@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>کۆنتڕۆڵی کوردیا ئەدڤێنتچەر | Admin Panel</title>
+  <title>بەڕێوەبەری ماڵپەڕ | Kurdia Adventure</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,31 +18,30 @@
       🔐
     </div>
     <h2 class="text-2xl font-bold text-white mb-2">بەڕێوەبەری ماڵپەڕ</h2>
-    <p class="text-xs text-gray-400 mb-6">تکایە وشەی نهێنی بنووسە بۆ دەستکاریکردنی ماڵپەڕ</p>
+    <p class="text-xs text-gray-400 mb-6">وشەی نهێنی بنووسە بۆ دەستکاریکردنی ماڵپەڕ</p>
     
     <input type="password" id="pinInput" placeholder="وشەی نهێنی" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-3 text-center text-lg tracking-widest text-white mb-4 focus:outline-none focus:border-yellow-500">
     <button onclick="checkPin()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold py-3.5 rounded-xl transition">چوونەژوورەوە</button>
   </div>
 
-  <!-- داشبۆردی بەڕێوەبردن (کاتێک وشەی نهێنی لێدەدرێت دەکرێتەوە) -->
+  <!-- داشبۆردی بەڕێوەبردن -->
   <div id="adminDashboard" class="hidden max-w-3xl mx-auto space-y-8">
-    
     <div class="flex items-center justify-between border-b border-gray-800 pb-4">
       <div>
         <h1 class="text-2xl font-extrabold text-white">کۆنتڕۆڵی کوردیا ئەدڤێنتچەر</h1>
         <p class="text-xs text-gray-400">دەستکاریکردنی ڕاستەوخۆی گەشت، ڕەنگ و وێنەکان</p>
       </div>
-      <button onclick="saveAllSettings()" id="saveBtn" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold px-6 py-2.5 rounded-xl text-sm shadow-lg shadow-yellow-500/20 transition">
-        بڵاوکردنەوەی گۆڕانکارییەکان
+      <button onclick="saveToCloud()" id="saveBtn" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold px-6 py-2.5 rounded-xl text-sm shadow-lg transition">
+        پاشەکەوت و بڵاوکردنەوە
       </button>
     </div>
 
-    <!-- بەشی گۆڕینی ڕەنگی ماڵپەڕ -->
+    <!-- بەشی ڕەنگەکان -->
     <div class="bg-[#1E293B] border border-gray-800 p-6 rounded-2xl space-y-4">
-      <h3 class="text-base font-bold text-white flex items-center gap-2">🎨 ڕەنگی سەرەکیی ماڵپەڕ</h3>
+      <h3 class="text-base font-bold text-white">🎨 ڕەنگی سەرەکیی ماڵپەڕ</h3>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <label class="flex items-center gap-2 bg-[#0F172A] p-3 rounded-xl border border-gray-700 cursor-pointer">
-          <input type="radio" name="siteColor" value="#EAB308" checked>
+          <input type="radio" name="siteColor" value="#EAB308">
           <span class="w-4 h-4 rounded-full bg-yellow-500"></span>
           <span class="text-xs font-semibold">زەرد</span>
         </label>
@@ -57,32 +56,32 @@
           <span class="text-xs font-semibold">پرتەقاڵی</span>
         </label>
         <label class="flex items-center gap-2 bg-[#0F172A] p-3 rounded-xl border border-gray-700 cursor-pointer">
-          <input type="radio" name="siteColor" value="#06B6D4">
+          <input type="radio" name="siteColor" value="#06B6D4" checked>
           <span class="w-4 h-4 rounded-full bg-cyan-500"></span>
           <span class="text-xs font-semibold">شینی ئاسمانی</span>
         </label>
       </div>
     </div>
 
-    <!-- بەشی گەشتی نوێ -->
+    <!-- زانیاریی گەشتی نوێ -->
     <div class="bg-[#1E293B] border border-gray-800 p-6 rounded-2xl space-y-4">
-      <h3 class="text-base font-bold text-white flex items-center gap-2">🏔️ زانیاریی گەشتی نوێ</h3>
+      <h3 class="text-base font-bold text-white">🏔️ زانیاریی گەشتی نوێ</h3>
       
       <div>
         <label class="text-xs text-gray-400 block mb-1">ناوی گەشت / شوێن</label>
-        <input type="text" id="tripTitle" value="گەشتی چیای سەفین (SAFEN Mountain)" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
+        <input type="text" id="tripTitle" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label class="text-xs text-gray-400 block mb-1">نرخی بەشداربوون</label>
-          <input type="text" id="tripPrice" value="٢٥,٠٠٠ دینار" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
+          <input type="text" id="tripPrice" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
         </div>
         <div>
           <label class="text-xs text-gray-400 block mb-1">ئاستی سەختی</label>
           <select id="tripDifficulty" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
             <option value="ئاسان">ئاسان</option>
-            <option value="مامناوەند" selected>مامناوەند</option>
+            <option value="مامناوەند">مامناوەند</option>
             <option value="سەخت">سەخت</option>
           </select>
         </div>
@@ -91,48 +90,33 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label class="text-xs text-gray-400 block mb-1">کاتژمێری کۆبوونەوە</label>
-          <input type="text" id="tripTime" value="٠٦:٠٠ی بەیانی" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
+          <input type="text" id="tripTime" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
         </div>
         <div>
           <label class="text-xs text-gray-400 block mb-1">شوێنی کۆبوونەوە</label>
-          <input type="text" id="tripLocation" value="هەولێر (پارکی شانەدەر)" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
+          <input type="text" id="tripLocation" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
         </div>
       </div>
 
       <div>
         <label class="text-xs text-gray-400 block mb-1">کورتەی ڕێڕەو و گەشتەکە</label>
-        <textarea id="tripDesc" rows="3" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500">گەشتێکی شاخەوانیی نایاب بەناو سروشتی دەوروبەری شەقڵاوە و هەڵکشان بەرەو لووتکە بە ڕێڕەوی سەرنجڕاکێش و دیمەنی پانۆرامایی.</textarea>
+        <textarea id="tripDesc" rows="3" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500"></textarea>
       </div>
     </div>
 
-    <!-- بەشی وێنەی گەورەی ماڵپەڕ (Hero & Gallery) -->
+    <!-- بەشی وێنەی سەرەکی -->
     <div class="bg-[#1E293B] border border-gray-800 p-6 rounded-2xl space-y-4">
-      <h3 class="text-base font-bold text-white flex items-center gap-2">📸 وێنەی سەرەکی و وێنەی نوێ</h3>
-      
+      <h3 class="text-base font-bold text-white">📸 وێنەی سەرەکیی ماڵپەڕ</h3>
       <div>
-        <label class="text-xs text-gray-400 block mb-1">لینکی وێنەی سەرەکی (Hero Image URL)</label>
-        <input type="text" id="heroImageUrl" value="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500" dir="ltr">
-        <p class="text-[11px] text-gray-500 mt-1">دەتوانیت هەر وێنەیەک لە ئینتەرنێت هەیە یان لە ماڵپەڕێکی وەک ImgBB باربکەیت و لینکەکەی لێرە دابنێیت.</p>
-      </div>
-
-      <!-- بارکردنی وێنەی ڕاستەوخۆ لە مۆبایلەوە -->
-      <div class="border-2 border-dashed border-gray-700 rounded-xl p-6 text-center hover:border-yellow-500 transition cursor-pointer">
-        <input type="file" id="fileUpload" accept="image/*" class="hidden" onchange="previewMobileImage(event)">
-        <label for="fileUpload" class="cursor-pointer block">
-          <div class="text-3xl mb-2">📁</div>
-          <span class="text-xs font-semibold text-white block">هەڵبژاردنی وێنە لە مۆبایلەوە</span>
-          <span class="text-[10px] text-gray-400">وێنەکە ڕاستەوخۆ دەبێتە وێنەی سەرەکی ماڵپەڕ</span>
-        </label>
-        <div id="imagePreviewContainer" class="hidden mt-4">
-          <img id="imagePreview" src="" class="h-32 mx-auto rounded-lg object-cover border border-gray-600">
-        </div>
+        <label class="text-xs text-gray-400 block mb-1">لینکی وێنە (Image URL)</label>
+        <input type="text" id="heroImageUrl" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500" dir="ltr">
       </div>
     </div>
-
   </div>
 
   <script>
-    // وشەی نهێنی پێشوەختە دانراو (دەتوانیت بیگۆڕیت)
+    const BIN_ID = "6ab7f417ac6210605af863a3";
+    const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
     const SECRET_PIN = "2026";
 
     function checkPin() {
@@ -140,42 +124,43 @@
       if (pin === SECRET_PIN) {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('adminDashboard').classList.remove('hidden');
-        loadCurrentSettings();
+        fetchCurrentData();
       } else {
         alert("وشەی نهێنی هەڵەیە!");
       }
     }
 
-    function previewMobileImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('heroImageUrl').value = e.target.result;
-          document.getElementById('imagePreview').src = e.target.result;
-          document.getElementById('imagePreviewContainer').classList.remove('hidden');
-        };
-        reader.readAsDataURL(file);
+    async function fetchCurrentData() {
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { 'X-Master-Key': API_KEY }
+        });
+        const data = (await res.json()).record;
+
+        document.getElementById('tripTitle').value = data.tripTitle || '';
+        document.getElementById('tripPrice').value = data.tripPrice || '';
+        document.getElementById('tripDifficulty').value = data.tripDifficulty || 'مامناوەند';
+        document.getElementById('tripTime').value = data.tripTime || '';
+        document.getElementById('tripLocation').value = data.tripLocation || '';
+        document.getElementById('tripDesc').value = data.tripDesc || '';
+        document.getElementById('heroImageUrl').value = data.heroImageUrl || '';
+
+        const radios = document.getElementsByName('siteColor');
+        for (let r of radios) {
+          if (r.value === data.color) r.checked = true;
+        }
+      } catch (err) {
+        console.error(err);
       }
     }
 
-    function loadCurrentSettings() {
-      const savedData = localStorage.getItem('kurdia_settings');
-      if (savedData) {
-        const data = JSON.parse(savedData);
-        if (data.tripTitle) document.getElementById('tripTitle').value = data.tripTitle;
-        if (data.tripPrice) document.getElementById('tripPrice').value = data.tripPrice;
-        if (data.tripDifficulty) document.getElementById('tripDifficulty').value = data.tripDifficulty;
-        if (data.tripTime) document.getElementById('tripTime').value = data.tripTime;
-        if (data.tripLocation) document.getElementById('tripLocation').value = data.tripLocation;
-        if (data.tripDesc) document.getElementById('tripDesc').value = data.tripDesc;
-        if (data.heroImageUrl) document.getElementById('heroImageUrl').value = data.heroImageUrl;
-      }
-    }
+    async function saveToCloud() {
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = "کەمێک چاوەڕێ بکە...";
 
-    function saveAllSettings() {
       const selectedColor = document.querySelector('input[name="siteColor"]:checked').value;
-      const data = {
+      const payload = {
         color: selectedColor,
         tripTitle: document.getElementById('tripTitle').value,
         tripPrice: document.getElementById('tripPrice').value,
@@ -183,20 +168,31 @@
         tripTime: document.getElementById('tripTime').value,
         tripLocation: document.getElementById('tripLocation').value,
         tripDesc: document.getElementById('tripDesc').value,
-        heroImageUrl: document.getElementById('heroImageUrl').value,
-        updatedAt: new Date().toISOString()
+        heroImageUrl: document.getElementById('heroImageUrl').value
       };
 
-      // پاشەکەوتکردن لە ناوخۆی وێبگەڕ (وەک هەنگاوی خێرا)
-      localStorage.setItem('kurdia_settings', JSON.stringify(data));
+      try {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY
+          },
+          body: JSON.stringify(payload)
+        });
 
-      const btn = document.getElementById('saveBtn');
-      btn.innerText = "بڵاوکرایەوە! ✓";
-      btn.classList.replace('bg-yellow-500', 'bg-emerald-500');
-      setTimeout(() => {
-        btn.innerText = "بڵاوکردنەوەی گۆڕانکارییەکان";
-        btn.classList.replace('bg-emerald-500', 'bg-yellow-500');
-      }, 2000);
+        saveBtn.innerText = "بڵاوکرایەوە! ✓";
+        saveBtn.classList.replace('bg-yellow-500', 'bg-emerald-500');
+        setTimeout(() => {
+          saveBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+          saveBtn.classList.replace('bg-emerald-500', 'bg-yellow-500');
+          saveBtn.disabled = false;
+        }, 2000);
+      } catch (err) {
+        alert("کێشەیەک ڕوویدا لە کاتی پاشەکەوتکردن!");
+        saveBtn.disabled = false;
+        saveBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+      }
     }
   </script>
 </body>
