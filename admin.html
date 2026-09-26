@@ -3,599 +3,886 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
   <title>KURDIA ADVENTURE — SMART WEBSITE BUILDER</title>
 
-  <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Google Fonts: Vazirmatn -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
-      font-family: 'Vazirmatn', sans-serif;
-      background-color: #07090e;
-      color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: "Vazirmatn", sans-serif;
+      background: #080b12;
+      color: #f5f5f5;
     }
-    .glass-panel {
-      background: rgba(18, 24, 38, 0.78);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+
+    body {
+      overflow: hidden;
     }
-    .viewport-desktop { width: 100%; }
-    .viewport-tablet { width: 768px; }
-    .viewport-mobile { width: 390px; }
+
+    button,
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0c1019;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #303847;
+      border-radius: 20px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4a5568;
+    }
+
+    .glass {
+      background: rgba(17, 23, 35, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .panel {
+      background: #111722;
+      border: 1px solid #202938;
+      border-radius: 16px;
+    }
+
+    .input {
+      width: 100%;
+      background: #0b1019;
+      border: 1px solid #293241;
+      border-radius: 10px;
+      color: #fff;
+      padding: 10px 12px;
+      outline: none;
+      transition: .2s;
+    }
+
+    .input:focus {
+      border-color: #9d1c32;
+      box-shadow: 0 0 0 3px rgba(157,28,50,.12);
+    }
+
+    textarea.input {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .btn {
+      border: 1px solid #293241;
+      background: #151c29;
+      color: #fff;
+      border-radius: 10px;
+      padding: 9px 13px;
+      cursor: pointer;
+      transition: .2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .btn:hover {
+      background: #1c2635;
+      border-color: #3b4658;
+    }
+
+    .btn-primary {
+      background: #9d1c32;
+      border-color: #9d1c32;
+    }
+
+    .btn-primary:hover {
+      background: #b3223b;
+      border-color: #b3223b;
+    }
+
+    .btn-danger {
+      background: #35131b;
+      border-color: #63202d;
+      color: #ff9baa;
+    }
+
+    .btn-success {
+      background: #123026;
+      border-color: #205842;
+      color: #8ff0bd;
+    }
+
+    .sidebar-item {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #8e99aa;
+      padding: 11px 13px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-align: right;
+      transition: .2s;
+    }
+
+    .sidebar-item:hover {
+      background: #151d2a;
+      color: #fff;
+    }
+
+    .sidebar-item.active {
+      background: rgba(157,28,50,.16);
+      color: #ffb7c2;
+    }
+
+    .section-row {
+      background: #0d131d;
+      border: 1px solid #202938;
+      border-radius: 11px;
+      padding: 9px;
+      cursor: grab;
+      transition: .2s;
+    }
+
+    .section-row:hover {
+      border-color: #394557;
+      transform: translateY(-1px);
+    }
+
+    .section-row.selected {
+      border-color: #9d1c32;
+      box-shadow: 0 0 0 1px rgba(157,28,50,.25);
+    }
+
+    .section-row.hidden-section {
+      opacity: .45;
+    }
+
+    .dragging {
+      opacity: .4;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      background: #43d17c;
+      box-shadow: 0 0 10px rgba(67,209,124,.6);
+    }
+
+    .viewport-frame {
+      transition: width .3s ease;
+      height: calc(100vh - 76px);
+      background: #080b12;
+      box-shadow: 0 0 60px rgba(0,0,0,.35);
+    }
+
+    .viewport-desktop {
+      width: 100%;
+    }
+
+    .viewport-tablet {
+      width: 820px;
+      max-width: 100%;
+    }
+
+    .viewport-mobile {
+      width: 390px;
+      max-width: 100%;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 99999;
+      min-width: 250px;
+      padding: 13px 17px;
+      border-radius: 12px;
+      background: #171e2b;
+      border: 1px solid #303a4b;
+      box-shadow: 0 15px 50px rgba(0,0,0,.4);
+      transform: translateY(30px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(8px);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(700px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: #111722;
+      border: 1px solid #293241;
+      border-radius: 20px;
+      box-shadow: 0 30px 100px rgba(0,0,0,.55);
+    }
+
+    .color-input {
+      width: 44px;
+      height: 40px;
+      padding: 2px;
+      background: #0b1019;
+      border: 1px solid #293241;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .range {
+      width: 100%;
+      accent-color: #9d1c32;
+    }
+
+    .empty {
+      border: 1px dashed #303a4a;
+      border-radius: 14px;
+      padding: 25px;
+      text-align: center;
+      color: #7f8999;
+    }
+
+    .login-bg {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(157,28,50,.22), transparent 30%),
+        radial-gradient(circle at 85% 80%, rgba(127,29,29,.18), transparent 30%),
+        #070a10;
+    }
+
+    .login-card {
+      background: rgba(15,20,30,.92);
+      border: 1px solid #252e3d;
+      box-shadow: 0 30px 100px rgba(0,0,0,.55);
+      backdrop-filter: blur(20px);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 11px;
+      background: #1a202c;
+      color: #9ba6b7;
+      border: 1px solid #293241;
+    }
+
+    @media (max-width: 900px) {
+      .desktop-sidebar {
+        display: none;
+      }
+
+      .mobile-sidebar {
+        display: block !important;
+      }
+
+      .viewport-tablet {
+        width: 100%;
+      }
+
+      .viewport-mobile {
+        width: 100%;
+      }
+    }
+
+    .mobile-sidebar {
+      display: none;
+    }
   </style>
 </head>
-<body class="min-h-screen">
 
-  <!-- ================= AUTH SCREEN ================= -->
-  <div id="loginScreen" class="max-w-md mx-auto mt-28 glass-panel p-8 sm:p-10 rounded-3xl text-center space-y-6 shadow-2xl">
-    <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-3xl">
-      <i data-lucide="shield-check" class="w-8 h-8"></i>
+<body>
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<div id="loginScreen" class="fixed inset-0 z-[10000] login-bg flex items-center justify-center p-5">
+
+  <div class="login-card w-full max-w-md rounded-3xl p-8">
+
+    <div class="text-center mb-8">
+
+      <div class="w-20 h-20 mx-auto rounded-3xl bg-[#9d1c32] flex items-center justify-center shadow-2xl shadow-red-950/40 mb-5">
+        <i data-lucide="mountain" class="w-10 h-10"></i>
+      </div>
+
+      <h1 class="text-2xl font-black">KURDIA ADVENTURE</h1>
+
+      <p class="text-gray-500 mt-2">
+        SMART WEBSITE BUILDER
+      </p>
+
     </div>
-    <div>
-      <h2 class="text-2xl font-black text-white">Smart Website Builder</h2>
-      <p class="text-xs text-gray-400 mt-1">وشەی نهێنی (PIN) بنووسە بۆ بەڕێوەبردنی وێبسایت</p>
-    </div>
-    <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-      <input type="password" id="adminPinInput" placeholder="••••" maxlength="8" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3.5 text-center text-2xl tracking-widest text-white focus:outline-none focus:border-amber-500">
-      <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm transition">
-        دەستپێکردن
+
+    <form id="loginForm">
+
+      <label class="block text-sm text-gray-400 mb-2">
+        وشەی نهێنی
+      </label>
+
+      <input
+        id="pinInput"
+        type="password"
+        class="input text-center text-xl tracking-[.4em]"
+        placeholder="••••"
+        autocomplete="off"
+      >
+
+      <button
+        type="submit"
+        class="btn btn-primary w-full mt-4 py-3 font-bold"
+      >
+        <i data-lucide="log-in" class="w-5 h-5"></i>
+        چوونەژوورەوە
       </button>
+
+      <p id="loginError" class="hidden text-red-400 text-sm text-center mt-4">
+        وشەی نهێنی هەڵەیە
+      </p>
+
     </form>
+
+    <div class="text-center mt-7 text-xs text-gray-600">
+      KURDIA ADVENTURE © 2026
+    </div>
+
   </div>
 
-  <!-- ================= MAIN BUILDER APP ================= -->
-  <div id="builderApp" class="hidden min-h-screen flex flex-col">
+</div>
 
-    <!-- Top Action Header -->
-    <header class="h-16 border-b border-slate-800 bg-[#0c1017] px-4 sm:px-6 flex items-center justify-between z-30">
-      <div class="flex items-center gap-4">
-        <span class="text-base font-black tracking-wider text-white">KURDIA <span class="text-amber-400">BUILDER</span></span>
-        
-        <!-- Undo / Redo -->
-        <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
-          <button onclick="undoHistory()" title="Undo" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-slate-800 transition"><i data-lucide="undo-2" class="w-4 h-4"></i></button>
-          <button onclick="redoHistory()" title="Redo" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-slate-800 transition"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
-        </div>
 
-        <!-- Viewport Switcher -->
-        <div class="hidden sm:flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
-          <button onclick="changeViewport('desktop')" id="vpDesk" class="p-2 rounded-lg bg-amber-500 text-black font-bold transition"><i data-lucide="monitor" class="w-4 h-4"></i></button>
-          <button onclick="changeViewport('tablet')" id="vpTab" class="p-2 rounded-lg text-gray-400 hover:text-white transition"><i data-lucide="tablet" class="w-4 h-4"></i></button>
-          <button onclick="changeViewport('mobile')" id="vpMob" class="p-2 rounded-lg text-gray-400 hover:text-white transition"><i data-lucide="smartphone" class="w-4 h-4"></i></button>
-        </div>
+<!-- =========================================================
+     MAIN APP
+========================================================= -->
+
+<div id="app" class="hidden h-screen overflow-hidden">
+
+  <!-- TOP BAR -->
+
+  <header class="h-[76px] border-b border-[#202938] bg-[#0d121b]/95 backdrop-blur-xl flex items-center justify-between px-4 md:px-6 relative z-50">
+
+    <div class="flex items-center gap-3">
+
+      <button
+        id="mobileMenuBtn"
+        class="btn md:hidden"
+        onclick="toggleMobileSidebar()"
+      >
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+
+      <div class="w-10 h-10 rounded-xl bg-[#9d1c32] flex items-center justify-center">
+        <i data-lucide="mountain" class="w-5 h-5"></i>
       </div>
 
-      <div class="flex items-center gap-3">
-        <!-- Draft / Status Tag -->
-        <span id="draftStatusBadge" class="hidden sm:inline-block text-[11px] font-bold px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-gray-300">
-          Draft (پاشەکەوتکراو)
-        </span>
-        <a href="index.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-gray-300 hover:text-white text-xs font-bold flex items-center gap-2">
-          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">ماڵپەڕی زیندوو</span>
-        </a>
-        <button onclick="publishToLiveCloud()" id="btnPublishLive" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider shadow-lg transition flex items-center gap-2">
-          <i data-lucide="cloud-upload" class="w-4 h-4"></i>
-          <span>بڵاوکردنەوە</span>
+      <div class="hidden sm:block">
+        <div class="font-black text-sm">KURDIA BUILDER</div>
+        <div class="text-[10px] text-gray-500">SMART WEBSITE BUILDER</div>
+      </div>
+
+    </div>
+
+
+    <div class="flex items-center gap-2">
+
+      <button
+        class="btn hidden sm:inline-flex"
+        onclick="undoState()"
+        title="Undo"
+      >
+        <i data-lucide="undo-2" class="w-4 h-4"></i>
+      </button>
+
+      <button
+        class="btn hidden sm:inline-flex"
+        onclick="redoState()"
+        title="Redo"
+      >
+        <i data-lucide="redo-2" class="w-4 h-4"></i>
+      </button>
+
+      <div class="hidden md:flex items-center gap-1 bg-[#090e16] rounded-xl p-1 border border-[#202938]">
+
+        <button
+          class="btn border-0"
+          id="desktopBtn"
+          onclick="setViewport('desktop')"
+        >
+          <i data-lucide="monitor" class="w-4 h-4"></i>
         </button>
+
+        <button
+          class="btn border-0"
+          id="tabletBtn"
+          onclick="setViewport('tablet')"
+        >
+          <i data-lucide="tablet" class="w-4 h-4"></i>
+        </button>
+
+        <button
+          class="btn border-0"
+          id="mobileBtn"
+          onclick="setViewport('mobile')"
+        >
+          <i data-lucide="smartphone" class="w-4 h-4"></i>
+        </button>
+
       </div>
-    </header>
 
-    <!-- Workspace View -->
-    <div class="flex-1 flex overflow-hidden">
+      <a
+        href="index.html"
+        target="_blank"
+        class="btn hidden sm:inline-flex"
+      >
+        <i data-lucide="external-link" class="w-4 h-4"></i>
+        سایت
+      </a>
 
-      <!-- Left Sidebar (Controls & Customizers) -->
-      <aside class="w-80 sm:w-96 border-l border-slate-800 bg-[#090d14] flex flex-col z-20 overflow-y-auto">
-        <!-- Nav Tabs -->
-        <div class="grid grid-cols-4 border-b border-slate-800 text-xs font-bold text-gray-400">
-          <button onclick="selectBuilderTab('sections')" id="tabBtnSec" class="py-3 text-amber-400 border-b-2 border-amber-400">سێکشنەکان</button>
-          <button onclick="selectBuilderTab('theme')" id="tabBtnTheme" class="py-3 hover:text-white">ڕەنگ و دیزاین</button>
-          <button onclick="selectBuilderTab('media')" id="tabBtnMedia" class="py-3 hover:text-white">میدیا</button>
-          <button onclick="selectBuilderTab('ai')" id="tabBtnAi" class="py-3 hover:text-white flex items-center justify-center gap-1"><i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> AI</button>
+      <button
+        class="btn btn-success font-bold"
+        onclick="publishSite()"
+      >
+        <i data-lucide="send" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">Publish</span>
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- MAIN AREA -->
+
+  <div class="flex h-[calc(100vh-76px)]">
+
+
+    <!-- LEFT SIDEBAR -->
+
+    <aside
+      id="sidebar"
+      class="desktop-sidebar w-[330px] shrink-0 border-l border-[#202938] bg-[#0d121b] overflow-y-auto"
+    >
+
+      <div class="p-4">
+
+        <!-- TABS -->
+
+        <div class="grid grid-cols-5 gap-1 mb-5 bg-[#080c13] rounded-xl p-1">
+
+          <button class="sidebar-item justify-center px-1 active" data-tab="sections" onclick="switchTab('sections')">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+          </button>
+
+          <button class="sidebar-item justify-center px-1" data-tab="theme" onclick="switchTab('theme')">
+            <i data-lucide="palette" class="w-4 h-4"></i>
+          </button>
+
+          <button class="sidebar-item justify-center px-1" data-tab="media" onclick="switchTab('media')">
+            <i data-lucide="images" class="w-4 h-4"></i>
+          </button>
+
+          <button class="sidebar-item justify-center px-1" data-tab="ai" onclick="switchTab('ai')">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </button>
+
+          <button class="sidebar-item justify-center px-1" data-tab="settings" onclick="switchTab('settings')">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+          </button>
+
         </div>
 
-        <div class="p-5 flex-1 space-y-6">
 
-          <!-- ================= TAB 1: SECTIONS & DRAG REORDER ================= -->
-          <div id="tabContentSections" class="space-y-4">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white uppercase tracking-wider">ڕیزبەندی و سێکشنەکان</span>
-              <button onclick="toggleAddSectionModal()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-[11px] font-bold text-white flex items-center gap-1">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i> زیادکردنی بەش
+        <!-- SECTIONS -->
+
+        <section id="tab-sections">
+
+          <div class="flex items-center justify-between mb-3">
+
+            <div>
+              <h2 class="font-bold">بەشەکانی وێبسایت</h2>
+              <p class="text-xs text-gray-500 mt-1">
+                ڕیزبەندی و دەستکاریکردن
+              </p>
+            </div>
+
+            <button
+              class="btn btn-primary px-2"
+              onclick="openAddSectionModal()"
+            >
+              <i data-lucide="plus" class="w-4 h-4"></i>
+            </button>
+
+          </div>
+
+          <div id="sectionsList" class="space-y-2"></div>
+
+          <div class="mt-4 text-xs text-gray-600">
+            دەتوانیت بەشەکان بە Drag & Drop بگوازیتەوە.
+          </div>
+
+        </section>
+
+
+        <!-- THEME -->
+
+        <section id="tab-theme" class="hidden">
+
+          <h2 class="font-bold mb-1">ڕووکاری وێبسایت</h2>
+
+          <p class="text-xs text-gray-500 mb-5">
+            ڕەنگ و ستایلی گشتی
+          </p>
+
+
+          <div class="panel p-4 mb-4">
+
+            <label class="text-sm text-gray-400 block mb-2">
+              ڕەنگی سەرەتا
+            </label>
+
+            <div class="flex gap-2">
+
+              <input
+                id="gradColor1"
+                type="color"
+                class="color-input"
+                onchange="updateField('gradColor1',this.value)"
+              >
+
+              <input
+                id="gradColor1Text"
+                class="input"
+                onchange="updateField('gradColor1',this.value)"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="panel p-4 mb-4">
+
+            <label class="text-sm text-gray-400 block mb-2">
+              ڕەنگی دووەم
+            </label>
+
+            <div class="flex gap-2">
+
+              <input
+                id="gradColor2"
+                type="color"
+                class="color-input"
+                onchange="updateField('gradColor2',this.value)"
+              >
+
+              <input
+                id="gradColor2Text"
+                class="input"
+                onchange="updateField('gradColor2',this.value)"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="panel p-4">
+
+            <label class="text-sm text-gray-400 block mb-3">
+              Preset
+            </label>
+
+            <div class="grid grid-cols-2 gap-2">
+
+              <button class="btn" onclick="applyTheme('#9d1c32','#111827')">
+                Kurdia
               </button>
-            </div>
-            <p class="text-[11px] text-gray-400">بەرز و نزم بکەرەوە بۆ گۆڕینی شوێن، یان کرتە لەسەر چاو بکە بۆ شاردنەوە:</p>
 
-            <div id="dragSectionsList" class="space-y-2"></div>
+              <button class="btn" onclick="applyTheme('#0f766e','#082f49')">
+                Nature
+              </button>
 
-            <!-- Active Section Properties Editor -->
-            <div id="activeSectionEditorBox" class="pt-4 border-t border-slate-800 space-y-4">
-              <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider">دەستکاریکردنی زانیاری سێکشن</h4>
-              <div id="dynamicPropertiesContainer" class="space-y-3"></div>
+              <button class="btn" onclick="applyTheme('#7c2d12','#171717')">
+                Sunset
+              </button>
+
+              <button class="btn" onclick="applyTheme('#4c1d95','#111827')">
+                Night
+              </button>
+
             </div>
+
           </div>
 
-          <!-- ================= TAB 2: THEME & GRADIENTS ================= -->
-          <div id="tabContentTheme" class="hidden space-y-5">
-            <span class="text-xs font-bold text-white uppercase tracking-wider block">دیزاین و گرەیدیەنت</span>
-            
-            <div class="space-y-3">
-              <label class="text-xs text-gray-400 block">گرەیدیەنتی سەرەکی</label>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <span class="text-[10px] text-gray-500 block mb-1">Color 1 (Start)</span>
-                  <input type="color" id="pickerColor1" onchange="applyCustomThemeColors()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
-                </div>
-                <div>
-                  <span class="text-[10px] text-gray-500 block mb-1">Color 2 (End)</span>
-                  <input type="color" id="pickerColor2" onchange="applyCustomThemeColors()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
-                </div>
-              </div>
-            </div>
+        </section>
 
-            <div class="pt-4 border-t border-slate-800 space-y-3">
-              <label class="text-xs text-gray-400 block">شێوازە ئامادەکراوەکان (Presets)</label>
-              <div class="grid grid-cols-2 gap-2">
-                <button onclick="setBuilderPreset('#f59e0b', '#fde047')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">زێڕین</button>
-                <button onclick="setBuilderPreset('#06b6d4', '#2563eb')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">شین و ئاسمانی</button>
-                <button onclick="setBuilderPreset('#34d399', '#0d9488')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">سەوزی شاخ</button>
-                <button onclick="setBuilderPreset('#f97316', '#f43f5e')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">پڕتەقاڵی</button>
-              </div>
-            </div>
-          </div>
 
-          <!-- ================= TAB 3: MEDIA LIBRARY ================= -->
-          <div id="tabContentMedia" class="hidden space-y-4">
-            <span class="text-xs font-bold text-white uppercase tracking-wider block">میدیا لایبرەری (Media Library)</span>
-            
-            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl space-y-3">
-              <span class="text-xs font-bold text-gray-200 block">بارکردنی وێنەی نوێ</span>
-              <input type="file" id="mediaUploadFile" accept="image/*" class="hidden" onchange="handleDirectMediaUpload(this.files[0])">
-              <label for="mediaUploadFile" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer transition">
-                <i data-lucide="upload" class="w-4 h-4"></i> هەڵبژاردنی وێنە لە مۆبایل
-              </label>
-              <span id="mediaUploadFeedback" class="text-[10px] text-gray-400 block text-center">وێنەکە ڕاستەوخۆ دەچێتە ناو کۆگای میدیا</span>
-            </div>
+        <!-- MEDIA -->
 
-            <div class="space-y-2">
-              <span class="text-xs font-bold text-gray-300 block">وێنە پاشەکەوتکراوەکان</span>
-              <div id="mediaGridBox" class="grid grid-cols-2 gap-2"></div>
-            </div>
-          </div>
+        <section id="tab-media" class="hidden">
 
-          <!-- ================= TAB 4: AI ASSISTANT ================= -->
-          <div id="tabContentAi" class="hidden space-y-4">
-            <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
-              <i data-lucide="sparkles" class="w-4 h-4"></i>
-              <span>فەرمانی زیرەکی دەستکرد</span>
-            </div>
-            <p class="text-[11px] text-gray-400 leading-relaxed">
-              دەتوانیت بە زمانی کوردی فەرمان بە وێبسایت بدەیت تا دەستکاری دیزاین و گەشت بکات:
+          <h2 class="font-bold mb-1">Media Library</h2>
+
+          <p class="text-xs text-gray-500 mb-5">
+            وێنەکانت بەڕێوە ببە
+          </p>
+
+
+          <div class="panel p-4 mb-4">
+
+            <input
+              id="mediaUpload"
+              type="file"
+              accept="image/*"
+              class="hidden"
+              onchange="uploadImage(event)"
+            >
+
+            <label
+              for="mediaUpload"
+              class="btn btn-primary w-full cursor-pointer"
+            >
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              Upload Image
+            </label>
+
+            <p class="text-[11px] text-gray-600 mt-3 text-center">
+              ImgBB یان Local Image
             </p>
 
-            <div class="space-y-2">
-              <textarea id="aiKurdishPrompt" rows="3" placeholder="نموونە: ڕەنگی ماڵپەڕەکە بکە بە سەوز، یان ناونووسین دابخە" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
-              <button onclick="executeKurdishAiPrompt()" id="btnRunAi" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-extrabold text-xs transition">
-                جێبەجێکردنی فەرمان
-              </button>
+          </div>
+
+
+          <div id="mediaGrid" class="grid grid-cols-2 gap-2"></div>
+
+        </section>
+
+
+        <!-- AI -->
+
+        <section id="tab-ai" class="hidden">
+
+          <div class="flex items-center gap-2 mb-2">
+
+            <div class="w-9 h-9 rounded-xl bg-purple-900/30 flex items-center justify-center">
+              <i data-lucide="sparkles" class="w-5 h-5 text-purple-300"></i>
             </div>
 
-            <div class="pt-4 border-t border-slate-800 space-y-3">
-              <span class="text-xs font-bold text-white block">AI Knowledge Base (زانیارییەکان بۆ بۆت)</span>
-              <div>
-                <label class="text-[10px] text-gray-400 block mb-1">دەربارەی گروپ</label>
-                <textarea id="fieldKbAbout" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
-              </div>
-              <div>
-                <label class="text-[10px] text-gray-400 block mb-1">کەلوپەلی پێویست</label>
-                <textarea id="fieldKbEquipment" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
-              </div>
-              <div>
-                <label class="text-[10px] text-gray-400 block mb-1">یاسا و سەلامەتی</label>
-                <textarea id="fieldKbRules" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
-              </div>
+            <div>
+              <h2 class="font-bold">Kurdia AI</h2>
+              <p class="text-[10px] text-gray-500">
+                فرمان بە کوردی
+              </p>
             </div>
+
           </div>
 
-        </div>
-      </aside>
 
-      <!-- Center: Responsive Preview Workspace -->
-      <main class="flex-1 bg-[#05070a] p-4 sm:p-8 flex items-center justify-center overflow-auto">
-        <div id="previewWrapper" class="viewport-desktop h-full bg-[#07090e] rounded-3xl border border-slate-800 shadow-2xl transition-all duration-300 overflow-hidden relative">
-          <iframe id="liveFrame" src="index.html" class="w-full h-full border-0"></iframe>
-        </div>
-      </main>
+          <div class="panel p-4">
 
-    </div>
-  </div>
+            <textarea
+              id="aiCommand"
+              class="input"
+              placeholder="نموونە: ناونیشانی گەشت بگۆڕە بۆ گەشتی ساڵیادی کوردیا"
+            ></textarea>
 
-  <!-- ================= MODAL: ADD NEW SECTION ================= -->
-  <div id="addSectionModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-panel max-w-md w-full p-6 rounded-3xl space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="text-sm font-bold text-white">زیادکردنی بەشی نوێ بۆ وێبسایت</h3>
-        <button onclick="toggleAddSectionModal()" class="text-gray-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
-        <button onclick="addNewSectionTemplate('about')" class="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500 rounded-xl text-right">📄 دەربارەی ئێمە</button>
-        <button onclick="addNewSectionTemplate('trip')" class="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500 rounded-xl text-right">🏔️ گەشتی داهاتوو</button>
-        <button onclick="addNewSectionTemplate('services')" class="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500 rounded-xl text-right">🎒 خزمەتگوزاری</button>
-        <button onclick="addNewSectionTemplate('gallery')" class="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500 rounded-xl text-right">📸 گەلەری وێنەکان</button>
-        <button onclick="addNewSectionTemplate('faq')" class="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500 rounded-xl text-right">❓ پرسیارە باوەکان</button>
-        <button onclick="addNewSectionTemplate('booking')" class="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500 rounded-xl text-right">🎫 فۆڕمی ناونووسین</button>
-      </div>
-    </div>
-  </div>
+            <button
+              class="btn btn-primary w-full mt-3"
+              onclick="runAICommand()"
+            >
+              <i data-lucide="wand-sparkles" class="w-4 h-4"></i>
+              جێبەجێکردن
+            </button>
 
-  <!-- ================= SCRIPT LOGIC ================= -->
-  <script>
-    lucide.createIcons();
-
-    const BIN_ID = "6ab7f417ac6210605af863a3";
-    const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
-    const SECRET_PIN = "2026";
-    const IMGBB_KEY = "c89b7b9f5eaae43bce82e66b4d3f572a";
-
-    let stateTree = null;
-    let historyStack = [];
-    let historyIdx = -1;
-
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const pin = document.getElementById('adminPinInput').value;
-      if (pin === SECRET_PIN) {
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('builderApp').classList.remove('hidden');
-        loadBuilderApp();
-      } else {
-        alert("وشەی نهێنی هەڵەیە!");
-      }
-    }
-
-    function changeViewport(mode) {
-      const wrap = document.getElementById('previewWrapper');
-      wrap.className = 'h-full bg-[#07090e] rounded-3xl border border-slate-800 shadow-2xl transition-all duration-300 overflow-hidden relative ' +
-        (mode === 'mobile' ? 'viewport-mobile' : mode === 'tablet' ? 'viewport-tablet' : 'viewport-desktop');
-
-      document.getElementById('vpDesk').className = mode === 'desktop' ? 'p-2 rounded-lg bg-amber-500 text-black font-bold' : 'p-2 rounded-lg text-gray-400 hover:text-white';
-      document.getElementById('vpTab').className = mode === 'tablet' ? 'p-2 rounded-lg bg-amber-500 text-black font-bold' : 'p-2 rounded-lg text-gray-400 hover:text-white';
-      document.getElementById('vpMob').className = mode === 'mobile' ? 'p-2 rounded-lg bg-amber-500 text-black font-bold' : 'p-2 rounded-lg text-gray-400 hover:text-white';
-    }
-
-    function selectBuilderTab(tab) {
-      const tabs = ['sections', 'theme', 'media', 'ai'];
-      tabs.forEach(t => {
-        document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1)).classList.add('hidden');
-        document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1)).className = 'py-3 hover:text-white';
-      });
-      document.getElementById('tabContent' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
-      document.getElementById('tabBtn' + tab.charAt(0).toUpperCase() + tab.slice(1)).className = 'py-3 text-amber-400 border-b-2 border-amber-400';
-    }
-
-    function pushHistory(newState) {
-      historyStack = historyStack.slice(0, historyIdx + 1);
-      historyStack.push(JSON.parse(JSON.stringify(newState)));
-      historyIdx++;
-      stateTree = newState;
-      refreshLiveIframe();
-    }
-
-    function undoHistory() {
-      if (historyIdx > 0) {
-        historyIdx--;
-        stateTree = JSON.parse(JSON.stringify(historyStack[historyIdx]));
-        syncBuilderInputs();
-        refreshLiveIframe();
-      }
-    }
-
-    function redoHistory() {
-      if (historyIdx < historyStack.length - 1) {
-        historyIdx++;
-        stateTree = JSON.parse(JSON.stringify(historyStack[historyIdx]));
-        syncBuilderInputs();
-        refreshLiveIframe();
-      }
-    }
-
-    async function loadBuilderApp() {
-      try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, {
-          headers: { 'X-Master-Key': API_KEY }
-        });
-        const raw = await res.json();
-        const data = raw.record;
-
-        if (!data.sectionsOrder) data.sectionsOrder = ['hero', 'about', 'trip', 'services', 'gear', 'gallery', 'faq', 'booking'];
-        if (!data.hiddenSections) data.hiddenSections = [];
-        if (!data.mediaLibrary) {
-          data.mediaLibrary = [
-            'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b',
-            'https://images.unsplash.com/photo-1544735716-392fe2489ffa',
-            'https://images.unsplash.com/photo-1519681393784-d120267933ba'
-          ];
-        }
-
-        pushHistory(data);
-        syncBuilderInputs();
-        renderDragSectionList();
-        renderMediaLibrary();
-        editSectionProperties('hero');
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    function syncBuilderInputs() {
-      document.getElementById('pickerColor1').value = stateTree.gradColor1 || '#f59e0b';
-      document.getElementById('pickerColor2').value = stateTree.gradColor2 || '#fde047';
-      document.getElementById('fieldKbAbout').value = stateTree.aiKnowledge?.about || '';
-      document.getElementById('fieldKbEquipment').value = stateTree.aiKnowledge?.equipment || '';
-      document.getElementById('fieldKbRules').value = stateTree.aiKnowledge?.rules || '';
-    }
-
-    function renderDragSectionList() {
-      const list = document.getElementById('dragSectionsList');
-      list.innerHTML = '';
-      const names = {
-        hero: 'بەشی سەرەکی (Hero)',
-        about: 'دەربارەی ئێمە (About)',
-        trip: 'زانیاری گەشت (Trip)',
-        services: 'خزمەتگوزارییەکان (Services)',
-        gear: 'کەلوپەل (Gear)',
-        gallery: 'گەلەری وێنەکان (Gallery)',
-        faq: 'پرسیارە باوەکان (FAQ)',
-        booking: 'فۆڕمی ناونووسین (Booking)'
-      };
-
-      stateTree.sectionsOrder.forEach((sec, idx) => {
-        const isHidden = (stateTree.hiddenSections || []).includes(sec);
-        const item = document.createElement('div');
-        item.className = 'flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold';
-        item.innerHTML = `
-          <span class="cursor-pointer hover:text-amber-400 ${isHidden ? 'opacity-40 line-through' : ''}" onclick="editSectionProperties('${sec}')">📌 ${names[sec] || sec}</span>
-          <div class="flex items-center gap-1.5">
-            <button onclick="toggleSectionVisibility('${sec}')" class="p-1 hover:text-white ${isHidden ? 'text-rose-400' : 'text-gray-400'}"><i data-lucide="${isHidden ? 'eye-off' : 'eye'}" class="w-3.5 h-3.5"></i></button>
-            <button onclick="moveSectionRank(${idx}, -1)" class="p-1 hover:text-white text-gray-500"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i></button>
-            <button onclick="moveSectionRank(${idx}, 1)" class="p-1 hover:text-white text-gray-500"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i></button>
           </div>
-        `;
-        list.appendChild(item);
-      });
-      lucide.createIcons();
-    }
 
-    function moveSectionRank(index, dir) {
-      const order = [...stateTree.sectionsOrder];
-      const target = index + dir;
-      if (target < 0 || target >= order.length) return;
-      const tmp = order[index];
-      order[index] = order[target];
-      order[target] = tmp;
-      stateTree.sectionsOrder = order;
-      pushHistory(stateTree);
-      renderDragSectionList();
-    }
 
-    function toggleSectionVisibility(sec) {
-      if (!stateTree.hiddenSections) stateTree.hiddenSections = [];
-      if (stateTree.hiddenSections.includes(sec)) {
-        stateTree.hiddenSections = stateTree.hiddenSections.filter(s => s !== sec);
-      } else {
-        stateTree.hiddenSections.push(sec);
-      }
-      pushHistory(stateTree);
-      renderDragSectionList();
-    }
+          <div class="panel p-4 mt-4">
 
-    function toggleAddSectionModal() {
-      document.getElementById('addSectionModal').classList.toggle('hidden');
-    }
+            <h3 class="font-bold text-sm mb-3">
+              زانیاری AI
+            </h3>
 
-    function addNewSectionTemplate(sec) {
-      if (!stateTree.sectionsOrder.includes(sec)) {
-        stateTree.sectionsOrder.push(sec);
-      }
-      stateTree.hiddenSections = (stateTree.hiddenSections || []).filter(s => s !== sec);
-      pushHistory(stateTree);
-      renderDragSectionList();
-      toggleAddSectionModal();
-    }
+            <label class="text-xs text-gray-500">
+              دەربارەی کوردیا
+            </label>
 
-    function editSectionProperties(sec) {
-      const box = document.getElementById('dynamicPropertiesContainer');
-      box.innerHTML = '';
+            <textarea
+              id="knowledgeAbout"
+              class="input mt-2"
+              onchange="updateField('knowledgeAbout',this.value)"
+            ></textarea>
 
-      if (sec === 'hero') {
-        box.innerHTML = `
-          <div><label class="text-[10px] text-gray-400 block mb-1">Badge</label><input type="text" value="${stateTree.heroBadge || ''}" oninput="updateStateProperty('heroBadge', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">Title</label><input type="text" value="${stateTree.heroTitle || ''}" oninput="updateStateProperty('heroTitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">Subtitle</label><textarea oninput="updateStateProperty('heroSubtitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white">${stateTree.heroSubtitle || ''}</textarea></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">Image URL</label><input type="text" value="${stateTree.heroImageUrl || ''}" oninput="updateStateProperty('heroImageUrl', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white" dir="ltr"></div>
-        `;
-      } else if (sec === 'trip') {
-        box.innerHTML = `
-          <div><label class="text-[10px] text-gray-400 block mb-1">ناوی گەشت</label><input type="text" value="${stateTree.tripTitle || ''}" oninput="updateStateProperty('tripTitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">نرخ</label><input type="text" value="${stateTree.tripPrice || ''}" oninput="updateStateProperty('tripPrice', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">ئاستی سەختی</label><input type="text" value="${stateTree.tripDifficulty || ''}" oninput="updateStateProperty('tripDifficulty', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">ماوەی ڕێڕۆیشتن</label><input type="text" value="${stateTree.tripDuration || ''}" oninput="updateStateProperty('tripDuration', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">کاتی بەڕێکەوتن</label><input type="text" value="${stateTree.tripTime || ''}" oninput="updateStateProperty('tripTime', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">شوێنی کۆبوونەوە</label><input type="text" value="${stateTree.tripLocation || ''}" oninput="updateStateProperty('tripLocation', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">کورتەی گەشت</label><textarea oninput="updateStateProperty('tripDesc', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white">${stateTree.tripDesc || ''}</textarea></div>
-          <div class="flex items-center gap-2 pt-2">
-            <input type="checkbox" id="bookingToggleCheck" ${stateTree.bookingOpen !== false ? 'checked' : ''} onchange="updateStateProperty('bookingOpen', this.checked)" class="w-4 h-4 rounded text-amber-500">
-            <label for="bookingToggleCheck" class="text-xs font-bold text-white">دۆخی ناونووسین (کراوەیە)</label>
+
+            <label class="text-xs text-gray-500 block mt-4">
+              ئامێر و خزمەتگوزاری
+            </label>
+
+            <textarea
+              id="knowledgeEquipment"
+              class="input mt-2"
+              onchange="updateField('knowledgeEquipment',this.value)"
+            ></textarea>
+
           </div>
-        `;
-      } else {
-        box.innerHTML = `<p class="text-xs text-gray-400">تایبەتمەندییەکانی بەشی ${sec} ڕاستەوخۆ دەستکاری دەکرێن.</p>`;
-      }
-    }
 
-    function updateStateProperty(key, val) {
-      stateTree[key] = val;
-      pushHistory(stateTree);
-    }
 
-    function setBuilderPreset(c1, c2) {
-      stateTree.gradColor1 = c1;
-      stateTree.gradColor2 = c2;
-      document.getElementById('pickerColor1').value = c1;
-      document.getElementById('pickerColor2').value = c2;
-      pushHistory(stateTree);
-    }
+          <div class="panel p-4 mt-4">
 
-    function applyCustomThemeColors() {
-      stateTree.gradColor1 = document.getElementById('pickerColor1').value;
-      stateTree.gradColor2 = document.getElementById('pickerColor2').value;
-      pushHistory(stateTree);
-    }
+            <h3 class="font-bold text-sm mb-3">
+              نموونەی فرمان
+            </h3>
 
-    async function handleDirectMediaUpload(file) {
-      if (!file) return;
-      const feedback = document.getElementById('mediaUploadFeedback');
-      feedback.innerText = "وێنەکە بەرز دەکرێتەوە بۆ هەور...";
-      feedback.className = "text-[10px] text-amber-400 block text-center animate-pulse";
+            <div class="space-y-2 text-xs text-gray-500">
 
-      const formData = new FormData();
-      formData.append("image", file);
+              <div class="badge">
+                ناونیشانی گەشت بگۆڕە
+              </div>
 
-      try {
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
-          method: "POST",
-          body: formData
-        });
-        const d = await res.json();
-        if (d && d.data && d.data.url) {
-          if (!stateTree.mediaLibrary) stateTree.mediaLibrary = [];
-          stateTree.mediaLibrary.push(d.data.url);
-          feedback.innerText = "بە سەرکەوتوویی بەرزکرایەوە! ✓";
-          feedback.className = "text-[10px] text-emerald-400 block text-center";
-          pushHistory(stateTree);
-          renderMediaLibrary();
-        }
-      } catch (err) {
-        feedback.innerText = "هەڵە لە بەرزکردنەوە ڕوویدا!";
-        feedback.className = "text-[10px] text-rose-400 block text-center";
-      }
-    }
+              <div class="badge">
+                نرخ بکە 50000
+              </div>
 
-    function renderMediaLibrary() {
-      const grid = document.getElementById('mediaGridBox');
-      grid.innerHTML = '';
-      (stateTree.mediaLibrary || []).forEach((url, i) => {
-        const d = document.createElement('div');
-        d.className = 'relative group rounded-xl overflow-hidden border border-slate-800 h-24';
-        d.innerHTML = `
-          <img src="${url}" class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-            <button onclick="applyMediaAsHero('${url}')" title="Hero وەک" class="p-1 bg-amber-500 rounded text-black text-[10px] font-bold">Hero</button>
-            <button onclick="deleteMediaFromLibrary(${i})" title="سڕینەوە" class="p-1 bg-rose-500 rounded text-white text-[10px] font-bold"><i data-lucide="trash" class="w-3 h-3"></i></button>
+              <div class="badge">
+                شوێن بگۆڕە بۆ ڕەواندز
+              </div>
+
+              <div class="badge">
+                وێنەی Hero بگۆڕە
+              </div>
+
+              <div class="badge">
+                Booking داخە
+              </div>
+
+            </div>
+
           </div>
-        `;
-        grid.appendChild(d);
-      });
-      lucide.createIcons();
-    }
 
-    function applyMediaAsHero(url) {
-      stateTree.heroImageUrl = url;
-      pushHistory(stateTree);
-      editSectionProperties('hero');
-    }
+        </section>
 
-    function deleteMediaFromLibrary(idx) {
-      stateTree.mediaLibrary.splice(idx, 1);
-      pushHistory(stateTree);
-      renderMediaLibrary();
-    }
 
-    function executeKurdishAiPrompt() {
-      const input = document.getElementById('aiKurdishPrompt');
-      const cmd = input.value.trim().toLowerCase();
-      if (!cmd) return;
+        <!-- SETTINGS -->
 
-      const btn = document.getElementById('btnRunAi');
-      btn.innerText = "جێبەجێدەکرێت...";
+        <section id="tab-settings" class="hidden">
 
-      setTimeout(() => {
-        if (cmd.includes('سەوز')) {
-          setBuilderPreset('#34d399', '#0d9488');
-        } else if (cmd.includes('شین')) {
-          setBuilderPreset('#06b6d4', '#2563eb');
-        } else if (cmd.includes('زەرد') || cmd.includes('زێڕین')) {
-          setBuilderPreset('#f59e0b', '#fde047');
-        }
+          <h2 class="font-bold mb-1">Settings</h2>
 
-        if (cmd.includes('داخە') || cmd.includes('داخراو')) {
-          stateTree.bookingOpen = false;
-        } else if (cmd.includes('بکەرەوە') || cmd.includes('کراوە')) {
-          stateTree.bookingOpen = true;
-        }
+          <p class="text-xs text-gray-500 mb-5">
+            ڕێکخستنەکانی وێبسایت
+          </p>
 
-        if (cmd.includes('هەڵگورد')) {
-          stateTree.tripTitle = "گەشتی چیای هەڵگورد (Halgurd Mountain)";
-        } else if (cmd.includes('سەفین')) {
-          stateTree.tripTitle = "گەشتی چیای سەفین (SAFEN Mountain)";
-        }
 
-        pushHistory(stateTree);
-        syncBuilderInputs();
-        btn.innerText = "جێبەجێکرا! ✓";
-        setTimeout(() => btn.innerText = "جێبەجێکردنی فەرمان", 1200);
-      }, 400);
-    }
+          <div class="panel p-4 mb-4">
 
-    function refreshLiveIframe() {
-      const frame = document.getElementById('liveFrame');
-      if (frame && frame.contentWindow && frame.contentWindow.renderPublicWebsite) {
-        frame.contentWindow.renderPublicWebsite(stateTree);
-      }
-    }
+            <label class="text-xs text-gray-500">
+              SEO Title
+            </label>
 
-    async function publishToLiveCloud() {
-      const btn = document.getElementById('btnPublishLive');
-      btn.disabled = true;
-      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> پاشەکەوت دەکرێت...`;
+            <input
+              id="seoTitle"
+              class="input mt-2"
+              onchange="updateField('seoTitle',this.value)"
+            >
 
-      stateTree.aiKnowledge = {
-        about: document.getElementById('fieldKbAbout').value,
-        equipment: document.getElementById('fieldKbEquipment').value,
-        rules: document.getElementById('fieldKbRules').value
-      };
 
-      try {
-        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY
-          },
-          body: JSON.stringify(stateTree)
-        });
+            <label class="text-xs text-gray-500 block mt-4">
+              SEO Description
+            </label>
 
-        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> بڵاوکرایەوە!`;
-        btn.classList.replace('bg-amber-500', 'bg-emerald-500');
+            <textarea
+              id="seoDescription"
+              class="input mt-2"
+              onchange="updateField('seoDescription',this.value)"
+            ></textarea>
 
-        setTimeout(() => {
-          btn.innerHTML = `<i data-lucide="cloud-upload" class="w-4 h-4"></i> <span>بڵاوکردنەوە</span>`;
-          btn.classList.replace('bg-emerald-500', 'bg-amber-500');
-          btn.disabled = false;
-          lucide.createIcons();
-        }, 2000);
-      } catch (err) {
-        alert("کێشەیەک لە پەیوەندی بە داتابەیس ڕوویدا!");
-        btn.disabled = false;
-        btn.innerText = "بڵاوکردنەوە";
-      }
-    }
-  </script>
-</body>
-</html>
+
+            <label class="text-xs text-gray-500 block mt-4">
+              Social Image
+            </label>
+
+            <input
+              id="socialImage"
+              class="input mt-2"
+              onchange="updateField('socialImage',this.value)"
+            >
+
+          </div>
+
+
+          <div class="panel p-4 mb-4">
+
+            <h3 class="font-bold text-sm mb-3">
+              Booking
+            </h3>
+
+            <label class="flex items-center justify-between">
+
+              <span class="text-sm">
+                Booking کراوە بێت
+              </span>
+
+              <input
+                id="bookingOpen"
+                type="checkbox"
+                onchange="updateField('bookingOpen',this.checked)"
+              >
+
+            </label>
+
+          </div>
+
+
+          <div class="panel p-4">
+
+            <button
+              class="btn w-full mb-2"
+              onclick="exportData()"
+            >
+              <i dat
