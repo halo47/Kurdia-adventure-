@@ -2,124 +2,310 @@
 <html lang="ku" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بەڕێوەبەری ماڵپەڕ | Kurdia Adventure</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>داشبۆردی بەڕێوەبردن | KURDIA ADVENTURE CMS</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-  <style>body { font-family: 'Vazirmatn', sans-serif; }</style>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: #07090e;
+      color: #f1f5f9;
+    }
+    .glass-panel {
+      background: rgba(18, 24, 38, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
 </head>
-<body class="bg-[#0B0F19] text-gray-100 min-h-screen p-4 sm:p-8">
+<body class="min-h-screen p-4 sm:p-8">
 
-  <!-- بەشی چوونەژوورەوە بە وشەی نهێنی -->
-  <div id="loginScreen" class="max-w-md mx-auto mt-20 bg-[#1E293B] border border-gray-700 p-8 rounded-2xl shadow-2xl text-center">
-    <div class="w-16 h-16 bg-yellow-500/10 border border-yellow-500/30 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
-      🔐
+  <!-- ================= AUTH SCREEN ================= -->
+  <div id="loginScreen" class="max-w-md mx-auto mt-24 glass-panel p-8 sm:p-10 rounded-3xl text-center space-y-6 shadow-2xl">
+    <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-3xl">
+      <i data-lucide="lock" class="w-8 h-8"></i>
     </div>
-    <h2 class="text-2xl font-bold text-white mb-2">بەڕێوەبەری ماڵپەڕ</h2>
-    <p class="text-xs text-gray-400 mb-6">وشەی نهێنی بنووسە بۆ دەستکاریکردنی ماڵپەڕ</p>
-    
-    <input type="password" id="pinInput" placeholder="وشەی نهێنی" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-3 text-center text-lg tracking-widest text-white mb-4 focus:outline-none focus:border-yellow-500">
-    <button onclick="checkPin()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold py-3.5 rounded-xl transition">چوونەژوورەوە</button>
-  </div>
+    <div>
+      <h2 class="text-2xl font-black text-white">بەڕێوەبەری کوردیا</h2>
+      <p class="text-xs text-gray-400 mt-1">وشەی نهێنی (PIN) بنووسە بۆ بەڕێوەبردنی وێبسایت</p>
+    </div>
 
-  <!-- داشبۆردی بەڕێوەبردن -->
-  <div id="adminDashboard" class="hidden max-w-3xl mx-auto space-y-8">
-    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
-      <div>
-        <h1 class="text-2xl font-extrabold text-white">کۆنتڕۆڵی کوردیا ئەدڤێنتچەر</h1>
-        <p class="text-xs text-gray-400">دەستکاریکردنی ڕاستەوخۆی گەشت، ڕەنگ و وێنەکان</p>
-      </div>
-      <button onclick="saveToCloud()" id="saveBtn" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold px-6 py-2.5 rounded-xl text-sm shadow-lg transition">
-        پاشەکەوت و بڵاوکردنەوە
+    <form onsubmit="handleLogin(event)" class="space-y-4">
+      <input type="password" id="pinInput" placeholder="••••" maxlength="8" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3.5 text-center text-2xl tracking-widest text-white focus:outline-none focus:border-amber-500">
+      <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm transition">
+        چوونەژوورەوە
       </button>
-    </div>
-
-    <!-- بەشی ڕەنگەکان -->
-    <div class="bg-[#1E293B] border border-gray-800 p-6 rounded-2xl space-y-4">
-      <h3 class="text-base font-bold text-white">🎨 ڕەنگی سەرەکیی ماڵپەڕ</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <label class="flex items-center gap-2 bg-[#0F172A] p-3 rounded-xl border border-gray-700 cursor-pointer">
-          <input type="radio" name="siteColor" value="#EAB308">
-          <span class="w-4 h-4 rounded-full bg-yellow-500"></span>
-          <span class="text-xs font-semibold">زەرد</span>
-        </label>
-        <label class="flex items-center gap-2 bg-[#0F172A] p-3 rounded-xl border border-gray-700 cursor-pointer">
-          <input type="radio" name="siteColor" value="#10B981">
-          <span class="w-4 h-4 rounded-full bg-emerald-500"></span>
-          <span class="text-xs font-semibold">سەوز</span>
-        </label>
-        <label class="flex items-center gap-2 bg-[#0F172A] p-3 rounded-xl border border-gray-700 cursor-pointer">
-          <input type="radio" name="siteColor" value="#F97316">
-          <span class="w-4 h-4 rounded-full bg-orange-500"></span>
-          <span class="text-xs font-semibold">پرتەقاڵی</span>
-        </label>
-        <label class="flex items-center gap-2 bg-[#0F172A] p-3 rounded-xl border border-gray-700 cursor-pointer">
-          <input type="radio" name="siteColor" value="#06B6D4" checked>
-          <span class="w-4 h-4 rounded-full bg-cyan-500"></span>
-          <span class="text-xs font-semibold">شینی ئاسمانی</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- زانیاریی گەشتی نوێ -->
-    <div class="bg-[#1E293B] border border-gray-800 p-6 rounded-2xl space-y-4">
-      <h3 class="text-base font-bold text-white">🏔️ زانیاریی گەشتی نوێ</h3>
-      
-      <div>
-        <label class="text-xs text-gray-400 block mb-1">ناوی گەشت / شوێن</label>
-        <input type="text" id="tripTitle" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">نرخی بەشداربوون</label>
-          <input type="text" id="tripPrice" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">ئاستی سەختی</label>
-          <select id="tripDifficulty" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-            <option value="ئاسان">ئاسان</option>
-            <option value="مامناوەند">مامناوەند</option>
-            <option value="سەخت">سەخت</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">کاتژمێری کۆبوونەوە</label>
-          <input type="text" id="tripTime" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">شوێنی کۆبوونەوە</label>
-          <input type="text" id="tripLocation" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500">
-        </div>
-      </div>
-
-      <div>
-        <label class="text-xs text-gray-400 block mb-1">کورتەی ڕێڕەو و گەشتەکە</label>
-        <textarea id="tripDesc" rows="3" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-500"></textarea>
-      </div>
-    </div>
-
-    <!-- بەشی وێنەی سەرەکی -->
-    <div class="bg-[#1E293B] border border-gray-800 p-6 rounded-2xl space-y-4">
-      <h3 class="text-base font-bold text-white">📸 وێنەی سەرەکیی ماڵپەڕ</h3>
-      <div>
-        <label class="text-xs text-gray-400 block mb-1">لینکی وێنە (Image URL)</label>
-        <input type="text" id="heroImageUrl" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500" dir="ltr">
-      </div>
-    </div>
+    </form>
   </div>
 
+  <!-- ================= MAIN ADMIN DASHBOARD ================= -->
+  <div id="adminDashboard" class="hidden max-w-6xl mx-auto space-y-8 pb-24">
+    
+    <!-- Top Bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+      <div>
+        <span class="text-xs font-bold text-amber-500 tracking-wider">KURDIA ADVENTURE CMS</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-white">کۆنتڕۆڵی تەواوی وێبسایت</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="index.html" target="_blank" class="px-4 py-2.5 rounded-xl glass-panel text-gray-300 hover:text-white text-xs font-bold flex items-center gap-2">
+          <i data-lucide="external-link" class="w-4 h-4"></i>
+          <span>بینینی ماڵپەڕ</span>
+        </a>
+        <button onclick="saveAllSettings()" id="saveBtn" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider shadow-lg transition">
+          پاشەکەوت و بڵاوکردنەوە
+        </button>
+      </div>
+    </div>
+
+    <!-- Overview Stats Bar -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="glass-panel p-4 rounded-2xl">
+        <span class="text-xs text-gray-400 block">دۆخی وێبسایت</span>
+        <span class="font-bold text-emerald-400 text-sm mt-1 inline-flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> چاڵاکە لەسەر هەور
+        </span>
+      </div>
+
+      <div class="glass-panel p-4 rounded-2xl">
+        <span class="text-xs text-gray-400 block">دۆخی ناونووسین</span>
+        <span id="statBookingStatus" class="font-bold text-white text-sm mt-1 block">پشکنین...</span>
+      </div>
+
+      <div class="glass-panel p-4 rounded-2xl">
+        <span class="text-xs text-gray-400 block">گەشتی ئێستا</span>
+        <span id="statTripName" class="font-bold text-white text-sm mt-1 block truncate">چاوەڕوان بە...</span>
+      </div>
+
+      <div class="glass-panel p-4 rounded-2xl">
+        <span class="text-xs text-gray-400 block">کۆتا نوێکردنەوە</span>
+        <span id="statLastUpdate" class="font-bold text-gray-300 text-sm mt-1 block">ئێستا</span>
+      </div>
+    </div>
+
+    <!-- Main Settings Form Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left & Center: Fields (2 Cols) -->
+      <div class="lg:col-span-2 space-y-8">
+        
+        <!-- ================= DYNAMIC GRADIENT COLOR CONTROLS ================= -->
+        <div class="glass-panel p-6 rounded-3xl space-y-4">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <i data-lucide="palette" class="w-5 h-5 text-amber-400"></i>
+            <span>سیستەمی ڕەنگی گرەیدیەنت (Gradient Accent)</span>
+          </h3>
+
+          <!-- Presets -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <button type="button" onclick="setGradient('#f59e0b', '#fde047')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
+              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-300 block mb-2"></span>
+              <span class="text-xs font-bold text-gray-200">زێڕینی خۆر</span>
+            </button>
+            <button type="button" onclick="setGradient('#06b6d4', '#2563eb')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
+              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 block mb-2"></span>
+              <span class="text-xs font-bold text-gray-200">شین و ئاسمانی</span>
+            </button>
+            <button type="button" onclick="setGradient('#34d399', '#0d9488')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
+              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-emerald-400 to-teal-600 block mb-2"></span>
+              <span class="text-xs font-bold text-gray-200">سەوزی سروشت</span>
+            </button>
+            <button type="button" onclick="setGradient('#f97316', '#f43f5e')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
+              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-orange-500 to-rose-500 block mb-2"></span>
+              <span class="text-xs font-bold text-gray-200">ئاگر و سەرکێشی</span>
+            </button>
+          </div>
+
+          <!-- Custom Pickers -->
+          <div class="grid grid-cols-2 gap-4 pt-2">
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">ڕەنگی دەستپێک (Color 1)</label>
+              <input type="color" id="gradColor1" oninput="updateLivePreview()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">ڕەنگی کۆتایی (Color 2)</label>
+              <input type="color" id="gradColor2" oninput="updateLivePreview()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= HERO SECTION CONTROL ================= -->
+        <div class="glass-panel p-6 rounded-3xl space-y-4">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <i data-lucide="layout" class="w-5 h-5 text-amber-400"></i>
+            <span>بەشی پێشوازی ماڵپەڕ (Hero Section)</span>
+          </h3>
+
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">درووشمی بچووکی سەرەوە (Badge)</label>
+            <input type="text" id="heroBadge" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">ناونیشانی گەورە (Title)</label>
+            <input type="text" id="heroTitle" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">پێناسەی کورت (Subtitle)</label>
+            <textarea id="heroSubtitle" rows="2" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none"></textarea>
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">لینکی وێنەی گەورە (Hero Image URL)</label>
+            <input type="text" id="heroImageUrl" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none" dir="ltr">
+          </div>
+        </div>
+
+        <!-- ================= TRIP DETAILS CONTROL ================= -->
+        <div class="glass-panel p-6 rounded-3xl space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+              <i data-lucide="compass" class="w-5 h-5 text-amber-400"></i>
+              <span>زانیارییەکانی گەشت (Trip Details)</span>
+            </h3>
+
+            <!-- Booking Toggle -->
+            <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">
+              <input type="checkbox" id="bookingOpen" onchange="updateLivePreview()" class="w-4 h-4 rounded text-amber-500">
+              <span id="bookingToggleText" class="text-xs font-bold text-gray-300">دۆخی ناونووسین</span>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">ناوی شوێن / چیای گەشتەکە</label>
+              <input type="text" id="tripTitle" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">نرخی بەشداربوون</label>
+              <input type="text" id="tripPrice" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">ئاستی سەختی</label>
+              <input type="text" id="tripDifficulty" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">ماوەی ڕێڕۆیشتن</label>
+              <input type="text" id="tripDuration" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">کاتی بەڕێکەوتن</label>
+              <input type="text" id="tripTime" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">شوێنی کۆبوونەوە</label>
+            <input type="text" id="tripLocation" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">کورتەی ڕێڕەوی گەشتەکە</label>
+            <textarea id="tripDesc" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none"></textarea>
+          </div>
+        </div>
+
+        <!-- ================= TIMELINE STEPS CONTROL ================= -->
+        <div class="glass-panel p-6 rounded-3xl space-y-4">
+          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+            <i data-lucide="milestone" class="w-5 h-5 text-amber-400"></i>
+            <span>خشتەی هەنگاوەکان (Trip Steps)</span>
+          </h3>
+
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ١</label>
+              <input type="text" id="step1" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ٢</label>
+              <input type="text" id="step2" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ٣</label>
+              <input type="text" id="step3" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ٤</label>
+              <input type="text" id="step4" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive Live Preview (Sticky) -->
+      <div class="space-y-6">
+        <div class="sticky top-8 space-y-6">
+          
+          <div class="glass-panel p-6 rounded-3xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <span class="text-xs font-bold text-gray-300 flex items-center gap-1.5">
+                <i data-lucide="eye" class="w-4 h-4 text-amber-400"></i> بینینی ڕاستەوخۆ (Live Preview)
+              </span>
+              <span class="text-[10px] text-gray-500">خۆکارانە دەگۆڕێت</span>
+            </div>
+
+            <!-- Mini Website Card Preview -->
+            <div class="rounded-2xl overflow-hidden border border-slate-800 bg-[#07090e] shadow-inner">
+              <div class="relative h-36">
+                <img id="prevImg" src="" class="w-full h-full object-cover filter brightness-[0.4]">
+                <div class="absolute inset-0 p-4 flex flex-col justify-end">
+                  <span id="prevBadge" class="text-[10px] font-bold text-amber-400">سەرکێشی</span>
+                  <h4 id="prevTitle" class="text-sm font-black text-white truncate">ناوی گەشت</h4>
+                </div>
+              </div>
+              <div class="p-4 space-y-2">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="text-gray-400">نرخی گەشت:</span>
+                  <span id="prevPrice" class="font-black text-amber-400">٢٥,٠٠٠ دینار</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <span class="text-gray-400">دۆخی ناونووسین:</span>
+                  <span id="prevBooking" class="font-bold text-emerald-400">کراوەیە</span>
+                </div>
+                <div class="pt-2">
+                  <div id="prevBtn" class="w-full py-2 rounded-lg text-center font-bold text-xs bg-amber-500 text-black">
+                    ناونووسین بکە
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Publish Trigger in Sidebar -->
+            <button onclick="saveAllSettings()" id="sideSaveBtn" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition shadow-xl">
+              پاشەکەوت و بڵاوکردنەوە
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
+    lucide.createIcons();
+
     const BIN_ID = "6ab7f417ac6210605af863a3";
     const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
     const SECRET_PIN = "2026";
 
-    function checkPin() {
+    function handleLogin(e) {
+      e.preventDefault();
       const pin = document.getElementById('pinInput').value;
       if (pin === SECRET_PIN) {
         document.getElementById('loginScreen').classList.add('hidden');
@@ -130,45 +316,108 @@
       }
     }
 
+    function setGradient(c1, c2) {
+      document.getElementById('gradColor1').value = c1;
+      document.getElementById('gradColor2').value = c2;
+      updateLivePreview();
+    }
+
+    function updateLivePreview() {
+      const c1 = document.getElementById('gradColor1').value;
+      const c2 = document.getElementById('gradColor2').value;
+      const badge = document.getElementById('heroBadge').value;
+      const title = document.getElementById('heroTitle').value;
+      const price = document.getElementById('tripPrice').value;
+      const img = document.getElementById('heroImageUrl').value;
+      const isOpen = document.getElementById('bookingOpen').checked;
+
+      document.getElementById('prevBadge').innerText = badge || 'سەرکێشی';
+      document.getElementById('prevTitle').innerText = title || 'کوردیا ئەدڤێنتچەر';
+      document.getElementById('prevPrice').innerText = price || '٢٥,٠٠٠ دینار';
+      document.getElementById('prevImg').src = img || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b';
+      
+      const prevBooking = document.getElementById('prevBooking');
+      const toggleText = document.getElementById('bookingToggleText');
+      if (isOpen) {
+        prevBooking.innerText = "کراوەیە";
+        prevBooking.className = "font-bold text-emerald-400";
+        toggleText.innerText = "دۆخی ناونووسین (کراوەیە 🟢)";
+      } else {
+        prevBooking.innerText = "داخراوە";
+        prevBooking.className = "font-bold text-rose-400";
+        toggleText.innerText = "دۆخی ناونووسین (داخراوە 🔴)";
+      }
+
+      // Dynamic colors in preview button
+      const prevBtn = document.getElementById('prevBtn');
+      prevBtn.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+    }
+
     async function fetchCurrentData() {
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, {
           headers: { 'X-Master-Key': API_KEY }
         });
         const data = (await res.json()).record;
 
+        document.getElementById('gradColor1').value = data.gradColor1 || '#f59e0b';
+        document.getElementById('gradColor2').value = data.gradColor2 || '#fde047';
+        document.getElementById('heroBadge').value = data.heroBadge || '';
+        document.getElementById('heroTitle').value = data.heroTitle || '';
+        document.getElementById('heroSubtitle').value = data.heroSubtitle || '';
+        document.getElementById('heroImageUrl').value = data.heroImageUrl || '';
+
+        document.getElementById('bookingOpen').checked = data.bookingOpen !== false;
         document.getElementById('tripTitle').value = data.tripTitle || '';
         document.getElementById('tripPrice').value = data.tripPrice || '';
-        document.getElementById('tripDifficulty').value = data.tripDifficulty || 'مامناوەند';
+        document.getElementById('tripDifficulty').value = data.tripDifficulty || '';
+        document.getElementById('tripDuration').value = data.tripDuration || '';
         document.getElementById('tripTime').value = data.tripTime || '';
         document.getElementById('tripLocation').value = data.tripLocation || '';
         document.getElementById('tripDesc').value = data.tripDesc || '';
-        document.getElementById('heroImageUrl').value = data.heroImageUrl || '';
 
-        const radios = document.getElementsByName('siteColor');
-        for (let r of radios) {
-          if (r.value === data.color) r.checked = true;
-        }
+        document.getElementById('step1').value = data.step1 || '';
+        document.getElementById('step2').value = data.step2 || '';
+        document.getElementById('step3').value = data.step3 || '';
+        document.getElementById('step4').value = data.step4 || '';
+
+        // Update Overview Stats
+        document.getElementById('statBookingStatus').innerText = data.bookingOpen !== false ? "کراوەیە" : "داخراوە";
+        document.getElementById('statTripName').innerText = data.tripTitle || "دیارینەکراوە";
+
+        updateLivePreview();
       } catch (err) {
-        console.error(err);
+        console.error("Fetch failed:", err);
       }
     }
 
-    async function saveToCloud() {
-      const saveBtn = document.getElementById('saveBtn');
-      saveBtn.disabled = true;
-      saveBtn.innerText = "کەمێک چاوەڕێ بکە...";
+    async function saveAllSettings() {
+      const btn = document.getElementById('saveBtn');
+      const sideBtn = document.getElementById('sideSaveBtn');
+      btn.disabled = true;
+      sideBtn.disabled = true;
+      btn.innerText = "کەمێک چاوەڕێ بکە...";
+      sideBtn.innerText = "کەمێک چاوەڕێ بکە...";
 
-      const selectedColor = document.querySelector('input[name="siteColor"]:checked').value;
       const payload = {
-        color: selectedColor,
+        gradColor1: document.getElementById('gradColor1').value,
+        gradColor2: document.getElementById('gradColor2').value,
+        heroBadge: document.getElementById('heroBadge').value,
+        heroTitle: document.getElementById('heroTitle').value,
+        heroSubtitle: document.getElementById('heroSubtitle').value,
+        heroImageUrl: document.getElementById('heroImageUrl').value,
+        bookingOpen: document.getElementById('bookingOpen').checked,
         tripTitle: document.getElementById('tripTitle').value,
         tripPrice: document.getElementById('tripPrice').value,
         tripDifficulty: document.getElementById('tripDifficulty').value,
+        tripDuration: document.getElementById('tripDuration').value,
         tripTime: document.getElementById('tripTime').value,
         tripLocation: document.getElementById('tripLocation').value,
         tripDesc: document.getElementById('tripDesc').value,
-        heroImageUrl: document.getElementById('heroImageUrl').value
+        step1: document.getElementById('step1').value,
+        step2: document.getElementById('step2').value,
+        step3: document.getElementById('step3').value,
+        step4: document.getElementById('step4').value
       };
 
       try {
@@ -181,17 +430,29 @@
           body: JSON.stringify(payload)
         });
 
-        saveBtn.innerText = "بڵاوکرایەوە! ✓";
-        saveBtn.classList.replace('bg-yellow-500', 'bg-emerald-500');
+        btn.innerText = "بڵاوکرایەوە! ✓";
+        sideBtn.innerText = "بڵاوکرایەوە! ✓";
+        btn.classList.replace('bg-amber-500', 'bg-emerald-500');
+        sideBtn.classList.replace('bg-amber-500', 'bg-emerald-500');
+
+        document.getElementById('statLastUpdate').innerText = new Date().toLocaleTimeString('en-US');
+        document.getElementById('statBookingStatus').innerText = payload.bookingOpen ? "کراوەیە" : "داخراوە";
+        document.getElementById('statTripName').innerText = payload.tripTitle;
+
         setTimeout(() => {
-          saveBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
-          saveBtn.classList.replace('bg-emerald-500', 'bg-yellow-500');
-          saveBtn.disabled = false;
+          btn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+          sideBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+          btn.classList.replace('bg-emerald-500', 'bg-amber-500');
+          sideBtn.classList.replace('bg-emerald-500', 'bg-amber-500');
+          btn.disabled = false;
+          sideBtn.disabled = false;
         }, 2000);
       } catch (err) {
-        alert("کێشەیەک ڕوویدا لە کاتی پاشەکەوتکردن!");
-        saveBtn.disabled = false;
-        saveBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+        alert("کێشەیەک لە پەیوەندی بە داتابەیس ڕوویدا!");
+        btn.disabled = false;
+        sideBtn.disabled = false;
+        btn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+        sideBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
       }
     }
   </script>
