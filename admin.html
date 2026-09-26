@@ -102,22 +102,15 @@
           <div id="contentSections" class="space-y-4">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold text-white uppercase tracking-wider">ڕیزبەندی و سێکشنەکان</span>
-              <button onclick="openAddSectionModal()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-[11px] font-bold text-white flex items-center gap-1">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i> زیادکردن
-              </button>
             </div>
-            <p class="text-[11px] text-gray-400">شوێنی سێکشنەکان بەرز و نزم بکەرەوە بۆ گۆڕینی ڕیزبەندی لەسەر وێبسایت:</p>
+            <p class="text-[11px] text-gray-400">شوێنی سێکشنەکان بەرز و نزم بکەرەوە، یان کلیک لەسەر ناوەکەی بکە بۆ دەستکاری:</p>
 
-            <div id="sectionsList" class="space-y-2">
-              <!-- Injected dynamically with Move Up / Down -->
-            </div>
+            <div id="sectionsList" class="space-y-2"></div>
 
             <!-- Active Section Properties Editor -->
             <div id="sectionEditorBox" class="pt-4 border-t border-slate-800 space-y-4">
               <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider">دەستکاریکردنی زانیاری سێکشن</h4>
-              <div id="dynamicFields" class="space-y-3">
-                <!-- Populated based on selection -->
-              </div>
+              <div id="dynamicFields" class="space-y-3"></div>
             </div>
           </div>
 
@@ -150,31 +143,31 @@
             </div>
           </div>
 
-          <!-- ================= TAB: AI ASSISTANT (WEBSITE COMMANDS) ================= -->
+          <!-- ================= TAB: AI ASSISTANT ================= -->
           <div id="contentAi" class="hidden space-y-4">
             <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
               <i data-lucide="sparkles" class="w-4 h-4"></i>
               <span>فەرمانی زیرەکی دەستکرد</span>
             </div>
             <p class="text-[11px] text-gray-400 leading-relaxed">
-              دەتوانیت بە زمانی کوردی فەرمان بە وێبسایت بدەیت تا ڕاستەوخۆ دەستکاری دیزاین و زانیاری بکات.
+              دەتوانیت بە کوردی فەرمان بە وێبسایت بدەیت تا دەستکاری دیزاین و گەشت بکات:
             </p>
 
             <div class="space-y-2">
-              <textarea id="aiCommandInput" rows="3" placeholder="نموونە: ڕەنگی ماڵپەڕەکە بکە بە سەوز و ناونیشانی گەشتەکە بکە بە گەشتی چیای هەڵگورد" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
-              <button onclick="executeAiCommand()" id="aiRunBtn" class="w-full py-2.5 rounded-xl bg-accent-grad text-black font-extrabold text-xs transition">
-                جێبەجێکردنی فەرمان لەسەر دیزاین
+              <textarea id="aiCommandInput" rows="3" placeholder="نموونە: ڕەنگی ماڵپەڕەکە بکە بە سەوز و ناونووسین دابخە" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+              <button onclick="executeAiCommand()" id="aiRunBtn" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-extrabold text-xs transition">
+                جێبەجێکردنی فەرمان
               </button>
             </div>
 
             <div class="pt-4 border-t border-slate-800 space-y-3">
-              <span class="text-xs font-bold text-white block">AI Knowledge Base (زانیارییەکانی بۆتەکە)</span>
+              <span class="text-xs font-bold text-white block">AI Knowledge Base (زانیارییەکان بۆ بۆت)</span>
               <div>
-                <label class="text-[10px] text-gray-400 block mb-1">دەربارەی گروپ و سەرکێشی</label>
+                <label class="text-[10px] text-gray-400 block mb-1">دەربارەی گروپ</label>
                 <textarea id="kbAbout" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
               </div>
               <div>
-                <label class="text-[10px] text-gray-400 block mb-1">کەلوپەلی پێویست بۆ بەشداربووان</label>
+                <label class="text-[10px] text-gray-400 block mb-1">کەلوپەلی پێویست</label>
                 <textarea id="kbEquipment" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
               </div>
             </div>
@@ -192,7 +185,7 @@
               <textarea id="seoDescInput" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
             </div>
             <div class="pt-3 border-t border-slate-800 space-y-3">
-              <span class="text-xs font-bold text-white block">لینکی پەیوەندی و تۆڕەکان</span>
+              <span class="text-xs font-bold text-white block">پەیوەندییەکان</span>
               <input type="text" id="socInsta" placeholder="Instagram URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
               <input type="text" id="socWa" placeholder="WhatsApp (0750...)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
               <input type="text" id="socTele" placeholder="Telegram URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
@@ -202,10 +195,9 @@
         </div>
       </aside>
 
-      <!-- Center & Right: Live Responsive Preview Workspace -->
+      <!-- Center: Live Viewport -->
       <main class="flex-1 bg-[#05070a] p-4 sm:p-8 flex items-center justify-center overflow-auto">
         <div id="previewWrapper" class="viewport-desktop h-full bg-[#07090e] rounded-3xl border border-slate-800 shadow-2xl transition-all duration-300 overflow-hidden relative">
-          <!-- Live Preview Iframe connected to live DOM render -->
           <iframe id="previewFrame" src="index.html" class="w-full h-full border-0"></iframe>
         </div>
       </main>
@@ -220,8 +212,9 @@
     const BIN_ID = "6ab7f417ac6210605af863a3";
     const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
     const SECRET_PIN = "2026";
+    // ImgBB Free Upload API Key
+    const IMGBB_API_KEY = "c89b7b9f5eaae43bce82e66b4d3f572a";
 
-    // Application State Tree
     let appState = null;
     let historyStack = [];
     let historyIndex = -1;
@@ -238,7 +231,6 @@
       }
     }
 
-    // Viewport Controls
     function setViewport(type) {
       const wrap = document.getElementById('previewWrapper');
       wrap.className = 'h-full bg-[#07090e] rounded-3xl border border-slate-800 shadow-2xl transition-all duration-300 overflow-hidden relative ' +
@@ -249,7 +241,6 @@
       document.getElementById('vpMob').className = type === 'mobile' ? 'p-2 rounded-lg bg-amber-500 text-black font-bold' : 'p-2 rounded-lg text-gray-400 hover:text-white';
     }
 
-    // Tab Switching
     function switchTab(tab) {
       const tabs = ['sections', 'theme', 'ai', 'settings'];
       tabs.forEach(t => {
@@ -260,7 +251,6 @@
       document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1, 3)).className = 'py-3 text-amber-400 border-b-2 border-amber-400';
     }
 
-    // History Snapshot
     function pushState(newState) {
       historyStack = historyStack.slice(0, historyIndex + 1);
       historyStack.push(JSON.parse(JSON.stringify(newState)));
@@ -287,7 +277,6 @@
       }
     }
 
-    // Initialize Builder
     async function initBuilder() {
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, {
@@ -296,15 +285,14 @@
         const raw = await res.json();
         const data = raw.record;
 
-        // Ensure state schema structure
         if (!data.sectionsOrder) {
           data.sectionsOrder = ['hero', 'trip', 'services', 'gear', 'gallery', 'faq', 'booking'];
         }
-        if (!data.aiKnowledge) {
-          data.aiKnowledge = { about: 'کوردیا ئەدڤێنتچەر گروپێکی پێشەنگی شاخەوانییە لە کوردستان.', equipment: 'پێڵاوی دژەخلیسک و ٢ لیتر ئاو پێویستە.' };
-        }
-        if (!data.socials) {
-          data.socials = { instagram: '', whatsapp: '07503130360', telegram: '' };
+        if (!data.galleryList) {
+          data.galleryList = [
+            { url: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa', title: 'لووتکەی چیا' },
+            { url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba', title: 'کەمپینگی شەوانە' }
+          ];
         }
 
         pushState(data);
@@ -316,7 +304,6 @@
       }
     }
 
-    // Sync input fields with State
     function syncInputs() {
       document.getElementById('themeColor1').value = appState.gradColor1 || '#f59e0b';
       document.getElementById('themeColor2').value = appState.gradColor2 || '#fde047';
@@ -329,7 +316,6 @@
       document.getElementById('socTele').value = appState.socials?.telegram || '';
     }
 
-    // Reorder Section Up / Down
     function moveSection(index, direction) {
       const order = [...appState.sectionsOrder];
       const targetIndex = index + direction;
@@ -344,7 +330,6 @@
       renderSectionsList();
     }
 
-    // Render Drag / Reorder List
     function renderSectionsList() {
       const list = document.getElementById('sectionsList');
       list.innerHTML = '';
@@ -373,17 +358,69 @@
       lucide.createIcons();
     }
 
-    // Section Properties Panel
+    // Direct Image Upload Handler to Cloud
+    async function uploadDirectImage(file, targetField, statusId, previewId) {
+      const statusEl = document.getElementById(statusId);
+      statusEl.innerText = "وێنەکە ئەپڵۆد دەکرێت بۆ هەور...";
+      statusEl.className = "text-[11px] text-amber-400 block animate-pulse";
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data && data.data && data.data.url) {
+          const directUrl = data.data.url;
+          statusEl.innerText = "ئەپڵۆد بە سەرکەوتوویی تەواو بوو! ✓";
+          statusEl.className = "text-[11px] text-emerald-400 block";
+          
+          if (previewId) {
+            document.getElementById(previewId).src = directUrl;
+          }
+
+          if (targetField === 'heroImageUrl') {
+            updateField('heroImageUrl', directUrl);
+          } else if (targetField === 'gallery') {
+            if (!appState.galleryList) appState.galleryList = [];
+            appState.galleryList.push({ url: directUrl, title: 'وێنەی نوێ' });
+            pushState(appState);
+            editSection('gallery');
+          }
+        } else {
+          statusEl.innerText = "کێشەیەک ڕوویدا لە بارکردن!";
+          statusEl.className = "text-[11px] text-rose-400 block";
+        }
+      } catch (err) {
+        statusEl.innerText = "هێڵ کێشەی هەیە لە ئەپڵۆد!";
+        statusEl.className = "text-[11px] text-rose-400 block";
+      }
+    }
+
     function editSection(sec) {
       const box = document.getElementById('dynamicFields');
       box.innerHTML = '';
 
       if (sec === 'hero') {
         box.innerHTML = `
-          <div><label class="text-[10px] text-gray-400 block mb-1">Badge</label><input type="text" value="${appState.heroBadge || ''}" oninput="updateField('heroBadge', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">Title</label><input type="text" value="${appState.heroTitle || ''}" oninput="updateField('heroTitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">Subtitle</label><textarea oninput="updateField('heroSubtitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white">${appState.heroSubtitle || ''}</textarea></div>
-          <div><label class="text-[10px] text-gray-400 block mb-1">Image URL</label><input type="text" value="${appState.heroImageUrl || ''}" oninput="updateField('heroImageUrl', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white" dir="ltr"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">درووشمی بچووک (Badge)</label><input type="text" value="${appState.heroBadge || ''}" oninput="updateField('heroBadge', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">ناونیشانی سەرەکی</label><input type="text" value="${appState.heroTitle || ''}" oninput="updateField('heroTitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">پێناسەی کورت</label><textarea oninput="updateField('heroSubtitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white">${appState.heroSubtitle || ''}</textarea></div>
+          
+          <!-- Image Upload Block -->
+          <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+            <span class="text-xs font-bold text-white block">وێنەی گەورەی پاشبنەما (Hero Image)</span>
+            <img id="heroImgPrev" src="${appState.heroImageUrl || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'}" class="w-full h-24 object-cover rounded-lg border border-slate-800">
+            <input type="file" id="heroFile" accept="image/*" class="hidden" onchange="uploadDirectImage(this.files[0], 'heroImageUrl', 'heroUploadStatus', 'heroImgPrev')">
+            <label for="heroFile" class="w-full py-2 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition">
+              <i data-lucide="image-plus" class="w-4 h-4"></i> ئەپڵۆدکردنی وێنە لە مۆبایلەوە
+            </label>
+            <span id="heroUploadStatus" class="text-[10px] text-gray-500 block text-center">وێنەکە هەڵبژێرە، دەستبەجێ بەرزدەکرێتەوە</span>
+          </div>
         `;
       } else if (sec === 'trip') {
         box.innerHTML = `
@@ -391,13 +428,55 @@
           <div><label class="text-[10px] text-gray-400 block mb-1">نرخ</label><input type="text" value="${appState.tripPrice || ''}" oninput="updateField('tripPrice', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
           <div><label class="text-[10px] text-gray-400 block mb-1">ئاستی سەختی</label><input type="text" value="${appState.tripDifficulty || ''}" oninput="updateField('tripDifficulty', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
           <div><label class="text-[10px] text-gray-400 block mb-1">ماوەی ڕێڕۆیشتن</label><input type="text" value="${appState.tripDuration || ''}" oninput="updateField('tripDuration', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">کاتی بەڕێکەوتن</label><input type="text" value="${appState.tripTime || ''}" oninput="updateField('tripTime', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">شوێنی کۆبوونەوە</label><input type="text" value="${appState.tripLocation || ''}" oninput="updateField('tripLocation', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">کورتەی گەشت</label><textarea oninput="updateField('tripDesc', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white">${appState.tripDesc || ''}</textarea></div>
           <div class="flex items-center gap-2 pt-2">
             <input type="checkbox" id="bookToggle" ${appState.bookingOpen !== false ? 'checked' : ''} onchange="updateField('bookingOpen', this.checked)" class="w-4 h-4 rounded text-amber-500">
             <label for="bookToggle" class="text-xs font-bold text-white">دۆخی ناونووسین (کراوەیە)</label>
           </div>
         `;
+      } else if (sec === 'gallery') {
+        let galleryItems = '';
+        (appState.galleryList || []).forEach((g, i) => {
+          galleryItems += `
+            <div class="flex items-center gap-2 p-2 bg-slate-950 rounded-lg border border-slate-800">
+              <img src="${g.url}" class="w-10 h-10 object-cover rounded">
+              <input type="text" value="${g.title || ''}" onchange="updateGalleryTitle(${i}, this.value)" class="flex-1 bg-transparent text-xs text-white">
+              <button onclick="deleteGalleryItem(${i})" class="text-rose-400 hover:text-white p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          `;
+        });
+
+        box.innerHTML = `
+          <div class="space-y-3">
+            <span class="text-xs font-bold text-white block">وێنەکانی گەلەری</span>
+            <div class="space-y-2">${galleryItems}</div>
+            <input type="file" id="galleryFile" accept="image/*" class="hidden" onchange="uploadDirectImage(this.files[0], 'gallery', 'galleryUploadStatus', null)">
+            <label for="galleryFile" class="w-full py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer transition">
+              <i data-lucide="upload" class="w-4 h-4 text-amber-400"></i> زیادکردنی وێنە لە مۆبایلەوە
+            </label>
+            <span id="galleryUploadStatus" class="text-[10px] text-gray-500 block text-center">وێنەکە هەڵبژێرە، دەستبەجێ زیاد دەبێت</span>
+          </div>
+        `;
       } else {
         box.innerHTML = `<p class="text-xs text-gray-400">تایبەتمەندییەکانی ${sec} دەستکاری دەکرێن.</p>`;
+      }
+      lucide.createIcons();
+    }
+
+    function updateGalleryTitle(index, title) {
+      if (appState.galleryList && appState.galleryList[index]) {
+        appState.galleryList[index].title = title;
+        pushState(appState);
+      }
+    }
+
+    function deleteGalleryItem(index) {
+      if (appState.galleryList) {
+        appState.galleryList.splice(index, 1);
+        pushState(appState);
+        editSection('gallery');
       }
     }
 
@@ -420,7 +499,6 @@
       pushState(appState);
     }
 
-    // AI Natural Language Command Interpreter
     function executeAiCommand() {
       const input = document.getElementById('aiCommandInput');
       const cmd = input.value.trim().toLowerCase();
@@ -453,11 +531,10 @@
         pushState(appState);
         syncInputs();
         btn.innerText = "جێبەجێکرا! ✓";
-        setTimeout(() => btn.innerText = "جێبەجێکردنی فەرمان لەسەر دیزاین", 1500);
+        setTimeout(() => btn.innerText = "جێبەجێکردنی فەرمان", 1500);
       }, 400);
     }
 
-    // Refresh Preview Frame
     function refreshPreview() {
       const frame = document.getElementById('previewFrame');
       if (frame && frame.contentWindow && frame.contentWindow.renderCompleteWebsite) {
@@ -465,13 +542,11 @@
       }
     }
 
-    // Publish State to Cloud JSONBin
     async function publishToCloud() {
       const btn = document.getElementById('publishBtn');
       btn.disabled = true;
       btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> پاشەکەوت دەکرێت...`;
 
-      // Sync settings
       appState.aiKnowledge = {
         about: document.getElementById('kbAbout').value,
         equipment: document.getElementById('kbEquipment').value
