@@ -1,736 +1,2884 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl" class="scroll-smooth">
+<html lang="ku" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title id="pageSeoTitle">KURDIA ADVENTURE | کوردیا ئەدڤێنتچەر</title>
-  <meta name="description" id="pageSeoDesc" content="گەشتی شاخەوانی و سەرکێشی لە لووتکەکانی کوردستان بە بەرزترین ئاستی سەلامەتی.">
-  <meta name="keywords" id="pageSeoKeywords" content="شاخەوانی, کوردستان, گەشت, هەولێر, چیای سەفین, هەڵگورد, کەمپینگ">
 
-  <!-- Tailwind CSS & Lucide Icons -->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>KURDIA ADVENTURE</title>
+
+  <meta
+    id="metaDescription"
+    name="description"
+    content="KURDIA ADVENTURE — گەشت و سەرکێشی لە سروشتی کوردستان"
+  >
+
+  <meta name="theme-color" content="#0B0F19">
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Google Fonts: Vazirmatn -->
+  <!-- Vazirmatn -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
 
   <style>
-    :root {
-      --accent1: #f59e0b;
-      --accent2: #fde047;
-      --bg-dark: #07090e;
+
+    * {
+      box-sizing: border-box;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Vazirmatn', sans-serif;
-      background-color: var(--bg-dark);
-      color: #f1f5f9;
+      margin: 0;
+      background: #080b12;
+      color: #ffffff;
+      font-family: "Vazirmatn", sans-serif;
       overflow-x: hidden;
     }
-    .bg-accent-grad {
-      background: linear-gradient(135deg, var(--accent1), var(--accent2)) !important;
+
+    ::selection {
+      background: rgba(157, 28, 50, .35);
+      color: white;
     }
-    .text-accent-grad {
-      background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+
+    ::-webkit-scrollbar {
+      width: 7px;
     }
-    .border-accent {
-      border-color: var(--accent1) !important;
+
+    ::-webkit-scrollbar-track {
+      background: #080b12;
     }
-    .glass-nav {
-      background: rgba(7, 9, 14, 0.82);
+
+    ::-webkit-scrollbar-thumb {
+      background: #303746;
+      border-radius: 50px;
+    }
+
+    .glass {
+      background: rgba(10, 15, 24, .72);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255,255,255,.07);
     }
-    .glass-card {
-      background: rgba(18, 24, 38, 0.65);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+
+    .hero-overlay {
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(5,8,14,.15),
+          rgba(5,8,14,.55) 45%,
+          #080b12 100%
+        );
     }
-    .glass-card:hover {
-      border-color: rgba(255, 255, 255, 0.18);
+
+    .hero-gradient {
+      background:
+        radial-gradient(
+          circle at 15% 20%,
+          rgba(157,28,50,.25),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 85% 35%,
+          rgba(255,255,255,.06),
+          transparent 25%
+        );
     }
-    ::-webkit-scrollbar { width: 7px; }
-    ::-webkit-scrollbar-track { background: #07090e; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+
+    .section-title-line {
+      width: 55px;
+      height: 3px;
+      border-radius: 20px;
+    }
+
+    .service-card {
+      background: linear-gradient(
+        145deg,
+        rgba(20,27,40,.96),
+        rgba(10,15,24,.96)
+      );
+
+      border: 1px solid rgba(255,255,255,.07);
+
+      transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(157,28,50,.65);
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+    }
+
+    .trip-card {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(20,27,40,.98),
+          rgba(9,13,21,.98)
+        );
+
+      border: 1px solid rgba(255,255,255,.08);
+
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.25);
+    }
+
+    .btn-primary {
+      background: #9d1c32;
+      transition: .25s;
+    }
+
+    .btn-primary:hover {
+      background: #b4223c;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+      transition: .25s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,.12);
+      transform: translateY(-2px);
+    }
+
+    .info-card {
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .gallery-image {
+      transition:
+        transform .5s ease,
+        filter .5s ease;
+    }
+
+    .gallery-item:hover .gallery-image {
+      transform: scale(1.06);
+      filter: brightness(1.08);
+    }
+
+    .step-number {
+      background: #9d1c32;
+      box-shadow:
+        0 0 0 8px rgba(157,28,50,.10),
+        0 10px 35px rgba(157,28,50,.25);
+    }
+
+    .assistant-button {
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.35),
+        0 0 0 1px rgba(255,255,255,.08);
+    }
+
+    .assistant-window {
+      box-shadow:
+        0 25px 100px rgba(0,0,0,.55);
+    }
+
+    .chat-user {
+      background: #9d1c32;
+      border-radius: 18px 18px 4px 18px;
+    }
+
+    .chat-ai {
+      background: #171e2b;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 18px 18px 18px 4px;
+    }
+
+    .faq-item {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      cursor: pointer;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+    }
+
+    .faq-item.open .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    .faq-chevron {
+      transition: .3s;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .fade-up.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .custom-image {
+      max-height: 500px;
+      object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+
+      .hero-height {
+        min-height: 760px;
+      }
+
+    }
+
   </style>
+
 </head>
-<body class="selection:bg-amber-500 selection:text-black">
 
-  <!-- ================= TOP NOTIFICATION ================= -->
-  <div id="topNotificationBar" class="hidden text-center py-2 px-4 text-xs font-bold transition-all duration-300">
-    <span id="topNotificationMsg"></span>
-  </div>
 
-  <!-- ================= NAVIGATION ================= -->
-  <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-11 h-11 rounded-2xl bg-accent-grad flex items-center justify-center text-black font-black text-xl shadow-lg transition-transform duration-300 group-hover:scale-105">
-          🏔️
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<header
+  id="navbar"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+>
+
+  <div class="glass">
+
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between"
+    >
+
+      <!-- LOGO -->
+
+      <a
+        href="#home"
+        class="flex items-center gap-3"
+      >
+
+        <div
+          id="logoBox"
+          class="w-10 h-10 rounded-xl flex items-center justify-center"
+          style="background:#9d1c32"
+        >
+
+          <i
+            data-lucide="mountain"
+            class="w-5 h-5"
+          ></i>
+
         </div>
-        <div class="flex flex-col">
-          <span class="text-lg font-black tracking-wider text-white">KURDIA<span class="text-accent-grad">.</span></span>
-          <span class="text-[11px] text-gray-400 font-medium tracking-wide">کوردیا ئەدڤێنتچەر</span>
+
+        <div>
+
+          <div class="font-black tracking-wide">
+            KURDIA
+          </div>
+
+          <div class="text-[9px] text-gray-400 tracking-[.22em]">
+            ADVENTURE
+          </div>
+
         </div>
+
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300" id="desktopNavLinks">
-        <a href="#about" class="hover:text-white transition">دەربارە</a>
-        <a href="#trip" class="hover:text-white transition">گەشتی داهاتوو</a>
-        <a href="#services" class="hover:text-white transition">خزمەتگوزارییەکان</a>
-        <a href="#gear" class="hover:text-white transition">کەلوپەل</a>
-        <a href="#gallery" class="hover:text-white transition">گەلەری</a>
-        <a href="#faq" class="hover:text-white transition">پرسیارەکان</a>
+
+      <!-- DESKTOP NAV -->
+
+      <nav class="hidden md:flex items-center gap-7 text-sm">
+
+        <a
+          href="#home"
+          class="text-gray-300 hover:text-white transition"
+        >
+          سەرەتا
+        </a>
+
+        <a
+          href="#trip"
+          class="text-gray-300 hover:text-white transition"
+        >
+          گەشت
+        </a>
+
+        <a
+          href="#services"
+          class="text-gray-300 hover:text-white transition"
+        >
+          خزمەتگوزاری
+        </a>
+
+        <a
+          href="#gallery"
+          class="text-gray-300 hover:text-white transition"
+        >
+          وێنەکان
+        </a>
+
+        <a
+          href="#booking"
+          class="text-gray-300 hover:text-white transition"
+        >
+          بەشداری
+        </a>
+
       </nav>
 
-      <div class="hidden md:flex items-center gap-4">
-        <a href="#booking" id="desktopNavCta" class="bg-accent-grad text-black font-extrabold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition transform hover:scale-105 shadow-lg">
-          ناونووسین بکە
-        </a>
-      </div>
 
-      <button onclick="toggleMobileNavMenu()" aria-label="Menu" class="md:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-gray-300">
-        <i data-lucide="menu" id="menuIconOpen" class="w-6 h-6"></i>
-        <i data-lucide="x" id="menuIconClose" class="w-6 h-6 hidden"></i>
+      <!-- MOBILE -->
+
+      <button
+        id="mobileMenuButton"
+        class="md:hidden p-2 rounded-xl bg-white/5"
+        onclick="toggleMobileMenu()"
+      >
+
+        <i
+          data-lucide="menu"
+          class="w-5 h-5"
+        ></i>
+
       </button>
+
     </div>
 
-    <!-- Mobile Dropdown -->
-    <div id="mobileNavMenu" class="hidden md:hidden border-t border-slate-800 bg-[#07090e]/95 backdrop-blur-2xl px-6 py-6 space-y-4">
-      <a href="#about" onclick="toggleMobileNavMenu()" class="block text-base font-semibold text-gray-200 py-1">دەربارە</a>
-      <a href="#trip" onclick="toggleMobileNavMenu()" class="block text-base font-semibold text-gray-200 py-1">گەشتی داهاتوو</a>
-      <a href="#services" onclick="toggleMobileNavMenu()" class="block text-base font-semibold text-gray-200 py-1">خزمەتگوزارییەکان</a>
-      <a href="#gear" onclick="toggleMobileNavMenu()" class="block text-base font-semibold text-gray-200 py-1">کەلوپەل</a>
-      <a href="#gallery" onclick="toggleMobileNavMenu()" class="block text-base font-semibold text-gray-200 py-1">گەلەری</a>
-      <a href="#faq" onclick="toggleMobileNavMenu()" class="block text-base font-semibold text-gray-200 py-1">پرسیارە باوەکان</a>
-      <div class="pt-4 border-t border-slate-800">
-        <a href="#booking" onclick="toggleMobileNavMenu()" class="block w-full py-3 text-center bg-accent-grad text-black font-black text-sm rounded-xl">
-          ناونووسین بکە
+
+    <!-- MOBILE NAV -->
+
+    <div
+      id="mobileMenu"
+      class="hidden md:hidden border-t border-white/5"
+    >
+
+      <div class="px-5 py-4 flex flex-col gap-2">
+
+        <a
+          href="#home"
+          onclick="closeMobileMenu()"
+          class="py-3 text-gray-300"
+        >
+          سەرەتا
         </a>
-      </div>
-    </div>
-  </header>
 
-  <!-- ================= DYNAMIC SECTIONS CONTAINER ================= -->
-  <main id="appSectionsHost">
-    <!-- Rendered dynamically by master data schema -->
-  </main>
+        <a
+          href="#trip"
+          onclick="closeMobileMenu()"
+          class="py-3 text-gray-300"
+        >
+          گەشت
+        </a>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="py-14 border-t border-slate-900 bg-black/40 text-center text-xs text-gray-500 space-y-4">
-    <div class="flex items-center justify-center gap-2">
-      <span class="w-2.5 h-2.5 rounded-full bg-accent-grad"></span>
-      <span class="font-extrabold text-sm tracking-wider text-gray-300">KURDIA ADVENTURE</span>
-    </div>
-    <div id="footerSocialLinks" class="flex justify-center items-center gap-6 text-gray-400 py-2">
-      <!-- Dynamic social handles -->
-    </div>
-    <p>© 2026 کوردیا ئەدڤێنتچەر — سەرجەم مافەکان پارێزراون.</p>
-  </footer>
+        <a
+          href="#services"
+          onclick="closeMobileMenu()"
+          class="py-3 text-gray-300"
+        >
+          خزمەتگوزاری
+        </a>
 
-  <!-- ================= AI ASSISTANT CHAT WIDGET ================= -->
-  <div class="fixed bottom-6 left-6 z-50">
-    <button onclick="togglePublicAiChat()" id="publicChatBtn" class="flex items-center gap-3 px-5 py-3.5 rounded-full bg-accent-grad text-black font-extrabold shadow-2xl transition transform hover:scale-105">
-      <i data-lucide="bot" class="w-5 h-5"></i>
-      <span class="text-xs sm:text-sm">یاریدەدەری زیرەکی کوردیا</span>
-    </button>
+        <a
+          href="#gallery"
+          onclick="closeMobileMenu()"
+          class="py-3 text-gray-300"
+        >
+          وێنەکان
+        </a>
 
-    <div id="publicChatBox" class="hidden w-[350px] sm:w-[410px] h-[520px] bg-[#0d121d] border border-slate-800 rounded-3xl shadow-2xl flex-col overflow-hidden transition-all duration-300">
-      <div class="bg-slate-900/90 p-4 border-b border-slate-800 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-2xl bg-accent-grad flex items-center justify-center text-black font-bold">
-            🤖
-          </div>
-          <div>
-            <h4 class="text-sm font-bold text-white">یاریدەدەری زیرەکی کوردیا</h4>
-            <span class="text-[10px] text-emerald-400 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> لەسەر بنەمای زانیاری گەشت وەڵام دەداتەوە
-            </span>
-          </div>
-        </div>
-        <button onclick="togglePublicAiChat()" class="text-gray-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <a
+          href="#booking"
+          onclick="closeMobileMenu()"
+          class="py-3 text-gray-300"
+        >
+          بەشداری
+        </a>
+
       </div>
 
-      <div id="publicChatLogs" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs leading-relaxed">
-        <div class="bg-slate-900 p-3.5 rounded-2xl rounded-tr-none text-gray-200 border border-slate-800 max-w-[85%]">
-          سڵاو! من یاریدەدەری زیرەکی کوردیا ئەدڤێنتچەرم 🏔️ هەر پرسیارێکت لەسەر کات، تێچوو، ئاستی سەختی، پێداویستییەکان، یان یاساکانی گەشت هەیە لێم بپرسە.
-        </div>
-      </div>
-
-      <div class="p-3 border-t border-slate-800 bg-slate-900/60">
-        <form onsubmit="handleSendPublicAi(event)" class="flex gap-2">
-          <input type="text" id="publicChatField" placeholder="پرسیارەکەت بنووسە..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500">
-          <button type="submit" class="bg-accent-grad text-black px-4 py-2 rounded-xl font-bold transition">
-            <i data-lucide="send" class="w-4 h-4"></i>
-          </button>
-        </form>
-      </div>
     </div>
+
   </div>
 
-  <!-- ================= SCRIPTS & RENDERING ENGINE ================= -->
-  <script>
-    const BIN_ID = "6ab7f417ac6210605af863a3";
-    const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
-    const TELEGRAM_TOKEN = "8988711499:AAFr3njwdynHfGpEe_9u6LT8ocKwhdf-gmQ";
-    const TELEGRAM_CHAT = "1112648339";
+</header>
 
-    let stateCache = null;
 
-    function toggleMobileNavMenu() {
-      const menu = document.getElementById('mobileNavMenu');
-      const openI = document.getElementById('menuIconOpen');
-      const closeI = document.getElementById('menuIconClose');
-      menu.classList.toggle('hidden');
-      openI.classList.toggle('hidden');
-      closeI.classList.toggle('hidden');
-    }
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-    function togglePublicAiChat() {
-      const box = document.getElementById('publicChatBox');
-      const btn = document.getElementById('publicChatBtn');
-      if (box.classList.contains('hidden')) {
-        box.classList.remove('hidden');
-        box.classList.add('flex');
-        btn.classList.add('hidden');
-      } else {
-        box.classList.add('hidden');
-        box.classList.remove('flex');
-        btn.classList.remove('hidden');
-      }
-    }
+<main id="siteContent"></main>
 
-    function setGradientVars(c1, c2) {
-      document.documentElement.style.setProperty('--accent1', c1 || '#f59e0b');
-      document.documentElement.style.setProperty('--accent2', c2 || '#fde047');
-    }
 
-    async function initializeMainSite() {
-      try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, {
-          headers: { 'X-Master-Key': API_KEY }
-        });
-        const raw = await res.json();
-        stateCache = raw.record;
-        renderPublicWebsite(stateCache);
-      } catch (err) {
-        console.error("Fetch failed:", err);
-      }
-    }
+<!-- =========================================================
+     FOOTER
+========================================================= -->
 
-    function renderPublicWebsite(data) {
-      stateCache = data;
-      setGradientVars(data.gradColor1, data.gradColor2);
+<footer class="border-t border-white/5 bg-[#070a10]">
 
-      if (data.seoTitle) document.getElementById('pageSeoTitle').innerText = data.seoTitle;
-      if (data.seoDesc) document.getElementById('pageSeoDesc').setAttribute('content', data.seoDesc);
+  <div class="max-w-7xl mx-auto px-5 py-12">
 
-      const order = data.sectionsOrder || ['hero', 'about', 'trip', 'services', 'gear', 'gallery', 'faq', 'booking'];
-      const hidden = data.hiddenSections || [];
-      const container = document.getElementById('appSectionsHost');
-      container.innerHTML = '';
+    <div
+      class="flex flex-col md:flex-row items-center justify-between gap-6"
+    >
 
-      order.forEach(secKey => {
-        if (hidden.includes(secKey)) return;
-        if (secKey === 'hero') renderHero(container, data);
-        else if (secKey === 'about') renderAbout(container, data);
-        else if (secKey === 'trip') renderTrip(container, data);
-        else if (secKey === 'services') renderServices(container, data);
-        else if (secKey === 'gear') renderGear(container, data);
-        else if (secKey === 'gallery') renderGallery(container, data);
-        else if (secKey === 'faq') renderFaq(container, data);
-        else if (secKey === 'booking') renderBooking(container, data);
-      });
+      <div class="text-center md:text-right">
 
-      renderSocials(data.socials);
-      lucide.createIcons();
-    }
-
-    function renderHero(host, d) {
-      const html = `
-        <section id="hero" class="relative min-h-[92vh] flex items-center justify-center text-center px-4 overflow-hidden">
-          <div class="absolute inset-0 z-0">
-            <img src="${d.heroImageUrl || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'}" class="w-full h-full object-cover filter brightness-[0.40] transition-all duration-700">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/40 to-transparent"></div>
-          </div>
-          <div class="relative z-10 max-w-4xl mx-auto space-y-6 pt-12 pb-16">
-            <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
-              <span class="w-2 h-2 rounded-full bg-accent-grad animate-pulse"></span>
-              <span class="text-xs sm:text-sm font-semibold text-gray-200 tracking-wide">${d.heroBadge || 'سەرکێشی لە لووتکەکانی کوردستان'}</span>
-            </div>
-            <h1 class="text-3xl sm:text-6xl md:text-7xl font-black text-white leading-[1.25]">
-              ${(d.heroTitle || 'سروشت لەگەڵ کوردیا ئەدڤێنتچەر بدۆزەرەوە').replace('کوردیا ئەدڤێنتچەر', '<span class="text-accent-grad">کوردیا ئەدڤێنتچەر</span>')}
-            </h1>
-            <p class="text-sm sm:text-lg md:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-              ${d.heroSubtitle || 'گەشتی شاخەوانی و کەمپینگی تایبەت بە بەرزترین ئاستی سەلامەتی و سەرپەرشتیاری شارەزا.'}
-            </p>
-            <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="#booking" class="w-full sm:w-auto px-9 py-4 rounded-xl bg-accent-grad text-black font-extrabold text-sm uppercase tracking-wider transition transform hover:scale-105 shadow-2xl">
-                بەشداری لە گەشت بکە
-              </a>
-              <a href="#trip" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-card text-white font-bold text-sm hover:bg-white/10 transition">
-                خشتە و کاتی گەشت
-              </a>
-            </div>
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderAbout(host, d) {
-      const html = `
-        <section id="about" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-slate-900/60">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
-              <div class="inline-block text-xs font-bold uppercase tracking-widest text-accent-grad">دەربارەی ئێمە</div>
-              <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight">گەشتکردن بە ڕۆحی سەرکێشی و ڕێزگرتن لە سروشت</h2>
-              <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
-                ${d.aiKnowledge?.about || 'کوردیا ئەدڤێنتچەر (Kurdia Adventure) گرووپێکی فەرمی و پێشەنگی شاخەوانییە لە کوردستان، ئامانجمان ناساندنی لووتکە و سروشتی دڵڕفێنی نیشتمانە بە بەرزترین ئاستی ئاسایش و ڕێنمایی زانستی.'}
-              </p>
-              <div class="grid grid-cols-2 gap-4 pt-2">
-                <div class="glass-card p-4 rounded-2xl border border-slate-800">
-                  <span class="text-2xl font-black text-accent-grad block">+٥٠</span>
-                  <span class="text-xs text-gray-400">گەشتی سەرکەوتووی لووتکە</span>
-                </div>
-                <div class="glass-card p-4 rounded-2xl border border-slate-800">
-                  <span class="text-2xl font-black text-accent-grad block">١٠٠٪</span>
-                  <span class="text-xs text-gray-400">پابەندبوون بە سەلامەتی</span>
-                </div>
-              </div>
-            </div>
-            <div class="relative rounded-3xl overflow-hidden glass-card border border-slate-800 h-96">
-              <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-[#07090e] via-transparent to-transparent"></div>
-            </div>
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderTrip(host, d) {
-      const isOpen = d.bookingOpen !== false;
-      const html = `
-        <section id="trip" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <div class="inline-block text-xs font-bold uppercase tracking-widest text-accent-grad">ئامادەکاری گەشت</div>
-            <h2 class="text-3xl sm:text-5xl font-black text-white">گەشتی سەرکێشی داهاتوو</h2>
-            <p class="text-gray-400 text-sm">تەواوی وردەکارییەکان بۆ ئەزموونێکی سەلامەت و لەبیرنەکراو</p>
-          </div>
-
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 glass-card rounded-3xl p-6 sm:p-10 space-y-8">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
-                <div>
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${isOpen ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-rose-500/10 border border-rose-500/30 text-rose-400'}">
-                    ${isOpen ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ناونووسین کراوەیە' : '🔒 ناونووسین داخراوە'}
-                  </span>
-                  <h3 class="text-2xl sm:text-4xl font-extrabold text-white mt-3">${d.tripTitle || 'گەشتی چیای سەفین'}</h3>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-400 block font-medium">بڕی تێچوو بۆ هەر کەسێک</span>
-                  <span class="text-3xl sm:text-4xl font-black text-accent-grad block mt-1">${d.tripPrice || '٢٥,٠٠٠ دینار'}</span>
-                </div>
-              </div>
-
-              <p class="text-gray-300 text-sm sm:text-base leading-relaxed">${d.tripDesc || ''}</p>
-
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
-                  <i data-lucide="gauge" class="w-5 h-5 mx-auto text-gray-400 mb-2"></i>
-                  <span class="text-xs text-gray-400 block">ئاستی سەختی</span>
-                  <span class="font-bold text-white text-sm mt-1 block">${d.tripDifficulty || 'مامناوەند'}</span>
-                </div>
-                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
-                  <i data-lucide="clock" class="w-5 h-5 mx-auto text-gray-400 mb-2"></i>
-                  <span class="text-xs text-gray-400 block">ماوەی ڕێڕۆیشتن</span>
-                  <span class="font-bold text-white text-sm mt-1 block">${d.tripDuration || '٤ بۆ ٥ کاتژمێر'}</span>
-                </div>
-                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
-                  <i data-lucide="alarm-clock" class="w-5 h-5 mx-auto text-gray-400 mb-2"></i>
-                  <span class="text-xs text-gray-400 block">کاتی بەڕێکەوتن</span>
-                  <span class="font-bold text-white text-sm mt-1 block">${d.tripTime || '٠٦:٠٠ی بەیانی'}</span>
-                </div>
-                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-center">
-                  <i data-lucide="map-pin" class="w-5 h-5 mx-auto text-gray-400 mb-2"></i>
-                  <span class="text-xs text-gray-400 block">شوێنی کۆبوونەوە</span>
-                  <span class="font-bold text-white text-sm mt-1 block truncate">${d.tripLocation || 'هەولێر'}</span>
-                </div>
-              </div>
-
-              <!-- Timeline Steps -->
-              <div id="timeline" class="pt-6">
-                <h4 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                  <i data-lucide="milestone" class="w-5 h-5 text-accent-grad"></i>
-                  <span>خشتە و قۆناغەکانی گەشت</span>
-                </h4>
-                <div class="relative border-r-2 border-slate-800 space-y-7 pr-6 mr-3">
-                  <div class="relative"><span class="absolute -right-[31px] top-0 w-6 h-6 rounded-full bg-accent-grad text-black flex items-center justify-center font-black text-xs">١</span><p class="text-sm font-semibold text-white">${d.step1 || '٠٦:٠٠ بەیانی — کۆبوونەوە'}</p></div>
-                  <div class="relative"><span class="absolute -right-[31px] top-0 w-6 h-6 rounded-full bg-accent-grad text-black flex items-center justify-center font-black text-xs">٢</span><p class="text-sm font-semibold text-white">${d.step2 || '٠٧:٣٠ بەیانی — دەستپێکی ڕێڕۆیشتن'}</p></div>
-                  <div class="relative"><span class="absolute -right-[31px] top-0 w-6 h-6 rounded-full bg-accent-grad text-black flex items-center justify-center font-black text-xs">٣</span><p class="text-sm font-semibold text-white">${d.step3 || '١٢:٠٠ نیوەڕۆ — گەیشتن بە لووتکە'}</p></div>
-                  <div class="relative"><span class="absolute -right-[31px] top-0 w-6 h-6 rounded-full bg-accent-grad text-black flex items-center justify-center font-black text-xs">٤</span><p class="text-sm font-semibold text-white">${d.step4 || '٠٥:٠٠ ئێوارە — گەڕانەوە'}</p></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Trip Side Guard Card -->
-            <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-8">
-              <div class="space-y-6">
-                <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-accent-grad">
-                  <i data-lucide="shield-check" class="w-6 h-6"></i>
-                </div>
-                <h4 class="text-xl font-bold text-white">یاسا و مەرجەکانی سەلامەتی</h4>
-                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
-                  ${d.aiKnowledge?.rules || 'هەموو گەشتێک بە سەرپەرشتیاری تیمی شارەزا و یاوەری فریاگوزاری سەرەتایی بەڕێوە دەچێت. تکایە پێڵاوی شاخەوانی لەپێ بکەن.'}
-                </p>
-                <div class="border-t border-slate-800 pt-6 space-y-3 text-xs text-gray-300">
-                  <div class="flex items-center gap-2.5"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i><span>پاسی تایبەت و فێنککەرەوە</span></div>
-                  <div class="flex items-center gap-2.5"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i><span>سەرپەرشتیاری شارەزای شاخ</span></div>
-                  <div class="flex items-center gap-2.5"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i><span>فریاگوزاری سەرەتایی یاوەر</span></div>
-                  <div class="flex items-center gap-2.5"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i><span>وێنەگری فەرمی بۆ لووتکە</span></div>
-                </div>
-              </div>
-              <a href="#booking" class="w-full block py-4 text-center rounded-2xl bg-accent-grad text-black font-extrabold text-sm uppercase tracking-wider transition hover:shadow-xl">
-                جێگیرکردنی شوێن
-              </a>
-            </div>
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderServices(host, d) {
-      const services = d.servicesList || [
-        { icon: 'bus', title: 'هاتوچۆی پارێزراو', desc: 'پاسی مۆدێرنی گەشتیاری بۆ سەرجەم بەشداربووان' },
-        { icon: 'heart-pulse', title: 'فریاگوزاری پزیشکی', desc: 'کەلوپەلی تەواوی فریاکەوتن لەگەڵ تیمەکە' },
-        { icon: 'camera', title: 'وێنەگری پرۆفێشناڵ', desc: 'تۆمارکردنی ساتە تایبەتەکان بە کواڵیتی بەرز' },
-        { icon: 'compass', title: 'ڕێبەری شارەزا', desc: 'دیاریکردنی سەلامەتترین و جوانترین ڕێڕەو' }
-      ];
-
-      let itemsHtml = '';
-      services.forEach(s => {
-        itemsHtml += `
-          <div class="glass-card rounded-2xl p-6 text-right hover:border-slate-700 transition">
-            <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent-grad mb-5">
-              <i data-lucide="${s.icon || 'star'}" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-base font-bold text-white mb-2">${s.title}</h3>
-            <p class="text-xs text-gray-400 leading-relaxed">${s.desc}</p>
-          </div>
-        `;
-      });
-
-      const html = `
-        <section id="services" class="py-20 border-y border-slate-800/80 bg-slate-950/40">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-16">
-              <h2 class="text-2xl sm:text-4xl font-extrabold text-white">خزمەتگوزارییە یاوەرەکان</h2>
-              <p class="text-gray-400 text-xs sm:text-sm mt-2">ئەو خزمەتانەی لەگەڵ هەر گەشتێکدا پێشکەش دەکرێن</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              ${itemsHtml}
-            </div>
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderGear(host, d) {
-      const html = `
-        <section id="gear" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center max-w-2xl mx-auto mb-16">
-            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">پێداویستییە سەرەکییەکان</h2>
-            <p class="text-gray-400 text-xs sm:text-sm mt-2">ئەو کەرەستانەی پێویستە بۆ سەلامەتی لەگەڵت بێت</p>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-            <div class="glass-card rounded-2xl p-5 text-center">
-              <div class="w-12 h-12 mx-auto rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-accent-grad mb-3"><i data-lucide="footprints" class="w-6 h-6"></i></div>
-              <h3 class="text-sm font-bold text-white mb-1">پێڵاوی شاخەوانی</h3>
-              <p class="text-[11px] text-gray-400">دژەخلیسک و پارێزەری پاژنە</p>
-            </div>
-            <div class="glass-card rounded-2xl p-5 text-center">
-              <div class="w-12 h-12 mx-auto rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-accent-grad mb-3"><i data-lucide="backpack" class="w-6 h-6"></i></div>
-              <h3 class="text-sm font-bold text-white mb-1">جانتا و گۆچان</h3>
-              <p class="text-[11px] text-gray-400">جانتای کێشی کەم بە گۆچانی شاخ</p>
-            </div>
-            <div class="glass-card rounded-2xl p-5 text-center">
-              <div class="w-12 h-12 mx-auto rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-accent-grad mb-3"><i data-lucide="droplet" class="w-6 h-6"></i></div>
-              <h3 class="text-sm font-bold text-white mb-1">ئاو و وزەبەخش</h3>
-              <p class="text-[11px] text-gray-400">لانیکەم ٢ لیتر ئاو و خورما</p>
-            </div>
-            <div class="glass-card rounded-2xl p-5 text-center">
-              <div class="w-12 h-12 mx-auto rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-accent-grad mb-3"><i data-lucide="sun-medium" class="w-6 h-6"></i></div>
-              <h3 class="text-sm font-bold text-white mb-1">پاراستن لە خۆر</h3>
-              <p class="text-[11px] text-gray-400">کڵاو، چاویلکەی خۆر و کرێم</p>
-            </div>
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderGallery(host, d) {
-      const gallery = d.galleryList || [
-        { url: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa', title: 'لووتکەی چیا' },
-        { url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba', title: 'کەمپینگی شەوانە' },
-        { url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb', title: 'سروشتی کوردستان' }
-      ];
-
-      let imgHtml = '';
-      gallery.forEach(g => {
-        imgHtml += `
-          <div class="relative group overflow-hidden rounded-2xl h-64 border border-slate-800">
-            <img src="${g.url}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
-              <span class="text-xs font-bold text-white">${g.title || ''}</span>
-            </div>
-          </div>
-        `;
-      });
-
-      const html = `
-        <section id="gallery" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
-          <div class="text-center max-w-2xl mx-auto mb-16">
-            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">گەلەری وێنەکانی پێشوو</h2>
-            <p class="text-gray-400 text-xs sm:text-sm mt-2">یادگارییە تۆمارکراوەکانی لووتکەکانی کوردستان</p>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            ${imgHtml}
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderFaq(host, d) {
-      const faqs = d.faqList || [
-        { q: 'ئایا ئەم گەشتە بۆ کەسانی سەرەتایی دەبێت؟', a: 'بەڵێ، ڕێڕەوەکە بە شێوازێکی مامناوەند هەڵبژێردراوە کە بۆ کەسانی ئاساییش گونجاوە.' },
-        { q: 'شێوازی پارەدان چۆنە؟', a: 'لە ڕێگەی FastPay بۆ ژمارەی 07503130360 دەبێت و لە واتسئاپ پشتڕاست دەکرێتەوە.' }
-      ];
-
-      let faqHtml = '';
-      faqs.forEach(f => {
-        faqHtml += `
-          <div class="glass-card rounded-2xl p-5 text-right space-y-2">
-            <h4 class="text-sm font-bold text-white flex items-center justify-between">
-              <span>${f.q}</span>
-              <i data-lucide="chevron-down" class="w-4 h-4 text-accent-grad"></i>
-            </h4>
-            <p class="text-xs text-gray-400 leading-relaxed pt-1 border-t border-slate-800/60">${f.a}</p>
-          </div>
-        `;
-      });
-
-      const html = `
-        <section id="faq" class="py-24 max-w-4xl mx-auto px-4 sm:px-6 border-t border-slate-800/80">
-          <div class="text-center max-w-2xl mx-auto mb-16">
-            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">پرسیارە باوەکان</h2>
-            <p class="text-gray-400 text-xs sm:text-sm mt-2">وەڵامی سەرجەم ئەو پرسیارانەی بەردەوام دەکرێن</p>
-          </div>
-          <div class="space-y-4">
-            ${faqHtml}
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderBooking(host, d) {
-      const isOpen = d.bookingOpen !== false;
-      const html = `
-        <section id="booking" class="py-24 max-w-4xl mx-auto px-4 sm:px-6">
-          <div class="text-center max-w-xl mx-auto mb-12">
-            <div class="inline-block text-xs font-bold uppercase tracking-widest text-accent-grad">ناونووسینی فەرمی</div>
-            <h2 class="text-3xl sm:text-5xl font-black text-white mt-1">بەشداری لەم گەشتە بکە</h2>
-            <p class="text-gray-400 text-xs sm:text-sm mt-2">تکایە زانیارییەکانت بنووسە بۆ تۆمارکردنی ناوت</p>
-          </div>
-
-          <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-            ${!isOpen ? `
-              <div class="text-center py-16 space-y-4">
-                <div class="w-20 h-20 mx-auto rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-3xl">🔒</div>
-                <h3 class="text-2xl sm:text-3xl font-black text-white">ناونووسین بۆ ئەم گەشتە داخراوە</h3>
-                <p class="text-gray-400 text-sm max-w-md mx-auto">تەواوی کورسییەکان پڕبوونەتەوە. دەتوانیت چاوەڕوانی گەشتی داهاتوومان بیت.</p>
-                <a href="https://wa.me/9647503130360" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 text-white text-xs font-bold hover:bg-white/20 transition">
-                  <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
-                  <span>پەیوەندی لە واتسئاپ</span>
-                </a>
-              </div>
-            ` : `
-              <form id="publicBookingForm" onsubmit="handlePublicBooking(event)" class="space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-2">ناوی سیانی</label>
-                    <input type="text" id="regFullName" required placeholder="ناوی بەشداربوو" class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-slate-600 transition">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-2">ژمارەی مۆبایل (واتسئاپ)</label>
-                    <input type="tel" id="regPhone" required placeholder="0750XXXXXXX" class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-slate-600 transition" dir="ltr">
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-2">ژمارەی کەس</label>
-                    <select id="regTickets" class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-slate-600 transition">
-                      <option value="1">١ کەس</option>
-                      <option value="2">٢ کەس</option>
-                      <option value="3">٣ کەس</option>
-                      <option value="4">٤ کەس</option>
-                      <option value="5+">٥ کەس یان زیاتر</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-2">شوێنی سواربوون</label>
-                    <select id="regLocation" class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-slate-600 transition">
-                      <option value="shanadar">هەولێر — نزیک پارکی شانەدەر</option>
-                      <option value="kasnazan">هەولێر — ڕێگای کەسنەزان</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800/90 space-y-2">
-                  <div class="flex items-center gap-2 text-xs font-bold text-accent-grad">
-                    <i data-lucide="wallet" class="w-4 h-4"></i>
-                    <span>شێوازی پارەدان و مسۆگەرکردنی کورسی:</span>
-                  </div>
-                  <p class="text-xs text-gray-300 leading-relaxed">
-                    بڕی تێچوو لە ڕێگەی <strong>FastPay</strong> بۆ ژمارەی <span class="font-bold text-white tracking-widest" dir="ltr">0750 313 0360</span> بنێرە، پاشان ناونووسینەکە تەواو بکە.
-                  </p>
-                </div>
-
-                <div class="flex items-start gap-3">
-                  <input type="checkbox" id="regTerms" required class="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-0">
-                  <label for="regTerms" class="text-xs text-gray-400 leading-relaxed cursor-pointer">
-                    سەرجەم مەرجەکان و خشتەی کاتی گەشتەکەم خوێندەوە، پابەندی ڕێنماییەکانی سەلامەتی سەرپەرشتیارانی گروپ دەبم.
-                  </label>
-                </div>
-
-                <button type="submit" id="regSubmitBtn" class="w-full py-4 rounded-xl bg-accent-grad text-black font-black text-sm uppercase tracking-wider transition transform hover:scale-[1.01] hover:shadow-2xl">
-                  تۆمارکردن و ناونووسین
-                </button>
-              </form>
-
-              <div id="regSuccessCard" class="hidden text-center py-12 space-y-4">
-                <div class="w-16 h-16 mx-auto bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center text-emerald-400 text-2xl">
-                  <i data-lucide="check" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white">ناونووسینەکەت بە سەرکەوتوویی تۆمارکرا!</h3>
-                <p class="text-xs sm:text-sm text-gray-400 max-w-md mx-auto leading-relaxed">
-                  زانیارییەکانت بۆ سەرپەرشتیاری کوردیا ئەدڤێنتچەر نێردرا؛ بە زووترین کات پەیوەندیت پێوە دەکەین.
-                </p>
-              </div>
-            `}
-          </div>
-        </section>
-      `;
-      host.insertAdjacentHTML('beforeend', html);
-    }
-
-    function renderSocials(soc) {
-      const s = soc || {};
-      const container = document.getElementById('footerSocialLinks');
-      container.innerHTML = `
-        ${s.instagram ? `<a href="${s.instagram}" target="_blank" class="hover:text-white transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>` : ''}
-        ${s.facebook ? `<a href="${s.facebook}" target="_blank" class="hover:text-white transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>` : ''}
-        ${s.telegram ? `<a href="${s.telegram}" target="_blank" class="hover:text-white transition"><i data-lucide="send" class="w-5 h-5"></i></a>` : ''}
-        ${s.whatsapp ? `<a href="https://wa.me/${s.whatsapp}" target="_blank" class="hover:text-white transition"><i data-lucide="phone" class="w-5 h-5"></i></a>` : ''}
-      `;
-    }
-
-    function handlePublicBooking(e) {
-      e.preventDefault();
-      const name = document.getElementById('regFullName').value.trim();
-      const phone = document.getElementById('regPhone').value.trim();
-      const tickets = document.getElementById('regTickets').value;
-      const loc = document.getElementById('regLocation').options[document.getElementById('regLocation').selectedIndex].text;
-
-      const btn = document.getElementById('regSubmitBtn');
-      btn.disabled = true;
-      btn.innerText = "کەمێک چاوەڕێ بکە...";
-
-      const msg = `🏔️ *ناونووسینی نوێ بۆ گەشتی کوردیا ئەدڤێنتچەر*
-━━━━━━━━━━━━━━━━━━
-👤 *ناو:* ${name}
-📞 *مۆبایل:* ${phone}
-👥 *ژمارەی کەس:* ${tickets}
-📍 *شوێنی سواربوون:* ${loc}
-⏰ *کات:* ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Baghdad' })}`;
-
-      const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
-
-      const img = new Image();
-      img.src = url;
-
-      try {
-        fetch(url, { mode: 'no-cors' });
-      } catch (err) {}
-
-      setTimeout(() => {
-        document.getElementById('publicBookingForm').classList.add('hidden');
-        document.getElementById('regSuccessCard').classList.remove('hidden');
-        btn.disabled = false;
-        btn.innerText = "تۆمارکردن و ناونووسین";
-      }, 500);
-    }
-
-    function handleSendPublicAi(e) {
-      e.preventDefault();
-      const input = document.getElementById('publicChatField');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const log = document.getElementById('publicChatLogs');
-      log.innerHTML += `
-        <div class="flex justify-end">
-          <div class="bg-accent-grad text-black font-semibold p-3 rounded-2xl rounded-tl-none max-w-[85%]">
-            ${text}
-          </div>
+        <div class="font-black text-xl">
+          KURDIA ADVENTURE
         </div>
-      `;
-      input.value = '';
-      log.scrollTop = log.scrollHeight;
 
-      setTimeout(() => {
-        let reply = "بۆ هەر پرسیارێکی زیاتر دەتوانیت پەیوەندی بە سەرپەرشتیاری گروپ بکەیت لە 07503130360.";
-        const low = text.toLowerCase();
-        const d = stateCache || {};
-        const kb = d.aiKnowledge || {};
+        <div class="text-gray-500 text-sm mt-2">
+          گەشت • سروشت • هاوڕێتی • یادەوەری
+        </div>
 
-        if (low.includes('نرخ') || low.includes('چەندە') || low.includes('پارە')) {
-          reply = `نرخی بەشداربوون لەم گەشتەدا (${d.tripPrice || '٢٥,٠٠٠ دینار'})ە کە هاتوچۆ بە پاسی مۆدێرن، سەرپەرشتیاری شارەزا و فریاگوزاری سەرەتایی دەگرێتەوە.`;
-        } else if (low.includes('کەی') || low.includes('کات') || low.includes('سەعات')) {
-          reply = `کاتی بەڕێکەوتن کاتژمێر (${d.tripTime || '٠٦:٠٠ی بەیانی'})یە و لە (${d.tripLocation || 'هەولێر'}) کۆدەبینەوە.`;
-        } else if (low.includes('پێڵاو') || low.includes('جل') || low.includes('کەلوپەل') || low.includes('ئاو')) {
-          reply = kb.equipment || "پێویستە پێڵاوی شاخەوانی دژەخلیسک، جانتای کێشی کەم، لانیکەم ٢ لیتر ئاو، میوەی وشک و کڵاوی دژەخۆرت لەگەڵ بێت.";
-        } else if (low.includes('شوێن') || low.includes('پڕ') || low.includes('مابێت') || low.includes('ناونووسین')) {
-          reply = d.bookingOpen !== false ? "ناونووسین لە ئێستادا کراوەیە دەتوانیت ڕاستەوخۆ فۆڕمەکە لە وێبسایتەکە پڕبکەیتەوە." : "بەداخەوە کورسییەکانی ئەم گەشتە بە تەواوی پڕبوونەتەوە.";
-        } else if (low.includes('سەخت') || low.includes('ڕێگا') || low.includes('چەند کاتژمێر')) {
-          reply = `ئاستی سەختی ئەم گەشتە (${d.tripDifficulty || 'مامناوەند'})ە و ماوەی ڕێڕۆیشتن نزیکەی (${d.tripDuration || '٤ بۆ ٥ کاتژمێر'}) دەخایەنێت.`;
-        } else if (kb.about && (low.includes('کوردیا') || low.includes('ئێوە کێن'))) {
-          reply = kb.about;
+      </div>
+
+
+      <div class="text-gray-600 text-xs text-center">
+
+        KURDIA ADVENTURE ©
+        <span id="year"></span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- =========================================================
+     AI ASSISTANT
+========================================================= -->
+
+<button
+  id="assistantButton"
+  onclick="toggleAssistant()"
+  class="assistant-button fixed bottom-5 left-5 z-[200] w-14 h-14 rounded-2xl flex items-center justify-center"
+  style="background:#9d1c32"
+>
+
+  <i
+    data-lucide="message-circle"
+    class="w-6 h-6"
+  ></i>
+
+</button>
+
+
+<div
+  id="assistantWindow"
+  class="hidden fixed bottom-24 left-5 z-[199] w-[calc(100vw-40px)] sm:w-[390px] max-h-[620px] assistant-window rounded-3xl overflow-hidden bg-[#0d121b] border border-white/10"
+>
+
+  <div
+    class="px-4 py-4 border-b border-white/10 flex items-center justify-between"
+  >
+
+    <div class="flex items-center gap-3">
+
+      <div
+        class="w-10 h-10 rounded-xl flex items-center justify-center"
+        style="background:#9d1c32"
+      >
+
+        <i
+          data-lucide="sparkles"
+          class="w-5 h-5"
+        ></i>
+
+      </div>
+
+      <div>
+
+        <div class="font-bold">
+          Kurdia Assistant
+        </div>
+
+        <div class="text-[10px] text-green-400">
+          Online
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      onclick="toggleAssistant()"
+      class="p-2 text-gray-400 hover:text-white"
+    >
+
+      <i
+        data-lucide="x"
+        class="w-5 h-5"
+      ></i>
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="chatMessages"
+    class="p-4 h-[400px] overflow-y-auto space-y-3"
+  ></div>
+
+
+  <div
+    class="p-3 border-t border-white/10"
+  >
+
+    <div class="flex gap-2">
+
+      <input
+        id="chatInput"
+        type="text"
+        class="flex-1 bg-[#080d15] border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#9d1c32]"
+        placeholder="پرسیارێکت هەیە؟"
+        onkeydown="handleChatKey(event)"
+      >
+
+      <button
+        onclick="sendChatMessage()"
+        class="w-12 h-12 rounded-xl flex items-center justify-center"
+        style="background:#9d1c32"
+      >
+
+        <i
+          data-lucide="send"
+          class="w-4 h-4"
+        ></i>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   DEFAULT DATA
+============================================================ */
+
+const DEFAULT_DATA = {
+
+  gradColor1: "#9d1c32",
+  gradColor2: "#111827",
+
+  heroBadge: "KURDIA ADVENTURE",
+
+  heroTitle:
+    "گەشتێک بۆ ناو سروشتی کوردستان",
+
+  heroSubtitle:
+    "گەشت، سروشت، هاوڕێتی و یادەوەرییەکان لەگەڵ KURDIA ADVENTURE",
+
+  heroImageUrl: "",
+
+  bookingOpen: true,
+
+  tripTitle:
+    "گەشتی تایبەتی کوردیا",
+
+  tripPrice:
+    "50,000 IQD",
+
+  tripDifficulty:
+    "ئاسان",
+
+  tripDuration:
+    "1 ڕۆژ",
+
+  tripTime:
+    "06:00",
+
+  tripLocation:
+    "کوردستان",
+
+  tripDesc:
+    "گەشتێکی جوان بۆ ناو سروشت و شوێنە جوانەکانی کوردستان.",
+
+  step1:
+    "کۆبوونەوە",
+
+  step2:
+    "گەشتکردن",
+
+  step3:
+    "چوونە ناو سروشت",
+
+  step4:
+    "گەڕانەوە",
+
+  knowledgeAbout:
+    "KURDIA ADVENTURE گرووپێکی گەشت و سەرکێشییە کە گەشت بۆ سروشت و شاخەکانی کوردستان ڕێکدەخات.",
+
+  knowledgeEquipment:
+    "پاس، خواردن، ئاوی خواردنەوە، چای، نەسکافێ، خێمە، کارەبا و ڕووناکی، کورسی و مێز، ئاگر، یارمەتی فریاکەوتن و ڕێبەر.",
+
+  seoTitle:
+    "KURDIA ADVENTURE",
+
+  seoDescription:
+    "گەشت و سەرکێشی لە سروشتی کوردستان.",
+
+  socialImage:
+    "",
+
+  services: [
+    "پاس",
+    "نان و خواردن",
+    "ئاوی خواردنەوە و چای",
+    "خێمە",
+    "کارەبا و ڕووناکی",
+    "کورسی و مێز",
+    "ئەگەر و گەرما",
+    "پڕۆژێکتەر",
+    "یاری و چالاکی",
+    "ڕێبەری شارەزا",
+    "یارمەتی فریاکەوتن",
+    "کیسی خۆڵ",
+    "WC"
+  ],
+
+  gallery: [],
+
+  sections: [
+
+    {
+      id: "hero_1",
+      type: "hero",
+      title: "Hero",
+      visible: true
+    },
+
+    {
+      id: "trip_1",
+      type: "trip",
+      title: "گەشت",
+      visible: true
+    },
+
+    {
+      id: "services_1",
+      type: "services",
+      title: "خزمەتگوزاری",
+      visible: true
+    },
+
+    {
+      id: "steps_1",
+      type: "steps",
+      title: "چۆن بەشداری بکەیت؟",
+      visible: true
+    },
+
+    {
+      id: "gallery_1",
+      type: "gallery",
+      title: "وێنەکان",
+      visible: true
+    },
+
+    {
+      id: "booking_1",
+      type: "booking",
+      title: "Booking",
+      visible: true
+    }
+
+  ]
+
+};
+
+
+/* ============================================================
+   STATE
+============================================================ */
+
+let siteData = loadPublishedData();
+
+
+/* ============================================================
+   LOAD DATA
+============================================================ */
+
+function clone(obj) {
+
+  return JSON.parse(
+    JSON.stringify(obj)
+  );
+
+}
+
+
+function mergeData(base, extra) {
+
+  const result = {
+    ...base,
+    ...extra
+  };
+
+  if (!Array.isArray(result.sections)) {
+    result.sections =
+      clone(DEFAULT_DATA.sections);
+  }
+
+  if (!Array.isArray(result.services)) {
+    result.services =
+      clone(DEFAULT_DATA.services);
+  }
+
+  if (!Array.isArray(result.gallery)) {
+    result.gallery = [];
+  }
+
+  return result;
+
+}
+
+
+function loadPublishedData() {
+
+  try {
+
+    const published =
+      localStorage.getItem(
+        "kurdia_builder_published_v3"
+      );
+
+    if (published) {
+
+      return mergeData(
+        clone(DEFAULT_DATA),
+        JSON.parse(published)
+      );
+
+    }
+
+
+    const draft =
+      localStorage.getItem(
+        "kurdia_builder_draft_v3"
+      );
+
+    if (draft) {
+
+      return mergeData(
+        clone(DEFAULT_DATA),
+        JSON.parse(draft)
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+  return clone(DEFAULT_DATA);
+
+}
+
+
+/* ============================================================
+   RENDER
+============================================================ */
+
+function renderSite() {
+
+  document.documentElement.style.setProperty(
+    "--primary",
+    siteData.gradColor1
+  );
+
+
+  document.body.style.setProperty(
+    "--primary",
+    siteData.gradColor1
+  );
+
+
+  document
+    .getElementById("metaDescription")
+    .setAttribute(
+      "content",
+      siteData.seoDescription || ""
+    );
+
+
+  document.title =
+    siteData.seoTitle ||
+    "KURDIA ADVENTURE";
+
+
+  const content =
+    document.getElementById(
+      "siteContent"
+    );
+
+
+  content.innerHTML = "";
+
+
+  siteData.sections
+    .filter(section => section.visible !== false)
+    .forEach(section => {
+
+      const element =
+        renderSection(section);
+
+      if (element) {
+        content.appendChild(element);
+      }
+
+    });
+
+
+  if (
+    !siteData.sections.some(
+      s => s.type === "hero" &&
+      s.visible !== false
+    )
+  ) {
+
+    const hero =
+      renderHero({
+        type: "hero",
+        visible: true
+      });
+
+    content.prepend(hero);
+
+  }
+
+
+  setupIcons();
+
+  setupAnimations();
+
+  setupFAQ();
+
+  updateYear();
+
+}
+
+
+/* ============================================================
+   SECTION RENDERER
+============================================================ */
+
+function renderSection(section) {
+
+  switch (section.type) {
+
+    case "hero":
+      return renderHero(section);
+
+    case "trip":
+      return renderTrip(section);
+
+    case "services":
+      return renderServices(section);
+
+    case "steps":
+      return renderSteps(section);
+
+    case "gallery":
+      return renderGallery(section);
+
+    case "faq":
+      return renderFAQ(section);
+
+    case "booking":
+      return renderBooking(section);
+
+    case "custom":
+      return renderCustom(section);
+
+    default:
+      return null;
+
+  }
+
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+function renderHero(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.id = "home";
+
+  wrapper.className =
+    "relative min-h-[760px] md:min-h-[850px] flex items-center overflow-hidden hero-height";
+
+
+  const image =
+    siteData.heroImageUrl ||
+    "";
+
+
+  wrapper.innerHTML = `
+
+    <div
+      class="absolute inset-0"
+      style="
+        background-image:
+          ${image
+            ? `url('${escapeAttr(image)}')`
+            : "linear-gradient(135deg,#111827,#080b12)"
+          };
+        background-size:cover;
+        background-position:center;
+      "
+    ></div>
+
+
+    <div class="absolute inset-0 hero-overlay"></div>
+
+    <div class="absolute inset-0 hero-gradient"></div>
+
+
+    <div class="relative z-10 max-w-7xl mx-auto w-full px-5 sm:px-6 lg:px-8 pt-28">
+
+      <div class="max-w-4xl fade-up">
+
+        <div
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-black/20 backdrop-blur-md text-sm text-gray-200"
+        >
+
+          <span
+            class="w-2 h-2 rounded-full"
+            style="background:${escapeAttr(siteData.gradColor1)}"
+          ></span>
+
+          ${escapeHTML(siteData.heroBadge)}
+
+        </div>
+
+
+        <h1
+          class="mt-7 text-4xl sm:text-5xl md:text-7xl font-black leading-[1.2] tracking-tight"
+        >
+          ${escapeHTML(siteData.heroTitle)}
+        </h1>
+
+
+        <p
+          class="mt-6 text-base sm:text-lg md:text-xl text-gray-300 max-w-2xl leading-9"
+        >
+          ${escapeHTML(siteData.heroSubtitle)}
+        </p>
+
+
+        <div class="flex flex-col sm:flex-row gap-3 mt-9">
+
+          <a
+            href="#booking"
+            class="btn-primary px-7 py-4 rounded-xl font-bold text-center"
+          >
+            بەشداری لە گەشت
+          </a>
+
+          <a
+            href="#trip"
+            class="btn-secondary px-7 py-4 rounded-xl font-bold text-center"
+          >
+            زانیاری زیاتر
+          </a>
+
+        </div>
+
+
+        <div
+          class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl"
+        >
+
+          ${heroMiniCard(
+            "map-pin",
+            "شوێن",
+            siteData.tripLocation
+          )}
+
+          ${heroMiniCard(
+            "clock-3",
+            "کات",
+            siteData.tripTime
+          )}
+
+          ${heroMiniCard(
+            "calendar-days",
+            "ماوە",
+            siteData.tripDuration
+          )}
+
+          ${heroMiniCard(
+            "mountain",
+            "ئاست",
+            siteData.tripDifficulty
+          )}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+function heroMiniCard(icon, label, value) {
+
+  return `
+
+    <div class="info-card rounded-2xl p-4 backdrop-blur-md">
+
+      <div class="flex items-center gap-2 text-gray-400 text-xs">
+
+        <i
+          data-lucide="${icon}"
+          class="w-4 h-4"
+        ></i>
+
+        ${escapeHTML(label)}
+
+      </div>
+
+      <div class="font-bold mt-2 text-sm">
+        ${escapeHTML(value)}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   TRIP
+============================================================ */
+
+function renderTrip(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.id = "trip";
+
+  wrapper.className =
+    "py-24 md:py-32 bg-[#080b12]";
+
+
+  wrapper.innerHTML = `
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+      ${sectionHeader(
+        "گەشت",
+        siteData.tripTitle,
+        "هەموو زانیارییە سەرەکییەکانی گەشت لە یەک شوێن."
+      )}
+
+
+      <div class="trip-card rounded-3xl overflow-hidden mt-12">
+
+        <div class="grid lg:grid-cols-2">
+
+          <div class="p-7 sm:p-10 lg:p-14">
+
+            <div class="flex flex-wrap gap-2 mb-6">
+
+              ${pill(
+                "map-pin",
+                siteData.tripLocation
+              )}
+
+              ${pill(
+                "clock-3",
+                siteData.tripTime
+              )}
+
+              ${pill(
+                "mountain",
+                siteData.tripDifficulty
+              )}
+
+            </div>
+
+
+            <h3
+              class="text-3xl md:text-4xl font-black leading-tight"
+            >
+              ${escapeHTML(siteData.tripTitle)}
+            </h3>
+
+
+            <p
+              class="mt-6 text-gray-400 leading-9"
+            >
+              ${escapeHTML(siteData.tripDesc)}
+            </p>
+
+
+            <div
+              class="grid grid-cols-2 gap-3 mt-8"
+            >
+
+              ${tripStat(
+                "calendar-days",
+                "ماوە",
+                siteData.tripDuration
+              )}
+
+              ${tripStat(
+                "clock-3",
+                "کات",
+                siteData.tripTime
+              )}
+
+              ${tripStat(
+                "mountain",
+                "ئاست",
+                siteData.tripDifficulty
+              )}
+
+              ${tripStat(
+                "map-pin",
+                "شوێن",
+                siteData.tripLocation
+              )}
+
+            </div>
+
+
+            <div
+              class="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+            >
+
+              <div>
+
+                <div class="text-xs text-gray-500">
+                  نرخی بەشداری
+                </div>
+
+                <div
+                  class="text-2xl font-black mt-1"
+                >
+                  ${escapeHTML(siteData.tripPrice)}
+                </div>
+
+              </div>
+
+
+              <a
+                href="#booking"
+                class="btn-primary px-7 py-4 rounded-xl font-bold text-center sm:mr-auto"
+              >
+                بەشداری بکە
+              </a>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="relative min-h-[350px] lg:min-h-full"
+          >
+
+            ${
+              siteData.heroImageUrl
+                ? `
+                  <img
+                    src="${escapeAttr(siteData.heroImageUrl)}"
+                    alt=""
+                    class="absolute inset-0 w-full h-full object-cover"
+                  >
+                `
+                : `
+                  <div
+                    class="absolute inset-0 bg-gradient-to-br from-[#171e2b] to-[#090d15] flex items-center justify-center"
+                  >
+
+                    <i
+                      data-lucide="mountain"
+                      class="w-28 h-28 text-gray-700"
+                    ></i>
+
+                  </div>
+                `
+            }
+
+
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+            ></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+function tripStat(icon, label, value) {
+
+  return `
+
+    <div class="info-card rounded-2xl p-4">
+
+      <div class="flex items-center gap-2 text-gray-500 text-xs">
+
+        <i
+          data-lucide="${icon}"
+          class="w-4 h-4"
+        ></i>
+
+        ${escapeHTML(label)}
+
+      </div>
+
+      <div class="font-bold mt-2">
+        ${escapeHTML(value)}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function pill(icon, text) {
+
+  return `
+
+    <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/5 text-xs text-gray-300">
+
+      <i
+        data-lucide="${icon}"
+        class="w-3.5 h-3.5"
+      ></i>
+
+      ${escapeHTML(text)}
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   SERVICES
+============================================================ */
+
+function renderServices(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.id = "services";
+
+  wrapper.className =
+    "py-24 md:py-32 bg-[#0a0e16]";
+
+
+  const icons = [
+    "bus",
+    "utensils",
+    "coffee",
+    "tent",
+    "lightbulb",
+    "armchair",
+    "flame",
+    "projector",
+    "trophy",
+    "compass",
+    "life-buoy",
+    "trash-2",
+    "bath"
+  ];
+
+
+  const services =
+    Array.isArray(siteData.services)
+      ? siteData.services
+      : [];
+
+
+  wrapper.innerHTML = `
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+      ${sectionHeader(
+        "خزمەتگوزاری",
+        section.title || "هەموو شتێک بۆ گەشتێکی باشتر",
+        "ئەو خزمەتگوزارییەی کە لە گەشتەکانماندا بۆ بەشداربووان دابین دەکرێت."
+      )}
+
+
+      <div
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mt-12"
+      >
+
+        ${services.map((service, index) => `
+
+          <div class="service-card rounded-2xl p-5 sm:p-6 fade-up">
+
+            <div
+              class="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
+              style="background:${hexToRgba(siteData.gradColor1,.12)}"
+            >
+
+              <i
+                data-lucide="${icons[index % icons.length]}"
+                class="w-5 h-5"
+                style="color:${escapeAttr(siteData.gradColor1)}"
+              ></i>
+
+            </div>
+
+            <div
+              class="font-bold text-sm sm:text-base leading-7"
+            >
+              ${escapeHTML(service)}
+            </div>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+/* ============================================================
+   STEPS
+============================================================ */
+
+function renderSteps(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.id = "steps";
+
+  wrapper.className =
+    "py-24 md:py-32 bg-[#080b12]";
+
+
+  const steps = [
+
+    siteData.step1,
+    siteData.step2,
+    siteData.step3,
+    siteData.step4
+
+  ];
+
+
+  wrapper.innerHTML = `
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+      ${sectionHeader(
+        "چۆن؟",
+        section.title || "چۆن بەشداری بکەیت؟",
+        "لە چوار هەنگاوی سادەدا لەگەڵمان بە گەشتەکەوە بەرەوپێش بچۆ."
+      )}
+
+
+      <div
+        class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-16"
+      >
+
+        ${steps.map((step, index) => `
+
+          <div class="relative text-center fade-up">
+
+            <div
+              class="step-number w-16 h-16 mx-auto rounded-2xl flex items-center justify-center font-black text-xl"
+            >
+              ${index + 1}
+            </div>
+
+            <h3 class="font-bold mt-7 text-lg">
+              ${escapeHTML(step)}
+            </h3>
+
+            <p class="text-sm text-gray-500 leading-7 mt-3">
+              هەنگاوی ${index + 1} بۆ بەشداری لە گەشتەکە.
+            </p>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+/* ============================================================
+   GALLERY
+============================================================ */
+
+function renderGallery(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.id = "gallery";
+
+  wrapper.className =
+    "py-24 md:py-32 bg-[#0a0e16]";
+
+
+  const gallery =
+    Array.isArray(siteData.gallery)
+      ? siteData.gallery
+      : [];
+
+
+  if (!gallery.length) {
+
+    wrapper.innerHTML = `
+
+      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+        ${sectionHeader(
+          "وێنەکان",
+          section.title || "یادەوەرییەکانمان",
+          "شوێنی وێنە و یادەوەرییەکانی گەشتەکان."
+        )}
+
+
+        <div class="mt-12 empty-gallery">
+
+          <div
+            class="rounded-3xl border border-dashed border-white/10 py-20 text-center"
+          >
+
+            <i
+              data-lucide="images"
+              class="w-12 h-12 mx-auto text-gray-700"
+            ></i>
+
+            <p class="text-gray-500 mt-4">
+              هێشتا وێنەیەک زیاد نەکراوە.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return wrapper;
+
+  }
+
+
+  wrapper.innerHTML = `
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+      ${sectionHeader(
+        "وێنەکان",
+        section.title || "یادەوەرییەکانمان",
+        "هەندێک لە ساتە جوانەکانی گەشتەکانمان."
+      )}
+
+
+      <div
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-12"
+      >
+
+        ${gallery.map(image => `
+
+          <div
+            class="gallery-item aspect-square rounded-2xl overflow-hidden bg-[#111722] border border-white/5"
+          >
+
+            <img
+              src="${escapeAttr(image.url)}"
+              alt="${escapeAttr(image.name || "")}"
+              class="gallery-image w-full h-full object-cover"
+              loading="lazy"
+            >
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+/* ============================================================
+   FAQ
+============================================================ */
+
+function renderFAQ(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.id = "faq";
+
+  wrapper.className =
+    "py-24 md:py-32 bg-[#080b12]";
+
+
+  const faqs = [
+
+    {
+      q: "گەشتەکان لە کوێ دەست پێ دەکەن؟",
+      a: `زانیاری شوێنی کۆبوونەوە بۆ هەر گەشتێک لە کاتی ڕێکخستنی گەشتەکە ڕادەگەیەنرێت.`
+    },
+
+    {
+      q: "نرخی گەشت چەندە؟",
+      a: `نرخی گەشتی ئێستا ${siteData.tripPrice} ـە. بۆ هەر گەشتێکی تر نرخەکە دەتوانێت جیاواز بێت.`
+    },
+
+    {
+      q: "ئایا خێمە دابین دەکرێت؟",
+      a: `بەپێی خزمەتگوزارییەکانی گەشت، خێمە بۆ بەشداربووانی تۆمارکراو دابین دەکرێت.`
+    },
+
+    {
+      q: "چۆن دەتوانم بەشداری بکەم؟",
+      a: `لە بەشی بەشداری فۆڕمەکە پڕ بکەرەوە یان لەگەڵ تیمی KURDIA ADVENTURE پەیوەندی بکە.`
+    }
+
+  ];
+
+
+  wrapper.innerHTML = `
+
+    <div class="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8">
+
+      ${sectionHeader(
+        "FAQ",
+        section.title || "پرسیارە باوەکان",
+        "وەڵامی هەندێک پرسیاری باو."
+      )}
+
+
+      <div class="space-y-3 mt-12">
+
+        ${faqs.map((faq, index) => `
+
+          <div class="faq-item">
+
+            <div
+              class="faq-question p-5 flex items-center justify-between gap-4"
+              onclick="toggleFAQ(this)"
+            >
+
+              <span class="font-bold text-sm sm:text-base">
+                ${escapeHTML(faq.q)}
+              </span>
+
+              <i
+                data-lucide="chevron-down"
+                class="faq-chevron w-5 h-5 text-gray-500 shrink-0"
+              ></i>
+
+            </div>
+
+
+            <div class="faq-answer">
+
+              <div
+                class="px-5 pb-5 text-sm text-gray-400 leading-8"
+              >
+                ${escapeHTML(faq.a)}
+              </div>
+
+            </div>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+/* ============================================================
+   BOOKING
+============================================================ */
+
+function renderBooking(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.id = "booking";
+
+  wrapper.className =
+    "py-24 md:py-32 bg-[#0a0e16]";
+
+
+  if (!siteData.bookingOpen) {
+
+    wrapper.innerHTML = `
+
+      <div class="max-w-3xl mx-auto px-5 text-center">
+
+        <div
+          class="rounded-3xl border border-white/10 bg-white/[.03] p-10 md:p-16"
+        >
+
+          <div
+            class="w-16 h-16 mx-auto rounded-2xl bg-white/5 flex items-center justify-center"
+          >
+
+            <i
+              data-lucide="lock"
+              class="w-7 h-7 text-gray-500"
+            ></i>
+
+          </div>
+
+          <h2 class="text-2xl font-black mt-6">
+            تۆمارکردن داخراوە
+          </h2>
+
+          <p class="text-gray-500 mt-3">
+            کاتی کرانەوەی تۆمارکردن بە زوویی ڕادەگەیەنرێت.
+          </p>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return wrapper;
+
+  }
+
+
+  wrapper.innerHTML = `
+
+    <div class="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8">
+
+      ${sectionHeader(
+        "بەشداری",
+        section.title || "بۆ گەشتەکە تۆمار بکە",
+        "زانیارییەکانت بنووسە تا تیمی KURDIA ADVENTURE پەیوەندیت پێوە بکات."
+      )}
+
+
+      <div class="trip-card rounded-3xl p-6 sm:p-9 md:p-12 mt-12">
+
+        <form
+          id="bookingForm"
+          onsubmit="submitBooking(event)"
+          class="grid md:grid-cols-2 gap-5"
+        >
+
+          <div>
+
+            <label class="text-xs text-gray-500">
+              ناو
+            </label>
+
+            <input
+              id="bookingName"
+              required
+              class="w-full mt-2 bg-[#080d15] border border-white/10 rounded-xl px-4 py-3.5 outline-none focus:border-[#9d1c32]"
+              placeholder="ناوی تەواو"
+            >
+
+          </div>
+
+
+          <div>
+
+            <label class="text-xs text-gray-500">
+              ژمارەی مۆبایل
+            </label>
+
+            <input
+              id="bookingPhone"
+              required
+              type="tel"
+              class="w-full mt-2 bg-[#080d15] border border-white/10 rounded-xl px-4 py-3.5 outline-none focus:border-[#9d1c32]"
+              placeholder="07xx xxx xxxx"
+            >
+
+          </div>
+
+
+          <div>
+
+            <label class="text-xs text-gray-500">
+              ژمارەی کەسان
+            </label>
+
+            <select
+              id="bookingPeople"
+              class="w-full mt-2 bg-[#080d15] border border-white/10 rounded-xl px-4 py-3.5 outline-none focus:border-[#9d1c32]"
+            >
+
+              <option value="1">1 کەس</option>
+              <option value="2">2 کەس</option>
+              <option value="3">3 کەس</option>
+              <option value="4">4 کەس</option>
+              <option value="5">5 کەس</option>
+              <option value="6">6 کەس</option>
+              <option value="7">7 کەس</option>
+              <option value="8">8 کەس</option>
+              <option value="9">9 کەس</option>
+              <option value="10">10 کەس</option>
+
+            </select>
+
+          </div>
+
+
+          <div>
+
+            <label class="text-xs text-gray-500">
+              تێبینی
+            </label>
+
+            <input
+              id="bookingNote"
+              class="w-full mt-2 bg-[#080d15] border border-white/10 rounded-xl px-4 py-3.5 outline-none focus:border-[#9d1c32]"
+              placeholder="تێبینییەکت هەیە؟"
+            >
+
+          </div>
+
+
+          <div class="md:col-span-2">
+
+            <button
+              type="submit"
+              class="btn-primary w-full rounded-xl py-4 font-black"
+            >
+
+              <span class="inline-flex items-center justify-center gap-2">
+
+                <i
+                  data-lucide="send"
+                  class="w-5 h-5"
+                ></i>
+
+                ناردنی داواکاری
+
+              </span>
+
+            </button>
+
+          </div>
+
+
+          <div
+            id="bookingResult"
+            class="md:col-span-2 hidden rounded-xl p-4 text-sm"
+          ></div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+/* ============================================================
+   CUSTOM
+============================================================ */
+
+function renderCustom(section) {
+
+  const wrapper =
+    document.createElement("section");
+
+  wrapper.className =
+    "py-24 md:py-32 bg-[#080b12]";
+
+
+  wrapper.innerHTML = `
+
+    <div class="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
+
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+
+        <div>
+
+          <div
+            class="section-title-line mb-5"
+            style="background:${escapeAttr(siteData.gradColor1)}"
+          ></div>
+
+          <h2
+            class="text-3xl md:text-5xl font-black"
+          >
+            ${escapeHTML(
+              section.customTitle ||
+              section.title ||
+              "بەشی تایبەت"
+            )}
+          </h2>
+
+          <p class="mt-6 text-gray-400 leading-9">
+            ${escapeHTML(
+              section.customText ||
+              ""
+            )}
+          </p>
+
+        </div>
+
+
+        ${
+          section.customImage
+            ? `
+              <div class="rounded-3xl overflow-hidden border border-white/10">
+
+                <img
+                  src="${escapeAttr(section.customImage)}"
+                  class="w-full custom-image"
+                  alt=""
+                >
+
+              </div>
+            `
+            : `
+              <div
+                class="rounded-3xl min-h-[300px] bg-white/[.03] border border-white/5 flex items-center justify-center"
+              >
+
+                <i
+                  data-lucide="image"
+                  class="w-16 h-16 text-gray-700"
+                ></i>
+
+              </div>
+            `
         }
 
-        log.innerHTML += `
-          <div class="bg-slate-900 p-3.5 rounded-2xl rounded-tr-none text-gray-200 border border-slate-800 max-w-[85%]">
-            ${reply}
-          </div>
-        `;
-        log.scrollTop = log.scrollHeight;
-      }, 400);
+      </div>
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+function sectionHeader(
+  eyebrow,
+  title,
+  description
+) {
+
+  return `
+
+    <div class="max-w-3xl">
+
+      <div
+        class="section-title-line mb-5"
+        style="background:${escapeAttr(siteData.gradColor1)}"
+      ></div>
+
+      <div
+        class="text-sm font-bold"
+        style="color:${escapeAttr(siteData.gradColor1)}"
+      >
+        ${escapeHTML(eyebrow)}
+      </div>
+
+      <h2
+        class="text-3xl sm:text-4xl md:text-5xl font-black mt-3 leading-tight"
+      >
+        ${escapeHTML(title)}
+      </h2>
+
+      <p class="text-gray-500 mt-5 leading-8">
+        ${escapeHTML(description)}
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   BOOKING
+============================================================ */
+
+function submitBooking(event) {
+
+  event.preventDefault();
+
+
+  const name =
+    document.getElementById(
+      "bookingName"
+    ).value.trim();
+
+
+  const phone =
+    document.getElementById(
+      "bookingPhone"
+    ).value.trim();
+
+
+  const people =
+    document.getElementById(
+      "bookingPeople"
+    ).value;
+
+
+  const note =
+    document.getElementById(
+      "bookingNote"
+    ).value.trim();
+
+
+  const result =
+    document.getElementById(
+      "bookingResult"
+    );
+
+
+  if (!name || !phone) {
+
+    result.className =
+      "md:col-span-2 rounded-xl p-4 text-sm bg-red-950/40 border border-red-900/50 text-red-300";
+
+    result.textContent =
+      "تکایە ناو و ژمارەی مۆبایل پڕ بکەرەوە.";
+
+    return;
+
+  }
+
+
+  /*
+     ئەم بەشە ئێستا داواکارییەکە لە browser ـەکەدا
+     هەڵدەگرێت.
+     دەتوانرێت دواتر بە Telegram / API / Database
+     پەیوەست بکرێت.
+  */
+
+  const booking = {
+
+    name,
+
+    phone,
+
+    people,
+
+    note,
+
+    trip: siteData.tripTitle,
+
+    price: siteData.tripPrice,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  const bookings =
+    JSON.parse(
+      localStorage.getItem(
+        "kurdia_bookings"
+      ) || "[]"
+    );
+
+
+  bookings.push(booking);
+
+
+  localStorage.setItem(
+    "kurdia_bookings",
+    JSON.stringify(bookings)
+  );
+
+
+  result.className =
+    "md:col-span-2 rounded-xl p-4 text-sm bg-green-950/40 border border-green-900/50 text-green-300";
+
+
+  result.textContent =
+    "داواکارییەکەت بە سەرکەوتوویی تۆمار کرا. تیمی KURDIA ADVENTURE پەیوەندیت پێوە دەکات.";
+
+
+  document
+    .getElementById("bookingForm")
+    .reset();
+
+}
+
+
+/* ============================================================
+   ASSISTANT
+============================================================ */
+
+function toggleAssistant() {
+
+  const windowElement =
+    document.getElementById(
+      "assistantWindow"
+    );
+
+
+  const isHidden =
+    windowElement.classList.contains(
+      "hidden"
+    );
+
+
+  windowElement.classList.toggle(
+    "hidden"
+  );
+
+
+  if (isHidden) {
+
+    initializeChat();
+
+    setTimeout(() => {
+
+      document
+        .getElementById("chatInput")
+        ?.focus();
+
+    }, 100);
+
+  }
+
+}
+
+
+function initializeChat() {
+
+  const messages =
+    document.getElementById(
+      "chatMessages"
+    );
+
+
+  if (
+    messages.dataset.initialized === "1"
+  ) {
+    return;
+  }
+
+
+  messages.dataset.initialized = "1";
+
+
+  addChatMessage(
+    "ai",
+    `سڵاو 👋 من Kurdia Assistant ـم. دەتوانم یارمەتیت بدەم لە زانیاری گەشت، نرخ، شوێن، کات و خزمەتگوزارییەکان.`
+  );
+
+}
+
+
+function addChatMessage(
+  type,
+  text
+) {
+
+  const messages =
+    document.getElementById(
+      "chatMessages"
+    );
+
+
+  const div =
+    document.createElement("div");
+
+
+  div.className =
+    type === "user"
+      ? "flex justify-start"
+      : "flex justify-end";
+
+
+  const bubble =
+    document.createElement("div");
+
+
+  bubble.className =
+    type === "user"
+      ? "chat-user max-w-[85%] px-4 py-3 text-sm leading-7"
+      : "chat-ai max-w-[85%] px-4 py-3 text-sm leading-7";
+
+
+  bubble.textContent = text;
+
+
+  div.appendChild(bubble);
+
+  messages.appendChild(div);
+
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+}
+
+
+function handleChatKey(event) {
+
+  if (event.key === "Enter") {
+
+    event.preventDefault();
+
+    sendChatMessage();
+
+  }
+
+}
+
+
+function sendChatMessage() {
+
+  const input =
+    document.getElementById(
+      "chatInput"
+    );
+
+
+  const message =
+    input.value.trim();
+
+
+  if (!message) {
+    return;
+  }
+
+
+  addChatMessage(
+    "user",
+    message
+  );
+
+
+  input.value = "";
+
+
+  setTimeout(() => {
+
+    const answer =
+      getAssistantAnswer(
+        message
+      );
+
+
+    addChatMessage(
+      "ai",
+      answer
+    );
+
+  }, 350);
+
+}
+
+
+/* ============================================================
+   ASSISTANT KNOWLEDGE
+============================================================ */
+
+function getAssistantAnswer(message) {
+
+  const m =
+    normalizeText(message);
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "سڵاو",
+        "slaw",
+        "hello",
+        "hi"
+      ]
+    )
+  ) {
+
+    return "سڵاو 👋 بەخێربێیت بۆ KURDIA ADVENTURE. چ شتێکت دەوێت بزانیت؟";
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "نرخ",
+        "پارە",
+        "چەنە",
+        "نرخی"
+      ]
+    )
+  ) {
+
+    return `نرخی ئەم گەشتە ${siteData.tripPrice} ـە.`;
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "شوێن",
+        "کوێ",
+        "location"
+      ]
+    )
+  ) {
+
+    return `شوێنی گەشت: ${siteData.tripLocation}.`;
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "کات",
+        "دەست پێ",
+        "سەعات"
+      ]
+    )
+  ) {
+
+    return `کاتی گەشت: ${siteData.tripTime}.`;
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "ماوە",
+        "چەند ڕۆژ",
+        "ڕۆژ"
+      ]
+    )
+  ) {
+
+    return `ماوەی گەشت: ${siteData.tripDuration}.`;
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "خزمەتگوزاری",
+        "چی هەیە",
+        "دابین"
+      ]
+    )
+  ) {
+
+    return (
+      "خزمەتگوزارییەکانمان: " +
+      siteData.services.join("، ") +
+      "."
+    );
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "خێمە",
+        "tent"
+      ]
+    )
+  ) {
+
+    return "بەپێی داتای سایت، خێمە بۆ بەشداربووانی تۆمارکراو دابین دەکرێت.";
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "booking",
+        "تۆمار",
+        "بەشداری",
+        "بەشدار"
+      ]
+    )
+  ) {
+
+    if (siteData.bookingOpen) {
+
+      return "بەڵێ، تۆمارکردن کراوەیە. دەتوانیت لە بەشی «بەشداری» فۆڕمەکە پڕ بکەیتەوە.";
+
     }
 
-    initializeMainSite();
-  </script>
+    return "لە ئێستادا تۆمارکردن داخراوە.";
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "کوردیا",
+        "کێن",
+        "دەربارە"
+      ]
+    )
+  ) {
+
+    return (
+      siteData.knowledgeAbout ||
+      "KURDIA ADVENTURE گرووپێکی گەشت و سەرکێشییە."
+    );
+
+  }
+
+
+  if (
+    containsAny(
+      m,
+      [
+        "ئامێر",
+        "کەلوپەل",
+        "چی بهێنم",
+        "ئامادەکاری"
+      ]
+    )
+  ) {
+
+    return (
+      siteData.knowledgeEquipment ||
+      "بەپێی جۆری گەشت، پێویستە ئامێری گونجاو لەگەڵ خۆت بهێنیت."
+    );
+
+  }
+
+
+  return `ببورە، لە داتای ئێستای سایتدا وەڵامی وردم بۆ ئەم پرسیارە نییە. دەتوانیت لەبارەی نرخ، شوێن، کات، ماوە، خزمەتگوزاری یان بەشداری پرسیار بکەیت.`;
+
+}
+
+
+/* ============================================================
+   TEXT HELPERS
+============================================================ */
+
+function normalizeText(text) {
+
+  return String(text || "")
+    .toLowerCase()
+    .replace(/‌/g, "")
+    .trim();
+
+}
+
+
+function containsAny(
+  text,
+  list
+) {
+
+  return list.some(
+    word => text.includes(
+      normalizeText(word)
+    )
+  );
+
+}
+
+
+/* ============================================================
+   FAQ
+============================================================ */
+
+function setupFAQ() {
+
+  /*
+     Event handlers are inline,
+     so no additional setup is required.
+  */
+
+}
+
+
+function toggleFAQ(element) {
+
+  const item =
+    element.closest(
+      ".faq-item"
+    );
+
+
+  if (!item) {
+    return;
+  }
+
+
+  document
+    .querySelectorAll(".faq-item")
+    .forEach(other => {
+
+      if (other !== item) {
+
+        other.classList.remove(
+          "open"
+        );
+
+      }
+
+    });
+
+
+  item.classList.toggle(
+    "open"
+  );
+
+}
+
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+
+function setupAnimations() {
+
+  const elements =
+    document.querySelectorAll(
+      ".fade-up"
+    );
+
+
+  if (
+    !("IntersectionObserver" in window)
+  ) {
+
+    elements.forEach(
+      el => el.classList.add("show")
+    );
+
+    return;
+
+  }
+
+
+  const observer =
+    new IntersectionObserver(
+      entries => {
+
+        entries.forEach(entry => {
+
+          if (
+            entry.isIntersecting
+          ) {
+
+            entry.target.classList.add(
+              "show"
+            );
+
+            observer.unobserve(
+              entry.target
+            );
+
+          }
+
+        });
+
+      },
+      {
+        threshold: .12
+      }
+    );
+
+
+  elements.forEach(
+    el => observer.observe(el)
+  );
+
+}
+
+
+/* ============================================================
+   MOBILE MENU
+============================================================ */
+
+function toggleMobileMenu() {
+
+  document
+    .getElementById("mobileMenu")
+    .classList.toggle("hidden");
+
+}
+
+
+function closeMobileMenu() {
+
+  document
+    .getElementById("mobileMenu")
+    .classList.add("hidden");
+
+}
+
+
+/* ============================================================
+   NAVBAR SCROLL
+============================================================ */
+
+window.addEventListener(
+  "scroll",
+  function() {
+
+    const nav =
+      document.getElementById(
+        "navbar"
+      );
+
+
+    if (
+      window.scrollY > 30
+    ) {
+
+      nav.classList.add(
+        "bg-[#080b12]/80"
+      );
+
+    } else {
+
+      nav.classList.remove(
+        "bg-[#080b12]/80"
+      );
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   LUCIDE
+============================================================ */
+
+function setupIcons() {
+
+  if (
+    window.lucide &&
+    typeof lucide.createIcons === "function"
+  ) {
+
+    lucide.createIcons();
+
+  }
+
+}
+
+
+/* ============================================================
+   YEAR
+============================================================ */
+
+function updateYear() {
+
+  const year =
+    document.getElementById(
+      "year"
+    );
+
+
+  if (year) {
+
+    year.textContent =
+      new Date().getFullYear();
+
+  }
+
+}
+
+
+/* ============================================================
+   HEX COLOR
+============================================================ */
+
+function hexToRgba(
+  hex,
+  alpha
+) {
+
+  let value =
+    String(hex || "")
+      .replace("#", "")
+      .trim();
+
+
+  if (value.length === 3) {
+
+    value =
+      value
+        .split("")
+        .map(x => x + x)
+        .join("");
+
+  }
+
+
+  const number =
+    parseInt(value, 16);
+
+
+  if (
+    Number.isNaN(number)
+  ) {
+
+    return `rgba(157,28,50,${alpha})`;
+
+  }
+
+
+  const r =
+    (number >> 16) & 255;
+
+  const g =
+    (number >> 8) & 255;
+
+  const b =
+    number & 255;
+
+
+  return `rgba(${r},${g},${b},${alpha})`;
+
+}
+
+
+/* ============================================================
+   ESCAPE
+============================================================ */
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function escapeAttr(value) {
+
+  return escapeHTML(value);
+
+}
+
+
+/* ============================================================
+   ADMIN LIVE PREVIEW CONNECTION
+============================================================ */
+
+window.addEventListener(
+  "message",
+  function(event) {
+
+    if (!event.data) {
+      return;
+    }
+
+
+    if (
+      event.data.type ===
+      "KURDIA_BUILDER_STATE"
+    ) {
+
+      try {
+
+        siteData =
+          mergeData(
+            clone(DEFAULT_DATA),
+            event.data.state
+          );
+
+
+        renderSite();
+
+      } catch (error) {
+
+        console.error(
+          "Preview state error:",
+          error
+        );
+
+      }
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   ASK ADMIN FOR STATE
+============================================================ */
+
+window.parent.postMessage(
+  {
+    type: "REQUEST_KURDIA_STATE"
+  },
+  "*"
+);
+
+
+/* ============================================================
+   INITIAL RENDER
+============================================================ */
+
+renderSite();
+
+setupIcons();
+
+updateYear();
+
+</script>
+
 </body>
 </html>
