@@ -294,7 +294,7 @@
         <div class="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
           <p class="text-xs text-yellow-400 font-bold mb-1">شێوازی پارەدان و جێگیرکردنی کورسی:</p>
           <p class="text-xs text-gray-300 leading-relaxed">
-            بڕی پارەکە لە ڕێگەی <strong>FastPay</strong> بۆ ئەم ژمارەیە بنێرە: <span class="font-bold text-white tracking-wider" dir="ltr">0750 313 0360</span>. پاشان وێنەی پسوولەکە لە خوارەوە بنێرە یان دوای ناونووسین لە واتسئاپ بۆمان بنێرە.
+            بڕی پارەکە لە ڕێگەی <strong>FastPay</strong> بۆ ئەم ژمارەیە بنێرە: <span class="font-bold text-white tracking-wider" dir="ltr">0750 313 0360</span>. پاشان ناونووسینەکە تەواو بکە و لە واتسئاپ پسوولەکە پشتڕاست دەکەینەوە.
           </p>
         </div>
 
@@ -317,7 +317,7 @@
         </div>
         <h3 class="text-2xl font-bold text-white mb-2">ناونووسینەکەت بە سەرکەوتوویی تۆمارکرا!</h3>
         <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">
-          تیمەکەمان بە زووترین کات لە ڕێگەی پەیوەندی یان نامەی واتسئاپەوە پەیوەندیت پێوە دەکەن بۆ پشتڕاستکردنەوەی کۆتایی.
+          زانیارییەکانت گەیشت؛ تیمەکەمان بە زووترین کات لە ڕێگەی نامەی واتسئاپەوە پەیوەندیت پێوە دەکەن.
         </p>
         <button onclick="resetBooking()" class="text-xs text-yellow-400 underline">ناونووسینی کەسێکی تر</button>
       </div>
@@ -364,4 +364,131 @@
         <form onsubmit="handleSendChat(event)" class="flex gap-2">
           <input type="text" id="chatInput" placeholder="پرسیارەکەت لێرە بنووسە..." class="flex-1 bg-[#111827] border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-yellow-500">
           <button type="submit" class="bg-yellow-500 text-black px-4 py-2 rounded-xl font-bold hover:bg-yellow-400 transition">
-            <i data-lucide=
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ژێرپەڕە (Footer) -->
+  <footer class="py-10 border-t border-adventure-border text-center text-xs text-gray-500">
+    <p>© 2026 کوردیا ئەدڤێنتچەر — سەرجەم مافەکان پارێزراون.</p>
+  </footer>
+
+  <script>
+    // چالاککردنی ئایکۆنەکان
+    lucide.createIcons();
+
+    // نیشاندان یان شاردنەوەی چات
+    function toggleChat() {
+      const chatBox = document.getElementById('chatBox');
+      const chatBtn = document.getElementById('chatToggleBtn');
+      if (chatBox.classList.contains('hidden')) {
+        chatBox.classList.remove('hidden');
+        chatBox.classList.add('flex');
+        chatBtn.classList.add('hidden');
+      } else {
+        chatBox.classList.add('hidden');
+        chatBox.classList.remove('flex');
+        chatBtn.classList.remove('hidden');
+      }
+    }
+
+    // بەڕێوەبردنی ناونووسین و ناردنی دەستبەجێ بۆ تێلێگرام
+    async function handleBooking(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('fullName').value;
+      const phone = document.getElementById('phone').value;
+      const tickets = document.getElementById('ticketCount').value;
+      const location = document.getElementById('pickupLocation').options[document.getElementById('pickupLocation').selectedIndex].text;
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "کەمێک چاوەڕێ بکە...";
+
+      const botToken = "8988711499:AAFr3njwdynHfGpEe_9u6LT8ocKwhdf-gmQ";
+      const chatId = "1112648339";
+
+      const message = `🏔️ *ناونووسینی نوێ بۆ کوردیا ئەدڤێنتچەر*
+━━━━━━━━━━━━━━━━━━
+👤 *ناو:* ${name}
+📞 *مۆبایل:* ${phone}
+👥 *ژمارەی کەسەکان:* ${tickets}
+📍 *شوێنی سواربوون:* ${location}
+⏰ *کات:* ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Baghdad' })}`;
+
+      try {
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'Markdown'
+          })
+        });
+
+        document.getElementById('bookingForm').classList.add('hidden');
+        document.getElementById('successMsg').classList.remove('hidden');
+      } catch (error) {
+        alert("کێشەیەک ڕوویدا لە کاتی ناردن، تکایە لە واتسئاپ پەیوەندیمان پێوە بکە.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "تۆمارکردن و ناونووسین";
+      }
+    }
+
+    function resetBooking() {
+      document.getElementById('bookingForm').reset();
+      document.getElementById('bookingForm').classList.remove('hidden');
+      document.getElementById('successMsg').classList.add('hidden');
+    }
+
+    // سیستەمی وەڵامدانەوەی زیرەکی دەستکردی ناو چات
+    function handleSendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatContainer = document.getElementById('chatMessages');
+
+      // نامەی بەکارهێنەر
+      chatContainer.innerHTML += `
+        <div class="flex justify-end">
+          <div class="bg-yellow-500 text-black font-semibold p-3 rounded-2xl rounded-tl-none max-w-[85%]">
+            ${text}
+          </div>
+        </div>
+      `;
+      input.value = '';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      // وەڵامی زیرەک بەپێی بابەتەکان
+      setTimeout(() => {
+        let reply = "بۆ هەر پرسیارێکی وردتر دەتوانیت ڕاستەوخۆ پەیوەندی بە سەرپەرشتیاری کوردیا ئەدڤێنتچەر بکەیت لە ڕێگەی 07503130360.";
+        const lower = text.toLowerCase();
+
+        if (lower.includes('نرخ') || lower.includes('چەندە') || lower.includes('پارە')) {
+          reply = "نرخی بەشداربوون لەم گەشتەدا ٢٥,٠٠٠ دینارە کە هاتوچۆ بە پاسی مۆدێرن، ڕێبەری شاخەوانی و فریاگوزاری سەرەتایی دەگرێتەوە.";
+        } else if (lower.includes('پێڵاو') || lower.includes('جل') || lower.includes('کەلوپەل')) {
+          reply = "پێویستە پێڵاوی شاخەوانی دژەخلیسک (Hiking shoes) لەپێ بکەیت، جلوبەرگی وەرزشی ئاسوودە، لانیکەم ٢ لیتر ئاو، لەگەڵ کڵاو و چاویلکەی خۆر.";
+        } else if (lower.includes('ناونووسین') || lower.includes('ناو') || lower.includes('حجز')) {
+          reply = "دەتوانیت ڕاستەوخۆ لە بەشی سەرەوە فۆڕمی ناونووسین پڕبکەیتەوە و کورسییەکەت جێگیر بکەیت.";
+        } else if (lower.includes('کات') || lower.includes('شوێن') || lower.includes('کۆبوونەوە')) {
+          reply = "کۆبوونەوە لە کاتژمێر ٠٦:٠٠ی بەیانییە لە هەولێر، نزیک پارکی شانەدەر.";
+        }
+
+        chatContainer.innerHTML += `
+          <div class="bg-[#1F2937] p-3 rounded-2xl rounded-tr-none text-gray-200 border border-gray-700 max-w-[85%]">
+            ${reply}
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 500);
+    }
+  </script>
+</body>
+</html>
