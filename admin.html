@@ -1,568 +1,3210 @@
-<!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<!DOCTYPE html><html lang="ku" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>KURDIA ADVENTURE — SMART WEBSITE BUILDER</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0; padding: 0; width: 100%; min-height: 100%;
-      font-family: "Vazirmatn", sans-serif;
-      background: #080b12; color: #f5f5f5; overflow: hidden;
-    }
-    button, input, textarea, select { font-family: inherit; }
-    ::-webkit-scrollbar { width: 7px; height: 7px; }
-    ::-webkit-scrollbar-track { background: #0c1019; }
-    ::-webkit-scrollbar-thumb { background: #303847; border-radius: 20px; }
-    ::-webkit-scrollbar-thumb:hover { background: #4a5568; }
-    .glass { background: rgba(17, 23, 35, 0.88); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.07); }
-    .panel { background: #111722; border: 1px solid #202938; border-radius: 16px; }
-    .input { width: 100%; background: #0b1019; border: 1px solid #293241; border-radius: 10px; color: #fff; padding: 10px 12px; outline: none; transition: .2s; }
-    .input:focus { border-color: #9d1c32; box-shadow: 0 0 0 3px rgba(157,28,50,.12); }
-    textarea.input { resize: vertical; min-height: 90px; }
-    .btn { border: 1px solid #293241; background: #151c29; color: #fff; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: .2s; display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
-    .btn:hover { background: #1c2635; border-color: #3b4658; }
-    .btn-primary { background: #9d1c32; border-color: #9d1c32; }
-    .btn-primary:hover { background: #b3223b; border-color: #b3223b; }
-    .btn-danger { background: #35131b; border-color: #63202d; color: #ff9baa; }
-    .btn-success { background: #123026; border-color: #205842; color: #8ff0bd; }
-    .sidebar-item { width: 100%; border: 0; background: transparent; color: #8e99aa; padding: 11px 13px; border-radius: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; text-align: right; transition: .2s; }
-    .sidebar-item:hover { background: #151d2a; color: #fff; }
-    .sidebar-item.active { background: rgba(157,28,50,.16); color: #ffb7c2; }
-    .section-row { background: #0d131d; border: 1px solid #202938; border-radius: 11px; padding: 9px; cursor: grab; transition: .2s; }
-    .section-row:hover { border-color: #394557; transform: translateY(-1px); }
-    .section-row.selected { border-color: #9d1c32; box-shadow: 0 0 0 1px rgba(157,28,50,.25); }
-    .section-row.hidden-section { opacity: .45; }
-    .dragging { opacity: .4; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #43d17c; box-shadow: 0 0 10px rgba(67,209,124,.6); }
-    .viewport-frame { transition: width .3s ease; height: calc(100vh - 76px); background: #080b12; box-shadow: 0 0 60px rgba(0,0,0,.35); }
-    .viewport-desktop { width: 100%; }
-    .viewport-tablet { width: 820px; max-width: 100%; }
-    .viewport-mobile { width: 390px; max-width: 100%; }
-    .toast { position: fixed; bottom: 24px; left: 24px; z-index: 99999; min-width: 250px; padding: 13px 17px; border-radius: 12px; background: #171e2b; border: 1px solid #303a4b; box-shadow: 0 15px 50px rgba(0,0,0,.4); transform: translateY(30px); opacity: 0; pointer-events: none; transition: .25s; }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.72); backdrop-filter: blur(8px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .modal-backdrop.show { display: flex; }
-    .modal { width: min(700px, 100%); max-height: 90vh; overflow: auto; background: #111722; border: 1px solid #293241; border-radius: 20px; box-shadow: 0 30px 100px rgba(0,0,0,.55); }
-    .color-input { width: 44px; height: 40px; padding: 2px; background: #0b1019; border: 1px solid #293241; border-radius: 8px; cursor: pointer; }
-    .login-bg { background: radial-gradient(circle at 15% 20%, rgba(157,28,50,.22), transparent 30%), radial-gradient(circle at 85% 80%, rgba(127,29,29,.18), transparent 30%), #070a10; }
-    .login-card { background: rgba(15,20,30,.92); border: 1px solid #252e3d; box-shadow: 0 30px 100px rgba(0,0,0,.55); backdrop-filter: blur(20px); }
-    .badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 4px 9px; font-size: 11px; background: #1a202c; color: #9ba6b7; border: 1px solid #293241; }
-    @media (max-width: 900px) {
-      .desktop-sidebar { display: none; }
-      .mobile-sidebar { display: block !important; }
-      .viewport-tablet, .viewport-mobile { width: 100%; }
-    }
-    .mobile-sidebar { display: none; }
-  </style>
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>KURDIA ADMIN</title><script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Vazirmatn",sans-serif;background:#070a10;color:#fff}
+body{overflow:hidden}
+button,input,textarea,select{font-family:inherit}
+button{cursor:pointer}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:#080c13}
+::-webkit-scrollbar-thumb{background:#303746;border-radius:20px}
 
-<!-- LOGIN -->
-<div id="loginScreen" class="fixed inset-0 z-[10000] login-bg flex items-center justify-center p-5">
-  <div class="login-card w-full max-w-md rounded-3xl p-8">
-    <div class="text-center mb-8">
-      <div class="w-20 h-20 mx-auto rounded-3xl bg-[#9d1c32] flex items-center justify-center shadow-2xl shadow-red-950/40 mb-5">
-        <i data-lucide="mountain" class="w-10 h-10"></i>
-      </div>
-      <h1 class="text-2xl font-black">KURDIA ADVENTURE</h1>
-      <p class="text-gray-500 mt-2">SMART WEBSITE BUILDER</p>
-    </div>
-    <form id="loginForm">
-      <label class="block text-sm text-gray-400 mb-2">وشەی نهێنی</label>
-      <input id="pinInput" type="password" class="input text-center text-xl tracking-[.4em]" placeholder="••••" autocomplete="off">
-      <button type="submit" class="btn btn-primary w-full mt-4 py-3 font-bold">
-        <i data-lucide="log-in" class="w-5 h-5"></i>
-        چوونەژوورەوە
-      </button>
-      <p id="loginError" class="hidden text-red-400 text-sm text-center mt-4">وشەی نهێنی هەڵەیە</p>
-    </form>
-    <div class="text-center mt-7 text-xs text-gray-600">KURDIA ADVENTURE © 2026</div>
+:root{
+  --red:#9d1c32;
+  --panel:#0d131d;
+  --panel2:#111925;
+  --border:rgba(255,255,255,.08);
+  --muted:#8993a5;
+}
+
+.app{height:100vh;display:flex;flex-direction:column}
+
+.topbar{
+  height:64px;
+  flex:none;
+  background:#0a0f17;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  z-index:50;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.logo{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  background:var(--red);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.brand-title{font-weight:900;letter-spacing:.05em}
+.brand-sub{font-size:9px;color:#727d90;letter-spacing:.2em}
+
+.top-actions{display:flex;align-items:center;gap:7px}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border-radius:11px;
+  background:#111823;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#c8ced8;
+}
+
+.icon-btn:hover{background:#182130;color:#fff}
+
+.primary-btn{
+  background:var(--red);
+  border:0;
+  border-radius:11px;
+  padding:10px 16px;
+  font-weight:800;
+  color:#fff;
+}
+
+.primary-btn:hover{background:#b4223c}
+
+.layout{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:260px minmax(0,1fr) 330px;
+}
+
+.sidebar{
+  background:#0b111a;
+  border-left:1px solid var(--border);
+  min-height:0;
+  overflow:auto;
+  padding:14px;
+}
+
+.main{
+  min-width:0;
+  min-height:0;
+  overflow:auto;
+  background:
+    radial-gradient(circle at 30% 0%,rgba(157,28,50,.09),transparent 30%),
+    #080c13;
+}
+
+.inspector{
+  background:#0b111a;
+  border-right:1px solid var(--border);
+  min-height:0;
+  overflow:auto;
+  padding:14px;
+}
+
+.panel-title{
+  font-size:12px;
+  font-weight:800;
+  color:#9da7b7;
+  margin:5px 3px 10px;
+}
+
+.section-list{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.section-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px;
+  border-radius:12px;
+  background:#101722;
+  border:1px solid transparent;
+  transition:.2s;
+}
+
+.section-item:hover{
+  background:#151e2b;
+}
+
+.section-item.active{
+  border-color:rgba(157,28,50,.7);
+  background:rgba(157,28,50,.12);
+}
+
+.drag-handle{
+  color:#657084;
+  cursor:grab;
+}
+
+.section-info{
+  flex:1;
+  min-width:0;
+}
+
+.section-name{
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.section-type{
+  font-size:9px;
+  color:#687487;
+  margin-top:2px;
+}
+
+.eye-btn{
+  width:27px;
+  height:27px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#738096;
+}
+
+.eye-btn.hidden-section{color:#c23a52}
+
+.workspace{
+  padding:18px;
+  min-height:100%;
+}
+
+.workspace-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.workspace-title{
+  font-size:20px;
+  font-weight:900;
+}
+
+.workspace-sub{
+  font-size:11px;
+  color:#707b8e;
+  margin-top:4px;
+}
+
+.device-switch{
+  display:flex;
+  background:#0d131d;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:4px;
+  gap:3px;
+}
+
+.device-switch button{
+  width:38px;
+  height:34px;
+  border-radius:8px;
+  background:transparent;
+  color:#788398;
+}
+
+.device-switch button.active{
+  background:#1a2331;
+  color:#fff;
+}
+
+.preview-shell{
+  background:#111722;
+  border:1px solid var(--border);
+  border-radius:18px;
+  min-height:650px;
+  overflow:hidden;
+  position:relative;
+}
+
+.preview-toolbar{
+  height:43px;
+  background:#0d131d;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+}
+
+.preview-url{
+  color:#657084;
+  font-size:10px;
+}
+
+.preview-area{
+  min-height:607px;
+  background:#05070b;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  overflow:auto;
+  padding:15px;
+}
+
+#previewFrame{
+  border:0;
+  background:#080b12;
+  width:100%;
+  min-height:720px;
+  transition:.25s;
+  box-shadow:0 15px 60px rgba(0,0,0,.4);
+}
+
+.form-card{
+  background:#101722;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:13px;
+  margin-bottom:10px;
+}
+
+.form-title{
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:11px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.field{
+  margin-bottom:10px;
+}
+
+.field label{
+  display:block;
+  color:#9ba5b5;
+  font-size:10px;
+  font-weight:700;
+  margin-bottom:5px;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  background:#080d15;
+  border:1px solid rgba(255,255,255,.08);
+  color:#fff;
+  border-radius:10px;
+  padding:10px;
+  outline:none;
+  font-size:12px;
+}
+
+.field textarea{
+  min-height:82px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:rgba(157,28,50,.8);
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.small-btn{
+  border:1px solid var(--border);
+  background:#121a26;
+  color:#d4d9e2;
+  border-radius:9px;
+  padding:8px 10px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.small-btn:hover{background:#1a2433}
+
+.danger-btn{
+  background:rgba(190,35,60,.1);
+  color:#f07187;
+  border:1px solid rgba(190,35,60,.3);
+}
+
+.success-btn{
+  background:rgba(37,160,98,.1);
+  color:#66d7a0;
+  border:1px solid rgba(37,160,98,.25);
+}
+
+.array-item{
+  display:flex;
+  gap:6px;
+  margin-bottom:6px;
+}
+
+.array-item input{
+  flex:1;
+}
+
+.image-preview{
+  width:100%;
+  height:120px;
+  border-radius:10px;
+  object-fit:cover;
+  background:#080d15;
+  border:1px solid var(--border);
+  margin-bottom:8px;
+}
+
+.color-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.color-row input[type=color]{
+  width:48px;
+  height:40px;
+  padding:2px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:#080d15;
+}
+
+.empty{
+  padding:30px 12px;
+  text-align:center;
+  color:#677286;
+  font-size:11px;
+}
+
+.toast{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  z-index:9999;
+  background:#151d2a;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:11px 15px;
+  font-size:11px;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
+  transform:translateY(100px);
+  opacity:0;
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.modal-backdrop.show{display:flex}
+
+.modal{
+  width:min(520px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0e151f;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.login-screen{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(157,28,50,.2),transparent 35%),
+    #060910;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.login-box{
+  width:min(390px,100%);
+  background:#0d131d;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:25px;
+  box-shadow:0 30px 100px rgba(0,0,0,.55);
+  text-align:center;
+}
+
+.login-logo{
+  width:65px;
+  height:65px;
+  border-radius:19px;
+  background:var(--red);
+  margin:0 auto 15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.login-box input{
+  width:100%;
+  margin-top:15px;
+  background:#080d15;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:13px;
+  color:#fff;
+  text-align:center;
+  letter-spacing:.3em;
+  outline:none;
+}
+
+.login-box button{
+  width:100%;
+  margin-top:10px;
+}
+
+.tabbar{
+  display:flex;
+  gap:5px;
+  overflow:auto;
+  margin-bottom:12px;
+}
+
+.tabbar button{
+  flex:none;
+  padding:8px 11px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:#101722;
+  color:#8d98aa;
+  font-size:10px;
+}
+
+.tabbar button.active{
+  background:rgba(157,28,50,.15);
+  border-color:rgba(157,28,50,.6);
+  color:#fff;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:9px;
+  color:#69d49d;
+}
+
+.status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#45c98c;
+}
+
+.mobile-menu-btn{display:none}
+
+@media(max-width:1100px){
+  .layout{grid-template-columns:220px minmax(0,1fr)}
+  .inspector{position:fixed;right:0;top:64px;bottom:0;width:min(360px,90vw);z-index:100;transform:translateX(105%);transition:.25s;box-shadow:-20px 0 60px rgba(0,0,0,.4)}
+  .inspector.open{transform:translateX(0)}
+  .mobile-menu-btn{display:flex}
+}
+
+@media(max-width:760px){
+  body{overflow:auto}
+  .topbar{height:58px;padding:0 9px}
+  .brand-sub{display:none}
+  .brand-title{font-size:12px}
+  .top-actions .desktop-only{display:none}
+  .layout{display:block;height:calc(100vh - 58px)}
+  .sidebar{
+    position:fixed;
+    right:0;
+    top:58px;
+    bottom:0;
+    width:290px;
+    z-index:200;
+    transform:translateX(105%);
+    transition:.25s;
+    box-shadow:-20px 0 70px rgba(0,0,0,.5);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .main{height:100%}
+  .workspace{padding:10px}
+  .workspace-head{align-items:flex-start}
+  .workspace-title{font-size:16px}
+  .preview-shell{min-height:600px}
+  .preview-area{min-height:550px;padding:7px}
+  #previewFrame{min-height:650px}
+  .row{grid-template-columns:1fr}
+}
+</style></head><body><div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <i data-lucide="mountain" style="width:30px;height:30px"></i>
+    </div><div style="font-size:20px;font-weight:900">KURDIA ADMIN</div>
+<div style="font-size:10px;color:#697487;margin-top:5px">
+  Smart Website Builder
+</div>
+
+<input
+  id="pinInput"
+  type="password"
+  inputmode="numeric"
+  maxlength="20"
+  placeholder="PIN"
+  onkeydown="if(event.key==='Enter')login()"
+>
+
+<button class="primary-btn" onclick="login()">
+  چوونەژوورەوە
+</button>
+
+<div id="loginError"
+  style="font-size:10px;color:#ef6b82;margin-top:9px;min-height:15px">
+</div>
+
+  </div>
+</div><div class="app" id="app" style="display:none">  <header class="topbar"><div class="brand">
+  <button class="icon-btn mobile-menu-btn" onclick="toggleSidebar()">
+    <i data-lucide="menu"></i>
+  </button>
+
+  <div class="logo">
+    <i data-lucide="mountain"></i>
+  </div>
+
+  <div>
+    <div class="brand-title">KURDIA ADMIN</div>
+    <div class="brand-sub">ADVENTURE WEBSITE BUILDER</div>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="app" class="hidden h-screen overflow-hidden">
-  <header class="h-[76px] border-b border-[#202938] bg-[#0d121b]/95 backdrop-blur-xl flex items-center justify-between px-4 md:px-6 relative z-50">
-    <div class="flex items-center gap-3">
-      <button id="mobileMenuBtn" class="btn md:hidden" onclick="toggleMobileSidebar()">
-        <i data-lucide="menu" class="w-5 h-5"></i>
-      </button>
-      <div class="w-10 h-10 rounded-xl bg-[#9d1c32] flex items-center justify-center">
-        <i data-lucide="mountain" class="w-5 h-5"></i>
-      </div>
-      <div class="hidden sm:block">
-        <div class="font-black text-sm">KURDIA BUILDER</div>
-        <div class="text-[10px] text-gray-500">SMART WEBSITE BUILDER</div>
-      </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <button class="btn hidden sm:inline-flex" onclick="undoState()" title="Undo"><i data-lucide="undo-2" class="w-4 h-4"></i></button>
-      <button class="btn hidden sm:inline-flex" onclick="redoState()" title="Redo"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
-      <div class="hidden md:flex items-center gap-1 bg-[#090e16] rounded-xl p-1 border border-[#202938]">
-        <button class="btn border-0" id="desktopBtn" onclick="setViewport('desktop')"><i data-lucide="monitor" class="w-4 h-4"></i></button>
-        <button class="btn border-0" id="tabletBtn" onclick="setViewport('tablet')"><i data-lucide="tablet" class="w-4 h-4"></i></button>
-        <button class="btn border-0" id="mobileBtn" onclick="setViewport('mobile')"><i data-lucide="smartphone" class="w-4 h-4"></i></button>
-      </div>
-      <a href="index.html" target="_blank" class="btn hidden sm:inline-flex"><i data-lucide="external-link" class="w-4 h-4"></i>سایت</a>
-      <button class="btn btn-success font-bold" onclick="publishSite()"><i data-lucide="send" class="w-4 h-4"></i><span class="hidden sm:inline">Publish</span></button>
-    </div>
-  </header>
+<div class="top-actions">
 
-  <div class="flex h-[calc(100vh-76px)]">
-    <!-- SIDEBAR -->
-    <aside id="sidebar" class="desktop-sidebar w-[330px] shrink-0 border-l border-[#202938] bg-[#0d121b] overflow-y-auto">
-      <div class="p-4">
-        <div class="grid grid-cols-5 gap-1 mb-5 bg-[#080c13] rounded-xl p-1">
-          <button class="sidebar-item justify-center px-1 active" data-tab="sections" onclick="switchTab('sections')"><i data-lucide="layers" class="w-4 h-4"></i></button>
-          <button class="sidebar-item justify-center px-1" data-tab="theme" onclick="switchTab('theme')"><i data-lucide="palette" class="w-4 h-4"></i></button>
-          <button class="sidebar-item justify-center px-1" data-tab="media" onclick="switchTab('media')"><i data-lucide="images" class="w-4 h-4"></i></button>
-          <button class="sidebar-item justify-center px-1" data-tab="ai" onclick="switchTab('ai')"><i data-lucide="sparkles" class="w-4 h-4"></i></button>
-          <button class="sidebar-item justify-center px-1" data-tab="settings" onclick="switchTab('settings')"><i data-lucide="settings" class="w-4 h-4"></i></button>
-        </div>
-
-        <!-- SECTIONS -->
-        <section id="tab-sections">
-          <div class="flex items-center justify-between mb-3">
-            <div><h2 class="font-bold">بەشەکانی وێبسایت</h2><p class="text-xs text-gray-500 mt-1">ڕیزبەندی و دەستکاریکردن</p></div>
-            <button class="btn btn-primary px-2" onclick="openAddSectionModal()"><i data-lucide="plus" class="w-4 h-4"></i></button>
-          </div>
-          <div id="sectionsList" class="space-y-2"></div>
-        </section>
-
-        <!-- THEME -->
-        <section id="tab-theme" class="hidden">
-          <h2 class="font-bold mb-1">ڕووکاری وێبسایت</h2>
-          <div class="panel p-4 mb-4">
-            <label class="text-sm text-gray-400 block mb-2">ڕەنگی سەرەتا</label>
-            <div class="flex gap-2">
-              <input id="gradColor1" type="color" class="color-input" onchange="updateField('gradColor1',this.value)">
-              <input id="gradColor1Text" class="input" onchange="updateField('gradColor1',this.value)">
-            </div>
-          </div>
-          <div class="panel p-4 mb-4">
-            <label class="text-sm text-gray-400 block mb-2">ڕەنگی دووەم</label>
-            <div class="flex gap-2">
-              <input id="gradColor2" type="color" class="color-input" onchange="updateField('gradColor2',this.value)">
-              <input id="gradColor2Text" class="input" onchange="updateField('gradColor2',this.value)">
-            </div>
-          </div>
-          <div class="panel p-4">
-            <label class="text-sm text-gray-400 block mb-3">Preset</label>
-            <div class="grid grid-cols-2 gap-2">
-              <button class="btn" onclick="applyTheme('#9d1c32','#111827')">Kurdia</button>
-              <button class="btn" onclick="applyTheme('#0f766e','#082f49')">Nature</button>
-              <button class="btn" onclick="applyTheme('#7c2d12','#171717')">Sunset</button>
-              <button class="btn" onclick="applyTheme('#4c1d95','#111827')">Night</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- MEDIA -->
-        <section id="tab-media" class="hidden">
-          <h2 class="font-bold mb-1">Media Library</h2>
-          <div class="panel p-4 mb-4">
-            <input id="mediaUpload" type="file" accept="image/*" class="hidden" onchange="uploadImage(event)">
-            <label for="mediaUpload" class="btn btn-primary w-full cursor-pointer"><i data-lucide="upload" class="w-4 h-4"></i>Upload Image</label>
-          </div>
-          <div id="mediaGrid" class="grid grid-cols-2 gap-2"></div>
-        </section>
-
-        <!-- AI -->
-        <section id="tab-ai" class="hidden">
-          <div class="panel p-4">
-            <textarea id="aiCommand" class="input" placeholder="نموونە: نرخ بکە 50000"></textarea>
-            <button class="btn btn-primary w-full mt-3" onclick="runAICommand()"><i data-lucide="wand-sparkles" class="w-4 h-4"></i>جێبەجێکردن</button>
-          </div>
-        </section>
-
-        <!-- SETTINGS -->
-        <section id="tab-settings" class="hidden">
-          <div class="panel p-4 mb-4">
-            <label class="text-xs text-gray-500">SEO Title</label>
-            <input id="seoTitle" class="input mt-2" onchange="updateField('seoTitle',this.value)">
-            <label class="text-xs text-gray-500 block mt-4">SEO Description</label>
-            <textarea id="seoDescription" class="input mt-2" onchange="updateField('seoDescription',this.value)"></textarea>
-          </div>
-          <div class="panel p-4 mb-4">
-            <label class="flex items-center justify-between">
-              <span class="text-sm">Booking کراوە بێت</span>
-              <input id="bookingOpen" type="checkbox" onchange="updateField('bookingOpen',this.checked)">
-            </label>
-          </div>
-          <div class="panel p-4 space-y-2">
-            <button class="btn w-full" onclick="exportData()"><i data-lucide="download" class="w-4 h-4"></i>Export JSON</button>
-            <button class="btn btn-danger w-full" onclick="resetDraft()"><i data-lucide="rotate-ccw" class="w-4 h-4"></i>Reset</button>
-          </div>
-        </section>
-      </div>
-    </aside>
-
-    <aside id="mobileSidebar" class="mobile-sidebar fixed top-[76px] right-0 bottom-0 w-[320px] max-w-[90vw] z-[100] bg-[#0d121b] border-l border-[#202938] overflow-y-auto shadow-2xl"></aside>
-
-    <!-- PREVIEW -->
-    <main class="flex-1 min-w-0 bg-[#070a10] flex flex-col">
-      <div class="h-[44px] shrink-0 border-b border-[#202938] bg-[#0b1018] flex items-center justify-between px-4">
-        <div class="flex items-center gap-3 text-xs">
-          <span class="status-dot"></span>
-          <span class="text-gray-400">Live Preview</span>
-          <span id="saveStatus" class="text-gray-600">Ready</span>
-        </div>
-        <div class="text-xs text-gray-600"><span id="viewportLabel">Desktop</span></div>
-      </div>
-      <div class="flex-1 overflow-auto flex justify-center p-0 md:p-3">
-        <div id="viewportFrame" class="viewport-frame viewport-desktop overflow-hidden border-x border-[#252e3d]">
-          <iframe id="previewFrame" src="index.html" class="w-full h-full border-0 bg-white"></iframe>
-        </div>
-      </div>
-    </main>
+  <div class="status desktop-only">
+    <span class="status-dot"></span>
+    Local Builder
   </div>
+
+  <button class="icon-btn desktop-only" title="Undo" onclick="undo()">
+    <i data-lucide="undo-2"></i>
+  </button>
+
+  <button class="icon-btn desktop-only" title="Redo" onclick="redo()">
+    <i data-lucide="redo-2"></i>
+  </button>
+
+  <button class="icon-btn" title="Preview" onclick="openPublicSite()">
+    <i data-lucide="external-link"></i>
+  </button>
+
+  <button class="primary-btn" onclick="publish()">
+    <i data-lucide="send" style="width:15px;height:15px;vertical-align:-3px"></i>
+    Publish
+  </button>
+
 </div>
 
-<div id="toast" class="toast"></div>
+  </header>  <div class="layout"><!-- SIDEBAR -->
 
-<!-- ============================================================
-     SCRIPTS & CONFIGURATION
-============================================================ -->
-<script>
-/* ============================================================
-   CONFIGURATION (لێرە ڕێکیانبخە)
-============================================================ */
+<aside class="sidebar" id="sidebar">
 
-// 1. ئایدی سندوقی داتاکەت لە JSONBin:
-const BIN_ID = "6ab7f417ac6210605af863a3";
+  <div class="panel-title">بەشەکانی ویبسایت</div>
 
-// 2. کلیلی تایبەتی jsonbin (لە بەشی API Keys دەیهێنیت، وەک $2a$10$...):
-const API_KEY = "کلیلەکەت_لێرە_دابنێ";
+  <div id="sectionList" class="section-list"></div>
 
-// 3. کلیلی سایتی ImgBB بۆ ئەوەی وێنەکان ڕاستەوخۆ باربکرێن:
-const IMGBB_KEY = "کلیلی_ئیمجب_لێرە_دابنێ";
+  <div style="height:12px"></div>
 
-// 4. وشەی نهێنی چوونەژوورەوەی ئەدمین:
+  <button class="small-btn" style="width:100%" onclick="openAddSectionModal()">
+    <i data-lucide="plus" style="width:14px;height:14px;vertical-align:-3px"></i>
+    زیادکردنی بەش
+  </button>
+
+  <div style="height:20px"></div>
+
+  <div class="panel-title">ئامرازەکان</div>
+
+  <div style="display:grid;gap:6px">
+
+    <button class="small-btn" onclick="openSettings('theme')">
+      🎨 Theme
+    </button>
+
+    <button class="small-btn" onclick="openSettings('seo')">
+      🔎 SEO
+    </button>
+
+    <button class="small-btn" onclick="openSettings('media')">
+      🖼️ Media
+    </button>
+
+    <button class="small-btn" onclick="exportData()">
+      📤 Export
+    </button>
+
+    <button class="small-btn" onclick="openImportModal()">
+      📥 Import
+    </button>
+
+    <button class="small-btn danger-btn" onclick="resetAll()">
+      ♻️ Reset
+    </button>
+
+  </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+  <div class="workspace">
+
+    <div class="workspace-head">
+
+      <div>
+        <div class="workspace-title">
+          KURDIA Website Builder
+        </div>
+
+        <div class="workspace-sub">
+          گۆڕانکارییەکان لەسەر data ـی ڕاستەقینەی ویبسایتەکەت
+        </div>
+      </div>
+
+      <div class="device-switch">
+
+        <button id="deviceDesktop" class="active"
+          onclick="setDevice('desktop')" title="Desktop">
+          <i data-lucide="monitor"></i>
+        </button>
+
+        <button id="deviceTablet"
+          onclick="setDevice('tablet')" title="Tablet">
+          <i data-lucide="tablet"></i>
+        </button>
+
+        <button id="deviceMobile"
+          onclick="setDevice('mobile')" title="Mobile">
+          <i data-lucide="smartphone"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="preview-shell">
+
+      <div class="preview-toolbar">
+
+        <div class="preview-url">
+          index.html — Live Preview
+        </div>
+
+        <button class="small-btn" onclick="reloadPreview()">
+          <i data-lucide="refresh-cw"
+             style="width:12px;height:12px;vertical-align:-2px"></i>
+          نوێکردنەوە
+        </button>
+
+      </div>
+
+      <div class="preview-area">
+
+        <iframe
+          id="previewFrame"
+          src="index.html"
+          title="Kurdia Website Preview">
+        </iframe>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- INSPECTOR -->
+
+<aside class="inspector" id="inspector">
+
+  <div id="inspectorContent"></div>
+
+</aside>
+
+  </div></div><div id="toast" class="toast"></div><!-- ADD SECTION MODAL --><div id="addSectionModal" class="modal-backdrop">  <div class="modal"><div style="display:flex;justify-content:space-between;align-items:center">
+  <div style="font-weight:900">زیادکردنی بەش</div>
+  <button class="icon-btn" onclick="closeModal('addSectionModal')">
+    <i data-lucide="x"></i>
+  </button>
+</div>
+
+<div style="height:12px"></div>
+
+<div class="row">
+
+  <button class="small-btn" onclick="addSection('hero')">Hero</button>
+  <button class="small-btn" onclick="addSection('trip')">گەشت</button>
+  <button class="small-btn" onclick="addSection('services')">خزمەتگوزاری</button>
+  <button class="small-btn" onclick="addSection('steps')">هەنگاوەکان</button>
+  <button class="small-btn" onclick="addSection('gallery')">وێنەکان</button>
+  <button class="small-btn" onclick="addSection('faq')">FAQ</button>
+  <button class="small-btn" onclick="addSection('booking')">Booking</button>
+  <button class="small-btn" onclick="addSection('custom')">Custom</button>
+
+</div>
+
+  </div></div><!-- IMPORT MODAL --><div id="importModal" class="modal-backdrop">  <div class="modal"><div style="display:flex;justify-content:space-between;align-items:center">
+  <div style="font-weight:900">Import Data</div>
+
+  <button class="icon-btn" onclick="closeModal('importModal')">
+    <i data-lucide="x"></i>
+  </button>
+</div>
+
+<div style="height:12px"></div>
+
+<textarea
+  id="importTextarea"
+  style="
+    width:100%;
+    min-height:300px;
+    background:#080d15;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+    color:#fff;
+    direction:ltr;
+    outline:none;
+    font-size:11px;
+  "
+  placeholder='{"gradColor1":"#9d1c32",...}'
+></textarea>
+
+<div style="height:10px"></div>
+
+<button class="primary-btn" style="width:100%" onclick="importData()">
+  Import
+</button>
+
+  </div></div><script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
 const SECRET_PIN = "2026";
 
-/* ============================================================
-   DEFAULT DATA & LOGIC
-============================================================ */
-const STORAGE_KEY = "kurdia_builder_draft_v3";
-const PUBLISHED_KEY = "kurdia_builder_published_v3";
+const STORAGE_PUBLISHED = "kurdia_builder_published_v3";
+const STORAGE_DRAFT = "kurdia_builder_draft_v3";
+const STORAGE_HISTORY = "kurdia_admin_history_v3";
+
+
+/* =========================================================
+   DEFAULT DATA
+   MATCHES REAL index.html DATA MODEL
+========================================================= */
 
 const DEFAULT_DATA = {
-  gradColor1: "#9d1c32",
-  gradColor2: "#111827",
-  heroBadge: "KURDIA ADVENTURE",
-  heroTitle: "گەشتێک بۆ ناو سروشتی کوردستان",
-  heroSubtitle: "گەشت، سروشت، هاوڕێتی و یادەوەرییەکان لەگەڵ KURDIA ADVENTURE",
-  heroImageUrl: "",
-  bookingOpen: true,
-  tripTitle: "گەشتی تایبەتی کوردیا",
-  tripPrice: "50,000 IQD",
-  tripDifficulty: "ئاسان",
-  tripDuration: "1 ڕۆژ",
-  tripTime: "06:00",
-  tripLocation: "کوردستان",
-  tripDesc: "گەشتێکی جوان بۆ ناو سروشت و شوێنە جوانەکانی کوردستان.",
-  step1: "کۆبوونەوە", step2: "گەشتکردن", step3: "چوونە ناو سروشت", step4: "گەڕانەوە",
-  seoTitle: "KURDIA ADVENTURE",
-  seoDescription: "گەشت و سەرکێشی لە سروشتی کوردستان.",
-  socialImage: "",
-  gallery: [],
-  sections: [
-    { id: "hero_1", type: "hero", title: "Hero", visible: true },
-    { id: "trip_1", type: "trip", title: "گەشت", visible: true },
-    { id: "services_1", type: "services", title: "خزمەتگوزاری", visible: true },
-    { id: "booking_1", type: "booking", title: "Booking", visible: true }
+
+  gradColor1:"#9d1c32",
+  gradColor2:"#111827",
+
+  heroBadge:"KURDIA ADVENTURE",
+
+  heroTitle:"گەشتێک بۆ ناو سروشتی کوردستان",
+
+  heroSubtitle:
+    "گەشت، سروشت، هاوڕێتی و یادەوەرییەکان لەگەڵ KURDIA ADVENTURE",
+
+  heroImageUrl:"",
+
+  bookingOpen:true,
+
+  tripTitle:"گەشتی تایبەتی کوردیا",
+  tripPrice:"50,000 IQD",
+  tripDifficulty:"ئاسان",
+  tripDuration:"1 ڕۆژ",
+  tripTime:"06:00",
+  tripLocation:"کوردستان",
+  tripDesc:
+    "گەشتێکی جوان بۆ ناو سروشت و شوێنە جوانەکانی کوردستان.",
+
+  step1:"کۆبوونەوە",
+  step2:"گەشتکردن",
+  step3:"چوونە ناو سروشت",
+  step4:"گەڕانەوە",
+
+  knowledgeAbout:
+    "KURDIA ADVENTURE گرووپێکی گەشت و سەرکێشییە کە گەشت بۆ سروشت و شاخەکانی کوردستان ڕێکدەخات.",
+
+  knowledgeEquipment:
+    "پاس، خواردن، ئاوی خواردنەوە، چای، نەسکافێ، خێمە، کارەبا و ڕووناکی، کورسی و مێز، ئاگر، یارمەتی فریاکەوتن و ڕێبەر.",
+
+  seoTitle:"KURDIA ADVENTURE",
+
+  seoDescription:
+    "گەشت و سەرکێشی لە سروشتی کوردستان.",
+
+  socialImage:"",
+
+  services:[
+    "پاس",
+    "نان و خواردن",
+    "ئاوی خواردنەوە و چای",
+    "خێمە",
+    "کارەبا و ڕووناکی",
+    "کورسی و مێز",
+    "ئەگەر و گەرما",
+    "پڕۆژێکتەر",
+    "یاری و چالاکی",
+    "ڕێبەری شارەزا",
+    "یارمەتی فریاکەوتن",
+    "کیسی خۆڵ",
+    "WC"
+  ],
+
+  gallery:[],
+
+  sections:[
+    {
+      id:"hero_1",
+      type:"hero",
+      title:"Hero",
+      visible:true
+    },
+    {
+      id:"trip_1",
+      type:"trip",
+      title:"گەشت",
+      visible:true
+    },
+    {
+      id:"services_1",
+      type:"services",
+      title:"خزمەتگوزاری",
+      visible:true
+    },
+    {
+      id:"steps_1",
+      type:"steps",
+      title:"چۆن بەشداری بکەیت؟",
+      visible:true
+    },
+    {
+      id:"gallery_1",
+      type:"gallery",
+      title:"وێنەکان",
+      visible:true
+    },
+    {
+      id:"booking_1",
+      type:"booking",
+      title:"Booking",
+      visible:true
+    }
   ]
+
 };
 
-let state = loadDraft();
-let historyStack = [];
-let historyIndex = -1;
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let siteData = clone(DEFAULT_DATA);
+
 let selectedSectionId = null;
-let currentViewport = "desktop";
-let draggedSectionId = null;
 
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const pin = document.getElementById("pinInput").value;
-  if (pin === SECRET_PIN) {
-    sessionStorage.setItem("kurdia_admin_logged_in", "1");
-    document.getElementById("loginScreen").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
-    initialize();
-  } else {
-    document.getElementById("loginError").classList.remove("hidden");
-    document.getElementById("pinInput").value = "";
-    setTimeout(() => document.getElementById("loginError").classList.add("hidden"), 2500);
+let undoStack = [];
+let redoStack = [];
+
+let currentDevice = "desktop";
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function clone(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
+function mergeData(base, extra){
+
+  const result = {
+    ...clone(base),
+    ...(extra || {})
+  };
+
+  if(!Array.isArray(result.sections)){
+    result.sections = clone(DEFAULT_DATA.sections);
   }
-});
 
-function initialize() {
-  if (!state || !state.sections) state = clone(DEFAULT_DATA);
-  pushHistory(false);
-  renderSectionsList();
-  renderMedia();
-  syncInputs();
-  setupIcons();
-  updatePreview();
-}
+  if(!Array.isArray(result.services)){
+    result.services = clone(DEFAULT_DATA.services);
+  }
 
-function setupIcons() {
-  if (window.lucide) lucide.createIcons();
-}
+  if(!Array.isArray(result.gallery)){
+    result.gallery = [];
+  }
 
-if (sessionStorage.getItem("kurdia_admin_logged_in") === "1") {
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  initialize();
-}
-
-function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
-
-function showToast(message, type = "normal") {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.className = "toast show";
-  if (type === "success") toast.style.borderColor = "#205842";
-  if (type === "error") toast.style.borderColor = "#63202d";
-  setTimeout(() => toast.classList.remove("show"), 2600);
-}
-
-function saveDraft() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  document.getElementById("saveStatus").textContent = "Saved";
-}
-
-function loadDraft() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return mergeData(clone(DEFAULT_DATA), JSON.parse(saved));
-  } catch (error) { console.error(error); }
-  return clone(DEFAULT_DATA);
-}
-
-function mergeData(base, extra) {
-  const result = { ...base, ...extra };
-  if (!Array.isArray(result.sections)) result.sections = clone(DEFAULT_DATA.sections);
-  if (!Array.isArray(result.gallery)) result.gallery = [];
   return result;
 }
 
-function pushHistory(save = true) {
-  const snapshot = clone(state);
-  if (historyStack.length && JSON.stringify(historyStack[historyIndex]) === JSON.stringify(snapshot)) return;
-  historyStack = historyStack.slice(0, historyIndex + 1);
-  historyStack.push(snapshot);
-  if (historyStack.length > 30) historyStack.shift();
-  historyIndex = historyStack.length - 1;
-  if (save) saveDraft();
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
 }
 
-function undoState() {
-  if (historyIndex <= 0) return showToast("هیچ گۆڕانکارییەکی پێشوو نییە");
-  historyIndex--;
-  state = clone(historyStack[historyIndex]);
-  saveDraft(); renderAll(); showToast("گۆڕانکاری گەڕێندرایەوە");
+
+function uid(prefix="section"){
+
+  return prefix + "_" +
+    Date.now().toString(36) +
+    Math.random().toString(36).slice(2,7);
+
 }
 
-function redoState() {
-  if (historyIndex >= historyStack.length - 1) return showToast("هیچ گۆڕانکارییەکی داهاتوو نییە");
-  historyIndex++;
-  state = clone(historyStack[historyIndex]);
-  saveDraft(); renderAll(); showToast("گۆڕانکاری دووبارە جێبەجێکرا");
+
+function showToast(message){
+
+  const el = document.getElementById("toast");
+
+  el.textContent = message;
+
+  el.classList.add("show");
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer = setTimeout(()=>{
+    el.classList.remove("show");
+  },2200);
+
 }
 
-function renderAll() {
-  renderSectionsList();
-  renderMedia();
-  syncInputs();
-  updatePreview();
-  setupIcons();
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function login(){
+
+  const value =
+    document.getElementById("pinInput").value.trim();
+
+  if(value === SECRET_PIN){
+
+    sessionStorage.setItem(
+      "kurdia_admin_logged",
+      "1"
+    );
+
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("app").style.display="flex";
+
+    init();
+
+  }else{
+
+    document.getElementById("loginError").textContent =
+      "PIN ـەکە هەڵەیە";
+
+  }
+
 }
 
-function updateField(field, value) {
-  pushHistory(false);
-  state[field] = value;
-  saveDraft();
-  syncInputs();
-  updatePreview();
+
+/* =========================================================
+   INIT
+========================================================= */
+
+function init(){
+
+  loadState();
+
+  renderSectionList();
+
+  renderInspector();
+
+  renderPreview();
+
+  lucide.createIcons();
+
 }
 
-function syncInputs() {
-  const ids = ["gradColor1", "gradColor2", "gradColor1Text", "gradColor2Text", "seoTitle", "seoDescription"];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const field = id.replace("Text", "");
-    if (field in state) el.value = state[field] ?? "";
-  });
-  const booking = document.getElementById("bookingOpen");
-  if (booking) booking.checked = !!state.bookingOpen;
+
+(function(){
+
+  if(
+    sessionStorage.getItem("kurdia_admin_logged") === "1"
+  ){
+
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("app").style.display="flex";
+
+    init();
+
+  }
+
+})();
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+function loadState(){
+
+  try{
+
+    const published =
+      localStorage.getItem(STORAGE_PUBLISHED);
+
+    const draft =
+      localStorage.getItem(STORAGE_DRAFT);
+
+    if(draft){
+
+      siteData =
+        mergeData(
+          DEFAULT_DATA,
+          JSON.parse(draft)
+        );
+
+    }else if(published){
+
+      siteData =
+        mergeData(
+          DEFAULT_DATA,
+          JSON.parse(published)
+        );
+
+    }else{
+
+      siteData =
+        clone(DEFAULT_DATA);
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    siteData =
+      clone(DEFAULT_DATA);
+
+  }
+
 }
 
-function renderSectionsList() {
-  const container = document.getElementById("sectionsList");
-  if (!container) return;
-  container.innerHTML = "";
-  state.sections.forEach(section => {
-    const row = document.createElement("div");
-    row.className = "section-row " + (selectedSectionId === section.id ? "selected " : "") + (!section.visible ? "hidden-section" : "");
-    row.innerHTML = `
-      <div class="flex items-center justify-between">
-        <span class="text-sm font-semibold">${escapeHTML(section.title)}</span>
-        <button class="p-1.5 text-gray-500 hover:text-white" onclick="event.stopPropagation(); toggleSection('${section.id}')">
-          <i data-lucide="${section.visible ? "eye" : "eye-off"}" class="w-4 h-4"></i>
-        </button>
-      </div>`;
-    container.appendChild(row);
-  });
-  setupIcons();
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function snapshot(){
+
+  undoStack.push(clone(siteData));
+
+  if(undoStack.length > 50){
+    undoStack.shift();
+  }
+
+  redoStack=[];
+
 }
 
-function toggleSection(id) {
-  const section = state.sections.find(s => s.id === id);
-  if (!section) return;
-  pushHistory(false);
-  section.visible = !section.visible;
-  saveDraft();
+
+function undo(){
+
+  if(!undoStack.length){
+
+    showToast("هیچ گۆڕانکارییەکی تر نییە");
+
+    return;
+  }
+
+  redoStack.push(clone(siteData));
+
+  siteData =
+    undoStack.pop();
+
+  saveDraft(false);
+
   renderAll();
+
 }
 
-function switchTab(tab) {
-  ["sections", "theme", "media", "ai", "settings"].forEach(name => {
-    const el = document.getElementById("tab-" + name);
-    if (el) el.classList.toggle("hidden", name !== tab);
-  });
-  document.querySelectorAll("[data-tab]").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.tab === tab);
-  });
-}
 
-function setViewport(type) {
-  currentViewport = type;
-  const frame = document.getElementById("viewportFrame");
-  frame.className = "viewport-frame viewport-" + type + " overflow-hidden border-x border-[#252e3d]";
-  document.getElementById("viewportLabel").textContent = type.charAt(0).toUpperCase() + type.slice(1);
-}
+function redo(){
 
-function toggleMobileSidebar() {
-  const sidebar = document.getElementById("mobileSidebar");
-  if (sidebar.innerHTML.trim() === "") {
-    sidebar.innerHTML = document.getElementById("sidebar").innerHTML;
-    setupIcons();
+  if(!redoStack.length){
+
+    showToast("هیچ گۆڕانکارییەکی تر نییە");
+
+    return;
   }
-  sidebar.classList.toggle("hidden");
+
+  undoStack.push(clone(siteData));
+
+  siteData =
+    redoStack.pop();
+
+  saveDraft(false);
+
+  renderAll();
+
 }
 
-function applyTheme(color1, color2) {
-  pushHistory(false);
-  state.gradColor1 = color1;
-  state.gradColor2 = color2;
-  saveDraft();
-  syncInputs();
-  updatePreview();
-  showToast("Theme نوێ کرا", "success");
-}
 
-function updatePreview() {
-  const frame = document.getElementById("previewFrame");
-  if (!frame || !frame.contentWindow) return;
-  try {
-    frame.contentWindow.postMessage({ type: "KURDIA_BUILDER_STATE", state: clone(state) }, "*");
-  } catch (error) { console.error(error); }
-}
+/* =========================================================
+   SAVE DRAFT
+========================================================= */
 
-async function uploadImage(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  showToast("وێنەکە باردەکرێت...");
-  if (IMGBB_KEY && !IMGBB_KEY.includes("لێرە_دابنێ")) {
-    try {
-      const form = new FormData();
-      form.append("image", file);
-      const res = await fetch("https://api.imgbb.com/1/upload?key=" + encodeURIComponent(IMGBB_KEY), { method: "POST", body: form });
-      const result = await res.json();
-      if (result.success && result.data && result.data.url) {
-        state.gallery.push({ id: "img_" + Date.now(), url: result.data.url, name: file.name });
-        saveDraft(); renderMedia(); showToast("وێنەکە سەرکەوتووانە بەرزکرایەوە", "success");
-        return;
-      }
-    } catch (e) { console.error(e); }
+function saveDraft(show=true){
+
+  localStorage.setItem(
+    STORAGE_DRAFT,
+    JSON.stringify(siteData)
+  );
+
+  if(show){
+    showToast("Draft هەڵگیرا");
   }
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    state.gallery.push({ id: "img_" + Date.now(), url: e.target.result, name: file.name });
-    saveDraft(); renderMedia(); showToast("وێنەکە بە شێوەی خۆجێیی هەڵگیرا", "success");
+
+}
+
+
+/* =========================================================
+   PUBLISH
+========================================================= */
+
+function publish(){
+
+  localStorage.setItem(
+    STORAGE_PUBLISHED,
+    JSON.stringify(siteData)
+  );
+
+  localStorage.setItem(
+    STORAGE_DRAFT,
+    JSON.stringify(siteData)
+  );
+
+  sendStateToPreview();
+
+  showToast(
+    "Publish کرا"
+  );
+
+}
+
+
+/* =========================================================
+   RENDER ALL
+========================================================= */
+
+function renderAll(){
+
+  renderSectionList();
+
+  renderInspector();
+
+  renderPreview();
+
+  lucide.createIcons();
+
+}
+
+
+/* =========================================================
+   SECTION LIST
+========================================================= */
+
+function sectionLabel(type){
+
+  const labels = {
+
+    hero:"Hero",
+
+    trip:"گەشت",
+
+    services:"خزمەتگوزاری",
+
+    steps:"هەنگاوەکان",
+
+    gallery:"وێنەکان",
+
+    faq:"پرسیارە باوەکان",
+
+    booking:"بەشداری",
+
+    custom:"بەشی تایبەت"
+
   };
-  reader.readAsDataURL(file);
+
+  return labels[type] || type;
+
 }
 
-function renderMedia() {
-  const grid = document.getElementById("mediaGrid");
-  if (!grid) return;
-  grid.innerHTML = "";
-  state.gallery.forEach(img => {
-    const item = document.createElement("div");
-    item.className = "relative aspect-square rounded-xl overflow-hidden border border-[#202938]";
-    item.innerHTML = `<img src="${escapeAttr(img.url)}" class="w-full h-full object-cover">`;
-    grid.appendChild(item);
-  });
-}
 
-function runAICommand() {
-  const val = document.getElementById("aiCommand").value.trim();
-  if (!val) return;
-  const priceMatch = val.match(/(?:نرخ|پارە).{0,20}?(?:بکە|بگۆڕە)\s*([0-9۰-۹,،]+)/i);
-  if (priceMatch) {
-    state.tripPrice = priceMatch[1] + " IQD";
-    saveDraft(); renderAll(); showToast("نرخ نوێکرایەوە", "success");
+function renderSectionList(){
+
+  const box =
+    document.getElementById("sectionList");
+
+  if(!siteData.sections.length){
+
+    box.innerHTML =
+      `<div class="empty">هیچ بەشێک نییە</div>`;
+
+    return;
+
   }
+
+  box.innerHTML =
+    siteData.sections.map((section,index)=>{
+
+      const active =
+        section.id === selectedSectionId
+          ? "active"
+          : "";
+
+      const hidden =
+        section.visible === false;
+
+      return `
+
+        <div
+          class="section-item ${active}"
+          draggable="true"
+          data-id="${escapeHTML(section.id)}"
+          ondragstart="dragStart(event,'${escapeHTML(section.id)}')"
+          ondragover="dragOver(event)"
+          ondrop="dropSection(event,'${escapeHTML(section.id)}')"
+          onclick="selectSection('${escapeHTML(section.id)}')"
+        >
+
+          <div class="drag-handle">
+            <i data-lucide="grip-vertical"
+               style="width:15px;height:15px"></i>
+          </div>
+
+          <div class="section-info">
+
+            <div class="section-name">
+              ${escapeHTML(section.title || sectionLabel(section.type))}
+            </div>
+
+            <div class="section-type">
+              ${escapeHTML(sectionLabel(section.type))}
+            </div>
+
+          </div>
+
+          <button
+            class="eye-btn ${hidden ? "hidden-section":""}"
+            onclick="event.stopPropagation();toggleSection('${escapeHTML(section.id)}')"
+          >
+
+            <i
+              data-lucide="${hidden ? "eye-off":"eye"}"
+              style="width:15px;height:15px"
+            ></i>
+
+          </button>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+  lucide.createIcons();
+
 }
 
-async function saveToJSONBin() {
-  if (!BIN_ID || !API_KEY || API_KEY.includes("لێرە_دابنێ")) return false;
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "X-Access-Key": API_KEY },
-      body: JSON.stringify(state)
-    });
-    return res.ok;
-  } catch (e) { return false; }
+
+/* =========================================================
+   SELECT SECTION
+========================================================= */
+
+function selectSection(id){
+
+  selectedSectionId=id;
+
+  renderSectionList();
+
+  renderInspector();
+
+  if(window.innerWidth <= 1100){
+
+    document
+      .getElementById("inspector")
+      .classList.add("open");
+
+  }
+
 }
 
-async function publishSite() {
-  document.getElementById("saveStatus").textContent = "Publishing...";
-  localStorage.setItem(PUBLISHED_KEY, JSON.stringify(state));
-  const remoteSaved = await saveToJSONBin();
-  document.getElementById("saveStatus").textContent = remoteSaved ? "Published" : "Published Local";
-  showToast(remoteSaved ? "وێبسایتەکە ڕاستەوخۆ بڵاوکرایەوە" : "تەنها بە شێوەی خۆجێیی پاشەکەوت کرا", "success");
+
+/* =========================================================
+   TOGGLE SECTION
+========================================================= */
+
+function toggleSection(id){
+
+  snapshot();
+
+  const section =
+    siteData.sections.find(
+      s => s.id === id
+    );
+
+  if(!section) return;
+
+  section.visible =
+    section.visible === false;
+
+  saveDraft(false);
+
+  renderAll();
+
+  showToast(
+    section.visible
+      ? "بەشەکە پیشان درا"
+      : "بەشەکە شاردرایەوە"
+  );
+
 }
 
-function exportData() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "kurdia-website-data.json";
-  a.click();
+
+/* =========================================================
+   DRAG DROP
+========================================================= */
+
+let dragId=null;
+
+
+function dragStart(event,id){
+
+  dragId=id;
+
+  event.dataTransfer.effectAllowed="move";
+
 }
 
-function resetDraft() {
-  if (!confirm("هەموو شتێک بگەڕێتەوە دۆخی سەرەتایی؟")) return;
-  state = clone(DEFAULT_DATA);
-  saveDraft(); renderAll(); showToast("گەڕێندرایەوە بۆ سەرەتا");
+
+function dragOver(event){
+
+  event.preventDefault();
+
+  event.dataTransfer.dropEffect="move";
+
 }
 
-function escapeHTML(str) { return String(str ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-function escapeAttr(str) { return escapeHTML(str); }
 
-setupIcons();
-</script>
-</body>
+function dropSection(event,targetId){
+
+  event.preventDefault();
+
+  if(!dragId || dragId===targetId) return;
+
+  const from =
+    siteData.sections.findIndex(
+      s => s.id===dragId
+    );
+
+  const to =
+    siteData.sections.findIndex(
+      s => s.id===targetId
+    );
+
+  if(from<0 || to<0) return;
+
+  snapshot();
+
+  const item =
+    siteData.sections.splice(from,1)[0];
+
+  siteData.sections.splice(to,0,item);
+
+  saveDraft(false);
+
+  renderAll();
+
+  showToast("ڕیزبەندی نوێ کرایەوە");
+
+  dragId=null;
+
+}
+
+
+/* =========================================================
+   ADD SECTION
+========================================================= */
+
+function openAddSectionModal(){
+
+  document
+    .getElementById("addSectionModal")
+    .classList.add("show");
+
+}
+
+
+function addSection(type){
+
+  snapshot();
+
+  let section;
+
+  if(type==="hero"){
+
+    section={
+      id:uid("hero"),
+      type:"hero",
+      title:"Hero",
+      visible:true
+    };
+
+  }else if(type==="trip"){
+
+    section={
+      id:uid("trip"),
+      type:"trip",
+      title:"گەشت",
+      visible:true
+    };
+
+  }else if(type==="services"){
+
+    section={
+      id:uid("services"),
+      type:"services",
+      title:"خزمەتگوزاری",
+      visible:true
+    };
+
+  }else if(type==="steps"){
+
+    section={
+      id:uid("steps"),
+      type:"steps",
+      title:"هەنگاوەکان",
+      visible:true
+    };
+
+  }else if(type==="gallery"){
+
+    section={
+      id:uid("gallery"),
+      type:"gallery",
+      title:"وێنەکان",
+      visible:true
+    };
+
+  }else if(type==="faq"){
+
+    section={
+      id:uid("faq"),
+      type:"faq",
+      title:"پرسیارە باوەکان",
+      visible:true,
+      items:[
+        {
+          question:"پرسیاری نوێ",
+          answer:"وەڵام"
+        }
+      ]
+    };
+
+  }else if(type==="booking"){
+
+    section={
+      id:uid("booking"),
+      type:"booking",
+      title:"بەشداری",
+      visible:true
+    };
+
+  }else{
+
+    section={
+      id:uid("custom"),
+      type:"custom",
+      title:"بەشی نوێ",
+      visible:true,
+      heading:"ناونیشانی بەش",
+      text:"دەقەکەت لێرە بنووسە",
+      image:"",
+      buttonText:"",
+      buttonUrl:""
+    };
+
+  }
+
+  siteData.sections.push(section);
+
+  selectedSectionId=section.id;
+
+  closeModal("addSectionModal");
+
+  saveDraft(false);
+
+  renderAll();
+
+  showToast("بەش زیاد کرا");
+
+}
+
+
+/* =========================================================
+   DELETE SECTION
+========================================================= */
+
+function deleteSelectedSection(){
+
+  if(!selectedSectionId){
+
+    showToast("سەرەتا بەشێک هەڵبژێرە");
+
+    return;
+
+  }
+
+  const section =
+    siteData.sections.find(
+      s => s.id===selectedSectionId
+    );
+
+  if(!section) return;
+
+  const ok =
+    confirm(
+      `دڵنیایت لە سڕینەوەی "${section.title}"؟`
+    );
+
+  if(!ok) return;
+
+  snapshot();
+
+  siteData.sections =
+    siteData.sections.filter(
+      s => s.id!==selectedSectionId
+    );
+
+  selectedSectionId=null;
+
+  saveDraft(false);
+
+  renderAll();
+
+  showToast("بەشەکە سڕایەوە");
+
+}
+
+
+/* =========================================================
+   INSPECTOR
+========================================================= */
+
+function renderInspector(){
+
+  const box =
+    document.getElementById("inspectorContent");
+
+  if(!selectedSectionId){
+
+    box.innerHTML=`
+
+      <div class="form-card">
+
+        <div class="form-title">
+          <i data-lucide="mouse-pointer-click"
+             style="width:16px;height:16px"></i>
+
+          بەشێک هەڵبژێرە
+        </div>
+
+        <div style="font-size:10px;color:#697487;line-height:1.9">
+          لە لای چەپ بەشێک هەڵبژێرە بۆ دەستکاریکردنی ناوەڕۆکەکەی.
+        </div>
+
+      </div>
+
+      <div class="form-card">
+
+        <div class="form-title">
+          <i data-lucide="settings"
+             style="width:16px;height:16px"></i>
+
+          Site Settings
+        </div>
+
+        <button class="small-btn" style="width:100%;margin-bottom:7px"
+          onclick="openSettings('theme')">
+          🎨 Theme
+        </button>
+
+        <button class="small-btn" style="width:100%;margin-bottom:7px"
+          onclick="openSettings('seo')">
+          🔎 SEO
+        </button>
+
+        <button class="small-btn" style="width:100%"
+          onclick="openSettings('media')">
+          🖼️ Media
+        </button>
+
+      </div>
+
+    `;
+
+    lucide.createIcons();
+
+    return;
+
+  }
+
+  const section =
+    siteData.sections.find(
+      s => s.id===selectedSectionId
+    );
+
+  if(!section){
+
+    selectedSectionId=null;
+
+    renderInspector();
+
+    return;
+
+  }
+
+  box.innerHTML =
+
+    sectionHeader(section) +
+
+    sectionFields(section);
+
+  lucide.createIcons();
+
+}
+
+
+function sectionHeader(section){
+
+  return `
+
+    <div class="form-card">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:7px">
+
+        <div>
+
+          <div style="font-weight:900;font-size:14px">
+            ${escapeHTML(section.title || sectionLabel(section.type))}
+          </div>
+
+          <div style="font-size:9px;color:#697487;margin-top:3px">
+            ${escapeHTML(sectionLabel(section.type))}
+          </div>
+
+        </div>
+
+        <button
+          class="small-btn danger-btn"
+          onclick="deleteSelectedSection()"
+        >
+          <i data-lucide="trash-2"
+             style="width:13px;height:13px;vertical-align:-2px"></i>
+        </button>
+
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="field">
+
+        <label>ناوی بەش لە Admin</label>
+
+        <input
+          value="${escapeHTML(section.title || "")}"
+          oninput="updateSectionTitle(this.value)"
+        >
+
+      </div>
+
+      <label style="display:flex;align-items:center;gap:8px;font-size:10px;color:#aeb6c3">
+
+        <input
+          type="checkbox"
+          ${section.visible !== false ? "checked":""}
+          onchange="setSectionVisible(this.checked)"
+        >
+
+        بەشەکە پیشان بدرێت
+
+      </label>
+
+    </div>
+
+  `;
+
+}
+
+
+function sectionFields(section){
+
+  switch(section.type){
+
+    case "hero":
+      return heroFields();
+
+    case "trip":
+      return tripFields();
+
+    case "services":
+      return servicesFields();
+
+    case "steps":
+      return stepsFields();
+
+    case "gallery":
+      return galleryFields();
+
+    case "faq":
+      return faqFields(section);
+
+    case "booking":
+      return bookingFields();
+
+    case "custom":
+      return customFields(section);
+
+    default:
+      return "";
+
+  }
+
+}
+
+
+/* =========================================================
+   COMMON FIELD
+========================================================= */
+
+function fieldInput(label,key,value,textarea=false){
+
+  return `
+
+    <div class="field">
+
+      <label>${escapeHTML(label)}</label>
+
+      ${
+        textarea
+        ?
+        `<textarea oninput="updateData('${key}',this.value)">${escapeHTML(value)}</textarea>`    :
+    `<input value="${escapeHTML(value)}"
+      oninput="updateData('${key}',this.value)">`
+  }
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+HERO
+========================================================= */
+
+function heroFields(){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="sparkles"></i>
+    Hero
+  </div>
+
+  ${fieldInput("Badge","heroBadge",siteData.heroBadge)}
+
+  ${fieldInput("ناونیشانی سەرەکی","heroTitle",siteData.heroTitle,true)}
+
+  ${fieldInput("ژێرناونیشان","heroSubtitle",siteData.heroSubtitle,true)}
+
+  ${imageField(
+    "heroImageUrl",
+    "وێنەی Hero",
+    siteData.heroImageUrl
+  )}
+
+</div>
+
+${tripQuickFields()}
+
+`;
+
+}
+
+function tripQuickFields(){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="info"></i>
+    زانیارییە سەرەکییەکانی گەشت
+  </div>
+
+  <div class="row">
+
+    ${fieldInput("شوێن","tripLocation",siteData.tripLocation)}
+
+    ${fieldInput("کات","tripTime",siteData.tripTime)}
+
+  </div>
+
+  <div class="row">
+
+    ${fieldInput("ماوە","tripDuration",siteData.tripDuration)}
+
+    ${fieldInput("ئاست","tripDifficulty",siteData.tripDifficulty)}
+
+  </div>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+TRIP
+========================================================= */
+
+function tripFields(){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="mountain"></i>
+    زانیاری گەشت
+  </div>
+
+  ${fieldInput("ناوی گەشت","tripTitle",siteData.tripTitle,true)}
+
+  ${fieldInput("نرخ","tripPrice",siteData.tripPrice)}
+
+  <div class="row">
+
+    ${fieldInput("ئاست","tripDifficulty",siteData.tripDifficulty)}
+
+    ${fieldInput("ماوە","tripDuration",siteData.tripDuration)}
+
+  </div>
+
+  <div class="row">
+
+    ${fieldInput("کات","tripTime",siteData.tripTime)}
+
+    ${fieldInput("شوێن","tripLocation",siteData.tripLocation)}
+
+  </div>
+
+  ${fieldInput("وەسفی گەشت","tripDesc",siteData.tripDesc,true)}
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+SERVICES
+========================================================= */
+
+function servicesFields(){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="list-checks"></i>
+    خزمەتگوزارییەکان
+  </div>
+
+  <div id="servicesArray">
+
+    ${
+      siteData.services.map((item,index)=>`
+
+        <div class="array-item">
+
+          <input
+            value="${escapeHTML(item)}"
+            oninput="updateArrayItem('services',${index},this.value)"
+          >
+
+          <button
+            class="small-btn danger-btn"
+            onclick="removeArrayItem('services',${index})"
+          >
+            ×
+          </button>
+
+        </div>
+
+      `).join("")
+    }
+
+  </div>
+
+  <button class="small-btn" style="width:100%;margin-top:4px"
+    onclick="addArrayItem('services')">
+    + زیادکردنی خزمەتگوزاری
+  </button>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+STEPS
+========================================================= */
+
+function stepsFields(){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="route"></i>
+    هەنگاوەکان
+  </div>
+
+  ${fieldInput("هەنگاوی 1","step1",siteData.step1)}
+
+  ${fieldInput("هەنگاوی 2","step2",siteData.step2)}
+
+  ${fieldInput("هەنگاوی 3","step3",siteData.step3)}
+
+  ${fieldInput("هەنگاوی 4","step4",siteData.step4)}
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+GALLERY
+========================================================= */
+
+function galleryFields(){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="images"></i>
+    وێنەکان
+  </div>
+
+  <div id="galleryArray">
+
+    ${
+      siteData.gallery.map((item,index)=>`
+
+        <div class="form-card" style="padding:8px">
+
+          ${
+            item
+            ?
+            `<img
+              src="${escapeHTML(item)}"
+              class="image-preview"
+              onerror="this.style.display='none'"
+            >`
+            :
+            ""
+          }
+
+          <div class="array-item">
+
+            <input
+              value="${escapeHTML(item)}"
+              placeholder="Image URL"
+              oninput="updateArrayItem('gallery',${index},this.value)"
+            >
+
+            <button
+              class="small-btn danger-btn"
+              onclick="removeArrayItem('gallery',${index})"
+            >
+              ×
+            </button>
+
+          </div>
+
+        </div>
+
+      `).join("")
+    }
+
+  </div>
+
+  <button
+    class="small-btn"
+    style="width:100%;margin-bottom:7px"
+    onclick="addArrayItem('gallery')"
+  >
+    + زیادکردنی وێنە
+  </button>
+
+  <label class="small-btn"
+    style="display:block;text-align:center">
+    📁 هەڵبژاردنی وێنە
+
+    <input
+      type="file"
+      accept="image/*"
+      style="display:none"
+      onchange="handleGalleryUpload(event)"
+    >
+  </label>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+FAQ
+========================================================= */
+
+function faqFields(section){
+
+if(!Array.isArray(section.items)){
+section.items=[];
+}
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="circle-help"></i>
+    FAQ
+  </div>
+
+  ${
+    section.items.map((item,index)=>`
+
+      <div class="form-card" style="padding:9px">
+
+        <div class="field">
+
+          <label>پرسیار</label>
+
+          <input
+            value="${escapeHTML(item.question || "")}"
+            oninput="updateFAQ(${index},'question',this.value)"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>وەڵام</label>
+
+          <textarea
+            oninput="updateFAQ(${index},'answer',this.value)"
+          >${escapeHTML(item.answer || "")}</textarea>
+
+        </div>
+
+        <button
+          class="small-btn danger-btn"
+          onclick="removeFAQ(${index})"
+        >
+          سڕینەوە
+        </button>
+
+      </div>
+
+    `).join("")
+  }
+
+  <button
+    class="small-btn"
+    style="width:100%"
+    onclick="addFAQ()"
+  >
+    + زیادکردنی FAQ
+  </button>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+BOOKING
+========================================================= */
+
+function bookingFields(){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="calendar-check"></i>
+    بەشداری
+  </div>
+
+  <label style="display:flex;align-items:center;gap:8px;font-size:11px">
+
+    <input
+      type="checkbox"
+      ${siteData.bookingOpen ? "checked":""}
+      onchange="updateData('bookingOpen',this.checked)"
+    >
+
+    بەشداری کراوەیە
+
+  </label>
+
+</div>
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="book-open"></i>
+    زانیاری AI Assistant
+  </div>
+
+  ${fieldInput(
+    "دەربارەی KURDIA",
+    "knowledgeAbout",
+    siteData.knowledgeAbout,
+    true
+  )}
+
+  ${fieldInput(
+    "کەرەستە و خزمەتگوزاری",
+    "knowledgeEquipment",
+    siteData.knowledgeEquipment,
+    true
+  )}
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+CUSTOM
+========================================================= */
+
+function customFields(section){
+
+return `
+
+<div class="form-card">
+
+  <div class="form-title">
+    <i data-lucide="layout-template"></i>
+    Custom Section
+  </div>
+
+  ${fieldInput(
+    "ناونیشان",
+    "__custom_heading",
+    section.heading || "",
+    true
+  )}
+
+  ${fieldInput(
+    "دەق",
+    "__custom_text",
+    section.text || "",
+    true
+  )}
+
+  ${imageField(
+    "__custom_image",
+    "وێنە",
+    section.image || ""
+  )}
+
+  ${fieldInput(
+    "دەقی Button",
+    "__custom_buttonText",
+    section.buttonText || ""
+  )}
+
+  ${fieldInput(
+    "لینکی Button",
+    "__custom_buttonUrl",
+    section.buttonUrl || ""
+  )}
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+IMAGE FIELD
+========================================================= */
+
+function imageField(key,label,value){
+
+return `
+
+<div class="field">
+
+  <label>${escapeHTML(label)}</label>
+
+  ${
+    value
+    ?
+    `<img
+      class="image-preview"
+      src="${escapeHTML(value)}"
+      onerror="this.style.display='none'"
+    >`
+    :
+    ""
+  }
+
+  <input
+    value="${escapeHTML(value || "")}"
+    placeholder="https://..."
+    oninput="updateData('${key}',this.value)"
+  >
+
+  <div style="height:6px"></div>
+
+  <label class="small-btn"
+    style="display:block;text-align:center">
+
+    📁 هەڵبژاردنی فایل
+
+    <input
+      type="file"
+      accept="image/*"
+      style="display:none"
+      onchange="handleSingleImage(event,'${key}')"
+    >
+
+  </label>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+UPDATE DATA
+========================================================= */
+
+function updateData(key,value){
+
+if(
+key.startsWith("_custom")
+){
+
+updateCustomField(
+  key,
+  value
+);
+
+return;
+
+}
+
+snapshot();
+
+siteData[key]=value;
+
+saveDraft(false);
+
+renderPreview();
+
+}
+
+function updateCustomField(key,value){
+
+const section =
+getSelectedSection();
+
+if(!section) return;
+
+snapshot();
+
+if(key==="__custom_heading"){
+section.heading=value;
+}
+
+if(key==="__custom_text"){
+section.text=value;
+}
+
+if(key==="__custom_image"){
+section.image=value;
+}
+
+if(key==="__custom_buttonText"){
+section.buttonText=value;
+}
+
+if(key==="__custom_buttonUrl"){
+section.buttonUrl=value;
+}
+
+saveDraft(false);
+
+renderPreview();
+
+}
+
+/* =========================================================
+SECTION TITLE
+========================================================= */
+
+function updateSectionTitle(value){
+
+const section =
+getSelectedSection();
+
+if(!section) return;
+
+snapshot();
+
+section.title=value;
+
+saveDraft(false);
+
+renderSectionList();
+
+}
+
+/* =========================================================
+SECTION VISIBLE
+========================================================= */
+
+function setSectionVisible(value){
+
+const section =
+getSelectedSection();
+
+if(!section) return;
+
+snapshot();
+
+section.visible=value;
+
+saveDraft(false);
+
+renderSectionList();
+
+renderPreview();
+
+}
+
+/* =========================================================
+GET SELECTED
+========================================================= */
+
+function getSelectedSection(){
+
+return siteData.sections.find(
+s => s.id===selectedSectionId
+);
+
+}
+
+/* =========================================================
+ARRAY
+========================================================= */
+
+function updateArrayItem(array,index,value){
+
+snapshot();
+
+siteData[array][index]=value;
+
+saveDraft(false);
+
+renderPreview();
+
+}
+
+function addArrayItem(array){
+
+snapshot();
+
+siteData[array].push("");
+
+saveDraft(false);
+
+renderInspector();
+
+renderPreview();
+
+}
+
+function removeArrayItem(array,index){
+
+snapshot();
+
+siteData[array].splice(index,1);
+
+saveDraft(false);
+
+renderInspector();
+
+renderPreview();
+
+}
+
+/* =========================================================
+FAQ
+========================================================= */
+
+function updateFAQ(index,key,value){
+
+const section =
+getSelectedSection();
+
+if(!section) return;
+
+if(!Array.isArray(section.items)){
+section.items=[];
+}
+
+snapshot();
+
+section.items[index][key]=value;
+
+saveDraft(false);
+
+renderPreview();
+
+}
+
+function addFAQ(){
+
+const section =
+getSelectedSection();
+
+if(!section) return;
+
+snapshot();
+
+if(!Array.isArray(section.items)){
+section.items=[];
+}
+
+section.items.push({
+question:"پرسیاری نوێ",
+answer:"وەڵامی پرسیار"
+});
+
+saveDraft(false);
+
+renderInspector();
+
+renderPreview();
+
+}
+
+function removeFAQ(index){
+
+const section =
+getSelectedSection();
+
+if(!section) return;
+
+snapshot();
+
+section.items.splice(index,1);
+
+saveDraft(false);
+
+renderInspector();
+
+renderPreview();
+
+}
+
+/* =========================================================
+IMAGE UPLOAD
+========================================================= */
+
+function fileToDataURL(file){
+
+return new Promise((resolve,reject)=>{
+
+const reader =
+  new FileReader();
+
+reader.onload =
+  () => resolve(reader.result);
+
+reader.onerror =
+  reject;
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
+async function handleSingleImage(event,key){
+
+const file =
+event.target.files[0];
+
+if(!file) return;
+
+try{
+
+const data =
+  await fileToDataURL(file);
+
+snapshot();
+
+if(key==="__custom_image"){
+
+  const section =
+    getSelectedSection();
+
+  if(section){
+    section.image=data;
+  }
+
+}else{
+
+  siteData[key]=data;
+
+}
+
+saveDraft(false);
+
+renderInspector();
+
+renderPreview();
+
+showToast("وێنە زیاد کرا");
+
+}catch(error){
+
+console.error(error);
+
+showToast("کێشە لە خوێندنەوەی وێنە");
+
+}
+
+}
+
+async function handleGalleryUpload(event){
+
+const file =
+event.target.files[0];
+
+if(!file) return;
+
+try{
+
+const data =
+  await fileToDataURL(file);
+
+snapshot();
+
+siteData.gallery.push(data);
+
+saveDraft(false);
+
+renderInspector();
+
+renderPreview();
+
+showToast("وێنە زیاد کرا");
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+/* =========================================================
+PREVIEW
+========================================================= */
+
+function renderPreview(){
+
+sendStateToPreview();
+
+}
+
+function sendStateToPreview(){
+
+const frame =
+document.getElementById("previewFrame");
+
+if(!frame || !frame.contentWindow) return;
+
+frame.contentWindow.postMessage(
+{
+type:"KURDIA_BUILDER_STATE",
+state:clone(siteData)
+},
+"*"
+);
+
+}
+
+window.addEventListener(
+"message",
+event=>{
+
+if(
+  event.data &&
+  event.data.type ===
+  "REQUEST_KURDIA_STATE"
+){
+
+  sendStateToPreview();
+
+}
+
+}
+);
+
+function reloadPreview(){
+
+const frame =
+document.getElementById("previewFrame");
+
+frame.src="index.html?" + Date.now();
+
+setTimeout(
+sendStateToPreview,
+700
+);
+
+}
+
+/* =========================================================
+DEVICE
+========================================================= */
+
+function setDevice(device){
+
+currentDevice=device;
+
+document
+.querySelectorAll(".device-switch button")
+.forEach(btn=>btn.classList.remove("active"));
+
+document
+.getElementById(
+"device" +
+device.charAt(0).toUpperCase() +
+device.slice(1)
+)
+.classList.add("active");
+
+const frame =
+document.getElementById("previewFrame");
+
+if(device==="desktop"){
+
+frame.style.width="100%";
+
+}
+
+if(device==="tablet"){
+
+frame.style.width="768px";
+frame.style.maxWidth="100%";
+
+}
+
+if(device==="mobile"){
+
+frame.style.width="390px";
+frame.style.maxWidth="100%";
+
+}
+
+}
+
+/* =========================================================
+SETTINGS
+========================================================= */
+
+function openSettings(type){
+
+selectedSectionId=null;
+
+renderSectionList();
+
+const box =
+document.getElementById("inspectorContent");
+
+if(type==="theme"){
+
+box.innerHTML=`
+
+  <div class="form-card">
+
+    <div class="form-title">
+      🎨 Theme
+    </div>
+
+    <div class="field">
+
+      <label>Primary Color</label>
+
+      <div class="color-row">
+
+        <input
+          type="color"
+          value="${escapeHTML(siteData.gradColor1)}"
+          onchange="updateData('gradColor1',this.value);renderInspector()"
+        >
+
+        <input
+          value="${escapeHTML(siteData.gradColor1)}"
+          oninput="updateData('gradColor1',this.value)"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="field">
+
+      <label>Secondary Color</label>
+
+      <div class="color-row">
+
+        <input
+          type="color"
+          value="${escapeHTML(siteData.gradColor2)}"
+          onchange="updateData('gradColor2',this.value);renderInspector()"
+        >
+
+        <input
+          value="${escapeHTML(siteData.gradColor2)}"
+          oninput="updateData('gradColor2',this.value)"
+        >
+
+      </div>
+
+    </div>
+
+  </div>
+
+`;
+
+}
+
+if(type==="seo"){
+
+box.innerHTML=`
+
+  <div class="form-card">
+
+    <div class="form-title">
+      🔎 SEO
+    </div>
+
+    ${fieldInput(
+      "SEO Title",
+      "seoTitle",
+      siteData.seoTitle
+    )}
+
+    ${fieldInput(
+      "SEO Description",
+      "seoDescription",
+      siteData.seoDescription,
+      true
+    )}
+
+    ${imageField(
+      "socialImage",
+      "Social Image",
+      siteData.socialImage
+    )}
+
+  </div>
+
+`;
+
+}
+
+if(type==="media"){
+
+box.innerHTML=`
+
+  <div class="form-card">
+
+    <div class="form-title">
+      🖼️ Media
+    </div>
+
+    <div style="font-size:10px;color:#737f91;line-height:1.9">
+      وێنەکان لە ناو state ـی ویبسایتەکە هەڵدەگیرێن.
+      بۆ وێنەی زۆر و گەورە، باشترە URL ـی CDN/ImgBB بەکاربهێنیت.
+    </div>
+
+  </div>
+
+  <div class="form-card">
+
+    <div class="form-title">
+      Hero Image
+    </div>
+
+    ${imageField(
+      "heroImageUrl",
+      "Hero",
+      siteData.heroImageUrl
+    )}
+
+  </div>
+
+`;
+
+}
+
+lucide.createIcons();
+
+}
+
+/* =========================================================
+EXPORT
+========================================================= */
+
+function exportData(){
+
+const blob =
+new Blob(
+[
+JSON.stringify(
+siteData,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+const url =
+URL.createObjectURL(blob);
+
+const a =
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+"kurdia-site-data.json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+showToast("Data هەناردرا");
+
+}
+
+/* =========================================================
+IMPORT
+========================================================= */
+
+function openImportModal(){
+
+document
+.getElementById("importModal")
+.classList.add("show");
+
+}
+
+function importData(){
+
+const text =
+document
+.getElementById("importTextarea")
+.value
+.trim();
+
+if(!text){
+
+showToast("Data بنووسە");
+
+return;
+
+}
+
+try{
+
+const parsed =
+  JSON.parse(text);
+
+snapshot();
+
+siteData =
+  mergeData(
+    DEFAULT_DATA,
+    parsed
+  );
+
+saveDraft(false);
+
+closeModal("importModal");
+
+renderAll();
+
+showToast("Import سەرکەوتوو بوو");
+
+}catch(error){
+
+showToast("JSON ـەکە دروست نییە");
+
+}
+
+}
+
+/* =========================================================
+RESET
+========================================================= */
+
+function resetAll(){
+
+const ok =
+confirm(
+"دڵنیایت؟ هەموو گۆڕانکارییەکانی ئەم browser ـە دەگەڕێنەوە بۆ default."
+);
+
+if(!ok) return;
+
+snapshot();
+
+siteData =
+clone(DEFAULT_DATA);
+
+localStorage.removeItem(
+STORAGE_DRAFT
+);
+
+localStorage.removeItem(
+STORAGE_PUBLISHED
+);
+
+selectedSectionId=null;
+
+renderAll();
+
+showToast("گەڕێندرایەوە بۆ Default");
+
+}
+
+/* =========================================================
+MODAL
+========================================================= */
+
+function closeModal(id){
+
+document
+.getElementById(id)
+.classList.remove("show");
+
+}
+
+/* =========================================================
+SIDEBAR / INSPECTOR MOBILE
+========================================================= */
+
+function toggleSidebar(){
+
+document
+.getElementById("sidebar")
+.classList.toggle("open");
+
+}
+
+function toggleInspector(){
+
+document
+.getElementById("inspector")
+.classList.toggle("open");
+
+}
+
+/* =========================================================
+PUBLIC SITE
+========================================================= */
+
+function openPublicSite(){
+
+window.open(
+"index.html",
+"_blank"
+);
+
+}
+
+/* =========================================================
+KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(
+  (event.ctrlKey || event.metaKey) &&
+  event.key.toLowerCase()==="z"
+){
+
+  event.preventDefault();
+
+  if(event.shiftKey){
+    redo();
+  }else{
+    undo();
+  }
+
+}
+
+if(
+  (event.ctrlKey || event.metaKey) &&
+  event.key.toLowerCase()==="s"
+){
+
+  event.preventDefault();
+
+  publish();
+
+}
+
+}
+);
+
+/* =========================================================
+CLOSE SIDE PANELS WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+"click",
+event=>{
+
+if(window.innerWidth > 1100) return;
+
+const sidebar =
+  document.getElementById("sidebar");
+
+const inspector =
+  document.getElementById("inspector");
+
+const target =
+  event.target;
+
+if(
+  sidebar.classList.contains("open") &&
+  !sidebar.contains(target) &&
+  !target.closest(".mobile-menu-btn")
+){
+
+  sidebar.classList.remove("open");
+
+}
+
+}
+);
+
+/* =========================================================
+ICONS
+========================================================= */
+
+if(window.lucide){
+lucide.createIcons();
+}
+
+</script></body>
 </html>
