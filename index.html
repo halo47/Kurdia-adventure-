@@ -21,37 +21,38 @@
             sans: ['Vazirmatn', 'sans-serif'],
           },
           colors: {
-            adventure: {
-              gold: '#EAB308',
-              dark: '#0F172A',
-              card: '#1E293B',
-              border: '#334155'
-            }
+            themeColor: 'var(--main-theme-color, #EAB308)'
           }
         }
       }
     }
   </script>
   <style>
+    :root {
+      --main-theme-color: #EAB308;
+    }
     body {
       font-family: 'Vazirmatn', sans-serif;
       background-color: #0B0F19;
       color: #F8FAFC;
     }
+    .theme-bg { background-color: var(--main-theme-color) !important; }
+    .theme-text { color: var(--main-theme-color) !important; }
+    .theme-border { border-color: var(--main-theme-color) !important; }
   </style>
 </head>
 <body class="selection:bg-yellow-500 selection:text-black">
 
   <!-- بەشی سەرەوە (Header / Navigation) -->
-  <header class="sticky top-0 z-40 backdrop-blur-md bg-[#0B0F19]/80 border-b border-adventure-border">
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-[#0B0F19]/80 border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-extrabold text-xl shadow-lg shadow-yellow-500/20">
+        <div class="w-10 h-10 rounded-xl theme-bg flex items-center justify-center text-black font-extrabold text-xl shadow-lg">
           ⛰️
         </div>
         <div>
           <span class="text-xl font-black tracking-wide text-white block">KURDIA ADVENTURE</span>
-          <span class="text-xs text-yellow-500 font-medium">کوردیا ئەدڤێنتچەر</span>
+          <span class="text-xs theme-text font-medium">کوردیا ئەدڤێنتچەر</span>
         </div>
       </div>
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
@@ -59,7 +60,7 @@
         <a href="#trip" class="hover:text-yellow-400 transition">گەشتی داهاتوو</a>
         <a href="#gear" class="hover:text-yellow-400 transition">کەلوپەلی پێویست</a>
       </nav>
-      <a href="#booking" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-6 py-2.5 rounded-full text-sm transition-all transform hover:scale-105 shadow-lg shadow-yellow-500/25">
+      <a href="#booking" class="theme-bg text-black font-bold px-6 py-2.5 rounded-full text-sm transition-all transform hover:scale-105 shadow-lg">
         ناونووسین بکە
       </a>
     </div>
@@ -68,28 +69,28 @@
   <!-- لاپەڕەی سەرەکی (Hero Section) -->
   <section class="relative min-h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden">
     <div class="absolute inset-0 z-0">
-      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80" 
+      <img id="displayHeroImg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80" 
            alt="Mountain Background" 
            class="w-full h-full object-cover opacity-25 filter brightness-75">
       <div class="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-[#0B0F19]/50 to-transparent"></div>
     </div>
 
     <div class="relative z-10 max-w-4xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-sm mb-6 backdrop-blur-sm">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-700 bg-white/5 theme-text text-sm mb-6 backdrop-blur-sm">
         <i data-lucide="compass" class="w-4 h-4"></i>
         <span>سەرکێشی و شاخەوانی لە لووتکەکانی کوردستان</span>
       </div>
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-tight mb-6">
-        جوانیی نەبینراوی سروشت لەگەڵ <span class="text-yellow-400">کوردیا ئەدڤێنتچەر</span> بدۆزەرەوە
+        جوانیی نەبینراوی سروشت لەگەڵ <span class="theme-text">کوردیا ئەدڤێنتچەر</span> بدۆزەرەوە
       </h1>
       <p class="text-gray-300 text-base sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-light">
         گەشتی شاخەوانی و کەمپینگی تایبەت بە بەرزترین ئاستی سەلامەتی و سەرپەرشتیاری شارەزا.
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#booking" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold text-base transition shadow-xl shadow-yellow-500/20">
+        <a href="#booking" class="w-full sm:w-auto px-8 py-4 rounded-xl theme-bg text-black font-extrabold text-base transition shadow-xl">
           بەشداری لە گەشتی داهاتوو بکە
         </a>
-        <a href="#trip" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-adventure-card border border-adventure-border hover:border-yellow-500/50 text-white font-bold text-base transition">
+        <a href="#trip" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#1E293B] border border-gray-700 text-white font-bold text-base transition">
           زانیاری و خشتەی گەشت
         </a>
       </div>
@@ -104,27 +105,26 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- کارتی سەرەکی گەشت -->
-      <div class="lg:col-span-2 bg-adventure-card border border-adventure-border rounded-2xl p-6 sm:p-8">
+      <div class="lg:col-span-2 bg-[#1E293B] border border-gray-700 rounded-2xl p-6 sm:p-8">
         <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
           <span class="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold">
             ناونووسین کراوەیە
           </span>
           <div class="text-right">
             <span class="text-gray-400 text-xs block">نرخی بەشداربوون</span>
-            <span class="text-2xl font-black text-yellow-400">٢٥,٠٠٠ دینار</span>
+            <span id="displayTripPrice" class="text-2xl font-black theme-text">٢٥,٠٠٠ دینار</span>
           </div>
         </div>
 
-        <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-4">گەشتی چیای سەفین (SAFEN Mountain)</h3>
-        <p class="text-gray-300 mb-8 leading-relaxed">
+        <h3 id="displayTripTitle" class="text-2xl sm:text-3xl font-extrabold text-white mb-4">گەشتی چیای سەفین (SAFEN Mountain)</h3>
+        <p id="displayTripDesc" class="text-gray-300 mb-8 leading-relaxed">
           گەشتێکی شاخەوانیی نایاب بەناو سروشتی دەوروبەری شەقڵاوە و هەڵکشان بەرەو لووتکە بە ڕێڕەوی سەرنجڕاکێش و دیمەنی پانۆرامایی.
         </p>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-y border-adventure-border mb-8">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-y border-gray-700 mb-8">
           <div>
             <span class="text-gray-400 text-xs block">ئاستی سەختی</span>
-            <span class="font-bold text-white mt-1 block">مامناوەند</span>
+            <span id="displayTripDifficulty" class="font-bold text-white mt-1 block">مامناوەند</span>
           </div>
           <div>
             <span class="text-gray-400 text-xs block">ماوەی ڕێڕۆیشتن</span>
@@ -132,11 +132,11 @@
           </div>
           <div>
             <span class="text-gray-400 text-xs block">کاتژمێری بەڕێکەوتن</span>
-            <span class="font-bold text-white mt-1 block">٠٦:٠٠ی بەیانی</span>
+            <span id="displayTripTime" class="font-bold text-white mt-1 block">٠٦:٠٠ی بەیانی</span>
           </div>
           <div>
             <span class="text-gray-400 text-xs block">شوێنی کۆبوونەوە</span>
-            <span class="font-bold text-white mt-1 block">هەولێر (پارکی شانەدەر)</span>
+            <span id="displayTripLocation" class="font-bold text-white mt-1 block">هەولێر (پارکی شانەدەر)</span>
           </div>
         </div>
 
@@ -144,28 +144,28 @@
         <h4 class="text-lg font-bold text-white mb-4">خشتەی کاتی گەشت</h4>
         <div class="space-y-4">
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full bg-yellow-500/10 border border-yellow-500 text-yellow-400 flex items-center justify-center font-bold text-xs shrink-0">١</div>
+            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">١</div>
             <div>
               <p class="font-bold text-white text-sm">٠٦:٠٠ بەیانی — کۆبوونەوە و بەڕێکەوتن</p>
               <p class="text-gray-400 text-xs mt-0.5">کۆبوونەوە لە شوێنی دیاریکراو و بەڕێکەوتن بەرەو خاڵی دەستپێک.</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full bg-yellow-500/10 border border-yellow-500 text-yellow-400 flex items-center justify-center font-bold text-xs shrink-0">٢</div>
+            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">٢</div>
             <div>
               <p class="font-bold text-white text-sm">٠٧:٣٠ بەیانی — گەیشتن و دەستپێکی شاخەوانی</p>
               <p class="text-gray-400 text-xs mt-0.5">ڕێنمایی سەرەتایی سەلامەتی و دەستپێکردنی ڕێڕۆیشتن بەرەو لووتکە.</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full bg-yellow-500/10 border border-yellow-500 text-yellow-400 flex items-center justify-center font-bold text-xs shrink-0">٣</div>
+            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">٣</div>
             <div>
               <p class="font-bold text-white text-sm">١٢:٠٠ نیوەڕۆ — گەیشتن بە لووتکە، پشوو و نانخواردن</p>
               <p class="text-gray-400 text-xs mt-0.5">مانەوە لە لووتکە بۆ چێژوەرگرتن لە دیمەن و گرتنی وێنەی یادگاری.</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full bg-yellow-500/10 border border-yellow-500 text-yellow-400 flex items-center justify-center font-bold text-xs shrink-0">٤</div>
+            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">٤</div>
             <div>
               <p class="font-bold text-white text-sm">٠٥:٠٠ ئێوارە — گەڕانەوە بۆ هەولێر</p>
               <p class="text-gray-400 text-xs mt-0.5">کۆتاییهاتنی گەشت و گەڕانەوە بۆ خاڵی سەرەتایی.</p>
@@ -175,76 +175,32 @@
       </div>
 
       <!-- کارتی خزمەتگوزارییەکان -->
-      <div class="bg-adventure-card border border-adventure-border rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+      <div class="bg-[#1E293B] border border-gray-700 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
         <div>
           <h4 class="text-xl font-bold text-white mb-6">خزمەتگوزارییەکان لەخۆدەگرێت:</h4>
           <ul class="space-y-4 text-sm text-gray-300">
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 text-yellow-400 shrink-0"></i>
+              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
               <span>هاتوچۆی تەواو بە پاسی گەشتیاریی مۆدێرن</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 text-yellow-400 shrink-0"></i>
+              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
               <span>ڕێبەر و سەرپەرشتیاری شارەزای شاخەوانی</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 text-yellow-400 shrink-0"></i>
+              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
               <span>تیمی فریاگوزاری سەرەتایی (First Aid)</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 text-yellow-400 shrink-0"></i>
+              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
               <span>وێنەگری فەرمی بۆ گرتنی وێنەی ناوازە</span>
             </li>
           </ul>
         </div>
-        <div class="mt-8 pt-6 border-t border-adventure-border">
+        <div class="mt-8 pt-6 border-t border-gray-700">
           <p class="text-xs text-gray-400 leading-relaxed">
             تکایە پێش ناونووسین دڵنیابە لە تەندروستی گشتی و هەبوونی پێڵاوی گونجاوی شاخەوانی.
           </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- بەشی کەلوپەلی پێویست (Gear Guide) -->
-  <section id="gear" class="py-20 bg-adventure-dark/50 border-y border-adventure-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">کەلوپەلی پێویست بۆ شاخەوانی</h2>
-        <p class="text-gray-400">بۆ ئەزموونێکی سەلامەت و ئاسوودە، ئەم پێداویستییانەت لەگەڵ بێت</p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-adventure-card border border-adventure-border rounded-xl p-6 text-center hover:border-yellow-500/40 transition">
-          <div class="w-14 h-14 mx-auto rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 mb-4">
-            <i data-lucide="footprints" class="w-7 h-7"></i>
-          </div>
-          <h3 class="font-bold text-white mb-2">پێڵاوی شاخەوانی</h3>
-          <p class="text-gray-400 text-xs leading-relaxed">پێڵاوی دژەخلیسک (Trekking/Hiking) کە پاڵپشتی پاژنەی پێ بکات.</p>
-        </div>
-
-        <div class="bg-adventure-card border border-adventure-border rounded-xl p-6 text-center hover:border-yellow-500/40 transition">
-          <div class="w-14 h-14 mx-auto rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 mb-4">
-            <i data-lucide="backpack" class="w-7 h-7"></i>
-          </div>
-          <h3 class="font-bold text-white mb-2">جانتا و گۆچان</h3>
-          <p class="text-gray-400 text-xs leading-relaxed">جانتای کێشی کەم (٢٠-٣٠ لیتر) لەگەڵ گۆچانی شاخەوانی بۆ پاراستنی ئەژنۆ.</p>
-        </div>
-
-        <div class="bg-adventure-card border border-adventure-border rounded-xl p-6 text-center hover:border-yellow-500/40 transition">
-          <div class="w-14 h-14 mx-auto rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 mb-4">
-            <i data-lucide="droplet" class="w-7 h-7"></i>
-          </div>
-          <h3 class="font-bold text-white mb-2">ئاو و خواردن</h3>
-          <p class="text-gray-400 text-xs leading-relaxed">لانیکەم ٢ لیتر ئاو، میوەی وشککراوە، خورما، و چەرەسات بۆ وزەبەخشین.</p>
-        </div>
-
-        <div class="bg-adventure-card border border-adventure-border rounded-xl p-6 text-center hover:border-yellow-500/40 transition">
-          <div class="w-14 h-14 mx-auto rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 mb-4">
-            <i data-lucide="sun-medium" class="w-7 h-7"></i>
-          </div>
-          <h3 class="font-bold text-white mb-2">پاراستن لە خۆر</h3>
-          <p class="text-gray-400 text-xs leading-relaxed">کڵاو، چاویلکەی دژەخۆر، و کرێمی پارێزەری تیشکی خۆر.</p>
         </div>
       </div>
     </div>
@@ -257,23 +213,23 @@
       <p class="text-gray-400 text-sm">تکایە زانیارییەکان بە دروستی پڕبکەرەوە؛ شوێنەکان دیاریکراون.</p>
     </div>
 
-    <div class="bg-adventure-card border border-adventure-border rounded-2xl p-6 sm:p-10 shadow-2xl">
+    <div class="bg-[#1E293B] border border-gray-700 rounded-2xl p-6 sm:p-10 shadow-2xl">
       <form id="bookingForm" onsubmit="handleBooking(event)" class="space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-2">ناوی سیانی</label>
-            <input type="text" id="fullName" required placeholder="ناوی بەشداربوو" class="w-full bg-[#0F172A] border border-adventure-border rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition">
+            <input type="text" id="fullName" required placeholder="ناوی بەشداربوو" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition">
           </div>
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-2">ژمارەی مۆبایل (واتسئاپ)</label>
-            <input type="tel" id="phone" required placeholder="0750XXXXXXX" class="w-full bg-[#0F172A] border border-adventure-border rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition" dir="ltr">
+            <input type="tel" id="phone" required placeholder="0750XXXXXXX" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition" dir="ltr">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-2">ژمارەی بەشداربووان</label>
-            <select id="ticketCount" class="w-full bg-[#0F172A] border border-adventure-border rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition">
+            <select id="ticketCount" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition">
               <option value="1">١ کەس</option>
               <option value="2">٢ کەس</option>
               <option value="3">٣ کەس</option>
@@ -283,7 +239,7 @@
           </div>
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-2">شوێنی سواربوون</label>
-            <select id="pickupLocation" class="w-full bg-[#0F172A] border border-adventure-border rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition">
+            <select id="pickupLocation" class="w-full bg-[#0F172A] border border-gray-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-yellow-500 transition">
               <option value="erbil-shanadar">هەولێر — نزیک پارکی شانەدەر</option>
               <option value="erbil-kasnazan">هەولێر — ڕێگای کەسنەزان</option>
             </select>
@@ -291,8 +247,8 @@
         </div>
 
         <!-- ڕێنمایی پارەدان -->
-        <div class="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
-          <p class="text-xs text-yellow-400 font-bold mb-1">شێوازی پارەدان و جێگیرکردنی کورسی:</p>
+        <div class="p-4 rounded-xl bg-white/5 border border-gray-700">
+          <p class="text-xs theme-text font-bold mb-1">شێوازی پارەدان و جێگیرکردنی کورسی:</p>
           <p class="text-xs text-gray-300 leading-relaxed">
             بڕی پارەکە لە ڕێگەی <strong>FastPay</strong> بۆ ئەم ژمارەیە بنێرە: <span class="font-bold text-white tracking-wider" dir="ltr">0750 313 0360</span>. پاشان ناونووسینەکە تەواو بکە و لە واتسئاپ پسوولەکە پشتڕاست دەکەینەوە.
           </p>
@@ -305,7 +261,7 @@
           </label>
         </div>
 
-        <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-black text-base transition shadow-xl shadow-yellow-500/20">
+        <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl theme-bg text-black font-black text-base transition shadow-xl">
           تۆمارکردن و ناونووسین
         </button>
       </form>
@@ -319,25 +275,22 @@
         <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">
           زانیارییەکانت گەیشت؛ تیمەکەمان بە زووترین کات لە ڕێگەی نامەی واتسئاپەوە پەیوەندیت پێوە دەکەن.
         </p>
-        <button onclick="resetBooking()" class="text-xs text-yellow-400 underline">ناونووسینی کەسێکی تر</button>
+        <button onclick="resetBooking()" class="text-xs theme-text underline">ناونووسینی کەسێکی تر</button>
       </div>
     </div>
   </section>
 
   <!-- چاتی زیرەک (AI Assistant Widget) -->
   <div class="fixed bottom-6 left-6 z-50">
-    <!-- دوگمەی کردنەوەی چات -->
-    <button onclick="toggleChat()" id="chatToggleBtn" class="flex items-center gap-3 px-5 py-3.5 rounded-full bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold shadow-2xl transition transform hover:scale-105">
+    <button onclick="toggleChat()" id="chatToggleBtn" class="flex items-center gap-3 px-5 py-3.5 rounded-full theme-bg text-black font-extrabold shadow-2xl transition transform hover:scale-105">
       <i data-lucide="message-square" class="w-5 h-5"></i>
       <span class="text-sm">پرسیار لە بۆتی زیرەک بکە</span>
     </button>
 
-    <!-- پەنجەرەی گفتوگۆ -->
-    <div id="chatBox" class="hidden w-[350px] sm:w-[380px] h-[500px] bg-[#111827] border border-adventure-border rounded-2xl shadow-2xl flex-col overflow-hidden transition-all duration-300">
-      <!-- سەردێڕی چات -->
-      <div class="bg-[#1F2937] p-4 flex items-center justify-between border-b border-adventure-border">
+    <div id="chatBox" class="hidden w-[350px] sm:w-[380px] h-[500px] bg-[#111827] border border-gray-700 rounded-2xl shadow-2xl flex-col overflow-hidden transition-all duration-300">
+      <div class="bg-[#1F2937] p-4 flex items-center justify-between border-b border-gray-700">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center font-bold">
+          <div class="w-8 h-8 rounded-full bg-white/10 theme-text flex items-center justify-center font-bold">
             🤖
           </div>
           <div>
@@ -352,18 +305,16 @@
         </button>
       </div>
 
-      <!-- ناوەڕۆکی نامەکان -->
       <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs leading-relaxed">
         <div class="bg-[#1F2937] p-3 rounded-2xl rounded-tr-none text-gray-200 border border-gray-700 max-w-[85%]">
           سڵاو! بەخێربێیت بۆ کوردیا ئەدڤێنتچەر 🏔️ دەتوانیت هەر پرسیارێکت دەربارەی گەشت، کەلوپەلی شاخەوانی، کات و شێوازی ناونووسین هەیە لێم بپرسیت!
         </div>
       </div>
 
-      <!-- شوێنی نووسینی نامە -->
-      <div class="p-3 border-t border-adventure-border bg-[#1F2937]">
+      <div class="p-3 border-t border-gray-700 bg-[#1F2937]">
         <form onsubmit="handleSendChat(event)" class="flex gap-2">
           <input type="text" id="chatInput" placeholder="پرسیارەکەت لێرە بنووسە..." class="flex-1 bg-[#111827] border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-yellow-500">
-          <button type="submit" class="bg-yellow-500 text-black px-4 py-2 rounded-xl font-bold hover:bg-yellow-400 transition">
+          <button type="submit" class="theme-bg text-black px-4 py-2 rounded-xl font-bold transition">
             <i data-lucide="send" class="w-4 h-4"></i>
           </button>
         </form>
@@ -371,16 +322,32 @@
     </div>
   </div>
 
-  <!-- ژێرپەڕە (Footer) -->
-  <footer class="py-10 border-t border-adventure-border text-center text-xs text-gray-500">
+  <footer class="py-10 border-t border-gray-800 text-center text-xs text-gray-500">
     <p>© 2026 کوردیا ئەدڤێنتچەر — سەرجەم مافەکان پارێزراون.</p>
   </footer>
 
   <script>
-    // چالاککردنی ئایکۆنەکان
     lucide.createIcons();
 
-    // نیشاندان یان شاردنەوەی چات
+    // وەرگرتنی ڕێکخستنەکان لە پەڕەی ئەدمین
+    function applySavedSettings() {
+      const savedData = localStorage.getItem('kurdia_settings');
+      if (savedData) {
+        const data = JSON.parse(savedData);
+        if (data.color) {
+          document.documentElement.style.setProperty('--main-theme-color', data.color);
+        }
+        if (data.tripTitle) document.getElementById('displayTripTitle').innerText = data.tripTitle;
+        if (data.tripPrice) document.getElementById('displayTripPrice').innerText = data.tripPrice;
+        if (data.tripDifficulty) document.getElementById('displayTripDifficulty').innerText = data.tripDifficulty;
+        if (data.tripTime) document.getElementById('displayTripTime').innerText = data.tripTime;
+        if (data.tripLocation) document.getElementById('displayTripLocation').innerText = data.tripLocation;
+        if (data.tripDesc) document.getElementById('displayTripDesc').innerText = data.tripDesc;
+        if (data.heroImageUrl) document.getElementById('displayHeroImg').src = data.heroImageUrl;
+      }
+    }
+    applySavedSettings();
+
     function toggleChat() {
       const chatBox = document.getElementById('chatBox');
       const chatBtn = document.getElementById('chatToggleBtn');
@@ -395,7 +362,6 @@
       }
     }
 
-    // بەڕێوەبردنی ناونووسین و ناردنی دەستبەجێ بۆ تێلێگرام بە بێ بلۆکبوون
     function handleBooking(e) {
       e.preventDefault();
 
@@ -420,16 +386,13 @@
 
       const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
 
-      // بەکارهێنانی Image Beacon بۆ مسۆگەرکردنی ناردن بە بێ کێشەی CORS
       const img = new Image();
       img.src = url;
 
-      // هەروەها ناردنی بە fetch بۆ دڵنیایی زیاتر
       try {
         fetch(url, { mode: 'no-cors' });
       } catch (err) {}
 
-      // نیشاندانی پەیامی سەرکەوتن
       setTimeout(() => {
         document.getElementById('bookingForm').classList.add('hidden');
         document.getElementById('successMsg').classList.remove('hidden');
@@ -444,7 +407,6 @@
       document.getElementById('successMsg').classList.add('hidden');
     }
 
-    // سیستەمی وەڵامدانەوەی زیرەکی دەستکردی ناو چات
     function handleSendChat(e) {
       e.preventDefault();
       const input = document.getElementById('chatInput');
@@ -452,11 +414,9 @@
       if (!text) return;
 
       const chatContainer = document.getElementById('chatMessages');
-
-      // نامەی بەکارهێنەر
       chatContainer.innerHTML += `
         <div class="flex justify-end">
-          <div class="bg-yellow-500 text-black font-semibold p-3 rounded-2xl rounded-tl-none max-w-[85%]">
+          <div class="theme-bg text-black font-semibold p-3 rounded-2xl rounded-tl-none max-w-[85%]">
             ${text}
           </div>
         </div>
@@ -464,19 +424,14 @@
       input.value = '';
       chatContainer.scrollTop = chatContainer.scrollHeight;
 
-      // وەڵامی زیرەک بەپێی بابەتەکان
       setTimeout(() => {
-        let reply = "بۆ هەر پرسیارێکی وردتر دەتوانیت ڕاستەوخۆ پەیوەندی بە سەرپەرشتیاری کوردیا ئەدڤێنتچەر بکەیت لە ڕێگەی 07503130360.";
+        let reply = "بۆ هەر پرسیارێکی وردتر دەتوانیت پەیوەندی بە سەرپەرشتیار بکەیت لە ڕێگەی 07503130360.";
         const lower = text.toLowerCase();
 
         if (lower.includes('نرخ') || lower.includes('چەندە') || lower.includes('پارە')) {
           reply = "نرخی بەشداربوون لەم گەشتەدا ٢٥,٠٠٠ دینارە کە هاتوچۆ بە پاسی مۆدێرن، ڕێبەری شاخەوانی و فریاگوزاری سەرەتایی دەگرێتەوە.";
         } else if (lower.includes('پێڵاو') || lower.includes('جل') || lower.includes('کەلوپەل')) {
-          reply = "پێویستە پێڵاوی شاخەوانی دژەخلیسک (Hiking shoes) لەپێ بکەیت، جلوبەرگی وەرزشی ئاسوودە، لانیکەم ٢ لیتر ئاو، لەگەڵ کڵاو و چاویلکەی خۆر.";
-        } else if (lower.includes('ناونووسین') || lower.includes('ناو') || lower.includes('حجز')) {
-          reply = "دەتوانیت ڕاستەوخۆ لە بەشی سەرەوە فۆڕمی ناونووسین پڕبکەیتەوە و کورسییەکەت جێگیر بکەیت.";
-        } else if (lower.includes('کات') || lower.includes('شوێن') || lower.includes('کۆبوونەوە')) {
-          reply = "کۆبوونەوە لە کاتژمێر ٠٦:٠٠ی بەیانییە لە هەولێر، نزیک پارکی شانەدەر.";
+          reply = "پێویستە پێڵاوی شاخەوانی دژەخلیسک لەپێ بکەیت، جلوبەرگی وەرزشی ئاسوودە، لانیکەم ٢ لیتر ئاو، لەگەڵ کڵاو و چاویلکەی خۆر.";
         }
 
         chatContainer.innerHTML += `
