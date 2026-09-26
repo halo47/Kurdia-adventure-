@@ -4,32 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>کوردیا ئەدڤێنتچەر | Kurdia Adventure</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts: Vazirmatn -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Vazirmatn', 'sans-serif'],
-          },
-          colors: {
-            themeColor: 'var(--main-theme-color, #EAB308)'
-          }
-        }
-      }
-    }
-  </script>
   <style>
     :root {
-      --main-theme-color: #EAB308;
+      --main-theme-color: #06B6D4;
     }
     body {
       font-family: 'Vazirmatn', sans-serif;
@@ -41,9 +24,8 @@
     .theme-border { border-color: var(--main-theme-color) !important; }
   </style>
 </head>
-<body class="selection:bg-yellow-500 selection:text-black">
+<body class="selection:bg-cyan-500 selection:text-black">
 
-  <!-- بەشی سەرەوە (Header / Navigation) -->
   <header class="sticky top-0 z-40 backdrop-blur-md bg-[#0B0F19]/80 border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -56,9 +38,9 @@
         </div>
       </div>
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-        <a href="#about" class="hover:text-yellow-400 transition">دەربارە</a>
-        <a href="#trip" class="hover:text-yellow-400 transition">گەشتی داهاتوو</a>
-        <a href="#gear" class="hover:text-yellow-400 transition">کەلوپەلی پێویست</a>
+        <a href="#about" class="hover:text-cyan-400 transition">دەربارە</a>
+        <a href="#trip" class="hover:text-cyan-400 transition">گەشتی داهاتوو</a>
+        <a href="#gear" class="hover:text-cyan-400 transition">کەلوپەلی پێویست</a>
       </nav>
       <a href="#booking" class="theme-bg text-black font-bold px-6 py-2.5 rounded-full text-sm transition-all transform hover:scale-105 shadow-lg">
         ناونووسین بکە
@@ -66,7 +48,6 @@
     </div>
   </header>
 
-  <!-- لاپەڕەی سەرەکی (Hero Section) -->
   <section class="relative min-h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img id="displayHeroImg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80" 
@@ -97,7 +78,6 @@
     </div>
   </section>
 
-  <!-- بەشی گەشتی داهاتوو (Upcoming Trip) -->
   <section id="trip" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
       <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">گەشتی داهاتوو</h2>
@@ -140,7 +120,6 @@
           </div>
         </div>
 
-        <!-- خشتەی هەنگاوەکان -->
         <h4 class="text-lg font-bold text-white mb-4">خشتەی کاتی گەشت</h4>
         <div class="space-y-4">
           <div class="flex items-start gap-4">
@@ -174,7 +153,6 @@
         </div>
       </div>
 
-      <!-- کارتی خزمەتگوزارییەکان -->
       <div class="bg-[#1E293B] border border-gray-700 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
         <div>
           <h4 class="text-xl font-bold text-white mb-6">خزمەتگوزارییەکان لەخۆدەگرێت:</h4>
@@ -197,16 +175,11 @@
             </li>
           </ul>
         </div>
-        <div class="mt-8 pt-6 border-t border-gray-700">
-          <p class="text-xs text-gray-400 leading-relaxed">
-            تکایە پێش ناونووسین دڵنیابە لە تەندروستی گشتی و هەبوونی پێڵاوی گونجاوی شاخەوانی.
-          </p>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- بەشی ناونووسین (Booking Form) -->
+  <!-- بەشی ناونووسین -->
   <section id="booking" class="py-20 max-w-4xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-black text-white mb-3">ناونووسین بۆ گەشت</h2>
@@ -246,11 +219,10 @@
           </div>
         </div>
 
-        <!-- ڕێنمایی پارەدان -->
         <div class="p-4 rounded-xl bg-white/5 border border-gray-700">
           <p class="text-xs theme-text font-bold mb-1">شێوازی پارەدان و جێگیرکردنی کورسی:</p>
           <p class="text-xs text-gray-300 leading-relaxed">
-            بڕی پارەکە لە ڕێگەی <strong>FastPay</strong> بۆ ئەم ژمارەیە بنێرە: <span class="font-bold text-white tracking-wider" dir="ltr">0750 313 0360</span>. پاشان ناونووسینەکە تەواو بکە و لە واتسئاپ پسوولەکە پشتڕاست دەکەینەوە.
+            بڕی پارەکە لە ڕێگەی <strong>FastPay</strong> بۆ ئەم ژمارەیە بنێرە: <span class="font-bold text-white tracking-wider" dir="ltr">0750 313 0360</span>.
           </p>
         </div>
 
@@ -266,61 +238,17 @@
         </button>
       </form>
 
-      <!-- پەیامی سەرکەوتوو بوون -->
       <div id="successMsg" class="hidden text-center py-8">
         <div class="w-16 h-16 bg-emerald-500/20 border border-emerald-500 rounded-full flex items-center justify-center text-emerald-400 mx-auto mb-4">
           <i data-lucide="check" class="w-8 h-8"></i>
         </div>
         <h3 class="text-2xl font-bold text-white mb-2">ناونووسینەکەت بە سەرکەوتوویی تۆمارکرا!</h3>
         <p class="text-gray-400 text-sm max-w-md mx-auto mb-6">
-          زانیارییەکانت گەیشت؛ تیمەکەمان بە زووترین کات لە ڕێگەی نامەی واتسئاپەوە پەیوەندیت پێوە دەکەن.
+          زانیارییەکانت گەیشت؛ تیمەکەمان بە زووترین کات پەیوەندیت پێوە دەکەن.
         </p>
-        <button onclick="resetBooking()" class="text-xs theme-text underline">ناونووسینی کەسێکی تر</button>
       </div>
     </div>
   </section>
-
-  <!-- چاتی زیرەک (AI Assistant Widget) -->
-  <div class="fixed bottom-6 left-6 z-50">
-    <button onclick="toggleChat()" id="chatToggleBtn" class="flex items-center gap-3 px-5 py-3.5 rounded-full theme-bg text-black font-extrabold shadow-2xl transition transform hover:scale-105">
-      <i data-lucide="message-square" class="w-5 h-5"></i>
-      <span class="text-sm">پرسیار لە بۆتی زیرەک بکە</span>
-    </button>
-
-    <div id="chatBox" class="hidden w-[350px] sm:w-[380px] h-[500px] bg-[#111827] border border-gray-700 rounded-2xl shadow-2xl flex-col overflow-hidden transition-all duration-300">
-      <div class="bg-[#1F2937] p-4 flex items-center justify-between border-b border-gray-700">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-white/10 theme-text flex items-center justify-center font-bold">
-            🤖
-          </div>
-          <div>
-            <h4 class="text-sm font-bold text-white">یاریدەدەری کوردیا ئەدڤێنتچەر</h4>
-            <span class="text-[10px] text-emerald-400 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ئۆنلاینە بۆ وەڵامدانەوە
-            </span>
-          </div>
-        </div>
-        <button onclick="toggleChat()" class="text-gray-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs leading-relaxed">
-        <div class="bg-[#1F2937] p-3 rounded-2xl rounded-tr-none text-gray-200 border border-gray-700 max-w-[85%]">
-          سڵاو! بەخێربێیت بۆ کوردیا ئەدڤێنتچەر 🏔️ دەتوانیت هەر پرسیارێکت دەربارەی گەشت، کەلوپەلی شاخەوانی، کات و شێوازی ناونووسین هەیە لێم بپرسیت!
-        </div>
-      </div>
-
-      <div class="p-3 border-t border-gray-700 bg-[#1F2937]">
-        <form onsubmit="handleSendChat(event)" class="flex gap-2">
-          <input type="text" id="chatInput" placeholder="پرسیارەکەت لێرە بنووسە..." class="flex-1 bg-[#111827] border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-yellow-500">
-          <button type="submit" class="theme-bg text-black px-4 py-2 rounded-xl font-bold transition">
-            <i data-lucide="send" class="w-4 h-4"></i>
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
 
   <footer class="py-10 border-t border-gray-800 text-center text-xs text-gray-500">
     <p>© 2026 کوردیا ئەدڤێنتچەر — سەرجەم مافەکان پارێزراون.</p>
@@ -329,11 +257,16 @@
   <script>
     lucide.createIcons();
 
-    // وەرگرتنی ڕێکخستنەکان لە پەڕەی ئەدمین
-    function applySavedSettings() {
-      const savedData = localStorage.getItem('kurdia_settings');
-      if (savedData) {
-        const data = JSON.parse(savedData);
+    const BIN_ID = "6ab7f417ac6210605af863a3";
+    const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
+
+    async function loadCloudData() {
+      try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { 'X-Master-Key': API_KEY }
+        });
+        const data = (await res.json()).record;
+
         if (data.color) {
           document.documentElement.style.setProperty('--main-theme-color', data.color);
         }
@@ -344,27 +277,14 @@
         if (data.tripLocation) document.getElementById('displayTripLocation').innerText = data.tripLocation;
         if (data.tripDesc) document.getElementById('displayTripDesc').innerText = data.tripDesc;
         if (data.heroImageUrl) document.getElementById('displayHeroImg').src = data.heroImageUrl;
+      } catch (err) {
+        console.error(err);
       }
     }
-    applySavedSettings();
-
-    function toggleChat() {
-      const chatBox = document.getElementById('chatBox');
-      const chatBtn = document.getElementById('chatToggleBtn');
-      if (chatBox.classList.contains('hidden')) {
-        chatBox.classList.remove('hidden');
-        chatBox.classList.add('flex');
-        chatBtn.classList.add('hidden');
-      } else {
-        chatBox.classList.add('hidden');
-        chatBox.classList.remove('flex');
-        chatBtn.classList.remove('hidden');
-      }
-    }
+    loadCloudData();
 
     function handleBooking(e) {
       e.preventDefault();
-
       const name = document.getElementById('fullName').value;
       const phone = document.getElementById('phone').value;
       const tickets = document.getElementById('ticketCount').value;
@@ -377,69 +297,23 @@
       const botToken = "8988711499:AAFr3njwdynHfGpEe_9u6LT8ocKwhdf-gmQ";
       const chatId = "1112648339";
 
-      const text = `🏔️ ناونووسینی نوێ بۆ کوردیا ئەدڤێنتچەر
+      const text = `🏔️ *کوردیا ئەدڤێنتچەر*
 ━━━━━━━━━━━━━━━━━━
-👤 ناو: ${name}
-📞 مۆبایل: ${phone}
-👥 ژمارەی کەسەکان: ${tickets}
-📍 شوێنی سواربوون: ${location}`;
+👤 *ناو:* ${name}
+📞 *مۆبایل:* ${phone}
+👥 *ژمارەی کەس:* ${tickets}
+📍 *شوێن:* ${location}`;
 
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
 
       const img = new Image();
       img.src = url;
-
-      try {
-        fetch(url, { mode: 'no-cors' });
-      } catch (err) {}
 
       setTimeout(() => {
         document.getElementById('bookingForm').classList.add('hidden');
         document.getElementById('successMsg').classList.remove('hidden');
         submitBtn.disabled = false;
         submitBtn.innerText = "تۆمارکردن و ناونووسین";
-      }, 500);
-    }
-
-    function resetBooking() {
-      document.getElementById('bookingForm').reset();
-      document.getElementById('bookingForm').classList.remove('hidden');
-      document.getElementById('successMsg').classList.add('hidden');
-    }
-
-    function handleSendChat(e) {
-      e.preventDefault();
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const chatContainer = document.getElementById('chatMessages');
-      chatContainer.innerHTML += `
-        <div class="flex justify-end">
-          <div class="theme-bg text-black font-semibold p-3 rounded-2xl rounded-tl-none max-w-[85%]">
-            ${text}
-          </div>
-        </div>
-      `;
-      input.value = '';
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-
-      setTimeout(() => {
-        let reply = "بۆ هەر پرسیارێکی وردتر دەتوانیت پەیوەندی بە سەرپەرشتیار بکەیت لە ڕێگەی 07503130360.";
-        const lower = text.toLowerCase();
-
-        if (lower.includes('نرخ') || lower.includes('چەندە') || lower.includes('پارە')) {
-          reply = "نرخی بەشداربوون لەم گەشتەدا ٢٥,٠٠٠ دینارە کە هاتوچۆ بە پاسی مۆدێرن، ڕێبەری شاخەوانی و فریاگوزاری سەرەتایی دەگرێتەوە.";
-        } else if (lower.includes('پێڵاو') || lower.includes('جل') || lower.includes('کەلوپەل')) {
-          reply = "پێویستە پێڵاوی شاخەوانی دژەخلیسک لەپێ بکەیت، جلوبەرگی وەرزشی ئاسوودە، لانیکەم ٢ لیتر ئاو، لەگەڵ کڵاو و چاویلکەی خۆر.";
-        }
-
-        chatContainer.innerHTML += `
-          <div class="bg-[#1F2937] p-3 rounded-2xl rounded-tr-none text-gray-200 border border-gray-700 max-w-[85%]">
-            ${reply}
-          </div>
-        `;
-        chatContainer.scrollTop = chatContainer.scrollHeight;
       }, 500);
     }
   </script>
