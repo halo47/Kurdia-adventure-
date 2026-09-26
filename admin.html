@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>داشبۆردی بەڕێوەبردن | KURDIA ADVENTURE CMS</title>
-  
+  <title>KURDIA ADVENTURE — SMART WEBSITE BUILDER</title>
+
+  <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  
+
+  <!-- Google Fonts: Vazirmatn -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -19,284 +21,199 @@
       color: #f1f5f9;
     }
     .glass-panel {
-      background: rgba(18, 24, 38, 0.7);
-      backdrop-filter: blur(12px);
+      background: rgba(18, 24, 38, 0.75);
+      backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
+    .viewport-desktop { width: 100%; }
+    .viewport-tablet { width: 768px; }
+    .viewport-mobile { width: 390px; }
   </style>
 </head>
-<body class="min-h-screen p-4 sm:p-8">
+<body class="min-h-screen">
 
   <!-- ================= AUTH SCREEN ================= -->
-  <div id="loginScreen" class="max-w-md mx-auto mt-24 glass-panel p-8 sm:p-10 rounded-3xl text-center space-y-6 shadow-2xl">
+  <div id="loginScreen" class="max-w-md mx-auto mt-28 glass-panel p-8 sm:p-10 rounded-3xl text-center space-y-6 shadow-2xl">
     <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-3xl">
-      <i data-lucide="lock" class="w-8 h-8"></i>
+      <i data-lucide="shield-check" class="w-8 h-8"></i>
     </div>
     <div>
-      <h2 class="text-2xl font-black text-white">بەڕێوەبەری کوردیا</h2>
-      <p class="text-xs text-gray-400 mt-1">وشەی نهێنی (PIN) بنووسە بۆ بەڕێوەبردنی وێبسایت</p>
+      <h2 class="text-2xl font-black text-white">Smart Website Builder</h2>
+      <p class="text-xs text-gray-400 mt-1">وشەی نهێنی (PIN) بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
     </div>
-
     <form onsubmit="handleLogin(event)" class="space-y-4">
       <input type="password" id="pinInput" placeholder="••••" maxlength="8" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3.5 text-center text-2xl tracking-widest text-white focus:outline-none focus:border-amber-500">
       <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm transition">
-        چوونەژوورەوە
+        دەستپێکردن
       </button>
     </form>
   </div>
 
-  <!-- ================= MAIN ADMIN DASHBOARD ================= -->
-  <div id="adminDashboard" class="hidden max-w-6xl mx-auto space-y-8 pb-24">
-    
-    <!-- Top Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
-      <div>
-        <span class="text-xs font-bold text-amber-500 tracking-wider">KURDIA ADVENTURE CMS</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-white">کۆنتڕۆڵی تەواوی وێبسایت</h1>
+  <!-- ================= MAIN BUILDER INTERFACE ================= -->
+  <div id="builderApp" class="hidden min-h-screen flex flex-col">
+
+    <!-- Top Action Toolbar -->
+    <header class="h-16 border-b border-slate-800 bg-[#0c1017] px-4 sm:px-6 flex items-center justify-between z-30">
+      <div class="flex items-center gap-4">
+        <span class="text-base font-black tracking-wider text-white">KURDIA <span class="text-amber-400">BUILDER</span></span>
+        
+        <!-- Undo / Redo -->
+        <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+          <button onclick="undoState()" title="Undo" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-slate-800 transition"><i data-lucide="undo-2" class="w-4 h-4"></i></button>
+          <button onclick="redoState()" title="Redo" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-slate-800 transition"><i data-lucide="redo-2" class="w-4 h-4"></i></button>
+        </div>
+
+        <!-- Viewport Switcher -->
+        <div class="hidden sm:flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+          <button onclick="setViewport('desktop')" id="vpDesk" class="p-2 rounded-lg bg-amber-500 text-black font-bold transition"><i data-lucide="monitor" class="w-4 h-4"></i></button>
+          <button onclick="setViewport('tablet')" id="vpTab" class="p-2 rounded-lg text-gray-400 hover:text-white transition"><i data-lucide="tablet" class="w-4 h-4"></i></button>
+          <button onclick="setViewport('mobile')" id="vpMob" class="p-2 rounded-lg text-gray-400 hover:text-white transition"><i data-lucide="smartphone" class="w-4 h-4"></i></button>
+        </div>
       </div>
+
       <div class="flex items-center gap-3">
-        <a href="index.html" target="_blank" class="px-4 py-2.5 rounded-xl glass-panel text-gray-300 hover:text-white text-xs font-bold flex items-center gap-2">
-          <i data-lucide="external-link" class="w-4 h-4"></i>
-          <span>بینینی ماڵپەڕ</span>
+        <a href="index.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-gray-300 hover:text-white text-xs font-bold flex items-center gap-2">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">ماڵپەڕی زیندوو</span>
         </a>
-        <button onclick="saveAllSettings()" id="saveBtn" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider shadow-lg transition">
-          پاشەکەوت و بڵاوکردنەوە
+        <button onclick="publishToCloud()" id="publishBtn" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider shadow-lg transition flex items-center gap-2">
+          <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+          <span>بڵاوکردنەوە</span>
         </button>
       </div>
-    </div>
+    </header>
 
-    <!-- Overview Stats Bar -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-      <div class="glass-panel p-4 rounded-2xl">
-        <span class="text-xs text-gray-400 block">دۆخی وێبسایت</span>
-        <span class="font-bold text-emerald-400 text-sm mt-1 inline-flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> چاڵاکە لەسەر هەور
-        </span>
-      </div>
+    <!-- Workspace Grid -->
+    <div class="flex-1 flex overflow-hidden">
 
-      <div class="glass-panel p-4 rounded-2xl">
-        <span class="text-xs text-gray-400 block">دۆخی ناونووسین</span>
-        <span id="statBookingStatus" class="font-bold text-white text-sm mt-1 block">پشکنین...</span>
-      </div>
-
-      <div class="glass-panel p-4 rounded-2xl">
-        <span class="text-xs text-gray-400 block">گەشتی ئێستا</span>
-        <span id="statTripName" class="font-bold text-white text-sm mt-1 block truncate">چاوەڕوان بە...</span>
-      </div>
-
-      <div class="glass-panel p-4 rounded-2xl">
-        <span class="text-xs text-gray-400 block">کۆتا نوێکردنەوە</span>
-        <span id="statLastUpdate" class="font-bold text-gray-300 text-sm mt-1 block">ئێستا</span>
-      </div>
-    </div>
-
-    <!-- Main Settings Form Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- Left & Center: Fields (2 Cols) -->
-      <div class="lg:col-span-2 space-y-8">
-        
-        <!-- ================= DYNAMIC GRADIENT COLOR CONTROLS ================= -->
-        <div class="glass-panel p-6 rounded-3xl space-y-4">
-          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-            <i data-lucide="palette" class="w-5 h-5 text-amber-400"></i>
-            <span>سیستەمی ڕەنگی گرەیدیەنت (Gradient Accent)</span>
-          </h3>
-
-          <!-- Presets -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <button type="button" onclick="setGradient('#f59e0b', '#fde047')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
-              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-300 block mb-2"></span>
-              <span class="text-xs font-bold text-gray-200">زێڕینی خۆر</span>
-            </button>
-            <button type="button" onclick="setGradient('#06b6d4', '#2563eb')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
-              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 block mb-2"></span>
-              <span class="text-xs font-bold text-gray-200">شین و ئاسمانی</span>
-            </button>
-            <button type="button" onclick="setGradient('#34d399', '#0d9488')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
-              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-emerald-400 to-teal-600 block mb-2"></span>
-              <span class="text-xs font-bold text-gray-200">سەوزی سروشت</span>
-            </button>
-            <button type="button" onclick="setGradient('#f97316', '#f43f5e')" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-right hover:border-slate-700 transition">
-              <span class="w-full h-4 rounded-lg bg-gradient-to-r from-orange-500 to-rose-500 block mb-2"></span>
-              <span class="text-xs font-bold text-gray-200">ئاگر و سەرکێشی</span>
-            </button>
-          </div>
-
-          <!-- Custom Pickers -->
-          <div class="grid grid-cols-2 gap-4 pt-2">
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">ڕەنگی دەستپێک (Color 1)</label>
-              <input type="color" id="gradColor1" oninput="updateLivePreview()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">ڕەنگی کۆتایی (Color 2)</label>
-              <input type="color" id="gradColor2" oninput="updateLivePreview()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
-            </div>
-          </div>
+      <!-- Left Sidebar: Controls & Tabs -->
+      <aside class="w-80 sm:w-96 border-l border-slate-800 bg-[#090d14] flex flex-col z-20 overflow-y-auto">
+        <!-- Tab Nav -->
+        <div class="grid grid-cols-4 border-b border-slate-800 text-xs font-bold text-gray-400">
+          <button onclick="switchTab('sections')" id="tabSec" class="py-3 text-amber-400 border-b-2 border-amber-400">سێکشنەکان</button>
+          <button onclick="switchTab('theme')" id="tabTheme" class="py-3 hover:text-white">ڕەنگ و دیزاین</button>
+          <button onclick="switchTab('ai')" id="tabAi" class="py-3 hover:text-white flex items-center justify-center gap-1"><i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> AI</button>
+          <button onclick="switchTab('settings')" id="tabSet" class="py-3 hover:text-white">ڕێکخستن</button>
         </div>
 
-        <!-- ================= HERO SECTION CONTROL ================= -->
-        <div class="glass-panel p-6 rounded-3xl space-y-4">
-          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-            <i data-lucide="layout" class="w-5 h-5 text-amber-400"></i>
-            <span>بەشی پێشوازی ماڵپەڕ (Hero Section)</span>
-          </h3>
+        <div class="p-5 flex-1 space-y-6">
 
-          <div>
-            <label class="text-xs text-gray-400 block mb-1">درووشمی بچووکی سەرەوە (Badge)</label>
-            <input type="text" id="heroBadge" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
-          </div>
-
-          <div>
-            <label class="text-xs text-gray-400 block mb-1">ناونیشانی گەورە (Title)</label>
-            <input type="text" id="heroTitle" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
-          </div>
-
-          <div>
-            <label class="text-xs text-gray-400 block mb-1">پێناسەی کورت (Subtitle)</label>
-            <textarea id="heroSubtitle" rows="2" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none"></textarea>
-          </div>
-
-          <div>
-            <label class="text-xs text-gray-400 block mb-1">لینکی وێنەی گەورە (Hero Image URL)</label>
-            <input type="text" id="heroImageUrl" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none" dir="ltr">
-          </div>
-        </div>
-
-        <!-- ================= TRIP DETAILS CONTROL ================= -->
-        <div class="glass-panel p-6 rounded-3xl space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-              <i data-lucide="compass" class="w-5 h-5 text-amber-400"></i>
-              <span>زانیارییەکانی گەشت (Trip Details)</span>
-            </h3>
-
-            <!-- Booking Toggle -->
-            <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">
-              <input type="checkbox" id="bookingOpen" onchange="updateLivePreview()" class="w-4 h-4 rounded text-amber-500">
-              <span id="bookingToggleText" class="text-xs font-bold text-gray-300">دۆخی ناونووسین</span>
-            </label>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">ناوی شوێن / چیای گەشتەکە</label>
-              <input type="text" id="tripTitle" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          <!-- ================= TAB: SECTIONS & DRAG REORDER ================= -->
+          <div id="contentSections" class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-white uppercase tracking-wider">ڕیزبەندی و سێکشنەکان</span>
+              <button onclick="openAddSectionModal()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-[11px] font-bold text-white flex items-center gap-1">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> زیادکردن
+              </button>
             </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">نرخی بەشداربوون</label>
-              <input type="text" id="tripPrice" oninput="updateLivePreview()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
-            </div>
-          </div>
+            <p class="text-[11px] text-gray-400">شوێنی سێکشنەکان بەرز و نزم بکەرەوە بۆ گۆڕینی ڕیزبەندی لەسەر وێبسایت:</p>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">ئاستی سەختی</label>
-              <input type="text" id="tripDifficulty" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">ماوەی ڕێڕۆیشتن</label>
-              <input type="text" id="tripDuration" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">کاتی بەڕێکەوتن</label>
-              <input type="text" id="tripTime" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-            </div>
-          </div>
-
-          <div>
-            <label class="text-xs text-gray-400 block mb-1">شوێنی کۆبوونەوە</label>
-            <input type="text" id="tripLocation" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
-          </div>
-
-          <div>
-            <label class="text-xs text-gray-400 block mb-1">کورتەی ڕێڕەوی گەشتەکە</label>
-            <textarea id="tripDesc" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none"></textarea>
-          </div>
-        </div>
-
-        <!-- ================= TIMELINE STEPS CONTROL ================= -->
-        <div class="glass-panel p-6 rounded-3xl space-y-4">
-          <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-            <i data-lucide="milestone" class="w-5 h-5 text-amber-400"></i>
-            <span>خشتەی هەنگاوەکان (Trip Steps)</span>
-          </h3>
-
-          <div class="space-y-3">
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ١</label>
-              <input type="text" id="step1" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ٢</label>
-              <input type="text" id="step2" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ٣</label>
-              <input type="text" id="step3" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">هەنگاوی ٤</label>
-              <input type="text" id="step4" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white">
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Right Column: Interactive Live Preview (Sticky) -->
-      <div class="space-y-6">
-        <div class="sticky top-8 space-y-6">
-          
-          <div class="glass-panel p-6 rounded-3xl space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-              <span class="text-xs font-bold text-gray-300 flex items-center gap-1.5">
-                <i data-lucide="eye" class="w-4 h-4 text-amber-400"></i> بینینی ڕاستەوخۆ (Live Preview)
-              </span>
-              <span class="text-[10px] text-gray-500">خۆکارانە دەگۆڕێت</span>
+            <div id="sectionsList" class="space-y-2">
+              <!-- Injected dynamically with Move Up / Down -->
             </div>
 
-            <!-- Mini Website Card Preview -->
-            <div class="rounded-2xl overflow-hidden border border-slate-800 bg-[#07090e] shadow-inner">
-              <div class="relative h-36">
-                <img id="prevImg" src="" class="w-full h-full object-cover filter brightness-[0.4]">
-                <div class="absolute inset-0 p-4 flex flex-col justify-end">
-                  <span id="prevBadge" class="text-[10px] font-bold text-amber-400">سەرکێشی</span>
-                  <h4 id="prevTitle" class="text-sm font-black text-white truncate">ناوی گەشت</h4>
-                </div>
+            <!-- Active Section Properties Editor -->
+            <div id="sectionEditorBox" class="pt-4 border-t border-slate-800 space-y-4">
+              <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider">دەستکاریکردنی زانیاری سێکشن</h4>
+              <div id="dynamicFields" class="space-y-3">
+                <!-- Populated based on selection -->
               </div>
-              <div class="p-4 space-y-2">
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-gray-400">نرخی گەشت:</span>
-                  <span id="prevPrice" class="font-black text-amber-400">٢٥,٠٠٠ دینار</span>
+            </div>
+          </div>
+
+          <!-- ================= TAB: THEME & GRADIENTS ================= -->
+          <div id="contentTheme" class="hidden space-y-5">
+            <span class="text-xs font-bold text-white uppercase tracking-wider block">دیزاین و گرەیدیەنت</span>
+            
+            <div class="space-y-3">
+              <label class="text-xs text-gray-400 block">گرەیدیەنتی سەرەکی</label>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <span class="text-[10px] text-gray-500 block mb-1">Color 1 (Start)</span>
+                  <input type="color" id="themeColor1" onchange="updateThemeColors()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
                 </div>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-gray-400">دۆخی ناونووسین:</span>
-                  <span id="prevBooking" class="font-bold text-emerald-400">کراوەیە</span>
-                </div>
-                <div class="pt-2">
-                  <div id="prevBtn" class="w-full py-2 rounded-lg text-center font-bold text-xs bg-amber-500 text-black">
-                    ناونووسین بکە
-                  </div>
+                <div>
+                  <span class="text-[10px] text-gray-500 block mb-1">Color 2 (End)</span>
+                  <input type="color" id="themeColor2" onchange="updateThemeColors()" class="w-full h-10 bg-slate-900 rounded-xl cursor-pointer">
                 </div>
               </div>
             </div>
 
-            <!-- Publish Trigger in Sidebar -->
-            <button onclick="saveAllSettings()" id="sideSaveBtn" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition shadow-xl">
-              پاشەکەوت و بڵاوکردنەوە
-            </button>
+            <div class="pt-4 border-t border-slate-800 space-y-3">
+              <label class="text-xs text-gray-400 block">شێوازە ئامادەکراوەکان (Presets)</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="setThemePreset('#f59e0b', '#fde047')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">زێڕین</button>
+                <button onclick="setThemePreset('#06b6d4', '#2563eb')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">شین و ئاسمانی</button>
+                <button onclick="setThemePreset('#34d399', '#0d9488')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">سەوزی شاخ</button>
+                <button onclick="setThemePreset('#f97316', '#f43f5e')" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-gray-300 hover:border-slate-700">پڕتەقاڵی</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= TAB: AI ASSISTANT (WEBSITE COMMANDS) ================= -->
+          <div id="contentAi" class="hidden space-y-4">
+            <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>فەرمانی زیرەکی دەستکرد</span>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+              دەتوانیت بە زمانی کوردی فەرمان بە وێبسایت بدەیت تا ڕاستەوخۆ دەستکاری دیزاین و زانیاری بکات.
+            </p>
+
+            <div class="space-y-2">
+              <textarea id="aiCommandInput" rows="3" placeholder="نموونە: ڕەنگی ماڵپەڕەکە بکە بە سەوز و ناونیشانی گەشتەکە بکە بە گەشتی چیای هەڵگورد" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+              <button onclick="executeAiCommand()" id="aiRunBtn" class="w-full py-2.5 rounded-xl bg-accent-grad text-black font-extrabold text-xs transition">
+                جێبەجێکردنی فەرمان لەسەر دیزاین
+              </button>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800 space-y-3">
+              <span class="text-xs font-bold text-white block">AI Knowledge Base (زانیارییەکانی بۆتەکە)</span>
+              <div>
+                <label class="text-[10px] text-gray-400 block mb-1">دەربارەی گروپ و سەرکێشی</label>
+                <textarea id="kbAbout" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
+              </div>
+              <div>
+                <label class="text-[10px] text-gray-400 block mb-1">کەلوپەلی پێویست بۆ بەشداربووان</label>
+                <textarea id="kbEquipment" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= TAB: SETTINGS & SEO ================= -->
+          <div id="contentSettings" class="hidden space-y-4">
+            <span class="text-xs font-bold text-white uppercase tracking-wider block">SEO و سۆشیاڵ میدیا</span>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">ناونیشانی وێبسایت (SEO Title)</label>
+              <input type="text" id="seoTitleInput" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">پێناسەی گووگڵ (Meta Description)</label>
+              <textarea id="seoDescInput" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></textarea>
+            </div>
+            <div class="pt-3 border-t border-slate-800 space-y-3">
+              <span class="text-xs font-bold text-white block">لینکی پەیوەندی و تۆڕەکان</span>
+              <input type="text" id="socInsta" placeholder="Instagram URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+              <input type="text" id="socWa" placeholder="WhatsApp (0750...)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+              <input type="text" id="socTele" placeholder="Telegram URL" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+            </div>
           </div>
 
         </div>
-      </div>
+      </aside>
+
+      <!-- Center & Right: Live Responsive Preview Workspace -->
+      <main class="flex-1 bg-[#05070a] p-4 sm:p-8 flex items-center justify-center overflow-auto">
+        <div id="previewWrapper" class="viewport-desktop h-full bg-[#07090e] rounded-3xl border border-slate-800 shadow-2xl transition-all duration-300 overflow-hidden relative">
+          <!-- Live Preview Iframe connected to live DOM render -->
+          <iframe id="previewFrame" src="index.html" class="w-full h-full border-0"></iframe>
+        </div>
+      </main>
 
     </div>
-
   </div>
 
-  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <!-- ================= JAVASCRIPT BUILDER ENGINE ================= -->
   <script>
     lucide.createIcons();
 
@@ -304,120 +221,267 @@
     const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
     const SECRET_PIN = "2026";
 
+    // Application State Tree
+    let appState = null;
+    let historyStack = [];
+    let historyIndex = -1;
+
     function handleLogin(e) {
       e.preventDefault();
       const pin = document.getElementById('pinInput').value;
       if (pin === SECRET_PIN) {
         document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('adminDashboard').classList.remove('hidden');
-        fetchCurrentData();
+        document.getElementById('builderApp').classList.remove('hidden');
+        initBuilder();
       } else {
         alert("وشەی نهێنی هەڵەیە!");
       }
     }
 
-    function setGradient(c1, c2) {
-      document.getElementById('gradColor1').value = c1;
-      document.getElementById('gradColor2').value = c2;
-      updateLivePreview();
+    // Viewport Controls
+    function setViewport(type) {
+      const wrap = document.getElementById('previewWrapper');
+      wrap.className = 'h-full bg-[#07090e] rounded-3xl border border-slate-800 shadow-2xl transition-all duration-300 overflow-hidden relative ' +
+        (type === 'mobile' ? 'viewport-mobile' : type === 'tablet' ? 'viewport-tablet' : 'viewport-desktop');
+
+      document.getElementById('vpDesk').className = type === 'desktop' ? 'p-2 rounded-lg bg-amber-500 text-black font-bold' : 'p-2 rounded-lg text-gray-400 hover:text-white';
+      document.getElementById('vpTab').className = type === 'tablet' ? 'p-2 rounded-lg bg-amber-500 text-black font-bold' : 'p-2 rounded-lg text-gray-400 hover:text-white';
+      document.getElementById('vpMob').className = type === 'mobile' ? 'p-2 rounded-lg bg-amber-500 text-black font-bold' : 'p-2 rounded-lg text-gray-400 hover:text-white';
     }
 
-    function updateLivePreview() {
-      const c1 = document.getElementById('gradColor1').value;
-      const c2 = document.getElementById('gradColor2').value;
-      const badge = document.getElementById('heroBadge').value;
-      const title = document.getElementById('heroTitle').value;
-      const price = document.getElementById('tripPrice').value;
-      const img = document.getElementById('heroImageUrl').value;
-      const isOpen = document.getElementById('bookingOpen').checked;
+    // Tab Switching
+    function switchTab(tab) {
+      const tabs = ['sections', 'theme', 'ai', 'settings'];
+      tabs.forEach(t => {
+        document.getElementById('content' + t.charAt(0).toUpperCase() + t.slice(1)).classList.add('hidden');
+        document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1, 3)).className = 'py-3 hover:text-white';
+      });
+      document.getElementById('content' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
+      document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1, 3)).className = 'py-3 text-amber-400 border-b-2 border-amber-400';
+    }
 
-      document.getElementById('prevBadge').innerText = badge || 'سەرکێشی';
-      document.getElementById('prevTitle').innerText = title || 'کوردیا ئەدڤێنتچەر';
-      document.getElementById('prevPrice').innerText = price || '٢٥,٠٠٠ دینار';
-      document.getElementById('prevImg').src = img || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b';
-      
-      const prevBooking = document.getElementById('prevBooking');
-      const toggleText = document.getElementById('bookingToggleText');
-      if (isOpen) {
-        prevBooking.innerText = "کراوەیە";
-        prevBooking.className = "font-bold text-emerald-400";
-        toggleText.innerText = "دۆخی ناونووسین (کراوەیە 🟢)";
-      } else {
-        prevBooking.innerText = "داخراوە";
-        prevBooking.className = "font-bold text-rose-400";
-        toggleText.innerText = "دۆخی ناونووسین (داخراوە 🔴)";
+    // History Snapshot
+    function pushState(newState) {
+      historyStack = historyStack.slice(0, historyIndex + 1);
+      historyStack.push(JSON.parse(JSON.stringify(newState)));
+      historyIndex++;
+      appState = newState;
+      refreshPreview();
+    }
+
+    function undoState() {
+      if (historyIndex > 0) {
+        historyIndex--;
+        appState = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+        syncInputs();
+        refreshPreview();
       }
-
-      // Dynamic colors in preview button
-      const prevBtn = document.getElementById('prevBtn');
-      prevBtn.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
     }
 
-    async function fetchCurrentData() {
+    function redoState() {
+      if (historyIndex < historyStack.length - 1) {
+        historyIndex++;
+        appState = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+        syncInputs();
+        refreshPreview();
+      }
+    }
+
+    // Initialize Builder
+    async function initBuilder() {
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?t=${Date.now()}`, {
           headers: { 'X-Master-Key': API_KEY }
         });
-        const data = (await res.json()).record;
+        const raw = await res.json();
+        const data = raw.record;
 
-        document.getElementById('gradColor1').value = data.gradColor1 || '#f59e0b';
-        document.getElementById('gradColor2').value = data.gradColor2 || '#fde047';
-        document.getElementById('heroBadge').value = data.heroBadge || '';
-        document.getElementById('heroTitle').value = data.heroTitle || '';
-        document.getElementById('heroSubtitle').value = data.heroSubtitle || '';
-        document.getElementById('heroImageUrl').value = data.heroImageUrl || '';
+        // Ensure state schema structure
+        if (!data.sectionsOrder) {
+          data.sectionsOrder = ['hero', 'trip', 'services', 'gear', 'gallery', 'faq', 'booking'];
+        }
+        if (!data.aiKnowledge) {
+          data.aiKnowledge = { about: 'کوردیا ئەدڤێنتچەر گروپێکی پێشەنگی شاخەوانییە لە کوردستان.', equipment: 'پێڵاوی دژەخلیسک و ٢ لیتر ئاو پێویستە.' };
+        }
+        if (!data.socials) {
+          data.socials = { instagram: '', whatsapp: '07503130360', telegram: '' };
+        }
 
-        document.getElementById('bookingOpen').checked = data.bookingOpen !== false;
-        document.getElementById('tripTitle').value = data.tripTitle || '';
-        document.getElementById('tripPrice').value = data.tripPrice || '';
-        document.getElementById('tripDifficulty').value = data.tripDifficulty || '';
-        document.getElementById('tripDuration').value = data.tripDuration || '';
-        document.getElementById('tripTime').value = data.tripTime || '';
-        document.getElementById('tripLocation').value = data.tripLocation || '';
-        document.getElementById('tripDesc').value = data.tripDesc || '';
-
-        document.getElementById('step1').value = data.step1 || '';
-        document.getElementById('step2').value = data.step2 || '';
-        document.getElementById('step3').value = data.step3 || '';
-        document.getElementById('step4').value = data.step4 || '';
-
-        // Update Overview Stats
-        document.getElementById('statBookingStatus').innerText = data.bookingOpen !== false ? "کراوەیە" : "داخراوە";
-        document.getElementById('statTripName').innerText = data.tripTitle || "دیارینەکراوە";
-
-        updateLivePreview();
+        pushState(data);
+        syncInputs();
+        renderSectionsList();
+        editSection('hero');
       } catch (err) {
-        console.error("Fetch failed:", err);
+        console.error("Init Error:", err);
       }
     }
 
-    async function saveAllSettings() {
-      const btn = document.getElementById('saveBtn');
-      const sideBtn = document.getElementById('sideSaveBtn');
-      btn.disabled = true;
-      sideBtn.disabled = true;
-      btn.innerText = "کەمێک چاوەڕێ بکە...";
-      sideBtn.innerText = "کەمێک چاوەڕێ بکە...";
+    // Sync input fields with State
+    function syncInputs() {
+      document.getElementById('themeColor1').value = appState.gradColor1 || '#f59e0b';
+      document.getElementById('themeColor2').value = appState.gradColor2 || '#fde047';
+      document.getElementById('kbAbout').value = appState.aiKnowledge?.about || '';
+      document.getElementById('kbEquipment').value = appState.aiKnowledge?.equipment || '';
+      document.getElementById('seoTitleInput').value = appState.seoTitle || '';
+      document.getElementById('seoDescInput').value = appState.seoDesc || '';
+      document.getElementById('socInsta').value = appState.socials?.instagram || '';
+      document.getElementById('socWa').value = appState.socials?.whatsapp || '';
+      document.getElementById('socTele').value = appState.socials?.telegram || '';
+    }
 
-      const payload = {
-        gradColor1: document.getElementById('gradColor1').value,
-        gradColor2: document.getElementById('gradColor2').value,
-        heroBadge: document.getElementById('heroBadge').value,
-        heroTitle: document.getElementById('heroTitle').value,
-        heroSubtitle: document.getElementById('heroSubtitle').value,
-        heroImageUrl: document.getElementById('heroImageUrl').value,
-        bookingOpen: document.getElementById('bookingOpen').checked,
-        tripTitle: document.getElementById('tripTitle').value,
-        tripPrice: document.getElementById('tripPrice').value,
-        tripDifficulty: document.getElementById('tripDifficulty').value,
-        tripDuration: document.getElementById('tripDuration').value,
-        tripTime: document.getElementById('tripTime').value,
-        tripLocation: document.getElementById('tripLocation').value,
-        tripDesc: document.getElementById('tripDesc').value,
-        step1: document.getElementById('step1').value,
-        step2: document.getElementById('step2').value,
-        step3: document.getElementById('step3').value,
-        step4: document.getElementById('step4').value
+    // Reorder Section Up / Down
+    function moveSection(index, direction) {
+      const order = [...appState.sectionsOrder];
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= order.length) return;
+
+      const temp = order[index];
+      order[index] = order[targetIndex];
+      order[targetIndex] = temp;
+
+      appState.sectionsOrder = order;
+      pushState(appState);
+      renderSectionsList();
+    }
+
+    // Render Drag / Reorder List
+    function renderSectionsList() {
+      const list = document.getElementById('sectionsList');
+      list.innerHTML = '';
+      const sectionNames = {
+        hero: 'بەشی سەرەکی (Hero)',
+        trip: 'زانیاری گەشت (Trip)',
+        services: 'خزمەتگوزارییەکان (Services)',
+        gear: 'کەلوپەل (Gear)',
+        gallery: 'گەلەری وێنەکان (Gallery)',
+        faq: 'پرسیارە باوەکان (FAQ)',
+        booking: 'فۆڕمی ناونووسین (Booking)'
+      };
+
+      appState.sectionsOrder.forEach((sec, idx) => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold';
+        item.innerHTML = `
+          <span class="cursor-pointer hover:text-amber-400" onclick="editSection('${sec}')">📌 ${sectionNames[sec] || sec}</span>
+          <div class="flex items-center gap-1">
+            <button onclick="moveSection(${idx}, -1)" class="p-1 hover:text-white text-gray-500"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i></button>
+            <button onclick="moveSection(${idx}, 1)" class="p-1 hover:text-white text-gray-500"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i></button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+      lucide.createIcons();
+    }
+
+    // Section Properties Panel
+    function editSection(sec) {
+      const box = document.getElementById('dynamicFields');
+      box.innerHTML = '';
+
+      if (sec === 'hero') {
+        box.innerHTML = `
+          <div><label class="text-[10px] text-gray-400 block mb-1">Badge</label><input type="text" value="${appState.heroBadge || ''}" oninput="updateField('heroBadge', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">Title</label><input type="text" value="${appState.heroTitle || ''}" oninput="updateField('heroTitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">Subtitle</label><textarea oninput="updateField('heroSubtitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white">${appState.heroSubtitle || ''}</textarea></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">Image URL</label><input type="text" value="${appState.heroImageUrl || ''}" oninput="updateField('heroImageUrl', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white" dir="ltr"></div>
+        `;
+      } else if (sec === 'trip') {
+        box.innerHTML = `
+          <div><label class="text-[10px] text-gray-400 block mb-1">ناوی گەشت</label><input type="text" value="${appState.tripTitle || ''}" oninput="updateField('tripTitle', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">نرخ</label><input type="text" value="${appState.tripPrice || ''}" oninput="updateField('tripPrice', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">ئاستی سەختی</label><input type="text" value="${appState.tripDifficulty || ''}" oninput="updateField('tripDifficulty', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div><label class="text-[10px] text-gray-400 block mb-1">ماوەی ڕێڕۆیشتن</label><input type="text" value="${appState.tripDuration || ''}" oninput="updateField('tripDuration', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white"></div>
+          <div class="flex items-center gap-2 pt-2">
+            <input type="checkbox" id="bookToggle" ${appState.bookingOpen !== false ? 'checked' : ''} onchange="updateField('bookingOpen', this.checked)" class="w-4 h-4 rounded text-amber-500">
+            <label for="bookToggle" class="text-xs font-bold text-white">دۆخی ناونووسین (کراوەیە)</label>
+          </div>
+        `;
+      } else {
+        box.innerHTML = `<p class="text-xs text-gray-400">تایبەتمەندییەکانی ${sec} دەستکاری دەکرێن.</p>`;
+      }
+    }
+
+    function updateField(key, val) {
+      appState[key] = val;
+      pushState(appState);
+    }
+
+    function setThemePreset(c1, c2) {
+      appState.gradColor1 = c1;
+      appState.gradColor2 = c2;
+      document.getElementById('themeColor1').value = c1;
+      document.getElementById('themeColor2').value = c2;
+      pushState(appState);
+    }
+
+    function updateThemeColors() {
+      appState.gradColor1 = document.getElementById('themeColor1').value;
+      appState.gradColor2 = document.getElementById('themeColor2').value;
+      pushState(appState);
+    }
+
+    // AI Natural Language Command Interpreter
+    function executeAiCommand() {
+      const input = document.getElementById('aiCommandInput');
+      const cmd = input.value.trim().toLowerCase();
+      if (!cmd) return;
+
+      const btn = document.getElementById('aiRunBtn');
+      btn.innerText = "جێبەجێدەکرێت...";
+
+      setTimeout(() => {
+        if (cmd.includes('سەوز')) {
+          setThemePreset('#34d399', '#0d9488');
+        } else if (cmd.includes('شین')) {
+          setThemePreset('#06b6d4', '#2563eb');
+        } else if (cmd.includes('زەرد') || cmd.includes('زێڕین')) {
+          setThemePreset('#f59e0b', '#fde047');
+        }
+
+        if (cmd.includes('داخە') || cmd.includes('داخراو')) {
+          appState.bookingOpen = false;
+        } else if (cmd.includes('بکەرەوە') || cmd.includes('کراوە')) {
+          appState.bookingOpen = true;
+        }
+
+        if (cmd.includes('هەڵگورد')) {
+          appState.tripTitle = "گەشتی چیای هەڵگورد (Halgurd Mountain)";
+        } else if (cmd.includes('سەفین')) {
+          appState.tripTitle = "گەشتی چیای سەفین (SAFEN Mountain)";
+        }
+
+        pushState(appState);
+        syncInputs();
+        btn.innerText = "جێبەجێکرا! ✓";
+        setTimeout(() => btn.innerText = "جێبەجێکردنی فەرمان لەسەر دیزاین", 1500);
+      }, 400);
+    }
+
+    // Refresh Preview Frame
+    function refreshPreview() {
+      const frame = document.getElementById('previewFrame');
+      if (frame && frame.contentWindow && frame.contentWindow.renderCompleteWebsite) {
+        frame.contentWindow.renderCompleteWebsite(appState);
+      }
+    }
+
+    // Publish State to Cloud JSONBin
+    async function publishToCloud() {
+      const btn = document.getElementById('publishBtn');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> پاشەکەوت دەکرێت...`;
+
+      // Sync settings
+      appState.aiKnowledge = {
+        about: document.getElementById('kbAbout').value,
+        equipment: document.getElementById('kbEquipment').value
+      };
+      appState.seoTitle = document.getElementById('seoTitleInput').value;
+      appState.seoDesc = document.getElementById('seoDescInput').value;
+      appState.socials = {
+        instagram: document.getElementById('socInsta').value,
+        whatsapp: document.getElementById('socWa').value,
+        telegram: document.getElementById('socTele').value
       };
 
       try {
@@ -427,32 +491,22 @@
             'Content-Type': 'application/json',
             'X-Master-Key': API_KEY
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(appState)
         });
 
-        btn.innerText = "بڵاوکرایەوە! ✓";
-        sideBtn.innerText = "بڵاوکرایەوە! ✓";
+        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> بڵاوکرایەوە!`;
         btn.classList.replace('bg-amber-500', 'bg-emerald-500');
-        sideBtn.classList.replace('bg-amber-500', 'bg-emerald-500');
-
-        document.getElementById('statLastUpdate').innerText = new Date().toLocaleTimeString('en-US');
-        document.getElementById('statBookingStatus').innerText = payload.bookingOpen ? "کراوەیە" : "داخراوە";
-        document.getElementById('statTripName').innerText = payload.tripTitle;
 
         setTimeout(() => {
-          btn.innerText = "پاشەکەوت و بڵاوکردنەوە";
-          sideBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+          btn.innerHTML = `<i data-lucide="cloud-upload" class="w-4 h-4"></i> <span>بڵاوکردنەوە</span>`;
           btn.classList.replace('bg-emerald-500', 'bg-amber-500');
-          sideBtn.classList.replace('bg-emerald-500', 'bg-amber-500');
           btn.disabled = false;
-          sideBtn.disabled = false;
+          lucide.createIcons();
         }, 2000);
       } catch (err) {
         alert("کێشەیەک لە پەیوەندی بە داتابەیس ڕوویدا!");
         btn.disabled = false;
-        sideBtn.disabled = false;
-        btn.innerText = "پاشەکەوت و بڵاوکردنەوە";
-        sideBtn.innerText = "پاشەکەوت و بڵاوکردنەوە";
+        btn.innerText = "بڵاوکردنەوە";
       }
     }
   </script>
