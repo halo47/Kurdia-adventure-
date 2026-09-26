@@ -1,415 +1,485 @@
-<!DOCTYPE html><html lang="ku" dir="rtl">
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>KURDIA ADMIN</title><script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script><link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>KURDIA ADMIN</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"><style>
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:"Vazirmatn",sans-serif;background:#070a10;color:#fff}
-body{overflow:hidden}
-button,input,textarea,select{font-family:inherit}
-button{cursor:pointer}
-::-webkit-scrollbar{width:7px;height:7px}
-::-webkit-scrollbar-track{background:#080c13}
-::-webkit-scrollbar-thumb{background:#303746;border-radius:20px}
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
 :root{
-  --red:#9d1c32;
-  --panel:#0d131d;
-  --panel2:#111925;
+  --bg:#070a10;
+  --panel:#0d121b;
+  --panel2:#111927;
   --border:rgba(255,255,255,.08);
-  --muted:#8993a5;
+  --text:#fff;
+  --muted:#94a3b8;
+  --primary:#9d1c32;
+  --primary2:#c92b49;
 }
 
-.app{height:100vh;display:flex;flex-direction:column}
+*{box-sizing:border-box}
 
-.topbar{
-  height:64px;
-  flex:none;
-  background:#0a0f17;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 16px;
-  z-index:50;
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Vazirmatn",sans-serif;
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:11px;
+body{
+  overflow:hidden;
 }
 
-.logo{
-  width:38px;
-  height:38px;
-  border-radius:11px;
-  background:var(--red);
+button,input,textarea,select{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+::-webkit-scrollbar{
+  width:6px;
+  height:6px;
+}
+
+::-webkit-scrollbar-track{
+  background:#080b11;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#303746;
+  border-radius:20px;
+}
+
+.hidden-force{
+  display:none!important;
+}
+
+.login-screen{
+  position:fixed;
+  inset:0;
+  z-index:99999;
   display:flex;
   align-items:center;
   justify-content:center;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(157,28,50,.22),transparent 35%),
+    #05070b;
+  padding:20px;
 }
 
-.brand-title{font-weight:900;letter-spacing:.05em}
-.brand-sub{font-size:9px;color:#727d90;letter-spacing:.2em}
-
-.top-actions{display:flex;align-items:center;gap:7px}
-
-.icon-btn{
-  width:40px;
-  height:40px;
-  border-radius:11px;
-  background:#111823;
+.login-box{
+  width:100%;
+  max-width:420px;
+  padding:35px;
+  border-radius:30px;
+  background:rgba(13,18,27,.92);
   border:1px solid var(--border);
+  box-shadow:0 35px 100px rgba(0,0,0,.55);
+  backdrop-filter:blur(20px);
+}
+
+.logo-box{
+  width:60px;
+  height:60px;
+  border-radius:20px;
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#c8ced8;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 15px 40px rgba(157,28,50,.28);
 }
 
-.icon-btn:hover{background:#182130;color:#fff}
-
-.primary-btn{
-  background:var(--red);
-  border:0;
-  border-radius:11px;
-  padding:10px 16px;
-  font-weight:800;
+.input{
+  width:100%;
+  background:#080c13;
+  border:1px solid var(--border);
   color:#fff;
+  border-radius:14px;
+  padding:13px 15px;
+  outline:none;
+  transition:.2s;
 }
 
-.primary-btn:hover{background:#b4223c}
+.input:focus{
+  border-color:rgba(201,43,73,.7);
+  box-shadow:0 0 0 3px rgba(157,28,50,.10);
+}
 
-.layout{
-  flex:1;
-  min-height:0;
+.textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.primary{
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  box-shadow:0 12px 35px rgba(157,28,50,.22);
+}
+
+.primary:hover{
+  filter:brightness(1.08);
+  transform:translateY(-1px);
+}
+
+.btn{
+  transition:.2s;
+}
+
+.btn:active{
+  transform:scale(.98);
+}
+
+.app{
+  height:100vh;
   display:grid;
-  grid-template-columns:260px minmax(0,1fr) 330px;
+  grid-template-columns:270px 1fr;
+  overflow:hidden;
 }
 
 .sidebar{
-  background:#0b111a;
+  background:#090d14;
   border-left:1px solid var(--border);
-  min-height:0;
-  overflow:auto;
-  padding:14px;
+  overflow-y:auto;
+  padding:18px;
 }
 
 .main{
   min-width:0;
-  min-height:0;
-  overflow:auto;
-  background:
-    radial-gradient(circle at 30% 0%,rgba(157,28,50,.09),transparent 30%),
-    #080c13;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
 
-.inspector{
-  background:#0b111a;
-  border-right:1px solid var(--border);
+.topbar{
+  height:70px;
+  flex:0 0 70px;
+  background:rgba(7,10,16,.92);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  backdrop-filter:blur(15px);
+  z-index:20;
+}
+
+.workspace{
   min-height:0;
-  overflow:auto;
-  padding:14px;
+  flex:1;
+  display:grid;
+  grid-template-columns:330px minmax(0,1fr) 350px;
+  overflow:hidden;
+}
+
+.panel{
+  background:#0a0f17;
+  border-left:1px solid var(--border);
+  overflow-y:auto;
+}
+
+.panel:last-child{
+  border-left:0;
+  border-right:1px solid var(--border);
 }
 
 .panel-title{
-  font-size:12px;
+  padding:17px;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
   font-weight:800;
-  color:#9da7b7;
-  margin:5px 3px 10px;
+  position:sticky;
+  top:0;
+  background:#0a0f17;
+  z-index:5;
 }
 
 .section-list{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
+  padding:12px;
 }
 
 .section-item{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:11px;
-  border-radius:12px;
-  background:#101722;
-  border:1px solid transparent;
+  background:#0e1520;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:15px;
+  padding:12px;
+  margin-bottom:8px;
   transition:.2s;
 }
 
 .section-item:hover{
-  background:#151e2b;
+  border-color:rgba(255,255,255,.14);
 }
 
 .section-item.active{
-  border-color:rgba(157,28,50,.7);
-  background:rgba(157,28,50,.12);
+  border-color:rgba(157,28,50,.8);
+  background:rgba(157,28,50,.10);
+}
+
+.section-item.dragging{
+  opacity:.35;
+}
+
+.section-main{
+  display:flex;
+  align-items:center;
+  gap:9px;
 }
 
 .drag-handle{
-  color:#657084;
+  color:#64748b;
   cursor:grab;
 }
 
-.section-info{
-  flex:1;
-  min-width:0;
+.section-icon{
+  width:35px;
+  height:35px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.05);
+  color:#cbd5e1;
+  flex:0 0 auto;
 }
 
 .section-name{
+  min-width:0;
+  flex:1;
+}
+
+.section-name strong{
+  display:block;
   font-size:12px;
-  font-weight:800;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
-.section-type{
-  font-size:9px;
-  color:#687487;
+.section-name span{
+  display:block;
+  color:#64748b;
+  font-size:10px;
   margin-top:2px;
 }
 
-.eye-btn{
-  width:27px;
-  height:27px;
+.mini-btn{
+  width:31px;
+  height:31px;
+  border-radius:9px;
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#738096;
+  background:rgba(255,255,255,.045);
+  color:#94a3b8;
 }
 
-.eye-btn.hidden-section{color:#c23a52}
-
-.workspace{
-  padding:18px;
-  min-height:100%;
-}
-
-.workspace-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:14px;
-}
-
-.workspace-title{
-  font-size:20px;
-  font-weight:900;
-}
-
-.workspace-sub{
-  font-size:11px;
-  color:#707b8e;
-  margin-top:4px;
-}
-
-.device-switch{
-  display:flex;
-  background:#0d131d;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:4px;
-  gap:3px;
-}
-
-.device-switch button{
-  width:38px;
-  height:34px;
-  border-radius:8px;
-  background:transparent;
-  color:#788398;
-}
-
-.device-switch button.active{
-  background:#1a2331;
+.mini-btn:hover{
+  background:rgba(255,255,255,.09);
   color:#fff;
 }
 
-.preview-shell{
-  background:#111722;
-  border:1px solid var(--border);
-  border-radius:18px;
-  min-height:650px;
-  overflow:hidden;
+.preview{
+  min-width:0;
+  min-height:0;
   position:relative;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(157,28,50,.08),transparent 30%),
+    #070a10;
+  display:flex;
+  flex-direction:column;
 }
 
 .preview-toolbar{
-  height:43px;
-  background:#0d131d;
+  height:54px;
+  flex:0 0 54px;
   border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  padding:0 12px;
+  justify-content:center;
+  gap:6px;
+  background:#090e16;
 }
 
-.preview-url{
-  color:#657084;
-  font-size:10px;
+.device-btn{
+  height:34px;
+  padding:0 11px;
+  border-radius:9px;
+  background:rgba(255,255,255,.04);
+  color:#94a3b8;
+  border:1px solid transparent;
+  font-size:11px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.device-btn.active{
+  background:rgba(157,28,50,.14);
+  border-color:rgba(157,28,50,.4);
+  color:#fff;
 }
 
 .preview-area{
-  min-height:607px;
-  background:#05070b;
+  min-height:0;
+  flex:1;
   display:flex;
   justify-content:center;
   align-items:flex-start;
+  padding:18px;
   overflow:auto;
+}
+
+.preview-frame{
+  background:#fff;
+  width:100%;
+  height:100%;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+  transition:.3s;
+}
+
+.preview-frame.tablet{
+  width:768px;
+  max-width:100%;
+}
+
+.preview-frame.mobile{
+  width:390px;
+  max-width:100%;
+}
+
+.preview-frame iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  background:#fff;
+}
+
+.inspector{
   padding:15px;
 }
 
-#previewFrame{
-  border:0;
-  background:#080b12;
-  width:100%;
-  min-height:720px;
-  transition:.25s;
-  box-shadow:0 15px 60px rgba(0,0,0,.4);
-}
-
-.form-card{
-  background:#101722;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:13px;
-  margin-bottom:10px;
-}
-
-.form-title{
-  font-size:12px;
-  font-weight:900;
-  margin-bottom:11px;
-  display:flex;
-  align-items:center;
-  gap:7px;
-}
-
 .field{
-  margin-bottom:10px;
+  margin-bottom:16px;
 }
 
 .field label{
   display:block;
-  color:#9ba5b5;
-  font-size:10px;
-  font-weight:700;
-  margin-bottom:5px;
+  font-size:11px;
+  color:#94a3b8;
+  margin-bottom:7px;
 }
 
-.field input,
-.field textarea,
-.field select{
-  width:100%;
-  background:#080d15;
-  border:1px solid rgba(255,255,255,.08);
-  color:#fff;
-  border-radius:10px;
-  padding:10px;
-  outline:none;
-  font-size:12px;
+.field-title{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:15px;
 }
 
-.field textarea{
-  min-height:82px;
-  resize:vertical;
+.divider{
+  height:1px;
+  background:var(--border);
+  margin:20px 0;
 }
 
-.field input:focus,
-.field textarea:focus,
-.field select:focus{
-  border-color:rgba(157,28,50,.8);
+.switch{
+  width:43px;
+  height:25px;
+  border-radius:50px;
+  background:#263142;
+  position:relative;
+  transition:.2s;
 }
 
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
+.switch span{
+  position:absolute;
+  width:19px;
+  height:19px;
+  top:3px;
+  right:3px;
+  border-radius:50%;
+  background:#fff;
+  transition:.2s;
 }
 
-.small-btn{
+.switch.on{
+  background:var(--primary);
+}
+
+.switch.on span{
+  right:21px;
+}
+
+.media-card{
+  position:relative;
+  aspect-ratio:1;
+  border-radius:13px;
+  overflow:hidden;
   border:1px solid var(--border);
-  background:#121a26;
-  color:#d4d9e2;
-  border-radius:9px;
-  padding:8px 10px;
-  font-size:10px;
-  font-weight:700;
+  background:#111827;
 }
 
-.small-btn:hover{background:#1a2433}
-
-.danger-btn{
-  background:rgba(190,35,60,.1);
-  color:#f07187;
-  border:1px solid rgba(190,35,60,.3);
-}
-
-.success-btn{
-  background:rgba(37,160,98,.1);
-  color:#66d7a0;
-  border:1px solid rgba(37,160,98,.25);
-}
-
-.array-item{
-  display:flex;
-  gap:6px;
-  margin-bottom:6px;
-}
-
-.array-item input{
-  flex:1;
-}
-
-.image-preview{
+.media-card img{
   width:100%;
-  height:120px;
-  border-radius:10px;
+  height:100%;
   object-fit:cover;
-  background:#080d15;
+}
+
+.media-remove{
+  position:absolute;
+  top:5px;
+  left:5px;
+  width:27px;
+  height:27px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.65);
+  color:#fff;
+}
+
+.service-row,
+.faq-row,
+.gallery-row{
+  background:#0c131d;
   border:1px solid var(--border);
+  border-radius:14px;
+  padding:10px;
   margin-bottom:8px;
 }
 
-.color-row{
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-
-.color-row input[type=color]{
-  width:48px;
-  height:40px;
-  padding:2px;
-  border-radius:9px;
-  border:1px solid var(--border);
-  background:#080d15;
-}
-
 .empty{
-  padding:30px 12px;
+  padding:40px 20px;
   text-align:center;
-  color:#677286;
-  font-size:11px;
+  color:#64748b;
 }
 
 .toast{
   position:fixed;
-  left:18px;
-  bottom:18px;
-  z-index:9999;
-  background:#151d2a;
+  bottom:20px;
+  right:20px;
+  z-index:999999;
+  background:#111827;
   border:1px solid var(--border);
-  border-radius:12px;
-  padding:11px 15px;
-  font-size:11px;
-  box-shadow:0 20px 50px rgba(0,0,0,.4);
-  transform:translateY(100px);
+  padding:13px 18px;
+  border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  transform:translateY(120px);
   opacity:0;
-  transition:.25s;
+  transition:.3s;
+  font-size:12px;
 }
 
 .toast.show{
@@ -417,413 +487,476 @@ button{cursor:pointer}
   opacity:1;
 }
 
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(8px);
+.mobile-sidebar-button{
   display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
 }
 
-.modal-backdrop.show{display:flex}
+@media(max-width:1200px){
+  .workspace{
+    grid-template-columns:280px minmax(0,1fr);
+  }
 
-.modal{
-  width:min(520px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#0e151f;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:18px;
-  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  .inspector-panel{
+    display:none;
+  }
 }
 
-.login-screen{
-  position:fixed;
-  inset:0;
-  z-index:99999;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(157,28,50,.2),transparent 35%),
-    #060910;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
+@media(max-width:850px){
+  body{
+    overflow:auto;
+  }
 
-.login-box{
-  width:min(390px,100%);
-  background:#0d131d;
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:25px;
-  box-shadow:0 30px 100px rgba(0,0,0,.55);
-  text-align:center;
-}
+  .app{
+    display:block;
+    height:auto;
+    min-height:100vh;
+  }
 
-.login-logo{
-  width:65px;
-  height:65px;
-  border-radius:19px;
-  background:var(--red);
-  margin:0 auto 15px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.login-box input{
-  width:100%;
-  margin-top:15px;
-  background:#080d15;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:13px;
-  color:#fff;
-  text-align:center;
-  letter-spacing:.3em;
-  outline:none;
-}
-
-.login-box button{
-  width:100%;
-  margin-top:10px;
-}
-
-.tabbar{
-  display:flex;
-  gap:5px;
-  overflow:auto;
-  margin-bottom:12px;
-}
-
-.tabbar button{
-  flex:none;
-  padding:8px 11px;
-  border-radius:9px;
-  border:1px solid var(--border);
-  background:#101722;
-  color:#8d98aa;
-  font-size:10px;
-}
-
-.tabbar button.active{
-  background:rgba(157,28,50,.15);
-  border-color:rgba(157,28,50,.6);
-  color:#fff;
-}
-
-.status{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-size:9px;
-  color:#69d49d;
-}
-
-.status-dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#45c98c;
-}
-
-.mobile-menu-btn{display:none}
-
-@media(max-width:1100px){
-  .layout{grid-template-columns:220px minmax(0,1fr)}
-  .inspector{position:fixed;right:0;top:64px;bottom:0;width:min(360px,90vw);z-index:100;transform:translateX(105%);transition:.25s;box-shadow:-20px 0 60px rgba(0,0,0,.4)}
-  .inspector.open{transform:translateX(0)}
-  .mobile-menu-btn{display:flex}
-}
-
-@media(max-width:760px){
-  body{overflow:auto}
-  .topbar{height:58px;padding:0 9px}
-  .brand-sub{display:none}
-  .brand-title{font-size:12px}
-  .top-actions .desktop-only{display:none}
-  .layout{display:block;height:calc(100vh - 58px)}
   .sidebar{
     position:fixed;
-    right:0;
-    top:58px;
+    top:0;
     bottom:0;
+    right:0;
     width:290px;
-    z-index:200;
-    transform:translateX(105%);
+    z-index:1000;
+    transform:translateX(100%);
     transition:.25s;
-    box-shadow:-20px 0 70px rgba(0,0,0,.5);
+    box-shadow:-20px 0 60px rgba(0,0,0,.45);
   }
-  .sidebar.open{transform:translateX(0)}
-  .main{height:100%}
-  .workspace{padding:10px}
-  .workspace-head{align-items:flex-start}
-  .workspace-title{font-size:16px}
-  .preview-shell{min-height:600px}
-  .preview-area{min-height:550px;padding:7px}
-  #previewFrame{min-height:650px}
-  .row{grid-template-columns:1fr}
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    min-height:100vh;
+  }
+
+  .workspace{
+    display:block;
+    overflow:visible;
+  }
+
+  .sections-panel{
+    display:none;
+  }
+
+  .preview{
+    height:calc(100vh - 70px);
+  }
+
+  .mobile-sidebar-button{
+    display:flex;
+  }
+
+  .topbar{
+    padding:0 12px;
+  }
+
+  .topbar-actions .desktop-only{
+    display:none;
+  }
 }
-</style></head><body><div id="loginScreen" class="login-screen">
+
+@media(max-width:500px){
+  .preview-area{
+    padding:8px;
+  }
+
+  .preview-frame{
+    border-radius:8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginScreen" class="login-screen">
+
   <div class="login-box">
-    <div class="login-logo">
-      <i data-lucide="mountain" style="width:30px;height:30px"></i>
-    </div><div style="font-size:20px;font-weight:900">KURDIA ADMIN</div>
-<div style="font-size:10px;color:#697487;margin-top:5px">
-  Smart Website Builder
-</div>
 
-<input
-  id="pinInput"
-  type="password"
-  inputmode="numeric"
-  maxlength="20"
-  placeholder="PIN"
-  onkeydown="if(event.key==='Enter')login()"
->
+    <div class="flex justify-center">
+      <div class="logo-box">
+        <i data-lucide="mountain" class="w-7 h-7"></i>
+      </div>
+    </div>
 
-<button class="primary-btn" onclick="login()">
-  چوونەژوورەوە
-</button>
+    <div class="text-center mt-6">
 
-<div id="loginError"
-  style="font-size:10px;color:#ef6b82;margin-top:9px;min-height:15px">
-</div>
+      <div class="text-2xl font-black">
+        KURDIA ADMIN
+      </div>
+
+      <div class="text-xs text-gray-500 mt-2">
+        Smart Website Builder
+      </div>
+
+    </div>
+
+    <div class="mt-8">
+
+      <label class="block text-xs text-gray-400 mb-2">
+        کۆدی چوونەژوورەوە
+      </label>
+
+      <input
+        id="pinInput"
+        type="password"
+        inputmode="numeric"
+        class="input text-center tracking-[.5em]"
+        placeholder="••••"
+        maxlength="20"
+        onkeydown="if(event.key==='Enter') login()"
+      >
+
+      <button
+        onclick="login()"
+        class="btn primary w-full mt-4 rounded-xl py-3.5 font-bold"
+      >
+        چوونەژوورەوە
+      </button>
+
+      <div
+        id="loginError"
+        class="text-red-400 text-xs text-center mt-4 min-h-[18px]"
+      ></div>
+
+    </div>
 
   </div>
-</div><div class="app" id="app" style="display:none">  <header class="topbar"><div class="brand">
-  <button class="icon-btn mobile-menu-btn" onclick="toggleSidebar()">
-    <i data-lucide="menu"></i>
-  </button>
-
-  <div class="logo">
-    <i data-lucide="mountain"></i>
-  </div>
-
-  <div>
-    <div class="brand-title">KURDIA ADMIN</div>
-    <div class="brand-sub">ADVENTURE WEBSITE BUILDER</div>
-  </div>
-</div>
-
-<div class="top-actions">
-
-  <div class="status desktop-only">
-    <span class="status-dot"></span>
-    Local Builder
-  </div>
-
-  <button class="icon-btn desktop-only" title="Undo" onclick="undo()">
-    <i data-lucide="undo-2"></i>
-  </button>
-
-  <button class="icon-btn desktop-only" title="Redo" onclick="redo()">
-    <i data-lucide="redo-2"></i>
-  </button>
-
-  <button class="icon-btn" title="Preview" onclick="openPublicSite()">
-    <i data-lucide="external-link"></i>
-  </button>
-
-  <button class="primary-btn" onclick="publish()">
-    <i data-lucide="send" style="width:15px;height:15px;vertical-align:-3px"></i>
-    Publish
-  </button>
 
 </div>
 
-  </header>  <div class="layout"><!-- SIDEBAR -->
 
-<aside class="sidebar" id="sidebar">
+<!-- APP -->
 
-  <div class="panel-title">بەشەکانی ویبسایت</div>
+<div id="app" class="app hidden-force">
 
-  <div id="sectionList" class="section-list"></div>
+  <!-- SIDEBAR -->
 
-  <div style="height:12px"></div>
+  <aside id="sidebar" class="sidebar">
 
-  <button class="small-btn" style="width:100%" onclick="openAddSectionModal()">
-    <i data-lucide="plus" style="width:14px;height:14px;vertical-align:-3px"></i>
-    زیادکردنی بەش
-  </button>
+    <div class="flex items-center gap-3 px-2 pb-5">
 
-  <div style="height:20px"></div>
-
-  <div class="panel-title">ئامرازەکان</div>
-
-  <div style="display:grid;gap:6px">
-
-    <button class="small-btn" onclick="openSettings('theme')">
-      🎨 Theme
-    </button>
-
-    <button class="small-btn" onclick="openSettings('seo')">
-      🔎 SEO
-    </button>
-
-    <button class="small-btn" onclick="openSettings('media')">
-      🖼️ Media
-    </button>
-
-    <button class="small-btn" onclick="exportData()">
-      📤 Export
-    </button>
-
-    <button class="small-btn" onclick="openImportModal()">
-      📥 Import
-    </button>
-
-    <button class="small-btn danger-btn" onclick="resetAll()">
-      ♻️ Reset
-    </button>
-
-  </div>
-
-</aside>
-
-
-<!-- MAIN -->
-
-<main class="main">
-
-  <div class="workspace">
-
-    <div class="workspace-head">
+      <div class="logo-box !w-11 !h-11 !rounded-xl">
+        <i data-lucide="mountain" class="w-5 h-5"></i>
+      </div>
 
       <div>
-        <div class="workspace-title">
-          KURDIA Website Builder
+
+        <div class="font-black text-sm">
+          KURDIA
         </div>
 
-        <div class="workspace-sub">
-          گۆڕانکارییەکان لەسەر data ـی ڕاستەقینەی ویبسایتەکەت
+        <div class="text-[9px] text-gray-500 tracking-widest">
+          ADMIN
         </div>
-      </div>
-
-      <div class="device-switch">
-
-        <button id="deviceDesktop" class="active"
-          onclick="setDevice('desktop')" title="Desktop">
-          <i data-lucide="monitor"></i>
-        </button>
-
-        <button id="deviceTablet"
-          onclick="setDevice('tablet')" title="Tablet">
-          <i data-lucide="tablet"></i>
-        </button>
-
-        <button id="deviceMobile"
-          onclick="setDevice('mobile')" title="Mobile">
-          <i data-lucide="smartphone"></i>
-        </button>
 
       </div>
 
     </div>
 
 
-    <div class="preview-shell">
+    <div class="text-[10px] text-gray-600 font-bold px-2 mb-2">
+      بەڕێوەبردن
+    </div>
 
-      <div class="preview-toolbar">
 
-        <div class="preview-url">
-          index.html — Live Preview
+    <div class="space-y-1">
+
+      <button
+        class="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-white/5 text-white text-sm"
+      >
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+        داشبۆرد
+      </button>
+
+      <button
+        onclick="focusSections()"
+        class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white text-sm"
+      >
+        <i data-lucide="layers-3" class="w-4 h-4"></i>
+        بەشەکانی سایت
+      </button>
+
+      <button
+        onclick="focusMedia()"
+        class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white text-sm"
+      >
+        <i data-lucide="images" class="w-4 h-4"></i>
+        وێنەکان
+      </button>
+
+      <button
+        onclick="focusTheme()"
+        class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white text-sm"
+      >
+        <i data-lucide="palette" class="w-4 h-4"></i>
+        ڕەنگ و ڕووکاری
+      </button>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <div class="flex items-center justify-between px-2 mb-2">
+
+      <div class="text-[10px] text-gray-600 font-bold">
+        بەشەکان
+      </div>
+
+      <button
+        onclick="addSection()"
+        class="mini-btn"
+        title="زیادکردنی بەش"
+      >
+        <i data-lucide="plus" class="w-4 h-4"></i>
+      </button>
+
+    </div>
+
+
+    <div id="sectionList" class="section-list p-0"></div>
+
+
+    <div class="mt-5 pt-5 border-t border-white/5">
+
+      <button
+        onclick="logout()"
+        class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-gray-500 hover:text-red-400 hover:bg-red-500/5 text-sm"
+      >
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        چوونەدەرەوە
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+      <div class="flex items-center gap-3">
+
+        <button
+          onclick="toggleSidebar()"
+          class="mobile-sidebar-button mini-btn"
+        >
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <div>
+
+          <div class="font-black text-sm">
+            Smart Website Builder
+          </div>
+
+          <div class="text-[10px] text-gray-600">
+            KURDIA ADVENTURE
+          </div>
+
         </div>
 
-        <button class="small-btn" onclick="reloadPreview()">
-          <i data-lucide="refresh-cw"
-             style="width:12px;height:12px;vertical-align:-2px"></i>
-          نوێکردنەوە
+      </div>
+
+
+      <div class="topbar-actions flex items-center gap-2">
+
+        <button
+          onclick="undo()"
+          class="desktop-only mini-btn"
+          title="Undo"
+        >
+          <i data-lucide="undo-2" class="w-4 h-4"></i>
+        </button>
+
+        <button
+          onclick="redo()"
+          class="desktop-only mini-btn"
+          title="Redo"
+        >
+          <i data-lucide="redo-2" class="w-4 h-4"></i>
+        </button>
+
+        <button
+          onclick="saveDraft()"
+          class="desktop-only px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold"
+        >
+          پاشەکەوتکردن
+        </button>
+
+        <button
+          onclick="publish()"
+          class="primary px-5 py-2.5 rounded-xl text-xs font-bold btn"
+        >
+          <span class="flex items-center gap-2">
+            <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+            Publish
+          </span>
         </button>
 
       </div>
 
-      <div class="preview-area">
+    </header>
 
-        <iframe
-          id="previewFrame"
-          src="index.html"
-          title="Kurdia Website Preview">
-        </iframe>
 
-      </div>
+    <!-- WORKSPACE -->
+
+    <div class="workspace">
+
+      <!-- SECTIONS -->
+
+      <section
+        id="sectionsPanel"
+        class="panel sections-panel"
+      >
+
+        <div class="panel-title flex items-center justify-between">
+
+          <span>
+            بەشەکانی ویبسایت
+          </span>
+
+          <button
+            onclick="addSection()"
+            class="mini-btn"
+          >
+            <i data-lucide="plus" class="w-4 h-4"></i>
+          </button>
+
+        </div>
+
+        <div
+          id="desktopSectionList"
+          class="section-list"
+        ></div>
+
+      </section>
+
+
+      <!-- PREVIEW -->
+
+      <section class="preview">
+
+        <div class="preview-toolbar">
+
+          <button
+            class="device-btn active"
+            data-device="desktop"
+            onclick="setDevice('desktop',this)"
+          >
+            <i data-lucide="monitor" class="w-4 h-4"></i>
+            Desktop
+          </button>
+
+          <button
+            class="device-btn"
+            data-device="tablet"
+            onclick="setDevice('tablet',this)"
+          >
+            <i data-lucide="tablet" class="w-4 h-4"></i>
+            Tablet
+          </button>
+
+          <button
+            class="device-btn"
+            data-device="mobile"
+            onclick="setDevice('mobile',this)"
+          >
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+            Mobile
+          </button>
+
+          <button
+            onclick="reloadPreview()"
+            class="device-btn"
+            title="نوێکردنەوە"
+          >
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
+
+          <button
+            onclick="openWebsite()"
+            class="device-btn"
+            title="کردنەوەی سایت"
+          >
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+          </button>
+
+        </div>
+
+
+        <div class="preview-area">
+
+          <div
+            id="previewFrame"
+            class="preview-frame"
+          >
+
+            <iframe
+              id="sitePreview"
+              src="index.html"
+              title="KURDIA Website Preview"
+            ></iframe>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- INSPECTOR -->
+
+      <section
+        id="inspectorPanel"
+        class="panel inspector-panel"
+      >
+
+        <div class="panel-title flex items-center justify-between">
+
+          <span>
+            دەستکاریکردن
+          </span>
+
+          <button
+            onclick="closeInspector()"
+            class="mini-btn"
+          >
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+
+        </div>
+
+        <div
+          id="inspector"
+          class="inspector"
+        ></div>
+
+      </section>
 
     </div>
 
-  </div>
-
-</main>
-
-
-<!-- INSPECTOR -->
-
-<aside class="inspector" id="inspector">
-
-  <div id="inspectorContent"></div>
-
-</aside>
-
-  </div></div><div id="toast" class="toast"></div><!-- ADD SECTION MODAL --><div id="addSectionModal" class="modal-backdrop">  <div class="modal"><div style="display:flex;justify-content:space-between;align-items:center">
-  <div style="font-weight:900">زیادکردنی بەش</div>
-  <button class="icon-btn" onclick="closeModal('addSectionModal')">
-    <i data-lucide="x"></i>
-  </button>
-</div>
-
-<div style="height:12px"></div>
-
-<div class="row">
-
-  <button class="small-btn" onclick="addSection('hero')">Hero</button>
-  <button class="small-btn" onclick="addSection('trip')">گەشت</button>
-  <button class="small-btn" onclick="addSection('services')">خزمەتگوزاری</button>
-  <button class="small-btn" onclick="addSection('steps')">هەنگاوەکان</button>
-  <button class="small-btn" onclick="addSection('gallery')">وێنەکان</button>
-  <button class="small-btn" onclick="addSection('faq')">FAQ</button>
-  <button class="small-btn" onclick="addSection('booking')">Booking</button>
-  <button class="small-btn" onclick="addSection('custom')">Custom</button>
+  </main>
 
 </div>
 
-  </div></div><!-- IMPORT MODAL --><div id="importModal" class="modal-backdrop">  <div class="modal"><div style="display:flex;justify-content:space-between;align-items:center">
-  <div style="font-weight:900">Import Data</div>
 
-  <button class="icon-btn" onclick="closeModal('importModal')">
-    <i data-lucide="x"></i>
-  </button>
-</div>
+<div id="toast" class="toast"></div>
 
-<div style="height:12px"></div>
 
-<textarea
-  id="importTextarea"
-  style="
-    width:100%;
-    min-height:300px;
-    background:#080d15;
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:12px;
-    color:#fff;
-    direction:ltr;
-    outline:none;
-    font-size:11px;
-  "
-  placeholder='{"gradColor1":"#9d1c32",...}'
-></textarea>
-
-<div style="height:10px"></div>
-
-<button class="primary-btn" style="width:100%" onclick="importData()">
-  Import
-</button>
-
-  </div></div><script>
+<script>
 
 /* =========================================================
    CONFIG
@@ -831,114 +964,119 @@ button{cursor:pointer}
 
 const SECRET_PIN = "2026";
 
-const STORAGE_PUBLISHED = "kurdia_builder_published_v3";
-const STORAGE_DRAFT = "kurdia_builder_draft_v3";
-const STORAGE_HISTORY = "kurdia_admin_history_v3";
+const DRAFT_KEY =
+  "kurdia_builder_draft_v3";
+
+const PUBLISHED_KEY =
+  "kurdia_builder_published_v3";
+
+/*
+  ئەگەر Worker ـەکەت هەیە،
+  تەنها ئەم URL ـە دابنێ.
+*/
+const REMOTE_ENDPOINT =
+  window.KURDIA_ADMIN_ENDPOINT || "";
 
 
 /* =========================================================
    DEFAULT DATA
-   MATCHES REAL index.html DATA MODEL
 ========================================================= */
 
 const DEFAULT_DATA = {
 
   gradColor1:"#9d1c32",
+
   gradColor2:"#111827",
 
   heroBadge:"KURDIA ADVENTURE",
 
   heroTitle:"گەشتێک بۆ ناو سروشتی کوردستان",
 
-  heroSubtitle:
-    "گەشت، سروشت، هاوڕێتی و یادەوەرییەکان لەگەڵ KURDIA ADVENTURE",
+  heroSubtitle:"گەشت، سروشت، هاوڕێتی و یادەوەرییەکان لەگەڵ KURDIA ADVENTURE",
 
   heroImageUrl:"",
 
   bookingOpen:true,
 
   tripTitle:"گەشتی تایبەتی کوردیا",
+
   tripPrice:"50,000 IQD",
+
   tripDifficulty:"ئاسان",
+
   tripDuration:"1 ڕۆژ",
+
   tripTime:"06:00",
+
   tripLocation:"کوردستان",
-  tripDesc:
-    "گەشتێکی جوان بۆ ناو سروشت و شوێنە جوانەکانی کوردستان.",
+
+  tripDesc:"گەشتێکی تایبەتی بۆ ناو سروشت و شوێنە جوانەکانی کوردستان.",
 
   step1:"کۆبوونەوە",
+
   step2:"گەشتکردن",
+
   step3:"چوونە ناو سروشت",
+
   step4:"گەڕانەوە",
 
-  knowledgeAbout:
-    "KURDIA ADVENTURE گرووپێکی گەشت و سەرکێشییە کە گەشت بۆ سروشت و شاخەکانی کوردستان ڕێکدەخات.",
-
-  knowledgeEquipment:
-    "پاس، خواردن، ئاوی خواردنەوە، چای، نەسکافێ، خێمە، کارەبا و ڕووناکی، کورسی و مێز، ئاگر، یارمەتی فریاکەوتن و ڕێبەر.",
-
-  seoTitle:"KURDIA ADVENTURE",
-
-  seoDescription:
-    "گەشت و سەرکێشی لە سروشتی کوردستان.",
-
-  socialImage:"",
-
-  services:[
-    "پاس",
-    "نان و خواردن",
-    "ئاوی خواردنەوە و چای",
-    "خێمە",
-    "کارەبا و ڕووناکی",
-    "کورسی و مێز",
-    "ئەگەر و گەرما",
-    "پڕۆژێکتەر",
-    "یاری و چالاکی",
-    "ڕێبەری شارەزا",
-    "یارمەتی فریاکەوتن",
-    "کیسی خۆڵ",
-    "WC"
-  ],
+  services:[],
 
   gallery:[],
 
+  faq:[],
+
   sections:[
+
     {
       id:"hero_1",
       type:"hero",
       title:"Hero",
       visible:true
     },
+
     {
       id:"trip_1",
       type:"trip",
       title:"گەشت",
       visible:true
     },
+
     {
       id:"services_1",
       type:"services",
       title:"خزمەتگوزاری",
       visible:true
     },
+
     {
       id:"steps_1",
       type:"steps",
       title:"چۆن بەشداری بکەیت؟",
       visible:true
     },
+
     {
       id:"gallery_1",
       type:"gallery",
       title:"وێنەکان",
       visible:true
     },
+
+    {
+      id:"faq_1",
+      type:"faq",
+      title:"پرسیارەکان",
+      visible:true
+    },
+
     {
       id:"booking_1",
       type:"booking",
-      title:"Booking",
+      title:"بەشداری",
       visible:true
     }
+
   ]
 
 };
@@ -948,49 +1086,61 @@ const DEFAULT_DATA = {
    STATE
 ========================================================= */
 
-let siteData = clone(DEFAULT_DATA);
+let state =
+  clone(DEFAULT_DATA);
 
-let selectedSectionId = null;
+let selectedId =
+  null;
 
-let undoStack = [];
-let redoStack = [];
+let history = [];
 
-let currentDevice = "desktop";
+let historyIndex =
+  -1;
+
+let draggedId =
+  null;
 
 
 /* =========================================================
-   HELPERS
+   UTILS
 ========================================================= */
 
 function clone(obj){
-  return JSON.parse(JSON.stringify(obj));
+  return JSON.parse(
+    JSON.stringify(obj)
+  );
 }
 
 
-function mergeData(base, extra){
+function mergeData(base,extra){
 
   const result = {
-    ...clone(base),
-    ...(extra || {})
+    ...base,
+    ...extra
   };
 
   if(!Array.isArray(result.sections)){
-    result.sections = clone(DEFAULT_DATA.sections);
+    result.sections =
+      clone(DEFAULT_DATA.sections);
   }
 
   if(!Array.isArray(result.services)){
-    result.services = clone(DEFAULT_DATA.services);
+    result.services = [];
   }
 
   if(!Array.isArray(result.gallery)){
     result.gallery = [];
   }
 
+  if(!Array.isArray(result.faq)){
+    result.faq = [];
+  }
+
   return result;
 }
 
 
-function escapeHTML(value){
+function escapeHtml(value){
 
   return String(value ?? "")
     .replace(/&/g,"&amp;")
@@ -998,33 +1148,35 @@ function escapeHTML(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
-
 }
 
 
-function uid(prefix="section"){
-
-  return prefix + "_" +
-    Date.now().toString(36) +
-    Math.random().toString(36).slice(2,7);
-
+function escapeAttr(value){
+  return escapeHtml(value);
 }
 
 
 function showToast(message){
 
-  const el = document.getElementById("toast");
+  const toast =
+    document.getElementById("toast");
 
-  el.textContent = message;
+  toast.textContent =
+    message;
 
-  el.classList.add("show");
+  toast.classList.add("show");
 
-  clearTimeout(window.__toastTimer);
+  clearTimeout(
+    window.__toastTimer
+  );
 
-  window.__toastTimer = setTimeout(()=>{
-    el.classList.remove("show");
-  },2200);
-
+  window.__toastTimer =
+    setTimeout(
+      ()=>{
+        toast.classList.remove("show");
+      },
+      3000
+    );
 }
 
 
@@ -1035,63 +1187,83 @@ function showToast(message){
 function login(){
 
   const value =
-    document.getElementById("pinInput").value.trim();
+    document.getElementById(
+      "pinInput"
+    ).value.trim();
 
-  if(value === SECRET_PIN){
+  if(value !== SECRET_PIN){
 
-    sessionStorage.setItem(
-      "kurdia_admin_logged",
-      "1"
+    document.getElementById(
+      "loginError"
+    ).textContent =
+      "کۆدی چوونەژوورەوە هەڵەیە.";
+
+    return;
+  }
+
+  sessionStorage.setItem(
+    "kurdia_admin_login",
+    "1"
+  );
+
+  document
+    .getElementById(
+      "loginScreen"
+    )
+    .classList.add(
+      "hidden-force"
     );
 
-    document.getElementById("loginScreen").style.display="none";
-    document.getElementById("app").style.display="flex";
+  document
+    .getElementById(
+      "app"
+    )
+    .classList.remove(
+      "hidden-force"
+    );
 
-    init();
-
-  }else{
-
-    document.getElementById("loginError").textContent =
-      "PIN ـەکە هەڵەیە";
-
-  }
-
+  initializeAdmin();
 }
 
 
-/* =========================================================
-   INIT
-========================================================= */
+function logout(){
 
-function init(){
+  sessionStorage.removeItem(
+    "kurdia_admin_login"
+  );
 
-  loadState();
-
-  renderSectionList();
-
-  renderInspector();
-
-  renderPreview();
-
-  lucide.createIcons();
-
+  location.reload();
 }
 
 
-(function(){
+function checkLogin(){
 
   if(
-    sessionStorage.getItem("kurdia_admin_logged") === "1"
+    sessionStorage.getItem(
+      "kurdia_admin_login"
+    ) === "1"
   ){
 
-    document.getElementById("loginScreen").style.display="none";
-    document.getElementById("app").style.display="flex";
+    document
+      .getElementById(
+        "loginScreen"
+      )
+      .classList.add(
+        "hidden-force"
+      );
 
-    init();
+    document
+      .getElementById(
+        "app"
+      )
+      .classList.remove(
+        "hidden-force"
+      );
+
+    initializeAdmin();
 
   }
-
-})();
+}
 
 
 /* =========================================================
@@ -1102,32 +1274,31 @@ function loadState(){
 
   try{
 
-    const published =
-      localStorage.getItem(STORAGE_PUBLISHED);
-
     const draft =
-      localStorage.getItem(STORAGE_DRAFT);
+      localStorage.getItem(
+        DRAFT_KEY
+      );
+
+    const published =
+      localStorage.getItem(
+        PUBLISHED_KEY
+      );
 
     if(draft){
 
-      siteData =
-        mergeData(
-          DEFAULT_DATA,
-          JSON.parse(draft)
-        );
+      return mergeData(
+        clone(DEFAULT_DATA),
+        JSON.parse(draft)
+      );
 
-    }else if(published){
+    }
 
-      siteData =
-        mergeData(
-          DEFAULT_DATA,
-          JSON.parse(published)
-        );
+    if(published){
 
-    }else{
-
-      siteData =
-        clone(DEFAULT_DATA);
+      return mergeData(
+        clone(DEFAULT_DATA),
+        JSON.parse(published)
+      );
 
     }
 
@@ -1135,11 +1306,11 @@ function loadState(){
 
     console.error(error);
 
-    siteData =
-      clone(DEFAULT_DATA);
-
   }
 
+  return clone(
+    DEFAULT_DATA
+  );
 }
 
 
@@ -1147,32 +1318,62 @@ function loadState(){
    HISTORY
 ========================================================= */
 
-function snapshot(){
+function initializeHistory(){
 
-  undoStack.push(clone(siteData));
+  history = [
+    clone(state)
+  ];
 
-  if(undoStack.length > 50){
-    undoStack.shift();
+  historyIndex = 0;
+}
+
+
+function commit(){
+
+  history =
+    history.slice(
+      0,
+      historyIndex + 1
+    );
+
+  history.push(
+    clone(state)
+  );
+
+  if(history.length > 40){
+
+    history.shift();
+
+  }else{
+
+    historyIndex++;
+
   }
 
-  redoStack=[];
+  saveDraft(false);
+
+  renderAll();
 
 }
 
 
 function undo(){
 
-  if(!undoStack.length){
+  if(historyIndex <= 0){
 
-    showToast("هیچ گۆڕانکارییەکی تر نییە");
+    showToast(
+      "هیچ گۆڕانکارییەکی تر نییە."
+    );
 
     return;
   }
 
-  redoStack.push(clone(siteData));
+  historyIndex--;
 
-  siteData =
-    undoStack.pop();
+  state =
+    clone(
+      history[historyIndex]
+    );
 
   saveDraft(false);
 
@@ -1183,17 +1384,24 @@ function undo(){
 
 function redo(){
 
-  if(!redoStack.length){
+  if(
+    historyIndex >=
+    history.length - 1
+  ){
 
-    showToast("هیچ گۆڕانکارییەکی تر نییە");
+    showToast(
+      "هیچ گۆڕانکارییەکی تر نییە."
+    );
 
     return;
   }
 
-  undoStack.push(clone(siteData));
+  historyIndex++;
 
-  siteData =
-    redoStack.pop();
+  state =
+    clone(
+      history[historyIndex]
+    );
 
   saveDraft(false);
 
@@ -1203,18 +1411,22 @@ function redo(){
 
 
 /* =========================================================
-   SAVE DRAFT
+   SAVE
 ========================================================= */
 
 function saveDraft(show=true){
 
   localStorage.setItem(
-    STORAGE_DRAFT,
-    JSON.stringify(siteData)
+    DRAFT_KEY,
+    JSON.stringify(state)
   );
 
   if(show){
-    showToast("Draft هەڵگیرا");
+
+    showToast(
+      "✓ Draft پاشەکەوت کرا."
+    );
+
   }
 
 }
@@ -1224,23 +1436,70 @@ function saveDraft(show=true){
    PUBLISH
 ========================================================= */
 
-function publish(){
+async function publish(){
 
-  localStorage.setItem(
-    STORAGE_PUBLISHED,
-    JSON.stringify(siteData)
-  );
+  try{
 
-  localStorage.setItem(
-    STORAGE_DRAFT,
-    JSON.stringify(siteData)
-  );
+    localStorage.setItem(
+      PUBLISHED_KEY,
+      JSON.stringify(state)
+    );
 
-  sendStateToPreview();
+    /*
+      ناردنی state بۆ preview
+    */
 
-  showToast(
-    "Publish کرا"
-  );
+    sendStateToPreview();
+
+    /*
+      ئەگەر endpoint دانراوە،
+      state بۆ online API دەنێرێت.
+    */
+
+    if(REMOTE_ENDPOINT){
+
+      const response =
+        await fetch(
+          REMOTE_ENDPOINT,
+          {
+            method:"PUT",
+
+            headers:{
+              "Content-Type":
+                "application/json",
+
+              "X-Admin-Pin":
+                SECRET_PIN
+            },
+
+            body:
+              JSON.stringify(state)
+          }
+        );
+
+      if(!response.ok){
+
+        throw new Error(
+          "Online publish failed"
+        );
+
+      }
+
+    }
+
+    showToast(
+      "✓ گۆڕانکارییەکان Publish کران."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "❌ Publish سەرکەوتوو نەبوو."
+    );
+
+  }
 
 }
 
@@ -1251,13 +1510,13 @@ function publish(){
 
 function renderAll(){
 
-  renderSectionList();
+  renderSectionLists();
 
   renderInspector();
 
-  renderPreview();
+  sendStateToPreview();
 
-  lucide.createIcons();
+  setupIcons();
 
 }
 
@@ -1266,161 +1525,167 @@ function renderAll(){
    SECTION LIST
 ========================================================= */
 
-function sectionLabel(type){
+const sectionIcons = {
 
-  const labels = {
+  hero:"image",
 
-    hero:"Hero",
+  trip:"mountain",
 
-    trip:"گەشت",
+  services:"briefcase-business",
 
-    services:"خزمەتگوزاری",
+  steps:"list-checks",
 
-    steps:"هەنگاوەکان",
+  gallery:"images",
 
-    gallery:"وێنەکان",
+  faq:"circle-help",
 
-    faq:"پرسیارە باوەکان",
+  booking:"calendar-check",
 
-    booking:"بەشداری",
+  custom:"square-stack"
 
-    custom:"بەشی تایبەت"
+};
 
-  };
 
-  return labels[type] || type;
+function sectionLabel(section){
+
+  return section.title ||
+    ({
+      hero:"Hero",
+      trip:"گەشت",
+      services:"خزمەتگوزاری",
+      steps:"هەنگاوەکان",
+      gallery:"گەلەری",
+      faq:"پرسیارەکان",
+      booking:"بەشداری",
+      custom:"بەشی تایبەت"
+    }[section.type] || "بەش");
 
 }
 
 
-function renderSectionList(){
+function renderSectionLists(){
 
-  const box =
-    document.getElementById("sectionList");
+  const html =
+    state.sections
+      .map(
+        section =>
+          sectionItemHTML(
+            section
+          )
+      )
+      .join("");
 
-  if(!siteData.sections.length){
+  document.getElementById(
+    "sectionList"
+  ).innerHTML =
+    html;
 
-    box.innerHTML =
-      `<div class="empty">هیچ بەشێک نییە</div>`;
+  document.getElementById(
+    "desktopSectionList"
+  ).innerHTML =
+    html;
 
-    return;
+  bindDragDrop();
 
-  }
+}
 
-  box.innerHTML =
-    siteData.sections.map((section,index)=>{
 
-      const active =
-        section.id === selectedSectionId
-          ? "active"
-          : "";
+function sectionItemHTML(section){
 
-      const hidden =
-        section.visible === false;
+  const active =
+    selectedId === section.id
+      ? "active"
+      : "";
 
-      return `
+  const icon =
+    sectionIcons[
+      section.type
+    ] ||
+    "square";
 
-        <div
-          class="section-item ${active}"
-          draggable="true"
-          data-id="${escapeHTML(section.id)}"
-          ondragstart="dragStart(event,'${escapeHTML(section.id)}')"
-          ondragover="dragOver(event)"
-          ondrop="dropSection(event,'${escapeHTML(section.id)}')"
-          onclick="selectSection('${escapeHTML(section.id)}')"
-        >
+  return `
 
-          <div class="drag-handle">
-            <i data-lucide="grip-vertical"
-               style="width:15px;height:15px"></i>
-          </div>
+    <div
+      class="section-item ${active}"
+      draggable="true"
+      data-section-id="${escapeAttr(section.id)}"
+    >
 
-          <div class="section-info">
+      <div
+        class="section-main"
+      >
 
-            <div class="section-name">
-              ${escapeHTML(section.title || sectionLabel(section.type))}
-            </div>
-
-            <div class="section-type">
-              ${escapeHTML(sectionLabel(section.type))}
-            </div>
-
-          </div>
-
-          <button
-            class="eye-btn ${hidden ? "hidden-section":""}"
-            onclick="event.stopPropagation();toggleSection('${escapeHTML(section.id)}')"
-          >
-
-            <i
-              data-lucide="${hidden ? "eye-off":"eye"}"
-              style="width:15px;height:15px"
-            ></i>
-
-          </button>
-
+        <div class="drag-handle">
+          <i
+            data-lucide="grip-vertical"
+            class="w-4 h-4"
+          ></i>
         </div>
 
-      `;
+        <button
+          class="section-icon"
+          onclick="selectSection('${escapeAttr(section.id)}')"
+        >
+          <i
+            data-lucide="${icon}"
+            class="w-4 h-4"
+          ></i>
+        </button>
 
-    }).join("");
+        <button
+          class="section-name text-right"
+          onclick="selectSection('${escapeAttr(section.id)}')"
+        >
 
-  lucide.createIcons();
+          <strong>
+            ${escapeHtml(
+              sectionLabel(section)
+            )}
+          </strong>
 
-}
+          <span>
+            ${escapeHtml(
+              section.type
+            )}
+          </span>
 
+        </button>
 
-/* =========================================================
-   SELECT SECTION
-========================================================= */
+        <button
+          class="mini-btn"
+          onclick="toggleSection('${escapeAttr(section.id)}')"
+          title="نیشاندان / شاراوە"
+        >
 
-function selectSection(id){
+          <i
+            data-lucide="${
+              section.visible === false
+                ? "eye-off"
+                : "eye"
+            }"
+            class="w-4 h-4"
+          ></i>
 
-  selectedSectionId=id;
+        </button>
 
-  renderSectionList();
+        <button
+          class="mini-btn"
+          onclick="deleteSection('${escapeAttr(section.id)}')"
+          title="سڕینەوە"
+        >
 
-  renderInspector();
+          <i
+            data-lucide="trash-2"
+            class="w-4 h-4"
+          ></i>
 
-  if(window.innerWidth <= 1100){
+        </button>
 
-    document
-      .getElementById("inspector")
-      .classList.add("open");
+      </div>
 
-  }
+    </div>
 
-}
-
-
-/* =========================================================
-   TOGGLE SECTION
-========================================================= */
-
-function toggleSection(id){
-
-  snapshot();
-
-  const section =
-    siteData.sections.find(
-      s => s.id === id
-    );
-
-  if(!section) return;
-
-  section.visible =
-    section.visible === false;
-
-  saveDraft(false);
-
-  renderAll();
-
-  showToast(
-    section.visible
-      ? "بەشەکە پیشان درا"
-      : "بەشەکە شاردرایەوە"
-  );
-
+  `;
 }
 
 
@@ -1428,224 +1693,152 @@ function toggleSection(id){
    DRAG DROP
 ========================================================= */
 
-let dragId=null;
-
-
-function dragStart(event,id){
-
-  dragId=id;
-
-  event.dataTransfer.effectAllowed="move";
-
-}
-
-
-function dragOver(event){
-
-  event.preventDefault();
-
-  event.dataTransfer.dropEffect="move";
-
-}
-
-
-function dropSection(event,targetId){
-
-  event.preventDefault();
-
-  if(!dragId || dragId===targetId) return;
-
-  const from =
-    siteData.sections.findIndex(
-      s => s.id===dragId
-    );
-
-  const to =
-    siteData.sections.findIndex(
-      s => s.id===targetId
-    );
-
-  if(from<0 || to<0) return;
-
-  snapshot();
-
-  const item =
-    siteData.sections.splice(from,1)[0];
-
-  siteData.sections.splice(to,0,item);
-
-  saveDraft(false);
-
-  renderAll();
-
-  showToast("ڕیزبەندی نوێ کرایەوە");
-
-  dragId=null;
-
-}
-
-
-/* =========================================================
-   ADD SECTION
-========================================================= */
-
-function openAddSectionModal(){
+function bindDragDrop(){
 
   document
-    .getElementById("addSectionModal")
-    .classList.add("show");
+    .querySelectorAll(
+      ".section-item"
+    )
+    .forEach(
+      item => {
 
-}
+        item.addEventListener(
+          "dragstart",
+          event => {
 
+            draggedId =
+              item.dataset.sectionId;
 
-function addSection(type){
+            item.classList.add(
+              "dragging"
+            );
 
-  snapshot();
+            event.dataTransfer.effectAllowed =
+              "move";
 
-  let section;
+          }
+        );
 
-  if(type==="hero"){
+        item.addEventListener(
+          "dragend",
+          () => {
 
-    section={
-      id:uid("hero"),
-      type:"hero",
-      title:"Hero",
-      visible:true
-    };
+            item.classList.remove(
+              "dragging"
+            );
 
-  }else if(type==="trip"){
+          }
+        );
 
-    section={
-      id:uid("trip"),
-      type:"trip",
-      title:"گەشت",
-      visible:true
-    };
+        item.addEventListener(
+          "dragover",
+          event => {
 
-  }else if(type==="services"){
+            event.preventDefault();
 
-    section={
-      id:uid("services"),
-      type:"services",
-      title:"خزمەتگوزاری",
-      visible:true
-    };
+          }
+        );
 
-  }else if(type==="steps"){
+        item.addEventListener(
+          "drop",
+          event => {
 
-    section={
-      id:uid("steps"),
-      type:"steps",
-      title:"هەنگاوەکان",
-      visible:true
-    };
+            event.preventDefault();
 
-  }else if(type==="gallery"){
+            const targetId =
+              item.dataset.sectionId;
 
-    section={
-      id:uid("gallery"),
-      type:"gallery",
-      title:"وێنەکان",
-      visible:true
-    };
+            if(
+              !draggedId ||
+              draggedId === targetId
+            ){
 
-  }else if(type==="faq"){
+              return;
+            }
 
-    section={
-      id:uid("faq"),
-      type:"faq",
-      title:"پرسیارە باوەکان",
-      visible:true,
-      items:[
-        {
-          question:"پرسیاری نوێ",
-          answer:"وەڵام"
-        }
-      ]
-    };
+            const from =
+              state.sections.findIndex(
+                s =>
+                  s.id === draggedId
+              );
 
-  }else if(type==="booking"){
+            const to =
+              state.sections.findIndex(
+                s =>
+                  s.id === targetId
+              );
 
-    section={
-      id:uid("booking"),
-      type:"booking",
-      title:"بەشداری",
-      visible:true
-    };
+            if(
+              from < 0 ||
+              to < 0
+            ){
 
-  }else{
+              return;
 
-    section={
-      id:uid("custom"),
-      type:"custom",
-      title:"بەشی نوێ",
-      visible:true,
-      heading:"ناونیشانی بەش",
-      text:"دەقەکەت لێرە بنووسە",
-      image:"",
-      buttonText:"",
-      buttonUrl:""
-    };
+            }
 
-  }
+            const moved =
+              state.sections.splice(
+                from,
+                1
+              )[0];
 
-  siteData.sections.push(section);
+            state.sections.splice(
+              to,
+              0,
+              moved
+            );
 
-  selectedSectionId=section.id;
+            commit();
 
-  closeModal("addSectionModal");
+            draggedId =
+              null;
 
-  saveDraft(false);
+          }
+        );
 
-  renderAll();
-
-  showToast("بەش زیاد کرا");
+      }
+    );
 
 }
 
 
 /* =========================================================
-   DELETE SECTION
+   SELECT
 ========================================================= */
 
-function deleteSelectedSection(){
+function selectSection(id){
 
-  if(!selectedSectionId){
+  selectedId =
+    id;
 
-    showToast("سەرەتا بەشێک هەڵبژێرە");
+  renderSectionLists();
 
-    return;
+  renderInspector();
+
+  if(
+    window.innerWidth <= 850
+  ){
+
+    document
+      .getElementById(
+        "sidebar"
+      )
+      .classList.remove(
+        "open"
+      );
 
   }
 
-  const section =
-    siteData.sections.find(
-      s => s.id===selectedSectionId
-    );
+}
 
-  if(!section) return;
 
-  const ok =
-    confirm(
-      `دڵنیایت لە سڕینەوەی "${section.title}"؟`
-    );
+function getSelected(){
 
-  if(!ok) return;
-
-  snapshot();
-
-  siteData.sections =
-    siteData.sections.filter(
-      s => s.id!==selectedSectionId
-    );
-
-  selectedSectionId=null;
-
-  saveDraft(false);
-
-  renderAll();
-
-  showToast("بەشەکە سڕایەوە");
+  return state.sections.find(
+    section =>
+      section.id === selectedId
+  );
 
 }
 
@@ -1656,142 +1849,374 @@ function deleteSelectedSection(){
 
 function renderInspector(){
 
-  const box =
-    document.getElementById("inspectorContent");
-
-  if(!selectedSectionId){
-
-    box.innerHTML=`
-
-      <div class="form-card">
-
-        <div class="form-title">
-          <i data-lucide="mouse-pointer-click"
-             style="width:16px;height:16px"></i>
-
-          بەشێک هەڵبژێرە
-        </div>
-
-        <div style="font-size:10px;color:#697487;line-height:1.9">
-          لە لای چەپ بەشێک هەڵبژێرە بۆ دەستکاریکردنی ناوەڕۆکەکەی.
-        </div>
-
-      </div>
-
-      <div class="form-card">
-
-        <div class="form-title">
-          <i data-lucide="settings"
-             style="width:16px;height:16px"></i>
-
-          Site Settings
-        </div>
-
-        <button class="small-btn" style="width:100%;margin-bottom:7px"
-          onclick="openSettings('theme')">
-          🎨 Theme
-        </button>
-
-        <button class="small-btn" style="width:100%;margin-bottom:7px"
-          onclick="openSettings('seo')">
-          🔎 SEO
-        </button>
-
-        <button class="small-btn" style="width:100%"
-          onclick="openSettings('media')">
-          🖼️ Media
-        </button>
-
-      </div>
-
-    `;
-
-    lucide.createIcons();
-
-    return;
-
-  }
+  const inspector =
+    document.getElementById(
+      "inspector"
+    );
 
   const section =
-    siteData.sections.find(
-      s => s.id===selectedSectionId
-    );
+    getSelected();
 
   if(!section){
 
-    selectedSectionId=null;
+    inspector.innerHTML = `
+      <div class="empty">
+        <i
+          data-lucide="mouse-pointer-click"
+          class="w-9 h-9 mx-auto mb-4"
+        ></i>
 
-    renderInspector();
+        <div class="font-bold">
+          بەشێک هەڵبژێرە
+        </div>
+
+        <div class="text-xs mt-2 leading-6">
+          لە لیستی بەشەکان کلیک بکە بۆ دەستکاریکردن.
+        </div>
+      </div>
+    `;
+
+    renderGeneralInspector();
 
     return;
-
   }
 
-  box.innerHTML =
+  inspector.innerHTML =
+    buildInspector(
+      section
+    );
 
-    sectionHeader(section) +
+  bindInspectorEvents();
 
-    sectionFields(section);
-
-  lucide.createIcons();
+  setupIcons();
 
 }
 
 
-function sectionHeader(section){
+function buildInspector(section){
+
+  let html = `
+
+    <div class="mb-5">
+
+      <div class="text-lg font-black">
+        ${escapeHtml(
+          sectionLabel(section)
+        )}
+      </div>
+
+      <div class="text-[10px] text-gray-600 mt-1">
+        ${escapeHtml(section.type)}
+      </div>
+
+    </div>
+
+
+    <div class="flex items-center justify-between p-3 rounded-xl bg-white/[.03] border border-white/[.06] mb-5">
+
+      <div>
+
+        <div class="text-xs font-bold">
+          پیشاندانی بەش
+        </div>
+
+        <div class="text-[10px] text-gray-600 mt-1">
+          ئەم بەشە لە سایت نیشان بدرێت؟
+        </div>
+
+      </div>
+
+      <button
+        class="switch ${
+          section.visible !== false
+            ? "on"
+            : ""
+        }"
+        onclick="toggleSection('${escapeAttr(section.id)}')"
+      >
+        <span></span>
+      </button>
+
+    </div>
+
+  `;
+
+  switch(section.type){
+
+    case "hero":
+      html += heroInspector();
+      break;
+
+    case "trip":
+      html += tripInspector();
+      break;
+
+    case "services":
+      html += servicesInspector();
+      break;
+
+    case "steps":
+      html += stepsInspector();
+      break;
+
+    case "gallery":
+      html += galleryInspector();
+      break;
+
+    case "faq":
+      html += faqInspector();
+      break;
+
+    case "booking":
+      html += bookingInspector();
+      break;
+
+    case "custom":
+      html += customInspector(section);
+      break;
+
+  }
+
+  html += `
+
+    <div class="divider"></div>
+
+    <button
+      onclick="deleteSection('${escapeAttr(section.id)}')"
+      class="w-full py-3 rounded-xl bg-red-500/5 border border-red-500/10 text-red-400 text-xs font-bold"
+    >
+      <span class="flex items-center justify-center gap-2">
+        <i data-lucide="trash-2" class="w-4 h-4"></i>
+        سڕینەوەی ئەم بەشە
+      </span>
+    </button>
+
+  `;
+
+  return html;
+
+}
+
+
+/* =========================================================
+   HERO INSPECTOR
+========================================================= */
+
+function heroInspector(){
 
   return `
 
-    <div class="form-card">
+    <div class="field">
 
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:7px">
+      <label>
+        Badge
+      </label>
 
-        <div>
+      <input
+        id="heroBadge"
+        class="input"
+        value="${escapeAttr(
+          state.heroBadge
+        )}"
+      >
 
-          <div style="font-weight:900;font-size:14px">
-            ${escapeHTML(section.title || sectionLabel(section.type))}
-          </div>
+    </div>
 
-          <div style="font-size:9px;color:#697487;margin-top:3px">
-            ${escapeHTML(sectionLabel(section.type))}
-          </div>
 
-        </div>
+    <div class="field">
 
-        <button
-          class="small-btn danger-btn"
-          onclick="deleteSelectedSection()"
-        >
-          <i data-lucide="trash-2"
-             style="width:13px;height:13px;vertical-align:-2px"></i>
-        </button>
+      <label>
+        ناونیشانی سەرەکی
+      </label>
 
-      </div>
+      <textarea
+        id="heroTitle"
+        class="input textarea"
+      >${escapeHtml(
+        state.heroTitle
+      )}</textarea>
 
-      <div style="height:10px"></div>
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        دەقی ژێر ناونیشان
+      </label>
+
+      <textarea
+        id="heroSubtitle"
+        class="input textarea"
+      >${escapeHtml(
+        state.heroSubtitle
+      )}</textarea>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        بەستەری وێنەی Hero
+      </label>
+
+      <input
+        id="heroImageUrl"
+        class="input"
+        dir="ltr"
+        placeholder="https://..."
+        value="${escapeAttr(
+          state.heroImageUrl
+        )}"
+      >
+
+    </div>
+
+
+    <button
+      onclick="focusMedia()"
+      class="w-full py-3 rounded-xl bg-white/5 border border-white/10 text-xs font-bold"
+    >
+      <span class="flex items-center justify-center gap-2">
+        <i data-lucide="images" class="w-4 h-4"></i>
+        هەڵبژاردنی وێنە
+      </span>
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   TRIP INSPECTOR
+========================================================= */
+
+function tripInspector(){
+
+  return `
+
+    <div class="field">
+
+      <label>
+        ناونیشانی گەشت
+      </label>
+
+      <input
+        id="tripTitle"
+        class="input"
+        value="${escapeAttr(
+          state.tripTitle
+        )}"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        نرخ
+      </label>
+
+      <input
+        id="tripPrice"
+        class="input"
+        value="${escapeAttr(
+          state.tripPrice
+        )}"
+      >
+
+    </div>
+
+
+    <div class="grid grid-cols-2 gap-3">
 
       <div class="field">
 
-        <label>ناوی بەش لە Admin</label>
+        <label>
+          ئاست
+        </label>
 
         <input
-          value="${escapeHTML(section.title || "")}"
-          oninput="updateSectionTitle(this.value)"
+          id="tripDifficulty"
+          class="input"
+          value="${escapeAttr(
+            state.tripDifficulty
+          )}"
         >
 
       </div>
 
-      <label style="display:flex;align-items:center;gap:8px;font-size:10px;color:#aeb6c3">
+      <div class="field">
+
+        <label>
+          ماوە
+        </label>
 
         <input
-          type="checkbox"
-          ${section.visible !== false ? "checked":""}
-          onchange="setSectionVisible(this.checked)"
+          id="tripDuration"
+          class="input"
+          value="${escapeAttr(
+            state.tripDuration
+          )}"
         >
 
-        بەشەکە پیشان بدرێت
+      </div>
 
+    </div>
+
+
+    <div class="grid grid-cols-2 gap-3">
+
+      <div class="field">
+
+        <label>
+          کات
+        </label>
+
+        <input
+          id="tripTime"
+          class="input"
+          value="${escapeAttr(
+            state.tripTime
+          )}"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          شوێن
+        </label>
+
+        <input
+          id="tripLocation"
+          class="input"
+          value="${escapeAttr(
+            state.tripLocation
+          )}"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        وردەکاری گەشت
       </label>
+
+      <textarea
+        id="tripDesc"
+        class="input textarea"
+      >${escapeHtml(
+        state.tripDesc
+      )}</textarea>
 
     </div>
 
@@ -1800,1411 +2225,1759 @@ function sectionHeader(section){
 }
 
 
-function sectionFields(section){
+/* =========================================================
+   SERVICES INSPECTOR
+========================================================= */
 
-  switch(section.type){
+function servicesInspector(){
 
-    case "hero":
-      return heroFields();
+  return `
 
-    case "trip":
-      return tripFields();
+    <div class="flex items-center justify-between mb-4">
 
-    case "services":
-      return servicesFields();
+      <div class="field-title !mb-0">
+        خزمەتگوزارییەکان
+      </div>
 
-    case "steps":
-      return stepsFields();
+      <button
+        onclick="addService()"
+        class="mini-btn"
+      >
+        <i data-lucide="plus" class="w-4 h-4"></i>
+      </button>
 
-    case "gallery":
-      return galleryFields();
+    </div>
 
-    case "faq":
-      return faqFields(section);
+    <div id="servicesEditor">
 
-    case "booking":
-      return bookingFields();
+      ${
+        state.services.map(
+          (service,index) => `
 
-    case "custom":
-      return customFields(section);
+            <div
+              class="service-row flex gap-2"
+            >
 
-    default:
-      return "";
+              <input
+                class="input service-input"
+                data-index="${index}"
+                value="${escapeAttr(service)}"
+              >
 
-  }
+              <button
+                onclick="removeService(${index})"
+                class="mini-btn text-red-400"
+              >
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+
+            </div>
+
+          `
+        ).join("")
+      }
+
+    </div>
+
+  `;
 
 }
 
 
 /* =========================================================
-   COMMON FIELD
+   STEPS
 ========================================================= */
 
-function fieldInput(label,key,value,textarea=false){
+function stepsInspector(){
+
+  const steps = [
+    ["step1","هەنگاوی ١",state.step1],
+    ["step2","هەنگاوی ٢",state.step2],
+    ["step3","هەنگاوی ٣",state.step3],
+    ["step4","هەنگاوی ٤",state.step4]
+  ];
+
+  return `
+
+    <div class="field-title">
+      هەنگاوەکان
+    </div>
+
+    ${
+      steps.map(
+        item => `
+
+          <div class="field">
+
+            <label>
+              ${item[1]}
+            </label>
+
+            <input
+              id="${item[0]}"
+              class="input"
+              value="${escapeAttr(item[2])}"
+            >
+
+          </div>
+
+        `
+      ).join("")
+    }
+
+  `;
+
+}
+
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+function galleryInspector(){
 
   return `
 
     <div class="field">
 
-      <label>${escapeHTML(label)}</label>
+      <div class="flex items-center justify-between">
 
-      ${
-        textarea
-        ?
-        `<textarea oninput="updateData('${key}',this.value)">${escapeHTML(value)}</textarea>`    :
-    `<input value="${escapeHTML(value)}"
-      oninput="updateData('${key}',this.value)">`
-  }
-
-</div>
-
-`;
-
-}
-
-/* =========================================================
-HERO
-========================================================= */
-
-function heroFields(){
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="sparkles"></i>
-    Hero
-  </div>
-
-  ${fieldInput("Badge","heroBadge",siteData.heroBadge)}
-
-  ${fieldInput("ناونیشانی سەرەکی","heroTitle",siteData.heroTitle,true)}
-
-  ${fieldInput("ژێرناونیشان","heroSubtitle",siteData.heroSubtitle,true)}
-
-  ${imageField(
-    "heroImageUrl",
-    "وێنەی Hero",
-    siteData.heroImageUrl
-  )}
-
-</div>
-
-${tripQuickFields()}
-
-`;
-
-}
-
-function tripQuickFields(){
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="info"></i>
-    زانیارییە سەرەکییەکانی گەشت
-  </div>
-
-  <div class="row">
-
-    ${fieldInput("شوێن","tripLocation",siteData.tripLocation)}
-
-    ${fieldInput("کات","tripTime",siteData.tripTime)}
-
-  </div>
-
-  <div class="row">
-
-    ${fieldInput("ماوە","tripDuration",siteData.tripDuration)}
-
-    ${fieldInput("ئاست","tripDifficulty",siteData.tripDifficulty)}
-
-  </div>
-
-</div>
-
-`;
-
-}
-
-/* =========================================================
-TRIP
-========================================================= */
-
-function tripFields(){
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="mountain"></i>
-    زانیاری گەشت
-  </div>
-
-  ${fieldInput("ناوی گەشت","tripTitle",siteData.tripTitle,true)}
-
-  ${fieldInput("نرخ","tripPrice",siteData.tripPrice)}
-
-  <div class="row">
-
-    ${fieldInput("ئاست","tripDifficulty",siteData.tripDifficulty)}
-
-    ${fieldInput("ماوە","tripDuration",siteData.tripDuration)}
-
-  </div>
-
-  <div class="row">
-
-    ${fieldInput("کات","tripTime",siteData.tripTime)}
-
-    ${fieldInput("شوێن","tripLocation",siteData.tripLocation)}
-
-  </div>
-
-  ${fieldInput("وەسفی گەشت","tripDesc",siteData.tripDesc,true)}
-
-</div>
-
-`;
-
-}
-
-/* =========================================================
-SERVICES
-========================================================= */
-
-function servicesFields(){
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="list-checks"></i>
-    خزمەتگوزارییەکان
-  </div>
-
-  <div id="servicesArray">
-
-    ${
-      siteData.services.map((item,index)=>`
-
-        <div class="array-item">
-
-          <input
-            value="${escapeHTML(item)}"
-            oninput="updateArrayItem('services',${index},this.value)"
-          >
-
-          <button
-            class="small-btn danger-btn"
-            onclick="removeArrayItem('services',${index})"
-          >
-            ×
-          </button>
-
-        </div>
-
-      `).join("")
-    }
-
-  </div>
-
-  <button class="small-btn" style="width:100%;margin-top:4px"
-    onclick="addArrayItem('services')">
-    + زیادکردنی خزمەتگوزاری
-  </button>
-
-</div>
-
-`;
-
-}
-
-/* =========================================================
-STEPS
-========================================================= */
-
-function stepsFields(){
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="route"></i>
-    هەنگاوەکان
-  </div>
-
-  ${fieldInput("هەنگاوی 1","step1",siteData.step1)}
-
-  ${fieldInput("هەنگاوی 2","step2",siteData.step2)}
-
-  ${fieldInput("هەنگاوی 3","step3",siteData.step3)}
-
-  ${fieldInput("هەنگاوی 4","step4",siteData.step4)}
-
-</div>
-
-`;
-
-}
-
-/* =========================================================
-GALLERY
-========================================================= */
-
-function galleryFields(){
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="images"></i>
-    وێنەکان
-  </div>
-
-  <div id="galleryArray">
-
-    ${
-      siteData.gallery.map((item,index)=>`
-
-        <div class="form-card" style="padding:8px">
-
-          ${
-            item
-            ?
-            `<img
-              src="${escapeHTML(item)}"
-              class="image-preview"
-              onerror="this.style.display='none'"
-            >`
-            :
-            ""
-          }
-
-          <div class="array-item">
-
-            <input
-              value="${escapeHTML(item)}"
-              placeholder="Image URL"
-              oninput="updateArrayItem('gallery',${index},this.value)"
-            >
-
-            <button
-              class="small-btn danger-btn"
-              onclick="removeArrayItem('gallery',${index})"
-            >
-              ×
-            </button>
-
-          </div>
-
-        </div>
-
-      `).join("")
-    }
-
-  </div>
-
-  <button
-    class="small-btn"
-    style="width:100%;margin-bottom:7px"
-    onclick="addArrayItem('gallery')"
-  >
-    + زیادکردنی وێنە
-  </button>
-
-  <label class="small-btn"
-    style="display:block;text-align:center">
-    📁 هەڵبژاردنی وێنە
-
-    <input
-      type="file"
-      accept="image/*"
-      style="display:none"
-      onchange="handleGalleryUpload(event)"
-    >
-  </label>
-
-</div>
-
-`;
-
-}
-
-/* =========================================================
-FAQ
-========================================================= */
-
-function faqFields(section){
-
-if(!Array.isArray(section.items)){
-section.items=[];
-}
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="circle-help"></i>
-    FAQ
-  </div>
-
-  ${
-    section.items.map((item,index)=>`
-
-      <div class="form-card" style="padding:9px">
-
-        <div class="field">
-
-          <label>پرسیار</label>
-
-          <input
-            value="${escapeHTML(item.question || "")}"
-            oninput="updateFAQ(${index},'question',this.value)"
-          >
-
-        </div>
-
-        <div class="field">
-
-          <label>وەڵام</label>
-
-          <textarea
-            oninput="updateFAQ(${index},'answer',this.value)"
-          >${escapeHTML(item.answer || "")}</textarea>
-
+        <div class="field-title !mb-0">
+          وێنەکانی گەلەری
         </div>
 
         <button
-          class="small-btn danger-btn"
-          onclick="removeFAQ(${index})"
+          onclick="addGalleryImage()"
+          class="mini-btn"
         >
-          سڕینەوە
+          <i data-lucide="plus" class="w-4 h-4"></i>
         </button>
 
       </div>
 
-    `).join("")
-  }
+    </div>
 
-  <button
-    class="small-btn"
-    style="width:100%"
-    onclick="addFAQ()"
-  >
-    + زیادکردنی FAQ
-  </button>
 
-</div>
-
-`;
-
-}
-
-/* =========================================================
-BOOKING
-========================================================= */
-
-function bookingFields(){
-
-return `
-
-<div class="form-card">
-
-  <div class="form-title">
-    <i data-lucide="calendar-check"></i>
-    بەشداری
-  </div>
-
-  <label style="display:flex;align-items:center;gap:8px;font-size:11px">
-
-    <input
-      type="checkbox"
-      ${siteData.bookingOpen ? "checked":""}
-      onchange="updateData('bookingOpen',this.checked)"
+    <div
+      id="galleryEditor"
+      class="space-y-2"
     >
 
-    بەشداری کراوەیە
+      ${
+        state.gallery.map(
+          (image,index) => {
 
-  </label>
+            const src =
+              typeof image === "string"
+                ? image
+                : image.url || image.src || "";
 
-</div>
+            return `
 
-<div class="form-card">
+              <div
+                class="gallery-row"
+              >
 
-  <div class="form-title">
-    <i data-lucide="book-open"></i>
-    زانیاری AI Assistant
-  </div>
+                <div class="flex gap-2">
 
-  ${fieldInput(
-    "دەربارەی KURDIA",
-    "knowledgeAbout",
-    siteData.knowledgeAbout,
-    true
-  )}
+                  <input
+                    class="input gallery-input"
+                    data-index="${index}"
+                    dir="ltr"
+                    value="${escapeAttr(src)}"
+                    placeholder="https://..."
+                  >
 
-  ${fieldInput(
-    "کەرەستە و خزمەتگوزاری",
-    "knowledgeEquipment",
-    siteData.knowledgeEquipment,
-    true
-  )}
+                  <button
+                    onclick="removeGalleryImage(${index})"
+                    class="mini-btn text-red-400"
+                  >
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
 
-</div>
+                </div>
 
-`;
+              </div>
 
-}
+            `;
 
-/* =========================================================
-CUSTOM
-========================================================= */
+          }
+        ).join("")
+      }
 
-function customFields(section){
+    </div>
 
-return `
 
-<div class="form-card">
+    <div class="text-[10px] text-gray-600 leading-6 mt-3">
+      لینکێکی وێنە دابنێ یان وێنەکە لە Media Library ـەوە هەڵبژێرە.
+    </div>
 
-  <div class="form-title">
-    <i data-lucide="layout-template"></i>
-    Custom Section
-  </div>
-
-  ${fieldInput(
-    "ناونیشان",
-    "__custom_heading",
-    section.heading || "",
-    true
-  )}
-
-  ${fieldInput(
-    "دەق",
-    "__custom_text",
-    section.text || "",
-    true
-  )}
-
-  ${imageField(
-    "__custom_image",
-    "وێنە",
-    section.image || ""
-  )}
-
-  ${fieldInput(
-    "دەقی Button",
-    "__custom_buttonText",
-    section.buttonText || ""
-  )}
-
-  ${fieldInput(
-    "لینکی Button",
-    "__custom_buttonUrl",
-    section.buttonUrl || ""
-  )}
-
-</div>
-
-`;
+  `;
 
 }
 
+
 /* =========================================================
-IMAGE FIELD
+   FAQ
 ========================================================= */
 
-function imageField(key,label,value){
+function faqInspector(){
 
-return `
+  return `
 
-<div class="field">
+    <div class="flex items-center justify-between mb-4">
 
-  <label>${escapeHTML(label)}</label>
+      <div class="field-title !mb-0">
+        پرسیارەکان
+      </div>
 
-  ${
-    value
-    ?
-    `<img
-      class="image-preview"
-      src="${escapeHTML(value)}"
-      onerror="this.style.display='none'"
-    >`
-    :
+      <button
+        onclick="addFAQ()"
+        class="mini-btn"
+      >
+        <i data-lucide="plus" class="w-4 h-4"></i>
+      </button>
+
+    </div>
+
+
+    <div>
+
+      ${
+        state.faq.map(
+          (faq,index) => `
+
+            <div class="faq-row">
+
+              <div class="flex gap-2">
+
+                <input
+                  class="input faq-question"
+                  data-index="${index}"
+                  placeholder="پرسیار"
+                  value="${escapeAttr(
+                    faq.question
+                  )}"
+                >
+
+                <button
+                  onclick="removeFAQ(${index})"
+                  class="mini-btn text-red-400"
+                >
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+
+              </div>
+
+              <textarea
+                class="input textarea faq-answer mt-2"
+                data-index="${index}"
+                placeholder="وەڵام"
+              >${escapeHtml(
+                faq.answer
+              )}</textarea>
+
+            </div>
+
+          `
+        ).join("")
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   BOOKING
+========================================================= */
+
+function bookingInspector(){
+
+  return `
+
+    <div class="field">
+
+      <div class="flex items-center justify-between p-3 rounded-xl bg-white/[.03] border border-white/[.06]">
+
+        <div>
+
+          <div class="text-xs font-bold">
+            بەشداری کراوەیە؟
+          </div>
+
+          <div class="text-[10px] text-gray-600 mt-1">
+            ئەگەر داخراو بێت، دوگمەی بەشداری نیشان نادرێت.
+          </div>
+
+        </div>
+
+        <button
+          class="switch ${
+            state.bookingOpen !== false
+              ? "on"
+              : ""
+          }"
+          onclick="toggleBooking()"
+        >
+          <span></span>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        ژمارەی WhatsApp بۆ Booking
+      </label>
+
+      <input
+        id="bookingPhone"
+        class="input"
+        dir="ltr"
+        placeholder="9647xxxxxxxxx"
+        value="${escapeAttr(
+          state.bookingPhone || ""
+        )}"
+      >
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CUSTOM
+========================================================= */
+
+function customInspector(section){
+
+  return `
+
+    <div class="field">
+
+      <label>
+        ناونیشان
+      </label>
+
+      <input
+        id="customTitle"
+        class="input"
+        value="${escapeAttr(
+          section.title || ""
+        )}"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        ناوەڕۆک
+      </label>
+
+      <textarea
+        id="customContent"
+        class="input textarea"
+      >${escapeHtml(
+        section.content || ""
+      )}</textarea>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        وێنە
+      </label>
+
+      <input
+        id="customImage"
+        class="input"
+        dir="ltr"
+        value="${escapeAttr(
+          section.image || ""
+        )}"
+      >
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   INSPECTOR EVENTS
+========================================================= */
+
+function bindInspectorEvents(){
+
+  const bindings = [
+
+    ["heroBadge","heroBadge"],
+    ["heroTitle","heroTitle"],
+    ["heroSubtitle","heroSubtitle"],
+    ["heroImageUrl","heroImageUrl"],
+
+    ["tripTitle","tripTitle"],
+    ["tripPrice","tripPrice"],
+    ["tripDifficulty","tripDifficulty"],
+    ["tripDuration","tripDuration"],
+    ["tripTime","tripTime"],
+    ["tripLocation","tripLocation"],
+    ["tripDesc","tripDesc"],
+
+    ["step1","step1"],
+    ["step2","step2"],
+    ["step3","step3"],
+    ["step4","step4"],
+
+    ["bookingPhone","bookingPhone"]
+
+  ];
+
+  bindings.forEach(
+    ([id,key]) => {
+
+      const element =
+        document.getElementById(id);
+
+      if(!element){
+        return;
+      }
+
+      element.addEventListener(
+        "input",
+        () => {
+
+          state[key] =
+            element.value;
+
+          commit();
+
+        }
+      );
+
+    }
+  );
+
+
+  const customTitle =
+    document.getElementById(
+      "customTitle"
+    );
+
+  const customContent =
+    document.getElementById(
+      "customContent"
+    );
+
+  const customImage =
+    document.getElementById(
+      "customImage"
+    );
+
+  const section =
+    getSelected();
+
+  if(section && section.type === "custom"){
+
+    if(customTitle){
+
+      customTitle.addEventListener(
+        "input",
+        () => {
+
+          section.title =
+            customTitle.value;
+
+          commit();
+
+        }
+      );
+
+    }
+
+    if(customContent){
+
+      customContent.addEventListener(
+        "input",
+        () => {
+
+          section.content =
+            customContent.value;
+
+          commit();
+
+        }
+      );
+
+    }
+
+    if(customImage){
+
+      customImage.addEventListener(
+        "input",
+        () => {
+
+          section.image =
+            customImage.value;
+
+          commit();
+
+        }
+      );
+
+    }
+
+  }
+
+
+  document
+    .querySelectorAll(
+      ".service-input"
+    )
+    .forEach(
+      input => {
+
+        input.addEventListener(
+          "input",
+          () => {
+
+            state.services[
+              Number(
+                input.dataset.index
+              )
+            ] =
+              input.value;
+
+            commit();
+
+          }
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".gallery-input"
+    )
+    .forEach(
+      input => {
+
+        input.addEventListener(
+          "input",
+          () => {
+
+            state.gallery[
+              Number(
+                input.dataset.index
+              )
+            ] =
+              input.value;
+
+            commit();
+
+          }
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".faq-question"
+    )
+    .forEach(
+      input => {
+
+        input.addEventListener(
+          "input",
+          () => {
+
+            state.faq[
+              Number(
+                input.dataset.index
+              )
+            ].question =
+              input.value;
+
+            commit();
+
+          }
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".faq-answer"
+    )
+    .forEach(
+      input => {
+
+        input.addEventListener(
+          "input",
+          () => {
+
+            state.faq[
+              Number(
+                input.dataset.index
+              )
+            ].answer =
+              input.value;
+
+            commit();
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   SECTION ACTIONS
+========================================================= */
+
+function toggleSection(id){
+
+  const section =
+    state.sections.find(
+      s => s.id === id
+    );
+
+  if(!section){
+    return;
+  }
+
+  section.visible =
+    section.visible === false;
+
+  commit();
+
+}
+
+
+function deleteSection(id){
+
+  if(
+    !confirm(
+      "دڵنیایت لە سڕینەوەی ئەم بەشە؟"
+    )
+  ){
+
+    return;
+
+  }
+
+  state.sections =
+    state.sections.filter(
+      s => s.id !== id
+    );
+
+  if(selectedId === id){
+
+    selectedId =
+      null;
+
+  }
+
+  commit();
+
+}
+
+
+function addSection(){
+
+  const id =
+    "custom_" +
+    Date.now();
+
+  state.sections.push({
+
+    id,
+
+    type:"custom",
+
+    title:"بەشی نوێ",
+
+    content:
+      "ناوەڕۆکی خۆت لێرە بنووسە.",
+
+    image:"",
+
+    visible:true
+
+  });
+
+  selectedId =
+    id;
+
+  commit();
+
+}
+
+
+/* =========================================================
+   SERVICES ACTIONS
+========================================================= */
+
+function addService(){
+
+  state.services.push(
+    "خزمەتگوزاریی نوێ"
+  );
+
+  commit();
+
+}
+
+
+function removeService(index){
+
+  state.services.splice(
+    index,
+    1
+  );
+
+  commit();
+
+}
+
+
+/* =========================================================
+   GALLERY ACTIONS
+========================================================= */
+
+function addGalleryImage(){
+
+  state.gallery.push(
     ""
-  }
+  );
 
-  <input
-    value="${escapeHTML(value || "")}"
-    placeholder="https://..."
-    oninput="updateData('${key}',this.value)"
-  >
-
-  <div style="height:6px"></div>
-
-  <label class="small-btn"
-    style="display:block;text-align:center">
-
-    📁 هەڵبژاردنی فایل
-
-    <input
-      type="file"
-      accept="image/*"
-      style="display:none"
-      onchange="handleSingleImage(event,'${key}')"
-    >
-
-  </label>
-
-</div>
-
-`;
+  commit();
 
 }
+
+
+function removeGalleryImage(index){
+
+  state.gallery.splice(
+    index,
+    1
+  );
+
+  commit();
+
+}
+
 
 /* =========================================================
-UPDATE DATA
+   FAQ ACTIONS
 ========================================================= */
-
-function updateData(key,value){
-
-if(
-key.startsWith("_custom")
-){
-
-updateCustomField(
-  key,
-  value
-);
-
-return;
-
-}
-
-snapshot();
-
-siteData[key]=value;
-
-saveDraft(false);
-
-renderPreview();
-
-}
-
-function updateCustomField(key,value){
-
-const section =
-getSelectedSection();
-
-if(!section) return;
-
-snapshot();
-
-if(key==="__custom_heading"){
-section.heading=value;
-}
-
-if(key==="__custom_text"){
-section.text=value;
-}
-
-if(key==="__custom_image"){
-section.image=value;
-}
-
-if(key==="__custom_buttonText"){
-section.buttonText=value;
-}
-
-if(key==="__custom_buttonUrl"){
-section.buttonUrl=value;
-}
-
-saveDraft(false);
-
-renderPreview();
-
-}
-
-/* =========================================================
-SECTION TITLE
-========================================================= */
-
-function updateSectionTitle(value){
-
-const section =
-getSelectedSection();
-
-if(!section) return;
-
-snapshot();
-
-section.title=value;
-
-saveDraft(false);
-
-renderSectionList();
-
-}
-
-/* =========================================================
-SECTION VISIBLE
-========================================================= */
-
-function setSectionVisible(value){
-
-const section =
-getSelectedSection();
-
-if(!section) return;
-
-snapshot();
-
-section.visible=value;
-
-saveDraft(false);
-
-renderSectionList();
-
-renderPreview();
-
-}
-
-/* =========================================================
-GET SELECTED
-========================================================= */
-
-function getSelectedSection(){
-
-return siteData.sections.find(
-s => s.id===selectedSectionId
-);
-
-}
-
-/* =========================================================
-ARRAY
-========================================================= */
-
-function updateArrayItem(array,index,value){
-
-snapshot();
-
-siteData[array][index]=value;
-
-saveDraft(false);
-
-renderPreview();
-
-}
-
-function addArrayItem(array){
-
-snapshot();
-
-siteData[array].push("");
-
-saveDraft(false);
-
-renderInspector();
-
-renderPreview();
-
-}
-
-function removeArrayItem(array,index){
-
-snapshot();
-
-siteData[array].splice(index,1);
-
-saveDraft(false);
-
-renderInspector();
-
-renderPreview();
-
-}
-
-/* =========================================================
-FAQ
-========================================================= */
-
-function updateFAQ(index,key,value){
-
-const section =
-getSelectedSection();
-
-if(!section) return;
-
-if(!Array.isArray(section.items)){
-section.items=[];
-}
-
-snapshot();
-
-section.items[index][key]=value;
-
-saveDraft(false);
-
-renderPreview();
-
-}
 
 function addFAQ(){
 
-const section =
-getSelectedSection();
+  state.faq.push({
 
-if(!section) return;
+    question:
+      "پرسیاری نوێ",
 
-snapshot();
+    answer:
+      "وەڵامی پرسیار."
 
-if(!Array.isArray(section.items)){
-section.items=[];
-}
+  });
 
-section.items.push({
-question:"پرسیاری نوێ",
-answer:"وەڵامی پرسیار"
-});
-
-saveDraft(false);
-
-renderInspector();
-
-renderPreview();
+  commit();
 
 }
+
 
 function removeFAQ(index){
 
-const section =
-getSelectedSection();
+  state.faq.splice(
+    index,
+    1
+  );
 
-if(!section) return;
-
-snapshot();
-
-section.items.splice(index,1);
-
-saveDraft(false);
-
-renderInspector();
-
-renderPreview();
+  commit();
 
 }
+
 
 /* =========================================================
-IMAGE UPLOAD
+   BOOKING
 ========================================================= */
 
-function fileToDataURL(file){
+function toggleBooking(){
 
-return new Promise((resolve,reject)=>{
+  state.bookingOpen =
+    state.bookingOpen === false;
 
-const reader =
-  new FileReader();
-
-reader.onload =
-  () => resolve(reader.result);
-
-reader.onerror =
-  reject;
-
-reader.readAsDataURL(file);
-
-});
+  commit();
 
 }
 
-async function handleSingleImage(event,key){
-
-const file =
-event.target.files[0];
-
-if(!file) return;
-
-try{
-
-const data =
-  await fileToDataURL(file);
-
-snapshot();
-
-if(key==="__custom_image"){
-
-  const section =
-    getSelectedSection();
-
-  if(section){
-    section.image=data;
-  }
-
-}else{
-
-  siteData[key]=data;
-
-}
-
-saveDraft(false);
-
-renderInspector();
-
-renderPreview();
-
-showToast("وێنە زیاد کرا");
-
-}catch(error){
-
-console.error(error);
-
-showToast("کێشە لە خوێندنەوەی وێنە");
-
-}
-
-}
-
-async function handleGalleryUpload(event){
-
-const file =
-event.target.files[0];
-
-if(!file) return;
-
-try{
-
-const data =
-  await fileToDataURL(file);
-
-snapshot();
-
-siteData.gallery.push(data);
-
-saveDraft(false);
-
-renderInspector();
-
-renderPreview();
-
-showToast("وێنە زیاد کرا");
-
-}catch(error){
-
-console.error(error);
-
-}
-
-}
 
 /* =========================================================
-PREVIEW
+   PREVIEW
 ========================================================= */
-
-function renderPreview(){
-
-sendStateToPreview();
-
-}
 
 function sendStateToPreview(){
 
-const frame =
-document.getElementById("previewFrame");
+  const iframe =
+    document.getElementById(
+      "sitePreview"
+    );
+
+  if(!iframe){
+    return;
+  }
+
+  try{
+
+    iframe.contentWindow.postMessage(
+      {
+        type:
+          "KURDIA_BUILDER_STATE",
+        state:
+          clone(state)
+      },
+      "*"
+    );
+
+  }catch(error){
+
+    console.warn(error);
 
-if(!frame || !frame.contentWindow) return;
-
-frame.contentWindow.postMessage(
-{
-type:"KURDIA_BUILDER_STATE",
-state:clone(siteData)
-},
-"*"
-);
-
-}
-
-window.addEventListener(
-"message",
-event=>{
-
-if(
-  event.data &&
-  event.data.type ===
-  "REQUEST_KURDIA_STATE"
-){
-
-  sendStateToPreview();
-
-}
-
-}
-);
-
-function reloadPreview(){
-
-const frame =
-document.getElementById("previewFrame");
-
-frame.src="index.html?" + Date.now();
-
-setTimeout(
-sendStateToPreview,
-700
-);
-
-}
-
-/* =========================================================
-DEVICE
-========================================================= */
-
-function setDevice(device){
-
-currentDevice=device;
-
-document
-.querySelectorAll(".device-switch button")
-.forEach(btn=>btn.classList.remove("active"));
-
-document
-.getElementById(
-"device" +
-device.charAt(0).toUpperCase() +
-device.slice(1)
-)
-.classList.add("active");
-
-const frame =
-document.getElementById("previewFrame");
-
-if(device==="desktop"){
-
-frame.style.width="100%";
-
-}
-
-if(device==="tablet"){
-
-frame.style.width="768px";
-frame.style.maxWidth="100%";
-
-}
-
-if(device==="mobile"){
-
-frame.style.width="390px";
-frame.style.maxWidth="100%";
-
-}
-
-}
-
-/* =========================================================
-SETTINGS
-========================================================= */
-
-function openSettings(type){
-
-selectedSectionId=null;
-
-renderSectionList();
-
-const box =
-document.getElementById("inspectorContent");
-
-if(type==="theme"){
-
-box.innerHTML=`
-
-  <div class="form-card">
-
-    <div class="form-title">
-      🎨 Theme
-    </div>
-
-    <div class="field">
-
-      <label>Primary Color</label>
-
-      <div class="color-row">
-
-        <input
-          type="color"
-          value="${escapeHTML(siteData.gradColor1)}"
-          onchange="updateData('gradColor1',this.value);renderInspector()"
-        >
-
-        <input
-          value="${escapeHTML(siteData.gradColor1)}"
-          oninput="updateData('gradColor1',this.value)"
-        >
-
-      </div>
-
-    </div>
-
-    <div class="field">
-
-      <label>Secondary Color</label>
-
-      <div class="color-row">
-
-        <input
-          type="color"
-          value="${escapeHTML(siteData.gradColor2)}"
-          onchange="updateData('gradColor2',this.value);renderInspector()"
-        >
-
-        <input
-          value="${escapeHTML(siteData.gradColor2)}"
-          oninput="updateData('gradColor2',this.value)"
-        >
-
-      </div>
-
-    </div>
-
-  </div>
-
-`;
-
-}
-
-if(type==="seo"){
-
-box.innerHTML=`
-
-  <div class="form-card">
-
-    <div class="form-title">
-      🔎 SEO
-    </div>
-
-    ${fieldInput(
-      "SEO Title",
-      "seoTitle",
-      siteData.seoTitle
-    )}
-
-    ${fieldInput(
-      "SEO Description",
-      "seoDescription",
-      siteData.seoDescription,
-      true
-    )}
-
-    ${imageField(
-      "socialImage",
-      "Social Image",
-      siteData.socialImage
-    )}
-
-  </div>
-
-`;
-
-}
-
-if(type==="media"){
-
-box.innerHTML=`
-
-  <div class="form-card">
-
-    <div class="form-title">
-      🖼️ Media
-    </div>
-
-    <div style="font-size:10px;color:#737f91;line-height:1.9">
-      وێنەکان لە ناو state ـی ویبسایتەکە هەڵدەگیرێن.
-      بۆ وێنەی زۆر و گەورە، باشترە URL ـی CDN/ImgBB بەکاربهێنیت.
-    </div>
-
-  </div>
-
-  <div class="form-card">
-
-    <div class="form-title">
-      Hero Image
-    </div>
-
-    ${imageField(
-      "heroImageUrl",
-      "Hero",
-      siteData.heroImageUrl
-    )}
-
-  </div>
-
-`;
-
-}
-
-lucide.createIcons();
-
-}
-
-/* =========================================================
-EXPORT
-========================================================= */
-
-function exportData(){
-
-const blob =
-new Blob(
-[
-JSON.stringify(
-siteData,
-null,
-2
-)
-],
-{
-type:"application/json"
-}
-);
-
-const url =
-URL.createObjectURL(blob);
-
-const a =
-document.createElement("a");
-
-a.href=url;
-
-a.download=
-"kurdia-site-data.json";
-
-a.click();
-
-URL.revokeObjectURL(url);
-
-showToast("Data هەناردرا");
-
-}
-
-/* =========================================================
-IMPORT
-========================================================= */
-
-function openImportModal(){
-
-document
-.getElementById("importModal")
-.classList.add("show");
-
-}
-
-function importData(){
-
-const text =
-document
-.getElementById("importTextarea")
-.value
-.trim();
-
-if(!text){
-
-showToast("Data بنووسە");
-
-return;
-
-}
-
-try{
-
-const parsed =
-  JSON.parse(text);
-
-snapshot();
-
-siteData =
-  mergeData(
-    DEFAULT_DATA,
-    parsed
-  );
-
-saveDraft(false);
-
-closeModal("importModal");
-
-renderAll();
-
-showToast("Import سەرکەوتوو بوو");
-
-}catch(error){
-
-showToast("JSON ـەکە دروست نییە");
-
-}
-
-}
-
-/* =========================================================
-RESET
-========================================================= */
-
-function resetAll(){
-
-const ok =
-confirm(
-"دڵنیایت؟ هەموو گۆڕانکارییەکانی ئەم browser ـە دەگەڕێنەوە بۆ default."
-);
-
-if(!ok) return;
-
-snapshot();
-
-siteData =
-clone(DEFAULT_DATA);
-
-localStorage.removeItem(
-STORAGE_DRAFT
-);
-
-localStorage.removeItem(
-STORAGE_PUBLISHED
-);
-
-selectedSectionId=null;
-
-renderAll();
-
-showToast("گەڕێندرایەوە بۆ Default");
-
-}
-
-/* =========================================================
-MODAL
-========================================================= */
-
-function closeModal(id){
-
-document
-.getElementById(id)
-.classList.remove("show");
-
-}
-
-/* =========================================================
-SIDEBAR / INSPECTOR MOBILE
-========================================================= */
-
-function toggleSidebar(){
-
-document
-.getElementById("sidebar")
-.classList.toggle("open");
-
-}
-
-function toggleInspector(){
-
-document
-.getElementById("inspector")
-.classList.toggle("open");
-
-}
-
-/* =========================================================
-PUBLIC SITE
-========================================================= */
-
-function openPublicSite(){
-
-window.open(
-"index.html",
-"_blank"
-);
-
-}
-
-/* =========================================================
-KEYBOARD SHORTCUTS
-========================================================= */
-
-document.addEventListener(
-"keydown",
-event=>{
-
-if(
-  (event.ctrlKey || event.metaKey) &&
-  event.key.toLowerCase()==="z"
-){
-
-  event.preventDefault();
-
-  if(event.shiftKey){
-    redo();
-  }else{
-    undo();
   }
 
 }
 
-if(
-  (event.ctrlKey || event.metaKey) &&
-  event.key.toLowerCase()==="s"
+
+function reloadPreview(){
+
+  const iframe =
+    document.getElementById(
+      "sitePreview"
+    );
+
+  if(!iframe){
+    return;
+  }
+
+  iframe.src =
+    "index.html?preview=" +
+    Date.now();
+
+}
+
+
+function openWebsite(){
+
+  window.open(
+    "index.html",
+    "_blank"
+  );
+
+}
+
+
+function setDevice(
+  device,
+  button
 ){
 
-  event.preventDefault();
+  const frame =
+    document.getElementById(
+      "previewFrame"
+    );
 
-  publish();
+  frame.classList.remove(
+    "tablet",
+    "mobile"
+  );
+
+  if(device === "tablet"){
+
+    frame.classList.add(
+      "tablet"
+    );
+
+  }
+
+  if(device === "mobile"){
+
+    frame.classList.add(
+      "mobile"
+    );
+
+  }
+
+  document
+    .querySelectorAll(
+      ".device-btn"
+    )
+    .forEach(
+      b =>
+        b.classList.remove(
+          "active"
+        )
+    );
+
+  button.classList.add(
+    "active"
+  );
 
 }
 
-}
-);
 
 /* =========================================================
-CLOSE SIDE PANELS WHEN CLICKING OUTSIDE
+   MEDIA
+========================================================= */
+
+function focusMedia(){
+
+  /*
+    Media library ـی سادە لە inspector
+    دروست دەکەین بۆ Hero و Gallery.
+  */
+
+  selectedId =
+    selectedId ||
+    (
+      state.sections[0]
+        ? state.sections[0].id
+        : null
+    );
+
+  const inspector =
+    document.getElementById(
+      "inspector"
+    );
+
+  inspector.innerHTML = `
+
+    <div class="mb-6">
+
+      <div class="text-lg font-black">
+        Media Library
+      </div>
+
+      <div class="text-xs text-gray-600 mt-2 leading-6">
+        وێنەی نوێ Upload بکە یان بەستەری وێنە زیاد بکە.
+      </div>
+
+    </div>
+
+
+    <label
+      class="w-full py-4 rounded-2xl border border-dashed border-white/10 bg-white/[.02] flex flex-col items-center justify-center cursor-pointer hover:bg-white/[.04]"
+    >
+
+      <i
+        data-lucide="upload-cloud"
+        class="w-7 h-7 text-gray-500"
+      ></i>
+
+      <span
+        class="text-xs text-gray-400 mt-3"
+      >
+        Upload Image
+      </span>
+
+      <input
+        id="mediaUpload"
+        type="file"
+        accept="image/*"
+        class="hidden"
+      >
+
+    </label>
+
+
+    <div class="divider"></div>
+
+
+    <div class="field">
+
+      <label>
+        زیادکردنی وێنە بە URL
+      </label>
+
+      <div class="flex gap-2">
+
+        <input
+          id="mediaUrl"
+          class="input"
+          dir="ltr"
+          placeholder="https://..."
+        >
+
+        <button
+          onclick="addMediaUrl()"
+          class="mini-btn"
+        >
+          <i data-lucide="plus" class="w-4 h-4"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="mediaGrid"
+      class="grid grid-cols-2 gap-2"
+    >
+
+      ${renderMediaGrid()}
+
+    </div>
+
+  `;
+
+  const upload =
+    document.getElementById(
+      "mediaUpload"
+    );
+
+  if(upload){
+
+    upload.addEventListener(
+      "change",
+      handleImageUpload
+    );
+
+  }
+
+  setupIcons();
+
+}
+
+
+function renderMediaGrid(){
+
+  const images = [
+    ...(state.gallery || [])
+  ];
+
+  if(state.heroImageUrl){
+
+    images.unshift(
+      state.heroImageUrl
+    );
+
+  }
+
+  const unique =
+    [...new Set(
+      images.filter(Boolean)
+    )];
+
+  if(!unique.length){
+
+    return `
+      <div class="col-span-2 empty">
+        هێشتا وێنەیەک نییە.
+      </div>
+    `;
+
+  }
+
+  return unique.map(
+    (src,index) => `
+
+      <div class="media-card">
+
+        <img
+          src="${escapeAttr(src)}"
+          alt=""
+        >
+
+        <button
+          class="media-remove"
+          onclick="removeMedia('${escapeAttr(src)}')"
+        >
+          <i
+            data-lucide="x"
+            class="w-4 h-4"
+          ></i>
+        </button>
+
+      </div>
+
+    `
+  ).join("");
+
+}
+
+
+function addMediaUrl(){
+
+  const input =
+    document.getElementById(
+      "mediaUrl"
+    );
+
+  const url =
+    input.value.trim();
+
+  if(!url){
+    return;
+  }
+
+  state.gallery.push(
+    url
+  );
+
+  input.value =
+    "";
+
+  commit();
+
+  focusMedia();
+
+}
+
+
+function handleImageUpload(event){
+
+  const file =
+    event.target.files &&
+    event.target.files[0];
+
+  if(!file){
+    return;
+  }
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    showToast(
+      "تەنها فایلەکانی وێنە ڕێگەپێدراون."
+    );
+
+    return;
+
+  }
+
+  const reader =
+    new FileReader();
+
+  reader.onload =
+    function(){
+
+      state.gallery.push(
+        reader.result
+      );
+
+      commit();
+
+      focusMedia();
+
+    };
+
+  reader.readAsDataURL(
+    file
+  );
+
+}
+
+
+function removeMedia(src){
+
+  state.gallery =
+    state.gallery.filter(
+      image =>
+        (
+          typeof image ===
+          "string"
+            ? image
+            : image.url
+        ) !== src
+    );
+
+  if(
+    state.heroImageUrl === src
+  ){
+
+    state.heroImageUrl =
+      "";
+
+  }
+
+  commit();
+
+  focusMedia();
+
+}
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function focusTheme(){
+
+  const inspector =
+    document.getElementById(
+      "inspector"
+    );
+
+  inspector.innerHTML = `
+
+    <div class="mb-6">
+
+      <div class="text-lg font-black">
+        ڕەنگ و ڕووکاری
+      </div>
+
+      <div class="text-xs text-gray-600 mt-2">
+        ڕەنگی سەرەکی ویبسایت لێرە بگۆڕە.
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Primary Color
+      </label>
+
+      <div class="flex gap-2">
+
+        <input
+          id="primaryColor"
+          type="color"
+          value="${escapeAttr(
+            state.gradColor1
+          )}"
+          class="w-14 h-12 rounded-xl bg-transparent border-0"
+        >
+
+        <input
+          id="primaryColorText"
+          class="input"
+          dir="ltr"
+          value="${escapeAttr(
+            state.gradColor1
+          )}"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Secondary Color
+      </label>
+
+      <div class="flex gap-2">
+
+        <input
+          id="secondaryColor"
+          type="color"
+          value="${escapeAttr(
+            state.gradColor2
+          )}"
+          class="w-14 h-12 rounded-xl bg-transparent border-0"
+        >
+
+        <input
+          id="secondaryColorText"
+          class="input"
+          dir="ltr"
+          value="${escapeAttr(
+            state.gradColor2
+          )}"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <div class="field">
+
+      <label>
+        SEO Title
+      </label>
+
+      <input
+        id="seoTitle"
+        class="input"
+        value="${escapeAttr(
+          state.seoTitle || "KURDIA ADVENTURE"
+        )}"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        SEO Description
+      </label>
+
+      <textarea
+        id="seoDescription"
+        class="input textarea"
+      >${escapeHtml(
+        state.seoDescription || ""
+      )}</textarea>
+
+    </div>
+
+  `;
+
+  bindThemeEvents();
+
+}
+
+
+function bindThemeEvents(){
+
+  const pairs = [
+    [
+      "primaryColor",
+      "primaryColorText",
+      "gradColor1"
+    ],
+    [
+      "secondaryColor",
+      "secondaryColorText",
+      "gradColor2"
+    ]
+  ];
+
+  pairs.forEach(
+    ([colorId,textId,key]) => {
+
+      const color =
+        document.getElementById(
+          colorId
+        );
+
+      const text =
+        document.getElementById(
+          textId
+        );
+
+      if(!color || !text){
+        return;
+      }
+
+      color.addEventListener(
+        "input",
+        () => {
+
+          state[key] =
+            color.value;
+
+          text.value =
+            color.value;
+
+          commit();
+
+        }
+      );
+
+      text.addEventListener(
+        "input",
+        () => {
+
+          if(
+            /^#[0-9a-f]{6}$/i.test(
+              text.value
+            )
+          ){
+
+            state[key] =
+              text.value;
+
+            color.value =
+              text.value;
+
+            commit();
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  const seoTitle =
+    document.getElementById(
+      "seoTitle"
+    );
+
+  const seoDescription =
+    document.getElementById(
+      "seoDescription"
+    );
+
+  if(seoTitle){
+
+    seoTitle.addEventListener(
+      "input",
+      () => {
+
+        state.seoTitle =
+          seoTitle.value;
+
+        commit();
+
+      }
+    );
+
+  }
+
+  if(seoDescription){
+
+    seoDescription.addEventListener(
+      "input",
+      () => {
+
+        state.seoDescription =
+          seoDescription.value;
+
+        commit();
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   GENERAL NAV
+========================================================= */
+
+function focusSections(){
+
+  const panel =
+    document.getElementById(
+      "sectionsPanel"
+    );
+
+  panel.scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+function closeInspector(){
+
+  selectedId =
+    null;
+
+  renderInspector();
+
+  renderSectionLists();
+
+}
+
+
+function toggleSidebar(){
+
+  document
+    .getElementById(
+      "sidebar"
+    )
+    .classList.toggle(
+      "open"
+    );
+
+}
+
+
+/* =========================================================
+   EXPORT / IMPORT
+========================================================= */
+
+function exportJSON(){
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          state,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          "application/json"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const a =
+    document.createElement(
+      "a"
+    );
+
+  a.href =
+    url;
+
+  a.download =
+    "kurdia-site-state.json";
+
+  a.click();
+
+  URL.revokeObjectURL(
+    url
+  );
+
+}
+
+
+function importJSON(){
+
+  const input =
+    document.createElement(
+      "input"
+    );
+
+  input.type =
+    "file";
+
+  input.accept =
+    ".json,application/json";
+
+  input.onchange =
+    event => {
+
+      const file =
+        event.target.files[0];
+
+      if(!file){
+        return;
+      }
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () => {
+
+          try{
+
+            const imported =
+              JSON.parse(
+                reader.result
+              );
+
+            state =
+              mergeData(
+                clone(DEFAULT_DATA),
+                imported
+              );
+
+            selectedId =
+              null;
+
+            initializeHistory();
+
+            saveDraft(false);
+
+            renderAll();
+
+            showToast(
+              "✓ داتا هێنرایە ناو Admin."
+            );
+
+          }catch(error){
+
+            showToast(
+              "❌ JSON هەڵەیە."
+            );
+
+          }
+
+        };
+
+      reader.readAsText(
+        file
+      );
+
+    };
+
+  input.click();
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
 ========================================================= */
 
 document.addEventListener(
-"click",
-event=>{
+  "keydown",
+  event => {
 
-if(window.innerWidth > 1100) return;
+    if(
+      (event.ctrlKey ||
+       event.metaKey) &&
+      event.key.toLowerCase() === "z"
+    ){
 
-const sidebar =
-  document.getElementById("sidebar");
+      event.preventDefault();
 
-const inspector =
-  document.getElementById("inspector");
+      if(event.shiftKey){
 
-const target =
-  event.target;
+        redo();
 
-if(
-  sidebar.classList.contains("open") &&
-  !sidebar.contains(target) &&
-  !target.closest(".mobile-menu-btn")
-){
+      }else{
 
-  sidebar.classList.remove("open");
+        undo();
 
-}
+      }
 
-}
+    }
+
+    if(
+      (event.ctrlKey ||
+       event.metaKey) &&
+      event.key.toLowerCase() === "s"
+    ){
+
+      event.preventDefault();
+
+      saveDraft();
+
+    }
+
+  }
 );
 
+
 /* =========================================================
-ICONS
+   ICONS
 ========================================================= */
 
-if(window.lucide){
-lucide.createIcons();
+function setupIcons(){
+
+  if(
+    window.lucide &&
+    typeof lucide.createIcons ===
+      "function"
+  ){
+
+    lucide.createIcons();
+
+  }
+
 }
 
-</script></body>
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+function initializeAdmin(){
+
+  state =
+    loadState();
+
+  initializeHistory();
+
+  renderAll();
+
+  setupIcons();
+
+  /*
+    ئەگەر iframe state داوای کرد،
+    state ـی ئێستا بنێرە.
+  */
+
+  window.addEventListener(
+    "message",
+    event => {
+
+      if(
+        event.data &&
+        event.data.type ===
+        "REQUEST_KURDIA_STATE"
+      ){
+
+        if(
+          event.source
+        ){
+
+          event.source.postMessage(
+            {
+              type:
+                "KURDIA_BUILDER_STATE",
+              state:
+                clone(state)
+            },
+            "*"
+          );
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+window.addEventListener(
+  "load",
+  () => {
+
+    checkLogin();
+
+    setupIcons();
+
+  }
+);
+
+</script>
+
+</body>
 </html>
