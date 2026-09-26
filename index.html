@@ -11,43 +11,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --main-theme-color: #06B6D4;
-    }
     body {
       font-family: 'Vazirmatn', sans-serif;
       background-color: #0B0F19;
       color: #F8FAFC;
     }
-    .theme-bg { background-color: var(--main-theme-color) !important; }
-    .theme-text { color: var(--main-theme-color) !important; }
-    .theme-border { border-color: var(--main-theme-color) !important; }
   </style>
 </head>
-<body class="selection:bg-cyan-500 selection:text-black">
+<body>
 
+  <!-- بەشی سەرەوە -->
   <header class="sticky top-0 z-40 backdrop-blur-md bg-[#0B0F19]/80 border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl theme-bg flex items-center justify-center text-black font-extrabold text-xl shadow-lg">
+        <div id="logoIcon" class="w-10 h-10 rounded-xl bg-yellow-500 flex items-center justify-center text-black font-extrabold text-xl shadow-lg">
           ⛰️
         </div>
         <div>
           <span class="text-xl font-black tracking-wide text-white block">KURDIA ADVENTURE</span>
-          <span class="text-xs theme-text font-medium">کوردیا ئەدڤێنتچەر</span>
+          <span id="subLogoText" class="text-xs text-yellow-500 font-medium">کوردیا ئەدڤێنتچەر</span>
         </div>
       </div>
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-        <a href="#about" class="hover:text-cyan-400 transition">دەربارە</a>
-        <a href="#trip" class="hover:text-cyan-400 transition">گەشتی داهاتوو</a>
-        <a href="#gear" class="hover:text-cyan-400 transition">کەلوپەلی پێویست</a>
+        <a href="#about" class="hover:text-white transition">دەربارە</a>
+        <a href="#trip" class="hover:text-white transition">گەشتی داهاتوو</a>
+        <a href="#gear" class="hover:text-white transition">کەلوپەلی پێویست</a>
       </nav>
-      <a href="#booking" class="theme-bg text-black font-bold px-6 py-2.5 rounded-full text-sm transition-all transform hover:scale-105 shadow-lg">
+      <a href="#booking" id="navBookingBtn" class="bg-yellow-500 text-black font-bold px-6 py-2.5 rounded-full text-sm transition shadow-lg">
         ناونووسین بکە
       </a>
     </div>
   </header>
 
+  <!-- بەشی پێشوازی (Hero) -->
   <section class="relative min-h-[85vh] flex items-center justify-center text-center px-4 overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img id="displayHeroImg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=80" 
@@ -57,18 +53,18 @@
     </div>
 
     <div class="relative z-10 max-w-4xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-700 bg-white/5 theme-text text-sm mb-6 backdrop-blur-sm">
-        <i data-lucide="compass" class="w-4 h-4"></i>
-        <span>سەرکێشی و شاخەوانی لە لووتکەکانی کوردستان</span>
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-700 bg-white/5 text-sm mb-6 backdrop-blur-sm">
+        <i data-lucide="compass" class="w-4 h-4 text-white"></i>
+        <span class="text-gray-200">سەرکێشی و شاخەوانی لە لووتکەکانی کوردستان</span>
       </div>
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-tight mb-6">
-        جوانیی نەبینراوی سروشت لەگەڵ <span class="theme-text">کوردیا ئەدڤێنتچەر</span> بدۆزەرەوە
+        جوانیی نەبینراوی سروشت لەگەڵ <span id="heroBrandText" class="text-yellow-400">کوردیا ئەدڤێنتچەر</span> بدۆزەرەوە
       </h1>
       <p class="text-gray-300 text-base sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-light">
         گەشتی شاخەوانی و کەمپینگی تایبەت بە بەرزترین ئاستی سەلامەتی و سەرپەرشتیاری شارەزا.
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#booking" class="w-full sm:w-auto px-8 py-4 rounded-xl theme-bg text-black font-extrabold text-base transition shadow-xl">
+        <a href="#booking" id="heroActionBtn" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-yellow-500 text-black font-extrabold text-base transition shadow-xl">
           بەشداری لە گەشتی داهاتوو بکە
         </a>
         <a href="#trip" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#1E293B] border border-gray-700 text-white font-bold text-base transition">
@@ -78,6 +74,7 @@
     </div>
   </section>
 
+  <!-- بەشی گەشت -->
   <section id="trip" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
       <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">گەشتی داهاتوو</h2>
@@ -92,7 +89,7 @@
           </span>
           <div class="text-right">
             <span class="text-gray-400 text-xs block">نرخی بەشداربوون</span>
-            <span id="displayTripPrice" class="text-2xl font-black theme-text">٢٥,٠٠٠ دینار</span>
+            <span id="displayTripPrice" class="text-2xl font-black text-yellow-400">٢٥,٠٠٠ دینار</span>
           </div>
         </div>
 
@@ -123,28 +120,28 @@
         <h4 class="text-lg font-bold text-white mb-4">خشتەی کاتی گەشت</h4>
         <div class="space-y-4">
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">١</div>
+            <div class="step-badge w-8 h-8 rounded-full bg-yellow-500 text-black flex items-center justify-center font-bold text-xs shrink-0">١</div>
             <div>
               <p class="font-bold text-white text-sm">٠٦:٠٠ بەیانی — کۆبوونەوە و بەڕێکەوتن</p>
               <p class="text-gray-400 text-xs mt-0.5">کۆبوونەوە لە شوێنی دیاریکراو و بەڕێکەوتن بەرەو خاڵی دەستپێک.</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">٢</div>
+            <div class="step-badge w-8 h-8 rounded-full bg-yellow-500 text-black flex items-center justify-center font-bold text-xs shrink-0">٢</div>
             <div>
               <p class="font-bold text-white text-sm">٠٧:٣٠ بەیانی — گەیشتن و دەستپێکی شاخەوانی</p>
               <p class="text-gray-400 text-xs mt-0.5">ڕێنمایی سەرەتایی سەلامەتی و دەستپێکردنی ڕێڕۆیشتن بەرەو لووتکە.</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">٣</div>
+            <div class="step-badge w-8 h-8 rounded-full bg-yellow-500 text-black flex items-center justify-center font-bold text-xs shrink-0">٣</div>
             <div>
               <p class="font-bold text-white text-sm">١٢:٠٠ نیوەڕۆ — گەیشتن بە لووتکە، پشوو و نانخواردن</p>
               <p class="text-gray-400 text-xs mt-0.5">مانەوە لە لووتکە بۆ چێژوەرگرتن لە دیمەن و گرتنی وێنەی یادگاری.</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
-            <div class="w-8 h-8 rounded-full theme-bg text-black flex items-center justify-center font-bold text-xs shrink-0">٤</div>
+            <div class="step-badge w-8 h-8 rounded-full bg-yellow-500 text-black flex items-center justify-center font-bold text-xs shrink-0">٤</div>
             <div>
               <p class="font-bold text-white text-sm">٠٥:٠٠ ئێوارە — گەڕانەوە بۆ هەولێر</p>
               <p class="text-gray-400 text-xs mt-0.5">کۆتاییهاتنی گەشت و گەڕانەوە بۆ خاڵی سەرەتایی.</p>
@@ -158,19 +155,19 @@
           <h4 class="text-xl font-bold text-white mb-6">خزمەتگوزارییەکان لەخۆدەگرێت:</h4>
           <ul class="space-y-4 text-sm text-gray-300">
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
+              <i data-lucide="check-circle" class="check-icon w-5 h-5 text-yellow-400 shrink-0"></i>
               <span>هاتوچۆی تەواو بە پاسی گەشتیاریی مۆدێرن</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
+              <i data-lucide="check-circle" class="check-icon w-5 h-5 text-yellow-400 shrink-0"></i>
               <span>ڕێبەر و سەرپەرشتیاری شارەزای شاخەوانی</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
+              <i data-lucide="check-circle" class="check-icon w-5 h-5 text-yellow-400 shrink-0"></i>
               <span>تیمی فریاگوزاری سەرەتایی (First Aid)</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 theme-text shrink-0"></i>
+              <i data-lucide="check-circle" class="check-icon w-5 h-5 text-yellow-400 shrink-0"></i>
               <span>وێنەگری فەرمی بۆ گرتنی وێنەی ناوازە</span>
             </li>
           </ul>
@@ -179,7 +176,7 @@
     </div>
   </section>
 
-  <!-- بەشی ناونووسین -->
+  <!-- فۆڕمی ناونووسین -->
   <section id="booking" class="py-20 max-w-4xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-black text-white mb-3">ناونووسین بۆ گەشت</h2>
@@ -220,7 +217,7 @@
         </div>
 
         <div class="p-4 rounded-xl bg-white/5 border border-gray-700">
-          <p class="text-xs theme-text font-bold mb-1">شێوازی پارەدان و جێگیرکردنی کورسی:</p>
+          <p id="paymentNotice" class="text-xs text-yellow-400 font-bold mb-1">شێوازی پارەدان و جێگیرکردنی کورسی:</p>
           <p class="text-xs text-gray-300 leading-relaxed">
             بڕی پارەکە لە ڕێگەی <strong>FastPay</strong> بۆ ئەم ژمارەیە بنێرە: <span class="font-bold text-white tracking-wider" dir="ltr">0750 313 0360</span>.
           </p>
@@ -233,7 +230,7 @@
           </label>
         </div>
 
-        <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl theme-bg text-black font-black text-base transition shadow-xl">
+        <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl bg-yellow-500 text-black font-black text-base transition shadow-xl">
           تۆمارکردن و ناونووسین
         </button>
       </form>
@@ -260,6 +257,33 @@
     const BIN_ID = "6ab7f417ac6210605af863a3";
     const API_KEY = "$2a$10$8avc1KliyAqa2Nof1YPm8eks0PGlSxSbJse5LUrK5irHtbVfhu.WW";
 
+    // ڕاستەوخۆ گۆڕینی ڕەنگی تەواوی توخمەکان بە بێ بەستنەوە بە کلاسی نەگۆڕ
+    function applyColor(hexColor) {
+      if (!hexColor) return;
+      
+      const bgElements = [
+        document.getElementById('logoIcon'),
+        document.getElementById('navBookingBtn'),
+        document.getElementById('heroActionBtn'),
+        document.getElementById('submitBtn'),
+        ...document.querySelectorAll('.step-badge')
+      ];
+      bgElements.forEach(el => {
+        if (el) el.style.backgroundColor = hexColor;
+      });
+
+      const textElements = [
+        document.getElementById('subLogoText'),
+        document.getElementById('heroBrandText'),
+        document.getElementById('displayTripPrice'),
+        document.getElementById('paymentNotice'),
+        ...document.querySelectorAll('.check-icon')
+      ];
+      textElements.forEach(el => {
+        if (el) el.style.color = hexColor;
+      });
+    }
+
     async function loadCloudData() {
       try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
@@ -267,9 +291,7 @@
         });
         const data = (await res.json()).record;
 
-        if (data.color) {
-          document.documentElement.style.setProperty('--main-theme-color', data.color);
-        }
+        if (data.color) applyColor(data.color);
         if (data.tripTitle) document.getElementById('displayTripTitle').innerText = data.tripTitle;
         if (data.tripPrice) document.getElementById('displayTripPrice').innerText = data.tripPrice;
         if (data.tripDifficulty) document.getElementById('displayTripDifficulty').innerText = data.tripDifficulty;
@@ -278,7 +300,7 @@
         if (data.tripDesc) document.getElementById('displayTripDesc').innerText = data.tripDesc;
         if (data.heroImageUrl) document.getElementById('displayHeroImg').src = data.heroImageUrl;
       } catch (err) {
-        console.error(err);
+        console.error("Cloud load error:", err);
       }
     }
     loadCloudData();
