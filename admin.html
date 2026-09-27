@@ -710,13 +710,13 @@ input[type="checkbox"]{
 .upload-btn-row{
   display:flex;
   gap:8px;
-  margin-top:6px;
+  margin-top:8px;
   align-items:center;
 }
 .image-mini-preview{
   width:46px;
   height:46px;
-  border-radius:8px;
+  border-radius:10px;
   object-fit:cover;
   border:1px solid var(--border);
   display:none;
@@ -2452,7 +2452,7 @@ const DEFAULT_STATE = {
 };
 
 /* ============================================================
-   HELPERS & IMAGE COMPRESSOR
+   HELPERS & OPTIMIZED IMAGE COMPRESSOR
 ============================================================ */
 
 function deepClone(obj){
@@ -2503,8 +2503,8 @@ function result(id, message, type="ok"){
   el.className = `result show ${type}`;
 }
 
-// پەستاندنی زیرەکانەی وێنە لە ناو مۆبایل پێش پاشەکەوتکردن
-function compressImageFile(file, maxWidth=1280, quality=0.82){
+// پەستاندنی ڕاستەقینە تا بە تەواوی جێگەی ببێتەوە لەناو بیرگەی مۆبایل
+function compressImageFile(file, maxWidth=850, quality=0.68){
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -2525,7 +2525,6 @@ function compressImageFile(file, maxWidth=1280, quality=0.82){
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
 
-        // هەناردەکردن بە فۆرماتی هاوچەرخ
         const base64 = canvas.toDataURL("image/jpeg", quality);
         resolve(base64);
       };
@@ -2556,7 +2555,7 @@ function normalizeState(){
 }
 
 /* ============================================================
-   LOAD / SAVE
+   LOAD / SAVE & BROADCAST SYNC
 ============================================================ */
 
 function loadState(){
@@ -2579,7 +2578,15 @@ function loadState(){
 
 function saveState(announce=true){
   normalizeState();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(state));
+  }catch(e){
+    console.error("Storage error:", e);
+    toast("⚠️ قەبارەی وێنەکان زۆر گەورەیە، تکایە ڕێژەیەک لە وێنەکان کەم بکەرەوە.");
+    return;
+  }
+
   publishState();
   if(announce){
     toast("💾 پاشەکەوت کرا");
@@ -2588,7 +2595,13 @@ function saveState(announce=true){
 }
 
 function publishState(){
-  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(state));
+  const stringified = JSON.stringify(state);
+  try{
+    localStorage.setItem(STORAGE_KEY, stringified);
+    localStorage.setItem("KURDIA_BUILDER_STATE", stringified);
+  }catch(e){}
+
+  // پەیوەندی کردن بە هەموو تاب و تەنیشتە کراوەکان لە ڕێگەی پەیامەوە
   const iframe = document.getElementById("sitePreview");
   if(iframe && iframe.contentWindow){
     iframe.contentWindow.postMessage({
@@ -2758,16 +2771,16 @@ builderFields.forEach(id => {
 document.getElementById("heroImageFile").addEventListener("change", async (e) => {
   const file = e.target.files?.[0];
   if(!file) return;
-  toast("⏳ وێنەکە باردەکرێت...");
+  toast("⏳ وێنەی سەرەکی دادەنرێت...");
   try{
-    const base64 = await compressImageFile(file, 1600, 0.85);
+    const base64 = await compressImageFile(file, 900, 0.72);
     state.heroImageUrl = base64;
     setValue("heroImageUrl", base64);
     updatePreview("heroImagePreview", base64);
     pushHistory();
     saveState(false);
     publishState();
-    toast("✅ وێنەی Hero لە مۆبایلەوە داندرا");
+    toast("✅ وێنەی سەرەکی لە مۆبایلەوە داندرا");
   }catch(err){
     toast("❌ کێشە لە خوێندنەوەی وێنە");
   }
@@ -2778,9 +2791,9 @@ document.getElementById("heroImageFile").addEventListener("change", async (e) =>
 document.getElementById("tripImageFile").addEventListener("change", async (e) => {
   const file = e.target.files?.[0];
   if(!file) return;
-  toast("⏳ وێنەکە باردەکرێت...");
+  toast("⏳ وێنەی گەشت دادەنرێت...");
   try{
-    const base64 = await compressImageFile(file, 1280, 0.82);
+    const base64 = await compressImageFile(file, 850, 0.70);
     state.tripImageUrl = base64;
     setValue("tripImageUrl", base64);
     updatePreview("tripImagePreview", base64);
@@ -2962,13 +2975,13 @@ document.getElementById("addGalleryBtn").addEventListener("click", () => {
   publishState();
 });
 
-// ئەپڵۆدی ڕاستەوخۆ بۆ گەلەری لە مۆبایلەوە
+// ئەپڵۆدی وێنەی گەلەری لە مۆبایلەوە
 document.getElementById("galleryUploadInput").addEventListener("change", async (e) => {
   const file = e.target.files?.[0];
   if(!file) return;
-  toast("⏳ وێنەی گەلەری باردەکرێت...");
+  toast("⏳ وێنەی گەلەری دادەنرێت...");
   try{
-    const base64 = await compressImageFile(file, 1200, 0.82);
+    const base64 = await compressImageFile(file, 800, 0.70);
     const title = prompt("ناونیشانی ئەم وێنەیە لە گەلەری (ئارەزوومەندانە):") || "KURDIA ADVENTURE";
     state.gallery.push({ url: base64, title });
     pushHistory();
@@ -3316,7 +3329,7 @@ document.getElementById("saveBtn").addEventListener("click", () => {
 
 document.getElementById("publishBtn").addEventListener("click", () => {
   normalizeState();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  saveState(false);
   publishState();
   toast("🚀 Website state Publish کرا");
   const status = document.getElementById("builderStatus");
@@ -3403,6 +3416,7 @@ document.getElementById("importFile").addEventListener("change", async event => 
 document.getElementById("clearDataBtn").addEventListener("click", () => {
   if(!confirm("دڵنیایت هەموو Data ـی Builder بسڕینەوە؟")) return;
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem("KURDIA_BUILDER_STATE");
   state = deepClone(DEFAULT_STATE);
   pushHistory();
   renderAll();
