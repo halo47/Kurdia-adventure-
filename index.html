@@ -20,6 +20,653 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
+      /* =========================================================
+   KURDIA MOBILE RESPONSIVE FIX
+   Design unchanged — mobile layout only
+========================================================= */
+
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden !important;
+}
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+img,
+video,
+iframe{
+  max-width:100%;
+}
+
+.container{
+  width:min(var(--container),calc(100% - 40px));
+  max-width:100%;
+}
+
+/* ------------------------------
+   HEADER MOBILE
+------------------------------ */
+
+@media(max-width:1024px){
+
+  .header-inner{
+    width:100%;
+    min-width:0;
+    gap:10px;
+  }
+
+  .desktop-nav{
+    display:none !important;
+  }
+
+  .header-inner > .primary{
+    display:none !important;
+  }
+
+  .logo{
+    min-width:0;
+    flex-shrink:1;
+  }
+
+  .logo-mark{
+    flex:0 0 44px;
+  }
+
+  .logo-title,
+  .logo-sub{
+    white-space:nowrap;
+  }
+
+}
+
+/* ------------------------------
+   SMALL MOBILE HEADER
+------------------------------ */
+
+@media(max-width:520px){
+
+  .container{
+    width:calc(100% - 24px);
+  }
+
+  .header-inner{
+    height:68px;
+  }
+
+  .logo{
+    gap:8px;
+  }
+
+  .logo-mark{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+    border-radius:14px;
+  }
+
+  .logo-mark svg{
+    width:19px;
+    height:19px;
+  }
+
+  .logo-title{
+    font-size:14px;
+  }
+
+  .logo-sub{
+    font-size:7px;
+    letter-spacing:.18em;
+    margin-top:4px;
+  }
+
+  .header-inner > button{
+    width:42px !important;
+    height:42px !important;
+    flex:0 0 42px;
+  }
+
+  .mobile-menu .container{
+    width:calc(100% - 24px);
+  }
+
+}
+
+/* ------------------------------
+   HERO
+------------------------------ */
+
+@media(max-width:768px){
+
+  .hero{
+    width:100%;
+    max-width:100%;
+    min-height:780px;
+    overflow:hidden;
+  }
+
+  .hero-content{
+    width:100%;
+    max-width:100%;
+    padding-top:125px;
+    padding-bottom:65px;
+  }
+
+  .hero-title{
+    max-width:100%;
+    width:100%;
+    font-size:clamp(2.5rem,13vw,4.7rem);
+    line-height:1.08;
+    letter-spacing:-.045em;
+    overflow-wrap:anywhere;
+  }
+
+  .hero-subtitle{
+    max-width:100%;
+    width:100%;
+    font-size:1rem;
+    line-height:1.9;
+  }
+
+  .hero-actions{
+    width:100%;
+  }
+
+  .hero-action{
+    min-width:0;
+  }
+
+  .hero-meta{
+    width:100%;
+    max-width:100%;
+  }
+
+}
+
+/* Very small phones */
+
+@media(max-width:400px){
+
+  .hero{
+    min-height:760px;
+  }
+
+  .hero-content{
+    padding-top:115px;
+  }
+
+  .hero-title{
+    font-size:clamp(2.25rem,12.5vw,3.8rem);
+  }
+
+  .hero-subtitle{
+    font-size:.94rem;
+  }
+
+  .hero-meta{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .meta-card{
+    padding:13px;
+    min-width:0;
+  }
+
+  .meta-value{
+    font-size:12px;
+    overflow-wrap:anywhere;
+  }
+
+}
+
+/* ------------------------------
+   DISCOVERY
+------------------------------ */
+
+@media(max-width:560px){
+
+  .discovery{
+    width:100%;
+    margin-top:-30px;
+  }
+
+  .discovery-card{
+    width:100%;
+    padding:14px;
+    border-radius:22px;
+  }
+
+  .discovery-grid{
+    width:100%;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  .discovery-field{
+    min-width:0;
+    width:100%;
+  }
+
+  .discovery-button{
+    width:100%;
+    min-width:0;
+  }
+
+}
+
+/* ------------------------------
+   TRIP
+------------------------------ */
+
+@media(max-width:900px){
+
+  .trip-card{
+    width:100%;
+    max-width:100%;
+    grid-template-columns:1fr;
+  }
+
+  .trip-photo{
+    width:100%;
+    min-height:360px;
+  }
+
+  .trip-content{
+    width:100%;
+    min-width:0;
+    padding:25px;
+  }
+
+}
+
+@media(max-width:500px){
+
+  .trip-photo{
+    min-height:320px;
+  }
+
+  .trip-photo-bottom{
+    right:18px;
+    left:18px;
+    bottom:18px;
+  }
+
+  .trip-photo-title{
+    font-size:1.35rem;
+    line-height:1.5;
+  }
+
+  .trip-info-grid{
+    grid-template-columns:1fr;
+  }
+
+  .trip-info{
+    min-width:0;
+  }
+
+  .trip-detail{
+    padding:16px;
+  }
+
+  .trip-detail-text{
+    font-size:.9rem;
+  }
+
+}
+
+/* ------------------------------
+   SERVICE CARDS
+------------------------------ */
+
+@media(max-width:700px){
+
+  .service-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+
+  .service{
+    min-width:0;
+    padding:16px;
+    border-radius:20px;
+  }
+
+  .service-title,
+  .service-text{
+    overflow-wrap:anywhere;
+  }
+
+}
+
+@media(max-width:380px){
+
+  .service-grid{
+    gap:7px;
+  }
+
+  .service{
+    padding:13px;
+  }
+
+}
+
+/* ------------------------------
+   HIGHLIGHTS
+------------------------------ */
+
+@media(max-width:800px){
+
+  .highlight-grid{
+    grid-template-columns:1fr;
+  }
+
+  .highlight-card{
+    min-width:0;
+  }
+
+}
+
+/* ------------------------------
+   ITINERARY
+------------------------------ */
+
+@media(max-width:750px){
+
+  .itinerary{
+    grid-template-columns:1fr;
+  }
+
+  .itinerary-item{
+    min-width:0;
+  }
+
+  .itinerary-text{
+    overflow-wrap:anywhere;
+  }
+
+}
+
+/* ------------------------------
+   STATS
+------------------------------ */
+
+@media(max-width:650px){
+
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    width:100%;
+  }
+
+  .stat{
+    min-width:0;
+    padding:25px 10px;
+  }
+
+  .stat-number{
+    font-size:2rem;
+  }
+
+  .stat-label{
+    font-size:.75rem;
+    overflow-wrap:anywhere;
+  }
+
+}
+
+/* ------------------------------
+   STEPS
+------------------------------ */
+
+@media(max-width:850px){
+
+  .steps-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+}
+
+@media(max-width:480px){
+
+  .steps-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* ------------------------------
+   GALLERY
+------------------------------ */
+
+@media(max-width:750px){
+
+  .gallery-grid{
+    width:100%;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-auto-rows:170px;
+    gap:8px;
+  }
+
+  .gallery-card{
+    min-width:0;
+    border-radius:18px;
+  }
+
+}
+
+/* ------------------------------
+   FAQ
+------------------------------ */
+
+@media(max-width:520px){
+
+  .faq{
+    width:100%;
+    max-width:100%;
+  }
+
+  .faq-button{
+    padding:17px;
+    gap:12px;
+  }
+
+  .faq-button span{
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+
+  .faq-answer-inner{
+    padding:0 17px 18px;
+    font-size:.9rem;
+  }
+
+}
+
+/* ------------------------------
+   BOOKING
+------------------------------ */
+
+@media(max-width:900px){
+
+  .booking-wrap{
+    width:100%;
+    max-width:100%;
+    padding:27px;
+    border-radius:27px;
+  }
+
+  .booking-grid{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .booking-wrap{
+    padding:19px;
+    border-radius:23px;
+  }
+
+  .booking-form{
+    grid-template-columns:1fr;
+    width:100%;
+  }
+
+  .input{
+    min-width:0;
+    width:100%;
+  }
+
+  .booking-title{
+    font-size:clamp(1.9rem,9vw,3rem);
+  }
+
+}
+
+/* ------------------------------
+   FOOTER
+------------------------------ */
+
+@media(max-width:750px){
+
+  .footer-grid{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+    gap:10px;
+  }
+
+}
+
+/* ------------------------------
+   AI CHAT MOBILE
+------------------------------ */
+
+@media(max-width:600px){
+
+  .ai-button{
+    width:54px;
+    height:54px;
+    left:15px;
+    bottom:15px;
+  }
+
+  .ai-window{
+    left:10px;
+    right:10px;
+    bottom:80px;
+    width:auto;
+    max-width:none;
+    border-radius:22px;
+  }
+
+  .ai-messages{
+    height:300px;
+    max-height:45vh;
+  }
+
+  .ai-input-row{
+    padding:10px;
+  }
+
+  .ai-input{
+    min-width:0;
+    font-size:14px;
+  }
+
+}
+
+/* ------------------------------
+   TOAST
+------------------------------ */
+
+@media(max-width:520px){
+
+  #toast{
+    right:12px;
+    left:12px;
+    bottom:12px;
+    width:auto;
+    max-width:none;
+    text-align:center;
+  }
+
+}
+
+/* ------------------------------
+   PREVENT LONG TEXT BREAKING
+------------------------------ */
+
+h1,
+h2,
+h3,
+h4,
+p,
+a,
+button,
+span,
+div{
+  max-width:100%;
+}
+
+p,
+h1,
+h2,
+h3,
+h4{
+  overflow-wrap:anywhere;
+}
+
+/* ------------------------------
+   SAFETY: NO HORIZONTAL SCROLL
+------------------------------ */
+
+section,
+header,
+main,
+footer{
+  max-width:100%;
+  overflow-x:clip;
+}
+
+@supports not (overflow:clip){
+  section,
+  header,
+  main,
+  footer{
+    overflow-x:hidden;
+  }
+}
+
+/* ------------------------------
+   MOBILE TOUCH
+------------------------------ */
+
+@media(max-width:768px){
+
+  a,
+  button{
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .primary:hover,
+  .secondary:hover,
+  .service:hover,
+  .highlight-card:hover{
+    transform:none;
+  }
+
+}
 
 :root{
  --primary:#9d1c32;
