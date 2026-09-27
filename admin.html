@@ -1,2047 +1,1345 @@
-<!DOCTYPE html>
-<html lang="ku" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>KURDIA ADVENTURE — Admin</title>
-
-<style>
-:root{
-  --primary:#9d1c32;
-  --primary2:#c92b49;
-  --bg:#070a10;
-  --surface:#0e141e;
-  --surface2:#131c29;
-  --text:#fff;
-  --muted:#94a3b8;
-  --border:rgba(255,255,255,.08);
-  --green:#22c55e;
-  --red:#ef4444;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html,
-body{
-  margin:0;
-  width:100%;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:
-    Arial,
-    "Noto Sans Arabic",
-    sans-serif;
-}
-
-body{
-  overflow-x:hidden;
-}
-
-button,
-input,
-textarea,
-select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.app{
-  min-height:100vh;
-  display:flex;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-  position:fixed;
-  right:0;
-  top:0;
-  bottom:0;
-  width:270px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(14,20,30,.98),
-      rgba(7,10,16,.98)
-    );
-  border-left:1px solid var(--border);
-  padding:20px 14px;
-  z-index:100;
-  overflow-y:auto;
-}
-
-.brand{
-  padding:8px 10px 22px;
-  border-bottom:1px solid var(--border);
-  margin-bottom:16px;
-}
-
-.brand-title{
-  font-size:20px;
-  font-weight:900;
-}
-
-.brand-sub{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:5px;
-}
-
-.nav{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-.nav button{
-  width:100%;
-  border:1px solid transparent;
-  background:transparent;
-  color:#cbd5e1;
-  padding:13px 14px;
-  border-radius:13px;
-  text-align:right;
-  transition:.2s;
-}
-
-.nav button:hover{
-  background:rgba(255,255,255,.04);
-}
-
-.nav button.active{
-  background:
-    linear-gradient(
-      135deg,
-      rgba(157,28,50,.35),
-      rgba(201,43,73,.12)
-    );
-  border-color:rgba(201,43,73,.28);
-  color:#fff;
-}
-
-.main{
-  width:calc(100% - 270px);
-  margin-right:270px;
-  min-height:100vh;
-  padding:25px;
-}
-
-.topbar{
-  min-height:68px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  margin-bottom:20px;
-}
-
-.top-title h1{
-  margin:0;
-  font-size:25px;
-}
-
-.top-title p{
-  margin:5px 0 0;
-  color:var(--muted);
-  font-size:12px;
-}
-
-.status{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:var(--muted);
-  font-size:12px;
-}
-
-.dot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px rgba(34,197,94,.6);
-}
-
-/* PAGES */
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-/* CARDS */
-
-.grid{
-  display:grid;
-  grid-template-columns:
-    repeat(4,minmax(0,1fr));
-  gap:14px;
-}
-
-.grid-2{
-  display:grid;
-  grid-template-columns:
-    repeat(2,minmax(0,1fr));
-  gap:16px;
-}
-
-.card{
-  background:
-    linear-gradient(
-      145deg,
-      rgba(19,28,41,.95),
-      rgba(14,20,30,.95)
-    );
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 15px 50px rgba(0,0,0,.16);
-}
-
-.stat{
-  min-height:125px;
-}
-
-.stat-icon{
-  font-size:25px;
-}
-
-.stat-value{
-  font-size:25px;
-  font-weight:900;
-  margin-top:13px;
-}
-
-.stat-label{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:5px;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin:22px 0 12px;
-}
-
-.section-title h2{
-  font-size:17px;
-  margin:0;
-}
-
-.section-title span{
-  color:var(--muted);
-  font-size:11px;
-}
-
-/* FORM */
-
-.field{
-  margin-bottom:14px;
-}
-
-.field label{
-  display:block;
-  color:#cbd5e1;
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:7px;
-}
-
-input,
-textarea,
-select{
-  width:100%;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:rgba(255,255,255,.035);
-  color:#fff;
-  padding:12px 13px;
-  outline:none;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:rgba(201,43,73,.7);
-  box-shadow:
-    0 0 0 3px rgba(157,28,50,.12);
-}
-
-textarea{
-  min-height:120px;
-  resize:vertical;
-}
-
-select option{
-  background:#101722;
-  color:#fff;
-}
-
-/* BUTTONS */
-
-.btn{
-  border:0;
-  border-radius:12px;
-  padding:12px 17px;
-  color:#fff;
-  font-weight:800;
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:translateY(-1px);
-}
-
-.btn-primary{
-  background:
-    linear-gradient(
-      135deg,
-      var(--primary),
-      var(--primary2)
-    );
-}
-
-.btn-secondary{
-  background:rgba(255,255,255,.05);
-  border:1px solid var(--border);
-}
-
-.btn-danger{
-  background:rgba(239,68,68,.12);
-  color:#fca5a5;
-  border:1px solid rgba(239,68,68,.2);
-}
-
-.actions{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-}
-
-/* WORKER */
-
-.worker-box{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  flex-wrap:wrap;
-}
-
-.worker-url{
-  direction:ltr;
-  text-align:left;
-  font-family:monospace;
-  font-size:12px;
-  color:#cbd5e1;
-  background:rgba(0,0,0,.2);
-  padding:10px;
-  border-radius:9px;
-  word-break:break-all;
-}
-
-/* REGISTRATION */
-
-.registration-grid{
-  display:grid;
-  grid-template-columns:
-    1fr 1fr;
-  gap:16px;
-}
-
-.registration-grid .full{
-  grid-column:1/-1;
-}
-
-.upload{
-  border:1px dashed rgba(255,255,255,.15);
-  border-radius:15px;
-  padding:20px;
-  text-align:center;
-  background:rgba(255,255,255,.02);
-}
-
-.upload input{
-  margin-top:10px;
-}
-
-.preview{
-  display:none;
-  margin-top:12px;
-  max-width:100%;
-  max-height:280px;
-  border-radius:14px;
-  border:1px solid var(--border);
-}
-
-.result{
-  display:none;
-  margin-top:15px;
-  padding:14px;
-  border-radius:13px;
-  font-size:12px;
-  line-height:1.9;
-  white-space:pre-wrap;
-}
-
-.result.ok{
-  display:block;
-  color:#86efac;
-  background:rgba(34,197,94,.07);
-  border:1px solid rgba(34,197,94,.18);
-}
-
-.result.error{
-  display:block;
-  color:#fca5a5;
-  background:rgba(239,68,68,.07);
-  border:1px solid rgba(239,68,68,.18);
-}
-
-/* SERVICE */
-
-.service-list{
-  display:flex;
-  flex-direction:column;
-  gap:9px;
-}
-
-.service-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:12px;
-  background:rgba(255,255,255,.025);
-  border:1px solid var(--border);
-  border-radius:13px;
-}
-
-.service-icon{
-  width:40px;
-  height:40px;
-  border-radius:11px;
-  display:grid;
-  place-items:center;
-  background:rgba(157,28,50,.18);
-  font-size:20px;
-}
-
-.service-name{
-  flex:1;
-}
-
-.service-name small{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
-}
-
-/* LOG */
-
-.log{
-  max-height:260px;
-  overflow:auto;
-  background:#05070b;
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:12px;
-  direction:ltr;
-  text-align:left;
-  font-family:monospace;
-  font-size:11px;
-  line-height:1.8;
-}
-
-/* MOBILE */
-
-.mobile-toggle{
-  display:none;
-}
-
-@media(max-width:900px){
-
-  .sidebar{
-    transform:translateX(100%);
-    transition:.25s;
-  }
-
-  .sidebar.open{
-    transform:translateX(0);
-  }
-
-  .main{
-    width:100%;
-    margin-right:0;
-    padding:15px;
-  }
-
-  .mobile-toggle{
-    display:block;
-    border:1px solid var(--border);
-    background:rgba(255,255,255,.04);
-    color:#fff;
-    border-radius:11px;
-    padding:10px 13px;
-  }
-
-  .grid{
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
-  }
-
-  .registration-grid,
-  .grid-2{
-    grid-template-columns:1fr;
-  }
-
-  .registration-grid .full{
-    grid-column:auto;
-  }
-}
-
-@media(max-width:520px){
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .topbar{
-    align-items:flex-start;
-  }
-
-  .top-title h1{
-    font-size:20px;
-  }
-
-  .main{
-    padding:12px;
-  }
-
-  .card{
-    padding:14px;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<div class="app">
-
-  <!-- SIDEBAR -->
-
-  <aside class="sidebar" id="sidebar">
-
-    <div class="brand">
-      <div class="brand-title">
-        🏔️ KURDIA ADVENTURE
-      </div>
-
-      <div class="brand-sub">
-        Smart Website Control Panel
-      </div>
-    </div>
-
-    <nav class="nav">
-
-      <button class="active" data-page="dashboard">
-        📊 داشبۆرد
-      </button>
-
-      <button data-page="registration">
-        🧾 تاقیکردنەوەی بەشداری
-      </button>
-
-      <button data-page="worker">
-        ☁️ Worker
-      </button>
-
-      <button data-page="ai">
-        🤖 AI Assistant
-      </button>
-
-      <button data-page="services">
-        🧩 خزمەتگوزارییەکان
-      </button>
-
-      <button data-page="website">
-        🌐 ماڵپەڕ
-      </button>
-
-      <button data-page="settings">
-        ⚙️ ڕێکخستنەکان
-      </button>
-
-    </nav>
-
-  </aside>
-
-  <!-- MAIN -->
-
-  <main class="main">
-
-    <div class="topbar">
-
-      <div class="top-title">
-
-        <button
-          class="mobile-toggle"
-          id="menuBtn"
-        >
-          ☰
-        </button>
-
-        <h1 id="pageTitle">
-          داشبۆرد
-        </h1>
-
-        <p>
-          KURDIA ADVENTURE
-          Smart Control Panel
-        </p>
-
-      </div>
-
-      <div class="status">
-
-        <span class="dot"></span>
-
-        سیستەم چالاکە
-
-      </div>
-
-    </div>
-
-
-    <!-- DASHBOARD -->
-
-    <section
-      class="page active"
-      id="page-dashboard"
-    >
-
-      <div class="grid">
-
-        <div class="card stat">
-          <div class="stat-icon">🌐</div>
-          <div class="stat-value">
-            ONLINE
-          </div>
-          <div class="stat-label">
-            KURDIA Website
-          </div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-icon">🤖</div>
-          <div
-            class="stat-value"
-            id="geminiStatus"
-          >
-            —
-          </div>
-          <div class="stat-label">
-            Gemini AI
-          </div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-icon">📩</div>
-          <div
-            class="stat-value"
-            id="telegramStatus"
-          >
-            —
-          </div>
-          <div class="stat-label">
-            Telegram
-          </div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-icon">🔗</div>
-          <div
-            class="stat-value"
-            id="webhookStatus"
-          >
-            —
-          </div>
-          <div class="stat-label">
-            Webhook
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="section-title">
-
-        <h2>
-          ☁️ دۆخی Backend
-        </h2>
-
-        <span>
-          Cloudflare Worker
-        </span>
-
-      </div>
-
-      <div class="card">
-
-        <div class="worker-box">
-
-          <div>
-
-            <strong>
-              KURDIA Worker
-            </strong>
-
-            <div class="worker-url">
-              https://kurdia.alwandssalh.workers.dev
-            </div>
-
-          </div>
-
-          <button
-            class="btn btn-primary"
-            id="healthBtn"
-          >
-            🔄 نوێکردنەوەی دۆخ
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div class="section-title">
-
-        <h2>
-          ⚡ کردارە خێراکان
-        </h2>
-
-      </div>
-
-      <div class="card">
-
-        <div class="actions">
-
-          <button
-            class="btn btn-primary"
-            onclick="showPage('registration')"
-          >
-            🧾 تاقیکردنەوەی بەشداری
-          </button>
-
-          <button
-            class="btn btn-secondary"
-            id="telegramTestBtn"
-          >
-            📩 تاقیکردنەوەی Telegram
-          </button>
-
-          <button
-            class="btn btn-secondary"
-            onclick="showPage('ai')"
-          >
-            🤖 تاقیکردنەوەی AI
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- REGISTRATION -->
-
-    <section
-      class="page"
-      id="page-registration"
-    >
-
-      <div class="section-title">
-
-        <h2>
-          🧾 تاقیکردنەوەی سیستەمی بەشداری
-        </h2>
-
-        <span>
-          Admin → Worker → Gemini → Telegram
-        </span>
-
-      </div>
-
-      <div class="card">
-
-        <div class="registration-grid">
-
-          <div class="field">
-
-            <label>
-              👤 ناوی بەشداربوو
-            </label>
-
-            <input
-              id="regName"
-              placeholder="ناوی تاقیکردنەوە"
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              📱 ژمارەی مۆبایل
-            </label>
-
-            <input
-              id="regPhone"
-              inputmode="tel"
-              placeholder="07700000000"
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              🏕️ ناوی گەشت
-            </label>
-
-            <input
-              id="regTrip"
-              placeholder="گەشتی تاقیکردنەوە"
-            >
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              👥 ژمارەی کەسان
-            </label>
-
-            <input
-              id="regPeople"
-              inputmode="numeric"
-              value="2"
-            >
-
-          </div>
-
-
-          <div class="field full">
-
-            <label>
-              🧾 پسوڵەی پارەدان
-            </label>
-
-            <div class="upload">
-
-              <div>
-                وێنەی پسوڵە هەڵبژێرە
-              </div>
-
-              <input
-                type="file"
-                id="regReceipt"
-                accept="image/*"
-              >
-
-              <img
-                id="receiptPreview"
-                class="preview"
-                alt="Receipt preview"
-              >
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="actions">
-
-          <button
-            class="btn btn-primary"
-            id="registerBtn"
-          >
-            🚀 ناردنی تاقیکردنەوە
-          </button>
-
-          <button
-            class="btn btn-secondary"
-            id="clearRegBtn"
-          >
-            🧹 پاککردنەوە
-          </button>
-
-        </div>
-
-
-        <div
-          id="registrationResult"
-          class="result"
-        ></div>
-
-      </div>
-
-
-      <div class="section-title">
-
-        <h2>
-          🔄 زنجیرەی کار
-        </h2>
-
-      </div>
-
-      <div class="grid">
-
-        <div class="card">
-          🧾
-          <strong>Registration</strong>
-          <div class="stat-label">
-            زانیاری بەشداربوو
-          </div>
-        </div>
-
-        <div class="card">
-          🤖
-          <strong>Gemini</strong>
-          <div class="stat-label">
-            پشکنینی وێنە
-          </div>
-        </div>
-
-        <div class="card">
-          📩
-          <strong>Telegram</strong>
-          <div class="stat-label">
-            ناردنی داواکاری
-          </div>
-        </div>
-
-        <div class="card">
-          ✅❌
-          <strong>Decision</strong>
-          <div class="stat-label">
-            Verify / Reject
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- WORKER -->
-
-    <section
-      class="page"
-      id="page-worker"
-    >
-
-      <div class="section-title">
-
-        <h2>
-          ☁️ Cloudflare Worker
-        </h2>
-
-      </div>
-
-      <div class="card">
-
-        <div class="field">
-
-          <label>
-            Worker URL
-          </label>
-
-          <input
-            id="workerUrl"
-            value="https://kurdia.alwandssalh.workers.dev"
-          >
-
-        </div>
-
-        <div class="actions">
-
-          <button
-            class="btn btn-primary"
-            id="workerHealthBtn"
-          >
-            🔍 پشکنینی Worker
-          </button>
-
-        </div>
-
-        <div
-          id="workerResult"
-          class="result"
-        ></div>
-
-      </div>
-
-
-      <div class="section-title">
-
-        <h2>
-          🔗 Webhook
-        </h2>
-
-      </div>
-
-      <div class="card">
-
-        <div class="worker-url">
-          https://kurdia.alwandssalh.workers.dev/api/telegram/webhook
-        </div>
-
-        <p class="note">
-          Webhook لەلایەن Worker ـەکەوە بە شێوەی خۆکار دادەنرێت.
-          پێویست ناکات بە دەستی /set-webhook بەکاربهێنیت.
-        </p>
-
-      </div>
-
-    </section>
-
-
-    <!-- AI -->
-
-    <section
-      class="page"
-      id="page-ai"
-    >
-
-      <div class="section-title">
-
-        <h2>
-          🤖 KURDIA AI Assistant
-        </h2>
-
-      </div>
-
-      <div class="card">
-
-        <div class="field">
-
-          <label>
-            پرسیار
-          </label>
-
-          <textarea
-            id="aiQuestion"
-            placeholder="پرسیارێک بە کوردی بنووسە..."
-          ></textarea>
-
-        </div>
-
-        <button
-          class="btn btn-primary"
-          id="aiBtn"
-        >
-          🤖 وەڵام بدەرەوە
-        </button>
-
-        <div
-          id="aiResult"
-          class="result"
-        ></div>
-
-      </div>
-
-    </section>
-
-
-    <!-- SERVICES -->
-
-    <section
-      class="page"
-      id="page-services"
-    >
-
-      <div class="section-title">
-
-        <h2>
-          🧩 خزمەتگوزارییەکان
-        </h2>
-
-      </div>
-
-      <div class="card">
-
-        <div
-          class="service-list"
-          id="serviceList"
-        ></div>
-
-        <div class="actions" style="margin-top:15px">
-
-          <input
-            id="serviceName"
-            placeholder="ناوی خزمەتگوزاری"
-            style="flex:1;min-width:180px"
-          >
-
-          <input
-            id="serviceIcon"
-            placeholder="ئایکۆن، نموونە: 🚌"
-            style="width:180px"
-          >
-
-          <button
-            class="btn btn-primary"
-            id="addServiceBtn"
-          >
-            + زیادکردن
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- WEBSITE -->
-
-    <section
-      class="page"
-      id="page-website"
-    >
-
-      <div class="section-title">
-
-        <h2>
-          🌐 ماڵپەڕ
-        </h2>
-
-      </div>
-
-      <div class="card">
-
-        <div class="field">
-
-          <label>
-            Website
-          </label>
-
-          <input
-            value="https://halo47.github.io/Kurdia-adventure-/"
-            readonly
-          >
-
-        </div>
-
-        <div class="actions">
-
-          <a
-            class="btn btn-primary"
-            href="https://halo47.github.io/Kurdia-adventure-/"
-            target="_blank"
-            style="text-decoration:none"
-          >
-            🌐 کردنەوەی ماڵپەڕ
-          </a>
-
-          <a
-            class="btn btn-secondary"
-            href="https://github.com/halo47/Kurdia-adventure-"
-            target="_blank"
-            style="text-decoration:none"
-          >
-            GitHub
-          </a>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- SETTINGS -->
-
-    <section
-      class="page"
-      id="page-settings"
-    >
-
-      <div class="section-title">
-
-        <h2>
-          ⚙️ ڕێکخستنەکان
-        </h2>
-
-      </div>
-
-      <div class="card">
-
-        <div class="field">
-
-          <label>
-            PIN ـی Admin
-          </label>
-
-          <input
-            type="password"
-            value="2026"
-            readonly
-          >
-
-          <div class="note">
-            API Key و Telegram Token لەم Admin ـەدا پێویست نییە.
-            Worker ـەکە Secret ـەکان لە Cloudflare پارێزراو هەڵدەگرێت.
-          </div>
-
-        </div>
-
-        <div class="field">
-
-          <label>
-            Gemini Model
-          </label>
-
-          <input
-            value="gemini-3.8-flash"
-            readonly
-          >
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-</div>
-
-
-<script>
-
-const WORKER_URL =
-  "https://kurdia.alwandssalh.workers.dev";
-
-
-/* NAVIGATION */
-
-const pageTitles = {
-  dashboard:"داشبۆرد",
-  registration:"تاقیکردنەوەی بەشداری",
-  worker:"Cloudflare Worker",
-  ai:"AI Assistant",
-  services:"خزمەتگوزارییەکان",
-  website:"ماڵپەڕ",
-  settings:"ڕێکخستنەکان"
-};
-
-function showPage(name){
-
-  document
-    .querySelectorAll(".page")
-    .forEach(page=>{
-      page.classList.remove("active");
-    });
-
-  const target =
-    document.getElementById(
-      "page-" + name
-    );
-
-  if(target){
-    target.classList.add("active");
-  }
-
-  document
-    .querySelectorAll(".nav button")
-    .forEach(btn=>{
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === name
-      );
-    });
-
-  document.getElementById(
-    "pageTitle"
-  ).textContent =
-    pageTitles[name] || name;
-
-  document
-    .getElementById("sidebar")
-    .classList.remove("open");
-}
-
-document
-  .querySelectorAll(".nav button")
-  .forEach(btn=>{
-    btn.addEventListener(
-      "click",
-      ()=>{
-        showPage(btn.dataset.page);
-      }
-    );
-  });
-
-
-document
-  .getElementById("menuBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-      document
-        .getElementById("sidebar")
-        .classList.toggle("open");
+// ============================================================
+// KURDIA ADVENTURE — CLOUDFLARE WORKER
+// Gemini + Telegram + Registration + Verify/Reject + WhatsApp
+// ============================================================
+//
+// Cloudflare Secrets required:
+//
+// GEMINI_API_KEY
+// TELEGRAM_BOT_TOKEN
+// TELEGRAM_CHAT_ID
+// WHATSAPP_PHONE_NUMBER_ID
+// WHATSAPP_ACCESS_TOKEN
+// WHATSAPP_APPROVED_TEMPLATE
+// WHATSAPP_REJECTED_TEMPLATE
+//
+// Optional:
+// WHATSAPP_GRAPH_VERSION = v23.0
+//
+// ============================================================
+
+export default {
+  async fetch(request, env, ctx) {
+
+    const url = new URL(request.url);
+
+    const CORS = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Content-Type, Authorization"
+    };
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: CORS
+      });
     }
-  );
 
-
-/* HEALTH */
-
-async function checkHealth(){
-
-  const gemini =
-    document.getElementById(
-      "geminiStatus"
-    );
-
-  const telegram =
-    document.getElementById(
-      "telegramStatus"
-    );
-
-  const webhook =
-    document.getElementById(
-      "webhookStatus"
-    );
-
-  gemini.textContent="...";
-  telegram.textContent="...";
-  webhook.textContent="...";
-
-  try{
-
-    const response =
-      await fetch(
-        WORKER_URL +
-        "/api/health"
+    const json = (data, status = 200) =>
+      new Response(
+        JSON.stringify(data),
+        {
+          status,
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            ...CORS
+          }
+        }
       );
 
-    const data =
-      await response.json();
+    const MODEL = "gemini-3.8-flash";
 
-    gemini.textContent =
-      data.gemini
-        ? "ON"
-        : "OFF";
+    // ==========================================================
+    // HELPERS
+    // ==========================================================
 
-    telegram.textContent =
-      data.telegram
-        ? "ON"
-        : "OFF";
+    function cleanPhone(phone) {
+      return String(phone || "")
+        .replace(/[^\d+]/g, "")
+        .replace(/^00/, "+");
+    }
 
-    webhook.textContent =
-      data.webhook?.ok
-        ? "ON"
-        : "OFF";
+    function normalizeWhatsAppPhone(phone) {
+      let p = cleanPhone(phone);
 
-  }catch(error){
+      if (p.startsWith("+")) {
+        return p.substring(1);
+      }
 
-    gemini.textContent="ERR";
-    telegram.textContent="ERR";
-    webhook.textContent="ERR";
+      if (p.startsWith("00")) {
+        return p.substring(2);
+      }
 
-  }
-}
+      // Iraq local number
+      if (p.startsWith("07") && p.length >= 10) {
+        return "964" + p.substring(1);
+      }
 
+      return p;
+    }
 
-document
-  .getElementById("healthBtn")
-  .addEventListener(
-    "click",
-    checkHealth
-  );
+    function makeId() {
+      return (
+        "KD-" +
+        Date.now().toString(36).toUpperCase() +
+        "-" +
+        crypto.randomUUID().slice(0, 6).toUpperCase()
+      );
+    }
 
+    function bytesToBase64(bytes) {
+      let binary = "";
 
-/* WORKER HEALTH */
+      const chunk = 0x8000;
 
-document
-  .getElementById("workerHealthBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
-
-      const box =
-        document.getElementById(
-          "workerResult"
+      for (let i = 0; i < bytes.length; i += chunk) {
+        binary += String.fromCharCode(
+          ...bytes.subarray(i, i + chunk)
         );
+      }
 
-      box.className="result";
-      box.textContent=
-        "⏳ Worker پشکنین دەکرێت...";
-      box.style.display="block";
+      return btoa(binary);
+    }
 
-      try{
+    // ==========================================================
+    // TELEGRAM
+    // ==========================================================
 
-        const url =
-          document
-            .getElementById(
-              "workerUrl"
-            )
-            .value
-            .replace(/\/+$/,"");
+    async function telegram(method, body) {
 
-        const response =
-          await fetch(
-            url + "/api/health"
-          );
+      if (!env.TELEGRAM_BOT_TOKEN) {
+        throw new Error(
+          "TELEGRAM_BOT_TOKEN is missing"
+        );
+      }
 
-        const data =
-          await response.json();
+      const response = await fetch(
+        `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/${method}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(body)
+        }
+      );
 
-        box.className="result ok";
+      const data = await response.json();
 
-        box.textContent =
-          "✅ Worker کار دەکات.\n\n" +
-          "Gemini: " +
-          (data.gemini ? "ON" : "OFF") +
-          "\nTelegram: " +
-          (data.telegram ? "ON" : "OFF") +
-          "\nWebhook: " +
-          (data.webhook?.ok ? "ON" : "OFF") +
-          "\nModel: " +
-          (data.model || "-");
+      if (!response.ok || data.ok === false) {
+        throw new Error(
+          data.description ||
+          "Telegram API error"
+        );
+      }
 
-      }catch(error){
+      return data;
+    }
 
-        box.className="result error";
+    // ==========================================================
+    // GEMINI
+    // ==========================================================
 
-        box.textContent =
-          "❌ Worker کێشەی هەیە:\n" +
-          error.message;
+    async function gemini(text, imageBase64 = null, mime = null) {
+
+      if (!env.GEMINI_API_KEY) {
+        throw new Error(
+          "GEMINI_API_KEY is missing"
+        );
+      }
+
+      const parts = [
+        {
+          text
+        }
+      ];
+
+      if (imageBase64) {
+
+        parts.push({
+          inline_data: {
+            mime_type:
+              mime || "image/jpeg",
+            data: imageBase64
+          }
+        });
 
       }
 
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key":
+              env.GEMINI_API_KEY
+          },
+
+          body: JSON.stringify({
+            contents: [
+              {
+                parts
+              }
+            ]
+          })
+        }
+      );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+
+        throw new Error(
+          data?.error?.message ||
+          "Gemini API error"
+        );
+
+      }
+
+      const answer =
+        data?.candidates?.[0]
+          ?.content
+          ?.parts
+          ?.map(p => p.text || "")
+          ?.join("") || "";
+
+      return answer;
     }
-  );
 
+    // ==========================================================
+    // WHATSAPP CLOUD API
+    // ==========================================================
 
-/* TELEGRAM TEST */
+    async function whatsappTemplate(
+      phone,
+      templateName,
+      name,
+      trip
+    ) {
 
-document
-  .getElementById("telegramTestBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
+      if (
+        !env.WHATSAPP_PHONE_NUMBER_ID ||
+        !env.WHATSAPP_ACCESS_TOKEN
+      ) {
 
-      try{
+        throw new Error(
+          "WhatsApp credentials are missing"
+        );
 
-        const response =
-          await fetch(
-            WORKER_URL +
-            "/test-telegram",
+      }
+
+      if (!templateName) {
+
+        throw new Error(
+          "WhatsApp template name is missing"
+        );
+
+      }
+
+      const version =
+        env.WHATSAPP_GRAPH_VERSION ||
+        "v23.0";
+
+      const recipient =
+        normalizeWhatsAppPhone(phone);
+
+      const body = {
+        messaging_product: "whatsapp",
+
+        to: recipient,
+
+        type: "template",
+
+        template: {
+          name: templateName,
+
+          language: {
+            code:
+              env.WHATSAPP_LANGUAGE ||
+              "ku"
+          },
+
+          components: [
             {
-              method:"POST"
+              type: "body",
+
+              parameters: [
+                {
+                  type: "text",
+                  text: String(name || "")
+                },
+                {
+                  type: "text",
+                  text: String(trip || "")
+                }
+              ]
             }
-          );
-
-        const data =
-          await response.json();
-
-        if(data.ok){
-          alert(
-            "✅ پەیامی تاقیکردنەوە نێردرا بۆ Telegram."
-          );
-        }else{
-          alert(
-            "❌ Telegram:\n" +
-            (data.description ||
-             data.error ||
-             "هەڵە")
-          );
+          ]
         }
-
-      }catch(error){
-
-        alert(
-          "❌ هەڵەی پەیوەندی:\n" +
-          error.message
-        );
-
-      }
-
-    }
-  );
-
-
-/* RECEIPT PREVIEW */
-
-document
-  .getElementById("regReceipt")
-  .addEventListener(
-    "change",
-    function(){
-
-      const file =
-        this.files[0];
-
-      const preview =
-        document.getElementById(
-          "receiptPreview"
-        );
-
-      if(!file){
-
-        preview.style.display="none";
-        preview.removeAttribute("src");
-        return;
-
-      }
-
-      const url =
-        URL.createObjectURL(file);
-
-      preview.src=url;
-      preview.style.display="block";
-
-    }
-  );
-
-
-/* REGISTRATION */
-
-document
-  .getElementById("registerBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
-
-      const result =
-        document.getElementById(
-          "registrationResult"
-        );
-
-      const button =
-        document.getElementById(
-          "registerBtn"
-        );
-
-      const name =
-        document
-          .getElementById("regName")
-          .value
-          .trim();
-
-      const phone =
-        document
-          .getElementById("regPhone")
-          .value
-          .trim();
-
-      const trip =
-        document
-          .getElementById("regTrip")
-          .value
-          .trim();
-
-      const people =
-        document
-          .getElementById("regPeople")
-          .value
-          .trim() || "1";
-
-      const receipt =
-        document
-          .getElementById("regReceipt")
-          .files[0];
-
-      if(!name || !phone || !trip){
-
-        result.className=
-          "result error";
-
-        result.textContent=
-          "❌ تکایە ناو، ژمارەی مۆبایل و ناوی گەشت پڕ بکەرەوە.";
-
-        return;
-
-      }
-
-
-      button.disabled=true;
-
-      button.textContent=
-        "⏳ نێردرێت...";
-
-      result.className="result";
-
-      result.textContent=
-        "⏳ داواکارییەکە بۆ Worker دەنێردرێت...";
-
-      result.style.display="block";
-
-
-      try{
-
-        const form =
-          new FormData();
-
-        form.append(
-          "name",
-          name
-        );
-
-        form.append(
-          "phone",
-          phone
-        );
-
-        form.append(
-          "trip",
-          trip
-        );
-
-        form.append(
-          "people",
-          people
-        );
-
-        if(receipt){
-
-          form.append(
-            "receipt",
-            receipt,
-            receipt.name
-          );
-
-        }
-
-
-        const response =
-          await fetch(
-            WORKER_URL +
-            "/api/register",
-            {
-              method:"POST",
-              body:form
-            }
-          );
-
-
-        const data =
-          await response
-            .json()
-            .catch(
-              ()=>({})
-            );
-
-
-        if(
-          !response.ok ||
-          !data.ok
-        ){
-
-          throw new Error(
-            data.error ||
-            ("HTTP " +
-             response.status)
-          );
-
-        }
-
-
-        result.className=
-          "result ok";
-
-        result.textContent =
-          "✅ تاقیکردنەوە سەرکەوتوو بوو.\n\n" +
-          "🆔 Registration ID: " +
-          (data.registration_id || "-") +
-          "\n\n" +
-          "📩 داواکارییەکە نێردراوە بۆ Telegram.\n" +
-          "لە Telegram ـەوە دەتوانیت:\n" +
-          "✅ پشتڕاستی بکەیتەوە\n" +
-          "❌ یان ڕەتی بکەیتەوە.";
-
-      }catch(error){
-
-        result.className=
-          "result error";
-
-        result.textContent =
-          "❌ ناردن سەرکەوتوو نەبوو.\n\n" +
-          error.message;
-
-      }finally{
-
-        button.disabled=false;
-
-        button.textContent=
-          "🚀 ناردنی تاقیکردنەوە";
-
-      }
-
-    }
-  );
-
-
-/* CLEAR REGISTRATION */
-
-document
-  .getElementById("clearRegBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      document
-        .getElementById("regName")
-        .value="";
-
-      document
-        .getElementById("regPhone")
-        .value="";
-
-      document
-        .getElementById("regTrip")
-        .value="";
-
-      document
-        .getElementById("regPeople")
-        .value="2";
-
-      document
-        .getElementById("regReceipt")
-        .value="";
-
-      document
-        .getElementById("receiptPreview")
-        .style.display="none";
-
-      document
-        .getElementById(
-          "registrationResult"
-        )
-        .style.display="none";
-
-    }
-  );
-
-
-/* AI */
-
-document
-  .getElementById("aiBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
-
-      const question =
-        document
-          .getElementById(
-            "aiQuestion"
-          )
-          .value
-          .trim();
-
-      const result =
-        document.getElementById(
-          "aiResult"
-        );
-
-      if(!question){
-
-        result.className=
-          "result error";
-
-        result.textContent=
-          "تکایە پرسیارێک بنووسە.";
-
-        return;
-
-      }
-
-      result.className="result";
-
-      result.textContent=
-        "⏳ Gemini وەڵام دەداتەوە...";
-
-      result.style.display="block";
-
-
-      try{
-
-        const response =
-          await fetch(
-            WORKER_URL +
-            "/api/ai",
-            {
-              method:"POST",
-              headers:{
-                "Content-Type":
-                  "application/json"
-              },
-              body:JSON.stringify({
-                message:question
-              })
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if(!response.ok ||
-           !data.ok){
-
-          throw new Error(
-            data.error ||
-            "AI error"
-          );
-
-        }
-
-        result.className=
-          "result ok";
-
-        result.textContent =
-          data.answer ||
-          "وەڵامێک نەدۆزرایەوە.";
-
-      }catch(error){
-
-        result.className=
-          "result error";
-
-        result.textContent=
-          "❌ AI:\n" +
-          error.message;
-
-      }
-
-    }
-  );
-
-
-/* SERVICES */
-
-let services =
-  JSON.parse(
-    localStorage.getItem(
-      "KURDIA_SERVICES"
-    ) ||
-    "[]"
-  );
-
-if(!services.length){
-
-  services=[
-    {
-      name:"گواستنەوە",
-      icon:"🚌"
-    },
-    {
-      name:"نان و خواردن",
-      icon:"🍽️"
-    },
-    {
-      name:"ئاوی خواردنەوە",
-      icon:"💧"
-    },
-    {
-      name:"خێمە",
-      icon:"⛺"
-    },
-    {
-      name:"کارەبا و ڕووناکی",
-      icon:"💡"
-    },
-    {
-      name:"کورسی و مێز",
-      icon:"🪑"
-    },
-    {
-      name:"پڕۆژێکتەر",
-      icon:"📽️"
-    },
-    {
-      name:"ئاگری گەرمکردنەوە",
-      icon:"🔥"
-    }
-  ];
-
-}
-
-
-function saveServices(){
-
-  localStorage.setItem(
-    "KURDIA_SERVICES",
-    JSON.stringify(services)
-  );
-
-}
-
-
-function renderServices(){
-
-  const list =
-    document.getElementById(
-      "serviceList"
-    );
-
-  list.innerHTML="";
-
-  services.forEach(
-    (service,index)=>{
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-      item.className=
-        "service-item";
-
-      item.innerHTML=`
-        <div class="service-icon">
-          ${service.icon || "✨"}
-        </div>
-
-        <div class="service-name">
-          <strong>
-            ${escapeHtml(service.name)}
-          </strong>
-
-          <small>
-            ${escapeHtml(service.icon || "")}
-          </small>
-        </div>
-
-        <button
-          class="btn btn-danger"
-          data-index="${index}"
-        >
-          سڕینەوە
-        </button>
-      `;
-
-      item
-        .querySelector("button")
-        .addEventListener(
-          "click",
-          ()=>{
-            services.splice(
-              index,
-              1
-            );
-
-            saveServices();
-            renderServices();
+      };
+
+      const response =
+        await fetch(
+          `https://graph.facebook.com/${version}/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+          {
+            method: "POST",
+
+            headers: {
+              "Authorization":
+                `Bearer ${env.WHATSAPP_ACCESS_TOKEN}`,
+
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(body)
           }
         );
 
-      list.appendChild(item);
+      const data =
+        await response.json();
 
-    }
-  );
+      if (!response.ok) {
 
-}
-
-
-document
-  .getElementById("addServiceBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      const name =
-        document
-          .getElementById(
-            "serviceName"
-          )
-          .value
-          .trim();
-
-      const icon =
-        document
-          .getElementById(
-            "serviceIcon"
-          )
-          .value
-          .trim();
-
-      if(!name){
-
-        alert(
-          "ناوی خزمەتگوزاری بنووسە."
+        throw new Error(
+          data?.error?.message ||
+          JSON.stringify(data)
         );
-
-        return;
 
       }
 
-      services.push({
-        name,
-        icon:icon || "✨"
-      });
+      return data;
+    }
 
-      saveServices();
-      renderServices();
+    // ==========================================================
+    // SAVE REGISTRATION
+    //
+    // KV binding:
+    //
+    // REGISTRATIONS
+    //
+    // Add Cloudflare KV namespace binding:
+    //
+    // Variable name:
+    // REGISTRATIONS
+    // ==========================================================
 
-      document
-        .getElementById(
-          "serviceName"
-        )
-        .value="";
+    async function saveRegistration(data) {
 
-      document
-        .getElementById(
-          "serviceIcon"
-        )
-        .value="";
+      if (!env.REGISTRATIONS) {
+        return;
+      }
+
+      await env.REGISTRATIONS.put(
+        data.id,
+        JSON.stringify(data),
+        {
+          expirationTtl:
+            60 * 60 * 24 * 90
+        }
+      );
 
     }
-  );
 
+    async function getRegistration(id) {
 
-function escapeHtml(value){
+      if (!env.REGISTRATIONS) {
+        return null;
+      }
 
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+      const value =
+        await env.REGISTRATIONS.get(id);
 
+      if (!value) {
+        return null;
+      }
+
+      try {
+        return JSON.parse(value);
+      } catch {
+        return null;
+      }
+
+    }
+
+    // ==========================================================
+    // WEBHOOK SETUP
+    // ==========================================================
+
+    async function setWebhook(request) {
+
+      try {
+
+        const webhookUrl =
+          new URL(
+            "/api/telegram/webhook",
+            request.url
+          ).toString();
+
+        return await telegram(
+          "setWebhook",
+          {
+            url: webhookUrl
+          }
+        );
+
+      } catch (error) {
+
+        return {
+          ok: false,
+          error: error.message
+        };
+
+      }
+
+    }
+
+    // ==========================================================
+    // HEALTH
+    // ==========================================================
+
+    if (
+      url.pathname === "/api/health" &&
+      request.method === "GET"
+    ) {
+
+      let webhook = null;
+
+      try {
+        webhook =
+          await telegram(
+            "getWebhookInfo",
+            {}
+          );
+      } catch (e) {
+        webhook = {
+          ok: false,
+          error: e.message
+        };
+      }
+
+      return json({
+        ok: true,
+
+        worker:
+          "KURDIA ADVENTURE",
+
+        model: MODEL,
+
+        gemini:
+          !!env.GEMINI_API_KEY,
+
+        telegram:
+          !!env.TELEGRAM_BOT_TOKEN &&
+          !!env.TELEGRAM_CHAT_ID,
+
+        whatsapp:
+          !!env.WHATSAPP_PHONE_NUMBER_ID &&
+          !!env.WHATSAPP_ACCESS_TOKEN,
+
+        registrations:
+          !!env.REGISTRATIONS,
+
+        webhook
+      });
+
+    }
+
+    // ==========================================================
+    // ROOT
+    // ==========================================================
+
+    if (
+      url.pathname === "/" &&
+      request.method === "GET"
+    ) {
+
+      ctx.waitUntil(
+        setWebhook(request)
+      );
+
+      return json({
+        ok: true,
+
+        message:
+          "KURDIA ADVENTURE WORKER ONLINE",
+
+        gemini:
+          MODEL,
+
+        whatsapp:
+          !!env.WHATSAPP_ACCESS_TOKEN
+      });
+
+    }
+
+    // ==========================================================
+    // TEST TELEGRAM
+    // ==========================================================
+
+    if (
+      url.pathname === "/test-telegram" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const result =
+          await telegram(
+            "sendMessage",
+            {
+              chat_id:
+                env.TELEGRAM_CHAT_ID,
+
+              text:
+`🏔️ KURDIA ADVENTURE
+
+✅ Telegram Worker Test سەرکەوتوو بوو!
+
+🤖 Gemini: ${MODEL}`
+
+            }
+          );
+
+        return json({
+          ok: true,
+          telegram: result
+        });
+
+      } catch (error) {
+
+        return json(
+          {
+            ok: false,
+            error: error.message
+          },
+          500
+        );
+
+      }
+
+    }
+
+    // ==========================================================
+    // TEST WHATSAPP
+    // ==========================================================
+
+    if (
+      url.pathname === "/api/test-whatsapp" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const body =
+          await request.json();
+
+        const phone =
+          body.phone;
+
+        const result =
+          await whatsappTemplate(
+            phone,
+            env.WHATSAPP_APPROVED_TEMPLATE,
+            body.name || "KURDIA",
+            body.trip || "KURDIA ADVENTURE"
+          );
+
+        return json({
+          ok: true,
+          whatsapp: result
+        });
+
+      } catch (error) {
+
+        return json(
+          {
+            ok: false,
+            error: error.message
+          },
+          500
+        );
+
+      }
+
+    }
+
+    // ==========================================================
+    // GENERAL AI
+    // ==========================================================
+
+    if (
+      url.pathname === "/api/ai" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const body =
+          await request.json();
+
+        const answer =
+          await gemini(
+`تۆ KURDIA ADVENTURE AI Assistant ـیت.
+
+بە کوردیی سۆرانی وەڵام بدەرەوە.
+
+لە زانیارییەکانی website ـەکە بەکاربهێنە.
+
+ئەگەر زانیارییەک نەبوو،
+دروستی مەکە.
+
+لە کارەکانی Admin ـدا یارمەتیدەر بە:
+
+- نووسینی دەق
+- ناونیشان
+- description
+- FAQ
+- service name
+- service icon
+- trip information
+- website content
+
+پرسیاری بەکارهێنەر:
+
+${body.message || ""}
+
+Website data:
+
+${JSON.stringify(
+  body.website || {},
+  null,
+  2
+)}`
+          );
+
+        return json({
+          ok: true,
+          answer
+        });
+
+      } catch (error) {
+
+        return json(
+          {
+            ok: false,
+            error: error.message
+          },
+          500
+        );
+
+      }
+
+    }
+
+    // ==========================================================
+    // REGISTRATION
+    // ==========================================================
+
+    if (
+      url.pathname === "/api/register" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const form =
+          await request.formData();
+
+        const name =
+          String(
+            form.get("name") || ""
+          ).trim();
+
+        const phone =
+          String(
+            form.get("phone") || ""
+          ).trim();
+
+        const trip =
+          String(
+            form.get("trip") || ""
+          ).trim();
+
+        const people =
+          String(
+            form.get("people") || "1"
+          ).trim();
+
+        const receipt =
+          form.get("receipt");
+
+        if (
+          !name ||
+          !phone ||
+          !trip
+        ) {
+
+          return json(
+            {
+              ok: false,
+              error:
+                "ناو، ژمارە و گەشت پێویستن"
+            },
+            400
+          );
+
+        }
+
+        const id =
+          makeId();
+
+        let aiResult =
+          "NO_RECEIPT";
+
+        let imageBase64 =
+          null;
+
+        let imageMime =
+          "image/jpeg";
+
+        // ------------------------------------------------------
+        // RECEIPT
+        // ------------------------------------------------------
+
+        if (
+          receipt &&
+          typeof receipt.arrayBuffer ===
+            "function"
+        ) {
+
+          imageMime =
+            receipt.type ||
+            "image/jpeg";
+
+          const buffer =
+            await receipt.arrayBuffer();
+
+          imageBase64 =
+            bytesToBase64(
+              new Uint8Array(buffer)
+            );
+
+          aiResult =
+            await gemini(
+`ئەم وێنەیە پسوڵەی پارەدانە.
+
+تەنها شیکردنەوە بکە.
+
+بڕیاری کۆتایی مەدە.
+
+وەڵامەکەت بە کوردیی سۆرانی بێت.
+
+ئەم خاڵانە بپشکنە:
+
+1. ئایا بە ڕوونی پسوڵەی پارەدانە؟
+2. ناوی شوێن/کۆمپانیا
+3. بڕی پارە
+4. ژمارەی پسوڵە
+5. بەروار
+6. هەر نیشانەیەکی گرنگ
+
+ئەگەر دڵنیانیت نییە،
+NEEDS_REVIEW بنووسە.
+
+ناوی بەشداربوو:
+${name}
+
+گەشت:
+${trip}`,
+              imageBase64,
+              imageMime
+            );
+
+        }
+
+        // ------------------------------------------------------
+        // SAVE
+        // ------------------------------------------------------
+
+        const registration = {
+
+          id,
+
+          name,
+
+          phone,
+
+          trip,
+
+          people,
+
+          ai:
+            aiResult,
+
+          receipt:
+            imageBase64
+              ? {
+                  mime:
+                    imageMime,
+                  data:
+                    imageBase64
+                }
+              : null,
+
+          status:
+            "PENDING",
+
+          createdAt:
+            new Date().toISOString()
+
+        };
+
+        await saveRegistration(
+          registration
+        );
+
+        // ------------------------------------------------------
+        // TELEGRAM
+        // ------------------------------------------------------
+
+        const telegramText =
+`🏔️ KURDIA ADVENTURE
+━━━━━━━━━━━━━━━━
+
+🧾 بەشداریی نوێ
+
+🆔 ID:
+${id}
+
+👤 ناو:
+${name}
+
+📱 ژمارە:
+${phone}
+
+🏕️ گەشت:
+${trip}
+
+👥 ژمارەی کەس:
+${people}
+
+🤖 Gemini:
+${aiResult}
+
+━━━━━━━━━━━━━━━━
+⚠️ بڕیاری کۆتایی لەلایەن Admin ـەوە دەدرێت.`;
+
+        const buttons = {
+          inline_keyboard: [
+            [
+              {
+                text:
+                  "✅ پشتڕاستکردنەوە",
+                callback_data:
+                  `verify:${id}`
+              }
+            ],
+            [
+              {
+                text:
+                  "❌ ڕەتکردنەوە",
+                callback_data:
+                  `reject:${id}`
+              }
+            ]
+          ]
+        };
+
+        const tg =
+          await telegram(
+            "sendMessage",
+            {
+              chat_id:
+                env.TELEGRAM_CHAT_ID,
+
+              text:
+                telegramText,
+
+              reply_markup:
+                buttons
+            }
+          );
+
+        // ------------------------------------------------------
+        // RECEIPT PHOTO
+        //
+        // Telegram needs multipart upload.
+        // ------------------------------------------------------
+
+        if (
+          imageBase64
+        ) {
+
+          try {
+
+            const bytes =
+              Uint8Array.from(
+                atob(imageBase64),
+                c =>
+                  c.charCodeAt(0)
+              );
+
+            const blob =
+              new Blob(
+                [bytes],
+                {
+                  type:
+                    imageMime
+                }
+              );
+
+            const photoForm =
+              new FormData();
+
+            photoForm.append(
+              "chat_id",
+              env.TELEGRAM_CHAT_ID
+            );
+
+            photoForm.append(
+              "photo",
+              blob,
+              "receipt.jpg"
+            );
+
+            photoForm.append(
+              "caption",
+`🧾 Receipt
+
+🆔 ${id}
+👤 ${name}
+📱 ${phone}
+🏕️ ${trip}
+
+🤖 AI:
+${aiResult}`
+            );
+
+            await fetch(
+              `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendPhoto`,
+              {
+                method: "POST",
+                body: photoForm
+              }
+            );
+
+          } catch {}
+
+        }
+
+        return json({
+          ok: true,
+
+          registration_id:
+            id,
+
+          status:
+            "PENDING",
+
+          telegram:
+            !!tg?.ok
+
+        });
+
+      } catch (error) {
+
+        return json(
+          {
+            ok: false,
+            error:
+              error.message
+          },
+          500
+        );
+
+      }
+
+    }
+
+    // ==========================================================
+    // TELEGRAM WEBHOOK
+    // ==========================================================
+
+    if (
+      url.pathname ===
+        "/api/telegram/webhook" &&
+      request.method === "POST"
+    ) {
+
+      try {
+
+        const update =
+          await request.json();
+
+        const callback =
+          update.callback_query;
+
+        if (!callback) {
+
+          return json({
+            ok: true
+          });
+
+        }
+
+        const data =
+          String(
+            callback.data || ""
+          );
+
+        const parts =
+          data.split(":");
+
+        const action =
+          parts[0];
+
+        const id =
+          parts.slice(1).join(":");
+
+        if (
+          action !== "verify" &&
+          action !== "reject"
+        ) {
+
+          return json({
+            ok: true
+          });
+
+        }
+
+        // ------------------------------------------------------
+        // ANSWER TELEGRAM BUTTON
+        // ------------------------------------------------------
+
+        await telegram(
+          "answerCallbackQuery",
+          {
+            callback_query_id:
+              callback.id,
+
+            text:
+              action === "verify"
+                ? "✅ پشتڕاستکراوە"
+                : "❌ ڕەتکرایەوە"
+          }
+        );
+
+        // ------------------------------------------------------
+        // GET REGISTRATION
+        // ------------------------------------------------------
+
+        let registration =
+          await getRegistration(id);
+
+        /*
+         * If KV is not configured,
+         * we cannot safely recover the
+         * phone/name after the callback.
+         */
+
+        if (!registration) {
+
+          await telegram(
+            "sendMessage",
+            {
+              chat_id:
+                callback.message.chat.id,
+
+              text:
+`⚠️ تۆمارکردنی ${id} نەدۆزرایەوە.
+
+تکایە Cloudflare KV ـی REGISTRATIONS دابنێ.`
+            }
+          );
+
+          return json({
+            ok: false,
+            error:
+              "Registration not found"
+          });
+
+        }
+
+        // ------------------------------------------------------
+        // VERIFY
+        // ------------------------------------------------------
+
+        if (
+          action === "verify"
+        ) {
+
+          registration.status =
+            "VERIFIED";
+
+          registration.verifiedAt =
+            new Date().toISOString();
+
+          await saveRegistration(
+            registration
+          );
+
+          let whatsappResult =
+            null;
+
+          let whatsappError =
+            null;
+
+          try {
+
+            whatsappResult =
+              await whatsappTemplate(
+                registration.phone,
+
+                env.WHATSAPP_APPROVED_TEMPLATE,
+
+                registration.name,
+
+                registration.trip
+              );
+
+          } catch (error) {
+
+            whatsappError =
+              error.message;
+
+          }
+
+          // ----------------------------------------------------
+          // TELEGRAM UPDATE
+          // ----------------------------------------------------
+
+          try {
+
+            await telegram(
+              "editMessageReplyMarkup",
+              {
+                chat_id:
+                  callback.message.chat.id,
+
+                message_id:
+                  callback.message.message_id,
+
+                reply_markup:
+                  {
+                    inline_keyboard: []
+                  }
+              }
+            );
+
+          } catch {}
+
+          await telegram(
+            "sendMessage",
+            {
+              chat_id:
+                callback.message.chat.id,
+
+              text:
+`✅ بەشداری پشتڕاستکرایەوە
+
+🆔 ${registration.id}
+
+👤 ${registration.name}
+
+📱 ${registration.phone}
+
+🏕️ ${registration.trip}
+
+📲 WhatsApp:
+${
+  whatsappResult
+    ? "✅ نامە نێردرا"
+    : "❌ نەکرا"
 }
 
+${
+  whatsappError
+    ? "\n⚠️ " + whatsappError
+    : ""
+}`
+            }
+          );
 
-/* START */
+          return json({
+            ok: true,
 
-renderServices();
-checkHealth();
+            action:
+              "VERIFIED",
 
-</script>
+            whatsapp:
+              !!whatsappResult,
 
-</body>
-</html>
+            error:
+              whatsappError
+          });
+
+        }
+
+        // ------------------------------------------------------
+        // REJECT
+        // ------------------------------------------------------
+
+        if (
+          action === "reject"
+        ) {
+
+          registration.status =
+            "REJECTED";
+
+          registration.rejectedAt =
+            new Date().toISOString();
+
+          await saveRegistration(
+            registration
+          );
+
+          let whatsappResult =
+            null;
+
+          let whatsappError =
+            null;
+
+          try {
+
+            whatsappResult =
+              await whatsappTemplate(
+                registration.phone,
+
+                env.WHATSAPP_REJECTED_TEMPLATE,
+
+                registration.name,
+
+                registration.trip
+              );
+
+          } catch (error) {
+
+            whatsappError =
+              error.message;
+
+          }
+
+          try {
+
+            await telegram(
+              "editMessageReplyMarkup",
+              {
+                chat_id:
+                  callback.message.chat.id,
+
+                message_id:
+                  callback.message.message_id,
+
+                reply_markup:
+                  {
+                    inline_keyboard: []
+                  }
+              }
+            );
+
+          } catch {}
+
+          await telegram(
+            "sendMessage",
+            {
+              chat_id:
+                callback.message.chat.id,
+
+              text:
+`❌ بەشداری ڕەتکرایەوە
+
+🆔 ${registration.id}
+
+👤 ${registration.name}
+
+📱 ${registration.phone}
+
+🏕️ ${registration.trip}
+
+📲 WhatsApp:
+${
+  whatsappResult
+    ? "✅ نامە نێردرا"
+    : "❌ نەکرا"
+}
+
+${
+  whatsappError
+    ? "\n⚠️ " + whatsappError
+    : ""
+}`
+            }
+          );
+
+          return json({
+            ok: true,
+
+            action:
+              "REJECTED",
+
+            whatsapp:
+              !!whatsappResult,
+
+            error:
+              whatsappError
+          });
+
+        }
+
+        return json({
+          ok: true
+        });
+
+      } catch (error) {
+
+        return json(
+          {
+            ok: false,
+            error:
+              error.message
+          },
+          500
+        );
+
+      }
+
+    }
+
+    // ==========================================================
+    // SET WEBHOOK MANUALLY IF NEEDED
+    // ==========================================================
+
+    if (
+      url.pathname ===
+        "/api/telegram/set-webhook" &&
+      request.method === "POST"
+    ) {
+
+      const result =
+        await setWebhook(request);
+
+      return json(result);
+
+    }
+
+    // ==========================================================
+    // 404
+    // ==========================================================
+
+    return json(
+      {
+        ok: false,
+        error:
+          "Endpoint not found"
+      },
+      404
+    );
+  }
+};
