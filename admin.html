@@ -2,39 +2,49 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>KURDIA ADMIN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KURDIA ADVENTURE — Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
+:root{
+  --primary:#9d1c32;
+  --primary-light:#c92b49;
+  --secondary:#111827;
+  --background:#070a10;
+  --surface:#0d121b;
+  --surface-2:#121a26;
+  --surface-3:#172130;
+  --text:#fff;
+  --muted:#94a3b8;
+  --border:rgba(255,255,255,.08);
+  --success:#22c55e;
+  --warning:#f59e0b;
+  --danger:#ef4444;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
 }
 
-:root{
-  --bg:#090b0d;
-  --panel:#111518;
-  --panel2:#171c20;
-  --line:#293137;
-  --text:#f5f5f5;
-  --muted:#9ba5aa;
-  --accent:#b51d32;
-  --accent2:#e02c45;
-  --green:#22c55e;
-  --yellow:#eab308;
-  --danger:#ef4444;
-  --radius:18px;
+html{
+  scroll-behavior:smooth;
 }
 
 body{
-  font-family:
-  Tahoma,
-  Arial,
-  sans-serif;
+  font-family:"Vazirmatn",sans-serif;
   background:
-    radial-gradient(circle at 80% 0%,rgba(181,29,50,.18),transparent 30%),
-    var(--bg);
+    radial-gradient(circle at 15% 10%,rgba(157,28,50,.16),transparent 28%),
+    radial-gradient(circle at 85% 20%,rgba(201,43,73,.08),transparent 25%),
+    var(--background);
   color:var(--text);
   min-height:100vh;
 }
@@ -43,508 +53,996 @@ button,
 input,
 textarea,
 select{
-  font:inherit;
+  font-family:inherit;
 }
 
 button{
   cursor:pointer;
 }
 
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
 .hidden{
   display:none!important;
 }
 
-/* LOGIN */
+/* =========================
+   LOGIN
+========================= */
 
-#loginPage{
+.login-screen{
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:20px;
+  position:relative;
+  overflow:hidden;
 }
 
-.loginBox{
-  width:min(420px,100%);
-  background:rgba(17,21,24,.96);
-  border:1px solid var(--line);
+.login-bg{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(7,10,16,.25),rgba(7,10,16,.95)),
+    radial-gradient(circle at center,rgba(157,28,50,.18),transparent 50%);
+}
+
+.login-card{
+  width:100%;
+  max-width:440px;
+  background:rgba(13,18,27,.82);
+  border:1px solid var(--border);
   border-radius:28px;
-  padding:34px 25px;
-  box-shadow:0 25px 80px rgba(0,0,0,.5);
-  text-align:center;
+  padding:34px;
+  backdrop-filter:blur(24px);
+  box-shadow:var(--shadow);
+  position:relative;
+  z-index:2;
 }
 
-.logoCircle{
-  width:78px;
-  height:78px;
-  margin:auto auto 18px;
-  border-radius:50%;
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:22px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(135deg,#8e1428,#d72b43);
-  font-size:30px;
+  margin:0 auto 20px;
+  box-shadow:0 15px 45px rgba(157,28,50,.35);
+}
+
+.logo i{
+  width:36px;
+  height:36px;
+}
+
+.login-card h1{
+  text-align:center;
+  font-size:25px;
   font-weight:900;
 }
 
-.loginBox h1{
-  font-size:25px;
-  margin-bottom:8px;
-}
-
-.loginBox p{
+.login-card p{
   color:var(--muted);
-  margin-bottom:25px;
+  text-align:center;
+  margin:8px 0 25px;
+  font-size:14px;
 }
 
 .input{
   width:100%;
-  background:#0c1012;
-  border:1px solid var(--line);
-  color:white;
-  border-radius:13px;
-  padding:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  color:#fff;
+  border-radius:14px;
+  padding:14px 16px;
   outline:none;
+  transition:.2s;
 }
 
 .input:focus{
-  border-color:var(--accent2);
+  border-color:rgba(201,43,73,.7);
+  box-shadow:0 0 0 4px rgba(157,28,50,.12);
 }
 
-.loginBtn{
-  width:100%;
-  border:0;
-  margin-top:14px;
-  padding:14px;
-  border-radius:13px;
-  color:#fff;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  font-weight:800;
+.login-error{
+  color:#f87171;
+  font-size:13px;
+  text-align:center;
+  margin-top:12px;
 }
 
-/* APP */
+/* =========================
+   APP
+========================= */
 
-#app{
+.app{
+  display:none;
   min-height:100vh;
+}
+
+.app.active{
+  display:block;
 }
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:50;
-  height:72px;
-  background:rgba(9,11,13,.92);
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--line);
+  z-index:100;
+  height:74px;
+  background:rgba(7,10,16,.78);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(22px);
+}
+
+.topbar-inner{
+  height:100%;
+  max-width:1700px;
+  margin:auto;
+  padding:0 20px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 22px;
+  gap:15px;
 }
 
 .brand{
   display:flex;
   align-items:center;
   gap:12px;
-  font-weight:900;
+  min-width:210px;
 }
 
-.brandIcon{
-  width:42px;
-  height:42px;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
+.brand-icon{
+  width:43px;
+  height:43px;
+  border-radius:13px;
   display:flex;
   align-items:center;
   justify-content:center;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  box-shadow:0 8px 25px rgba(157,28,50,.3);
 }
 
-.logoutBtn{
-  border:1px solid var(--line);
-  color:#fff;
-  background:#111518;
-  border-radius:10px;
-  padding:9px 14px;
+.brand-title{
+  font-weight:900;
+  font-size:16px;
 }
 
-.layout{
+.brand-sub{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.top-actions{
   display:flex;
-  min-height:calc(100vh - 72px);
+  align-items:center;
+  gap:8px;
 }
 
-.sidebar{
-  width:250px;
-  border-left:1px solid var(--line);
-  background:#0d1113;
-  padding:18px 12px;
-  flex-shrink:0;
-}
-
-.navBtn{
-  width:100%;
-  border:0;
-  background:transparent;
-  color:#aeb7bb;
-  padding:13px 14px;
+.icon-btn,
+.action-btn{
+  border:1px solid var(--border);
+  color:#fff;
+  background:rgba(255,255,255,.04);
+  min-height:42px;
   border-radius:12px;
-  text-align:right;
-  margin-bottom:5px;
+  padding:0 13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
   transition:.2s;
 }
 
-.navBtn:hover,
-.navBtn.active{
-  background:#1b2024;
+.icon-btn{
+  width:42px;
+  padding:0;
+}
+
+.icon-btn:hover,
+.action-btn:hover{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.14);
+}
+
+.primary{
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  border-color:transparent;
+  box-shadow:0 8px 25px rgba(157,28,50,.22);
+}
+
+.primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 30px rgba(157,28,50,.35);
+}
+
+.success{
+  background:rgba(34,197,94,.12);
+  color:#86efac;
+  border-color:rgba(34,197,94,.2);
+}
+
+.danger{
+  background:rgba(239,68,68,.1);
+  color:#fca5a5;
+  border-color:rgba(239,68,68,.2);
+}
+
+.layout{
+  max-width:1700px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr);
+  gap:20px;
+  padding:20px;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+  position:sticky;
+  top:94px;
+  height:calc(100vh - 114px);
+  overflow:auto;
+  background:rgba(13,18,27,.72);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:13px;
+  backdrop-filter:blur(20px);
+}
+
+.nav-title{
+  font-size:11px;
+  color:#64748b;
+  padding:13px 12px 7px;
+  font-weight:700;
+}
+
+.nav-item{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aeb9ca;
+  padding:12px 13px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:3px;
+  font-size:13px;
+  text-align:right;
+  transition:.2s;
+}
+
+.nav-item:hover{
+  background:rgba(255,255,255,.05);
   color:#fff;
 }
 
-.navIcon{
-  display:inline-block;
-  width:28px;
+.nav-item.active{
+  color:#fff;
+  background:linear-gradient(135deg,rgba(157,28,50,.95),rgba(201,43,73,.65));
+  box-shadow:0 10px 30px rgba(157,28,50,.18);
 }
 
-.main{
-  flex:1;
-  min-width:0;
-  padding:24px;
-  max-width:1500px;
+.nav-item i{
+  width:18px;
+  height:18px;
 }
 
-.pageTitle{
-  font-size:28px;
-  font-weight:900;
-  margin-bottom:6px;
+.sidebar-status{
+  margin-top:15px;
+  border-top:1px solid var(--border);
+  padding:15px 8px 5px;
 }
 
-.pageSub{
+.status-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-size:11px;
   color:var(--muted);
-  margin-bottom:25px;
+  padding:7px 4px;
 }
 
-/* CARDS */
-
-.card{
-  background:rgba(17,21,24,.92);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:20px;
-  margin-bottom:18px;
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#64748b;
+  display:inline-block;
+  margin-left:5px;
 }
 
-.card h2{
-  font-size:19px;
-  margin-bottom:7px;
+.status-dot.ok{
+  background:#22c55e;
+  box-shadow:0 0 12px rgba(34,197,94,.6);
 }
 
-.cardDesc{
+.status-dot.bad{
+  background:#ef4444;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  min-width:0;
+}
+
+.view{
+  display:none;
+}
+
+.view.active{
+  display:block;
+}
+
+.page-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.page-head h2{
+  font-size:26px;
+  font-weight:900;
+}
+
+.page-head p{
   color:var(--muted);
   font-size:13px;
-  margin-bottom:18px;
+  margin-top:5px;
+}
+
+.page-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
+  gap:15px;
 }
 
-.grid3{
-  display:grid;
+.grid-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.grid-3{
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
+}
+
+.card{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.01)),
+    rgba(13,18,27,.78);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:19px;
+  box-shadow:0 12px 40px rgba(0,0,0,.16);
+}
+
+.card h3{
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:14px;
+}
+
+.card-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.card-title h3{
+  margin:0;
+}
+
+.label{
+  display:block;
+  color:#cbd5e1;
+  font-size:12px;
+  margin-bottom:7px;
+  font-weight:600;
 }
 
 .field{
   margin-bottom:14px;
 }
 
-.field label{
-  display:block;
-  font-size:13px;
-  color:#c6ced1;
-  margin-bottom:7px;
-}
-
 textarea.input{
   min-height:110px;
   resize:vertical;
+  line-height:1.8;
 }
 
-.passwordWrap{
-  position:relative;
-}
-
-.passwordWrap .input{
-  padding-left:48px;
-}
-
-.eyeBtn{
-  position:absolute;
-  left:7px;
-  top:7px;
-  width:38px;
-  height:38px;
-  border:0;
-  border-radius:9px;
-  background:#20262a;
-  color:white;
-}
-
-/* BUTTONS */
-
-.btn{
-  border:0;
-  border-radius:11px;
-  padding:11px 16px;
-  color:#fff;
-  font-weight:700;
-  background:#252c31;
-}
-
-.btn:hover{
-  filter:brightness(1.15);
-}
-
-.btnPrimary{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-}
-
-.btnGreen{
-  background:#15803d;
-}
-
-.btnDanger{
-  background:#991b1b;
-}
-
-.btnBlue{
-  background:#1d4ed8;
-}
-
-.btnSmall{
-  padding:8px 11px;
-  font-size:12px;
-}
-
-.actions{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
-
-/* STATUS */
-
-.status{
-  margin-top:15px;
-  padding:12px;
-  border-radius:11px;
-  background:#0c1012;
-  border:1px solid var(--line);
+.small{
+  font-size:11px;
   color:var(--muted);
-  font-size:13px;
+  line-height:1.8;
 }
 
-.status.ok{
-  color:#86efac;
-  border-color:#166534;
-}
-
-.status.error{
-  color:#fca5a5;
-  border-color:#7f1d1d;
-}
-
-/* SWITCH */
-
-.switchRow{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:14px;
-  background:#0c1012;
-  border:1px solid var(--line);
-  border-radius:12px;
-}
-
-.switch{
+.stat{
   position:relative;
-  width:48px;
-  height:26px;
+  overflow:hidden;
 }
 
-.switch input{
-  opacity:0;
-  width:0;
-  height:0;
-}
-
-.slider{
-  position:absolute;
-  inset:0;
-  border-radius:30px;
-  background:#30373b;
-  cursor:pointer;
-}
-
-.slider:before{
+.stat::after{
   content:"";
   position:absolute;
-  width:20px;
-  height:20px;
-  right:3px;
-  top:3px;
-  background:white;
-  border-radius:50%;
-  transition:.2s;
+  width:100px;
+  height:100px;
+  background:var(--primary);
+  filter:blur(70px);
+  opacity:.15;
+  top:-30px;
+  left:-30px;
 }
 
-.switch input:checked+.slider{
-  background:var(--accent);
-}
-
-.switch input:checked+.slider:before{
-  transform:translateX(-22px);
-}
-
-/* SERVICES */
-
-.serviceItem{
-  display:grid;
-  grid-template-columns:70px 1fr auto;
-  gap:10px;
-  align-items:center;
-  padding:10px;
-  background:#0c1012;
-  border:1px solid var(--line);
-  border-radius:12px;
-  margin-bottom:9px;
-}
-
-.iconInput{
-  text-align:center;
-  font-size:22px;
-}
-
-.serviceDrag{
-  color:#677177;
-  cursor:grab;
-}
-
-.serviceActions{
-  display:flex;
-  gap:5px;
-}
-
-.iconPreview{
-  width:45px;
-  height:45px;
-  border-radius:11px;
-  background:#1d2327;
+.stat-icon{
+  width:43px;
+  height:43px;
+  border-radius:13px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
+  background:rgba(157,28,50,.12);
+  color:#ff708b;
+  margin-bottom:12px;
 }
 
-/* FAQ */
-
-.faqItem{
-  background:#0c1012;
-  border:1px solid var(--line);
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:10px;
-}
-
-/* IMAGE */
-
-.imagePreview{
-  width:100%;
-  max-height:230px;
-  object-fit:cover;
-  border-radius:13px;
-  border:1px solid var(--line);
-  margin-top:10px;
-  display:none;
-}
-
-/* AI */
-
-.aiMessages{
-  height:430px;
-  overflow:auto;
-  padding:12px;
-  background:#090c0e;
-  border:1px solid var(--line);
-  border-radius:14px;
-}
-
-.msg{
-  max-width:85%;
-  padding:12px 14px;
-  border-radius:14px;
-  margin-bottom:10px;
-  line-height:1.7;
-  white-space:pre-wrap;
-}
-
-.msg.user{
-  background:#541522;
-  margin-right:auto;
-}
-
-.msg.ai{
-  background:#1a2024;
-  margin-left:auto;
-}
-
-.aiInputRow{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-
-.aiInputRow textarea{
-  flex:1;
-  min-height:52px;
-}
-
-/* DASHBOARD */
-
-.stat{
-  padding:18px;
-  border-radius:16px;
-  background:#12171a;
-  border:1px solid var(--line);
-}
-
-.statNum{
-  font-size:28px;
+.stat-value{
+  font-size:27px;
   font-weight:900;
-  margin-top:8px;
 }
 
-.statLabel{
+.stat-label{
   color:var(--muted);
+  font-size:12px;
+  margin-top:3px;
+}
+
+/* =========================
+   BUILDER
+========================= */
+
+.builder{
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr) 290px;
+  gap:14px;
+  min-height:700px;
+}
+
+.panel{
+  background:rgba(13,18,27,.78);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  min-width:0;
+}
+
+.panel-head{
+  padding:14px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.panel-head strong{
   font-size:13px;
 }
 
-/* TOAST */
+.panel-body{
+  padding:13px;
+}
+
+.section-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.section-item{
+  background:rgba(255,255,255,.035);
+  border:1px solid transparent;
+  border-radius:12px;
+  padding:11px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:.2s;
+  user-select:none;
+}
+
+.section-item:hover{
+  border-color:rgba(255,255,255,.1);
+  background:rgba(255,255,255,.055);
+}
+
+.section-item.selected{
+  border-color:rgba(201,43,73,.45);
+  background:rgba(157,28,50,.12);
+}
+
+.section-item.dragging{
+  opacity:.45;
+}
+
+.drag{
+  color:#64748b;
+  cursor:grab;
+}
+
+.section-name{
+  flex:1;
+  font-size:12px;
+}
+
+.section-actions{
+  display:flex;
+  gap:3px;
+}
+
+.mini-btn{
+  width:28px;
+  height:28px;
+  border:0;
+  background:transparent;
+  color:#94a3b8;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.mini-btn:hover{
+  color:#fff;
+  background:rgba(255,255,255,.08);
+}
+
+.preview-wrap{
+  padding:13px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(157,28,50,.08),transparent 45%),
+    #05080d;
+  min-height:650px;
+  overflow:auto;
+}
+
+.device-switch{
+  display:flex;
+  justify-content:center;
+  gap:5px;
+  padding-bottom:10px;
+}
+
+.device-btn{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  color:#94a3b8;
+  border-radius:9px;
+  padding:7px 10px;
+  font-size:10px;
+}
+
+.device-btn.active{
+  color:#fff;
+  background:rgba(157,28,50,.25);
+  border-color:rgba(201,43,73,.4);
+}
+
+.site-preview{
+  margin:auto;
+  background:#070a10;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  min-height:600px;
+  overflow:hidden;
+  transition:.3s;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+}
+
+.site-preview.desktop{
+  width:100%;
+}
+
+.site-preview.tablet{
+  width:768px;
+  max-width:100%;
+}
+
+.site-preview.mobile{
+  width:390px;
+  max-width:100%;
+}
+
+.preview-site{
+  min-height:600px;
+  font-family:"Vazirmatn",sans-serif;
+  direction:rtl;
+  color:#fff;
+  background:#070a10;
+}
+
+.preview-hero{
+  min-height:260px;
+  padding:35px 25px;
+  display:flex;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,rgba(7,10,16,.2),rgba(7,10,16,.9)),
+    var(--hero-image);
+  background-size:cover;
+  background-position:center;
+}
+
+.preview-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,transparent,rgba(7,10,16,.7));
+}
+
+.preview-hero-content{
+  position:relative;
+  z-index:2;
+  max-width:620px;
+}
+
+.preview-badge{
+  display:inline-flex;
+  background:rgba(157,28,50,.85);
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:9px;
+  margin-bottom:10px;
+}
+
+.preview-title{
+  font-size:27px;
+  font-weight:900;
+  line-height:1.3;
+}
+
+.preview-sub{
+  color:#cbd5e1;
+  font-size:11px;
+  line-height:1.8;
+  margin-top:7px;
+}
+
+.preview-buttons{
+  display:flex;
+  gap:7px;
+  margin-top:14px;
+}
+
+.preview-button{
+  border:0;
+  padding:8px 13px;
+  border-radius:9px;
+  font-size:9px;
+  background:linear-gradient(135deg,#9d1c32,#c92b49);
+  color:#fff;
+}
+
+.preview-button.alt{
+  background:rgba(255,255,255,.08);
+}
+
+.preview-section{
+  padding:22px 18px;
+}
+
+.preview-heading{
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.preview-trip{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.preview-trip-img{
+  min-height:160px;
+  border-radius:14px;
+  background-size:cover;
+  background-position:center;
+}
+
+.preview-trip-info{
+  background:#0d121b;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  padding:13px;
+}
+
+.preview-trip-info h4{
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.preview-trip-info p{
+  color:#94a3b8;
+  font-size:10px;
+  line-height:1.8;
+}
+
+.preview-services{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.preview-service{
+  background:#0d121b;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  padding:12px 8px;
+  text-align:center;
+}
+
+.preview-service i{
+  color:#e0526c;
+  margin-bottom:7px;
+}
+
+.preview-service span{
+  display:block;
+  font-size:9px;
+  color:#cbd5e1;
+}
+
+.property-tabs{
+  display:flex;
+  gap:5px;
+  margin-bottom:13px;
+  overflow:auto;
+}
+
+.property-tab{
+  flex:0 0 auto;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.035);
+  color:#94a3b8;
+  padding:8px 10px;
+  border-radius:9px;
+  font-size:10px;
+}
+
+.property-tab.active{
+  background:rgba(157,28,50,.18);
+  color:#fff;
+  border-color:rgba(201,43,73,.35);
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+.service-list{
+  display:grid;
+  gap:9px;
+}
+
+.service-row{
+  display:grid;
+  grid-template-columns:35px 48px minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:9px;
+}
+
+.service-icon-preview{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,rgba(157,28,50,.25),rgba(201,43,73,.08));
+  color:#ff6c87;
+}
+
+.service-actions{
+  display:flex;
+  gap:4px;
+}
+
+/* =========================
+   AI
+========================= */
+
+.ai-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 320px;
+  gap:15px;
+}
+
+.chat{
+  min-height:600px;
+  display:flex;
+  flex-direction:column;
+}
+
+.chat-messages{
+  flex:1;
+  min-height:430px;
+  max-height:570px;
+  overflow:auto;
+  padding:15px;
+}
+
+.message{
+  max-width:82%;
+  margin-bottom:10px;
+  padding:11px 13px;
+  border-radius:15px;
+  font-size:12px;
+  line-height:1.9;
+  white-space:pre-wrap;
+}
+
+.message.ai{
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  margin-left:auto;
+}
+
+.message.user{
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  margin-right:auto;
+}
+
+.chat-input{
+  border-top:1px solid var(--border);
+  padding:11px;
+  display:flex;
+  gap:8px;
+}
+
+.chat-input textarea{
+  min-height:52px;
+  max-height:120px;
+  flex:1;
+}
+
+.ai-status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#94a3b8;
+  font-size:11px;
+}
+
+.ai-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#f59e0b;
+}
+
+.ai-dot.ok{
+  background:#22c55e;
+  box-shadow:0 0 12px rgba(34,197,94,.5);
+}
+
+.ai-dot.bad{
+  background:#ef4444;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.secret-input{
+  direction:ltr;
+  text-align:left;
+}
+
+.auto-model{
+  background:rgba(34,197,94,.06);
+  border:1px solid rgba(34,197,94,.15);
+  border-radius:14px;
+  padding:12px;
+}
+
+.auto-model-title{
+  font-size:12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.auto-model-value{
+  color:#86efac;
+  font-size:11px;
+  margin-top:5px;
+  direction:ltr;
+  text-align:left;
+}
+
+.warning{
+  background:rgba(245,158,11,.07);
+  border:1px solid rgba(245,158,11,.16);
+  color:#fcd34d;
+  border-radius:14px;
+  padding:12px;
+  font-size:11px;
+  line-height:1.8;
+}
+
+/* =========================
+   FAQ
+========================= */
+
+.faq-row{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:8px;
+}
+
+.faq-top{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.faq-top input{
+  flex:1;
+}
+
+/* =========================
+   TOAST
+========================= */
 
 .toast{
   position:fixed;
-  bottom:20px;
-  left:20px;
-  z-index:100;
-  background:#151a1d;
-  border:1px solid var(--line);
-  padding:13px 18px;
-  border-radius:13px;
-  box-shadow:0 15px 40px rgba(0,0,0,.4);
-  transform:translateY(100px);
+  bottom:22px;
+  right:22px;
+  z-index:9999;
+  min-width:260px;
+  max-width:380px;
+  background:#111827;
+  border:1px solid var(--border);
+  color:#fff;
+  padding:13px 15px;
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  transform:translateY(30px);
   opacity:0;
-  transition:.3s;
+  pointer-events:none;
+  transition:.25s;
+  font-size:12px;
 }
 
 .toast.show{
@@ -552,77 +1050,188 @@ textarea.input{
   opacity:1;
 }
 
-/* MOBILE */
+.toast.ok{
+  border-color:rgba(34,197,94,.3);
+}
 
-.mobileMenu{
+.toast.error{
+  border-color:rgba(239,68,68,.3);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  z-index:500;
   display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  backdrop-filter:blur(8px);
+}
+
+.modal.active{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:680px;
+  max-height:90vh;
+  overflow:auto;
+  background:#0d121b;
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+}
+
+.modal-head{
+  padding:16px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modal-body{
+  padding:17px;
+}
+
+.modal-foot{
+  padding:13px 17px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+  .builder{
+    grid-template-columns:210px minmax(0,1fr);
+  }
+
+  .builder .properties-panel{
+    display:none;
+  }
+
+  .ai-layout{
+    grid-template-columns:1fr;
+  }
 }
 
 @media(max-width:900px){
+  .layout{
+    grid-template-columns:1fr;
+    padding:12px;
+  }
 
   .sidebar{
     position:fixed;
-    right:0;
-    top:72px;
-    bottom:0;
-    z-index:40;
-    transform:translateX(110%);
-    transition:.25s;
-    box-shadow:-20px 0 50px rgba(0,0,0,.4);
+    right:12px;
+    left:12px;
+    bottom:12px;
+    top:auto;
+    height:auto;
+    z-index:200;
+    padding:6px;
+    border-radius:18px;
+    display:flex;
+    overflow:auto;
   }
 
-  .sidebar.open{
-    transform:translateX(0);
+  .sidebar .nav-title,
+  .sidebar-status{
+    display:none;
   }
 
-  .mobileMenu{
-    display:block;
-    border:1px solid var(--line);
-    background:#151a1d;
-    color:#fff;
-    border-radius:10px;
-    width:42px;
-    height:42px;
+  .nav-item{
+    flex:0 0 auto;
+    width:auto;
+    margin:0;
+    padding:9px 11px;
   }
 
-  .main{
-    padding:16px;
+  .nav-item span{
+    display:none;
   }
 
-  .grid,
-  .grid3{
+  .content{
+    padding-bottom:80px;
+  }
+
+  .grid-3{
     grid-template-columns:1fr;
   }
 
-  .topbar{
-    padding:0 12px;
+  .grid-2{
+    grid-template-columns:1fr;
   }
 
-  .brand span{
+  .builder{
+    grid-template-columns:1fr;
+  }
+
+  .builder .sections-panel{
+    display:none;
+  }
+
+  .brand{
+    min-width:auto;
+  }
+
+  .brand-sub{
     display:none;
   }
 }
 
 @media(max-width:600px){
-
-  .pageTitle{
-    font-size:23px;
+  .topbar{
+    height:64px;
   }
 
-  .card{
-    padding:15px;
+  .topbar-inner{
+    padding:0 12px;
   }
 
-  .serviceItem{
-    grid-template-columns:52px 1fr;
+  .brand-title{
+    font-size:14px;
   }
 
-  .serviceActions{
-    grid-column:1 / -1;
+  .top-actions .action-btn span{
+    display:none;
   }
 
-  .actions .btn{
-    flex:1;
+  .page-head{
+    flex-direction:column;
+  }
+
+  .page-head h2{
+    font-size:22px;
+  }
+
+  .service-row{
+    grid-template-columns:30px 42px minmax(0,1fr);
+  }
+
+  .service-actions{
+    grid-column:1/-1;
+    justify-content:flex-end;
+  }
+
+  .preview-trip{
+    grid-template-columns:1fr;
+  }
+
+  .preview-services{
+    grid-template-columns:repeat(2,1fr);
   }
 }
 </style>
@@ -630,220 +1239,280 @@ textarea.input{
 
 <body>
 
-<!-- LOGIN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
-<section id="loginPage">
+<div id="loginScreen" class="login-screen">
+  <div class="login-bg"></div>
 
-  <div class="loginBox">
+  <div class="login-card">
+    <div class="logo">
+      <i data-lucide="mountain"></i>
+    </div>
 
-    <div class="logoCircle">K</div>
+    <h1>KURDIA ADVENTURE</h1>
+    <p>Smart Website Control Center</p>
 
-    <h1>KURDIA ADMIN</h1>
+    <div class="field">
+      <label class="label">وشەی نهێنی Admin</label>
+      <input
+        id="pinInput"
+        class="input"
+        type="password"
+        inputmode="numeric"
+        placeholder="PIN"
+        autocomplete="off"
+      >
+    </div>
 
-    <p>بەڕێوەبردنی ماڵپەڕی KURDIA ADVENTURE</p>
-
-    <input
-      id="pinInput"
-      class="input"
-      type="password"
-      inputmode="numeric"
-      placeholder="PIN"
-      autocomplete="off"
-    >
-
-    <button
-      class="loginBtn"
-      onclick="login()"
-    >
+    <button id="loginBtn" class="action-btn primary" style="width:100%;height:48px">
+      <i data-lucide="log-in"></i>
       چوونەژوورەوە
     </button>
 
-    <div
-      id="loginError"
-      style="color:#f87171;margin-top:12px;font-size:13px"
-    ></div>
-
+    <div id="loginError" class="login-error"></div>
   </div>
+</div>
 
-</section>
+<!-- =========================
+     APP
+========================= -->
 
-
-<!-- APP -->
-
-<section id="app" class="hidden">
+<div id="app" class="app">
 
   <header class="topbar">
+    <div class="topbar-inner">
 
-    <div class="brand">
+      <div class="brand">
+        <div class="brand-icon">
+          <i data-lucide="mountain"></i>
+        </div>
 
-      <button
-        class="mobileMenu"
-        onclick="toggleSidebar()"
-      >
-        ☰
-      </button>
+        <div>
+          <div class="brand-title">KURDIA ADVENTURE</div>
+          <div class="brand-sub">Smart Website Builder</div>
+        </div>
+      </div>
 
-      <div class="brandIcon">K</div>
+      <div class="top-actions">
 
-      <span>KURDIA ADMIN</span>
+        <button class="action-btn" id="openSiteBtn">
+          <i data-lucide="external-link"></i>
+          <span>Website</span>
+        </button>
+
+        <button class="action-btn primary" id="publishTopBtn">
+          <i data-lucide="send"></i>
+          <span>Publish</span>
+        </button>
+
+      </div>
 
     </div>
-
-    <button
-      class="logoutBtn"
-      onclick="logout()"
-    >
-      دەرچوون
-    </button>
-
   </header>
-
 
   <div class="layout">
 
-    <aside id="sidebar" class="sidebar">
+    <!-- SIDEBAR -->
 
-      <button
-        class="navBtn active"
-        data-page="dashboard"
-        onclick="showPage('dashboard')"
-      >
-        <span class="navIcon">📊</span>
-        Dashboard
+    <aside class="sidebar">
+
+      <div class="nav-title">کۆنترۆڵ</div>
+
+      <button class="nav-item active" data-view="dashboard">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Dashboard</span>
       </button>
 
-      <button
-        class="navBtn"
-        data-page="builder"
-        onclick="showPage('builder')"
-      >
-        <span class="navIcon">🎨</span>
-        Website Builder
+      <button class="nav-item" data-view="builder">
+        <i data-lucide="blocks"></i>
+        <span>Website Builder</span>
       </button>
 
-      <button
-        class="navBtn"
-        data-page="services"
-        onclick="showPage('services')"
-      >
-        <span class="navIcon">🛠️</span>
-        Services
+      <button class="nav-item" data-view="services">
+        <i data-lucide="sparkles"></i>
+        <span>خزمەتگوزاریەکان</span>
       </button>
 
-      <button
-        class="navBtn"
-        data-page="ai"
-        onclick="showPage('ai')"
-      >
-        <span class="navIcon">🤖</span>
-        AI Assistant
+      <button class="nav-item" data-view="content">
+        <i data-lucide="type"></i>
+        <span>دەق و ناوەڕۆک</span>
       </button>
 
-      <button
-        class="navBtn"
-        data-page="telegram"
-        onclick="showPage('telegram')"
-      >
-        <span class="navIcon">📱</span>
-        API & Telegram
+      <button class="nav-item" data-view="gallery">
+        <i data-lucide="images"></i>
+        <span>Gallery</span>
       </button>
 
-      <button
-        class="navBtn"
-        data-page="faq"
-        onclick="showPage('faq')"
-      >
-        <span class="navIcon">❓</span>
-        FAQ
+      <button class="nav-item" data-view="faq">
+        <i data-lucide="circle-help"></i>
+        <span>FAQ</span>
       </button>
 
-      <button
-        class="navBtn"
-        data-page="data"
-        onclick="showPage('data')"
-      >
-        <span class="navIcon">💾</span>
-        Data / Backup
+      <div class="nav-title">AI</div>
+
+      <button class="nav-item" data-view="ai">
+        <i data-lucide="bot"></i>
+        <span>AI Assistant</span>
       </button>
+
+      <button class="nav-item" data-view="settings">
+        <i data-lucide="key-round"></i>
+        <span>Gemini & Telegram</span>
+      </button>
+
+      <div class="nav-title">داتا</div>
+
+      <button class="nav-item" data-view="backup">
+        <i data-lucide="database-backup"></i>
+        <span>Backup / Restore</span>
+      </button>
+
+      <div class="sidebar-status">
+
+        <div class="status-row">
+          <span>Website</span>
+          <span>
+            <span id="websiteDot" class="status-dot"></span>
+            <span id="websiteStatus">...</span>
+          </span>
+        </div>
+
+        <div class="status-row">
+          <span>Gemini</span>
+          <span>
+            <span id="geminiDot" class="status-dot"></span>
+            <span id="geminiStatus">...</span>
+          </span>
+        </div>
+
+        <div class="status-row">
+          <span>Telegram</span>
+          <span>
+            <span id="telegramDot" class="status-dot"></span>
+            <span id="telegramStatus">...</span>
+          </span>
+        </div>
+
+      </div>
 
     </aside>
 
+    <!-- CONTENT -->
 
-    <main class="main">
+    <main class="content">
 
+      <!-- =====================
+           DASHBOARD
+      ====================== -->
 
-      <!-- DASHBOARD -->
+      <section id="view-dashboard" class="view active">
 
-      <section id="page-dashboard" class="page">
-
-        <h1 class="pageTitle">بەخێربێیت 👋</h1>
-
-        <p class="pageSub">
-          کۆنترۆڵی تەواوی KURDIA ADVENTURE
-        </p>
-
-        <div class="grid3">
-
-          <div class="stat">
-            <div class="statLabel">Services</div>
-            <div id="statServices" class="statNum">0</div>
+        <div class="page-head">
+          <div>
+            <h2>بەخێربێیت 👋</h2>
+            <p>هەموو کۆنترۆڵی Website ـی KURDIA لێرەیە.</p>
           </div>
 
-          <div class="stat">
-            <div class="statLabel">Gallery</div>
-            <div id="statGallery" class="statNum">0</div>
+          <div class="page-actions">
+            <button class="action-btn" onclick="showView('builder')">
+              <i data-lucide="pen-line"></i>
+              دەستکاری Website
+            </button>
+
+            <button class="action-btn primary" onclick="showView('ai')">
+              <i data-lucide="bot"></i>
+              گفتوگۆ لەگەڵ AI
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="card stat">
+            <div class="stat-icon">
+              <i data-lucide="layers"></i>
+            </div>
+            <div id="statSections" class="stat-value">0</div>
+            <div class="stat-label">Section ـەکان</div>
           </div>
 
-          <div class="stat">
-            <div class="statLabel">FAQ</div>
-            <div id="statFaq" class="statNum">0</div>
+          <div class="card stat">
+            <div class="stat-icon">
+              <i data-lucide="sparkles"></i>
+            </div>
+            <div id="statServices" class="stat-value">0</div>
+            <div class="stat-label">خزمەتگوزاری</div>
+          </div>
+
+          <div class="card stat">
+            <div class="stat-icon">
+              <i data-lucide="image"></i>
+            </div>
+            <div id="statGallery" class="stat-value">0</div>
+            <div class="stat-label">وێنە</div>
           </div>
 
         </div>
 
+        <div style="height:15px"></div>
 
-        <div class="card" style="margin-top:18px">
+        <div class="grid grid-2">
 
-          <h2>⚡ خێرا</h2>
+          <div class="card">
 
-          <p class="cardDesc">
-            لەم شوێنەوە دەتوانیت ڕاستەوخۆ بچیتە بەشی پێویست.
-          </p>
+            <div class="card-title">
+              <h3>وضعی Website</h3>
 
-          <div class="actions">
+              <button class="action-btn" onclick="loadPublicWebsite()">
+                <i data-lucide="refresh-cw"></i>
+                نوێکردنەوە
+              </button>
+            </div>
 
-            <button
-              class="btn btnPrimary"
-              onclick="showPage('builder')"
-            >
-              🎨 دەستکاری Website
-            </button>
+            <div class="grid">
 
-            <button
-              class="btn btnBlue"
-              onclick="showPage('ai')"
-            >
-              🤖 کردنەوەی AI
-            </button>
+              <div class="status-row" style="background:rgba(255,255,255,.025);padding:12px;border-radius:12px">
+                <span>Website</span>
+                <strong id="dashWebsite">پشکنین...</strong>
+              </div>
 
-            <button
-              class="btn"
-              onclick="showPage('telegram')"
-            >
-              🔑 API & Telegram
-            </button>
+              <div class="status-row" style="background:rgba(255,255,255,.025);padding:12px;border-radius:12px">
+                <span>Gemini</span>
+                <strong id="dashGemini">پشکنین...</strong>
+              </div>
+
+              <div class="status-row" style="background:rgba(255,255,255,.025);padding:12px;border-radius:12px">
+                <span>Telegram</span>
+                <strong id="dashTelegram">پشکنین...</strong>
+              </div>
+
+            </div>
 
           </div>
 
-        </div>
+          <div class="card">
 
+            <div class="card-title">
+              <h3>AI ـی KURDIA</h3>
+              <div class="ai-status">
+                <span id="dashAiDot" class="ai-dot"></span>
+                <span id="dashAiText">خۆکار</span>
+              </div>
+            </div>
 
-        <div class="card">
+            <p class="small">
+              Gemini دەتوانێت دەق دروست بکات، ناونان بکات،
+              ئایکۆنی خزمەتگوزاری هەڵبژێرێت، پرسیار و وەڵام دروست بکات
+              و یارمەتی دەستکاریکردنی Website بدات.
+            </p>
 
-          <h2>📌 دۆخی سیستەم</h2>
+            <button class="action-btn primary" style="margin-top:15px" onclick="showView('ai')">
+              <i data-lucide="bot"></i>
+              کردنەوەی AI
+            </button>
 
-          <div id="systemStatus" class="status">
-            چاوەڕوانی...
           </div>
 
         </div>
@@ -851,655 +1520,378 @@ textarea.input{
       </section>
 
 
+      <!-- =====================
+           BUILDER
+      ====================== -->
 
-      <!-- BUILDER -->
+      <section id="view-builder" class="view">
 
-      <section id="page-builder" class="page hidden">
+        <div class="page-head">
 
-        <h1 class="pageTitle">🎨 Website Builder</h1>
-
-        <p class="pageSub">
-          دەستکاری ناوەڕۆکی ماڵپەڕەکە بکە و پاشان Publish بکە.
-        </p>
-
-
-        <!-- HERO -->
-
-        <div class="card">
-
-          <h2>🏔️ Hero</h2>
-
-          <p class="cardDesc">
-            بەشی سەرەکی ماڵپەڕ.
-          </p>
-
-          <div class="grid">
-
-            <div class="field">
-              <label>Badge</label>
-              <input
-                id="heroBadge"
-                class="input"
-              >
-            </div>
-
-            <div class="field">
-              <label>Title</label>
-              <input
-                id="heroTitle"
-                class="input"
-              >
-            </div>
-
+          <div>
+            <h2>Website Builder</h2>
+            <p>دیزاین و ناوەڕۆکی KURDIA لە یەک شوێن کۆنترۆڵ بکە.</p>
           </div>
 
-          <div class="field">
+          <div class="page-actions">
 
-            <label>Subtitle</label>
+            <button class="action-btn" id="undoBtn">
+              <i data-lucide="undo-2"></i>
+            </button>
 
-            <textarea
-              id="heroSubtitle"
-              class="input"
-            ></textarea>
+            <button class="action-btn" id="redoBtn">
+              <i data-lucide="redo-2"></i>
+            </button>
 
-          </div>
+            <button class="action-btn" id="previewPublicBtn">
+              <i data-lucide="eye"></i>
+              Preview
+            </button>
 
-
-          <div class="field">
-
-            <label>Hero Image URL</label>
-
-            <input
-              id="heroImageUrl"
-              class="input"
-              placeholder="https://..."
-              oninput="previewImage('heroImageUrl','heroPreview')"
-            >
-
-            <img
-              id="heroPreview"
-              class="imagePreview"
-            >
+            <button class="action-btn primary" id="saveBuilderBtn">
+              <i data-lucide="save"></i>
+              Save
+            </button>
 
           </div>
 
         </div>
 
+        <div class="builder">
+
+          <!-- SECTION PANEL -->
+
+          <div class="panel sections-panel">
+
+            <div class="panel-head">
+              <strong>Sections</strong>
+
+              <button class="mini-btn" id="addSectionBtn" title="زیادکردن">
+                <i data-lucide="plus"></i>
+              </button>
+            </div>
+
+            <div class="panel-body">
+
+              <div id="sectionList" class="section-list"></div>
+
+            </div>
+
+          </div>
+
+          <!-- PREVIEW -->
+
+          <div class="panel">
+
+            <div class="panel-head">
+
+              <strong>Live Preview</strong>
+
+              <div class="device-switch">
+
+                <button class="device-btn active" data-device="desktop">
+                  <i data-lucide="monitor"></i>
+                </button>
+
+                <button class="device-btn" data-device="tablet">
+                  <i data-lucide="tablet"></i>
+                </button>
+
+                <button class="device-btn" data-device="mobile">
+                  <i data-lucide="smartphone"></i>
+                </button>
+
+              </div>
+
+            </div>
+
+            <div class="preview-wrap">
+
+              <div id="sitePreview" class="site-preview desktop">
+                <div id="previewSite" class="preview-site"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- PROPERTIES -->
+
+          <div class="panel properties-panel">
+
+            <div class="panel-head">
+              <strong>Properties</strong>
+            </div>
+
+            <div id="propertiesPanel" class="panel-body">
+
+              <div class="small">
+                یەک Section هەڵبژێرە بۆ دەستکاریکردنی.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
 
 
-        <!-- TRIP -->
+      <!-- =====================
+           SERVICES
+      ====================== -->
+
+      <section id="view-services" class="view">
+
+        <div class="page-head">
+
+          <div>
+            <h2>خزمەتگوزاریەکان</h2>
+            <p>ئایکۆن و ناوی هەر خزمەتگوزارییەک بە جیاوازی کۆنترۆڵ بکە.</p>
+          </div>
+
+          <div class="page-actions">
+
+            <button class="action-btn" id="aiServicesBtn">
+              <i data-lucide="sparkles"></i>
+              AI ـی پێشنیار
+            </button>
+
+            <button class="action-btn primary" id="addServiceBtn">
+              <i data-lucide="plus"></i>
+              خزمەتگوزاری نوێ
+            </button>
+
+          </div>
+
+        </div>
 
         <div class="card">
 
-          <h2>🥾 Trip</h2>
+          <div id="serviceList" class="service-list"></div>
 
-          <p class="cardDesc">
-            زانیاری گەشتی سەرەکی.
-          </p>
+        </div>
 
-          <div class="grid">
+      </section>
 
-            <div class="field">
-              <label>ناوی گەشت</label>
-              <input id="tripTitle" class="input">
-            </div>
 
-            <div class="field">
-              <label>نرخ</label>
-              <input id="tripPrice" class="input">
-            </div>
+      <!-- =====================
+           CONTENT
+      ====================== -->
 
-            <div class="field">
-              <label>ئاست</label>
-              <input id="tripDifficulty" class="input">
-            </div>
+      <section id="view-content" class="view">
 
-            <div class="field">
-              <label>ماوە</label>
-              <input id="tripDuration" class="input">
-            </div>
+        <div class="page-head">
 
-            <div class="field">
-              <label>کات</label>
-              <input id="tripTime" class="input">
-            </div>
+          <div>
+            <h2>دەق و ناوەڕۆک</h2>
+            <p>دەقەکانی Hero و Trip و Steps بە ئاسانی دەستکاری بکە.</p>
+          </div>
 
-            <div class="field">
-              <label>شوێن</label>
-              <input id="tripLocation" class="input">
-            </div>
+          <div class="page-actions">
+            <button class="action-btn" id="aiContentBtn">
+              <i data-lucide="sparkles"></i>
+              AI
+            </button>
+
+            <button class="action-btn primary" id="saveContentBtn">
+              <i data-lucide="save"></i>
+              Save
+            </button>
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="property-tabs">
+
+            <button class="property-tab active" data-content-tab="hero">
+              Hero
+            </button>
+
+            <button class="property-tab" data-content-tab="trip">
+              Trip
+            </button>
+
+            <button class="property-tab" data-content-tab="steps">
+              Steps
+            </button>
+
+            <button class="property-tab" data-content-tab="booking">
+              Booking
+            </button>
 
           </div>
 
+          <div id="contentEditor"></div>
 
-          <div class="field">
+        </div>
 
-            <label>دەربارەی گەشت</label>
+      </section>
 
-            <textarea
-              id="tripDesc"
-              class="input"
-            ></textarea>
 
+      <!-- =====================
+           GALLERY
+      ====================== -->
+
+      <section id="view-gallery" class="view">
+
+        <div class="page-head">
+
+          <div>
+            <h2>Gallery</h2>
+            <p>وێنەکان زیاد، سڕینەوە و ڕێکبخە.</p>
           </div>
 
+          <div class="page-actions">
 
-          <div class="field">
-
-            <label>Trip Image URL</label>
-
-            <input
-              id="tripImageUrl"
-              class="input"
-              placeholder="https://..."
-              oninput="previewImage('tripImageUrl','tripPreview')"
-            >
-
-            <img
-              id="tripPreview"
-              class="imagePreview"
-            >
-
-          </div>
-
-
-          <div class="switchRow">
-
-            <div>
-              <strong>Booking</strong>
-              <div style="font-size:12px;color:#899398">
-                ڕێگەدان بە تۆمارکردن
-              </div>
-            </div>
-
-            <label class="switch">
-
-              <input
-                id="bookingOpen"
-                type="checkbox"
-              >
-
-              <span class="slider"></span>
-
+            <label class="action-btn primary" style="cursor:pointer">
+              <i data-lucide="upload"></i>
+              Upload
+              <input id="galleryUpload" type="file" accept="image/*" multiple hidden>
             </label>
 
           </div>
 
         </div>
 
-
-
-        <!-- STEPS -->
-
         <div class="card">
 
-          <h2>📋 Steps</h2>
-
-          <div class="grid">
-
-            <div class="field">
-              <label>Step 1</label>
-              <input id="step1" class="input">
-            </div>
-
-            <div class="field">
-              <label>Step 2</label>
-              <input id="step2" class="input">
-            </div>
-
-            <div class="field">
-              <label>Step 3</label>
-              <input id="step3" class="input">
-            </div>
-
-            <div class="field">
-              <label>Step 4</label>
-              <input id="step4" class="input">
-            </div>
-
-          </div>
-
-        </div>
-
-
-
-        <div class="actions">
-
-          <button
-            class="btn btnPrimary"
-            onclick="saveBuilder()"
-          >
-            💾 Save & Publish
-          </button>
-
-          <button
-            class="btn"
-            onclick="loadBuilder()"
-          >
-            ↻ Reload
-          </button>
+          <div id="galleryGrid" style="
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+            gap:12px;
+          "></div>
 
         </div>
 
       </section>
 
 
+      <!-- =====================
+           FAQ
+      ====================== -->
 
-      <!-- SERVICES -->
+      <section id="view-faq" class="view">
 
-      <section id="page-services" class="page hidden">
+        <div class="page-head">
 
-        <h1 class="pageTitle">🛠️ Services</h1>
+          <div>
+            <h2>FAQ</h2>
+            <p>پرسیار و وەڵامەکانی Website.</p>
+          </div>
 
-        <p class="pageSub">
-          ناو و ئایکۆنی هەر خزمەتگوزارییەک بە جیاوازی دیاری بکە.
-        </p>
+          <div class="page-actions">
 
-
-        <div class="card">
-
-          <div id="servicesList"></div>
-
-          <div class="actions">
-
-            <button
-              class="btn btnPrimary"
-              onclick="addService()"
-            >
-              + زیادکردنی Service
+            <button class="action-btn" id="aiFaqBtn">
+              <i data-lucide="sparkles"></i>
+              AI
             </button>
 
-            <button
-              class="btn btnBlue"
-              onclick="saveServices()"
-            >
-              💾 Save Services
+            <button class="action-btn primary" id="addFaqBtn">
+              <i data-lucide="plus"></i>
+              FAQ نوێ
             </button>
 
           </div>
 
         </div>
-
-
-        <div class="card">
-
-          <h2>🤖 AI Icon Selector</h2>
-
-          <p class="cardDesc">
-            ناوی خزمەتگوزاری بنووسە و AI ئایکۆنی گونجاو پێشنیار دەکات.
-          </p>
-
-          <div class="grid">
-
-            <div class="field">
-
-              <label>ناوی Service</label>
-
-              <input
-                id="iconServiceName"
-                class="input"
-                placeholder="بۆ نموونە: گواستنەوە بە پاس"
-              >
-
-            </div>
-
-            <div class="field">
-
-              <label>ئەنجام</label>
-
-              <input
-                id="iconAiResult"
-                class="input"
-                readonly
-              >
-
-            </div>
-
-          </div>
-
-          <div class="actions">
-
-            <button
-              class="btn btnPrimary"
-              onclick="suggestIcon()"
-            >
-              🤖 پێشنیارکردنی ئایکۆن
-            </button>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-
-      <!-- AI -->
-
-      <section id="page-ai" class="page hidden">
-
-        <h1 class="pageTitle">🤖 KURDIA AI Assistant</h1>
-
-        <p class="pageSub">
-          AI دەتوانێت لە ناوەڕۆک، Service، FAQ و زانیاری KURDIA یارمەتیت بدات.
-        </p>
-
-
-        <div class="card">
-
-          <div id="aiMessages" class="aiMessages">
-
-            <div class="msg ai">
-              سڵاو 👋 من AI ـی KURDIA ـم. چ شتێکت بۆ بکەم؟
-            </div>
-
-          </div>
-
-
-          <div class="aiInputRow">
-
-            <textarea
-              id="aiInput"
-              class="input"
-              placeholder="بۆ نموونە: دەقی جوان بۆ گەشتی ساڵیادی بنووسە..."
-            ></textarea>
-
-            <button
-              class="btn btnPrimary"
-              onclick="sendAiMessage()"
-            >
-              ناردن
-            </button>
-
-          </div>
-
-        </div>
-
-
-
-        <div class="card">
-
-          <h2>✍️ AI Text Generator</h2>
-
-          <p class="cardDesc">
-            دەقێک بۆ پۆست، گەشت، Service یان FAQ دروست بکە.
-          </p>
-
-          <textarea
-            id="textPrompt"
-            class="input"
-            placeholder="بۆ نموونە: دەقی کورت و کاریگەر بۆ بانگەشەی گەشتی ساڵیادی KURDIA بنووسە"
-          ></textarea>
-
-          <div class="actions">
-
-            <button
-              class="btn btnPrimary"
-              onclick="generateText()"
-            >
-              ✨ دروستکردنی دەق
-            </button>
-
-          </div>
-
-          <textarea
-            id="textResult"
-            class="input"
-            style="margin-top:12px"
-            placeholder="ئەنجامی AI..."
-          ></textarea>
-
-        </div>
-
-      </section>
-
-
-
-      <!-- API TELEGRAM -->
-
-      <section id="page-telegram" class="page hidden">
-
-        <h1 class="pageTitle">🔑 API & Telegram</h1>
-
-        <p class="pageSub">
-          API ـەکان لێرە دابنێ؛ پێویست ناکات کۆدەکە دەستکاری بکەیت.
-        </p>
-
-
-        <!-- GEMINI -->
-
-        <div class="card">
-
-          <h2>🤖 Gemini API</h2>
-
-          <p class="cardDesc">
-            کلیلی Gemini API لێرە داخڵ بکە.
-          </p>
-
-          <div class="field">
-
-            <label>Gemini API Key</label>
-
-            <div class="passwordWrap">
-
-              <input
-                id="geminiKey"
-                class="input"
-                type="password"
-                autocomplete="off"
-                placeholder="Gemini API Key"
-              >
-
-              <button
-                class="eyeBtn"
-                onclick="togglePassword('geminiKey')"
-              >
-                👁
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>Gemini Model</label>
-
-            <select
-              id="geminiModel"
-              class="input"
-            >
-              <option value="gemini-3.8-flash">
-                Gemini 3.8 Flash
-              </option>
-              <option value="gemini-3.7-flash">
-                Gemini 3.7 Flash
-              </option>
-              <option value="gemini-3.6-flash">
-                Gemini 3.6 Flash
-              </option>
-              <option value="gemini-3.5-flash">
-                Gemini 3.5 Flash
-              </option>
-            </select>
-
-          </div>
-
-
-          <div class="actions">
-
-            <button
-              class="btn btnPrimary"
-              onclick="saveApiSettings()"
-            >
-              💾 Save Gemini
-            </button>
-
-            <button
-              class="btn btnBlue"
-              onclick="testGemini()"
-            >
-              🧪 Test Gemini
-            </button>
-
-          </div>
-
-
-          <div
-            id="geminiStatus"
-            class="status"
-          >
-            Gemini پشکنین نەکراوە.
-          </div>
-
-        </div>
-
-
-
-        <!-- TELEGRAM -->
-
-        <div class="card">
-
-          <h2>📱 Telegram</h2>
-
-          <p class="cardDesc">
-            Bot Token و Chat ID ـی Telegram لێرە دابنێ.
-          </p>
-
-
-          <div class="field">
-
-            <label>Telegram Bot Token</label>
-
-            <div class="passwordWrap">
-
-              <input
-                id="telegramToken"
-                class="input"
-                type="password"
-                autocomplete="off"
-                placeholder="Telegram Bot Token"
-              >
-
-              <button
-                class="eyeBtn"
-                onclick="togglePassword('telegramToken')"
-              >
-                👁
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>Telegram Chat ID</label>
-
-            <input
-              id="telegramChatId"
-              class="input"
-              placeholder="-100..."
-            >
-
-          </div>
-
-
-          <div class="actions">
-
-            <button
-              class="btn btnPrimary"
-              onclick="saveApiSettings()"
-            >
-              💾 Save Telegram
-            </button>
-
-            <button
-              class="btn btnBlue"
-              onclick="testTelegram()"
-            >
-              🧪 Test Telegram
-            </button>
-
-          </div>
-
-
-          <div
-            id="telegramStatus"
-            class="status"
-          >
-            Telegram پشکنین نەکراوە.
-          </div>
-
-        </div>
-
-
-
-        <div class="card">
-
-          <h2>⚠️ تێبینی گرنگ</h2>
-
-          <p
-            style="
-            color:#facc15;
-            line-height:1.9;
-            font-size:13px
-            "
-          >
-            چونکە ماڵپەڕەکە لە GitHub Pages کار دەکات،
-            API Key و Telegram Token لە Browser ـەکەدا هەڵدەگیرێن.
-            بۆ تاقیکردنەوە باشە، بەڵام بۆ سیستەمی production ـی پارێزراو
-            باشترە API ـەکان لە backend بخرێن.
-          </p>
-
-        </div>
-
-
-        <div class="actions">
-
-          <button
-            class="btn btnDanger"
-            onclick="clearSecrets()"
-          >
-            🗑️ سڕینەوەی API و Token
-          </button>
-
-        </div>
-
-      </section>
-
-
-
-      <!-- FAQ -->
-
-      <section id="page-faq" class="page hidden">
-
-        <h1 class="pageTitle">❓ FAQ</h1>
-
-        <p class="pageSub">
-          پرسیار و وەڵامەکانی Website.
-        </p>
 
         <div class="card">
 
           <div id="faqList"></div>
 
-          <div class="actions">
+        </div>
 
-            <button
-              class="btn btnPrimary"
-              onclick="addFaq()"
-            >
-              + زیادکردنی FAQ
+      </section>
+
+
+      <!-- =====================
+           AI
+      ====================== -->
+
+      <section id="view-ai" class="view">
+
+        <div class="page-head">
+
+          <div>
+            <h2>AI Assistant</h2>
+            <p>Gemini ـی KURDIA بۆ Website و ناوەڕۆک.</p>
+          </div>
+
+          <div class="ai-status">
+            <span id="aiHeaderDot" class="ai-dot"></span>
+            <span id="aiHeaderStatus">Auto</span>
+          </div>
+
+        </div>
+
+        <div class="ai-layout">
+
+          <div class="card chat">
+
+            <div id="chatMessages" class="chat-messages">
+
+              <div class="message ai">
+                سڵاو 👋
+
+                من AI Assistant ـی KURDIA ـم.
+
+                دەتوانیت بە کوردی پێم بڵێیت چی دەتەوێت بگۆڕیت، وەک:
+
+                «دەقی Hero جوانتر بکە»
+
+                «ئەم خزمەتگوزارییە ناوێکی professional بۆ دابنێ»
+
+                «ئایکۆنی گونجاو بۆ تێنت هەڵبژێرە»
+
+                «دەقێکی ڕێکلامی بۆ گەشت بنووسە»
+              </div>
+
+            </div>
+
+            <div class="chat-input">
+
+              <textarea
+                id="aiInput"
+                class="input"
+                placeholder="بە کوردی بنووسە چی دەتەوێت..."
+              ></textarea>
+
+              <button id="sendAiBtn" class="action-btn primary">
+                <i data-lucide="send"></i>
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="card">
+
+            <div class="card-title">
+              <h3>AI Tools</h3>
+            </div>
+
+            <button class="action-btn" style="width:100%;margin-bottom:8px" id="generateTextTool">
+              <i data-lucide="wand-sparkles"></i>
+              دروستکردنی دەق
             </button>
 
-            <button
-              class="btn btnBlue"
-              onclick="saveFaq()"
-            >
-              💾 Save FAQ
+            <button class="action-btn" style="width:100%;margin-bottom:8px" id="iconTool">
+              <i data-lucide="icons"></i>
+              هەڵبژاردنی ئایکۆن
+            </button>
+
+            <button class="action-btn" style="width:100%;margin-bottom:8px" id="faqTool">
+              <i data-lucide="message-circle-question"></i>
+              دروستکردنی FAQ
+            </button>
+
+            <button class="action-btn" style="width:100%" id="tripTool">
+              <i data-lucide="map"></i>
+              دەقی گەشت
             </button>
 
           </div>
@@ -1509,105 +1901,412 @@ textarea.input{
       </section>
 
 
+      <!-- =====================
+           SETTINGS
+      ====================== -->
 
-      <!-- DATA -->
+      <section id="view-settings" class="view">
 
-      <section id="page-data" class="page hidden">
+        <div class="page-head">
 
-        <h1 class="pageTitle">💾 Data & Backup</h1>
+          <div>
+            <h2>Gemini & Telegram</h2>
+            <p>API ـەکان لێرە دابین بکە؛ Gemini model خۆکارانە هەڵدەبژێردرێت.</p>
+          </div>
 
-        <p class="pageSub">
-          داتای Website ـەکەت بە شێوەی JSON هەڵبگرە یان بگەڕێنەوە.
-        </p>
+          <div class="page-actions">
 
+            <button class="action-btn" id="testGeminiBtn">
+              <i data-lucide="bot"></i>
+              Test Gemini
+            </button>
 
-        <div class="card">
+            <button class="action-btn" id="testTelegramBtn">
+              <i data-lucide="send"></i>
+              Test Telegram
+            </button>
 
-          <h2>📤 Export</h2>
-
-          <p class="cardDesc">
-            هەموو داتای Website و Services و FAQ.
-          </p>
-
-          <button
-            class="btn btnPrimary"
-            onclick="exportData()"
-          >
-            ⬇️ Download Backup
-          </button>
-
-        </div>
-
-
-        <div class="card">
-
-          <h2>📥 Import</h2>
-
-          <input
-            id="importFile"
-            type="file"
-            accept=".json"
-            class="input"
-          >
-
-          <div class="actions">
-
-            <button
-              class="btn btnBlue"
-              onclick="importData()"
-            >
-              Upload Backup
+            <button class="action-btn primary" id="saveSettingsBtn">
+              <i data-lucide="save"></i>
+              Save
             </button>
 
           </div>
 
         </div>
 
+        <div class="grid grid-2">
 
-        <div class="card">
+          <div class="card">
 
-          <h2>🧹 Reset</h2>
+            <div class="card-title">
+              <h3>Gemini API</h3>
 
-          <p class="cardDesc">
-            داتای Website بگەڕێنەوە بۆ دۆخی بنەڕەتی.
-          </p>
+              <div class="ai-status">
+                <span id="settingsGeminiDot" class="ai-dot"></span>
+                <span id="settingsGeminiText">Auto</span>
+              </div>
+            </div>
 
-          <button
-            class="btn btnDanger"
-            onclick="resetWebsite()"
-          >
-            Reset Website
-          </button>
+            <div class="field">
 
+              <label class="label">
+                Gemini API Key
+              </label>
+
+              <input
+                id="geminiKey"
+                class="input secret-input"
+                type="password"
+                placeholder="AIza..."
+                autocomplete="off"
+              >
+
+            </div>
+
+            <div class="auto-model">
+
+              <div class="auto-model-title">
+                <i data-lucide="cpu"></i>
+                Gemini Model — Automatic
+              </div>
+
+              <div id="autoModelValue" class="auto-model-value">
+                Waiting for API key...
+              </div>
+
+            </div>
+
+            <div class="small" style="margin-top:12px">
+              Admin خۆی model ـی گونجاو دەدۆزێتەوە؛
+              پێویست ناکات model بە دەستی هەڵبژێریت.
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="card-title">
+              <h3>Telegram</h3>
+
+              <div class="ai-status">
+                <span id="settingsTelegramDot" class="ai-dot"></span>
+                <span id="settingsTelegramText">Auto</span>
+              </div>
+            </div>
+
+            <div class="field">
+
+              <label class="label">
+                Telegram Bot Token
+              </label>
+
+              <input
+                id="telegramToken"
+                class="input secret-input"
+                type="password"
+                placeholder="123456:ABC..."
+                autocomplete="off"
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label class="label">
+                Telegram Chat ID
+              </label>
+
+              <input
+                id="telegramChatId"
+                class="input secret-input"
+                type="text"
+                placeholder="-100..."
+                autocomplete="off"
+              >
+
+            </div>
+
+            <div class="small">
+              ئەمانە بۆ ناردنی داواکارییەکانی Booking ـە.
+            </div>
+
+          </div>
+
+        </div>
+
+        <div style="height:15px"></div>
+
+        <div class="warning">
+          ⚠️ چونکە Website ـەکە لە GitHub Pages کار دەکات،
+          API Key ـەکانی browser-side بە تەواوی نهێنی نین.
+          بۆ بەکارهێنانی شخصی/تاقیکردنەوە باشە، بەڵام بۆ production
+          backend ـێکی پارێزراو باشترە.
         </div>
 
       </section>
 
+
+      <!-- =====================
+           BACKUP
+      ====================== -->
+
+      <section id="view-backup" class="view">
+
+        <div class="page-head">
+
+          <div>
+            <h2>Backup & Restore</h2>
+            <p>هەموو داتای Website ـەکەت backup بکە.</p>
+          </div>
+
+        </div>
+
+        <div class="grid grid-2">
+
+          <div class="card">
+
+            <div class="card-title">
+              <h3>Backup</h3>
+            </div>
+
+            <p class="small">
+              هەموو settings، services، FAQ، gallery و content
+              وەک JSON دابەزێنە.
+            </p>
+
+            <button class="action-btn primary" style="margin-top:14px" id="exportBtn">
+              <i data-lucide="download"></i>
+              Download Backup
+            </button>
+
+          </div>
+
+          <div class="card">
+
+            <div class="card-title">
+              <h3>Restore</h3>
+            </div>
+
+            <p class="small">
+              backup ـی پێشوو هەڵبژێرە و داتا بگەڕێنەوە.
+            </p>
+
+            <label class="action-btn" style="margin-top:14px;display:inline-flex;cursor:pointer">
+              <i data-lucide="upload"></i>
+              Restore Backup
+              <input id="restoreInput" type="file" accept=".json,application/json" hidden>
+            </label>
+
+          </div>
+
+        </div>
+
+      </section>
 
     </main>
 
   </div>
 
-</section>
+</div>
+
+
+<!-- =========================
+     MODALS
+========================= -->
+
+<div id="serviceModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <strong id="serviceModalTitle">
+        خزمەتگوزاری
+      </strong>
+
+      <button class="icon-btn" onclick="closeModal('serviceModal')">
+        <i data-lucide="x"></i>
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="field">
+        <label class="label">ناوی خزمەتگوزاری</label>
+        <input id="serviceNameInput" class="input" placeholder="وێنە: گواستنەوە بە پاس">
+      </div>
+
+      <div class="field">
+        <label class="label">Icon name</label>
+        <input id="serviceIconInput" class="input" placeholder="bus">
+      </div>
+
+      <div class="small">
+        نموونە: bus, tent, coffee, utensils, lightbulb, camera, projector, flame, trophy, user-check, shield-alert, trash-2, bath
+      </div>
+
+      <div style="margin-top:14px">
+        <button id="modalAiIconBtn" class="action-btn">
+          <i data-lucide="sparkles"></i>
+          AI ـی Icon هەڵبژێرە
+        </button>
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button class="action-btn" onclick="closeModal('serviceModal')">
+        Cancel
+      </button>
+
+      <button id="saveServiceBtn" class="action-btn primary">
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="sectionModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <strong>زیادکردنی Section</strong>
+
+      <button class="icon-btn" onclick="closeModal('sectionModal')">
+        <i data-lucide="x"></i>
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="field">
+
+        <label class="label">جۆری Section</label>
+
+        <select id="sectionTypeInput" class="input">
+
+          <option value="hero">Hero</option>
+          <option value="trip">Trip</option>
+          <option value="services">Services</option>
+          <option value="steps">Steps</option>
+          <option value="gallery">Gallery</option>
+          <option value="faq">FAQ</option>
+          <option value="booking">Booking</option>
+          <option value="custom">Custom</option>
+
+        </select>
+
+      </div>
+
+      <div class="field">
+
+        <label class="label">ناوی Section</label>
+
+        <input
+          id="sectionNameInput"
+          class="input"
+          placeholder="وێنە: گەشتەکان"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button class="action-btn" onclick="closeModal('sectionModal')">
+        Cancel
+      </button>
+
+      <button id="saveSectionBtn" class="action-btn primary">
+        زیادکردن
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="aiResultModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <strong id="aiResultTitle">AI Result</strong>
+
+      <button class="icon-btn" onclick="closeModal('aiResultModal')">
+        <i data-lucide="x"></i>
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <textarea id="aiResultText" class="input" style="min-height:260px"></textarea>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button class="action-btn" onclick="closeModal('aiResultModal')">
+        داخستن
+      </button>
+
+      <button id="applyAiResultBtn" class="action-btn primary">
+        Apply
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
 
 <div id="toast" class="toast"></div>
 
 
 <script>
-
 /* =========================================================
-   KURDIA ADMIN
+   KURDIA ADVENTURE ADMIN
    ========================================================= */
 
 const SECRET_PIN = "2026";
 
-const STATE_KEY = "kurdia_builder_published_v3";
+const PUBLIC_SITE =
+  "https://halo47.github.io/Kurdia-adventure-/";
 
-const GEMINI_KEY_STORAGE = "KURDIA_GEMINI_KEY";
-const TELEGRAM_TOKEN_STORAGE = "KURDIA_TELEGRAM_TOKEN";
-const TELEGRAM_CHAT_STORAGE = "KURDIA_TELEGRAM_CHAT_ID";
-const GEMINI_MODEL_STORAGE = "KURDIA_GEMINI_MODEL";
+const RAW_INDEX =
+  "https://raw.githubusercontent.com/halo47/Kurdia-adventure-/refs/heads/main/index.html";
+
+const STORAGE_KEY =
+  "kurdia_builder_published_v3";
+
+const GEMINI_KEY_STORAGE =
+  "KURDIA_GEMINI_KEY";
+
+const TELEGRAM_TOKEN_STORAGE =
+  "KURDIA_TELEGRAM_TOKEN";
+
+const TELEGRAM_CHAT_STORAGE =
+  "KURDIA_TELEGRAM_CHAT_ID";
+
+const AUTO_MODEL_STORAGE =
+  "KURDIA_GEMINI_MODEL_AUTO";
 
 
 /* =========================================================
@@ -1616,71 +2315,65 @@ const GEMINI_MODEL_STORAGE = "KURDIA_GEMINI_MODEL";
 
 const DEFAULT_STATE = {
 
-  gradColor1:"#111111",
-  gradColor2:"#5b0b17",
+  gradColor1:"#9d1c32",
+  gradColor2:"#c92b49",
 
   heroBadge:"KURDIA ADVENTURE",
-
-  heroTitle:"لەگەڵ کوردیا بڕۆ بۆ سروشت",
-
-  heroSubtitle:
-    "گەشت، سروشت، هاوڕێتی و یادەوەرییە نوێکان.",
-
+  heroTitle:"گەشتێک بۆ بیرەوەرییە نوێکان",
+  heroSubtitle:"لەگەڵ KURDIA Adventure جوانترین شوێنەکانی سروشتی کوردستان ببینە.",
   heroImageUrl:"",
 
   bookingOpen:true,
 
-  tripTitle:"گەشتی نوێی کوردیا",
-
+  tripTitle:"گەشتی نوێی KURDIA",
   tripPrice:"",
-
-  tripDifficulty:"مامناوەند",
-
-  tripDuration:"1 ڕۆژ",
-
+  tripDifficulty:"ئاسان",
+  tripDuration:"٢ ڕۆژ",
   tripTime:"",
-
-  tripLocation:"کوردستان",
-
+  tripLocation:"",
   tripDesc:"",
-
   tripImageUrl:"",
 
-  step1:"تۆمارکردن",
+  bookingTelegram:"",
+  telegramChatId:"",
 
-  step2:"ئامادەبوون",
-
-  step3:"گەشتکردن",
-
-  step4:"دروستکردنی یادەوەری",
+  step1:"شوێنی کۆبوونەوە",
+  step2:"گواستنەوە بۆ شوێنی گەشت",
+  step3:"چێژ و ئەزموونی سروشت",
+  step4:"گەڕانەوە بە یادەوەرییە جوانەکان",
 
   services:[
-
-    {
-      name:"گواستنەوە",
-      icon:"🚌"
-    },
-
-    {
-      name:"نان و خواردن",
-      icon:"🍽️"
-    },
-
-    {
-      name:"خوێندنەوە و چا",
-      icon:"☕"
-    },
-
-    {
-      name:"تێنت",
-      icon:"⛺"
-    }
-
+    {name:"گواستنەوە بە پاس",icon:"bus"},
+    {name:"نان و خواردن",icon:"utensils"},
+    {name:"خواردنەوە",icon:"coffee"},
+    {name:"تێنت",icon:"tent"},
+    {name:"کارەبا و ڕووناکی",icon:"lightbulb"},
+    {name:"کورسی و مێز",icon:"armchair"},
+    {name:"تۆڕی تێنت",icon:"tent-tree"},
+    {name:"پڕۆژێکتەر و فیلم",icon:"projector"},
+    {name:"ئاگری شەو",icon:"flame"},
+    {name:"چالاکی و خەڵات",icon:"trophy"},
+    {name:"ڕێبەری شارەزا",icon:"user-check"},
+    {name:"یارمەتی فۆری",icon:"shield-alert"},
+    {name:"کیسی زبڵ",icon:"trash-2"},
+    {name:"WC",icon:"bath"}
   ],
 
   gallery:[],
 
-  faq:[]
+  faq:[],
+
+  sections:[
+    {id:"hero",type:"hero",visible:true},
+    {id:"trip",type:"trip",visible:true},
+    {id:"services",type:"services",visible:true},
+    {id:"steps",type:"steps",visible:true},
+    {id:"gallery",type:"gallery",visible:true},
+    {id:"faq",type:"faq",visible:true},
+    {id:"booking",type:"booking",visible:true}
+  ],
+
+  aiEndpoint:""
 
 };
 
@@ -1691,89 +2384,119 @@ const DEFAULT_STATE = {
 
 let state = loadState();
 
+let selectedSection = "hero";
+let selectedContentTab = "hero";
+let editingServiceIndex = -1;
 
-function loadState(){
+let undoStack = [];
+let redoStack = [];
 
-  try{
+let detectedGeminiModel = "";
 
-    const raw =
-      localStorage.getItem(STATE_KEY);
+let aiConversation = [];
 
-    if(!raw){
 
-      return structuredClone(DEFAULT_STATE);
+/* =========================================================
+   BASIC HELPERS
+   ========================================================= */
 
-    }
-
-    const parsed =
-      JSON.parse(raw);
-
-    return mergeDeep(
-      structuredClone(DEFAULT_STATE),
-      parsed
-    );
-
-  }catch(e){
-
-    console.error(e);
-
-    return structuredClone(DEFAULT_STATE);
-
-  }
-
+function $(id){
+  return document.getElementById(id);
 }
 
+function safeJSON(value, fallback){
+  try{
+    return JSON.parse(value);
+  }catch{
+    return fallback;
+  }
+}
 
-function mergeDeep(base,extra){
+function deepClone(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
 
-  if(
-    typeof base !== "object" ||
-    base === null
-  ){
+function mergeState(base, incoming){
 
-    return extra;
-
+  if(!incoming || typeof incoming !== "object"){
+    return deepClone(base);
   }
 
-  const result =
-    Array.isArray(base)
-      ? [...base]
-      : {...base};
+  const result = deepClone(base);
 
-  if(
-    typeof extra !== "object" ||
-    extra === null
-  ){
-
-    return result;
-
-  }
-
-  Object.keys(extra).forEach(key=>{
-
-    if(
-      typeof extra[key] === "object" &&
-      extra[key] !== null &&
-      !Array.isArray(extra[key]) &&
-      typeof result[key] === "object" &&
-      result[key] !== null &&
-      !Array.isArray(result[key])
-    ){
-
-      result[key] =
-        mergeDeep(result[key],extra[key]);
-
-    }else{
-
-      result[key] =
-        extra[key];
-
-    }
-
+  Object.keys(incoming).forEach(key=>{
+    result[key] = incoming[key];
   });
 
   return result;
+}
 
+function loadState(){
+
+  const saved =
+    localStorage.getItem(STORAGE_KEY);
+
+  if(!saved){
+    return deepClone(DEFAULT_STATE);
+  }
+
+  return mergeState(
+    DEFAULT_STATE,
+    safeJSON(saved,{})
+  );
+}
+
+function saveState(show=true){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(state)
+  );
+
+  renderAll();
+
+  if(show){
+    toast("داتا پاشەکەوت کرا ✓","ok");
+  }
+}
+
+function pushHistory(){
+
+  undoStack.push(
+    deepClone(state)
+  );
+
+  if(undoStack.length > 30){
+    undoStack.shift();
+  }
+
+  redoStack = [];
+}
+
+function updateState(mutator){
+
+  pushHistory();
+
+  mutator(state);
+
+  saveState(false);
+}
+
+function toast(message,type=""){
+
+  const el = $("toast");
+
+  el.textContent = message;
+
+  el.className =
+    "toast show " + type;
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer =
+    setTimeout(()=>{
+      el.className="toast";
+    },3000);
 }
 
 
@@ -1781,111 +2504,77 @@ function mergeDeep(base,extra){
    LOGIN
    ========================================================= */
 
-function login(){
+function doLogin(){
 
   const pin =
-    document.getElementById("pinInput").value.trim();
+    $("pinInput").value.trim();
 
   if(pin === SECRET_PIN){
 
     sessionStorage.setItem(
-      "KURDIA_ADMIN_LOGIN",
+      "kurdia_admin_login",
       "1"
     );
 
-    document
-      .getElementById("loginPage")
-      .classList.add("hidden");
-
-    document
-      .getElementById("app")
-      .classList.remove("hidden");
+    $("loginScreen").style.display="none";
+    $("app").classList.add("active");
 
     initialize();
 
   }else{
 
-    document
-      .getElementById("loginError")
-      .textContent =
-      "PIN هەڵەیە.";
+    $("loginError").textContent =
+      "PIN ـەکە هەڵەیە.";
 
   }
-
 }
 
+$("loginBtn").addEventListener(
+  "click",
+  doLogin
+);
 
-function logout(){
-
-  sessionStorage.removeItem(
-    "KURDIA_ADMIN_LOGIN"
-  );
-
-  location.reload();
-
-}
-
-
-document
-  .getElementById("pinInput")
-  .addEventListener(
-    "keydown",
-    e=>{
-      if(e.key==="Enter"){
-        login();
-      }
+$("pinInput").addEventListener(
+  "keydown",
+  e=>{
+    if(e.key==="Enter"){
+      doLogin();
     }
-  );
-
-
-if(
-  sessionStorage.getItem(
-    "KURDIA_ADMIN_LOGIN"
-  ) === "1"
-){
-
-  document
-    .getElementById("loginPage")
-    .classList.add("hidden");
-
-  document
-    .getElementById("app")
-    .classList.remove("hidden");
-
-}
+  }
+);
 
 
 /* =========================================================
    INITIALIZE
    ========================================================= */
 
-function initialize(){
+async function initialize(){
 
-  state = loadState();
+  lucide.createIcons();
 
-  loadBuilder();
+  loadSettingsUI();
 
-  loadServices();
+  renderAll();
 
-  loadFaq();
+  updateStatuses();
 
-  loadApiSettings();
+  await detectGeminiModel();
 
-  updateDashboard();
+  updateStatuses();
 
-  updateSystemStatus();
-
+  loadPublicWebsite();
 }
-
 
 if(
   sessionStorage.getItem(
-    "KURDIA_ADMIN_LOGIN"
+    "kurdia_admin_login"
   ) === "1"
 ){
 
-  initialize();
+  $("loginScreen").style.display="none";
+  $("app").classList.add("active");
 
+  initialize();
 }
 
 
@@ -1893,292 +2582,1170 @@ if(
    NAVIGATION
    ========================================================= */
 
-function showPage(name){
+document
+.querySelectorAll(".nav-item")
+.forEach(btn=>{
 
-  document
-    .querySelectorAll(".page")
-    .forEach(p=>{
-      p.classList.add("hidden");
-    });
+  btn.addEventListener(
+    "click",
+    ()=>{
 
-  const page =
-    document.getElementById(
-      "page-"+name
-    );
-
-  if(page){
-    page.classList.remove("hidden");
-  }
-
-  document
-    .querySelectorAll(".navBtn")
-    .forEach(btn=>{
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === name
+      showView(
+        btn.dataset.view
       );
-    });
+
+    }
+  );
+
+});
+
+function showView(view){
 
   document
-    .getElementById("sidebar")
-    .classList.remove("open");
+  .querySelectorAll(".view")
+  .forEach(v=>{
+    v.classList.remove("active");
+  });
 
-  if(name==="services"){
-    loadServices();
+  const target =
+    $("view-"+view);
+
+  if(target){
+    target.classList.add("active");
   }
 
-  if(name==="faq"){
-    loadFaq();
-  }
+  document
+  .querySelectorAll(".nav-item")
+  .forEach(btn=>{
+    btn.classList.toggle(
+      "active",
+      btn.dataset.view===view
+    );
+  });
 
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+  lucide.createIcons();
 }
 
 
-function toggleSidebar(){
+/* =========================================================
+   TOP BUTTONS
+   ========================================================= */
 
-  document
-    .getElementById("sidebar")
-    .classList.toggle("open");
+$("openSiteBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    window.open(
+      PUBLIC_SITE,
+      "_blank",
+      "noopener"
+    );
+  }
+);
+
+$("publishTopBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    publishWebsite();
+  }
+);
+
+$("previewPublicBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    window.open(
+      PUBLIC_SITE,
+      "_blank",
+      "noopener"
+    );
+  }
+);
+
+
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
+
+function renderAll(){
+
+  renderDashboard();
+
+  renderSections();
+
+  renderPreview();
+
+  renderProperties();
+
+  renderServices();
+
+  renderContent();
+
+  renderGallery();
+
+  renderFaq();
+
+  loadSettingsUI();
+
+  lucide.createIcons();
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+function renderDashboard(){
+
+  $("statSections").textContent =
+    state.sections.filter(
+      x=>x.visible
+    ).length;
+
+  $("statServices").textContent =
+    state.services.length;
+
+  $("statGallery").textContent =
+    state.gallery.length;
 
 }
 
 
 /* =========================================================
-   BUILDER
+   SECTIONS
    ========================================================= */
 
-function loadBuilder(){
+const SECTION_NAMES = {
 
-  state = loadState();
+  hero:"Hero",
 
-  const ids = [
+  trip:"Trip",
 
-    "heroBadge",
-    "heroTitle",
-    "heroSubtitle",
-    "heroImageUrl",
+  services:"Services",
 
-    "tripTitle",
-    "tripPrice",
-    "tripDifficulty",
-    "tripDuration",
-    "tripTime",
-    "tripLocation",
-    "tripDesc",
-    "tripImageUrl",
+  steps:"Steps",
 
-    "step1",
-    "step2",
-    "step3",
-    "step4"
+  gallery:"Gallery",
 
-  ];
+  faq:"FAQ",
 
-  ids.forEach(id=>{
+  booking:"Booking",
 
-    const el =
-      document.getElementById(id);
+  custom:"Custom"
 
-    if(el){
+};
 
-      el.value =
-        state[id] || "";
+function renderSections(){
+
+  const list =
+    $("sectionList");
+
+  list.innerHTML="";
+
+  state.sections.forEach(
+    (section,index)=>{
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "section-item " +
+        (selectedSection===section.id
+          ? "selected"
+          : "");
+
+      row.draggable=true;
+
+      row.dataset.index=index;
+
+      row.innerHTML=`
+
+        <span class="drag">
+          <i data-lucide="grip-vertical"></i>
+        </span>
+
+        <span class="section-name">
+          ${escapeHTML(
+            SECTION_NAMES[section.type]
+            || section.type
+          )}
+        </span>
+
+        <div class="section-actions">
+
+          <button class="mini-btn"
+            title="${section.visible?"شاردنەوە":"نیشاندان"}"
+            onclick="toggleSection(${index})">
+
+            <i data-lucide="${
+              section.visible
+              ? "eye"
+              : "eye-off"
+            }"></i>
+
+          </button>
+
+          <button class="mini-btn"
+            title="سڕینەوە"
+            onclick="deleteSection(${index})">
+
+            <i data-lucide="trash-2"></i>
+
+          </button>
+
+        </div>
+      `;
+
+      row.addEventListener(
+        "click",
+        e=>{
+
+          if(
+            e.target.closest("button")
+          ) return;
+
+          selectedSection =
+            section.id;
+
+          renderSections();
+
+          renderProperties();
+
+          renderPreview();
+
+        }
+      );
+
+      row.addEventListener(
+        "dragstart",
+        ()=>{
+          row.classList.add("dragging");
+        }
+      );
+
+      row.addEventListener(
+        "dragend",
+        ()=>{
+          row.classList.remove("dragging");
+        }
+      );
+
+      row.addEventListener(
+        "dragover",
+        e=>{
+          e.preventDefault();
+        }
+      );
+
+      row.addEventListener(
+        "drop",
+        e=>{
+
+          e.preventDefault();
+
+          const from =
+            Number(
+              e.dataTransfer.getData(
+                "text/plain"
+              )
+            );
+
+          const to=index;
+
+          if(
+            Number.isInteger(from)
+            && from!==to
+          ){
+
+            updateState(
+              s=>{
+                const item =
+                  s.sections.splice(
+                    from,
+                    1
+                  )[0];
+
+                s.sections.splice(
+                  to,
+                  0,
+                  item
+                );
+              }
+            );
+
+            renderSections();
+          }
+
+        }
+      );
+
+      list.appendChild(row);
 
     }
-
-  });
-
-
-  document
-    .getElementById("bookingOpen")
-    .checked =
-    state.bookingOpen !== false;
-
-
-  previewImage(
-    "heroImageUrl",
-    "heroPreview"
   );
 
-  previewImage(
-    "tripImageUrl",
-    "tripPreview"
-  );
-
+  lucide.createIcons();
 }
 
-
-function saveBuilder(){
-
-  const ids = [
-
-    "heroBadge",
-    "heroTitle",
-    "heroSubtitle",
-    "heroImageUrl",
-
-    "tripTitle",
-    "tripPrice",
-    "tripDifficulty",
-    "tripDuration",
-    "tripTime",
-    "tripLocation",
-    "tripDesc",
-    "tripImageUrl",
-
-    "step1",
-    "step2",
-    "step3",
-    "step4"
-
-  ];
-
-
-  ids.forEach(id=>{
-
-    const el =
-      document.getElementById(id);
-
-    if(el){
-
-      state[id] =
-        el.value.trim();
-
+document.addEventListener(
+  "dragstart",
+  e=>{
+    if(
+      e.target.classList.contains(
+        "section-item"
+      )
+    ){
+      e.dataTransfer.setData(
+        "text/plain",
+        e.target.dataset.index
+      );
     }
+  }
+);
 
-  });
+function toggleSection(index){
 
-
-  state.bookingOpen =
-    document
-      .getElementById("bookingOpen")
-      .checked;
-
-
-  saveState();
-
-  broadcastState();
-
-  showToast(
-    "Website بە سەرکەوتوویی Publish کرا."
-  );
-
-  updateDashboard();
-
-}
-
-
-function saveState(){
-
-  localStorage.setItem(
-    STATE_KEY,
-    JSON.stringify(state)
+  updateState(
+    s=>{
+      s.sections[index].visible =
+        !s.sections[index].visible;
+    }
   );
 
 }
 
+function deleteSection(index){
 
-function broadcastState(){
+  if(
+    !confirm(
+      "دڵنیایت لە سڕینەوەی ئەم Section ـە؟"
+    )
+  ) return;
 
-  try{
+  updateState(
+    s=>{
+      s.sections.splice(
+        index,
+        1
+      );
+    }
+  );
 
-    window.parent.postMessage(
-      {
-        type:"KURDIA_BUILDER_STATE",
-        state:state
-      },
-      "*"
+  if(
+    !state.sections.some(
+      x=>x.id===selectedSection
+    )
+  ){
+    selectedSection =
+      state.sections[0]?.id || "hero";
+  }
+
+}
+
+
+/* =========================================================
+   ADD SECTION
+   ========================================================= */
+
+$("addSectionBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    $("sectionTypeInput").value="custom";
+    $("sectionNameInput").value="";
+    $("sectionModal").classList.add("active");
+  }
+);
+
+$("saveSectionBtn")
+.addEventListener(
+  "click",
+  ()=>{
+
+    const type =
+      $("sectionTypeInput").value;
+
+    const name =
+      $("sectionNameInput").value.trim();
+
+    const id =
+      "section_"+Date.now();
+
+    updateState(
+      s=>{
+        s.sections.push({
+          id,
+          type,
+          visible:true,
+          name:
+            name ||
+            SECTION_NAMES[type] ||
+            "Custom"
+        });
+      }
     );
 
-  }catch(e){}
+    selectedSection=id;
 
+    closeModal(
+      "sectionModal"
+    );
+
+    renderAll();
+
+  }
+);
+
+
+/* =========================================================
+   PROPERTIES
+   ========================================================= */
+
+function renderProperties(){
+
+  const panel =
+    $("propertiesPanel");
+
+  const section =
+    state.sections.find(
+      x=>x.id===selectedSection
+    );
+
+  if(!section){
+
+    panel.innerHTML=`
+      <div class="small">
+        Section نییە.
+      </div>
+    `;
+
+    return;
+  }
+
+  const type =
+    section.type;
+
+  let html="";
+
+  if(type==="hero"){
+
+    html=`
+      <div class="field">
+        <label class="label">Badge</label>
+        <input class="input" data-bind="heroBadge"
+          value="${escapeAttr(state.heroBadge)}">
+      </div>
+
+      <div class="field">
+        <label class="label">Title</label>
+        <textarea class="input" data-bind="heroTitle">${escapeHTML(state.heroTitle)}</textarea>
+      </div>
+
+      <div class="field">
+        <label class="label">Subtitle</label>
+        <textarea class="input" data-bind="heroSubtitle">${escapeHTML(state.heroSubtitle)}</textarea>
+      </div>
+
+      <div class="field">
+        <label class="label">Hero Image URL</label>
+        <input class="input" data-bind="heroImageUrl"
+          value="${escapeAttr(state.heroImageUrl)}"
+          dir="ltr">
+      </div>
+
+      <button class="action-btn primary" onclick="generateForField('heroTitle')">
+        <i data-lucide="sparkles"></i>
+        AI دەقی Title
+      </button>
+    `;
+
+  }else if(type==="trip"){
+
+    html=`
+      <div class="field">
+        <label class="label">Trip Title</label>
+        <input class="input" data-bind="tripTitle"
+          value="${escapeAttr(state.tripTitle)}">
+      </div>
+
+      <div class="field">
+        <label class="label">Price</label>
+        <input class="input" data-bind="tripPrice"
+          value="${escapeAttr(state.tripPrice)}">
+      </div>
+
+      <div class="field">
+        <label class="label">Location</label>
+        <input class="input" data-bind="tripLocation"
+          value="${escapeAttr(state.tripLocation)}">
+      </div>
+
+      <div class="field">
+        <label class="label">Duration</label>
+        <input class="input" data-bind="tripDuration"
+          value="${escapeAttr(state.tripDuration)}">
+      </div>
+
+      <div class="field">
+        <label class="label">Difficulty</label>
+        <input class="input" data-bind="tripDifficulty"
+          value="${escapeAttr(state.tripDifficulty)}">
+      </div>
+
+      <div class="field">
+        <label class="label">Time</label>
+        <input class="input" data-bind="tripTime"
+          value="${escapeAttr(state.tripTime)}">
+      </div>
+
+      <div class="field">
+        <label class="label">Description</label>
+        <textarea class="input" data-bind="tripDesc">${escapeHTML(state.tripDesc)}</textarea>
+      </div>
+
+      <div class="field">
+        <label class="label">Trip Image URL</label>
+        <input class="input" data-bind="tripImageUrl"
+          value="${escapeAttr(state.tripImageUrl)}"
+          dir="ltr">
+      </div>
+    `;
+
+  }else if(type==="services"){
+
+    html=`
+      <div class="small" style="margin-bottom:12px">
+        خزمەتگوزاریەکان لە بەشی Services ـەوە دەستکاری دەکرێن.
+      </div>
+
+      <button class="action-btn primary"
+        onclick="showView('services')">
+        <i data-lucide="sparkles"></i>
+        کردنەوەی Services
+      </button>
+    `;
+
+  }else if(type==="steps"){
+
+    html=`
+
+      ${[1,2,3,4].map(n=>`
+
+        <div class="field">
+
+          <label class="label">
+            Step ${n}
+          </label>
+
+          <textarea
+            class="input"
+            data-bind="step${n}"
+          >${escapeHTML(
+            state["step"+n] || ""
+          )}</textarea>
+
+        </div>
+
+      `).join("")}
+
+    `;
+
+  }else if(type==="gallery"){
+
+    html=`
+      <div class="small" style="margin-bottom:12px">
+        Gallery لە بەشی Gallery ـەوە کۆنترۆڵ دەکرێت.
+      </div>
+
+      <button class="action-btn primary"
+        onclick="showView('gallery')">
+        <i data-lucide="images"></i>
+        کردنەوەی Gallery
+      </button>
+    `;
+
+  }else if(type==="faq"){
+
+    html=`
+      <div class="small" style="margin-bottom:12px">
+        FAQ لە بەشی FAQ ـەوە دەستکاری دەکرێت.
+      </div>
+
+      <button class="action-btn primary"
+        onclick="showView('faq')">
+        <i data-lucide="circle-help"></i>
+        کردنەوەی FAQ
+      </button>
+    `;
+
+  }else if(type==="booking"){
+
+    html=`
+
+      <div class="field">
+
+        <label class="label">
+          Booking status
+        </label>
+
+        <select
+          class="input"
+          id="bookingOpenProp"
+        >
+
+          <option value="true"
+            ${state.bookingOpen ? "selected":""}>
+            کراوە
+          </option>
+
+          <option value="false"
+            ${!state.bookingOpen ? "selected":""}>
+            داخراوە
+          </option>
+
+        </select>
+
+      </div>
+
+    `;
+
+  }else{
+
+    html=`
+      <div class="field">
+        <label class="label">
+          ناوی Section
+        </label>
+
+        <input
+          id="customSectionName"
+          class="input"
+          value="${escapeAttr(
+            section.name || ""
+          )}">
+      </div>
+    `;
+
+  }
+
+  panel.innerHTML=html;
+
+  panel
+  .querySelectorAll("[data-bind]")
+  .forEach(input=>{
+
+    input.addEventListener(
+      "input",
+      ()=>{
+
+        const key =
+          input.dataset.bind;
+
+        pushHistory();
+
+        if(input.tagName==="TEXTAREA"){
+          state[key]=input.value;
+        }else{
+          state[key]=input.value;
+        }
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(state)
+        );
+
+        renderPreview();
+        renderDashboard();
+
+      }
+    );
+
+  });
+
+  const booking =
+    $("bookingOpenProp");
+
+  if(booking){
+
+    booking.addEventListener(
+      "change",
+      ()=>{
+        pushHistory();
+
+        state.bookingOpen =
+          booking.value==="true";
+
+        saveState(false);
+      }
+    );
+
+  }
+
+  const customName =
+    $("customSectionName");
+
+  if(customName){
+
+    customName.addEventListener(
+      "input",
+      ()=>{
+
+        const item =
+          state.sections.find(
+            x=>x.id===selectedSection
+          );
+
+        if(item){
+          item.name =
+            customName.value;
+          saveState(false);
+          renderSections();
+        }
+
+      }
+    );
+
+  }
+
+  lucide.createIcons();
 }
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+function renderPreview(){
+
+  const preview =
+    $("previewSite");
+
+  if(!preview) return;
+
+  const visible =
+    state.sections.filter(
+      x=>x.visible
+    );
+
+  let html="";
+
+  visible.forEach(
+    section=>{
+
+      if(section.type==="hero"){
+
+        html+=`
+
+          <section
+            class="preview-hero"
+            style="--hero-image:url('${escapeCSSUrl(
+              state.heroImageUrl
+            )}')"
+          >
+
+            <div class="preview-hero-content">
+
+              <div class="preview-badge">
+                ${escapeHTML(
+                  state.heroBadge
+                )}
+              </div>
+
+              <div class="preview-title">
+                ${escapeHTML(
+                  state.heroTitle
+                )}
+              </div>
+
+              <div class="preview-sub">
+                ${escapeHTML(
+                  state.heroSubtitle
+                )}
+              </div>
+
+              <div class="preview-buttons">
+                <button class="preview-button">
+                  بەشداری
+                </button>
+
+                <button class="preview-button alt">
+                  زیاتر بزانە
+                </button>
+              </div>
+
+            </div>
+
+          </section>
+
+        `;
+
+      }
+
+      if(section.type==="trip"){
+
+        html+=`
+
+          <section class="preview-section">
+
+            <div class="preview-heading">
+              ${escapeHTML(
+                state.tripTitle
+              )}
+            </div>
+
+            <div class="preview-trip">
+
+              <div
+                class="preview-trip-img"
+                style="background-image:url('${escapeCSSUrl(
+                  state.tripImageUrl
+                )}')"
+              ></div>
+
+              <div class="preview-trip-info">
+
+                <h4>
+                  ${escapeHTML(
+                    state.tripTitle
+                  )}
+                </h4>
+
+                <p>
+                  ${escapeHTML(
+                    state.tripDesc ||
+                    "دەربارەی گەشتەکە."
+                  )}
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        `;
+
+      }
+
+      if(section.type==="services"){
+
+        html+=`
+
+          <section class="preview-section">
+
+            <div class="preview-heading">
+              خزمەتگوزاریەکان
+            </div>
+
+            <div class="preview-services">
+
+              ${state.services
+              .slice(0,9)
+              .map(service=>`
+
+                <div class="preview-service">
+
+                  <i
+                    data-lucide="${escapeAttr(
+                      service.icon ||
+                      "circle"
+                    )}"
+                  ></i>
+
+                  <span>
+                    ${escapeHTML(
+                      service.name
+                    )}
+                  </span>
+
+                </div>
+
+              `).join("")}
+
+            </div>
+
+          </section>
+
+        `;
+
+      }
+
+      if(section.type==="steps"){
+
+        html+=`
+
+          <section class="preview-section">
+
+            <div class="preview-heading">
+              چۆنیەتی بەشداریکردن
+            </div>
+
+            <div class="preview-services">
+
+              ${[1,2,3,4]
+              .map(n=>`
+
+                <div class="preview-service">
+
+                  <strong style="
+                    display:block;
+                    font-size:18px;
+                    color:#e0526c;
+                    margin-bottom:5px
+                  ">
+                    ${n}
+                  </strong>
+
+                  <span>
+                    ${escapeHTML(
+                      state["step"+n] || ""
+                    )}
+                  </span>
+
+                </div>
+
+              `).join("")}
+
+            </div>
+
+          </section>
+
+        `;
+
+      }
+
+      if(section.type==="gallery"){
+
+        html+=`
+
+          <section class="preview-section">
+
+            <div class="preview-heading">
+              Gallery
+            </div>
+
+            <div class="preview-services">
+
+              ${state.gallery
+              .slice(0,6)
+              .map(item=>`
+
+                <div
+                  style="
+                    min-height:90px;
+                    border-radius:12px;
+                    background-image:url('${escapeCSSUrl(
+                      item.url
+                    )}');
+                    background-size:cover;
+                    background-position:center;
+                    border:1px solid rgba(255,255,255,.07)
+                  "
+                ></div>
+
+              `).join("")}
+
+            </div>
+
+          </section>
+
+        `;
+
+      }
+
+      if(section.type==="faq"){
+
+        html+=`
+
+          <section class="preview-section">
+
+            <div class="preview-heading">
+              پرسیارە باوەکان
+            </div>
+
+            ${state.faq.slice(0,4)
+            .map(item=>`
+
+              <div style="
+                background:#0d121b;
+                border:1px solid rgba(255,255,255,.07);
+                border-radius:11px;
+                padding:10px;
+                margin-bottom:7px;
+                font-size:10px
+              ">
+
+                <strong>
+                  ${escapeHTML(item.q || "")}
+                </strong>
+
+                <p style="
+                  color:#94a3b8;
+                  margin-top:5px;
+                  line-height:1.7
+                ">
+                  ${escapeHTML(item.a || "")}
+                </p>
+
+              </div>
+
+            `).join("")}
+
+          </section>
+
+        `;
+
+      }
+
+      if(section.type==="booking"){
+
+        html+=`
+
+          <section class="preview-section">
+
+            <div class="preview-heading">
+              بەشداری لە گەشت
+            </div>
+
+            <button
+              class="preview-button"
+              style="width:100%"
+            >
+              ${state.bookingOpen
+                ? "بەشداری بکە"
+                : "Booking داخراوە"}
+            </button>
+
+          </section>
+
+        `;
+
+      }
+
+    }
+  );
+
+  preview.innerHTML=html;
+
+  lucide.createIcons();
+}
+
+
+/* =========================================================
+   DEVICE PREVIEW
+   ========================================================= */
+
+document
+.querySelectorAll(".device-btn")
+.forEach(btn=>{
+
+  btn.addEventListener(
+    "click",
+    ()=>{
+
+      document
+      .querySelectorAll(".device-btn")
+      .forEach(x=>{
+        x.classList.remove("active");
+      });
+
+      btn.classList.add("active");
+
+      const device =
+        btn.dataset.device;
+
+      const preview =
+        $("sitePreview");
+
+      preview.className =
+        "site-preview " +
+        device;
+
+    }
+  );
+
+});
 
 
 /* =========================================================
    SERVICES
    ========================================================= */
 
-function loadServices(){
-
-  state = loadState();
+function renderServices(){
 
   const list =
-    document.getElementById(
-      "servicesList"
-    );
+    $("serviceList");
 
-  list.innerHTML = "";
+  if(!list) return;
 
-  const services =
-    Array.isArray(state.services)
-      ? state.services
-      : [];
+  list.innerHTML="";
 
-
-  services.forEach(
+  state.services.forEach(
     (service,index)=>{
 
       const row =
         document.createElement("div");
 
-      row.className =
-        "serviceItem";
+      row.className="service-row";
 
-      row.draggable = true;
+      row.innerHTML=`
 
-      row.dataset.index =
-        index;
+        <div class="drag">
+          <i data-lucide="grip-vertical"></i>
+        </div>
 
-
-      row.innerHTML = `
-
-        <div class="iconPreview">
-          ${escapeHtml(service.icon || "🔹")}
+        <div class="service-icon-preview">
+          <i data-lucide="${
+            escapeAttr(
+              service.icon ||
+              "circle"
+            )
+          }"></i>
         </div>
 
         <div>
-
           <input
-            class="input serviceName"
-            value="${escapeAttr(service.name || "")}"
-            placeholder="ناوی Service"
+            class="input"
+            value="${escapeAttr(
+              service.name
+            )}"
+            data-service-name="${index}"
           >
-
-          <input
-            class="input serviceIcon"
-            style="margin-top:6px"
-            value="${escapeAttr(service.icon || "")}"
-            placeholder="ئایکۆن"
-          >
-
         </div>
 
-        <div class="serviceActions">
+        <div class="service-actions">
 
           <button
-            class="btn btnSmall"
-            onclick="moveService(${index},-1)"
+            class="mini-btn"
+            title="AI icon"
+            onclick="aiIconForService(${index})"
           >
-            ↑
+            <i data-lucide="sparkles"></i>
           </button>
 
           <button
-            class="btn btnSmall"
-            onclick="moveService(${index},1)"
+            class="mini-btn"
+            title="دەستکاری"
+            onclick="editService(${index})"
           >
-            ↓
+            <i data-lucide="pencil"></i>
           </button>
 
           <button
-            class="btn btnDanger btnSmall"
+            class="mini-btn"
+            title="سڕینەوە"
             onclick="deleteService(${index})"
           >
-            ×
+            <i data-lucide="trash-2"></i>
           </button>
 
         </div>
-
       `;
 
       list.appendChild(row);
@@ -2186,114 +3753,681 @@ function loadServices(){
     }
   );
 
-}
+  list
+  .querySelectorAll(
+    "[data-service-name]"
+  )
+  .forEach(input=>{
 
+    input.addEventListener(
+      "change",
+      ()=>{
 
-function addService(){
+        const index =
+          Number(
+            input.dataset.serviceName
+          );
 
-  if(!Array.isArray(state.services)){
-    state.services=[];
-  }
+        pushHistory();
 
-  state.services.push({
-    name:"خزمەتگوزاری نوێ",
-    icon:"🔹"
+        state.services[index].name =
+          input.value;
+
+        saveState(false);
+
+      }
+    );
+
   });
 
-  loadServices();
-
+  lucide.createIcons();
 }
 
+
+$("addServiceBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    editingServiceIndex=-1;
+
+    $("serviceModalTitle").textContent =
+      "زیادکردنی خزمەتگوزاری";
+
+    $("serviceNameInput").value="";
+    $("serviceIconInput").value="circle";
+
+    $("serviceModal").classList.add("active");
+  }
+);
+
+function editService(index){
+
+  editingServiceIndex=index;
+
+  const service =
+    state.services[index];
+
+  $("serviceModalTitle").textContent =
+    "دەستکاریکردنی خزمەتگوزاری";
+
+  $("serviceNameInput").value =
+    service.name || "";
+
+  $("serviceIconInput").value =
+    service.icon || "circle";
+
+  $("serviceModal").classList.add("active");
+}
+
+$("saveServiceBtn")
+.addEventListener(
+  "click",
+  ()=>{
+
+    const name =
+      $("serviceNameInput").value.trim();
+
+    const icon =
+      $("serviceIconInput").value.trim()
+      || "circle";
+
+    if(!name){
+      toast(
+        "ناوی خزمەتگوزاری پێویستە.",
+        "error"
+      );
+      return;
+    }
+
+    updateState(
+      s=>{
+
+        if(
+          editingServiceIndex>=0
+        ){
+
+          s.services[
+            editingServiceIndex
+          ]={
+            name,
+            icon
+          };
+
+        }else{
+
+          s.services.push({
+            name,
+            icon
+          });
+
+        }
+
+      }
+    );
+
+    closeModal(
+      "serviceModal"
+    );
+
+    renderAll();
+
+  }
+);
 
 function deleteService(index){
 
   if(
     !confirm(
-      "دڵنیایت لە سڕینەوەی ئەم Service ـە؟"
+      "دڵنیایت لە سڕینەوەی خزمەتگوزاری؟"
     )
-  ){
-    return;
-  }
+  ) return;
 
-  state.services.splice(index,1);
-
-  loadServices();
+  updateState(
+    s=>{
+      s.services.splice(
+        index,
+        1
+      );
+    }
+  );
 
 }
 
+$("aiServicesBtn")
+.addEventListener(
+  "click",
+  async()=>{
 
-function moveService(index,direction){
+    const prompt = `
+لیستی خزمەتگوزاریەکانی KURDIA Adventure ـم هەیە.
+هەر یەکێکیان بە شێوەی JSON بنووسە بە:
+name
+icon
 
-  const newIndex =
-    index + direction;
+Icon ـەکان دەبێت ناوی Lucide icon بن.
+هیچ emoji بەکارمەهێنە.
 
-  if(
-    newIndex < 0 ||
-    newIndex >= state.services.length
-  ){
-    return;
+لیست:
+${state.services
+.map(x=>x.name)
+.join("\n")}
+`;
+
+    const result =
+      await geminiText(prompt);
+
+    if(!result) return;
+
+    showAiResult(
+      "پێشنیاری AI",
+      result,
+      null
+    );
+
   }
+);
 
-  const temp =
+async function aiIconForService(index){
+
+  const service =
     state.services[index];
 
-  state.services[index] =
-    state.services[newIndex];
+  const prompt = `
+بۆ خزمەتگوزارییەکەی خوارەوە تەنها ناوی یەک Lucide icon ـی گونجاو بدە.
 
-  state.services[newIndex] =
-    temp;
+خزمەتگوزاری:
+${service.name}
 
-  loadServices();
+تەنها ئەمە وەڵام بدە:
+icon-name
+`;
+
+  const result =
+    await geminiText(prompt);
+
+  if(!result) return;
+
+  const icon =
+    result
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g,"");
+
+  if(icon){
+
+    updateState(
+      s=>{
+        s.services[index].icon =
+          icon;
+      }
+    );
+
+    toast(
+      `Icon هەڵبژێردرا: ${icon}`,
+      "ok"
+    );
+
+  }
 
 }
 
 
-function saveServices(){
+/* =========================================================
+   CONTENT
+   ========================================================= */
 
-  const rows =
-    document
-      .querySelectorAll(".serviceItem");
+document
+.querySelectorAll(
+  "[data-content-tab]"
+)
+.forEach(btn=>{
 
-  const services = [];
+  btn.addEventListener(
+    "click",
+    ()=>{
 
-  rows.forEach(row=>{
-
-    const name =
-      row
-        .querySelector(".serviceName")
-        .value
-        .trim();
-
-    const icon =
-      row
-        .querySelector(".serviceIcon")
-        .value
-        .trim();
-
-    if(name){
-
-      services.push({
-        name:name,
-        icon:icon || "🔹"
+      document
+      .querySelectorAll(
+        "[data-content-tab]"
+      )
+      .forEach(x=>{
+        x.classList.remove("active");
       });
 
+      btn.classList.add("active");
+
+      selectedContentTab =
+        btn.dataset.contentTab;
+
+      renderContent();
+
     }
+  );
+
+});
+
+function renderContent(){
+
+  const editor =
+    $("contentEditor");
+
+  if(!editor) return;
+
+  let html="";
+
+  if(selectedContentTab==="hero"){
+
+    html=`
+
+      ${fieldEditor(
+        "heroBadge",
+        "Badge",
+        state.heroBadge
+      )}
+
+      ${fieldEditor(
+        "heroTitle",
+        "Title",
+        state.heroTitle,
+        true
+      )}
+
+      ${fieldEditor(
+        "heroSubtitle",
+        "Subtitle",
+        state.heroSubtitle,
+        true
+      )}
+
+      ${fieldEditor(
+        "heroImageUrl",
+        "Hero Image URL",
+        state.heroImageUrl
+      )}
+
+    `;
+
+  }
+
+  if(selectedContentTab==="trip"){
+
+    html=`
+
+      ${fieldEditor(
+        "tripTitle",
+        "Trip Title",
+        state.tripTitle
+      )}
+
+      ${fieldEditor(
+        "tripPrice",
+        "Price",
+        state.tripPrice
+      )}
+
+      ${fieldEditor(
+        "tripDifficulty",
+        "Difficulty",
+        state.tripDifficulty
+      )}
+
+      ${fieldEditor(
+        "tripDuration",
+        "Duration",
+        state.tripDuration
+      )}
+
+      ${fieldEditor(
+        "tripTime",
+        "Time",
+        state.tripTime
+      )}
+
+      ${fieldEditor(
+        "tripLocation",
+        "Location",
+        state.tripLocation
+      )}
+
+      ${fieldEditor(
+        "tripDesc",
+        "Description",
+        state.tripDesc,
+        true
+      )}
+
+      ${fieldEditor(
+        "tripImageUrl",
+        "Trip Image URL",
+        state.tripImageUrl
+      )}
+
+    `;
+
+  }
+
+  if(selectedContentTab==="steps"){
+
+    html =
+      [1,2,3,4]
+      .map(n=>
+        fieldEditor(
+          "step"+n,
+          "Step "+n,
+          state["step"+n],
+          true
+        )
+      )
+      .join("");
+
+  }
+
+  if(selectedContentTab==="booking"){
+
+    html=`
+
+      <div class="field">
+
+        <label class="label">
+          Booking
+        </label>
+
+        <select
+          id="bookingStateSelect"
+          class="input"
+        >
+
+          <option
+            value="true"
+            ${state.bookingOpen?"selected":""}
+          >
+            کراوە
+          </option>
+
+          <option
+            value="false"
+            ${!state.bookingOpen?"selected":""}
+          >
+            داخراوە
+          </option>
+
+        </select>
+
+      </div>
+
+      ${fieldEditor(
+        "bookingTelegram",
+        "Booking Telegram",
+        state.bookingTelegram
+      )}
+
+      ${fieldEditor(
+        "telegramChatId",
+        "Telegram Chat ID",
+        state.telegramChatId
+      )}
+
+    `;
+
+  }
+
+  editor.innerHTML=html;
+
+  editor
+  .querySelectorAll(
+    "[data-content-key]"
+  )
+  .forEach(input=>{
+
+    input.addEventListener(
+      "input",
+      ()=>{
+
+        const key =
+          input.dataset.contentKey;
+
+        pushHistory();
+
+        state[key] =
+          input.value;
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(state)
+        );
+
+        renderPreview();
+
+      }
+    );
 
   });
 
+  const booking =
+    $("bookingStateSelect");
 
-  state.services =
-    services;
+  if(booking){
 
-  saveState();
+    booking.addEventListener(
+      "change",
+      ()=>{
 
-  broadcastState();
+        pushHistory();
 
-  showToast(
-    "Services پاشەکەوت کران."
+        state.bookingOpen =
+          booking.value==="true";
+
+        saveState(false);
+
+      }
+    );
+
+  }
+
+  lucide.createIcons();
+}
+
+function fieldEditor(
+  key,
+  label,
+  value,
+  textarea=false
+){
+
+  if(textarea){
+
+    return `
+      <div class="field">
+        <label class="label">${label}</label>
+
+        <textarea
+          class="input"
+          data-content-key="${key}"
+        >${escapeHTML(
+          value || ""
+        )}</textarea>
+
+        <button
+          class="action-btn"
+          style="margin-top:7px"
+          onclick="generateForField('${key}')"
+        >
+          <i data-lucide="sparkles"></i>
+          AI
+        </button>
+      </div>
+    `;
+
+  }
+
+  return `
+    <div class="field">
+      <label class="label">${label}</label>
+
+      <input
+        class="input"
+        data-content-key="${key}"
+        value="${escapeAttr(
+          value || ""
+        )}"
+        ${key.toLowerCase().includes("url")?"dir=\"ltr\"":""}
+      >
+    </div>
+  `;
+}
+
+$("saveContentBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    saveState();
+  }
+);
+
+$("aiContentBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    showView("ai");
+  }
+);
+
+
+/* =========================================================
+   GALLERY
+   ========================================================= */
+
+function renderGallery(){
+
+  const grid =
+    $("galleryGrid");
+
+  if(!grid) return;
+
+  if(
+    state.gallery.length===0
+  ){
+
+    grid.innerHTML=`
+      <div class="small">
+        هێشتا هیچ وێنەیەکت زیاد نەکردووە.
+      </div>
+    `;
+
+    return;
+  }
+
+  grid.innerHTML =
+    state.gallery
+    .map((item,index)=>`
+
+      <div style="
+        background:#0d121b;
+        border:1px solid var(--border);
+        border-radius:16px;
+        overflow:hidden;
+      ">
+
+        <div style="
+          height:150px;
+          background:url('${escapeCSSUrl(
+            item.url
+          )}') center/cover;
+        "></div>
+
+        <div style="padding:10px">
+
+          <input
+            class="input"
+            style="margin-bottom:7px"
+            value="${escapeAttr(
+              item.title || ""
+            )}"
+            onchange="updateGalleryTitle(${index},this.value)"
+          >
+
+          <button
+            class="action-btn danger"
+            style="width:100%"
+            onclick="deleteGallery(${index})"
+          >
+            <i data-lucide="trash-2"></i>
+            سڕینەوە
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+  lucide.createIcons();
+}
+
+$("galleryUpload")
+.addEventListener(
+  "change",
+  async e=>{
+
+    const files =
+      [...e.target.files];
+
+    for(
+      const file of files
+    ){
+
+      const dataUrl =
+        await fileToDataURL(file);
+
+      updateState(
+        s=>{
+          s.gallery.push({
+            url:dataUrl,
+            title:file.name
+          });
+        }
+      );
+
+    }
+
+    e.target.value="";
+
+    renderAll();
+
+  }
+);
+
+function updateGalleryTitle(
+  index,
+  title
+){
+
+  state.gallery[index].title =
+    title;
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(state)
   );
 
-  updateDashboard();
+}
+
+function deleteGallery(index){
+
+  if(
+    !confirm(
+      "دڵنیایت لە سڕینەوەی وێنە؟"
+    )
+  ) return;
+
+  updateState(
+    s=>{
+      s.gallery.splice(
+        index,
+        1
+      );
+    }
+  );
 
 }
 
@@ -2302,554 +4436,527 @@ function saveServices(){
    FAQ
    ========================================================= */
 
-function loadFaq(){
+function renderFaq(){
 
   const list =
-    document.getElementById(
-      "faqList"
-    );
+    $("faqList");
 
-  list.innerHTML = "";
+  if(!list) return;
 
-  const faq =
-    Array.isArray(state.faq)
-      ? state.faq
-      : [];
+  if(
+    state.faq.length===0
+  ){
 
-
-  faq.forEach((item,index)=>{
-
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "faqItem";
-
-    row.innerHTML = `
-
-      <div class="field">
-
-        <label>پرسیار</label>
-
-        <input
-          class="input faqQ"
-          value="${escapeAttr(item.q || "")}"
-        >
-
+    list.innerHTML=`
+      <div class="small">
+        هیچ FAQ ـێک نییە.
       </div>
-
-      <div class="field">
-
-        <label>وەڵام</label>
-
-        <textarea
-          class="input faqA"
-        >${escapeHtml(item.a || "")}</textarea>
-
-      </div>
-
-      <button
-        class="btn btnDanger btnSmall"
-        onclick="deleteFaq(${index})"
-      >
-        سڕینەوە
-      </button>
-
     `;
 
-    list.appendChild(row);
-
-  });
-
-}
-
-
-function addFaq(){
-
-  if(!Array.isArray(state.faq)){
-    state.faq=[];
+    return;
   }
 
-  state.faq.push({
-    q:"پرسیاری نوێ",
-    a:"وەڵامی پرسیار..."
-  });
+  list.innerHTML =
+    state.faq
+    .map((item,index)=>`
 
-  loadFaq();
+      <div class="faq-row">
 
+        <div class="faq-top">
+
+          <input
+            class="input"
+            placeholder="پرسیار"
+            value="${escapeAttr(
+              item.q || ""
+            )}"
+            onchange="updateFaq(${index},'q',this.value)"
+          >
+
+          <button
+            class="mini-btn"
+            onclick="deleteFaq(${index})"
+          >
+            <i data-lucide="trash-2"></i>
+          </button>
+
+        </div>
+
+        <textarea
+          class="input"
+          style="margin-top:8px"
+          placeholder="وەڵام"
+          onchange="updateFaq(${index},'a',this.value)"
+        >${escapeHTML(
+          item.a || ""
+        )}</textarea>
+
+      </div>
+
+    `).join("");
+
+  lucide.createIcons();
 }
 
+$("addFaqBtn")
+.addEventListener(
+  "click",
+  ()=>{
+
+    updateState(
+      s=>{
+        s.faq.push({
+          q:"پرسیاری نوێ",
+          a:"وەڵامی پرسیار."
+        });
+      }
+    );
+
+  }
+);
+
+function updateFaq(
+  index,
+  key,
+  value
+){
+
+  pushHistory();
+
+  state.faq[index][key] =
+    value;
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(state)
+  );
+
+}
 
 function deleteFaq(index){
 
-  state.faq.splice(index,1);
-
-  loadFaq();
-
-}
-
-
-function saveFaq(){
-
-  const rows =
-    document
-      .querySelectorAll(".faqItem");
-
-  const faq = [];
-
-  rows.forEach(row=>{
-
-    const q =
-      row
-        .querySelector(".faqQ")
-        .value
-        .trim();
-
-    const a =
-      row
-        .querySelector(".faqA")
-        .value
-        .trim();
-
-    if(q){
-
-      faq.push({
-        q:q,
-        a:a
-      });
-
+  updateState(
+    s=>{
+      s.faq.splice(
+        index,
+        1
+      );
     }
-
-  });
-
-  state.faq =
-    faq;
-
-  saveState();
-
-  broadcastState();
-
-  showToast(
-    "FAQ پاشەکەوت کرا."
   );
 
-  updateDashboard();
-
 }
+
+$("aiFaqBtn")
+.addEventListener(
+  "click",
+  async()=>{
+
+    const prompt=`
+بۆ KURDIA Adventure پێنج FAQ ـی گرنگ دروست بکە.
+
+دەبێت JSON ـی ئەم شێوەیە بێت:
+[
+ {"q":"...","a":"..."}
+]
+
+زمان: کوردی سۆرانی.
+`;
+
+    const result =
+      await geminiText(prompt);
+
+    if(result){
+      showAiResult(
+        "FAQ ـی AI",
+        result,
+        null
+      );
+    }
+
+  }
+);
 
 
 /* =========================================================
    GEMINI
-   ========================================================= */
+========================================================= */
 
-async function callGemini(
+function getGeminiKey(){
+
+  return (
+    localStorage.getItem(
+      GEMINI_KEY_STORAGE
+    ) || ""
+  ).trim();
+
+}
+
+function saveGeminiKey(value){
+
+  localStorage.setItem(
+    GEMINI_KEY_STORAGE,
+    value.trim()
+  );
+
+}
+
+async function detectGeminiModel(){
+
+  const key =
+    getGeminiKey();
+
+  if(!key){
+
+    detectedGeminiModel="";
+
+    $("autoModelValue").textContent =
+      "API Key داخڵ بکە بۆ دۆزینەوەی model.";
+
+    return "";
+  }
+
+  $("autoModelValue").textContent =
+    "دەگەڕێت بۆ model ـی گونجاو...";
+
+  try{
+
+    const response =
+      await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000",
+        {
+          method:"GET",
+          headers:{
+            "x-goog-api-key":key
+          }
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "Models API: " +
+        response.status
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    const models =
+      Array.isArray(data.models)
+      ? data.models
+      : [];
+
+    const supported =
+      models.filter(
+        m=>
+          Array.isArray(
+            m.supportedGenerationMethods
+          )
+          &&
+          m.supportedGenerationMethods
+          .includes("generateContent")
+      );
+
+    const ids =
+      supported.map(
+        m=>
+          String(
+            m.baseModelId ||
+            m.name ||
+            ""
+          )
+          .replace(/^models\//,"")
+      );
+
+    const preferred = [
+
+      "gemini-3.8-flash",
+
+      "gemini-3.7-flash",
+
+      "gemini-3.6-flash",
+
+      "gemini-3.5-flash",
+
+      "gemini-flash-latest"
+
+    ];
+
+    let selected =
+      preferred.find(
+        x=>ids.includes(x)
+      );
+
+    if(!selected){
+
+      const flash =
+        ids.find(
+          id=>
+            /gemini.*flash/i.test(id)
+            &&
+            !/tts|live|image|embedding/i.test(id)
+        );
+
+      selected =
+        flash ||
+        ids.find(
+          id=>
+            /gemini/i.test(id)
+            &&
+            !/tts|live|image|embedding/i.test(id)
+        );
+
+    }
+
+    if(!selected){
+
+      throw new Error(
+        "هیچ model ـێکی generateContent نەدۆزرایەوە."
+      );
+
+    }
+
+    detectedGeminiModel =
+      selected;
+
+    localStorage.setItem(
+      AUTO_MODEL_STORAGE,
+      selected
+    );
+
+    $("autoModelValue").textContent =
+      selected;
+
+    $("settingsGeminiText").textContent =
+      selected;
+
+    $("aiHeaderStatus").textContent =
+      selected;
+
+    $("dashAiText").textContent =
+      selected;
+
+    setGeminiStatus(true);
+
+    return selected;
+
+  }catch(error){
+
+    const cached =
+      localStorage.getItem(
+        AUTO_MODEL_STORAGE
+      );
+
+    if(cached){
+
+      detectedGeminiModel =
+        cached;
+
+      $("autoModelValue").textContent =
+        cached + " (cached)";
+
+      setGeminiStatus(true);
+
+      return cached;
+
+    }
+
+    detectedGeminiModel =
+      "gemini-3.8-flash";
+
+    $("autoModelValue").textContent =
+      "gemini-3.8-flash";
+
+    setGeminiStatus(false);
+
+    toast(
+      "نەتوانرا model ـەکان بدۆزرێنەوە. دڵنیابە لە API Key.",
+      "error"
+    );
+
+    return detectedGeminiModel;
+  }
+}
+
+async function geminiText(
   prompt,
   options={}
 ){
 
   const key =
-    localStorage.getItem(
-      GEMINI_KEY_STORAGE
-    ) || "";
+    getGeminiKey();
 
   if(!key){
 
-    throw new Error(
-      "Gemini API Key نەخراوەتە ناو Settings."
+    toast(
+      "سەرەتا Gemini API Key زیاد بکە.",
+      "error"
     );
+
+    showView("settings");
+
+    return null;
+  }
+
+  if(!detectedGeminiModel){
+
+    await detectGeminiModel();
 
   }
 
-
   const model =
-    options.model ||
-    localStorage.getItem(
-      GEMINI_MODEL_STORAGE
-    ) ||
+    detectedGeminiModel ||
     "gemini-3.8-flash";
-
-
-  const url =
-    "https://generativelanguage.googleapis.com/v1beta/models/"
-    + encodeURIComponent(model)
-    + ":generateContent";
-
-
-  const contents = [
-
-    {
-      role:"user",
-      parts:[
-        {
-          text:prompt
-        }
-      ]
-    }
-
-  ];
-
-
-  if(options.image){
-
-    contents[0].parts.push({
-
-      inline_data:{
-        mime_type:
-          options.image.mime,
-        data:
-          options.image.base64
-      }
-
-    });
-
-  }
-
-
-  const response =
-    await fetch(
-      url,
-      {
-        method:"POST",
-
-        headers:{
-          "Content-Type":
-            "application/json",
-          "x-goog-api-key":
-            key
-        },
-
-        body:JSON.stringify({
-
-          contents:contents,
-
-          generationConfig:{
-            temperature:
-              options.temperature ?? .5,
-            maxOutputTokens:
-              options.maxOutputTokens ?? 2048
-          }
-
-        })
-
-      }
-    );
-
-
-  const data =
-    await response.json();
-
-
-  if(!response.ok){
-
-    const message =
-      data?.error?.message ||
-      "Gemini API error";
-
-    throw new Error(message);
-
-  }
-
-
-  const text =
-    data
-      ?.candidates?.[0]
-      ?.content?.parts
-      ?.map(p=>p.text || "")
-      .join("")
-      .trim();
-
-
-  if(!text){
-
-    throw new Error(
-      "Gemini هیچ وەڵامێکی دروست نەگەڕاندەوە."
-    );
-
-  }
-
-  return text;
-
-}
-
-
-/* =========================================================
-   API SETTINGS
-   ========================================================= */
-
-function loadApiSettings(){
-
-  const gemini =
-    localStorage.getItem(
-      GEMINI_KEY_STORAGE
-    ) || "";
-
-  const token =
-    localStorage.getItem(
-      TELEGRAM_TOKEN_STORAGE
-    ) || "";
-
-  const chat =
-    localStorage.getItem(
-      TELEGRAM_CHAT_STORAGE
-    ) || "";
-
-  const model =
-    localStorage.getItem(
-      GEMINI_MODEL_STORAGE
-    ) ||
-    "gemini-3.8-flash";
-
-
-  document
-    .getElementById("geminiKey")
-    .value =
-    gemini;
-
-  document
-    .getElementById("telegramToken")
-    .value =
-    token;
-
-  document
-    .getElementById("telegramChatId")
-    .value =
-    chat;
-
-  document
-    .getElementById("geminiModel")
-    .value =
-    model;
-
-}
-
-
-function saveApiSettings(){
-
-  const gemini =
-    document
-      .getElementById("geminiKey")
-      .value
-      .trim();
-
-  const token =
-    document
-      .getElementById("telegramToken")
-      .value
-      .trim();
-
-  const chat =
-    document
-      .getElementById("telegramChatId")
-      .value
-      .trim();
-
-  const model =
-    document
-      .getElementById("geminiModel")
-      .value;
-
-
-  localStorage.setItem(
-    GEMINI_KEY_STORAGE,
-    gemini
-  );
-
-  localStorage.setItem(
-    TELEGRAM_TOKEN_STORAGE,
-    token
-  );
-
-  localStorage.setItem(
-    TELEGRAM_CHAT_STORAGE,
-    chat
-  );
-
-  localStorage.setItem(
-    GEMINI_MODEL_STORAGE,
-    model
-  );
-
-
-  showToast(
-    "API و Telegram پاشەکەوت کران."
-  );
-
-  updateSystemStatus();
-
-}
-
-
-async function testGemini(){
-
-  const box =
-    document.getElementById(
-      "geminiStatus"
-    );
-
-  box.className =
-    "status";
-
-  box.textContent =
-    "⏳ Gemini تاقی دەکرێتەوە...";
-
 
   try{
 
-    const answer =
-      await callGemini(
-        "تەنها بە کوردیی سۆرانی وەڵام بدە. بڵێ: Gemini بە سەرکەوتوویی کار دەکات.",
+    const system = `
+تۆ AI Assistant ـی فەرمی KURDIA ADVENTURE ـیت.
+
+ئەرکەکانت:
+- یارمەتی Website Builder بدە.
+- دەقی کوردی سۆرانی جوان و professional دروست بکە.
+- لە کاتی داواکاری icon، تەنها Lucide icon ـی گونجاو پێشنیار بکە.
+- لەسەر KURDIA تەنها لەسەر زانیارییە دابینکراوەکان قسە بکە.
+- هیچ زانیارییەکی خەیاڵی لەسەر گەشتێک دروست مەکە.
+- کاتێک user داوای گۆڕینی Website دەکات، گۆڕانکارییەکە بە ڕوونی پێشنیار بکە.
+- زمانی سەرەکی: کوردی سۆرانی.
+
+داتای ئێستای Website:
+
+${JSON.stringify(
+  state,
+  null,
+  2
+)}
+`;
+
+    const body={
+
+      system_instruction:{
+        parts:[
+          {
+            text:system
+          }
+        ]
+      },
+
+      contents:[
+
+        ...aiConversation.slice(-8),
+
         {
-          maxOutputTokens:100
+          role:"user",
+          parts:[
+            {
+              text:prompt
+            }
+          ]
+        }
+
+      ],
+
+      generationConfig:{
+        temperature:
+          options.temperature ??
+          0.65,
+
+        maxOutputTokens:
+          options.maxOutputTokens ??
+          1800
+      }
+
+    };
+
+    const response =
+      await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/" +
+        encodeURIComponent(model) +
+        ":generateContent",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            "x-goog-api-key":
+              key
+          },
+
+          body:
+            JSON.stringify(body)
         }
       );
 
+    const data =
+      await response.json();
 
-    box.className =
-      "status ok";
+    if(!response.ok){
 
-    box.textContent =
-      "✅ Gemini کار دەکات: " +
-      answer;
+      throw new Error(
+        data?.error?.message ||
+        "Gemini API error"
+      );
 
-  }catch(error){
+    }
 
-    box.className =
-      "status error";
+    const text =
+      data?.candidates?.[0]
+      ?.content?.parts
+      ?.map(
+        p=>p.text || ""
+      )
+      .join("")
+      .trim();
 
-    box.textContent =
-      "❌ " +
-      error.message;
+    if(!text){
 
-  }
+      throw new Error(
+        "Gemini وەڵامێکی بەتاڵی نارد."
+      );
 
-}
+    }
 
-
-/* =========================================================
-   TELEGRAM
-   ========================================================= */
-
-async function telegramRequest(
-  method,
-  body
-){
-
-  const token =
-    localStorage.getItem(
-      TELEGRAM_TOKEN_STORAGE
-    ) || "";
-
-  if(!token){
-
-    throw new Error(
-      "Telegram Bot Token نەخراوەتە ناو Settings."
-    );
-
-  }
-
-
-  const url =
-    "https://api.telegram.org/bot"
-    + token
-    + "/"
-    + method;
-
-
-  const response =
-    await fetch(
-      url,
+    aiConversation.push(
       {
-        method:"POST",
-
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        body:JSON.stringify(body)
-
+        role:"user",
+        parts:[
+          {text:prompt}
+        ]
+      },
+      {
+        role:"model",
+        parts:[
+          {text}
+        ]
       }
     );
 
+    if(
+      aiConversation.length>16
+    ){
+      aiConversation =
+        aiConversation.slice(-16);
+    }
 
-  const data =
-    await response.json();
+    setGeminiStatus(true);
 
-
-  if(!response.ok || !data.ok){
-
-    throw new Error(
-      data?.description ||
-      "Telegram API error"
-    );
-
-  }
-
-
-  return data;
-
-}
-
-
-async function testTelegram(){
-
-  const box =
-    document.getElementById(
-      "telegramStatus"
-    );
-
-  box.className =
-    "status";
-
-  box.textContent =
-    "⏳ Telegram تاقی دەکرێتەوە...";
-
-
-  const chat =
-    localStorage.getItem(
-      TELEGRAM_CHAT_STORAGE
-    ) || "";
-
-
-  if(!chat){
-
-    box.className =
-      "status error";
-
-    box.textContent =
-      "❌ Telegram Chat ID داخڵ بکە.";
-
-    return;
-
-  }
-
-
-  try{
-
-    await telegramRequest(
-      "sendMessage",
-      {
-        chat_id:chat,
-        text:
-          "✅ KURDIA ADMIN\n\nTelegram بە سەرکەوتوویی کار دەکات."
-      }
-    );
-
-
-    box.className =
-      "status ok";
-
-    box.textContent =
-      "✅ پەیامی تاقیکردنەوە نێردرا بۆ Telegram.";
+    return text;
 
   }catch(error){
 
-    box.className =
-      "status error";
+    setGeminiStatus(false);
 
-    box.textContent =
-      "❌ " +
-      error.message;
+    toast(
+      "Gemini: " +
+      error.message,
+      "error"
+    );
+
+    return null;
 
   }
 
@@ -2860,83 +4967,63 @@ async function testTelegram(){
    AI CHAT
    ========================================================= */
 
+$("sendAiBtn")
+.addEventListener(
+  "click",
+  sendAiMessage
+);
+
+$("aiInput")
+.addEventListener(
+  "keydown",
+  e=>{
+
+    if(
+      e.key==="Enter" &&
+      !e.shiftKey
+    ){
+
+      e.preventDefault();
+
+      sendAiMessage();
+
+    }
+
+  }
+);
+
 async function sendAiMessage(){
 
   const input =
-    document.getElementById(
-      "aiInput"
-    );
+    $("aiInput");
 
   const text =
     input.value.trim();
 
-  if(!text){
-    return;
-  }
+  if(!text) return;
 
-
-  addAiMessage(
+  addChatMessage(
     text,
     "user"
   );
 
-  input.value = "";
+  input.value="";
 
-
-  addAiMessage(
-    "⏳ چاوەڕوان بە...",
-    "ai"
-  );
-
-
-  try{
-
-    const prompt =
-`
-تۆ AI Assistant ـی KURDIA ADVENTURE ـیت.
-
-بە زمانی کوردیی سۆرانی وەڵام بدە مەگەر بەکارهێنەر زمانێکی تر داوا بکات.
-
-ئەم داتایە داتای ڕاستەوخۆی Website ـی KURDIA ـیە:
-
-${JSON.stringify(state,null,2)}
-
-ڕێنمایی:
-- بۆ پرسیارەکانی پەیوەندیدار بە KURDIA تەنها ئەو زانیارییە بەکاربهێنە کە لە داتاکەدایە.
-- نرخ، کات، شوێن، خزمەتگوزاری یان بەردەستبوون مەدروستکە ئەگەر لە داتا نییە.
-- ئەگەر زانیارییەک نەبوو، ڕوون بڵێ لە Website ـەکەدا دانەنراوە.
-- بۆ پرسیارە گشتییەکان دەتوانیت وەڵامی گشتی بدەیت.
-- وەڵامەکان ڕوون، سروشتی و کورت بن.
-
-پرسیاری بەکارهێنەر:
-${text}
-`;
-
-
-    const answer =
-      await callGemini(
-        prompt,
-        {
-          maxOutputTokens:1500
-        }
-      );
-
-
-    removeLastAiThinking();
-
-    addAiMessage(
-      answer,
+  const thinking =
+    addChatMessage(
+      "لە بیرکردنەوەدایە...",
       "ai"
     );
 
+  const result =
+    await geminiText(text);
 
-  }catch(error){
+  thinking.remove();
 
-    removeLastAiThinking();
+  if(result){
 
-    addAiMessage(
-      "❌ کێشە لە Gemini: " +
-      error.message,
+    addChatMessage(
+      result,
       "ai"
     );
 
@@ -2944,777 +5031,1114 @@ ${text}
 
 }
 
-
-function addAiMessage(text,type){
+function addChatMessage(
+  text,
+  type
+){
 
   const box =
-    document.getElementById(
-      "aiMessages"
-    );
+    $("chatMessages");
 
-  const div =
+  const el =
     document.createElement("div");
 
-  div.className =
-    "msg " + type;
+  el.className =
+    "message " + type;
 
-  div.textContent =
+  el.textContent =
     text;
 
-  box.appendChild(div);
+  box.appendChild(el);
 
   box.scrollTop =
     box.scrollHeight;
 
-}
-
-
-function removeLastAiThinking(){
-
-  const box =
-    document.getElementById(
-      "aiMessages"
-    );
-
-  const messages =
-    box.querySelectorAll(".msg.ai");
-
-  const last =
-    messages[messages.length-1];
-
-  if(
-    last &&
-    last.textContent.startsWith("⏳")
-  ){
-
-    last.remove();
-
-  }
-
+  return el;
 }
 
 
 /* =========================================================
-   AI TEXT
+   AI TOOLS
    ========================================================= */
 
-async function generateText(){
+$("generateTextTool")
+.addEventListener(
+  "click",
+  async()=>{
 
-  const prompt =
-    document
-      .getElementById("textPrompt")
-      .value
-      .trim();
+    const prompt=`
+دەقی professional و cinematic بۆ KURDIA Adventure بنووسە
+بۆ پۆستەری گەشت.
 
-  if(!prompt){
+کورت بێت.
+هەست بە adventure و friendship بدات.
+زمان: کوردی سۆرانی.
+`;
 
-    showToast(
-      "داواکارییەک بنووسە."
-    );
+    const result =
+      await geminiText(prompt);
 
-    return;
-
-  }
-
-
-  const result =
-    document.getElementById(
-      "textResult"
-    );
-
-  result.value =
-    "⏳ AI دەنووسێت...";
-
-
-  try{
-
-    const answer =
-      await callGemini(
-
-`
-تۆ نووسەری ناوەڕۆکی KURDIA ADVENTURE ـیت.
-
-بە کوردیی سۆرانی دەنووسیت.
-
-ئەم داواکارییە جێبەجێ بکە:
-
-${prompt}
-
-دەقەکە:
-- جوان
-- سروشتی
-- مۆدێرن
-- کورت و کاریگەر
-- گونجاو بۆ گەشت و سروشت
-
-هیچ شتێک لە خۆتەوە وەک زانیاریی ڕاستی KURDIA زیاد مەکە.
-`,
-      {
-        maxOutputTokens:1000
-      }
-    );
-
-
-    result.value =
-      answer;
-
-
-  }catch(error){
-
-    result.value =
-      "❌ " +
-      error.message;
+    if(result){
+      showAiResult(
+        "دەقی پێشنیارکراو",
+        result,
+        null
+      );
+    }
 
   }
-
-}
-
-
-/* =========================================================
-   AI ICON
-   ========================================================= */
-
-async function suggestIcon(){
-
-  const name =
-    document
-      .getElementById(
-        "iconServiceName"
-      )
-      .value
-      .trim();
-
-
-  if(!name){
-
-    showToast(
-      "ناوی Service بنووسە."
-    );
-
-    return;
-
-  }
-
-
-  const result =
-    document.getElementById(
-      "iconAiResult"
-    );
-
-
-  result.value =
-    "⏳ AI...";
-
-
-  try{
-
-    const answer =
-      await callGemini(
-
-`
-بۆ خزمەتگوزاریی خوارەوە تەنها یەک emoji ـی گونجاو هەڵبژێرە.
-
-Service:
-${name}
-
-تەنها emoji ـەکە بنووسە.
-هیچ دەقێکی تر مەنووسە.
-`,
-      {
-        maxOutputTokens:50,
-        temperature:.2
-      }
-    );
-
-
-    result.value =
-      answer.trim();
-
-
-  }catch(error){
-
-    result.value =
-      "❌ " +
-      error.message;
-
-  }
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
-
-function updateDashboard(){
-
-  state =
-    loadState();
-
-
-  document
-    .getElementById("statServices")
-    .textContent =
-    Array.isArray(state.services)
-      ? state.services.length
-      : 0;
-
-
-  document
-    .getElementById("statGallery")
-    .textContent =
-    Array.isArray(state.gallery)
-      ? state.gallery.length
-      : 0;
-
-
-  document
-    .getElementById("statFaq")
-    .textContent =
-    Array.isArray(state.faq)
-      ? state.faq.length
-      : 0;
-
-}
-
-
-function updateSystemStatus(){
-
-  const hasGemini =
-    !!localStorage.getItem(
-      GEMINI_KEY_STORAGE
-    );
-
-  const hasTelegram =
-    !!localStorage.getItem(
-      TELEGRAM_TOKEN_STORAGE
-    ) &&
-    !!localStorage.getItem(
-      TELEGRAM_CHAT_STORAGE
-    );
-
-
-  const box =
-    document.getElementById(
-      "systemStatus"
-    );
-
-
-  box.className =
-    "status " +
-    (
-      hasGemini && hasTelegram
-        ? "ok"
-        : ""
-    );
-
-
-  box.innerHTML =
-    "Gemini: " +
-    (
-      hasGemini
-        ? "✅"
-        : "❌"
-    ) +
-    " &nbsp;&nbsp; " +
-    "Telegram: " +
-    (
-      hasTelegram
-        ? "✅"
-        : "❌"
-    );
-
-}
-
-
-function updateSystemStatus(){
-
-  const hasGemini =
-    !!localStorage.getItem(
-      GEMINI_KEY_STORAGE
-    );
-
-  const hasTelegram =
-    !!localStorage.getItem(
-      TELEGRAM_TOKEN_STORAGE
-    ) &&
-    !!localStorage.getItem(
-      TELEGRAM_CHAT_STORAGE
-    );
-
-
-  const box =
-    document.getElementById(
-      "systemStatus"
-    );
-
-
-  if(!box){
-    return;
-  }
-
-
-  box.className =
-    "status " +
-    (
-      hasGemini && hasTelegram
-        ? "ok"
-        : ""
-    );
-
-
-  box.innerHTML =
-    "Gemini: " +
-    (
-      hasGemini
-        ? "✅"
-        : "❌"
-    ) +
-    " &nbsp;&nbsp; " +
-    "Telegram: " +
-    (
-      hasTelegram
-        ? "✅"
-        : "❌"
-    );
-
-}
-
-
-function updateSystemStatusSafe(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatusOnLoad(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatusNow(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatusFinal(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatus2(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatus3(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatus4(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatus5(){
-
-  updateSystemStatus();
-
-}
-
-
-function updateSystemStatus6(){
-
-  updateSystemStatus();
-
-}
-
-
-/* =========================================================
-   PREVIEW IMAGE
-   ========================================================= */
-
-function previewImage(
-  inputId,
-  imageId
-){
-
-  const input =
-    document.getElementById(
-      inputId
-    );
-
-  const img =
-    document.getElementById(
-      imageId
-    );
-
-  if(
-    !input ||
-    !img
-  ){
-    return;
-  }
-
-
-  const url =
-    input.value.trim();
-
-
-  if(!url){
-
-    img.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  img.src =
-    url;
-
-  img.style.display =
-    "block";
-
-
-  img.onerror = ()=>{
-
-    img.style.display =
-      "none";
-
-  };
-
-}
-
-
-/* =========================================================
-   PASSWORD
-   ========================================================= */
-
-function togglePassword(id){
-
-  const input =
-    document.getElementById(id);
-
-  if(input.type==="password"){
-
-    input.type =
-      "text";
-
-  }else{
-
-    input.type =
-      "password";
-
-  }
-
-}
-
-
-/* =========================================================
-   CLEAR SECRETS
-   ========================================================= */
-
-function clearSecrets(){
-
-  if(
-    !confirm(
-      "دڵنیایت لە سڕینەوەی Gemini و Telegram Settings؟"
-    )
-  ){
-    return;
-  }
-
-
-  localStorage.removeItem(
-    GEMINI_KEY_STORAGE
-  );
-
-  localStorage.removeItem(
-    TELEGRAM_TOKEN_STORAGE
-  );
-
-  localStorage.removeItem(
-    TELEGRAM_CHAT_STORAGE
-  );
-
-
-  loadApiSettings();
-
-  updateSystemStatus();
-
-  showToast(
-    "API و Telegram سڕانەوە."
-  );
-
-}
-
-
-/* =========================================================
-   EXPORT
-   ========================================================= */
-
-function exportData(){
-
-  const data = {
-
-    state:loadState(),
-
-    exportedAt:
-      new Date().toISOString(),
-
-    version:"KURDIA-ADMIN-1"
-
-  };
-
-
-  const blob =
-    new Blob(
-      [
-        JSON.stringify(
-          data,
-          null,
-          2
-        )
-      ],
-      {
-        type:"application/json"
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(blob);
-
-  const a =
-    document.createElement("a");
-
-  a.href =
-    url;
-
-  a.download =
-    "kurdia-backup.json";
-
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-}
-
-
-/* =========================================================
-   IMPORT
-   ========================================================= */
-
-function importData(){
-
-  const input =
-    document.getElementById(
-      "importFile"
-    );
-
-  const file =
-    input.files?.[0];
-
-
-  if(!file){
-
-    showToast(
-      "فایلی هەڵبژێرە."
-    );
-
-    return;
-
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload = ()=>{
-
-    try{
-
-      const data =
-        JSON.parse(
-          reader.result
-        );
-
-
-      const imported =
-        data.state || data;
-
-
-      state =
-        mergeDeep(
-          structuredClone(DEFAULT_STATE),
-          imported
-        );
-
-
-      saveState();
-
-      broadcastState();
-
-      loadBuilder();
-
-      loadServices();
-
-      loadFaq();
-
-      updateDashboard();
-
-
-      showToast(
-        "Backup بە سەرکەوتوویی گەڕێندرایەوە."
+);
+
+$("iconTool")
+.addEventListener(
+  "click",
+  async()=>{
+
+    const service =
+      prompt(
+        "ناوی خزمەتگوزاری بنووسە:"
       );
 
+    if(!service) return;
 
-    }catch(error){
+    const result =
+      await geminiText(`
+بۆ خزمەتگوزاری "${service}"
+تەنها یەک Lucide icon name بدە.
+تەنها icon-name.
+`);
 
-      showToast(
-        "فایلەکە دروست نییە."
+    if(result){
+
+      showAiResult(
+        "Icon",
+        result.trim(),
+        null
       );
 
     }
 
-  };
+  }
+);
 
+$("faqTool")
+.addEventListener(
+  "click",
+  ()=>{
+    showView("faq");
+    $("aiFaqBtn").click();
+  }
+);
 
-  reader.readAsText(file);
+$("tripTool")
+.addEventListener(
+  "click",
+  async()=>{
 
-}
+    const result =
+      await geminiText(`
+دەقی professional بۆ گەشتی KURDIA Adventure دروست بکە.
+ئەم زانیارییانە بەکاربهێنە:
+
+ناوی گەشت:
+${state.tripTitle}
+
+شوێن:
+${state.tripLocation}
+
+ماوە:
+${state.tripDuration}
+
+ئاست:
+${state.tripDifficulty}
+
+دەقەکە کورت و ڕێکلامی بێت.
+`);
+
+    if(result){
+
+      showAiResult(
+        "دەقی گەشت",
+        result,
+        null
+      );
+
+    }
+
+  }
+);
 
 
 /* =========================================================
-   RESET
+   AI RESULT
    ========================================================= */
 
-function resetWebsite(){
+let aiApplyCallback=null;
 
-  if(
-    !confirm(
-      "دڵنیایت؟ هەموو داتای Website دەگەڕێتەوە بۆ بنەڕەت."
-    )
-  ){
-    return;
-  }
+function showAiResult(
+  title,
+  text,
+  callback
+){
 
+  $("aiResultTitle").textContent =
+    title;
 
-  state =
-    structuredClone(
-      DEFAULT_STATE
+  $("aiResultText").value =
+    text;
+
+  aiApplyCallback =
+    callback;
+
+  $("aiResultModal")
+  .classList.add("active");
+
+}
+
+$("applyAiResultBtn")
+.addEventListener(
+  "click",
+  ()=>{
+
+    if(
+      typeof aiApplyCallback==="function"
+    ){
+
+      aiApplyCallback(
+        $("aiResultText").value
+      );
+
+    }
+
+    closeModal(
+      "aiResultModal"
     );
 
-
-  saveState();
-
-  broadcastState();
-
-  loadBuilder();
-
-  loadServices();
-
-  loadFaq();
-
-  updateDashboard();
+  }
+);
 
 
-  showToast(
-    "Website reset کرا."
+/* =========================================================
+   FIELD AI
+   ========================================================= */
+
+async function generateForField(
+  key
+){
+
+  const current =
+    state[key] || "";
+
+  const prompt=`
+لەسەر ئەم field ـە دەقێکی باشتر دروست بکە.
+
+Field:
+${key}
+
+دەقی ئێستا:
+${current}
+
+کوردی سۆرانی.
+Professional.
+Natural.
+`;
+
+  const result =
+    await geminiText(prompt);
+
+  if(!result) return;
+
+  showAiResult(
+    "AI",
+    result,
+    text=>{
+
+      updateState(
+        s=>{
+          s[key]=text;
+        }
+      );
+
+      renderAll();
+
+    }
   );
 
 }
 
 
 /* =========================================================
-   HELPERS
+   MODAL SERVICE AI
    ========================================================= */
 
-function escapeHtml(value){
+$("modalAiIconBtn")
+.addEventListener(
+  "click",
+  async()=>{
 
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    const name =
+      $("serviceNameInput")
+      .value.trim();
 
-}
+    if(!name){
+
+      toast(
+        "سەرەتا ناوی خزمەتگوزاری بنووسە.",
+        "error"
+      );
+
+      return;
+    }
+
+    const result =
+      await geminiText(`
+بۆ خزمەتگوزارییەکەی خوارەوە
+یەک Lucide icon ـی گونجاو هەڵبژێرە.
+
+خزمەتگوزاری:
+${name}
+
+تەنها icon name بنووسە.
+`);
+
+    if(result){
+
+      $("serviceIconInput").value =
+        result
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9-]/g,"");
+
+    }
+
+  }
+);
 
 
-function escapeAttr(value){
+/* =========================================================
+   GEMINI SETTINGS
+   ========================================================= */
 
-  return escapeHtml(value);
+function loadSettingsUI(){
 
-}
+  const key =
+    localStorage.getItem(
+      GEMINI_KEY_STORAGE
+    ) || "";
 
+  const token =
+    localStorage.getItem(
+      TELEGRAM_TOKEN_STORAGE
+    ) || "";
 
-function showToast(message){
+  const chat =
+    localStorage.getItem(
+      TELEGRAM_CHAT_STORAGE
+    ) || "";
 
-  const toast =
-    document.getElementById(
-      "toast"
+  $("geminiKey").value =
+    key;
+
+  $("telegramToken").value =
+    token;
+
+  $("telegramChatId").value =
+    chat;
+
+  const cached =
+    localStorage.getItem(
+      AUTO_MODEL_STORAGE
     );
 
-  toast.textContent =
-    message;
+  if(
+    cached &&
+    !detectedGeminiModel
+  ){
+    $("autoModelValue").textContent =
+      cached + " (cached)";
+  }
 
-  toast.classList.add("show");
+}
 
-  setTimeout(()=>{
+$("saveSettingsBtn")
+.addEventListener(
+  "click",
+  async()=>{
 
-    toast.classList.remove("show");
+    saveGeminiKey(
+      $("geminiKey").value
+    );
 
-  },2800);
+    localStorage.setItem(
+      TELEGRAM_TOKEN_STORAGE,
+      $("telegramToken").value.trim()
+    );
+
+    localStorage.setItem(
+      TELEGRAM_CHAT_STORAGE,
+      $("telegramChatId").value.trim()
+    );
+
+    detectedGeminiModel="";
+
+    await detectGeminiModel();
+
+    updateStatuses();
+
+    toast(
+      "Settings پاشەکەوت کرا ✓",
+      "ok"
+    );
+
+  }
+);
+
+$("geminiKey")
+.addEventListener(
+  "change",
+  async()=>{
+    saveGeminiKey(
+      $("geminiKey").value
+    );
+
+    detectedGeminiModel="";
+
+    await detectGeminiModel();
+
+    updateStatuses();
+  }
+);
+
+
+/* =========================================================
+   TELEGRAM
+   ========================================================= */
+
+async function sendTelegramMessage(
+  text
+){
+
+  const token =
+    localStorage.getItem(
+      TELEGRAM_TOKEN_STORAGE
+    ) || "";
+
+  const chat =
+    localStorage.getItem(
+      TELEGRAM_CHAT_STORAGE
+    ) || "";
+
+  if(!token || !chat){
+
+    throw new Error(
+      "Telegram Token/Chat ID دانەنراوە."
+    );
+
+  }
+
+  const response =
+    await fetch(
+      `https://api.telegram.org/bot${encodeURIComponent(token)}/sendMessage`,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:JSON.stringify({
+          chat_id:chat,
+          text:text
+        })
+      }
+    );
+
+  const data =
+    await response.json();
+
+  if(!response.ok || !data.ok){
+
+    throw new Error(
+      data?.description ||
+      "Telegram error"
+    );
+
+  }
+
+  return data;
+
+}
+
+$("testTelegramBtn")
+.addEventListener(
+  "click",
+  async()=>{
+
+    try{
+
+      await sendTelegramMessage(
+        "✅ KURDIA Admin Test\n\nTelegram بە سەرکەوتوویی پەیوەندی کرد."
+      );
+
+      setTelegramStatus(true);
+
+      toast(
+        "Telegram کاردەکات ✓",
+        "ok"
+      );
+
+    }catch(error){
+
+      setTelegramStatus(false);
+
+      toast(
+        error.message,
+        "error"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   TEST GEMINI
+   ========================================================= */
+
+$("testGeminiBtn")
+.addEventListener(
+  "click",
+  async()=>{
+
+    const result =
+      await geminiText(
+        "تەنها بنووسە: Gemini کاردەکات ✓"
+      );
+
+    if(result){
+
+      toast(
+        result,
+        "ok"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+function setDot(
+  id,
+  ok
+){
+
+  const dot =
+    $(id);
+
+  if(!dot) return;
+
+  dot.classList.remove(
+    "ok",
+    "bad"
+  );
+
+  dot.classList.add(
+    ok ? "ok" : "bad"
+  );
+
+}
+
+function setGeminiStatus(ok){
+
+  setDot(
+    "geminiDot",
+    ok
+  );
+
+  setDot(
+    "settingsGeminiDot",
+    ok
+  );
+
+  setDot(
+    "aiHeaderDot",
+    ok
+  );
+
+  setDot(
+    "dashAiDot",
+    ok
+  );
+
+  if($("geminiStatus")){
+    $("geminiStatus").textContent =
+      ok ? "OK" : "نەخێر";
+  }
+
+  if($("settingsGeminiText")){
+    $("settingsGeminiText").textContent =
+      detectedGeminiModel ||
+      (ok ? "OK" : "Offline");
+  }
+
+  if($("aiHeaderStatus")){
+    $("aiHeaderStatus").textContent =
+      detectedGeminiModel ||
+      (ok ? "Ready" : "Offline");
+  }
+
+}
+
+function setTelegramStatus(ok){
+
+  setDot(
+    "telegramDot",
+    ok
+  );
+
+  setDot(
+    "settingsTelegramDot",
+    ok
+  );
+
+  if($("telegramStatus")){
+    $("telegramStatus").textContent =
+      ok ? "OK" : "نەخێر";
+  }
+
+  if($("settingsTelegramText")){
+    $("settingsTelegramText").textContent =
+      ok ? "OK" : "Offline";
+  }
+
+}
+
+function updateStatuses(){
+
+  const hasKey =
+    !!getGeminiKey();
+
+  const hasTelegram =
+    !!localStorage.getItem(
+      TELEGRAM_TOKEN_STORAGE
+    )
+    &&
+    !!localStorage.getItem(
+      TELEGRAM_CHAT_STORAGE
+    );
+
+  setGeminiStatus(
+    hasKey &&
+    !!detectedGeminiModel
+  );
+
+  setTelegramStatus(
+    hasTelegram
+  );
+
+  setDot(
+    "websiteDot",
+    true
+  );
+
+  if($("websiteStatus")){
+    $("websiteStatus").textContent =
+      "Ready";
+  }
+
+  if($("dashWebsite")){
+    $("dashWebsite").textContent =
+      "Ready";
+  }
+
+  if($("dashGemini")){
+    $("dashGemini").textContent =
+      hasKey &&
+      detectedGeminiModel
+      ? detectedGeminiModel
+      : "Not connected";
+  }
+
+  if($("dashTelegram")){
+    $("dashTelegram").textContent =
+      hasTelegram
+      ? "Connected"
+      : "Not connected";
+  }
 
 }
 
 
 /* =========================================================
-   INIT
+   SAVE / PUBLISH
    ========================================================= */
 
-window.addEventListener(
-  "storage",
+$("saveBuilderBtn")
+.addEventListener(
+  "click",
   ()=>{
-    state =
-      loadState();
-
-    updateDashboard();
+    saveState();
   }
 );
 
+async function publishWebsite(){
+
+  saveState(false);
+
+  const published =
+    deepClone(state);
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(published)
+  );
+
+  /*
+    If index.html is open in another tab,
+    send the new state to it.
+  */
+
+  if(
+    window.opener &&
+    !window.opener.closed
+  ){
+
+    window.opener.postMessage(
+      {
+        type:
+          "KURDIA_BUILDER_STATE",
+        state:published
+      },
+      "*"
+    );
+
+  }
+
+  toast(
+    "Website state پاشەکەوت کرا. ئەگەر index.html ـەکە localStorage ـی هاوبەش بەکاربهێنێت، گۆڕانکاریەکان دەبینێت.",
+    "ok"
+  );
+
+  /*
+    Public GitHub Pages cannot be rewritten
+    directly from browser without GitHub authentication.
+    Therefore Publish here means saving the website state.
+  */
+
+}
+
+
+/* =========================================================
+   UNDO / REDO
+   ========================================================= */
+
+$("undoBtn")
+.addEventListener(
+  "click",
+  ()=>{
+
+    if(
+      undoStack.length===0
+    ){
+
+      toast(
+        "هیچ گۆڕانکارییەک نییە بۆ Undo.",
+        "error"
+      );
+
+      return;
+    }
+
+    redoStack.push(
+      deepClone(state)
+    );
+
+    state =
+      undoStack.pop();
+
+    saveState(false);
+
+    renderAll();
+
+    toast(
+      "Undo ✓",
+      "ok"
+    );
+
+  }
+);
+
+$("redoBtn")
+.addEventListener(
+  "click",
+  ()=>{
+
+    if(
+      redoStack.length===0
+    ){
+
+      toast(
+        "هیچ گۆڕانکارییەک نییە بۆ Redo.",
+        "error"
+      );
+
+      return;
+    }
+
+    undoStack.push(
+      deepClone(state)
+    );
+
+    state =
+      redoStack.pop();
+
+    saveState(false);
+
+    renderAll();
+
+    toast(
+      "Redo ✓",
+      "ok"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   PUBLIC WEBSITE FETCH
+   ========================================================= */
+
+async function loadPublicWebsite(){
+
+  try{
+
+    const response =
+      await fetch(
+        RAW_INDEX +
+        "?t=" +
+        Date.now()
+      );
+
+    if(!response.ok){
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+    }
+
+    const html =
+      await response.text();
+
+    setDot(
+      "websiteDot",
+      true
+    );
+
+    if($("websiteStatus")){
+      $("websiteStatus").textContent =
+        "Online";
+    }
+
+    if($("dashWebsite")){
+      $("dashWebsite").textContent =
+        "Online";
+    }
+
+    return html;
+
+  }catch(error){
+
+    setDot(
+      "websiteDot",
+      false
+    );
+
+    if($("websiteStatus")){
+      $("websiteStatus").textContent =
+        "Offline";
+    }
+
+    if($("dashWebsite")){
+      $("dashWebsite").textContent =
+        "Offline";
+    }
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+   BACKUP
+   ========================================================= */
+
+$("exportBtn")
+.addEventListener(
+  "click",
+  ()=>{
+
+    const backup={
+      version:3,
+      exportedAt:
+        new Date().toISOString(),
+      state:state
+    };
+
+    const blob =
+      new Blob(
+        [
+          JSON.stringify(
+            backup,
+            null,
+            2
+          )
+        ],
+        {
+          type:
+            "application/json"
+        }
+      );
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+    const a =
+      document.createElement("a");
+
+    a.href=url;
+
+    a.download =
+      "kurdia-backup-" +
+      Date.now() +
+      ".json";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    toast(
+      "Backup دابەزی ✓",
+      "ok"
+    );
+
+  }
+);
+
+$("restoreInput")
+.addEventListener(
+  "change",
+  async e=>{
+
+    const file =
+      e.target.files[0];
+
+    if(!file) return;
+
+    try{
+
+      const text =
+        await file.text();
+
+      const data =
+        JSON.parse(text);
+
+      const incoming =
+        data.state ||
+        data;
+
+      if(
+        !incoming ||
+        typeof incoming!=="object"
+      ){
+        throw new Error(
+          "Backup ـەکە نادروستە."
+        );
+      }
+
+      if(
+        !confirm(
+          "دڵنیایت؟ داتای ئێستا جێگۆڕکێ دەکرێت."
+        )
+      ){
+        return;
+      }
+
+      pushHistory();
+
+      state =
+        mergeState(
+          DEFAULT_STATE,
+          incoming
+        );
+
+      saveState(false);
+
+      renderAll();
+
+      toast(
+        "Backup گەڕێندرایەوە ✓",
+        "ok"
+      );
+
+    }catch(error){
+
+      toast(
+        error.message,
+        "error"
+      );
+
+    }
+
+    e.target.value="";
+
+  }
+);
+
+
+/* =========================================================
+   UTILITY
+   ========================================================= */
+
+function closeModal(id){
+
+  const modal =
+    $(id);
+
+  if(modal){
+    modal.classList.remove(
+      "active"
+    );
+  }
+
+}
+
+window.closeModal =
+  closeModal;
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  )
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+}
+
+function escapeAttr(value){
+
+  return escapeHTML(value);
+
+}
+
+function escapeCSSUrl(value){
+
+  return String(
+    value || ""
+  )
+  .replaceAll("\\","")
+  .replaceAll("'","%27")
+  .replaceAll('"',"%22")
+  .replaceAll("\n","");
+
+}
+
+function fileToDataURL(file){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        ()=>resolve(
+          reader.result
+        );
+
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   GLOBAL EXPORTS
+   ========================================================= */
+
+window.showView =
+  showView;
+
+window.toggleSection =
+  toggleSection;
+
+window.deleteSection =
+  deleteSection;
+
+window.editService =
+  editService;
+
+window.deleteService =
+  deleteService;
+
+window.aiIconForService =
+  aiIconForService;
+
+window.deleteGallery =
+  deleteGallery;
+
+window.updateGalleryTitle =
+  updateGalleryTitle;
+
+window.updateFaq =
+  updateFaq;
+
+window.deleteFaq =
+  deleteFaq;
+
+window.generateForField =
+  generateForField;
+
+
+/* =========================================================
+   CTRL + S
+   ========================================================= */
 
 document.addEventListener(
   "keydown",
   e=>{
 
     if(
-      e.ctrlKey &&
-      e.shiftKey &&
-      e.key.toLowerCase()==="k"
+      (e.ctrlKey || e.metaKey)
+      &&
+      e.key.toLowerCase()==="s"
     ){
 
       e.preventDefault();
 
-      showPage("telegram");
+      saveState();
 
     }
 
@@ -3722,17 +6146,37 @@ document.addEventListener(
 );
 
 
-if(
-  sessionStorage.getItem(
-    "KURDIA_ADMIN_LOGIN"
-  ) === "1"
-){
+/* =========================================================
+   ESC MODAL
+   ========================================================= */
 
-  updateDashboard();
+document.addEventListener(
+  "keydown",
+  e=>{
 
-  updateSystemStatus();
+    if(e.key==="Escape"){
 
-}
+      document
+      .querySelectorAll(".modal.active")
+      .forEach(
+        modal=>{
+          modal.classList.remove(
+            "active"
+          );
+        }
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIAL ICONS
+   ========================================================= */
+
+lucide.createIcons();
 
 </script>
 
