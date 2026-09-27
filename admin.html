@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>KURDIA ADVENTURE — دەستەی کۆنترۆڵ</title>
 
+<!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -18,7 +19,7 @@
   --surface:#0e141e;
   --surface2:#131c29;
   --border:rgba(255,255,255,.08);
-  --text:#fff;
+  --text:#ffffff;
   --muted:#94a3b8;
   --sidebar-w:270px;
 }
@@ -29,7 +30,6 @@ html, body{
   font-family:"Vazirmatn", sans-serif;
 }
 
-/* APP SHELL */
 .app-container{ display:flex; width:100%; height:100%; position:relative; }
 
 /* SIDEBAR DRAWER */
@@ -39,17 +39,17 @@ html, body{
   transition:transform .3s ease; height:100%;
 }
 .sidebar-header{
-  padding:16px 18px; border-bottom:1px solid var(--border);
+  padding:18px; border-bottom:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between;
 }
 .brand{ display:flex; align-items:center; gap:10px; }
 .brand-icon{
   width:36px; height:36px; border-radius:10px;
   background:linear-gradient(135deg, var(--primary), var(--primary2));
-  display:flex; align-items:center; justify-content:center;
+  display:flex; align-items:center; justify-content:center; color:#fff;
 }
 .brand-text h2{ font-size:15px; font-weight:900; line-height:1; }
-.brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.15em; }
+.brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.15em; font-weight:700; }
 
 .nav-list{ list-style:none; padding:12px 8px; display:flex; flex-direction:column; gap:5px; flex:1; overflow-y:auto; }
 .nav-btn{
@@ -57,20 +57,21 @@ html, body{
   text-align:right; padding:12px 14px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:700;
   display:flex; align-items:center; gap:12px; font-family:inherit; transition:.2s;
 }
+.nav-btn:hover{ background:rgba(255,255,255,.04); color:#fff; }
 .nav-btn.active{
   background:linear-gradient(135deg, rgba(157,28,50,.35), rgba(201,43,73,.2));
   color:#fff; border:1px solid rgba(201,43,73,.35);
 }
 .sidebar-footer{ padding:12px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
 
-/* MOBILE OVERLAY */
+/* BACKDROP FOR MOBILE */
 .sidebar-backdrop{
   position:fixed; inset:0; background:rgba(0,0,0,.65); backdrop-filter:blur(4px);
   z-index:90; opacity:0; pointer-events:none; transition:.25s ease;
 }
 .sidebar-backdrop.active{ opacity:1; pointer-events:auto; }
 
-/* WORKSPACE AREA */
+/* WORKSPACE */
 .workspace{ flex:1; display:flex; flex-direction:column; width:100%; height:100%; overflow:hidden; }
 .topbar{
   height:60px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.95);
@@ -85,7 +86,7 @@ html, body{
 
 .content-body{ flex:1; overflow-y:auto; padding:16px; -webkit-overflow-scrolling:touch; }
 
-/* CARDS & CONTROLS */
+/* CARDS & FIELDS */
 .card{ background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:18px; margin-bottom:16px; }
 .card-title{ font-size:14px; font-weight:800; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
 .field{ margin-bottom:12px; }
@@ -94,17 +95,17 @@ input, textarea, select{
   width:100%; border:1px solid var(--border); border-radius:12px;
   background:rgba(255,255,255,.04); color:#fff; padding:11px 12px; outline:none; font:inherit; font-size:13px;
 }
-input:focus, textarea:focus{ border-color:var(--primary2); }
+input:focus, textarea:focus, select:focus{ border-color:var(--primary2); }
 textarea{ min-height:85px; resize:vertical; }
 
 .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.grid-3{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
 .btn{
   border:0; border-radius:12px; padding:11px 16px; color:#fff;
   font-weight:800; cursor:pointer; background:var(--primary); transition:.2s; font-family:inherit;
   display:inline-flex; align-items:center; gap:8px; font-size:13px; justify-content:center; text-align:center;
 }
+.btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
 .btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); }
 .btn-success{ background:linear-gradient(135deg, #10b981, #059669); }
 .btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--border); }
@@ -143,7 +144,7 @@ textarea{ min-height:85px; resize:vertical; }
 }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* RESPONSIVE SPECIFICS FOR MOBILE */
+/* RESPONSIVE */
 @media(max-width:850px){
   .sidebar{
     position:fixed; top:0; right:0; bottom:0;
@@ -152,14 +153,13 @@ textarea{ min-height:85px; resize:vertical; }
   }
   .sidebar.open{ transform:translateX(0); }
   .menu-toggle{ display:flex; }
-  .grid-2, .grid-3{ grid-template-columns:1fr; }
+  .grid-2{ grid-template-columns:1fr; }
 }
 </style>
 </head>
 <body>
 
 <div class="app-container">
-  <!-- BACKDROP FOR MOBILE -->
   <div class="sidebar-backdrop" id="backdrop" onclick="toggleSidebar()"></div>
 
   <!-- SIDEBAR -->
@@ -172,19 +172,19 @@ textarea{ min-height:85px; resize:vertical; }
           <span>STUDIO BUILDER</span>
         </div>
       </div>
-      <button onclick="toggleSidebar()" style="background:none;border:0;color:#cbd5e1;cursor:pointer;" class="md:hidden">
+      <button onclick="toggleSidebar()" style="background:none;border:0;color:#cbd5e1;cursor:pointer;">
         <i data-lucide="x"></i>
       </button>
     </div>
 
     <ul class="nav-list">
-      <li><button class="nav-btn active" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و هەیکەلی سەرەکی</button></li>
+      <li><button class="nav-btn active" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و بەشی سەرەکی</button></li>
       <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامە و زانیاری گەشت</button></li>
-      <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزاری و تایبەتمەندی</button></li>
+      <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="image"></i> گەلەری وێنەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('whatsapp')"><i data-lucide="message-square"></i> پەیامەکانی WhatsApp & Maps</button></li>
-      <li><button class="nav-btn" onclick="switchTab('registrations')"><i data-lucide="users"></i> بەڕێوەبردنی بەشداربووان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & ئەرشیف</button></li>
+      <li><button class="nav-btn" onclick="switchTab('registrations')"><i data-lucide="users"></i> بەشداربووان لە Sheets</button></li>
+      <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
     </ul>
 
     <div class="sidebar-footer">
@@ -198,7 +198,7 @@ textarea{ min-height:85px; resize:vertical; }
     <header class="topbar">
       <div class="topbar-right">
         <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
-        <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">ڕەنگ و هەیکەلی سەرەکی</h1>
+        <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">ڕەنگ و بەشی سەرەکی</h1>
       </div>
       <button class="btn btn-success" style="padding:7px 12px;font-size:12px;" onclick="publishLive()">
         <i data-lucide="save"></i> Publish
@@ -210,7 +210,7 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- 1. DESIGN TAB -->
       <section class="page-tab active" id="tab-design">
         <div class="card">
-          <div class="card-title"><i data-lucide="pipette"></i> ڕەنگی براند (Global Colors)</div>
+          <div class="card-title"><i data-lucide="pipette"></i> ڕەنگەکانی ماڵپەڕ (Brand Colors)</div>
           <div class="grid-2">
             <div class="field">
               <label>ڕەنگی سەرەکی</label>
@@ -226,22 +226,22 @@ textarea{ min-height:85px; resize:vertical; }
         <div class="card">
           <div class="card-title"><i data-lucide="layout"></i> بەشی سەرەکی (Hero Section)</div>
           <div class="field">
-            <label>باجی سەرەوە (Badge)</label>
+            <label>باجی سەرەوە (Badge Text)</label>
             <input id="heroBadge" oninput="autoSync()">
           </div>
           <div class="field">
-            <label>ناونیشانی سەرەکی</label>
+            <label>ناونیشانی گەورەی سەرەکی</label>
             <input id="heroTitle" oninput="autoSync()">
           </div>
           <div class="field">
-            <label>پێناسەی کورت</label>
+            <label>پێناسەی ژێر ناونیشان</label>
             <textarea id="heroSubtitle" oninput="autoSync()"></textarea>
           </div>
           <div class="field">
-            <label>وێنەی کاڤەری سەرەکی</label>
+            <label>وێنەی کاڤەری سەرەکی لە مۆبایل</label>
             <div class="uploader-dropzone" onclick="document.getElementById('heroFileInput').click()">
               <i data-lucide="upload-cloud" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:11px;color:var(--muted);margin-top:4px;">وێنەیەک لە مۆبایلەکەت هەڵبژێرە</p>
+              <p style="font-size:11px;color:var(--muted);margin-top:4px;">پەنجە بنێ بۆ هەڵبژاردنی وێنە</p>
               <input type="file" id="heroFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'heroImageUrl', 'heroDropPreview')">
               <div id="heroDropPreview" class="dropzone-preview"></div>
             </div>
@@ -252,24 +252,24 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- 2. TRIP TAB -->
       <section class="page-tab" id="tab-trip">
         <div class="card">
-          <div class="card-title"><i data-lucide="compass"></i> زانیاری گەشت</div>
+          <div class="card-title"><i data-lucide="compass"></i> زانیاری و بەرنامەی گەشت</div>
           <div class="field"><label>ناوی گەشت</label><input id="tripTitle" oninput="autoSync()"></div>
           <div class="grid-2">
             <div class="field"><label>نرخی بەشداری</label><input id="tripPrice" oninput="autoSync()"></div>
             <div class="field"><label>شوێن</label><input id="tripLocation" oninput="autoSync()"></div>
             <div class="field"><label>کات و بەروار</label><input id="tripTime" oninput="autoSync()"></div>
-            <div class="field"><label>ماوە</label><input id="tripDuration" oninput="autoSync()"></div>
+            <div class="field"><label>ماوەی گەشت</label><input id="tripDuration" oninput="autoSync()"></div>
             <div class="field"><label>ئاستی گەشت</label><input id="tripDifficulty" oninput="autoSync()"></div>
           </div>
           <div class="field">
-            <label>تەواوی وردەکاری گەشت</label>
+            <label>تەواوی وردەکاری و خشتەی گەشت</label>
             <textarea id="tripDesc" oninput="autoSync()"></textarea>
           </div>
           <div class="field">
-            <label>وێنەی تایبەتی گەشت</label>
+            <label>وێنەی تایبەتی گەشتەکە</label>
             <div class="uploader-dropzone" onclick="document.getElementById('tripFileInput').click()">
               <i data-lucide="image-plus" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:11px;color:var(--muted);margin-top:4px;">وێنەی گەشت هەڵبژێرە</p>
+              <p style="font-size:11px;color:var(--muted);margin-top:4px;">وێنەی گەشتەکە دیاری بکە</p>
               <input type="file" id="tripFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'tripImageUrl', 'tripDropPreview')">
               <div id="tripDropPreview" class="dropzone-preview"></div>
             </div>
@@ -295,10 +295,10 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- 4. GALLERY TAB -->
       <section class="page-tab" id="tab-gallery">
         <div class="card">
-          <div class="card-title"><i data-lucide="images"></i> گەلەری وێنەکان</div>
+          <div class="card-title"><i data-lucide="images"></i> گەلەری وێنەکانی سروشت</div>
           <div class="uploader-dropzone" onclick="document.getElementById('galleryFileInput').click()">
             <i data-lucide="upload" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-            <p style="font-size:11px;color:var(--muted);margin-top:4px;">وێنەی نوێ زیاد بکە</p>
+            <p style="font-size:11px;color:var(--muted);margin-top:4px;">وێنەی نوێ لە مۆبایلەکەتەوە زیاد بکە</p>
             <input type="file" id="galleryFileInput" accept="image/*" style="display:none" onchange="addGalleryPhoto(event)">
           </div>
           <div class="gallery-grid" id="galleryContainer"></div>
@@ -308,17 +308,19 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- 5. WHATSAPP & MAPS -->
       <section class="page-tab" id="tab-whatsapp">
         <div class="card">
-          <div class="card-title"><i data-lucide="navigation"></i> پەیامەکانی WhatsApp و نەخشە</div>
+          <div class="card-title"><i data-lucide="navigation"></i> نامەکانی WhatsApp و لۆکەیشن</div>
           <div class="field">
             <label>📍 لینکی شوێنی کۆبوونەوە لە Google Maps</label>
             <input id="waMapsUrl" dir="ltr" oninput="autoSync()">
           </div>
           <div class="field">
-            <label>✅ دەقی نامەی پەسەندکردن (Verify)</label>
+            <label>✅ دەقی نامەی پەسەندکردن (Verify Template)</label>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆد)، <code>{maps}</code> (نەخشە)</p>
             <textarea id="waVerifyTemplate" style="min-height:140px;"></textarea>
           </div>
           <div class="field">
-            <label>❌ دەقی نامەی ڕەتکردنەوە (Reject)</label>
+            <label>❌ دەقی نامەی ڕەتکردنەوە (Reject Template)</label>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆد)، <code>{reason}</code> (هۆکار)</p>
             <textarea id="waRejectTemplate" style="min-height:100px;"></textarea>
           </div>
           <button class="btn btn-success" style="width:100%;margin-top:8px;" onclick="saveWhatsAppToCloud()">💾 پاشەکەوتکردن لە سێرڤەر</button>
@@ -339,9 +341,9 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- 7. BACKUP TAB -->
       <section class="page-tab" id="tab-backup">
         <div class="card">
-          <div class="card-title"><i data-lucide="save"></i> پاراستن و هێنانەوە</div>
+          <div class="card-title"><i data-lucide="save"></i> پاراستن و هێنانەوەی زانیارییەکان</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
-            پاشەکەوتکردنی هەموو گۆڕانکارییەکان بۆ ناو مۆبایلەکەت.
+            دەتوانیت تەواوی زانیاری و ڕێکخستنەکان بە شێوەی فایل لە مۆبایلەکەت پاشەکەوت بکەیت:
           </p>
           <div style="display:flex;gap:8px;">
             <button class="btn btn-secondary" style="flex:1;" onclick="exportBackup()"><i data-lucide="download"></i> Backup</button>
@@ -366,8 +368,8 @@ let appState = {
   gradColor1: "#9d1c32",
   gradColor2: "#c92b49",
   heroBadge: "KURDIA ADVENTURE",
-  heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
-  heroSubtitle: "گەشت، سروشت، هاوڕێتی و سەرکێشی لە دڵڕفێنترین ناوچەکانی کوردستان.",
+  heroTitle: "سەرکێشییەکی ڕاستەقینە لە لووتکەکانی کوردستان",
+  heroSubtitle: "گەشتەکانمان تەنها چوونە دەرەوە نییە؛ گەشتێکە بۆ دۆزینەوەی بەهێزیی خۆت و چێژوەرگرتن لە سروشتی کوردستان.",
   heroImageUrl: "",
   tripTitle: "گەشتی نوێی چیای هەڵگورد",
   tripPrice: "٣٥،٠٠٠ دینار",
@@ -375,12 +377,12 @@ let appState = {
   tripTime: "بەیانی ٠٥:٠٠",
   tripDuration: "١ ڕۆژ",
   tripDifficulty: "مامناوەند",
-  tripDesc: "گەشتێکی بێ وێنە بە هاوڕێیەتی ڕابەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و ئامادەکاری پێویست.",
+  tripDesc: "گەشتێکی پڕ جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ لووتکە.",
   tripImageUrl: "",
   services: [
-    "پاسی تایبەت و هاتوچۆی پارێزراو",
-    "تیمی شاخەوانی و فریاگوزاری سەرەتایی",
-    "فۆتۆگرافەری تایبەت",
+    "پاسی تایبەتی گەشتیاری و پارێزراو",
+    "تیمی ڕێبەری شاخەوانی و فریاگوزاری",
+    "فۆتۆگرافەری تایبەت بۆ یادەوەری",
     "خواردنەوە و چای سەر خەڵووز"
   ],
   gallery: [],
@@ -411,13 +413,13 @@ function switchTab(tabId){
   event.currentTarget.classList.add("active");
 
   const titles = {
-    design: "ڕەنگ و هەیکەلی سەرەکی",
+    design: "ڕەنگ و بەشی سەرەکی",
     trip: "بەرنامە و زانیاری گەشت",
-    services: "خزمەتگوزاری و تایبەتمەندی",
-    gallery: "گەلەری وێنەکان",
+    services: "خزمەتگوزارییەکان",
+    gallery: "گەلەری وێنەکانی سروشت",
     whatsapp: "پەیامەکانی WhatsApp & Maps",
-    registrations: "بەڕێوەبردنی بەشداربووان",
-    backup: "Backup & ئەرشیف"
+    registrations: "بەشداربووان لە Sheets",
+    backup: "Backup & Restore"
   };
   document.getElementById("topbarTitle").textContent = titles[tabId] || "کۆنترۆڵی ماڵپەڕ";
 
