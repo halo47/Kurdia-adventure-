@@ -2847,14 +2847,11 @@ footer{
 const JSONBIN_BIN_ID =
  "6ab7f417ac6210605af863a3";
 
-/*
-  API key ـی JSONBin لە کۆدی public دانەمەزرێنراوە.
-  ئەگەر Admin ـەکەت localStorage بەکاربهێنێت
-  ئەم index ـە دەتوانێت هەمان state بخوێنێتەوە.
-*/
-
 const JSONBIN_API_KEY =
  "YOUR_JSONBIN_API_KEY";
+
+const WORKER_ENDPOINT = 
+ "https://kurdia.alwandssalh.workers.dev";
 
 
 /* =========================================================
@@ -3171,7 +3168,7 @@ function toast(message){
 
  setTimeout(()=>{
   el.classList.remove("show");
- },3200);
+ },3500);
 
 }
 
@@ -3208,11 +3205,6 @@ async function loadData(){
 
  }
 
-
- /*
-  JSONBin only if a real key exists.
- */
-
  if(
   !JSONBIN_API_KEY ||
   JSONBIN_API_KEY ===
@@ -3222,7 +3214,6 @@ async function loadData(){
   return siteData;
 
  }
-
 
  try{
 
@@ -4377,6 +4368,7 @@ function booking(){
 
        <input
         id="bookName"
+        name="name"
         required
         class="input"
         placeholder="ناو و ناوی خێزان"
@@ -4384,6 +4376,7 @@ function booking(){
 
        <input
         id="bookPhone"
+        name="phone"
         required
         class="input"
         placeholder="ژمارەی مۆبایل"
@@ -4392,6 +4385,7 @@ function booking(){
 
        <input
         id="bookPeople"
+        name="people"
         type="number"
         min="1"
         value="1"
@@ -4401,38 +4395,43 @@ function booking(){
 
        <input
         id="bookNote"
+        name="note"
         class="input"
         placeholder="تێبینییەکی کورت"
        >
-<div class="receipt-upload">
-  <label
-    for="bookReceipt"
-    class="block text-sm font-bold mb-2"
-  >
-    🧾 بەڵگەی پارەدان
-  </label>
 
-  <input
-    id="bookReceipt"
-    type="file"
-    accept="image/jpeg,image/png,image/webp"
-    class="input"
-    required
-  >
+       <div class="receipt-upload full">
+        <label
+          for="bookReceipt"
+          class="block text-sm font-bold mb-2"
+        >
+          🧾 بەڵگەی پارەدان
+        </label>
 
-  <div
-    id="receiptPreview"
-    class="mt-3 hidden"
-  >
-    <img
-      id="receiptPreviewImage"
-      class="rounded-2xl w-full max-h-64 object-contain"
-      alt="Receipt preview"
-    >
-  </div>
-</div>
+        <input
+          id="bookReceipt"
+          name="receipt"
+          type="file"
+          accept="image/*"
+          class="input"
+          required
+        >
+
+        <div
+          id="receiptPreview"
+          class="mt-3 hidden"
+        >
+          <img
+            id="receiptPreviewImage"
+            class="rounded-2xl w-full max-h-64 object-contain"
+            alt="Receipt preview"
+          >
+        </div>
+       </div>
+
        <button
         type="submit"
+        id="bookSubmitBtn"
         class="primary submit-button full"
        >
         ناردنی داواکاری
@@ -4479,12 +4478,6 @@ function render(){
   document.getElementById("app");
 
  app.innerHTML="";
-
-
- /*
-  Keep the existing section system.
-  Admin can reorder/hide sections.
- */
 
  const sections =
   Array.isArray(siteData.sections)
@@ -4533,11 +4526,6 @@ function render(){
     html=custom(section);
    }
 
-   /*
-    New sections can be enabled automatically
-    even if old Admin doesn't know them.
-   */
-
    if(
     section.type==="highlights"
    ){
@@ -4556,23 +4544,14 @@ function render(){
     html=stats();
    }
 
-
    if(html){
-
     app.insertAdjacentHTML(
      "beforeend",
      html
     );
-
    }
 
   });
-
-
- /*
-  If old Admin has no new sections,
-  add the new premium blocks after trip.
- */
 
  if(
   !sections.some(
@@ -4590,7 +4569,6 @@ function render(){
   }
  }
 
-
  if(
   !sections.some(
    x=>x && x.type==="itinerary"
@@ -4600,15 +4578,12 @@ function render(){
    document.querySelector("#services");
 
   if(servicesEl){
-
    servicesEl.insertAdjacentHTML(
     "afterend",
     itinerary()
    );
-
   }
  }
-
 
  if(
   !sections.some(
@@ -4619,26 +4594,21 @@ function render(){
    document.querySelector("#steps");
 
   if(stepsEl){
-
    stepsEl.insertAdjacentHTML(
     "beforebegin",
     stats()
    );
-
   }
  }
-
 
  if(window.lucide){
   lucide.createIcons();
  }
 
-
  document.getElementById(
   "year"
  ).textContent =
   new Date().getFullYear();
-
 
  setupReveal();
 
@@ -4716,42 +4686,30 @@ function setupReveal(){
  if(
   !("IntersectionObserver" in window)
  ){
-
   elements.forEach(
    el=>el.classList.add("visible")
   );
-
   return;
-
  }
-
 
  const observer =
   new IntersectionObserver(
    entries=>{
-
     entries.forEach(entry=>{
-
      if(entry.isIntersecting){
-
       entry.target
        .classList
        .add("visible");
-
       observer.unobserve(
        entry.target
       );
-
      }
-
     });
-
    },
    {
     threshold:.08
    }
   );
-
 
  elements.forEach(
   el=>observer.observe(el)
@@ -4772,13 +4730,11 @@ function toggleFAQ(button){
  const wasOpen =
   current.classList.contains("open");
 
-
  document
   .querySelectorAll(".faq.open")
   .forEach(item=>{
    item.classList.remove("open");
   });
-
 
  if(!wasOpen){
   current.classList.add("open");
@@ -4847,35 +4803,6 @@ function closeLightbox(){
 
 
 /* =========================================================
-   TELEGRAM CONFIG
-   Reads Admin settings first.
-========================================================= */
-
-function getTelegramConfig(){
-
- return {
-
-  token:
-   localStorage.getItem(
-    "KURDIA_TELEGRAM_TOKEN"
-   ) || "",
-
-  chatId:
-   localStorage.getItem(
-    "KURDIA_TELEGRAM_CHAT_ID"
-   ) ||
-   siteData.telegramChatId ||
-   ""
-
- };
-
-}
-
-
-/* =========================================================
-   BOOKING
-========================================================= */
-/* =========================================================
    RECEIPT PREVIEW
 ========================================================= */
 
@@ -4909,8 +4836,8 @@ document.addEventListener("change", function(event){
     return;
   }
 
-  if(file.size > 10 * 1024 * 1024){
-    toast("قەبارەی وێنەکە نابێت لە 10MB زیاتر بێت.");
+  if(file.size > 15 * 1024 * 1024){
+    toast("قەبارەی وێنەکە نابێت لە 15MB زیاتر بێت.");
     event.target.value="";
     return;
   }
@@ -4919,21 +4846,20 @@ document.addEventListener("change", function(event){
     new FileReader();
 
   reader.onload = function(e){
-
     image.src =
       e.target.result;
-
     preview.classList.remove(
       "hidden"
     );
-
   };
 
   reader.readAsDataURL(file);
 
 });
-      /* =========================================================
-   BOOKING + AI RECEIPT VERIFICATION
+
+
+/* =========================================================
+   BOOKING DIRECTLY TO CLOUDFLARE WORKER (NO GLITCH)
 ========================================================= */
 
 async function submitBooking(event){
@@ -4942,6 +4868,9 @@ async function submitBooking(event){
 
   const form =
     event.target;
+
+  const submitBtn =
+    document.getElementById("bookSubmitBtn");
 
   const name =
     document
@@ -4975,540 +4904,65 @@ async function submitBooking(event){
     receiptInput?.files?.[0];
 
   if(!name || !phone){
-
-    toast(
-      "تکایە ناو و ژمارەی مۆبایل بنووسە."
-    );
-
+    toast("تکایە ناو و ژمارەی مۆبایل بنووسە.");
     return;
   }
 
   if(!receiptFile){
-
-    toast(
-      "تکایە بەڵگەی پارەدان دابنێ."
-    );
-
+    toast("تکایە بەڵگەی پارەدان دابنێ.");
     return;
   }
 
-  const config =
-    getTelegramConfig();
-
-  if(
-    !config.token ||
-    !config.chatId
-  ){
-
-    toast(
-      "Telegram لە Admin ـەوە ڕێک نەخراوە."
-    );
-
-    return;
+  if(submitBtn){
+    submitBtn.disabled = true;
+    submitBtn.textContent = "کەمێک چاوەڕێبە...";
   }
 
-  const requestId =
-    "KURDIA-" +
-    Date.now()
-      .toString()
-      .slice(-7);
-
-  toast(
-    "بەڵگەی پارەدان دەخرێتە ژێر پشکنینی AI..."
-  );
+  toast("داواکارییەکەت ڕەوانە دەکرێت...");
 
   try{
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("trip", siteData.tripTitle || "KURDIA ADVENTURE");
+    formData.append("people", people);
+    formData.append("note", note);
+    formData.append("receipt", receiptFile);
 
-    /*
-      Convert receipt to Base64
-    */
+    const response = await fetch(`${WORKER_ENDPOINT}/api/register`, {
+      method: "POST",
+      body: formData
+    });
 
-    const base64 =
-      await fileToBase64(
-        receiptFile
-      );
+    const result = await response.json().catch(() => ({}));
 
-    const mimeType =
-      receiptFile.type ||
-      "image/jpeg";
-
-    /*
-      Ask Gemini to inspect the receipt.
-    */
-
-    const aiResult =
-      await verifyReceiptWithGemini(
-        base64,
-        mimeType
-      );
-
-    /*
-      Build Telegram message
-    */
-
-    const status =
-      aiResult.status === "verified"
-        ? "✅ پشتڕاستکراوە"
-        : "⚠️ پێویستی بە پشکنینی دەستی هەیە";
-
-    const message =
-`🏔️ KURDIA ADVENTURE
-
-🎫 ناونووسینی نوێ
-
-🆔 Verification ID:
-${requestId}
-
-📌 گەشت:
-${siteData.tripTitle}
-
-👤 ناو:
-${name}
-
-📱 مۆبایل:
-${phone}
-
-👥 ژمارەی کەس:
-${people}
-
-💰 نرخی گەشت:
-${siteData.tripPrice}
-
-🧾 دۆخی AI:
-${status}
-
-💵 بڕی دۆزرایەوە لە receipt:
-${aiResult.amount || "نادیار"}
-
-📅 بەرواری receipt:
-${aiResult.date || "نادیار"}
-
-🔢 ژمارەی مامەڵە:
-${aiResult.transactionId || "نادیار"}
-
-🤖 دڵنیایی AI:
-${aiResult.confidence || "نادیار"}
-
-📝 هۆکار:
-${aiResult.reason || "نادیار"}
-
-📋 تێبینی:
-${note || "نییە"}`;
-
-    /*
-      If AI is confident:
-      send success message.
-
-      If AI is uncertain:
-      send manual-review message.
-    */
-
-    await sendTelegramMessage(
-      config,
-      message
-    );
-
-    /*
-      Send receipt image too.
-    */
-
-    await sendTelegramReceipt(
-      config,
-      receiptFile,
-      requestId,
-      status
-    );
-
-    /*
-      User-facing result
-    */
-
-    if(
-      aiResult.status ===
-      "verified"
-    ){
-
-      toast(
-        "🎉 ناونووسینەکەت بە سەرکەوتوویی وەرگیرا!"
-      );
-
-    }else{
-
-      toast(
-        "ناونووسینەکەت وەرگیرا. پێویستی بە پشکنینی دەستی هەیە."
-      );
-
+    if(response.ok && result.ok){
+      toast("🎉 ناونووسینەکەت بە سەرکەوتوویی تۆمار کرا!");
+      form.reset();
+      document.getElementById("bookPeople").value = "1";
+      document.getElementById("receiptPreview")?.classList.add("hidden");
+    } else {
+      toast("❌ " + (result.error || "کێشەیەک ڕوویدا لە تۆمارکردن."));
     }
-
-    form.reset();
-
-    document
-      .getElementById(
-        "bookPeople"
-      )
-      .value = "1";
-
-    document
-      .getElementById(
-        "receiptPreview"
-      )
-      ?.classList
-      .add("hidden");
-
   }catch(error){
-
-    console.error(
-      "Booking verification error:",
-      error
-    );
-
-    toast(
-      "کێشەیەک لە پشکنینی بەڵگە هەیە. تکایە دووبارە هەوڵ بدەرەوە."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   FILE → BASE64
-========================================================= */
-
-function fileToBase64(file){
-
-  return new Promise(
-    (resolve,reject)=>{
-
-      const reader =
-        new FileReader();
-
-      reader.onload = () => {
-
-        const result =
-          String(
-            reader.result || ""
-          );
-
-        resolve(
-          result.split(",")[1] || ""
-        );
-
-      };
-
-      reader.onerror =
-        reject;
-
-      reader.readAsDataURL(
-        file
-      );
-
+    console.error("Booking Error:", error);
+    toast("کێشەیەک لە پەیوەندی هەیە. تکایە دووبارە هەوڵ بدەرەوە.");
+  }finally{
+    if(submitBtn){
+      submitBtn.disabled = false;
+      submitBtn.textContent = "ناردنی داواکاری";
     }
-  );
-
-}
-
-
-/* =========================================================
-   GEMINI RECEIPT VERIFICATION
-========================================================= */
-
-async function verifyReceiptWithGemini(
-  base64,
-  mimeType
-){
-
-  const key =
-    localStorage.getItem(
-      "KURDIA_GEMINI_KEY"
-    ) || "";
-
-  if(!key){
-
-    throw new Error(
-      "Gemini API Key نەدۆزرایەوە."
-    );
-
-  }
-
-  const model =
-    await getGeminiModel();
-
-  const prompt = `
-تۆ سیستەمی پشکنینی بەڵگەی پارەدانی KURDIA ADVENTURE ـیت.
-
-ئەم وێنەیە بەڵگەی پارەدانە.
-
-بە وردی پشکنینی بکە.
-
-گرنگ:
-- هیچ زانیارییەک مەخەڵقێنە.
-- ئەگەر نووسینەکان ڕوون نین، status بکە needs_review.
-- ئەگەر بڕی پارە نادیارە، needs_review.
-- ئەگەر بەڵگەکە وەک receipt/پارەدان پشتڕاست نەکرا، needs_review.
-- تەنها ئەگەر بەڵگەکە ڕوون و خوێندراوە و زانیاریی سەرەکیی پارەدان بە دڵنیایی دیارە، verified بکە.
-- AI ناتوانێت بە تەنیا ڕاستیی بانکی مامەڵەیەک بسەلمێنێت؛ ئەگەر گومان هەبوو needs_review بکە.
-
-تەنها JSON ـی خوارەوە وەڵام بدە:
-
-{
-  "status": "verified" | "needs_review",
-  "amount": "بڕی پارە یان نادیار",
-  "currency": "IQD/USD/other/unknown",
-  "date": "بەروار یان نادیار",
-  "transactionId": "ژمارەی مامەڵە یان نادیار",
-  "confidence": "high/medium/low",
-  "reason": "هۆکاری کورت"
-}
-`;
-
-  const response =
-    await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/" +
-      encodeURIComponent(model) +
-      ":generateContent",
-      {
-        method:"POST",
-
-        headers:{
-          "Content-Type":
-            "application/json",
-
-          "x-goog-api-key":
-            key
-        },
-
-        body:
-          JSON.stringify({
-
-            contents:[
-              {
-                role:"user",
-
-                parts:[
-                  {
-                    text:prompt
-                  },
-                  {
-                    inlineData:{
-                      mimeType:
-                        mimeType,
-
-                      data:
-                        base64
-                    }
-                  }
-                ]
-
-              }
-            ],
-
-            generationConfig:{
-              temperature:0,
-              maxOutputTokens:500,
-              responseMimeType:
-                "application/json"
-            }
-
-          })
-      }
-    );
-
-  const data =
-    await response.json();
-
-  if(!response.ok){
-
-    throw new Error(
-      data?.error?.message ||
-      "Gemini verification error"
-    );
-
-  }
-
-  const text =
-    data
-      ?.candidates?.[0]
-      ?.content?.parts
-      ?.map(
-        part =>
-          part.text || ""
-      )
-      .join("")
-      .trim();
-
-  if(!text){
-
-    throw new Error(
-      "Gemini وەڵامێکی بەتاڵی دا."
-    );
-
-  }
-
-  try{
-
-    return JSON.parse(
-      text
-    );
-
-  }catch(error){
-
-    console.error(
-      "Invalid Gemini JSON:",
-      text
-    );
-
-    return {
-      status:"needs_review",
-      amount:"نادیار",
-      currency:"unknown",
-      date:"نادیار",
-      transactionId:"نادیار",
-      confidence:"low",
-      reason:
-        "AI نەیتوانی وەڵامەکە بە شێوەی JSON بخوێنێتەوە."
-    };
-
   }
 
 }
 
-
-/* =========================================================
-   TELEGRAM MESSAGE
-========================================================= */
-
-async function sendTelegramMessage(
-  config,
-  message
-){
-
-  const response =
-    await fetch(
-      "https://api.telegram.org/bot" +
-      encodeURIComponent(
-        config.token
-      ) +
-      "/sendMessage",
-      {
-        method:"POST",
-
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify({
-
-            chat_id:
-              config.chatId,
-
-            text:
-              message
-
-          })
-      }
-    );
-
-  const data =
-    await response.json();
-
-  if(
-    !response.ok ||
-    !data.ok
-  ){
-
-    throw new Error(
-      data.description ||
-      "Telegram message error"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   TELEGRAM RECEIPT IMAGE
-========================================================= */
-
-async function sendTelegramReceipt(
-  config,
-  file,
-  requestId,
-  status
-){
-
-  const formData =
-    new FormData();
-
-  formData.append(
-    "chat_id",
-    config.chatId
-  );
-
-  formData.append(
-    "photo",
-    file,
-    file.name
-  );
-
-  formData.append(
-    "caption",
-    `🧾 Receipt
-
-🆔 ${requestId}
-
-${status}`
-  );
-
-  const response =
-    await fetch(
-      "https://api.telegram.org/bot" +
-      encodeURIComponent(
-        config.token
-      ) +
-      "/sendPhoto",
-      {
-        method:"POST",
-        body:formData
-      }
-    );
-
-  const data =
-    await response.json();
-
-  if(
-    !response.ok ||
-    !data.ok
-  ){
-
-    throw new Error(
-      data.description ||
-      "Telegram photo error"
-    );
-
-  }
-
-}
 
 /* =========================================================
    GEMINI
 ========================================================= */
 
-/*
-  Admin stores:
-
-  KURDIA_GEMINI_KEY
-
-  The model is automatically detected.
-  No model dropdown is needed.
-*/
-
 let detectedGeminiModel =
  null;
-
 
 async function detectGeminiModel(){
 
@@ -5517,11 +4971,9 @@ async function detectGeminiModel(){
    "KURDIA_GEMINI_KEY"
   ) || "";
 
-
  if(!key){
   return null;
  }
-
 
  try{
 
@@ -5535,27 +4987,22 @@ async function detectGeminiModel(){
     }
    );
 
-
   if(!response.ok){
    throw new Error(
     "Models list failed"
    );
   }
 
-
   const data =
    await response.json();
-
 
   const models =
    Array.isArray(data.models)
    ?data.models
    :[];
 
-
   const compatible =
    models.filter(model=>{
-
     const methods =
      Array.isArray(
       model.supportedGenerationMethods
@@ -5577,9 +5024,7 @@ async function detectGeminiModel(){
      !name.includes("image") &&
      !name.includes("audio")
     );
-
    });
-
 
   const ids =
    compatible.map(model=>
@@ -5591,31 +5036,21 @@ async function detectGeminiModel(){
     )
    );
 
-
   const exact =
    [
-    "gemini-3.8-flash",
-    "gemini-flash-latest",
-    "gemini-3.7-flash",
-    "gemini-3.6-flash"
+    "gemini-2.5-flash",
+    "gemini-flash-latest"
    ];
-
 
   for(
    const preferred of exact
   ){
-
    if(ids.includes(preferred)){
-
     detectedGeminiModel =
      preferred;
-
     return preferred;
-
    }
-
   }
-
 
   const flash =
    ids.find(id=>
@@ -5623,43 +5058,27 @@ async function detectGeminiModel(){
     !/preview/i.test(id)
    );
 
-
   if(flash){
-
    detectedGeminiModel =
     flash;
-
    return flash;
-
   }
-
 
   if(ids.length){
-
    detectedGeminiModel =
     ids[0];
-
    return ids[0];
-
   }
 
-
  }catch(error){
-
   console.warn(
    "Gemini model detection failed:",
    error
   );
-
  }
 
-
- /*
-  Current stable fallback.
- */
-
  detectedGeminiModel =
-  "gemini-3.8-flash";
+  "gemini-2.5-flash";
 
  return detectedGeminiModel;
 
@@ -5690,7 +5109,6 @@ function buildAIContext(){
    .join("، ")
   :"";
 
-
  const itineraryText =
   Array.isArray(siteData.itinerary)
   ?siteData.itinerary
@@ -5701,7 +5119,6 @@ function buildAIContext(){
    .join("\n")
   :"";
 
-
  const faqText =
   Array.isArray(siteData.faq)
   ?siteData.faq
@@ -5711,7 +5128,6 @@ function buildAIContext(){
    )
    .join("\n")
   :"";
-
 
  return `
 ناوی براند:
@@ -5776,22 +5192,18 @@ function toggleAI(){
   "hidden"
  );
 
-
  const messages =
   document.getElementById(
    "messages"
   );
 
-
  if(
   !messages.children.length
  ){
-
   addAI(
    "ai",
    "سڵاو 👋 من Kurdia Assistant ـم. چ پرسیارێکت هەیە؟"
   );
-
  }
 
 }
@@ -5807,12 +5219,10 @@ function addAI(
    "messages"
   );
 
-
  const element =
   document.createElement(
    "div"
   );
-
 
  element.className =
   "ai-message " +
@@ -5822,15 +5232,12 @@ function addAI(
    :"ai"
   );
 
-
  element.textContent =
   text;
-
 
  box.appendChild(
   element
  );
-
 
  box.scrollTop =
   box.scrollHeight;
@@ -5845,18 +5252,15 @@ function addTyping(){
    "messages"
   );
 
-
  const element =
   document.createElement(
    "div"
   );
 
-
  element.id="aiTyping";
 
  element.className=
   "ai-message ai";
-
 
  element.innerHTML=`
 
@@ -5870,11 +5274,9 @@ function addTyping(){
 
  `;
 
-
  box.appendChild(
   element
  );
-
 
  box.scrollTop =
   box.scrollHeight;
@@ -5907,37 +5309,26 @@ async function sendAI(){
    "aiInput"
   );
 
-
  const question =
   input.value.trim();
-
 
  if(!question){
   return;
  }
 
-
  input.value="";
-
 
  addAI(
   "user",
   question
  );
 
-
  addTyping();
-
 
  const key =
   localStorage.getItem(
    "KURDIA_GEMINI_KEY"
   ) || "";
-
-
- /*
-  Optional custom endpoint from Admin.
- */
 
  if(siteData.aiEndpoint){
 
@@ -5967,13 +5358,10 @@ async function sendAI(){
      }
     );
 
-
    const data =
     await response.json();
 
-
    removeTyping();
-
 
    addAI(
     "ai",
@@ -5982,25 +5370,16 @@ async function sendAI(){
     "وەڵامێک نەدۆزرایەوە."
    );
 
-
    return;
 
   }catch(error){
-
    console.warn(
     "AI endpoint failed:",
     error
    );
-
   }
 
  }
-
-
- /*
-  No Gemini key:
-  give website-data fallback.
- */
 
  if(!key){
 
@@ -6015,12 +5394,10 @@ async function sendAI(){
 
  }
 
-
  try{
 
   const model =
    await getGeminiModel();
-
 
   const system =
  `
@@ -6041,7 +5418,6 @@ async function sendAI(){
 
 ${buildAIContext()}
 `;
-
 
   const response =
    await fetch(
@@ -6089,20 +5465,15 @@ ${buildAIContext()}
     }
    );
 
-
   const data =
    await response.json();
 
-
   if(!response.ok){
-
    throw new Error(
     data?.error?.message ||
     "Gemini error"
    );
-
   }
-
 
   const answer =
    data
@@ -6112,9 +5483,7 @@ ${buildAIContext()}
     .join("")
     .trim();
 
-
   removeTyping();
-
 
   addAI(
    "ai",
@@ -6122,23 +5491,18 @@ ${buildAIContext()}
    "ببورە، ئێستا نەتوانیم وەڵام بدەم."
   );
 
-
  }catch(error){
-
   console.error(
    "Gemini error:",
    error
   );
 
-
   removeTyping();
-
 
   addAI(
    "ai",
    "ببورە، کێشەیەک لە پەیوەندی بە AI هەیە. تکایە دووبارە هەوڵ بدەرەوە."
   );
-
  }
 
 }
@@ -6153,77 +5517,60 @@ function localAI(question){
  const q =
   question.toLowerCase();
 
-
  if(
   q.includes("نرخ") ||
   q.includes("پارە") ||
   q.includes("بەها")
  ){
-
   return `
 نرخی ئەم گەشتە:
 ${siteData.tripPrice}
 `;
-
  }
-
 
  if(
   q.includes("شوێن") ||
   q.includes("کوێ")
  ){
-
   return `
 شوێنی گەشت:
 ${siteData.tripLocation}
 `;
-
  }
-
 
  if(
   q.includes("کات") ||
   q.includes("کەی")
  ){
-
   return `
 کاتی گەشت:
 ${siteData.tripTime}
 `;
-
  }
-
 
  if(
   q.includes("ماوە") ||
   q.includes("ڕۆژ")
  ){
-
   return `
 ماوەی گەشت:
 ${siteData.tripDuration}
 `;
-
  }
-
 
  if(
   q.includes("ئاست") ||
   q.includes("سەخت")
  ){
-
   return `
 ئاستی گەشت:
 ${siteData.tripDifficulty}
 `;
-
  }
-
 
  if(
   q.includes("خزمەت")
  ){
-
   const services =
    Array.isArray(
     siteData.services
@@ -6237,21 +5584,16 @@ ${siteData.tripDifficulty}
 خزمەتگوزارییەکان:
 ${services}
 `;
-
  }
-
 
  if(
   q.includes("بەشداری") ||
   q.includes("تۆمار")
  ){
-
   return siteData.bookingOpen!==false
    ?"بەڵێ، بەشداری کراوەیە. دەتوانیت لە بەشی بەشداری فۆڕمەکە پڕ بکەیتەوە."
    :"لە ئێستادا بەشداری داخراوە.";
-
  }
-
 
  return `
 من دەتوانم یارمەتیت بدەم لە زانیارییەکانی
@@ -6274,7 +5616,6 @@ window.addEventListener(
    return;
   }
 
-
   if(
    event.data.type ===
    "KURDIA_BUILDER_STATE"
@@ -6286,17 +5627,14 @@ window.addEventListener(
      event.data.state || {}
     );
 
-
    localStorage.setItem(
     "kurdia_builder_published_v3",
     JSON.stringify(siteData)
    );
 
-
    render();
 
   }
-
 
   if(
    event.data.type ===
@@ -6335,7 +5673,6 @@ window.addEventListener(
    return;
   }
 
-
   try{
 
    if(event.newValue){
@@ -6353,9 +5690,7 @@ window.addEventListener(
    }
 
   }catch(error){
-
    console.warn(error);
-
   }
 
  }
@@ -6369,13 +5704,9 @@ window.addEventListener(
 document.addEventListener(
  "keydown",
  event=>{
-
   if(event.key==="Escape"){
-
    closeLightbox();
-
   }
-
  }
 );
 
@@ -6385,11 +5716,8 @@ document.addEventListener(
 ========================================================= */
 
 (async function(){
-
  await loadData();
-
  render();
-
 })();
 
 </script>
