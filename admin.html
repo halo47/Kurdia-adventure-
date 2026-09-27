@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>KURDIA ADVENTURE — دەستەی بەڕێوەبردن</title>
+<title>KURDIA ADVENTURE — دەستەی کۆنترۆڵی پێشکەوتوو</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,365 +17,741 @@
   --bg:#070a10;
   --surface:#0e141e;
   --surface2:#131c29;
+  --surface3:#192434;
   --border:rgba(255,255,255,.08);
+  --border-focus:rgba(201,43,73,.5);
   --text:#fff;
   --muted:#94a3b8;
-  --green:#22c55e;
+  --success:#10b981;
+  --warning:#f59e0b;
+  --danger:#ef4444;
 }
-*{ box-sizing:border-box; }
+*{ box-sizing:border-box; margin:0; padding:0; }
 body{
-  margin:0; background:var(--bg); color:var(--text);
+  background:var(--bg); color:var(--text);
   font-family:"Vazirmatn", sans-serif;
-  display:flex; min-height:100vh;
+  display:flex; height:100vh; overflow:hidden;
 }
+
+/* SIDEBAR */
 .sidebar{
-  width:260px; background:#0c1119; border-left:1px solid var(--border);
-  padding:20px 12px; display:flex; flex-direction:column; gap:8px;
-  flex-shrink:0;
+  width:280px; background:#0a0f17; border-left:1px solid var(--border);
+  display:flex; flex-direction:column; flex-shrink:0; z-index:20;
 }
-.main{ flex:1; padding:30px; max-width:1000px; margin:0 auto; overflow-y:auto; }
-.logo-title{ font-size:18px; font-weight:900; padding:10px; border-bottom:1px solid var(--border); margin-bottom:12px; }
-.nav button{
+.sidebar-header{
+  padding:22px 18px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.brand{ display:flex; align-items:center; gap:10px; }
+.brand-icon{
+  width:38px; height:38px; border-radius:12px;
+  background:linear-gradient(135deg, var(--primary), var(--primary2));
+  display:flex; align-items:center; justify-content:center;
+}
+.brand-text h2{ font-size:16px; font-weight:900; line-height:1; }
+.brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.2em; }
+
+.nav-list{ list-style:none; padding:15px 10px; display:flex; flex-direction:column; gap:6px; flex:1; overflow-y:auto; }
+.nav-btn{
   width:100%; border:0; background:transparent; color:#cbd5e1;
-  text-align:right; padding:12px 14px; border-radius:12px; cursor:pointer; font-size:14px; font-family:inherit;
-  display:flex; align-items:center; gap:10px; transition:.2s;
+  text-align:right; padding:12px 15px; border-radius:14px; cursor:pointer; font-size:13px; font-weight:700;
+  display:flex; align-items:center; gap:12px; font-family:inherit; transition:.2s;
 }
-.nav button:hover{ background:rgba(255,255,255,.04); }
-.nav button.active{ background:rgba(157,28,50,.35); color:#fff; border:1px solid rgba(201,43,73,.3); font-weight:bold; }
+.nav-btn:hover{ background:rgba(255,255,255,.04); color:#fff; }
+.nav-btn.active{
+  background:linear-gradient(135deg, rgba(157,28,50,.35), rgba(201,43,73,.2));
+  color:#fff; border:1px solid rgba(201,43,73,.35);
+}
+.nav-btn i{ width:18px; height:18px; }
 
-.card{ background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:20px; }
+.sidebar-footer{ padding:15px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+
+/* MAIN CONTENT */
+.workspace{ flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative; }
+.topbar{
+  height:70px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.8);
+  backdrop-filter:blur(20px); display:flex; align-items:center; justify-content:space-between;
+  padding:0 25px; flex-shrink:0;
+}
+.topbar-title h1{ font-size:18px; font-weight:900; }
+.topbar-title p{ font-size:11px; color:var(--muted); }
+.topbar-actions{ display:flex; align-items:center; gap:10px; }
+
+.content-area{ flex:1; display:flex; overflow:hidden; }
+.editor-pane{ flex:1; padding:25px; overflow-y:auto; }
+.preview-pane{
+  width:420px; border-right:1px solid var(--border); background:#05070b;
+  display:flex; flex-direction:column; transition:.3s;
+}
+@media(max-width:1200px){ .preview-pane{ display:none; } }
+
+/* CARDS & CONTROLS */
+.card{ background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:20px; }
 .card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
-.card-title{ font-size:16px; font-weight:800; display:flex; align-items:center; gap:8px; }
+.card-title{ font-size:15px; font-weight:800; display:flex; align-items:center; gap:8px; }
+.badge{ padding:4px 9px; border-radius:999px; font-size:10px; font-weight:800; background:rgba(255,255,255,.08); color:var(--muted); }
 
-.field{ margin-bottom:16px; }
-.field label{ display:block; font-size:12px; font-weight:bold; margin-bottom:6px; color:#cbd5e1; }
+.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+@media(max-width:768px){ .grid-2, .grid-3{ grid-template-columns:1fr; } }
+
+.field{ margin-bottom:14px; }
+.field label{ display:block; font-size:11px; font-weight:800; margin-bottom:6px; color:#cbd5e1; }
 input, textarea, select{
   width:100%; border:1px solid var(--border); border-radius:12px;
-  background:rgba(255,255,255,.04); color:#fff; padding:12px 14px; outline:none; font:inherit;
+  background:rgba(255,255,255,.04); color:#fff; padding:12px 14px; outline:none; font:inherit; font-size:13px;
+  transition:.2s;
 }
-input:focus, textarea:focus{ border-color:var(--primary2); }
-textarea{ min-height:100px; resize:vertical; }
+input:focus, textarea:focus, select:focus{ border-color:var(--border-focus); box-shadow:0 0 0 3px rgba(157,28,50,.15); }
+textarea{ min-height:85px; resize:vertical; }
+
+.color-picker-wrap{ display:flex; align-items:center; gap:12px; background:rgba(255,255,255,.04); padding:8px 12px; border-radius:12px; border:1px solid var(--border); }
+.color-picker-wrap input[type="color"]{ width:35px; height:35px; border-radius:8px; border:0; cursor:pointer; background:none; padding:0; }
 
 .btn{
-  border:0; border-radius:12px; padding:12px 20px; color:#fff;
-  font-weight:bold; cursor:pointer; background:var(--primary); transition:.2s; font-family:inherit;
+  border:0; border-radius:12px; padding:10px 18px; color:#fff;
+  font-weight:800; cursor:pointer; background:var(--primary); transition:.2s; font-family:inherit;
+  display:inline-flex; align-items:center; gap:8px; font-size:13px; justify-content:center;
 }
-.btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
-.btn-success{ background:linear-gradient(135deg, #16a34a, #22c55e); }
-.btn-secondary{ background:rgba(255,255,255,.08); border:1px solid var(--border); }
+.btn:hover{ filter:brightness(1.12); transform:translateY(-1px); }
+.btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow:0 10px 25px rgba(157,28,50,.3); }
+.btn-success{ background:linear-gradient(135deg, #10b981, #059669); }
+.btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--border); }
+.btn-secondary:hover{ background:rgba(255,255,255,.1); }
+.btn-danger{ background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); }
+.btn-danger:hover{ background:#ef4444; color:#fff; }
 
-.preview-box{
-  width:100%; height:180px; border-radius:14px; border:1px dashed var(--border);
-  background-size:cover; background-position:center; margin-top:8px; display:flex;
-  align-items:center; justify-content:center; color:var(--muted); font-size:12px;
+.uploader-dropzone{
+  border:2px dashed rgba(255,255,255,.12); border-radius:16px; padding:22px; text-align:center;
+  cursor:pointer; background:rgba(255,255,255,.02); transition:.2s; position:relative; overflow:hidden;
+}
+.uploader-dropzone:hover{ border-color:var(--primary2); background:rgba(157,28,50,.04); }
+.dropzone-preview{
+  width:100%; height:160px; border-radius:12px; background-size:cover; background-position:center;
+  display:none; position:relative; margin-top:10px; border:1px solid var(--border);
+}
+.dropzone-preview.active{ display:block; }
+
+/* SERVICES & GALLERY LISTS */
+.item-row{
+  display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
+  background:var(--surface2); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
+}
+.item-info{ display:flex; align-items:center; gap:10px; }
+.gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:10px; margin-top:12px; }
+.gallery-thumb{
+  height:95px; border-radius:12px; background-size:cover; background-position:center;
+  position:relative; border:1px solid var(--border); overflow:hidden;
+}
+.gallery-delete{
+  position:absolute; top:5px; left:5px; width:24px; height:24px; border-radius:6px;
+  background:rgba(0,0,0,.7); color:#ef4444; border:0; display:flex; align-items:center;
+  justify-content:center; cursor:pointer; font-size:12px;
 }
 
-.page{ display:none; }
-.page.active{ display:block; }
+/* LIVE SIMULATOR IFRAME */
+.simulator-header{
+  padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center;
+  justify-content:space-between; background:#0c1119;
+}
+.simulator-body{ flex:1; padding:12px; display:flex; justify-content:center; align-items:center; }
+.phone-frame{
+  width:100%; height:100%; max-height:740px; border:4px solid #1f2937; border-radius:28px;
+  overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,.7); position:relative; background:#000;
+}
+.phone-frame iframe{ width:100%; height:100%; border:0; }
 
+.page-tab{ display:none; }
+.page-tab.active{ display:block; animation:fadeIn .25s ease; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(5px); } to{ opacity:1; transform:translateY(0); } }
+
+/* TOAST */
 .toast{
-  position:fixed; left:20px; bottom:20px; padding:14px 20px; border-radius:14px;
-  background:#1e293b; border:1px solid var(--border); opacity:0; transform:translateY(50px);
-  transition:.3s; z-index:9999; font-size:13px; font-weight:bold;
+  position:fixed; left:25px; bottom:25px; padding:14px 22px; border-radius:14px;
+  background:#111827; border:1px solid var(--border); box-shadow:0 20px 50px rgba(0,0,0,.6);
+  opacity:0; transform:translateY(40px); transition:.3s; z-index:99999; font-weight:800; font-size:13px;
 }
 .toast.show{ opacity:1; transform:translateY(0); }
-
-@media(max-width:850px){
-  body{ flex-direction:column; }
-  .sidebar{ width:100%; border-left:0; border-bottom:1px solid var(--border); }
-  .main{ padding:16px; }
-}
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="logo-title">🏔️ KURDIA ADMIN</div>
-  <div class="nav">
-    <button class="active" onclick="showPage('builder')">🛠️ وێبسایت و گەشت</button>
-    <button onclick="showPage('whatsapp')">💬 پەیامەکانی WhatsApp & Maps</button>
-    <button onclick="showPage('backup')">💾 Backup & هێنانەوە</button>
-  </div>
-</div>
-
-<div class="main">
-
-  <!-- بەشی ١: دیزاینی ماڵپەڕ و گەشت -->
-  <div class="page active" id="page-builder">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <h2 style="margin:0;font-size:22px;font-weight:900;">دەستکاریکردنی ماڵپەڕ</h2>
-      <button class="btn btn-success" onclick="publishAll()">🚀 Publish و بڵاوکردنەوە</button>
-    </div>
-
-    <!-- بەشی سەرەکی ماڵپەڕ -->
-    <div class="card">
-      <div class="card-title">🎨 بەشی سەرەکی (Hero Section)</div>
-      <div class="field" style="margin-top:14px;"><label>ناونیشانی سەرەکی</label><input id="heroTitle"></div>
-      <div class="field"><label>پێناسەی ژێر ناونیشان</label><textarea id="heroSubtitle"></textarea></div>
-      <div class="field">
-        <label>وێنەی سەرەکی (لە گەلەری مۆبایلەکەتەوە)</label>
-        <input type="file" id="heroFile" accept="image/*">
-        <div id="heroPreview" class="preview-box">وێنە دیاری نەکراوە</div>
-      </div>
-    </div>
-
-    <!-- زانیاری گەشت -->
-    <div class="card">
-      <div class="card-title">🏕️ زانیاری گەشت (Current Trip)</div>
-      <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
-        <div class="field"><label>ناوی گەشت</label><input id="tripTitle"></div>
-        <div class="field"><label>نرخی بەشداری</label><input id="tripPrice"></div>
-        <div class="field"><label>شوێن</label><input id="tripLocation"></div>
-        <div class="field"><label>کات و بەروار</label><input id="tripTime"></div>
-        <div class="field"><label>ئاستی گەشت</label><input id="tripDifficulty"></div>
-        <div class="field"><label>ماوەی گەشت</label><input id="tripDuration"></div>
-      </div>
-      <div class="field"><label>تەواوی ڕوونکردنەوە و بەرنامەی گەشت</label><textarea id="tripDesc"></textarea></div>
-      <div class="field">
-        <label>وێنەی تایبەتی گەشت (لە گەلەری مۆبایلەکەتەوە)</label>
-        <input type="file" id="tripFile" accept="image/*">
-        <div id="tripPreview" class="preview-box">وێنە دیاری نەکراوە</div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-icon"><i data-lucide="mountain"></i></div>
+      <div class="brand-text">
+        <h2>KURDIA</h2>
+        <span>STUDIO BUILDER</span>
       </div>
     </div>
   </div>
 
-  <!-- بەشی ٢: ڕێکخستنی WhatsApp و Maps -->
-  <div class="page" id="page-whatsapp">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <h2 style="margin:0;font-size:22px;font-weight:900;">💬 نامەکانی WhatsApp و لۆکەیشن</h2>
-      <button class="btn btn-success" onclick="saveWhatsAppSettings()">💾 پاشەکەوتکردن</button>
+  <ul class="nav-list">
+    <li><button class="nav-btn active" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و هەیکەلی سەرەکی</button></li>
+    <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامە و زانیاری گەشت</button></li>
+    <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزاری و تایبەتمەندی</button></li>
+    <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="image"></i> گەلەری وێنەکانی سروشت</button></li>
+    <li><button class="nav-btn" onclick="switchTab('whatsapp')"><i data-lucide="message-square"></i> پەیامەکانی WhatsApp & Maps</button></li>
+    <li><button class="nav-btn" onclick="switchTab('registrations')"><i data-lucide="users"></i> بەڕێوەبردنی بەشداربووان</button></li>
+    <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & ئەرشیف</button></li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <button class="btn btn-primary" onclick="publishLive()"><i data-lucide="send"></i> بڵاوکردنەوەی فەرمی (Publish)</button>
+    <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> پیشاندانی وێبسایت</button>
+  </div>
+</aside>
+
+<!-- WORKSPACE -->
+<main class="workspace">
+  <header class="topbar">
+    <div class="topbar-title">
+      <h1 id="topbarTitle">ڕەنگ و هەیکەلی سەرەکی</h1>
+      <p>دەستکاری هەموو بەشەکانی ماڵپەڕ بە شێوازی سەربەخۆ</p>
     </div>
+    <div class="topbar-actions">
+      <span class="badge" id="saveStatus">💾 هەموو گۆڕانکارییەکان پارێزراون</span>
+      <button class="btn btn-secondary" onclick="reloadPreview()"><i data-lucide="refresh-cw"></i> نوێکردنەوەی پێشبینین</button>
+    </div>
+  </header>
 
-    <div class="card">
-      <div class="field">
-        <label>📍 لینکی شوێنی کۆبوونەوە لەسەر Google Maps</label>
-        <input id="waMapsUrl" dir="ltr" placeholder="https://maps.app.goo.gl/...">
-        <span style="font-size:11px;color:var(--muted);">لەم شوێنە لینکی نەخشەکە دادەنێیت و کاتێک گەشتەکە پشتڕاست دەکەیتەوە، ئۆتۆماتیکی دەنێردرێت بۆ بەشداربوو.</span>
-      </div>
+  <div class="content-area">
+    <!-- EDITOR PANE -->
+    <div class="editor-pane">
 
-      <div class="field">
-        <label>✅ دەقی نامەی پشتڕاستکردنەوە (Verify Message)</label>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">
-          کلیلەکان: <code>{id}</code> (کۆدی داواکاری) ، <code>{maps}</code> (لینکی نەخشە)
+      <!-- 1. DESIGN TAB -->
+      <section class="page-tab active" id="tab-design">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="pipette"></i> ڕەنگ و ستایلی براند (Global Colors)</div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>ڕەنگی سەرەکی براند (Primary Accent)</label>
+              <div class="color-picker-wrap">
+                <input type="color" id="gradColor1" onchange="autoSync()">
+                <span id="gradColor1Code">#9d1c32</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>ڕەنگی دووەم (Gradient Accent)</label>
+              <div class="color-picker-wrap">
+                <input type="color" id="gradColor2" onchange="autoSync()">
+                <span id="gradColor2Code">#c92b49</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <textarea id="waVerifyTemplate" style="min-height:180px;"></textarea>
-      </div>
 
-      <div class="field">
-        <label>❌ دەقی نامەی ڕەتکردنەوە (Reject Message)</label>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">
-          کلیلەکان: <code>{id}</code> (کۆدی داواکاری) ، <code>{reason}</code> (هۆکاری دیاریکراو لە تێلیگرام)
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="layout"></i> بەشی سەرەکی (Hero Section)</div>
+          </div>
+          <div class="field">
+            <label>باجی سەرەوە (Badge Text)</label>
+            <input id="heroBadge" oninput="autoSync()">
+          </div>
+          <div class="field">
+            <label>ناونیشانی گەورەی سەرەکی</label>
+            <input id="heroTitle" oninput="autoSync()">
+          </div>
+          <div class="field">
+            <label>پێناسە و وەسفی ژێر ناونیشان</label>
+            <textarea id="heroSubtitle" oninput="autoSync()"></textarea>
+          </div>
+          <div class="field">
+            <label>وێنەی سەرەکیی کاڤەر (Upload Hero Cover)</label>
+            <div class="uploader-dropzone" onclick="document.getElementById('heroFileInput').click()">
+              <i data-lucide="upload-cloud" style="width:32px;height:32px;margin:auto;color:var(--muted);"></i>
+              <p style="font-size:12px;color:var(--muted);margin-top:6px;">پەنجە بنێ بۆ هەڵبژاردنی وێنەی مۆبایل</p>
+              <input type="file" id="heroFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'heroImageUrl', 'heroDropPreview')">
+              <div id="heroDropPreview" class="dropzone-preview"></div>
+            </div>
+          </div>
         </div>
-        <textarea id="waRejectTemplate" style="min-height:130px;"></textarea>
+      </section>
+
+      <!-- 2. TRIP TAB -->
+      <section class="page-tab" id="tab-trip">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="map-pin"></i> زانیارییەکانی گەشتی ئێستا</div>
+          </div>
+          <div class="field">
+            <label>ناوی فەرمیی گەشت</label>
+            <input id="tripTitle" oninput="autoSync()">
+          </div>
+          <div class="grid-3">
+            <div class="field"><label>نرخی بەشداری</label><input id="tripPrice" oninput="autoSync()"></div>
+            <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation" oninput="autoSync()"></div>
+            <div class="field"><label>کات و بەرواری بەڕێکەوتن</label><input id="tripTime" oninput="autoSync()"></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label>ماوەی گەشت</label><input id="tripDuration" oninput="autoSync()"></div>
+            <div class="field"><label>ئاستی گەشت (Difficulty)</label><input id="tripDifficulty" oninput="autoSync()"></div>
+          </div>
+          <div class="field">
+            <label>تەواوی وردەکاری و خشتەی گەشت</label>
+            <textarea id="tripDesc" style="min-height:120px;" oninput="autoSync()"></textarea>
+          </div>
+          <div class="field">
+            <label>وێنەی تایبەتی گەشتەکە</label>
+            <div class="uploader-dropzone" onclick="document.getElementById('tripFileInput').click()">
+              <i data-lucide="image-plus" style="width:32px;height:32px;margin:auto;color:var(--muted);"></i>
+              <p style="font-size:12px;color:var(--muted);margin-top:6px;">وێنەی کێو، سروشت یان ئەشکەوتەکە دیاری بکە</p>
+              <input type="file" id="tripFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'tripImageUrl', 'tripDropPreview')">
+              <div id="tripDropPreview" class="dropzone-preview"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. SERVICES TAB -->
+      <section class="page-tab" id="tab-services">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="sparkles"></i> خزمەتگوزارییەکانی ناو گەشت</div>
+          </div>
+          <div class="grid-2" style="align-items:flex-end;">
+            <div class="field">
+              <label>ناوی خزمەتگوزاری</label>
+              <input id="newServiceName" placeholder="وەک: فۆتۆگرافەری تایبەت، خێوەت...">
+            </div>
+            <div class="field">
+              <button class="btn btn-primary" style="width:100%;height:44px;" onclick="addServiceItem()"><i data-lucide="plus"></i> زیادکردن بۆ لیست</button>
+            </div>
+          </div>
+          <div id="servicesList" style="margin-top:14px;"></div>
+        </div>
+      </section>
+
+      <!-- 4. GALLERY TAB -->
+      <section class="page-tab" id="tab-gallery">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="images"></i> گەلەری وێنە سەرنجڕاکێشەکان</div>
+          </div>
+          <div class="uploader-dropzone" onclick="document.getElementById('galleryFileInput').click()">
+            <i data-lucide="upload" style="width:32px;height:32px;margin:auto;color:var(--muted);"></i>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px;">وێنەی نوێ لە مۆبایلەکەتەوە زیاد بکە بۆ گەلەری</p>
+            <input type="file" id="galleryFileInput" accept="image/*" style="display:none" onchange="addGalleryPhoto(event)">
+          </div>
+          <div class="gallery-grid" id="galleryContainer"></div>
+        </div>
+      </section>
+
+      <!-- 5. WHATSAPP & MAPS -->
+      <section class="page-tab" id="tab-whatsapp">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="navigation"></i> نەخشە و لۆکەیشنی شوێنی کۆبوونەوە</div>
+            <button class="btn btn-success" onclick="saveWhatsAppToCloud()"><i data-lucide="cloud-upload"></i> پاشەکەوتکردن لە سێرڤەر</button>
+          </div>
+          <div class="field">
+            <label>📍 لینکی شوێنی کۆبوونەوە لە Google Maps Pin</label>
+            <input id="waMapsUrl" dir="ltr" placeholder="https://maps.app.goo.gl/..." oninput="autoSync()">
+          </div>
+          <div class="field">
+            <label>✅ دەقی نامەی پشتڕاستکردنەوە (پەسەندکردن لە Telegram)</label>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆدی گەشت)، <code>{maps}</code> (لینکی نەخشە)</p>
+            <textarea id="waVerifyTemplate" style="min-height:160px;line-height:1.7;"></textarea>
+          </div>
+          <div class="field">
+            <label>❌ دەقی نامەی ڕەتکردنەوە (Reject)</label>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆدی گەشت)، <code>{reason}</code> (هۆکاری دیاریکراو)</p>
+            <textarea id="waRejectTemplate" style="min-height:120px;line-height:1.7;"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. REGISTRATIONS TAB -->
+      <section class="page-tab" id="tab-registrations">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="table"></i> بەشداربووان لە Google Sheets</div>
+            <button class="btn btn-secondary" onclick="openSheets()"><i data-lucide="file-spreadsheet"></i> کردنەوەی ڕاستەوخۆی شیتەکە</button>
+          </div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+            هەموو ناونووسینەکان بە تەواوی لەگەڵ ژمارە، ناوە زیادەکان و کۆدی سەلماندن دەچنە ناو خشتەکەت. دەتوانیت بە پەنجەنانی دوگمەکەی سەرەوە لە ئەپی Google Sheets یان وێبگەڕ ڕاستەوخۆ تەماشایان بکەیت.
+          </p>
+        </div>
+      </section>
+
+      <!-- 7. BACKUP & RESTORE -->
+      <section class="page-tab" id="tab-backup">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="save"></i> پاراستنی تەواوی زانیاری و ڕێکخستنەکان</div>
+          </div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:15px;">
+            دەتوانیت تەواوی فایلەکان و وێنەکانی کۆکراوەی سایتەکە وەک فایلێکی سەربەخۆ دابەزێنیت و لە هەر مۆبایلێکی تر بە یەک چرکە بیهێنیتەوە.
+          </p>
+          <div style="display:flex;gap:12px;">
+            <button class="btn btn-secondary" onclick="exportBackup()"><i data-lucide="download"></i> دابەزاندنی یەدەگ (Backup)</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importBackupInput').click()"><i data-lucide="upload"></i> هێنانەوەی یەدەگ (Restore)</button>
+            <input type="file" id="importBackupInput" accept=".json" style="display:none" onchange="importBackup(event)">
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- PREVIEW PANE (SIMULATOR) -->
+    <div class="preview-pane">
+      <div class="simulator-header">
+        <span style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:6px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#10b981;"></span>
+          پێشبینینی ڕاستەوخۆی مۆبایل
+        </span>
+        <button onclick="reloadPreview()" style="background:none;border:0;color:var(--muted);cursor:pointer;"><i data-lucide="rotate-cw" style="width:14px;height:14px;"></i></button>
+      </div>
+      <div class="simulator-body">
+        <div class="phone-frame">
+          <iframe id="livePreviewFrame" src="index.html"></iframe>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- بەشی ٣: باکئەپ و هێنانەوە -->
-  <div class="page" id="page-backup">
-    <h2 style="font-size:22px;font-weight:900;margin-bottom:20px;">💾 Backup & هێنانەوەی زانیارییەکان</h2>
-    <div class="card">
-      <p style="color:var(--muted);font-size:13px;line-height:1.8;">
-        دەتوانیت تەواوی زانیارییەکانی ماڵپەڕ لەسەر شێوەی فایلێکی JSON لە مۆبایلەکەت پاشەکەوت بکەیت تا هەر کاتێک مۆبایلت گۆڕی یان فۆرماتت کرد، بە یەک کلیک بیهێنیتەوە.
-      </p>
-      <div style="display:flex;gap:10px;margin-top:14px;">
-        <button class="btn btn-secondary" onclick="exportData()">📥 دابەزاندنی فایل (Backup)</button>
-        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 هێنانەوەی فایل (Restore)</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-      </div>
-    </div>
-  </div>
-
-</div>
+</main>
 
 <div id="toast" class="toast"></div>
 
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
+const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
 
-let state = {
+let appState = {
+  gradColor1: "#9d1c32",
+  gradColor2: "#c92b49",
+  heroBadge: "KURDIA ADVENTURE",
   heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
   heroSubtitle: "گەشت، سروشت، هاوڕێتی و سەرکێشی لە دڵڕفێنترین ناوچەکانی کوردستان.",
   heroImageUrl: "",
-  tripTitle: "گەشتی نوێی KURDIA",
-  tripPrice: "—",
-  tripLocation: "کوردستان",
-  tripTime: "بەیانی",
-  tripDifficulty: "ئاسان بۆ مامناوەند",
+  tripTitle: "گەشتی نوێی چیای هەڵگورد",
+  tripPrice: "٣٥،٠٠٠ دینار",
+  tripLocation: "باڵەکایەتی — چیای هەڵگورد",
+  tripTime: "بەیانی ٠٥:٠٠",
   tripDuration: "١ ڕۆژ",
-  tripDesc: "زانیاری تەواوی بەرنامەی گەشتەکە لێرە دەبینیت.",
-  tripImageUrl: ""
+  tripDifficulty: "مامناوەند",
+  tripDesc: "گەشتێکی بێ وێنە بە هاوڕێیەتی ڕابەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و ئامادەکاری پێویست.",
+  tripImageUrl: "",
+  services: [
+    "پاسی تایبەت و هاتوچۆی پارێزراو",
+    "تیمی شاخەوانی و فریاگوزاری سەرەتایی",
+    "فۆتۆگرافەری تایبەت بۆ یادەوەرییەکان",
+    "خواردنەوە و چای سەر خەڵووز"
+  ],
+  gallery: [],
+  waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
+  waVerifyTemplate: `سڵاو بەڕێزم 🌿\nپیرۆزە! ناونووسینەکەت لەلایەن *KURDIA ADVENTURE* بە سەرکەوتوویی پشتڕاستکرایەوە. ✅\n\n🆔 *کۆدی داواکاری:* {id}\n\n📍 *شوێنی کۆبوونەوە لەسەر نەخشەی گۆگڵ:*\n{maps}\n\n⚠️ *تکایە ئەم خاڵانە لەبەرچاو بگرە:*\n١. پێڵاوی شاخەوانی و جلی گونجاو ئامادە بکە.\n٢. هێنانی ناسنامەی باری شارستانی یان کارتی نیشتمانی ناچارییە.\n٣. ڕۆژێک پێش گەشتەکە تەلەفۆنت بۆ دەکرێت بۆ هەماهەنگی کۆتایی.\n\nزۆر بەخێربێن! 🏔️✨`,
+  waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت لەلایەن *KURDIA ADVENTURE* پەسەند نەکرا. ❌\n\n🆔 *کۆدی داواکاری:* {id}\n⚠️ *هۆکاری ڕەتکردنەوە:* {reason}.\n\nتکایە دەتوانیت لە ڕێگەی ماڵپەڕەوە بە پسوولەی دروست فۆڕمەکە پڕبکەیتەوە. 💬`
 };
 
 function toast(msg){
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  setTimeout(()=> el.classList.remove("show"), 3200);
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 3200);
 }
 
-function showPage(name){
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("page-" + name).classList.add("active");
-  document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-  event.target.classList.add("active");
+function switchTab(tabId){
+  document.querySelectorAll(".page-tab").forEach(tab => tab.classList.remove("active"));
+  document.getElementById("tab-" + tabId).classList.add("active");
 
-  if(name === "whatsapp") loadWhatsAppSettings();
+  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+  event.currentTarget.classList.add("active");
+
+  const titles = {
+    design: "ڕەنگ و هەیکەلی سەرەکی",
+    trip: "بەرنامە و زانیاری گەشت",
+    services: "خزمەتگوزاری و تایبەتمەندی",
+    gallery: "گەلەری وێنەکانی سروشت",
+    whatsapp: "پەیامەکانی WhatsApp & Maps",
+    registrations: "بەڕێوەبردنی بەشداربووان",
+    backup: "Backup & ئەرشیف"
+  };
+  document.getElementById("topbarTitle").textContent = titles[tabId] || "کۆنترۆڵی ماڵپەڕ";
 }
 
-// پەستاندنی وێنەی مۆبایل بۆ قەبارەی گونجاو بێ شکانی کوالێتی
-function compressImage(file){
+function compressImage(file, maxWidth = 1000, quality = 0.72){
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = ev => {
       const img = new Image();
       img.onload = () => {
         let w = img.width, h = img.height;
-        if(w > 900){ h = Math.round((h * 900) / w); w = 900; }
+        if(w > maxWidth){ h = Math.round((h * maxWidth) / w); w = maxWidth; }
         const canvas = document.createElement("canvas");
         canvas.width = w; canvas.height = h;
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", 0.72));
+        resolve(canvas.toDataURL("image/jpeg", quality));
       };
       img.onerror = reject;
-      img.src = e.target.result;
+      img.src = ev.target.result;
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
+async function handleImageUpload(e, stateProp, previewId){
+  const file = e.target.files?.[0];
+  if(!file) return;
+  toast("⏳ وێنەکە ئامادە دەکرێت...");
+  try{
+    const compressed = await compressImage(file, 950, 0.75);
+    appState[stateProp] = compressed;
+    const prev = document.getElementById(previewId);
+    prev.style.backgroundImage = `url('${compressed}')`;
+    prev.classList.add("active");
+    autoSync();
+    toast("✅ وێنەکە بە سەرکەوتوویی دانرا");
+  }catch(err){
+    toast("❌ کێشەیەک لە خوێندنەوەی وێنە ڕوویدا");
+  }
+}
+
+function addServiceItem(){
+  const input = document.getElementById("newServiceName");
+  const val = input.value.trim();
+  if(!val) return;
+  appState.services.push(val);
+  input.value = "";
+  renderServices();
+  autoSync();
+}
+
+function removeServiceItem(idx){
+  appState.services.splice(idx, 1);
+  renderServices();
+  autoSync();
+}
+
+function renderServices(){
+  const container = document.getElementById("servicesList");
+  container.innerHTML = "";
+  appState.services.forEach((s, idx) => {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.innerHTML = `
+      <div class="item-info">
+        <i data-lucide="check" style="width:16px;height:16px;color:#10b981;"></i>
+        <span style="font-size:13px;font-weight:700;">${s}</span>
+      </div>
+      <button class="btn btn-danger" style="padding:6px 10px;font-size:11px;" onclick="removeServiceItem(${idx})">سڕینەوە</button>
+    `;
+    container.appendChild(row);
+  });
+  if(window.lucide) lucide.createIcons();
+}
+
+async function addGalleryPhoto(e){
+  const file = e.target.files?.[0];
+  if(!file) return;
+  toast("⏳ وێنەی گەلەری دادەنرێت...");
+  try{
+    const compressed = await compressImage(file, 800, 0.70);
+    appState.gallery.push(compressed);
+    renderGallery();
+    autoSync();
+    toast("✅ وێنە زیادکرا بۆ گەلەری");
+  }catch(err){
+    toast("❌ کێشە لە وێنە");
+  }
+}
+
+function removeGalleryPhoto(idx){
+  appState.gallery.splice(idx, 1);
+  renderGallery();
+  autoSync();
+}
+
+function renderGallery(){
+  const container = document.getElementById("galleryContainer");
+  container.innerHTML = "";
+  appState.gallery.forEach((img, idx) => {
+    const el = document.createElement("div");
+    el.className = "gallery-thumb";
+    el.style.backgroundImage = `url('${img}')`;
+    el.innerHTML = `<button class="gallery-delete" onclick="removeGalleryPhoto(${idx})">✕</button>`;
+    container.appendChild(el);
+  });
+}
+
+function autoSync(){
+  appState.gradColor1 = document.getElementById("gradColor1").value;
+  appState.gradColor2 = document.getElementById("gradColor2").value;
+  document.getElementById("gradColor1Code").textContent = appState.gradColor1;
+  document.getElementById("gradColor2Code").textContent = appState.gradColor2;
+
+  appState.heroBadge = document.getElementById("heroBadge").value;
+  appState.heroTitle = document.getElementById("heroTitle").value;
+  appState.heroSubtitle = document.getElementById("heroSubtitle").value;
+
+  appState.tripTitle = document.getElementById("tripTitle").value;
+  appState.tripPrice = document.getElementById("tripPrice").value;
+  appState.tripLocation = document.getElementById("tripLocation").value;
+  appState.tripTime = document.getElementById("tripTime").value;
+  appState.tripDuration = document.getElementById("tripDuration").value;
+  appState.tripDifficulty = document.getElementById("tripDifficulty").value;
+  appState.tripDesc = document.getElementById("tripDesc").value;
+
+  appState.waMapsUrl = document.getElementById("waMapsUrl").value;
+  appState.waVerifyTemplate = document.getElementById("waVerifyTemplate").value;
+  appState.waRejectTemplate = document.getElementById("waRejectTemplate").value;
+
+  // خەزنکردن بە شێوەی کاتی لە وێبگەڕ
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
+
+  // ناردنی دەستبەجێ بۆ ناو سیمولەیتەری پێشبینین
+  const iframe = document.getElementById("livePreviewFrame");
+  if(iframe && iframe.contentWindow){
+    iframe.contentWindow.postMessage({ type: "KURDIA_BUILDER_STATE", state: appState }, "*");
+  }
+}
+
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("KURDIA_BUILDER_STATE");
-    if(raw) state = Object.assign({}, state, JSON.parse(raw));
+    if(raw) appState = Object.assign({}, appState, JSON.parse(raw));
   }catch(e){}
 
-  document.getElementById("heroTitle").value = state.heroTitle || "";
-  document.getElementById("heroSubtitle").value = state.heroSubtitle || "";
-  document.getElementById("tripTitle").value = state.tripTitle || "";
-  document.getElementById("tripPrice").value = state.tripPrice || "";
-  document.getElementById("tripLocation").value = state.tripLocation || "";
-  document.getElementById("tripTime").value = state.tripTime || "";
-  document.getElementById("tripDifficulty").value = state.tripDifficulty || "";
-  document.getElementById("tripDuration").value = state.tripDuration || "";
-  document.getElementById("tripDesc").value = state.tripDesc || "";
+  document.getElementById("gradColor1").value = appState.gradColor1;
+  document.getElementById("gradColor2").value = appState.gradColor2;
+  document.getElementById("gradColor1Code").textContent = appState.gradColor1;
+  document.getElementById("gradColor2Code").textContent = appState.gradColor2;
 
-  if(state.heroImageUrl){
-    const box = document.getElementById("heroPreview");
-    box.style.backgroundImage = `url('${state.heroImageUrl}')`;
-    box.textContent = "";
+  document.getElementById("heroBadge").value = appState.heroBadge;
+  document.getElementById("heroTitle").value = appState.heroTitle;
+  document.getElementById("heroSubtitle").value = appState.heroSubtitle;
+
+  document.getElementById("tripTitle").value = appState.tripTitle;
+  document.getElementById("tripPrice").value = appState.tripPrice;
+  document.getElementById("tripLocation").value = appState.tripLocation;
+  document.getElementById("tripTime").value = appState.tripTime;
+  document.getElementById("tripDuration").value = appState.tripDuration;
+  document.getElementById("tripDifficulty").value = appState.tripDifficulty;
+  document.getElementById("tripDesc").value = appState.tripDesc;
+
+  document.getElementById("waMapsUrl").value = appState.waMapsUrl || "";
+  document.getElementById("waVerifyTemplate").value = appState.waVerifyTemplate || "";
+  document.getElementById("waRejectTemplate").value = appState.waRejectTemplate || "";
+
+  if(appState.heroImageUrl){
+    const h = document.getElementById("heroDropPreview");
+    h.style.backgroundImage = `url('${appState.heroImageUrl}')`;
+    h.classList.add("active");
   }
-  if(state.tripImageUrl){
-    const box = document.getElementById("tripPreview");
-    box.style.backgroundImage = `url('${state.tripImageUrl}')`;
-    box.textContent = "";
+  if(appState.tripImageUrl){
+    const t = document.getElementById("tripDropPreview");
+    t.style.backgroundImage = `url('${appState.tripImageUrl}')`;
+    t.classList.add("active");
   }
+
+  renderServices();
+  renderGallery();
+  loadCloudWASettings();
 }
 
-document.getElementById("heroFile").addEventListener("change", async (e) => {
-  const f = e.target.files?.[0];
-  if(f){
-    toast("⏳ وێنەی سەرەکی دادەنرێت...");
-    state.heroImageUrl = await compressImage(f);
-    const box = document.getElementById("heroPreview");
-    box.style.backgroundImage = `url('${state.heroImageUrl}')`;
-    box.textContent = "";
-    toast("✅ وێنەی سەرەکی ئامادەیە");
-  }
-});
-
-document.getElementById("tripFile").addEventListener("change", async (e) => {
-  const f = e.target.files?.[0];
-  if(f){
-    toast("⏳ وێنەی گەشت دادەنرێت...");
-    state.tripImageUrl = await compressImage(f);
-    const box = document.getElementById("tripPreview");
-    box.style.backgroundImage = `url('${state.tripImageUrl}')`;
-    box.textContent = "";
-    toast("✅ وێنەی گەشت ئامادەیە");
-  }
-});
-
-function publishAll(){
-  state.heroTitle = document.getElementById("heroTitle").value;
-  state.heroSubtitle = document.getElementById("heroSubtitle").value;
-  state.tripTitle = document.getElementById("tripTitle").value;
-  state.tripPrice = document.getElementById("tripPrice").value;
-  state.tripLocation = document.getElementById("tripLocation").value;
-  state.tripTime = document.getElementById("tripTime").value;
-  state.tripDifficulty = document.getElementById("tripDifficulty").value;
-  state.tripDuration = document.getElementById("tripDuration").value;
-  state.tripDesc = document.getElementById("tripDesc").value;
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(state));
-  toast("🚀 تەواوی گۆڕانکارییەکان بە سەرکەوتوویی بڵاوکرانەوە!");
-}
-
-async function loadWhatsAppSettings(){
+async function loadCloudWASettings(){
   try{
     const res = await fetch(`${WORKER_URL}/api/admin/wa-settings`);
     const data = await res.json();
     if(res.ok && data.settings){
-      document.getElementById("waMapsUrl").value = data.settings.mapsUrl || "";
-      document.getElementById("waVerifyTemplate").value = data.settings.verifyTemplate || "";
-      document.getElementById("waRejectTemplate").value = data.settings.rejectTemplate || "";
+      if(data.settings.mapsUrl) document.getElementById("waMapsUrl").value = data.settings.mapsUrl;
+      if(data.settings.verifyTemplate) document.getElementById("waVerifyTemplate").value = data.settings.verifyTemplate;
+      if(data.settings.rejectTemplate) document.getElementById("waRejectTemplate").value = data.settings.rejectTemplate;
+      autoSync();
     }
-  }catch(e){
-    toast("کێشە لە پەیوەندی بە ڕێکخستنی وەتسئەپ");
-  }
+  }catch(e){}
 }
 
-async function saveWhatsAppSettings(){
-  const mapsUrl = document.getElementById("waMapsUrl").value.trim();
-  const verifyTemplate = document.getElementById("waVerifyTemplate").value;
-  const rejectTemplate = document.getElementById("waRejectTemplate").value;
-
+async function saveWhatsAppToCloud(){
+  autoSync();
+  toast("⏳ ڕێکخستنی WhatsApp لە سێرڤەر دادەنرێت...");
   try{
     const res = await fetch(`${WORKER_URL}/api/admin/wa-settings`, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ mapsUrl, verifyTemplate, rejectTemplate })
+      body:JSON.stringify({
+        mapsUrl: appState.waMapsUrl,
+        verifyTemplate: appState.waVerifyTemplate,
+        rejectTemplate: appState.waRejectTemplate
+      })
     });
-    const data = await res.json();
-    if(res.ok && data.ok){
-      toast("✅ ڕێکخستنەکانی WhatsApp و نەخشە بە سەرکەوتوویی سەیڤ کران");
+    const d = await res.json();
+    if(res.ok && d.ok){
+      toast("✅ ڕێکخستنەکانی WhatsApp و نەخشە لە Cloud پاشەکەوت کران");
     }else{
-      toast("❌ پاشەکەوت نەکرا");
+      toast("❌ هەڵەیەک ڕوویدا لە خەزنکردن");
     }
   }catch(e){
-    toast("کێشە لە پەیوەندی بە سێرڤەر");
+    toast("کێشە لە پەیوەندی بە Cloudflare Worker");
   }
 }
 
-function exportData(){
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "kurdia-adventure-backup.json";
-  a.click();
+function publishLive(){
+  autoSync();
+  saveWhatsAppToCloud();
+  toast("🚀 پیرۆزە! هەموو بەشەکانی ماڵپەڕ بە سەرکەوتوویی بڵاوکرانەوە");
+  reloadPreview();
 }
 
-function importData(e){
+function reloadPreview(){
+  const iframe = document.getElementById("livePreviewFrame");
+  if(iframe){
+    iframe.src = iframe.src;
+    setTimeout(autoSync, 600);
+  }
+}
+
+function openLiveSite(){
+  window.open("index.html", "_blank");
+}
+
+function openSheets(){
+  window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank");
+}
+
+function exportBackup(){
+  autoSync();
+  const data = JSON.stringify(appState, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `kurdia-adventure-full-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast("📥 فایلی یەدەگ دابەزییە ناو مۆبایلەکەت");
+}
+
+function importBackup(e){
   const file = e.target.files?.[0];
   if(!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     try{
-      state = JSON.parse(ev.target.result);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(state));
+      appState = JSON.parse(ev.target.result);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       loadState();
-      toast("✅ فایلەکە بە سەرکەوتوویی هێنرایەوە");
-    }catch(err){ toast("❌ فایلی هەڵە یان تێکچوو"); }
+      autoSync();
+      reloadPreview();
+      toast("✅ تەواوی داتاکان بە سەرکەوتوویی هێنرانەوە");
+    }catch(err){
+      toast("❌ فایلی ناسراو نییە یان تێکچووە");
+    }
   };
   reader.readAsText(file);
 }
 
-loadState();
+window.addEventListener("DOMContentLoaded", () => {
+  loadState();
+  if(window.lucide) lucide.createIcons();
+});
 </script>
 </body>
 </html>
