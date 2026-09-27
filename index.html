@@ -3129,20 +3129,19 @@ function esc(value){
 }
 
 
+/* ---------------------------------------------------------
+   SAFE URL (نوێکراوەتەوە بۆ پشتگیریی Base64 مۆبایل)
+--------------------------------------------------------- */
 function safeUrl(value){
-
- const url =
-  String(value || "").trim();
-
- if(
-  !url ||
-  !/^https?:\/\//i.test(url)
- ){
+  const url = String(value || "").trim();
+  if(!url){
+    return "";
+  }
+  // پشتگیری کردنی هەم لینکی سەر وێب و هەم وێنەی ئەپڵۆدکراوی مۆبایل
+  if(/^https?:\/\//i.test(url) || url.startsWith("data:image/")){
+    return url;
+  }
   return "";
- }
-
- return url;
-
 }
 
 
@@ -3184,7 +3183,7 @@ async function loadData(){
   const local =
    localStorage.getItem(
     "kurdia_builder_published_v3"
-   );
+   ) || localStorage.getItem("KURDIA_BUILDER_STATE");
 
   if(local){
 
@@ -5668,7 +5667,9 @@ window.addEventListener(
 
   if(
    event.key !==
-   "kurdia_builder_published_v3"
+   "kurdia_builder_published_v3" &&
+   event.key !==
+   "KURDIA_BUILDER_STATE"
   ){
    return;
   }
