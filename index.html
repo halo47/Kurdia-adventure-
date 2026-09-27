@@ -2,507 +2,1480 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>KURDIA ADVENTURE — گەشتی شاخەوانی و سەرکێشی</title>
-<meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت، شاخەوانی و سەرکێشی لە دڵڕفێنترین لووتکە و ناوچەکانی کوردستان.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>KURDIA ADVENTURE</title>
+
+<meta id="metaDescription"
+      name="description"
+      content="KURDIA ADVENTURE — گەشت، سروشت، هاوڕێتی و سەرکێشی">
+
 <meta name="theme-color" content="#070a10">
 
-<!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
-:root{
-  --primary:#9d1c32;
-  --primary2:#c92b49;
-  --bg:#070a10;
-  --surface:#0e141e;
-  --surface2:#131c29;
-  --border:rgba(255,255,255,.08);
-  --text:#ffffff;
-  --muted:#94a3b8;
-}
-*{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html{ scroll-behavior:smooth; }
+/* =========================================================
+   KURDIA MOBILE RESPONSIVE FIX
+   Design unchanged — mobile layout only
+========================================================= */
+
+html,
 body{
-  background:
-    radial-gradient(circle at 10% 5%, rgba(157,28,50,.18), transparent 30%),
-    radial-gradient(circle at 90% 40%, rgba(30,64,175,.08), transparent 28%),
-    var(--bg);
-  color:var(--text);
-  font-family:"Vazirmatn", sans-serif;
-  overflow-x:hidden;
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden !important;
 }
 
-.container{ width:min(1240px, calc(100% - 32px)); margin:auto; }
-
-.glass-nav{
-  background:rgba(7,10,16,.85);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
-.surface-card{
-  background:linear-gradient(145deg, rgba(19,28,41,.9), rgba(8,12,19,.95));
-  border:1px solid var(--border);
-  border-radius:24px;
-}
-.btn-primary{
-  background:linear-gradient(135deg, var(--primary), var(--primary2));
-  box-shadow:0 12px 30px rgba(157,28,50,.3);
-  transition:.25s ease;
-}
-.btn-primary:hover{ transform:translateY(-2px); filter:brightness(1.1); }
-.btn-secondary{
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--border);
-  transition:.2s;
-}
-.btn-secondary:hover{ background:rgba(255,255,255,.1); }
-
-.hero-bg{
-  position:absolute; inset:0;
-  background-size:cover; background-position:center;
-  transform:scale(1.02);
-}
-.hero-overlay{
-  position:absolute; inset:0;
-  background:linear-gradient(to bottom, rgba(7,10,16,.4) 0%, rgba(7,10,16,.85) 75%, var(--bg) 100%);
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
 }
 
-.input-field{
-  width:100%; padding:13px 15px; border-radius:14px;
-  background:rgba(255,255,255,.04); border:1px solid var(--border);
-  color:#fff; outline:none; transition:.2s; font-size:14px;
+img,
+video,
+iframe{
+  max-width:100%;
 }
-.input-field:focus{ border-color:var(--primary2); box-shadow:0 0 0 3px rgba(157,28,50,.15); }
+
+.container{
+  width:min(var(--container),calc(100% - 40px));
+  max-width:100%;
+}
+
+/* HEADER MOBILE */
+@media(max-width:1024px){
+  .header-inner{
+    width:100%;
+    min-width:0;
+    gap:10px;
+  }
+  .desktop-nav{
+    display:none !important;
+  }
+  .header-inner > .primary{
+    display:none !important;
+  }
+  .logo{
+    min-width:0;
+    flex-shrink:1;
+  }
+  .logo-mark{
+    flex:0 0 44px;
+  }
+  .logo-title,
+  .logo-sub{
+    white-space:nowrap;
+  }
+}
+
+/* SMALL MOBILE HEADER */
+@media(max-width:520px){
+  .container{
+    width:calc(100% - 24px);
+  }
+  .header-inner{
+    height:68px;
+  }
+  .logo{
+    gap:8px;
+  }
+  .logo-mark{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+    border-radius:14px;
+  }
+  .logo-mark svg{
+    width:19px;
+    height:19px;
+  }
+  .logo-title{
+    font-size:14px;
+  }
+  .logo-sub{
+    font-size:7px;
+    letter-spacing:.18em;
+    margin-top:4px;
+  }
+  .header-inner > button{
+    width:42px !important;
+    height:42px !important;
+    flex:0 0 42px;
+  }
+  .mobile-menu .container{
+    width:calc(100% - 24px);
+  }
+}
+
+/* HERO */
+@media(max-width:768px){
+  .hero{
+    width:100%;
+    max-width:100%;
+    min-height:780px;
+    overflow:hidden;
+  }
+  .hero-content{
+    width:100%;
+    max-width:100%;
+    padding-top:125px;
+    padding-bottom:65px;
+  }
+  .hero-title{
+    max-width:100%;
+    width:100%;
+    font-size:clamp(2.5rem,13vw,4.7rem);
+    line-height:1.08;
+    letter-spacing:-.045em;
+    overflow-wrap:anywhere;
+  }
+  .hero-subtitle{
+    max-width:100%;
+    width:100%;
+    font-size:1rem;
+    line-height:1.9;
+  }
+  .hero-actions{
+    width:100%;
+  }
+  .hero-action{
+    min-width:0;
+  }
+  .hero-meta{
+    width:100%;
+    max-width:100%;
+  }
+}
+
+@media(max-width:400px){
+  .hero{
+    min-height:760px;
+  }
+  .hero-content{
+    padding-top:115px;
+  }
+  .hero-title{
+    font-size:clamp(2.25rem,12.5vw,3.8rem);
+  }
+  .hero-subtitle{
+    font-size:.94rem;
+  }
+  .hero-meta{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .meta-card{
+    padding:13px;
+    min-width:0;
+  }
+  .meta-value{
+    font-size:12px;
+    overflow-wrap:anywhere;
+  }
+}
+
+/* DISCOVERY */
+@media(max-width:560px){
+  .discovery{
+    width:100%;
+    margin-top:-30px;
+  }
+  .discovery-card{
+    width:100%;
+    padding:14px;
+    border-radius:22px;
+  }
+  .discovery-grid{
+    width:100%;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .discovery-field{
+    min-width:0;
+    width:100%;
+  }
+  .discovery-button{
+    width:100%;
+    min-width:0;
+  }
+}
+
+/* TRIP */
+@media(max-width:900px){
+  .trip-card{
+    width:100%;
+    max-width:100%;
+    grid-template-columns:1fr;
+  }
+  .trip-photo{
+    width:100%;
+    min-height:360px;
+  }
+  .trip-content{
+    width:100%;
+    min-width:0;
+    padding:25px;
+  }
+}
+
+@media(max-width:500px){
+  .trip-photo{
+    min-height:320px;
+  }
+  .trip-photo-bottom{
+    right:18px;
+    left:18px;
+    bottom:18px;
+  }
+  .trip-photo-title{
+    font-size:1.35rem;
+    line-height:1.5;
+  }
+  .trip-info-grid{
+    grid-template-columns:1fr;
+  }
+  .trip-info{
+    min-width:0;
+  }
+  .trip-detail{
+    padding:16px;
+  }
+  .trip-detail-text{
+    font-size:.9rem;
+  }
+}
+
+/* SERVICES */
+@media(max-width:700px){
+  .service-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+  .service{
+    min-width:0;
+    padding:16px;
+    border-radius:20px;
+  }
+  .service-title,
+  .service-text{
+    overflow-wrap:anywhere;
+  }
+}
+
+@media(max-width:380px){
+  .service-grid{
+    gap:7px;
+  }
+  .service{
+    padding:13px;
+  }
+}
+
+/* HIGHLIGHTS */
+@media(max-width:800px){
+  .highlight-grid{
+    grid-template-columns:1fr;
+  }
+  .highlight-card{
+    min-width:0;
+  }
+}
+
+/* ITINERARY */
+@media(max-width:750px){
+  .itinerary{
+    grid-template-columns:1fr;
+  }
+  .itinerary-item{
+    min-width:0;
+  }
+  .itinerary-text{
+    overflow-wrap:anywhere;
+  }
+}
+
+/* STATS */
+@media(max-width:650px){
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    width:100%;
+  }
+  .stat{
+    min-width:0;
+    padding:25px 10px;
+  }
+  .stat-number{
+    font-size:2rem;
+  }
+  .stat-label{
+    font-size:.75rem;
+    overflow-wrap:anywhere;
+  }
+}
+
+/* STEPS */
+@media(max-width:850px){
+  .steps-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:480px){
+  .steps-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* GALLERY */
+@media(max-width:750px){
+  .gallery-grid{
+    width:100%;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-auto-rows:170px;
+    gap:8px;
+  }
+  .gallery-card{
+    min-width:0;
+    border-radius:18px;
+  }
+}
+
+/* FAQ */
+@media(max-width:520px){
+  .faq{
+    width:100%;
+    max-width:100%;
+  }
+  .faq-button{
+    padding:17px;
+    gap:12px;
+  }
+  .faq-button span{
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+  .faq-answer-inner{
+    padding:0 17px 18px;
+    font-size:.9rem;
+  }
+}
+
+/* BOOKING */
+@media(max-width:900px){
+  .booking-wrap{
+    width:100%;
+    max-width:100%;
+    padding:27px;
+    border-radius:27px;
+  }
+  .booking-grid{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+}
+
+@media(max-width:520px){
+  .booking-wrap{
+    padding:19px;
+    border-radius:23px;
+  }
+  .booking-form{
+    grid-template-columns:1fr;
+    width:100%;
+  }
+  .input{
+    min-width:0;
+    width:100%;
+  }
+  .booking-title{
+    font-size:clamp(1.9rem,9vw,3rem);
+  }
+}
+
+/* FOOTER */
+@media(max-width:750px){
+  .footer-grid{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  .footer-bottom{
+    flex-direction:column;
+    gap:10px;
+  }
+}
+
+/* AI CHAT MOBILE */
+@media(max-width:600px){
+  .ai-button{
+    width:54px;
+    height:54px;
+    left:15px;
+    bottom:15px;
+  }
+  .ai-window{
+    left:10px;
+    right:10px;
+    bottom:80px;
+    width:auto;
+    max-width:none;
+    border-radius:22px;
+  }
+  .ai-messages{
+    height:300px;
+    max-height:45vh;
+  }
+  .ai-input-row{
+    padding:10px;
+  }
+  .ai-input{
+    min-width:0;
+    font-size:14px;
+  }
+}
+
+/* TOAST */
+@media(max-width:520px){
+  #toast{
+    right:12px;
+    left:12px;
+    bottom:12px;
+    width:auto;
+    max-width:none;
+    text-align:center;
+  }
+}
+
+h1, h2, h3, h4, p, a, button, span, div{ max-width:100%; }
+p, h1, h2, h3, h4{ overflow-wrap:anywhere; }
+
+section, header, main, footer{
+  max-width:100%;
+  overflow-x:clip;
+}
+@supports not (overflow:clip){
+  section, header, main, footer{ overflow-x:hidden; }
+}
+
+@media(max-width:768px){
+  a, button{ -webkit-tap-highlight-color:transparent; }
+  .primary:hover, .secondary:hover, .service:hover, .highlight-card:hover{ transform:none; }
+}
+
+:root{
+ --primary:#9d1c32;
+ --primary2:#c92b49;
+ --bg:#070a10;
+ --surface:#0e141e;
+ --surface2:#131c29;
+ --text:#fff;
+ --muted:#94a3b8;
+ --border:rgba(255,255,255,.08);
+ --container:1280px;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; background:var(--bg); }
+body{
+ margin:0;
+ background:
+ radial-gradient(circle at 10% 5%, rgba(157,28,50,.14), transparent 28%),
+ radial-gradient(circle at 90% 35%, rgba(30,64,175,.06), transparent 25%),
+ var(--bg);
+ color:var(--text);
+ font-family:"Vazirmatn",sans-serif;
+ overflow-x:hidden;
+}
+
+body::selection{ background:var(--primary); color:white; }
+a{ text-decoration:none; color:inherit; }
+button, input, textarea, select{ font-family:inherit; }
+button{ cursor:pointer; }
+img{ max-width:100%; }
+
+.container{ width:min(var(--container),calc(100% - 40px)); margin:auto; }
+@media(max-width:640px){ .container{ width:calc(100% - 28px); } }
+
+.glass{
+ background:rgba(7,10,16,.72);
+ backdrop-filter:blur(22px);
+ -webkit-backdrop-filter:blur(22px);
+ border-bottom:1px solid var(--border);
+}
+
+.surface{
+ background:linear-gradient(145deg, rgba(19,28,41,.97), rgba(8,12,19,.99));
+ border:1px solid var(--border);
+ box-shadow:0 30px 100px rgba(0,0,0,.22);
+}
+
+.primary{
+ background:linear-gradient(135deg, var(--primary), var(--primary2));
+ box-shadow:0 15px 45px rgba(157,28,50,.25);
+ transition:transform .25s ease, filter .25s ease, box-shadow .25s ease;
+}
+.primary:hover{
+ transform:translateY(-3px);
+ filter:brightness(1.08);
+ box-shadow:0 20px 55px rgba(157,28,50,.36);
+}
+
+.secondary{
+ background:rgba(255,255,255,.055);
+ border:1px solid rgba(255,255,255,.10);
+ backdrop-filter:blur(14px);
+ transition:.25s;
+}
+.secondary:hover{
+ background:rgba(255,255,255,.09);
+ border-color:rgba(255,255,255,.16);
+ transform:translateY(-2px);
+}
+
+.section{ padding:110px 0; }
+@media(max-width:768px){ .section{ padding:75px 0; } }
+
+.section-label{ color:#aeb7c5; font-size:.92rem; font-weight:800; }
+.section-title{ font-size:clamp(2rem,4vw,4rem); line-height:1.2; font-weight:900; letter-spacing:-.04em; }
+.section-description{ color:#94a3b8; line-height:2; max-width:720px; }
+
+/* HEADER */
+.site-header{ position:fixed; top:0; left:0; right:0; z-index:1000; }
+.header-inner{ height:76px; display:flex; align-items:center; justify-content:space-between; }
+.logo{ display:flex; align-items:center; gap:12px; }
+.logo-mark{
+ width:44px; height:44px; border-radius:16px;
+ display:flex; align-items:center; justify-content:center;
+ background:linear-gradient(135deg, var(--primary), var(--primary2));
+ box-shadow:0 12px 35px rgba(157,28,50,.25);
+}
+.logo-title{ font-weight:900; line-height:1; }
+.logo-sub{ font-size:9px; color:#64748b; letter-spacing:.25em; margin-top:5px; }
+
+.desktop-nav{ display:flex; align-items:center; gap:30px; font-size:14px; color:#cbd5e1; }
+.desktop-nav a{ position:relative; transition:.25s; }
+.desktop-nav a:hover{ color:#fff; }
+.desktop-nav a::after{
+ content:""; position:absolute; right:0; bottom:-8px; width:0; height:2px;
+ background:var(--primary2); transition:.25s;
+}
+.desktop-nav a:hover::after{ width:100%; }
+
+.mobile-menu{ display:none; border-top:1px solid rgba(255,255,255,.06); }
+.mobile-menu.open{ display:block; }
+.mobile-menu a{ display:block; padding:14px; border-radius:14px; }
+.mobile-menu a:hover{ background:rgba(255,255,255,.05); }
+
+/* HERO */
+.hero{ min-height:920px; position:relative; overflow:hidden; display:flex; align-items:center; }
+.hero-media{ position:absolute; inset:0; background-position:center; background-size:cover; background-repeat:no-repeat; transform:scale(1.02); }
+.hero-gradient{
+ position:absolute; inset:0;
+ background:linear-gradient(90deg, rgba(0,0,0,.12), rgba(0,0,0,.25) 45%, rgba(0,0,0,.72)),
+            linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.25) 40%, rgba(7,10,16,.92) 86%, var(--bg) 100%);
+}
+.hero-glow{
+ position:absolute; width:600px; height:600px; right:-220px; top:120px;
+ background:radial-gradient(circle, rgba(157,28,50,.22), transparent 65%);
+ filter:blur(30px); pointer-events:none;
+}
+.hero-content{ position:relative; z-index:3; padding-top:150px; padding-bottom:110px; }
+.hero-badge{
+ display:inline-flex; align-items:center; gap:9px; padding:9px 15px;
+ border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.30);
+ border-radius:999px; backdrop-filter:blur(18px); color:#e2e8f0; font-size:13px; font-weight:700;
+}
+.hero-dot{ width:8px; height:8px; border-radius:50%; background:var(--primary2); box-shadow:0 0 0 6px rgba(157,28,50,.10); }
+.hero-title{
+ max-width:950px; margin-top:28px; font-size:clamp(3.1rem, 7vw, 7.8rem); font-weight:900;
+ line-height:1.02; letter-spacing:-.065em; text-shadow:0 20px 80px rgba(0,0,0,.4);
+}
+.hero-title span{
+ background:linear-gradient(135deg, #fff, #d6dbe3); -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero-subtitle{ max-width:680px; margin-top:28px; color:#d1d5db; font-size:clamp(1rem,1.5vw,1.25rem); line-height:2; }
+.hero-actions{ margin-top:38px; display:flex; flex-wrap:wrap; gap:12px; }
+.hero-action{ padding:15px 24px; border-radius:16px; font-weight:800; text-align:center; }
+.hero-meta{ margin-top:55px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; max-width:850px; }
+.meta-card{ padding:17px; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.10); border-radius:18px; backdrop-filter:blur(16px); }
+.meta-label{ color:#94a3b8; font-size:11px; }
+.meta-value{ margin-top:5px; font-weight:800; font-size:14px; }
+
+/* QUICK DISCOVERY */
+.discovery{ position:relative; z-index:20; margin-top:-70px; }
+.discovery-card{
+ border-radius:28px; padding:22px;
+ background:linear-gradient(145deg, rgba(20,28,41,.96), rgba(8,12,18,.98));
+ border:1px solid rgba(255,255,255,.10); box-shadow:0 30px 90px rgba(0,0,0,.35);
+}
+.discovery-grid{ display:grid; grid-template-columns:1.3fr 1fr 1fr auto; gap:10px; }
+.discovery-field{
+ min-height:62px; display:flex; align-items:center; gap:12px; padding:12px 16px;
+ border-radius:17px; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.07);
+}
+.discovery-field svg{ color:#a9b3c1; }
+.discovery-label{ color:#64748b; font-size:10px; }
+.discovery-value{ color:#fff; font-size:14px; font-weight:800; margin-top:2px; }
+.discovery-button{ min-height:62px; padding:0 25px; border-radius:17px; font-weight:900; }
+
+/* TRIP */
+.trip-section{ padding-top:90px; }
+.trip-header{ display:flex; align-items:end; justify-content:space-between; gap:30px; margin-bottom:40px; }
+.trip-card{ overflow:hidden; border-radius:34px; display:grid; grid-template-columns:1.05fr .95fr; }
+.trip-photo{ min-height:610px; background-size:cover; background-position:center; position:relative; }
+.trip-photo::after{ content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.60), transparent 60%); }
+.trip-photo-badge{
+ position:absolute; z-index:2; right:25px; top:25px; padding:9px 14px;
+ background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.14); border-radius:999px;
+ backdrop-filter:blur(15px); font-size:12px; font-weight:800;
+}
+.trip-photo-bottom{ position:absolute; z-index:2; right:30px; left:30px; bottom:30px; }
+.trip-photo-title{ font-size:2rem; font-weight:900; }
+.trip-content{ padding:48px; }
+.trip-info-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.trip-info{ padding:17px; border-radius:19px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
+.trip-info-icon{ color:#c7ced8; }
+.trip-info-label{ color:#64748b; font-size:11px; margin-top:9px; }
+.trip-info-value{ margin-top:4px; font-weight:800; }
+.trip-detail{ margin-top:25px; padding:20px; border-radius:22px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); }
+.trip-detail-title{ color:#64748b; font-size:12px; }
+.trip-detail-text{ margin-top:9px; color:#d5dae2; line-height:2; }
+.trip-price-row{ margin-top:28px; display:flex; align-items:end; justify-content:space-between; gap:20px; }
+.trip-price-label{ color:#64748b; font-size:11px; }
+.trip-price{ margin-top:5px; font-size:2rem; font-weight:900; }
+
+/* HIGHLIGHTS */
+.highlight-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-top:45px; }
+.highlight-card{
+ padding:25px; border-radius:25px; background:linear-gradient(145deg, rgba(19,28,41,.96), rgba(8,12,18,.98));
+ border:1px solid rgba(255,255,255,.07); transition:.3s;
+}
+.highlight-card:hover{ transform:translateY(-6px); border-color:rgba(157,28,50,.45); box-shadow:0 25px 65px rgba(0,0,0,.3); }
+.highlight-icon{
+ width:54px; height:54px; border-radius:17px; display:flex; align-items:center; justify-content:center;
+ background:linear-gradient(135deg, rgba(157,28,50,.30), rgba(157,28,50,.06)); border:1px solid rgba(157,28,50,.30);
+}
+.highlight-title{ margin-top:20px; font-weight:900; font-size:1.05rem; }
+.highlight-text{ margin-top:8px; color:#94a3b8; line-height:1.9; font-size:.9rem; }
+
+/* SERVICES */
+.service-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:45px; }
+.service{
+ padding:22px; min-height:165px; border-radius:25px; background:linear-gradient(145deg, #151e2c, #0b111a);
+ border:1px solid rgba(255,255,255,.07); transition:.3s;
+}
+.service:hover{ transform:translateY(-7px); border-color:rgba(157,28,50,.55); box-shadow:0 28px 70px rgba(0,0,0,.35); }
+.service-icon{
+ width:52px; height:52px; border-radius:17px; display:flex; align-items:center; justify-content:center;
+ background:linear-gradient(135deg, rgba(157,28,50,.28), rgba(157,28,50,.04)); border:1px solid rgba(157,28,50,.35); color:#fff;
+}
+.service-name{ margin-top:20px; font-weight:800; line-height:1.7; }
+
+/* ITINERARY */
+.itinerary{ margin-top:50px; display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+.itinerary-item{
+ display:flex; gap:17px; padding:22px; border-radius:24px;
+ background:linear-gradient(145deg, rgba(18,26,38,.95), rgba(8,12,18,.98)); border:1px solid rgba(255,255,255,.07);
+}
+.itinerary-number{
+ flex:0 0 50px; width:50px; height:50px; border-radius:17px; display:flex; align-items:center; justify-content:center;
+ background:linear-gradient(135deg, var(--primary), var(--primary2)); font-weight:900;
+}
+.itinerary-title{ font-weight:900; }
+.itinerary-text{ margin-top:6px; color:#94a3b8; line-height:1.8; font-size:.9rem; }
+
+/* STATS */
+.trust-section{ position:relative; overflow:hidden; }
+.trust-section::before{
+ content:""; position:absolute; width:500px; height:500px; left:-250px; top:0;
+ background:radial-gradient(circle, rgba(157,28,50,.13), transparent 70%); pointer-events:none;
+}
+.stats-grid{
+ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; margin-top:50px;
+ overflow:hidden; border-radius:28px; border:1px solid rgba(255,255,255,.08);
+}
+.stat{ padding:35px 20px; text-align:center; background:rgba(255,255,255,.025); }
+.stat-number{ font-size:2.5rem; font-weight:900; }
+.stat-label{ margin-top:5px; color:#94a3b8; font-size:.85rem; }
+
+/* STEPS */
+.steps-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:45px; }
+.step{ padding:27px; border-radius:26px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); }
+.step-number{
+ width:55px; height:55px; border-radius:18px; display:flex; align-items:center; justify-content:center;
+ background:linear-gradient(135deg, var(--primary), var(--primary2)); font-weight:900; font-size:1.1rem;
+}
+.step-title{ margin-top:20px; font-weight:900; line-height:1.8; }
+
+/* GALLERY */
+.gallery-grid{ margin-top:45px; display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); grid-auto-rows:230px; gap:12px; }
+.gallery-card{ position:relative; overflow:hidden; border-radius:25px; border:1px solid rgba(255,255,255,.08); cursor:pointer; background:#0c1119; }
+.gallery-card:nth-child(1){ grid-column:span 7; grid-row:span 2; }
+.gallery-card:nth-child(2), .gallery-card:nth-child(3){ grid-column:span 5; }
+.gallery-card:nth-child(n+4){ grid-column:span 4; }
+.gallery-card img{ width:100%; height:100%; object-fit:cover; transition:transform .7s ease, filter .5s ease; }
+.gallery-card:hover img{ transform:scale(1.08); filter:brightness(1.08); }
+.gallery-overlay{
+ position:absolute; inset:auto 0 0 0; padding:28px 20px 18px; background:linear-gradient(transparent, rgba(0,0,0,.75)); opacity:0; transition:.3s;
+}
+.gallery-card:hover .gallery-overlay{ opacity:1; }
+
+/* FAQ */
+.faq-list{ margin-top:45px; display:grid; gap:10px; }
+.faq{ overflow:hidden; border-radius:22px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); }
+.faq-button{ width:100%; padding:21px; display:flex; align-items:center; justify-content:space-between; gap:20px; color:#fff; text-align:right; }
+.faq-answer{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
+.faq.open .faq-answer{ max-height:600px; }
+.faq-answer-inner{ padding:0 21px 22px; color:#94a3b8; line-height:2; }
+
+/* BOOKING */
+.booking-wrap{
+ position:relative; overflow:hidden; border-radius:34px; padding:55px;
+ background:linear-gradient(135deg, rgba(157,28,50,.18), rgba(18,26,38,.97) 45%, rgba(7,10,16,.99));
+ border:1px solid rgba(157,28,50,.22); box-shadow:0 35px 100px rgba(0,0,0,.28);
+}
+.booking-wrap::before{
+ content:""; position:absolute; width:450px; height:450px; left:-180px; top:-200px;
+ background:radial-gradient(circle, rgba(157,28,50,.18), transparent 70%);
+}
+.booking-inner{ position:relative; z-index:2; }
+.booking-grid{ display:grid; grid-template-columns:.9fr 1.1fr; gap:50px; align-items:start; }
+.booking-title{ font-size:clamp(2.1rem,4vw,4rem); font-weight:900; line-height:1.25; }
+.booking-description{ margin-top:17px; color:#94a3b8; line-height:2; }
+.booking-form{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+
+.input{
+ width:100%; padding:15px 17px; border-radius:15px; background:rgba(255,255,255,.055);
+ border:1px solid rgba(255,255,255,.09); color:#fff; outline:none; transition:.25s;
+}
+.input:focus{ border-color:rgba(201,43,73,.65); box-shadow:0 0 0 4px rgba(157,28,50,.10); }
+textarea.input{ resize:vertical; min-height:110px; }
+.full{ grid-column:1/-1; }
+.submit-button{ width:100%; padding:16px; border-radius:16px; font-weight:900; }
 
 .extra-name-box{
-  background:rgba(255,255,255,.025); border:1px dashed rgba(255,255,255,.12);
-  border-radius:14px; padding:12px; margin-top:8px;
+ background:rgba(255,255,255,.03); border:1px dashed rgba(255,255,255,.12);
+ border-radius:14px; padding:12px; margin-top:8px;
 }
 
-.faq-item{ border-bottom:1px solid var(--border); padding:16px 0; }
-.faq-question{ display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-weight:800; font-size:15px; }
-.faq-answer{ max-height:0; overflow:hidden; transition:max-height .3s ease; color:var(--muted); font-size:13px; line-height:1.8; }
-.faq-item.open .faq-answer{ max-height:200px; margin-top:10px; }
+/* FOOTER */
+footer{ border-top:1px solid rgba(255,255,255,.06); background:#05080d; }
+.footer-grid{ padding:65px 0; display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:50px; }
+.footer-title{ font-weight:900; font-size:1.2rem; }
+.footer-text{ margin-top:15px; color:#64748b; line-height:2; }
+.footer-links{ display:grid; gap:10px; color:#64748b; }
+.footer-links a{ transition:.2s; }
+.footer-links a:hover{ color:#fff; }
+.footer-bottom{ padding:20px 0; border-top:1px solid rgba(255,255,255,.05); color:#475569; font-size:12px; display:flex; justify-content:space-between; gap:20px; }
 
+/* AI CHAT */
+.ai-button{
+ position:fixed; left:22px; bottom:22px; z-index:900; width:60px; height:60px; border-radius:50%;
+ display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.10);
+ box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+.ai-window{
+ position:fixed; left:22px; bottom:95px; z-index:901; width:min(410px, calc(100vw - 30px));
+ border-radius:28px; overflow:hidden; box-shadow:0 35px 100px rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.09);
+}
+.ai-window.hidden{ display:none; }
+.ai-header{ padding:17px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.08); }
+.ai-title{ font-weight:900; }
+.ai-subtitle{ color:#64748b; font-size:10px; margin-top:3px; }
+.ai-messages{ height:360px; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:9px; }
+.ai-message{ max-width:90%; padding:11px 13px; font-size:13px; line-height:1.9; }
+.ai-message.ai{ align-self:flex-start; background:#171e2b; border-radius:18px 18px 18px 5px; }
+.ai-message.user{ align-self:flex-end; background:var(--primary); border-radius:18px 18px 5px 18px; }
+.ai-input-row{ padding:11px; display:flex; gap:8px; border-top:1px solid rgba(255,255,255,.08); }
+.ai-input{ flex:1; padding:12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:14px; color:white; outline:none; }
+.ai-send{ width:45px; border-radius:14px; }
+
+.typing{ display:flex; gap:4px; }
+.typing span{ width:5px; height:5px; border-radius:50%; background:#94a3b8; animation:typing 1s infinite; }
+.typing span:nth-child(2){ animation-delay:.15s; }
+.typing span:nth-child(3){ animation-delay:.3s; }
+@keyframes typing{ 0%,100%{ opacity:.3; transform:translateY(0); } 50%{ opacity:1; transform:translateY(-3px); } }
+
+/* LIGHTBOX */
+.lightbox{ position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.96); display:none; align-items:center; justify-content:center; padding:20px; }
+.lightbox.open{ display:flex; }
+.lightbox img{ max-width:95vw; max-height:90vh; object-fit:contain; border-radius:20px; }
+.lightbox-close{ position:absolute; top:20px; right:20px; width:46px; height:46px; border-radius:50%; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.10); color:white; }
+
+/* TOAST */
 #toast{
-  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
-  padding:14px 24px; border-radius:16px; background:#111827; border:1px solid var(--border);
-  box-shadow:0 25px 60px rgba(0,0,0,.7); opacity:0; transition:.3s ease; z-index:99999;
-  font-weight:800; font-size:13px; white-space:nowrap;
+ position:fixed; right:20px; bottom:20px; z-index:5000; padding:14px 18px; border-radius:16px;
+ background:#111827; border:1px solid rgba(255,255,255,.10); box-shadow:0 20px 60px rgba(0,0,0,.4);
+ transform:translateY(100px); opacity:0; transition:.3s;
 }
-#toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+#toast.show{ transform:translateY(0); opacity:1; }
+
+.reveal{ opacity:0; transform:translateY(25px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.visible{ opacity:1; transform:translateY(0); }
+
+@media(prefers-reduced-motion:reduce){
+ html{ scroll-behavior:auto; }
+ *, *::before, *::after{ animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
 </style>
 </head>
 
 <body>
 
 <!-- HEADER -->
-<header class="fixed top-0 left-0 right-0 z-50 glass-nav">
-  <div class="container h-20 flex items-center justify-between">
-    <a href="#home" class="flex items-center gap-3">
-      <div class="w-11 h-11 rounded-2xl flex items-center justify-center btn-primary text-white">
-        <i data-lucide="mountain"></i>
-      </div>
-      <div>
-        <div class="text-base font-black tracking-tight leading-none">KURDIA</div>
-        <div class="text-[9px] text-gray-400 tracking-[0.25em] mt-1 font-bold">ADVENTURE</div>
-      </div>
-    </a>
-
-    <nav class="hidden md:flex items-center gap-7 text-sm font-bold text-gray-300">
-      <a href="#home" class="hover:text-white transition">سەرەتا</a>
-      <a href="#trip" class="hover:text-white transition">گەشتی داهاتوو</a>
-      <a href="#gear" class="hover:text-white transition">کەرەستەکان</a>
-      <a href="#services" class="hover:text-white transition">خزمەتگوزاری</a>
-      <a href="#gallery" class="hover:text-white transition">گەلەری</a>
-      <a href="#faq" class="hover:text-white transition">پرسیارە باوەکان</a>
-    </nav>
-
-    <div class="flex items-center gap-3">
-      <a href="#booking" class="btn-primary px-5 py-2.5 rounded-xl text-xs font-black flex items-center gap-2">
-        <i data-lucide="ticket"></i> ناونووسین
-      </a>
+<header class="site-header">
+ <div class="glass">
+  <div class="container header-inner">
+   <a href="#home" class="logo">
+    <div class="logo-mark"><i data-lucide="mountain"></i></div>
+    <div>
+     <div class="logo-title">KURDIA</div>
+     <div class="logo-sub">ADVENTURE</div>
     </div>
+   </a>
+
+   <nav class="desktop-nav">
+    <a href="#home">سەرەتا</a>
+    <a href="#trip">گەشت</a>
+    <a href="#services">خزمەتگوزاری</a>
+    <a href="#itinerary">بەرنامە</a>
+    <a href="#gallery">وێنەکان</a>
+    <a href="#faq">پرسیارەکان</a>
+   </nav>
+
+   <a href="#booking" class="primary hidden md:flex px-5 py-3 rounded-xl font-bold">بەشداری</a>
+
+   <button onclick="toggleMenu()" class="lg:hidden w-11 h-11 rounded-xl bg-white/5 border border-white/10" aria-label="menu">
+    <i data-lucide="menu"></i>
+   </button>
   </div>
+
+  <div id="mobileMenu" class="mobile-menu lg:hidden">
+   <div class="container py-4">
+    <a href="#home" onclick="closeMenu()">سەرەتا</a>
+    <a href="#trip" onclick="closeMenu()">گەشت</a>
+    <a href="#services" onclick="closeMenu()">خزمەتگوزاری</a>
+    <a href="#itinerary" onclick="closeMenu()">بەرنامە</a>
+    <a href="#gallery" onclick="closeMenu()">وێنەکان</a>
+    <a href="#faq" onclick="closeMenu()">پرسیارەکان</a>
+    <a href="#booking" onclick="closeMenu()" class="primary text-center font-bold mt-2">بەشداری</a>
+   </div>
+  </div>
+ </div>
 </header>
 
-<!-- HERO -->
-<section id="home" class="relative min-h-[92vh] flex items-center pt-24 pb-16 overflow-hidden">
-  <div id="heroBgImg" class="hero-bg"></div>
-  <div class="hero-overlay"></div>
-  <div class="container relative z-10">
-    <div class="max-w-3xl">
-      <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-bold mb-6">
-        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-        <span id="heroBadgeText">KURDIA ADVENTURE</span>
-      </div>
-      <h1 id="heroTitleText" class="text-4xl sm:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-6">
-        سەرکێشییەکی ڕاستەقینە لە لووتکەکانی کوردستان
-      </h1>
-      <p id="heroSubText" class="text-base sm:text-lg text-gray-300 leading-relaxed max-w-2xl mb-8">
-        گەشتەکانمان تەنها چوونە دەرەوە نییە؛ گەشتێکە بۆ دۆزینەوەی بەهێزیی خۆت، ئاشنابوون بە سروشتە بێ وێنەکەی کوردستان، و پەیداکردنی هاوڕێی نوێ.
-      </p>
-      <div class="flex flex-wrap items-center gap-4">
-        <a href="#booking" class="btn-primary px-8 py-4 rounded-2xl text-sm font-black flex items-center gap-2">
-          <i data-lucide="compass"></i> بەشداری لەم گەشتە
-        </a>
-        <a href="#trip" class="btn-secondary px-7 py-4 rounded-2xl text-sm font-bold flex items-center gap-2">
-          بەرنامەی گەشت
-        </a>
-      </div>
-    </div>
+<main id="app"></main>
+
+<!-- AI ASSISTANT -->
+<button onclick="toggleAI()" class="ai-button primary" aria-label="Kurdia Assistant">
+ <i data-lucide="message-circle"></i>
+</button>
+
+<div id="aiWindow" class="ai-window surface hidden">
+ <div class="ai-header">
+  <div>
+   <div class="ai-title">Kurdia Assistant</div>
+   <div class="ai-subtitle">یاریدەدەری زیرەکی KURDIA</div>
   </div>
-</section>
+  <button onclick="toggleAI()"><i data-lucide="x"></i></button>
+ </div>
+ <div id="messages" class="ai-messages"></div>
+ <div class="ai-input-row">
+  <input id="aiInput" class="ai-input" placeholder="پرسیارێک بنووسە..." autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();sendAI();}">
+  <button onclick="sendAI()" class="ai-send primary"><i data-lucide="send"></i></button>
+ </div>
+</div>
 
-<!-- TRIP DETAILS -->
-<section id="trip" class="py-20">
-  <div class="container">
-    <div class="surface-card overflow-hidden">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
-        <div class="lg:col-span-6 relative min-h-[380px] lg:min-h-full">
-          <div id="tripImg" class="absolute inset-0 bg-cover bg-center"></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent lg:hidden"></div>
-        </div>
-
-        <div class="lg:col-span-6 p-7 sm:p-10 flex flex-col justify-between">
-          <div>
-            <div class="inline-block text-xs font-extrabold text-rose-500 tracking-wider mb-2">گەشتی داهاتووی ئێمە</div>
-            <h2 id="tripTitleDisplay" class="text-3xl sm:text-4xl font-black mb-4">گەشتی نوێ</h2>
-            <p id="tripDescDisplay" class="text-gray-300 text-sm sm:text-base leading-relaxed mb-8">
-              ڕوونکردنەوەی تەواوی بەرنامە و شوێنی گەشت.
-            </p>
-
-            <!-- TRIP SPEC BADGES -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-              <div class="p-3.5 bg-white/5 border border-white/5 rounded-2xl">
-                <span class="text-[11px] text-gray-400 font-bold block mb-1">📍 شوێن:</span>
-                <span id="tripLocDisplay" class="font-extrabold text-sm block">کوردستان</span>
-              </div>
-              <div class="p-3.5 bg-white/5 border border-white/5 rounded-2xl">
-                <span class="text-[11px] text-gray-400 font-bold block mb-1">⏰ کات:</span>
-                <span id="tripTimeDisplay" class="font-extrabold text-sm block">بەیانی</span>
-              </div>
-              <div class="p-3.5 bg-white/5 border border-white/5 rounded-2xl">
-                <span class="text-[11px] text-gray-400 font-bold block mb-1">⏳ ماوە:</span>
-                <span id="tripDurationDisplay" class="font-extrabold text-sm block">١ ڕۆژ</span>
-              </div>
-              <div class="p-3.5 bg-white/5 border border-white/5 rounded-2xl">
-                <span class="text-[11px] text-gray-400 font-bold block mb-1">🏔️ ئاست:</span>
-                <span id="tripDiffDisplay" class="font-extrabold text-sm block">مامناوەند</span>
-              </div>
-              <div class="p-3.5 bg-white/5 border border-white/5 rounded-2xl col-span-2 sm:col-span-2">
-                <span class="text-[11px] text-gray-400 font-bold block mb-1">💳 نرخی بەشداری:</span>
-                <span id="tripPriceDisplay" class="font-black text-xl text-rose-500 block">٣٥،٠٠٠ دینار</span>
-              </div>
-            </div>
-          </div>
-
-          <a href="#booking" class="btn-primary w-full py-4 rounded-xl text-center font-extrabold text-sm flex items-center justify-center gap-2">
-            <i data-lucide="user-plus"></i> ناونووسین و گرتنی جێگە
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- GEAR & PREPARATION GUIDE -->
-<section id="gear" class="py-16 bg-white/[0.015]">
-  <div class="container">
-    <div class="text-center max-w-xl mx-auto mb-14">
-      <span class="text-xs font-black text-rose-500 uppercase tracking-widest block mb-2">ئامۆژگاری بۆ شاخەوان</span>
-      <h2 class="text-3xl font-black">پێداویستییە گرنگەکانی گەشتەکە</h2>
-      <p class="text-sm text-gray-400 mt-3">بۆ ئەوەی گەشتەکەت سەلامەت و خۆش بێت، تکایە دڵنیابە لە ئامادەکردنی ئەم کەلوپەلانە:</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="surface-card p-6">
-        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mb-5">
-          <i data-lucide="footprints"></i>
-        </div>
-        <h3 class="text-base font-extrabold mb-2">١. پێڵاوی تایبەتی شاخەوانی</h3>
-        <p class="text-xs text-gray-400 leading-relaxed">
-          پێڵاوی بنەدار و پتەو (Vibram یان هاوشێوەی) بۆ ڕێگریکردن لە خلیسکین لەسەر بەرد و ڕێگای شاخاوی.
-        </p>
-      </div>
-
-      <div class="surface-card p-6">
-        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mb-5">
-          <i data-lucide="shirt"></i>
-        </div>
-        <h3 class="text-base font-extrabold mb-2">٢. جلوبەرگی چینی (Layers)</h3>
-        <p class="text-xs text-gray-400 leading-relaxed">
-          جلی وەرزشی و چاکەتی دژە با و باران، چونکە کەشوهەوای لووتکە و شاخەکان بە خێرایی دەگۆڕێت.
-        </p>
-      </div>
-
-      <div class="surface-card p-6">
-        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mb-5">
-          <i data-lucide="backpack"></i>
-        </div>
-        <h3 class="text-base font-extrabold mb-2">٣. جانتای پشت و ئاو</h3>
-        <p class="text-xs text-gray-400 leading-relaxed">
-          جانتایەکی سووک، بەلایەنی کەم ٢ لیتر ئاو، خورما، کەمێک گوێز و چەرەس بۆ ووزەی بەردەوام.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section id="services" class="py-20">
-  <div class="container">
-    <div class="text-center max-w-xl mx-auto mb-14">
-      <span class="text-xs font-black text-rose-500 uppercase tracking-widest block mb-2">خزمەتگوزارییەکان</span>
-      <h2 class="text-3xl font-black">ئەوەی ئێمە دابینی دەکەین</h2>
-    </div>
-
-    <div id="servicesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-  </div>
-</section>
-
-<!-- GALLERY -->
-<section id="gallery" class="py-16">
-  <div class="container">
-    <div class="flex justify-between items-end mb-10">
-      <div>
-        <span class="text-xs font-black text-rose-500 uppercase tracking-widest block mb-2">گەلەری و یادەوەرییەکان</span>
-        <h2 class="text-3xl font-black">دیمەنە دڵڕفێنەکانی گەشت</h2>
-      </div>
-    </div>
-
-    <div id="galleryContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-  </div>
-</section>
-
-<!-- FAQ SECTION -->
-<section id="faq" class="py-16 bg-white/[0.01]">
-  <div class="container max-w-3xl">
-    <div class="text-center mb-12">
-      <span class="text-xs font-black text-rose-500 uppercase tracking-widest block mb-2">پرسیارە باوەکان</span>
-      <h2 class="text-3xl font-black">پرسیار و وەڵامە باوەکان</h2>
-    </div>
-
-    <div class="surface-card p-6 sm:p-8">
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <span>ئایا گەشتەکان بۆ کەسانی سەرەتایی و دەستپێکەر گونجاوە؟</span>
-          <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 transition"></i>
-        </div>
-        <div class="faq-answer">
-          بەڵێ، ئێمە پلەی گەشتەکان دیاری دەکەین (ئاسان، مامناوەند، سەخت). زۆربەی گەشتەکانمان بە جۆرێک ڕێکخراون کە تەواوی خەڵک بە توانای جەستەیی ئاسایی بتوانن چێژی لێ ببینن و تیمی ڕێبەر لەگەڵتان دەبێت.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <span>شێوازی پارەدان و تۆمارکردن چۆنە؟</span>
-          <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 transition"></i>
-        </div>
-        <div class="faq-answer">
-          پارەدان لە ڕێگەی ئەپی FastPay یان کارتی FIB دەبێت. پاش ناردنی پارەکە، وێنەی پسوولەکە لە بەشی خوارەوە بار دەکەیت و دەستبەجێ بەستەری شوێنی کۆبوونەوە لە ڕێگەی WhatsApp پێتان دەگات.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <span>خاڵی کۆبوونەوە و کاتی گەڕانەوە لە کوێ دەبێت؟</span>
-          <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 transition"></i>
-        </div>
-        <div class="faq-answer">
-          خاڵی فەرمیی کۆبوونەوە بە لینکی ڕاستەوخۆی Google Maps لە WhatsApp بۆتان دەنێردرێت، و گەڕانەوە پێش ئاوابوونی خۆر یان بەپێی بەرنامەی دیاریکراوی گەشتەکە دەبێت.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- REGISTRATION (BOOKING) -->
-<section id="booking" class="py-20">
-  <div class="container max-w-4xl">
-    <div class="surface-card p-7 sm:p-12 relative overflow-hidden">
-
-      <div class="text-center max-w-xl mx-auto mb-10">
-        <span class="text-xs font-black text-rose-500 uppercase tracking-widest block mb-2">بەشداری و داواکاری</span>
-        <h2 class="text-3xl sm:text-4xl font-black">فۆڕمی ناونووسینی گەشت</h2>
-        <p class="text-xs sm:text-sm text-gray-400 mt-3">
-          تکایە سەرەتا ژمارەی WhatsAppەکەت دڵنیا بکەرەوە بۆ ئەوەی کۆدی سەلماندنت پێ بگات.
-        </p>
-      </div>
-
-      <!-- PAYMENT ACCOUNTS NOTICE -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        <div class="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-black text-xs">FAST</div>
-          <div>
-            <div class="text-xs text-gray-400">ژمارەی فاستپەی (FastPay):</div>
-            <div class="font-extrabold text-sm select-all">07503130360</div>
-          </div>
-        </div>
-        <div class="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-black text-xs">FIB</div>
-          <div>
-            <div class="text-xs text-gray-400">ژمارەی هەژماری FIB:</div>
-            <div class="font-extrabold text-sm select-all">07503130360</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- FORM -->
-      <form onsubmit="submitForm(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-gray-300 mb-1.5">ناوی سەرپەرشتیاری بەشداربوو</label>
-          <input id="userName" class="input-field" placeholder="ناوی سیانی بنووسە..." required>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-300 mb-1.5">ژمارەی مۆبایل (WhatsApp)</label>
-          <div class="flex gap-2">
-            <input id="userPhone" class="input-field" placeholder="07500000000" inputmode="tel" required>
-            <button type="button" id="sendOtpBtn" onclick="requestOtp()" class="btn-secondary px-5 rounded-xl text-xs font-bold whitespace-nowrap">
-              ناردنی کۆد
-            </button>
-          </div>
-        </div>
-
-        <div id="otpBox" class="hidden">
-          <label class="block text-xs font-bold text-rose-400 mb-1.5">کۆدی ٤ ژمارەیی وەتسئەپ</label>
-          <div class="flex gap-2">
-            <input id="userOtpCode" class="input-field" placeholder="••••" maxlength="4" inputmode="numeric">
-            <button type="button" id="verifyOtpBtn" onclick="verifyOtp()" class="btn-primary px-6 rounded-xl text-xs font-bold">
-              سەلماندن
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-300 mb-1.5">کۆی ژمارەی بەشداربووان</label>
-          <select id="userPeopleCount" class="input-field" onchange="renderDynamicNames(this.value)">
-            <option value="1">١ کەس (تەنها خۆم)</option>
-            <option value="2">٢ کەس</option>
-            <option value="3">٣ کەس</option>
-            <option value="4">٤ کەس</option>
-            <option value="5">٥ کەس</option>
-            <option value="6">٦ کەس</option>
-          </select>
-        </div>
-
-        <div id="dynamicNamesWrapper"></div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-300 mb-1.5">تێبینی یان داواکاری تایبەت</label>
-          <input id="userNote" class="input-field" placeholder="ئەگەر تێبینیت هەیە لێرە بینوسە...">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-300 mb-1.5">🧾 وێنەی پسوولەی پارەدان (بەڵگە)</label>
-          <input type="file" id="userReceipt" accept="image/*" class="input-field" required>
-        </div>
-
-        <button type="submit" id="submitBtn" class="btn-primary w-full py-4 rounded-xl font-black text-sm opacity-50 cursor-not-allowed mt-4" disabled>
-          🔒 سەرەتا مۆبایلەکەت لە WhatsApp بسەلمێنە
-        </button>
-      </form>
-
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="py-12 border-t border-white/5 bg-[#05070b]">
-  <div class="container text-center">
-    <div class="flex items-center justify-center gap-2 mb-4">
-      <div class="w-8 h-8 rounded-xl flex items-center justify-center btn-primary text-white text-xs">
-        <i data-lucide="mountain"></i>
-      </div>
-      <span class="font-black text-base">KURDIA ADVENTURE</span>
-    </div>
-    <p class="text-xs text-gray-500 max-w-md mx-auto mb-6 leading-relaxed">
-      گەشتی شاخەوانی و پاراستنی سروشتی پاکی کوردستان. هاوڕێمان بە لە جوانترین سەرکێشییەکان.
-    </p>
-    <div class="text-[11px] text-gray-600">
-      © 2026 KURDIA ADVENTURE. هەموو مافەکان پارێزراون.
-    </div>
-  </div>
-</footer>
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+ <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()"><i data-lucide="x"></i></button>
+ <img id="lightboxImage" src="" alt="KURDIA">
+</div>
 
 <div id="toast"></div>
 
-<script>
-const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
-const STORAGE_KEY = "kurdia_builder_published_v3";
+<!-- FOOTER -->
+<footer>
+ <div class="container footer-grid">
+  <div>
+   <div class="footer-title">KURDIA ADVENTURE</div>
+   <div class="footer-text">گەشت، سروشت، هاوڕێتی و دروستکردنی یادەوەرییە جوانەکان.</div>
+  </div>
+  <div>
+   <div class="footer-title mb-5">بەستەرە خێراکان</div>
+   <div class="footer-links">
+    <a href="#home">سەرەتا</a>
+    <a href="#trip">گەشت</a>
+    <a href="#services">خزمەتگوزاری</a>
+    <a href="#gallery">وێنەکان</a>
+    <a href="#faq">پرسیارەکان</a>
+    <a href="#booking">بەشداری</a>
+   </div>
+  </div>
+  <div>
+   <div class="footer-title mb-5">KURDIA</div>
+   <div class="footer-text">لەگەڵمان بۆ گەشتێکی جیاواز ئامادە بە.</div>
+  </div>
+ </div>
+ <div class="container footer-bottom">
+  <div>© <span id="year"></span> KURDIA ADVENTURE</div>
+  <div>هەموو مافەکان پارێزراون.</div>
+ </div>
+</footer>
 
-let site = {
-  gradColor1: "#9d1c32",
-  gradColor2: "#c92b49",
-  heroBadge: "KURDIA ADVENTURE",
-  heroTitle: "سەرکێشییەکی ڕاستەقینە لە لووتکەکانی کوردستان",
-  heroSubtitle: "گەشتەکانمان تەنها چوونە دەرەوە نییە؛ گەشتێکە بۆ دۆزینەوەی بەهێزیی خۆت و چێژوەرگرتن لە سروشتی کوردستان.",
-  heroImageUrl: "",
-  tripTitle: "گەشتی نوێی چیای هەڵگورد",
-  tripPrice: "٣٥،٠٠٠ دینار",
-  tripLocation: "باڵەکایەتی — چیای هەڵگورد",
-  tripTime: "بەیانی ٠٥:٠٠",
-  tripDuration: "١ ڕۆژ",
-  tripDifficulty: "مامناوەند",
-  tripDesc: "گەشتێکی پڕ جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ لووتکە.",
-  tripImageUrl: "",
-  services: [
-    "پاسی تایبەتی گەشتیاری و پارێزراو",
-    "تیمی ڕێبەری شاخەوانی و فریاگوزاری",
-    "فۆتۆگرافەری تایبەت بۆ تۆمارکردنی یادەوەری",
-    "خواردنەوە و چای سەر خەڵووز"
-  ],
-  gallery: []
+<script>
+/* =========================================================
+   KURDIA CONFIG & DATA
+========================================================= */
+const WORKER_ENDPOINT = "https://kurdia.alwandssalh.workers.dev";
+
+const DEFAULT_DATA = {
+ gradColor1:"#9d1c32",
+ gradColor2:"#c92b49",
+ seoTitle:"KURDIA ADVENTURE",
+ seoDescription:"KURDIA ADVENTURE — گەشت، سروشت، هاوڕێتی و سەرکێشی",
+ heroBadge:"KURDIA ADVENTURE",
+ heroTitle:"لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
+ heroSubtitle:"گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت سروشت ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی جوان دروست بکەن.",
+ heroImageUrl:"",
+ tripTitle:"گەشتی نوێی KURDIA",
+ tripPrice:"—",
+ tripDifficulty:"مامناوەند",
+ tripDuration:"١ ڕۆژ",
+ tripTime:"بەپێی بەرنامە",
+ tripLocation:"کوردستان",
+ tripDesc:"زانیاری تەواوی گەشت لێرە دەبینیت.",
+ tripImageUrl:"",
+ bookingOpen:true,
+ fibAccount:"07503130360",
+ step1:"شوێنی گەشت هەڵبژێرە",
+ step2:"تۆمار بکە",
+ step3:"لەگەڵ ئێمە بڕۆ",
+ step4:"یادەوەرییەکی جوان دروست بکە",
+ services:[
+  { name:"پاس", icon:"bus-front" },
+  { name:"نان و خواردن", icon:"utensils" },
+  { name:"خواردنەوە", icon:"coffee" },
+  { name:"خێوەت", icon:"tent-tree" },
+  { name:"کارەبا و ڕووناکی", icon:"lightbulb" },
+  { name:"کورسی و مێز", icon:"armchair" }
+ ],
+ gallery:[],
+ faq:[
+  { q:"چۆن بەشداری بکەم؟", a:"لە بەشی بەشداری ژمارەی WhatsAppەکەت پشتڕاست بکەرەوە، فۆڕمەکە پڕ بکەرەوە و پسوولەی پارەدان بنێرە." },
+  { q:"شێوازی پارەدان چۆنە؟", a:"پارەدان تەنها لە ڕێگەی کارتی بانکی FIB دەبێت بۆ هەژماری دیاریکراو." }
+ ],
+ sections:[
+  { id:"hero", type:"hero", visible:true },
+  { id:"trip", type:"trip", visible:true },
+  { id:"services", type:"services", visible:true },
+  { id:"steps", type:"steps", visible:true },
+  { id:"gallery", type:"gallery", visible:true },
+  { id:"faq", type:"faq", visible:true },
+  { id:"booking", type:"booking", visible:true }
+ ],
+ highlights:[
+  { title:"گەشتێکی ڕێکخراو", text:"هەموو وردەکارییەکانی گەشت بە شێوەیەکی ڕوون ڕێکخراون.", icon:"compass" },
+  { title:"هاوڕێی نوێ", text:"لەگەڵ کۆمەڵێک خەڵکی خۆشەویست و عاشقی سروشت بگەڕێ.", icon:"users" },
+  { title:"یادەوەرییەکی جیاواز", text:"تەنها گەشت ناکەین؛ یادەوەرییەک دروست دەکەین.", icon:"camera" }
+ ],
+ itinerary:[
+  { title:"کۆبوونەوە", text:"لە شوێنی دیاریکراو کۆدەبینەوە." },
+  { title:"دەستپێکردنی گەشت", text:"بەرەو شوێنی گەشت بە کۆمەڵ دەڕۆین." },
+  { title:"سروشت و چالاکی", text:"کاتێک بۆ گەشت، وێنەگرتن و خۆشحاڵی." },
+  { title:"گەڕانەوە", text:"لە کۆتایی ڕۆژدا بە یادەوەرییەکی جوان دەگەڕێینەوە." }
+ ],
+ stats:[
+  { number:"∞", label:"سەرکێشی" },
+  { number:"100%", label:"خۆشی" },
+  { number:"24/7", label:"هاوڕێتی" },
+  { number:"KURDIA", label:"لەگەڵ تۆ" }
+ ]
 };
 
-let isVerified = false;
+let siteData = clone(DEFAULT_DATA);
+let isPhoneVerified = false;
 
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 3200);
+function clone(value){ return JSON.parse(JSON.stringify(value)); }
+
+function merge(base, incoming){
+ if(!incoming || typeof incoming!=="object") return base;
+ Object.keys(incoming).forEach(key=>{
+  if(incoming[key] && typeof incoming[key]==="object" && !Array.isArray(incoming[key]) && base[key] && typeof base[key]==="object" && !Array.isArray(base[key])){
+   merge(base[key], incoming[key]);
+  }else{
+   base[key] = incoming[key];
+  }
+ });
+ return base;
 }
 
-function toggleFaq(el){
-  const item = el.closest(".faq-item");
-  item.classList.toggle("open");
-  const icon = item.querySelector("svg");
-  if(icon) icon.style.transform = item.classList.contains("open") ? "rotate(180deg)" : "rotate(0)";
+function esc(value){
+ return String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
-function renderDynamicNames(count){
-  const wrap = document.getElementById("dynamicNamesWrapper");
-  wrap.innerHTML = "";
-  const num = parseInt(count, 10);
-  if(num <= 1) return;
+function safeUrl(value){
+ const url = String(value || "").trim();
+ if(!url || !/^https?:\/\//i.test(url)) return "";
+ return url;
+}
+
+function icon(name){ return `<i data-lucide="${esc(name || "circle")}"></i>`; }
+
+function toast(message){
+ const el = document.getElementById("toast");
+ el.textContent = message;
+ el.classList.add("show");
+ setTimeout(()=>{ el.classList.remove("show"); }, 3200);
+}
+
+async function loadData(){
+ try{
+  const local = localStorage.getItem("kurdia_builder_published_v3") || localStorage.getItem("KURDIA_BUILDER_STATE");
+  if(local){
+   siteData = merge(clone(DEFAULT_DATA), JSON.parse(local));
+  }
+ }catch(error){
+  console.warn("Local data error:", error);
+ }
+}
+
+function applyTheme(){
+ document.documentElement.style.setProperty("--primary", siteData.gradColor1 || "#9d1c32");
+ document.documentElement.style.setProperty("--primary2", siteData.gradColor2 || "#c92b49");
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+function hero(){
+ const heroImage = safeUrl(siteData.heroImageUrl);
+ return `
+ <section id="home" class="hero">
+  <div class="hero-media" style="background-image:url('${esc(heroImage)}');"></div>
+  <div class="hero-gradient"></div>
+  <div class="hero-glow"></div>
+  <div class="container hero-content">
+   <div class="reveal">
+    <div class="hero-badge"><span class="hero-dot"></span>${esc(siteData.heroBadge || "KURDIA ADVENTURE")}</div>
+    <h1 class="hero-title">${esc(siteData.heroTitle || "")}</h1>
+    <p class="hero-subtitle">${esc(siteData.heroSubtitle || "")}</p>
+    <div class="hero-actions">
+     ${siteData.bookingOpen!==false ? `<a href="#booking" class="primary hero-action">بەشداری لە گەشت</a>` : ""}
+     <a href="#trip" class="secondary hero-action">زانیاری گەشت</a>
+    </div>
+    <div class="hero-meta">
+     ${metaCard("map-pin", "شوێن", siteData.tripLocation)}
+     ${metaCard("clock-3", "کات", siteData.tripTime)}
+     ${metaCard("timer", "ماوە", siteData.tripDuration)}
+     ${metaCard("mountain", "ئاست", siteData.tripDifficulty)}
+    </div>
+   </div>
+  </div>
+ </section>`;
+}
+
+function metaCard(iconName, label, value){
+ return `
+ <div class="meta-card">
+  ${icon(iconName)}
+  <div class="meta-label">${esc(label)}</div>
+  <div class="meta-value">${esc(value)}</div>
+ </div>`;
+}
+
+function discovery(){
+ return `
+ <section class="discovery">
+  <div class="container">
+   <div class="discovery-card reveal">
+    <div class="discovery-grid">
+     <div class="discovery-field">
+      ${icon("map")}
+      <div><div class="discovery-label">گەشت</div><div class="discovery-value">${esc(siteData.tripTitle)}</div></div>
+     </div>
+     <div class="discovery-field">
+      ${icon("map-pin")}
+      <div><div class="discovery-label">شوێن</div><div class="discovery-value">${esc(siteData.tripLocation)}</div></div>
+     </div>
+     <div class="discovery-field">
+      ${icon("calendar-days")}
+      <div><div class="discovery-label">کات</div><div class="discovery-value">${esc(siteData.tripTime)}</div></div>
+     </div>
+     ${siteData.bookingOpen!==false
+      ? `<a href="#booking" class="primary discovery-button flex items-center justify-center">بەشداری</a>`
+      : `<div class="discovery-button secondary flex items-center justify-center text-gray-500">بەشداری داخراوە</div>`
+     }
+    </div>
+   </div>
+  </div>
+ </section>`;
+}
+
+function trip(){
+ const image = safeUrl(siteData.tripImageUrl || siteData.heroImageUrl);
+ return `
+ <section id="trip" class="section trip-section">
+  <div class="container">
+   <div class="trip-header reveal">
+    <div>
+     <div class="section-label">گەشتی داهاتوو</div>
+     <h2 class="section-title mt-4">${esc(siteData.tripTitle)}</h2>
+    </div>
+    <a href="#booking" class="secondary px-5 py-3 rounded-xl font-bold hidden sm:flex">
+     بۆ گەشتەکە <i data-lucide="arrow-down-left" class="mr-2"></i>
+    </a>
+   </div>
+
+   <div class="surface trip-card reveal">
+    <div class="trip-photo" style="background-image:url('${esc(image)}');">
+     <div class="trip-photo-badge">KURDIA ADVENTURE</div>
+     <div class="trip-photo-bottom">
+      <div class="text-gray-300 text-sm">شوێنی گەشت</div>
+      <div class="trip-photo-title">${esc(siteData.tripLocation)}</div>
+     </div>
+    </div>
+
+    <div class="trip-content">
+     <div class="trip-info-grid">
+      ${tripInfo("clock-3", "کات", siteData.tripTime)}
+      ${tripInfo("timer", "ماوە", siteData.tripDuration)}
+      ${tripInfo("mountain", "ئاست", siteData.tripDifficulty)}
+      ${tripInfo("map-pin", "شوێن", siteData.tripLocation)}
+     </div>
+
+     <div class="trip-detail">
+      <div class="trip-detail-title">وردەکاری گەشت</div>
+      <div class="trip-detail-text">${esc(siteData.tripDesc)}</div>
+     </div>
+
+     <div class="trip-price-row">
+      <div>
+       <div class="trip-price-label">نرخی بەشداری</div>
+       <div class="trip-price">${esc(siteData.tripPrice)}</div>
+      </div>
+      ${siteData.bookingOpen!==false
+       ? `<a href="#booking" class="primary px-6 py-3 rounded-xl font-bold text-center">بەشداری</a>`
+       : `<div class="secondary px-5 py-3 rounded-xl text-gray-500">بەشداری داخراوە</div>`
+      }
+     </div>
+    </div>
+   </div>
+  </div>
+ </section>`;
+}
+
+function tripInfo(iconName, label, value){
+ return `
+ <div class="trip-info">
+  <div class="trip-info-icon">${icon(iconName)}</div>
+  <div class="trip-info-label">${esc(label)}</div>
+  <div class="trip-info-value">${esc(value)}</div>
+ </div>`;
+}
+
+function highlights(){
+ const list = Array.isArray(siteData.highlights) ? siteData.highlights : [];
+ if(!list.length) return "";
+ return `
+ <section class="section pt-0">
+  <div class="container">
+   <div class="reveal">
+    <div class="section-label">بۆچی لەگەڵ KURDIA؟</div>
+    <h2 class="section-title mt-4">تەنها گەشت نییە</h2>
+    <p class="section-description mt-5">ئەزموونێکە کە لەگەڵ خۆت دەیبەیتەوە.</p>
+   </div>
+   <div class="highlight-grid">
+    ${list.map(item=>`
+      <div class="highlight-card reveal">
+       <div class="highlight-icon">${icon(item.icon)}</div>
+       <div class="highlight-title">${esc(item.title)}</div>
+       <div class="highlight-text">${esc(item.text)}</div>
+      </div>
+    `).join("")}
+   </div>
+  </div>
+ </section>`;
+}
+
+function services(){
+ const list = Array.isArray(siteData.services) ? siteData.services : [];
+ if(!list.length) return "";
+ return `
+ <section id="services" class="section pt-0">
+  <div class="container">
+   <div class="reveal">
+    <div class="section-label">خزمەتگوزاری</div>
+    <h2 class="section-title mt-4">هەموو شتێک بۆ گەشتێکی باشتر</h2>
+    <p class="section-description mt-5">خزمەتگوزارییەکانمان بۆ ئەوە دانراون کە تۆ تەنها بیر لە گەشت و خۆشی بکەیت.</p>
+   </div>
+   <div class="service-grid">
+    ${list.map(item=>`
+      <div class="service reveal">
+       <div class="service-icon">${icon(item.icon)}</div>
+       <div class="service-name">${esc(item.name)}</div>
+      </div>
+    `).join("")}
+   </div>
+  </div>
+ </section>`;
+}
+
+function itinerary(){
+ const list = Array.isArray(siteData.itinerary) ? siteData.itinerary : [];
+ if(!list.length) return "";
+ return `
+ <section id="itinerary" class="section pt-0">
+  <div class="container">
+   <div class="reveal">
+    <div class="section-label">بەرنامەی گەشت</div>
+    <h2 class="section-title mt-4">لە سەرەتاوە تا کۆتایی</h2>
+    <p class="section-description mt-5">بزانە گەشتەکە چۆن بە ڕێکخراوی بەڕێوە دەچێت.</p>
+   </div>
+   <div class="itinerary">
+    ${list.map((item,index)=>`
+      <div class="itinerary-item reveal">
+       <div class="itinerary-number">${String(index+1).padStart(2,"0")}</div>
+       <div>
+        <div class="itinerary-title">${esc(item.title)}</div>
+        <div class="itinerary-text">${esc(item.text)}</div>
+       </div>
+      </div>
+    `).join("")}
+   </div>
+  </div>
+ </section>`;
+}
+
+function stats(){
+ const list = Array.isArray(siteData.stats) ? siteData.stats : [];
+ if(!list.length) return "";
+ return `
+ <section class="section pt-0 trust-section">
+  <div class="container">
+   <div class="stats-grid reveal">
+    ${list.map(item=>`
+      <div class="stat">
+       <div class="stat-number">${esc(item.number)}</div>
+       <div class="stat-label">${esc(item.label)}</div>
+      </div>
+    `).join("")}
+   </div>
+  </div>
+ </section>`;
+}
+
+function steps(){
+ const data = [siteData.step1, siteData.step2, siteData.step3, siteData.step4];
+ return `
+ <section id="steps" class="section pt-0">
+  <div class="container">
+   <div class="text-center reveal">
+    <div class="section-label">بەشداری</div>
+    <h2 class="section-title mt-4">چۆن بەشداری بکەیت؟</h2>
+   </div>
+   <div class="steps-grid">
+    ${data.map((text,index)=>`
+      <div class="step reveal">
+       <div class="step-number">${String(index+1).padStart(2,"0")}</div>
+       <div class="step-title">${esc(text)}</div>
+      </div>
+    `).join("")}
+   </div>
+  </div>
+ </section>`;
+}
+
+function gallery(){
+ const list = Array.isArray(siteData.gallery) ? siteData.gallery : [];
+ if(!list.length) return "";
+ return `
+ <section id="gallery" class="section pt-0">
+  <div class="container">
+   <div class="reveal">
+    <div class="section-label">وێنەکان</div>
+    <h2 class="section-title mt-4">ئەو یادەوەرییەی دەیبینیت</h2>
+    <p class="section-description mt-5">هەندێک لە ساتە جوانەکانی KURDIA.</p>
+   </div>
+   <div class="gallery-grid">
+    ${list.map(item=>`
+      <div class="gallery-card reveal" onclick="openLightbox('${esc(safeUrl(item.url))}')">
+       <img src="${esc(safeUrl(item.url))}" alt="${esc(item.title || "KURDIA ADVENTURE")}" loading="lazy">
+       <div class="gallery-overlay">${esc(item.title || "KURDIA")}</div>
+      </div>
+    `).join("")}
+   </div>
+  </div>
+ </section>`;
+}
+
+function faq(){
+ const list = Array.isArray(siteData.faq) ? siteData.faq : [];
+ if(!list.length) return "";
+ return `
+ <section id="faq" class="section pt-0">
+  <div class="container max-w-4xl">
+   <div class="text-center reveal">
+    <div class="section-label">پرسیارەکان</div>
+    <h2 class="section-title mt-4">پرسیارە باوەکان</h2>
+   </div>
+   <div class="faq-list">
+    ${list.map(item=>`
+      <div class="faq reveal">
+       <button class="faq-button" onclick="toggleFAQ(this)">
+        <span class="font-bold">${esc(item.q)}</span>${icon("chevron-down")}
+       </button>
+       <div class="faq-answer">
+        <div class="faq-answer-inner">${esc(item.a)}</div>
+       </div>
+      </div>
+    `).join("")}
+   </div>
+  </div>
+ </section>`;
+}
+
+/* =========================================================
+   BOOKING WITH FIB ONLY & WHATSAPP OTP
+========================================================= */
+function booking(){
+ if(siteData.bookingOpen === false){
+  return `
+  <section id="booking" class="section pt-0">
+   <div class="container">
+    <div class="booking-wrap">
+     <div class="booking-inner text-center">
+      <div class="section-label">بەشداری</div>
+      <h2 class="booking-title mt-4">بەشدارییەکان لەم کاتەدا داخراون</h2>
+      <p class="booking-description mx-auto">تکایە دواتر سەیری وێبسایت بکە بۆ زانیاریی نوێی گەشتەکان.</p>
+     </div>
+    </div>
+   </div>
+  </section>`;
+ }
+
+ const fibNumber = esc(siteData.fibAccount || "07503130360");
+
+ return `
+ <section id="booking" class="section pt-0">
+  <div class="container">
+   <div class="booking-wrap reveal">
+    <div class="booking-inner">
+     <div class="booking-grid">
+      <div>
+       <div class="section-label">بەشداری</div>
+       <h2 class="booking-title mt-4">
+        ئامادەیت بۆ <span style="color:var(--primary2)">${esc(siteData.tripTitle)}</span> ؟
+       </h2>
+       <p class="booking-description">
+        تکایە سەرەتا ژمارەی WhatsAppەکەت پشتڕاست بکەرەوە، ئینجا بڕی تێچووی گەشتەکە لە ڕێگەی کارتی FIB ڕەوانە بکە و پسوولەکەی بار بکە.
+       </p>
+
+       <!-- FIB PAYMENT BOX ONLY -->
+       <div class="mt-6 p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center font-black text-sm shrink-0">
+          FIB
+        </div>
+        <div>
+          <div class="text-xs text-gray-400 font-bold">هەژماری فەرمیی First Iraqi Bank (FIB):</div>
+          <div class="text-base font-black text-white tracking-wider select-all mt-0.5">${fibNumber}</div>
+        </div>
+       </div>
+
+       <div class="mt-6 flex gap-3 text-xs text-gray-400">
+        ${icon("shield-check")}
+        <span>زانیارییەکانت بە تەواوی پارێزراون و تەنها بۆ ڕێکخستنی ئەم گەشتە بەکاردێن.</span>
+       </div>
+      </div>
+
+      <form class="booking-form" onsubmit="submitBooking(event)">
+       <input id="bookName" required class="input" placeholder="ناوی تەواوی بەشداربوو">
+
+       <div class="flex gap-2">
+        <input id="bookPhone" required class="input" placeholder="ژمارەی WhatsApp" inputmode="tel">
+        <button type="button" id="otpSendBtn" onclick="requestOtpCode()" class="secondary px-4 rounded-xl text-xs font-bold whitespace-nowrap">
+          ناردنی کۆد
+        </button>
+       </div>
+
+       <div id="otpInputContainer" class="hidden full">
+        <div class="flex gap-2">
+          <input id="bookOtp" class="input" placeholder="کۆدی ٤ ژمارەیی بنووسە..." maxlength="4" inputmode="numeric">
+          <button type="button" id="otpVerifyBtn" onclick="verifyOtpCode()" class="primary px-6 rounded-xl text-xs font-bold">
+            سەلماندن
+          </button>
+        </div>
+       </div>
+
+       <select id="bookPeople" class="input full" onchange="handlePeopleCountChange(this.value)">
+        <option value="1">١ کەس (تەنها خۆم)</option>
+        <option value="2">٢ کەس</option>
+        <option value="3">٣ کەس</option>
+        <option value="4">٤ کەس</option>
+        <option value="5">٥ کەس</option>
+        <option value="6">٦ کەس</option>
+       </select>
+
+       <div id="extraNamesContainer" class="full"></div>
+
+       <input id="bookNote" class="input full" placeholder="تێبینی یان داواکارییەکی تایبەت (ئەگەر هەبێت)">
+
+       <div class="full">
+        <label for="bookReceipt" class="block text-xs font-bold mb-2 text-gray-300">
+          🧾 وێنەی پسوولەی پارەدانی FIB (Receipt)
+        </label>
+        <input id="bookReceipt" type="file" accept="image/*" class="input" required>
+        <div id="receiptPreview" class="mt-3 hidden">
+          <img id="receiptPreviewImage" class="rounded-2xl w-full max-h-60 object-contain bg-black/40 p-2" alt="Receipt preview">
+        </div>
+       </div>
+
+       <button type="submit" id="bookSubmitBtn" class="primary submit-button full opacity-50 cursor-not-allowed" disabled>
+        🔒 سەرەتا مۆبایلەکەت لە WhatsApp بسەلمێنە
+       </button>
+      </form>
+
+     </div>
+    </div>
+   </div>
+  </div>
+ </section>`;
+}
+
+/* =========================================================
+   DYNAMIC PERSONS & OTP HANDLERS
+========================================================= */
+function handlePeopleCountChange(val){
+  const container = document.getElementById("extraNamesContainer");
+  if(!container) return;
+  container.innerHTML = "";
+  const count = parseInt(val, 10);
+  if(count <= 1) return;
 
   const title = document.createElement("div");
-  title.className = "text-xs font-bold text-gray-300 mt-2 mb-2";
-  title.textContent = "ناوی هاوەڵەکانت:";
-  wrap.appendChild(title);
+  title.className = "text-xs font-bold text-gray-300 mt-2 mb-1";
+  title.textContent = "ناوی بەشداربووەکانی تر:";
+  container.appendChild(title);
 
-  for(let i = 2; i <= num; i++){
+  for(let i = 2; i <= count; i++){
     const box = document.createElement("div");
     box.className = "extra-name-box";
     box.innerHTML = `
       <label class="block text-[11px] text-gray-400 mb-1">ناوی کەسی ${i}:</label>
-      <input class="input-field extra-person-input" placeholder="ناوی سیانی کەسی ${i}" required>
+      <input class="input extra-companion-name" placeholder="ناوی سیانی کەسی ${i}" required>
     `;
-    wrap.appendChild(box);
+    container.appendChild(box);
   }
 }
 
-async function requestOtp(){
-  const phone = document.getElementById("userPhone").value.trim();
-  const btn = document.getElementById("sendOtpBtn");
+async function requestOtpCode(){
+  const phone = document.getElementById("bookPhone")?.value.trim();
+  const btn = document.getElementById("otpSendBtn");
   if(!phone){
     toast("تکایە سەرەتا ژمارەی مۆبایل بنووسە");
     return;
@@ -511,16 +1484,16 @@ async function requestOtp(){
   btn.disabled = true;
   btn.textContent = "دەنێردرێت...";
   try{
-    const res = await fetch(`${WORKER_URL}/api/otp/send`, {
+    const res = await fetch(`${WORKER_ENDPOINT}/api/otp/send`, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({ phone })
     });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("📩 کۆدی دڵنیابوونەوە بۆ WhatsApp نێردرا");
-      document.getElementById("otpBox").classList.remove("hidden");
-      btn.textContent = "دووبارە ناردنەوە";
+      toast("📩 کۆدی دڵنیابوونەوە بۆ WhatsAppەکەت نێردرا");
+      document.getElementById("otpInputContainer").classList.remove("hidden");
+      btn.textContent = "نێردرایەوە";
     }else{
       toast("❌ " + (d.error || "کێشەیەک ڕوویدا"));
       btn.textContent = "ناردنی کۆد";
@@ -533,35 +1506,38 @@ async function requestOtp(){
   }
 }
 
-async function verifyOtp(){
-  const phone = document.getElementById("userPhone").value.trim();
-  const code = document.getElementById("userOtpCode").value.trim();
-  const btn = document.getElementById("verifyOtpBtn");
-  const subBtn = document.getElementById("submitBtn");
+async function verifyOtpCode(){
+  const phone = document.getElementById("bookPhone")?.value.trim();
+  const code = document.getElementById("bookOtp")?.value.trim();
+  const btn = document.getElementById("otpVerifyBtn");
+  const subBtn = document.getElementById("bookSubmitBtn");
 
   if(!code || code.length !== 4){
-    toast("تکایە کۆدی ٤ ژمارەیی بە دروستی بنووسە");
+    toast("تکایە کۆدی ٤ ژمارەیی بنووسە");
     return;
   }
 
   btn.disabled = true;
   btn.textContent = "...";
   try{
-    const res = await fetch(`${WORKER_URL}/api/otp/verify`, {
+    const res = await fetch(`${WORKER_ENDPOINT}/api/otp/verify`, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({ phone, code })
     });
     const d = await res.json();
     if(res.ok && d.verified){
-      isVerified = true;
+      isPhoneVerified = true;
       toast("✅ ژمارەکەت بە سەرکەوتوویی سەلمێندرا!");
-      document.getElementById("otpBox").innerHTML = `<div class="text-xs text-green-400 font-bold p-2 bg-green-500/10 rounded-xl border border-green-500/20">✅ ژمارەی مۆبایل بە WhatsApp سەلمێندرا</div>`;
-      document.getElementById("userPhone").readOnly = true;
-      document.getElementById("sendOtpBtn").style.display = "none";
+      document.getElementById("otpInputContainer").innerHTML = `
+        <div class="text-xs text-green-400 font-bold p-3 bg-green-500/10 rounded-xl border border-green-500/20">
+          ✅ مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاستکرایەوە
+        </div>`;
+      document.getElementById("bookPhone").readOnly = true;
+      document.getElementById("otpSendBtn").style.display = "none";
       subBtn.disabled = false;
       subBtn.classList.remove("opacity-50", "cursor-not-allowed");
-      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی گەشت";
+      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی FIB";
     }else{
       toast("❌ " + (d.error || "کۆدەکە هەڵەیە"));
       btn.textContent = "سەلماندن";
@@ -574,122 +1550,263 @@ async function verifyOtp(){
   }
 }
 
-async function submitForm(e){
-  e.preventDefault();
-  if(!isVerified){
-    toast("تکایە سەرەتا مۆبایلەکەت بە وەتسئەپ بسەلمێنە");
+/* =========================================================
+   RECEIPT PREVIEW & SUBMISSION
+========================================================= */
+document.addEventListener("change", function(event){
+  if(event.target.id !== "bookReceipt") return;
+  const file = event.target.files?.[0];
+  const preview = document.getElementById("receiptPreview");
+  const image = document.getElementById("receiptPreviewImage");
+
+  if(!file){
+    preview?.classList.add("hidden");
     return;
   }
 
-  const subBtn = document.getElementById("submitBtn");
-  const name = document.getElementById("userName").value.trim();
-  const phone = document.getElementById("userPhone").value.trim();
-  const people = document.getElementById("userPeopleCount").value;
-  const note = document.getElementById("userNote").value.trim();
-  const receipt = document.getElementById("userReceipt").files?.[0];
+  const reader = new FileReader();
+  reader.onload = function(e){
+    image.src = e.target.result;
+    preview.classList.remove("hidden");
+  };
+  reader.readAsDataURL(file);
+});
 
-  const extraInputs = document.querySelectorAll(".extra-person-input");
-  const extraNames = Array.from(extraInputs).map(inp => inp.value.trim()).filter(Boolean).join("، ");
+async function submitBooking(event){
+  event.preventDefault();
+  if(!isPhoneVerified){
+    toast("تکایە سەرەتا مۆبایلەکەت لە WhatsApp بسەلمێنە");
+    return;
+  }
+
+  const subBtn = document.getElementById("bookSubmitBtn");
+  const name = document.getElementById("bookName").value.trim();
+  const phone = document.getElementById("bookPhone").value.trim();
+  const people = document.getElementById("bookPeople").value || "1";
+  const note = document.getElementById("bookNote").value.trim();
+  const receiptFile = document.getElementById("bookReceipt")?.files?.[0];
+
+  const companionInputs = document.querySelectorAll(".extra-companion-name");
+  const extraNames = Array.from(companionInputs).map(inp => inp.value.trim()).filter(Boolean).join("، ");
+
+  if(!name || !phone){
+    toast("تکایە ناو و ژمارەی مۆبایل بنووسە.");
+    return;
+  }
+  if(!receiptFile){
+    toast("تکایە پسوولەی پارەدانی FIB دابنێ.");
+    return;
+  }
 
   subBtn.disabled = true;
-  subBtn.textContent = "تکایە چاوەڕێبە...";
-  toast("داواکارییەکەت دەنێردرێت...");
+  subBtn.textContent = "داواکاری دەنێردرێت...";
+  toast("زانیارییەکان ڕەوانە دەکرێن...");
 
   try{
-    const form = new FormData();
-    form.append("name", name);
-    form.append("phone", phone);
-    form.append("trip", site.tripTitle);
-    form.append("people", people);
-    form.append("extra_names", extraNames);
-    form.append("note", note);
-    if(receipt) form.append("receipt", receipt);
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("trip", siteData.tripTitle || "KURDIA ADVENTURE");
+    formData.append("people", people);
+    formData.append("extra_names", extraNames);
+    formData.append("note", note);
+    formData.append("receipt", receiptFile);
 
-    const res = await fetch(`${WORKER_URL}/api/register`, { method:"POST", body:form });
+    const res = await fetch(`${WORKER_ENDPOINT}/api/register`, {
+      method:"POST",
+      body:formData
+    });
     const d = await res.json();
 
     if(res.ok && d.ok){
-      toast("🎉 ناونووسینەکەت بە سەرکەوتوویی تۆمار کرا!");
-      e.target.reset();
-      isVerified = false;
+      toast("🎉 ناونووسینەکەت بە سەرکەوتوویی وەرگیرا!");
+      event.target.reset();
+      isPhoneVerified = false;
+      document.getElementById("receiptPreview")?.classList.add("hidden");
       render();
     }else{
-      toast("❌ " + (d.error || "کێشەیەک ڕوویدا"));
+      toast("❌ " + (d.error || "کێشەیەک لە تۆمارکردن ڕوویدا"));
       subBtn.disabled = false;
-      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی گەشت";
+      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی FIB";
     }
   }catch(err){
     toast("کێشەیەک لە پەیوەندی بە سێرڤەر ڕوویدا");
     subBtn.disabled = false;
-    subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی گەشت";
+    subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی FIB";
   }
 }
 
+/* =========================================================
+   RENDER ENGINE
+========================================================= */
 function render(){
-  try{
-    const local = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("KURDIA_BUILDER_STATE");
-    if(local) site = Object.assign({}, site, JSON.parse(local));
-  }catch(e){}
+ applyTheme();
+ document.title = siteData.seoTitle || "KURDIA ADVENTURE";
+ document.getElementById("metaDescription").setAttribute("content", siteData.seoDescription || "");
 
-  document.documentElement.style.setProperty("--primary", site.gradColor1 || "#9d1c32");
-  document.documentElement.style.setProperty("--primary2", site.gradColor2 || "#c92b49");
+ const app = document.getElementById("app");
+ app.innerHTML = "";
 
-  document.getElementById("heroBadgeText").textContent = site.heroBadge || "KURDIA ADVENTURE";
-  document.getElementById("heroTitleText").textContent = site.heroTitle || "";
-  document.getElementById("heroSubText").textContent = site.heroSubtitle || "";
+ const sections = Array.isArray(siteData.sections) ? siteData.sections : DEFAULT_DATA.sections;
 
-  if(site.heroImageUrl){
-    document.getElementById("heroBgImg").style.backgroundImage = `url('${site.heroImageUrl}')`;
-  }
+ sections.filter(s => s && s.visible !== false).forEach(s => {
+   let html = "";
+   if(s.type === "hero") html = hero();
+   if(s.type === "trip") html = trip();
+   if(s.type === "services") html = services();
+   if(s.type === "steps") html = steps();
+   if(s.type === "gallery") html = gallery();
+   if(s.type === "faq") html = faq();
+   if(s.type === "booking") html = booking();
+   if(s.type === "highlights") html = highlights();
+   if(s.type === "itinerary") html = itinerary();
+   if(s.type === "stats") html = stats();
 
-  document.getElementById("tripTitleDisplay").textContent = site.tripTitle || "";
-  document.getElementById("tripDescDisplay").textContent = site.tripDesc || "";
-  document.getElementById("tripLocDisplay").textContent = site.tripLocation || "";
-  document.getElementById("tripTimeDisplay").textContent = site.tripTime || "";
-  document.getElementById("tripDurationDisplay").textContent = site.tripDuration || "";
-  document.getElementById("tripDiffDisplay").textContent = site.tripDifficulty || "";
-  document.getElementById("tripPriceDisplay").textContent = site.tripPrice || "";
+   if(html) app.insertAdjacentHTML("beforeend", html);
+ });
 
-  if(site.tripImageUrl || site.heroImageUrl){
-    document.getElementById("tripImg").style.backgroundImage = `url('${site.tripImageUrl || site.heroImageUrl}')`;
-  }
+ if(!sections.some(x => x && x.type === "highlights")){
+   const tripEl = document.querySelector("#trip");
+   if(tripEl) tripEl.insertAdjacentHTML("afterend", highlights());
+ }
+ if(!sections.some(x => x && x.type === "itinerary")){
+   const sEl = document.querySelector("#services");
+   if(sEl) sEl.insertAdjacentHTML("afterend", itinerary());
+ }
+ if(!sections.some(x => x && x.type === "stats")){
+   const stEl = document.querySelector("#steps");
+   if(stEl) stEl.insertAdjacentHTML("beforebegin", stats());
+ }
 
-  // SERVICES
-  const sContainer = document.getElementById("servicesContainer");
-  sContainer.innerHTML = "";
-  (site.services || []).forEach(s => {
-    const card = document.createElement("div");
-    card.className = "surface-card p-6 flex items-center gap-4";
-    card.innerHTML = `
-      <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0">
-        <i data-lucide="check"></i>
-      </div>
-      <span class="font-bold text-sm">${s}</span>
-    `;
-    sContainer.appendChild(card);
+ if(window.lucide) lucide.createIcons();
+ document.getElementById("year").textContent = new Date().getFullYear();
+ setupReveal();
+}
+
+function setupReveal(){
+ const elements = document.querySelectorAll(".reveal");
+ if(!("IntersectionObserver" in window)){
+  elements.forEach(el => el.classList.add("visible"));
+  return;
+ }
+ const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+   if(entry.isIntersecting){
+    entry.target.classList.add("visible");
+    observer.unobserve(entry.target);
+   }
   });
+ }, { threshold:.08 });
+ elements.forEach(el => observer.observe(el));
+}
 
-  // GALLERY
-  const gContainer = document.getElementById("galleryContainer");
-  gContainer.innerHTML = "";
-  (site.gallery || []).forEach(img => {
-    const d = document.createElement("div");
-    d.className = "h-48 rounded-2xl bg-cover bg-center border border-white/5";
-    d.style.backgroundImage = `url('${img}')`;
-    gContainer.appendChild(d);
+function toggleFAQ(button){
+ const current = button.parentElement;
+ const wasOpen = current.classList.contains("open");
+ document.querySelectorAll(".faq.open").forEach(item => item.classList.remove("open"));
+ if(!wasOpen) current.classList.add("open");
+}
+
+function toggleMenu(){ document.getElementById("mobileMenu").classList.toggle("open"); }
+function closeMenu(){ document.getElementById("mobileMenu").classList.remove("open"); }
+
+function openLightbox(src){
+ const image = safeUrl(src);
+ if(!image) return;
+ document.getElementById("lightboxImage").src = image;
+ document.getElementById("lightbox").classList.add("open");
+ document.body.style.overflow = "hidden";
+}
+
+function closeLightbox(){
+ document.getElementById("lightbox").classList.remove("open");
+ document.body.style.overflow = "";
+}
+
+/* =========================================================
+   AI ASSISTANT
+========================================================= */
+function toggleAI(){
+ const w = document.getElementById("aiWindow");
+ w.classList.toggle("hidden");
+ const m = document.getElementById("messages");
+ if(!m.children.length){
+  addAI("ai", "سڵاو 👋 من Kurdia Assistant ـم. چ پرسیارێکت هەیە لەسەر گەشتەکانمان؟");
+ }
+}
+
+function addAI(type, text){
+ const box = document.getElementById("messages");
+ const el = document.createElement("div");
+ el.className = "ai-message " + (type==="user"?"user":"ai");
+ el.textContent = text;
+ box.appendChild(el);
+ box.scrollTop = box.scrollHeight;
+}
+
+function addTyping(){
+ const box = document.getElementById("messages");
+ const el = document.createElement("div");
+ el.id = "aiTyping";
+ el.className = "ai-message ai";
+ el.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
+ box.appendChild(el);
+ box.scrollTop = box.scrollHeight;
+}
+
+function removeTyping(){
+ const el = document.getElementById("aiTyping");
+ if(el) el.remove();
+}
+
+async function sendAI(){
+ const input = document.getElementById("aiInput");
+ const q = input.value.trim();
+ if(!q) return;
+ input.value = "";
+ addAI("user", q);
+ addTyping();
+
+ try{
+  const res = await fetch(`${WORKER_ENDPOINT}/api/ai`, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ prompt: q })
   });
+  const data = await res.json();
+  removeTyping();
+  addAI("ai", data.text || localAI(q));
+ }catch(e){
+  removeTyping();
+  addAI("ai", localAI(q));
+ }
+}
 
-  if(window.lucide) lucide.createIcons();
+function localAI(q){
+ q = q.toLowerCase();
+ if(q.includes("نرخ") || q.includes("پارە")) return `نرخی بەشداری لەم گەشتە: ${siteData.tripPrice}`;
+ if(q.includes("شوێن") || q.includes("کوێ")) return `شوێنی گەشت: ${siteData.tripLocation}`;
+ if(q.includes("کات")) return `کاتی بەڕێکەوتن: ${siteData.tripTime}`;
+ if(q.includes("ماوە")) return `ماوەی گەشت: ${siteData.tripDuration}`;
+ if(q.includes("بانک") || q.includes("fib")) return `پارەدان تەنها لە ڕێگەی FIB بۆ ژمارەی: ${siteData.fibAccount || "07503130360"}`;
+ return `من دەتوانم یارمەتیت بدەم لە زانیارییەکانی ${siteData.tripTitle}، وەک نرخ، کات، شوێن و ڕێگەی پارەدان بە FIB.`;
 }
 
 window.addEventListener("message", ev => {
-  if(ev.data && ev.data.type === "KURDIA_BUILDER_STATE"){
-    site = Object.assign({}, site, ev.data.state || {});
-    render();
-  }
+ if(!ev.data) return;
+ if(ev.data.type === "KURDIA_BUILDER_STATE"){
+  siteData = merge(clone(DEFAULT_DATA), ev.data.state || {});
+  localStorage.setItem("kurdia_builder_published_v3", JSON.stringify(siteData));
+  render();
+ }
 });
 
-document.addEventListener("DOMContentLoaded", render);
+document.addEventListener("keydown", ev => { if(ev.key === "Escape") closeLightbox(); });
+
+(async function(){
+ await loadData();
+ render();
+})();
 </script>
 </body>
 </html>
