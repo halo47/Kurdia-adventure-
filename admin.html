@@ -705,6 +705,24 @@ input[type="checkbox"]{
 }
 
 /* =========================================================
+   IMAGE UPLOAD HELPER STYLES
+========================================================= */
+.upload-btn-row{
+  display:flex;
+  gap:8px;
+  margin-top:6px;
+  align-items:center;
+}
+.image-mini-preview{
+  width:46px;
+  height:46px;
+  border-radius:8px;
+  object-fit:cover;
+  border:1px solid var(--border);
+  display:none;
+}
+
+/* =========================================================
    MOBILE
 ========================================================= */
 
@@ -1291,13 +1309,35 @@ BUILDER
       <div class="field">
 
         <label>
-          Hero Image URL
+          Hero Image (URL یان ئەپڵۆد لە مۆبایل)
         </label>
 
         <input
           id="heroImageUrl"
           dir="ltr"
+          placeholder="https://..."
         >
+
+        <div class="upload-btn-row">
+          <input
+            type="file"
+            id="heroImageFile"
+            accept="image/*"
+            style="display:none"
+          >
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="document.getElementById('heroImageFile').click()"
+          >
+            📁 هەڵبژاردن لە مۆبایل
+          </button>
+          <img
+            id="heroImagePreview"
+            class="image-mini-preview"
+            alt="Hero Preview"
+          >
+        </div>
 
       </div>
 
@@ -1406,13 +1446,35 @@ BUILDER
       <div class="field">
 
         <label>
-          Trip Image
+          Trip Image (URL یان ئەپڵۆد لە مۆبایل)
         </label>
 
         <input
           id="tripImageUrl"
           dir="ltr"
+          placeholder="https://..."
         >
+
+        <div class="upload-btn-row">
+          <input
+            type="file"
+            id="tripImageFile"
+            accept="image/*"
+            style="display:none"
+          >
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="document.getElementById('tripImageFile').click()"
+          >
+            📁 هەڵبژاردن لە مۆبایل
+          </button>
+          <img
+            id="tripImagePreview"
+            class="image-mini-preview"
+            alt="Trip Preview"
+          >
+        </div>
 
       </div>
 
@@ -1674,12 +1736,26 @@ GALLERY
       🖼️ Gallery
     </h2>
 
-    <button
-      class="btn btn-primary"
-      id="addGalleryBtn"
-    >
-      + زیادکردن
-    </button>
+    <div class="actions">
+      <input
+        type="file"
+        id="galleryUploadInput"
+        accept="image/*"
+        style="display:none"
+      >
+      <button
+        class="btn btn-primary"
+        onclick="document.getElementById('galleryUploadInput').click()"
+      >
+        📁 ئەپڵۆدی وێنە لە مۆبایل
+      </button>
+      <button
+        class="btn btn-secondary"
+        id="addGalleryBtn"
+      >
+        🔗 زیادکردن بە URL
+      </button>
+    </div>
 
   </div>
 
@@ -2376,7 +2452,7 @@ const DEFAULT_STATE = {
 };
 
 /* ============================================================
-   HELPERS
+   HELPERS & IMAGE COMPRESSOR
 ============================================================ */
 
 function deepClone(obj){
@@ -2404,105 +2480,79 @@ function workerURL(){
 }
 
 function log(message){
-
-  const box =
-    document.getElementById(
-      "systemLog"
-    );
-
-  if(!box){
-    return;
-  }
-
-  const time =
-    new Date().toLocaleTimeString();
-
-  box.textContent +=
-    `[${time}] ${message}\n`;
-
-  box.scrollTop =
-    box.scrollHeight;
+  const box = document.getElementById("systemLog");
+  if(!box) return;
+  const time = new Date().toLocaleTimeString();
+  box.textContent += `[${time}] ${message}\n`;
+  box.scrollTop = box.scrollHeight;
 }
 
 function toast(message){
-
-  const el =
-    document.getElementById(
-      "toast"
-    );
-
-  el.textContent =
-    message;
-
+  const el = document.getElementById("toast");
+  el.textContent = message;
   el.classList.add("show");
-
   setTimeout(() => {
     el.classList.remove("show");
   },2800);
 }
 
-function result(
-  id,
-  message,
-  type="ok"
-){
+function result(id, message, type="ok"){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = message;
+  el.className = `result show ${type}`;
+}
 
-  const el =
-    document.getElementById(id);
+// پەستاندنی زیرەکانەی وێنە لە ناو مۆبایل پێش پاشەکەوتکردن
+function compressImageFile(file, maxWidth=1280, quality=0.82){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
 
-  if(!el){
-    return;
-  }
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
 
-  el.textContent =
-    message;
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
 
-  el.className =
-    `result show ${type}`;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // هەناردەکردن بە فۆرماتی هاوچەرخ
+        const base64 = canvas.toDataURL("image/jpeg", quality);
+        resolve(base64);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 function normalizeState(){
-
-  if(!state ||
-     typeof state !== "object"){
-    state =
-      deepClone(DEFAULT_STATE);
+  if(!state || typeof state !== "object"){
+    state = deepClone(DEFAULT_STATE);
   }
 
-  const keys =
-    Object.keys(DEFAULT_STATE);
-
+  const keys = Object.keys(DEFAULT_STATE);
   keys.forEach(key => {
-
-    if(
-      state[key] === undefined
-    ){
-      state[key] =
-        deepClone(
-          DEFAULT_STATE[key]
-        );
+    if(state[key] === undefined){
+      state[key] = deepClone(DEFAULT_STATE[key]);
     }
-
   });
 
-  if(!Array.isArray(state.services)){
-    state.services = [];
-  }
-
-  if(!Array.isArray(state.gallery)){
-    state.gallery = [];
-  }
-
-  if(!Array.isArray(state.faq)){
-    state.faq = [];
-  }
-
-  if(!Array.isArray(state.sections)){
-    state.sections =
-      deepClone(
-        DEFAULT_STATE.sections
-      );
-  }
+  if(!Array.isArray(state.services)) state.services = [];
+  if(!Array.isArray(state.gallery)) state.gallery = [];
+  if(!Array.isArray(state.faq)) state.faq = [];
+  if(!Array.isArray(state.sections)) state.sections = deepClone(DEFAULT_STATE.sections);
 }
 
 /* ============================================================
@@ -2510,111 +2560,48 @@ function normalizeState(){
 ============================================================ */
 
 function loadState(){
-
   try{
-
-    const raw =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
-
+    const raw = localStorage.getItem(STORAGE_KEY);
     if(raw){
-
-      state =
-        JSON.parse(raw);
-
+      state = JSON.parse(raw);
     }else{
-
-      state =
-        deepClone(
-          DEFAULT_STATE
-        );
-
+      state = deepClone(DEFAULT_STATE);
     }
-
   }catch(error){
-
-    state =
-      deepClone(
-        DEFAULT_STATE
-      );
-
+    state = deepClone(DEFAULT_STATE);
   }
 
   normalizeState();
-
-  history = [
-    deepClone(state)
-  ];
-
+  history = [deepClone(state)];
   historyIndex = 0;
-
   renderAll();
 }
 
-function saveState(
-  announce=true
-){
-
+function saveState(announce=true){
   normalizeState();
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(state)
-  );
-
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   publishState();
-
   if(announce){
     toast("💾 پاشەکەوت کرا");
   }
-
   log("State saved");
 }
 
 function publishState(){
-
-  localStorage.setItem(
-    "KURDIA_BUILDER_STATE",
-    JSON.stringify(state)
-  );
-
-  const iframe =
-    document.getElementById(
-      "sitePreview"
-    );
-
-  if(
-    iframe &&
-    iframe.contentWindow
-  ){
-
-    iframe.contentWindow.postMessage(
-      {
-        type:
-          "KURDIA_BUILDER_STATE",
-
-        state:
-          deepClone(state)
-      },
-      "*"
-    );
-
+  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(state));
+  const iframe = document.getElementById("sitePreview");
+  if(iframe && iframe.contentWindow){
+    iframe.contentWindow.postMessage({
+      type: "KURDIA_BUILDER_STATE",
+      state: deepClone(state)
+    }, "*");
   }
 
   try{
-
-    window.opener?.postMessage(
-      {
-        type:
-          "KURDIA_BUILDER_STATE",
-
-        state:
-          deepClone(state)
-      },
-      "*"
-    );
-
+    window.opener?.postMessage({
+      type: "KURDIA_BUILDER_STATE",
+      state: deepClone(state)
+    }, "*");
   }catch(e){}
 
   log("State published");
@@ -2625,96 +2612,38 @@ function publishState(){
 ============================================================ */
 
 function pushHistory(){
-
-  history =
-    history.slice(
-      0,
-      historyIndex + 1
-    );
-
-  history.push(
-    deepClone(state)
-  );
-
-  if(history.length > 30){
-    history.shift();
-  }
-
-  historyIndex =
-    history.length - 1;
-
+  history = history.slice(0, historyIndex + 1);
+  history.push(deepClone(state));
+  if(history.length > 30) history.shift();
+  historyIndex = history.length - 1;
   updateHistoryButtons();
 }
 
 function undo(){
-
-  if(historyIndex <= 0){
-    return;
-  }
-
+  if(historyIndex <= 0) return;
   historyIndex--;
-
-  state =
-    deepClone(
-      history[historyIndex]
-    );
-
+  state = deepClone(history[historyIndex]);
   normalizeState();
-
   renderAll();
-
   publishState();
-
   toast("↩️ Undo");
 }
 
 function redo(){
-
-  if(
-    historyIndex >=
-    history.length - 1
-  ){
-    return;
-  }
-
+  if(historyIndex >= history.length - 1) return;
   historyIndex++;
-
-  state =
-    deepClone(
-      history[historyIndex]
-    );
-
+  state = deepClone(history[historyIndex]);
   normalizeState();
-
   renderAll();
-
   publishState();
-
   toast("↪️ Redo");
 }
 
 function updateHistoryButtons(){
-
-  const undoBtn =
-    document.getElementById(
-      "undoBtn"
-    );
-
-  const redoBtn =
-    document.getElementById(
-      "redoBtn"
-    );
-
-  if(undoBtn){
-    undoBtn.disabled =
-      historyIndex <= 0;
-  }
-
-  if(redoBtn){
-    redoBtn.disabled =
-      historyIndex >=
-      history.length - 1;
-  }
+  const undoBtn = document.getElementById("undoBtn");
+  const redoBtn = document.getElementById("redoBtn");
+  if(undoBtn) undoBtn.disabled = historyIndex <= 0;
+  if(redoBtn) redoBtn.disabled = historyIndex >= history.length - 1;
 }
 
 /* ============================================================
@@ -2722,166 +2651,73 @@ function updateHistoryButtons(){
 ============================================================ */
 
 function showPage(name){
+  document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+  const target = document.getElementById("page-" + name);
+  if(target) target.classList.add("active");
 
-  document
-    .querySelectorAll(".page")
-    .forEach(page => {
-      page.classList.remove("active");
-    });
+  document.querySelectorAll(".nav button").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.page === name);
+  });
 
-  const target =
-    document.getElementById(
-      "page-" + name
-    );
-
-  if(target){
-    target.classList.add("active");
-  }
-
-  document
-    .querySelectorAll(".nav button")
-    .forEach(btn => {
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === name
-      );
-    });
-
-  const title =
-    document.getElementById(
-      "pageTitle"
-    );
-
-  if(title){
-    title.textContent =
-      titles[name] ||
-      name;
-  }
-
-  document
-    .getElementById("sidebar")
-    ?.classList.remove("open");
-
+  const title = document.getElementById("pageTitle");
+  if(title) title.textContent = titles[name] || name;
+  document.getElementById("sidebar")?.classList.remove("open");
 }
 
-window.showPage =
-  showPage;
+window.showPage = showPage;
 
 /* ============================================================
    RENDER BUILDER
 ============================================================ */
 
-function setValue(
-  id,
-  value
-){
+function setValue(id, value){
+  const el = document.getElementById(id);
+  if(el) el.value = value ?? "";
+}
 
-  const el =
-    document.getElementById(id);
-
-  if(el){
-    el.value =
-      value ?? "";
+function updatePreview(id, url){
+  const img = document.getElementById(id);
+  if(img){
+    if(url){
+      img.src = url;
+      img.style.display = "block";
+    }else{
+      img.style.display = "none";
+    }
   }
 }
 
 function renderBuilder(){
+  setValue("heroBadge", state.heroBadge);
+  setValue("heroTitle", state.heroTitle);
+  setValue("heroSubtitle", state.heroSubtitle);
+  setValue("heroImageUrl", state.heroImageUrl);
+  updatePreview("heroImagePreview", state.heroImageUrl);
 
-  setValue(
-    "heroBadge",
-    state.heroBadge
-  );
+  setValue("gradColor1", state.gradColor1);
+  setValue("gradColor2", state.gradColor2);
 
-  setValue(
-    "heroTitle",
-    state.heroTitle
-  );
+  setValue("tripTitle", state.tripTitle);
+  setValue("tripPrice", state.tripPrice);
+  setValue("tripDifficulty", state.tripDifficulty);
+  setValue("tripDuration", state.tripDuration);
+  setValue("tripTime", state.tripTime);
+  setValue("tripLocation", state.tripLocation);
+  setValue("tripImageUrl", state.tripImageUrl);
+  updatePreview("tripImagePreview", state.tripImageUrl);
 
-  setValue(
-    "heroSubtitle",
-    state.heroSubtitle
-  );
+  setValue("tripDesc", state.tripDesc);
 
-  setValue(
-    "heroImageUrl",
-    state.heroImageUrl
-  );
-
-  setValue(
-    "gradColor1",
-    state.gradColor1
-  );
-
-  setValue(
-    "gradColor2",
-    state.gradColor2
-  );
-
-  setValue(
-    "tripTitle",
-    state.tripTitle
-  );
-
-  setValue(
-    "tripPrice",
-    state.tripPrice
-  );
-
-  setValue(
-    "tripDifficulty",
-    state.tripDifficulty
-  );
-
-  setValue(
-    "tripDuration",
-    state.tripDuration
-  );
-
-  setValue(
-    "tripTime",
-    state.tripTime
-  );
-
-  setValue(
-    "tripLocation",
-    state.tripLocation
-  );
-
-  setValue(
-    "tripImageUrl",
-    state.tripImageUrl
-  );
-
-  setValue(
-    "tripDesc",
-    state.tripDesc
-  );
-
-  setValue(
-    "step1",
-    state.step1
-  );
-
-  setValue(
-    "step2",
-    state.step2
-  );
-
-  setValue(
-    "step3",
-    state.step3
-  );
-
-  setValue(
-    "step4",
-    state.step4
-  );
+  setValue("step1", state.step1);
+  setValue("step2", state.step2);
+  setValue("step3", state.step3);
+  setValue("step4", state.step4);
 
   updateHistoryButtons();
 }
 
 /* ============================================================
-   BUILDER INPUT BINDING
+   BUILDER INPUT & IMAGE UPLOAD BINDING
 ============================================================ */
 
 const builderFields = [
@@ -2906,33 +2742,56 @@ const builderFields = [
 ];
 
 builderFields.forEach(id => {
+  document.addEventListener("input", event => {
+    if(event.target.id !== id) return;
+    state[id] = event.target.value;
 
-  document.addEventListener(
-    "input",
-    event => {
+    if(id === "heroImageUrl") updatePreview("heroImagePreview", state[id]);
+    if(id === "tripImageUrl") updatePreview("tripImagePreview", state[id]);
 
-      if(
-        event.target.id !== id
-      ){
-        return;
-      }
+    const status = document.getElementById("builderStatus");
+    if(status) status.textContent = "Unsaved changes";
+  });
+});
 
-      state[id] =
-        event.target.value;
+// ئەپڵۆدکردنی وێنەی Hero لە مۆبایل
+document.getElementById("heroImageFile").addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if(!file) return;
+  toast("⏳ وێنەکە باردەکرێت...");
+  try{
+    const base64 = await compressImageFile(file, 1600, 0.85);
+    state.heroImageUrl = base64;
+    setValue("heroImageUrl", base64);
+    updatePreview("heroImagePreview", base64);
+    pushHistory();
+    saveState(false);
+    publishState();
+    toast("✅ وێنەی Hero لە مۆبایلەوە داندرا");
+  }catch(err){
+    toast("❌ کێشە لە خوێندنەوەی وێنە");
+  }
+  e.target.value = "";
+});
 
-      const status =
-        document.getElementById(
-          "builderStatus"
-        );
-
-      if(status){
-        status.textContent =
-          "Unsaved changes";
-      }
-
-    }
-  );
-
+// ئەپڵۆدکردنی وێنەی Trip لە مۆبایل
+document.getElementById("tripImageFile").addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if(!file) return;
+  toast("⏳ وێنەکە باردەکرێت...");
+  try{
+    const base64 = await compressImageFile(file, 1280, 0.82);
+    state.tripImageUrl = base64;
+    setValue("tripImageUrl", base64);
+    updatePreview("tripImagePreview", base64);
+    pushHistory();
+    saveState(false);
+    publishState();
+    toast("✅ وێنەی گەشت لە مۆبایلەوە داندرا");
+  }catch(err){
+    toast("❌ کێشە لە خوێندنەوەی وێنە");
+  }
+  e.target.value = "";
 });
 
 /* ============================================================
@@ -2940,2208 +2799,671 @@ builderFields.forEach(id => {
 ============================================================ */
 
 function renderServices(){
-
-  const list =
-    document.getElementById(
-      "serviceList"
-    );
-
-  if(!list){
-    return;
-  }
-
+  const list = document.getElementById("serviceList");
+  if(!list) return;
   list.innerHTML = "";
 
-  state.services.forEach(
-    (service,index) => {
+  state.services.forEach((service,index) => {
+    const item = document.createElement("div");
+    item.className = "service-item";
+    item.draggable = true;
+    item.dataset.index = index;
+    item.innerHTML = `
+      <div class="drag-handle">☷</div>
+      <div class="service-icon">${escapeHTML(service.icon || "⭐")}</div>
+      <div class="service-name">
+        <strong>${escapeHTML(service.name || "خزمەتگوزاری")}</strong>
+        <small>Icon: ${escapeHTML(service.icon || "⭐")}</small>
+      </div>
+      <button class="btn btn-secondary" data-edit-service="${index}">✏️</button>
+      <button class="btn btn-danger" data-delete-service="${index}">🗑️</button>
+    `;
 
-      const item =
-        document.createElement(
-          "div"
-        );
+    item.addEventListener("dragstart", () => item.classList.add("dragging"));
+    item.addEventListener("dragend", () => item.classList.remove("dragging"));
+    item.addEventListener("dragover", event => {
+      event.preventDefault();
+      const dragging = list.querySelector(".dragging");
+      if(!dragging || dragging === item) return;
+      const rect = item.getBoundingClientRect();
+      const after = event.clientY - rect.top > rect.height / 2;
+      if(after) item.after(dragging); else item.before(dragging);
+    });
 
-      item.className =
-        "service-item";
+    item.addEventListener("drop", () => {
+      const items = [...list.children];
+      state.services = items.map(el => state.services[Number(el.dataset.index)]);
+      pushHistory();
+      saveState(false);
+      renderServices();
+    });
 
-      item.draggable = true;
-
-      item.dataset.index =
-        index;
-
-      item.innerHTML = `
-
-        <div class="drag-handle">
-          ☷
-        </div>
-
-        <div class="service-icon">
-          ${escapeHTML(
-            service.icon || "⭐"
-          )}
-        </div>
-
-        <div class="service-name">
-
-          <strong>
-            ${escapeHTML(
-              service.name ||
-              "خزمەتگوزاری"
-            )}
-          </strong>
-
-          <small>
-            Icon:
-            ${escapeHTML(
-              service.icon ||
-              "⭐"
-            )}
-          </small>
-
-        </div>
-
-        <button
-          class="btn btn-secondary"
-          data-edit-service="${index}"
-        >
-          ✏️
-        </button>
-
-        <button
-          class="btn btn-danger"
-          data-delete-service="${index}"
-        >
-          🗑️
-        </button>
-
-      `;
-
-      item.addEventListener(
-        "dragstart",
-        () => {
-          item.classList.add(
-            "dragging"
-          );
-        }
-      );
-
-      item.addEventListener(
-        "dragend",
-        () => {
-          item.classList.remove(
-            "dragging"
-          );
-        }
-      );
-
-      item.addEventListener(
-        "dragover",
-        event => {
-          event.preventDefault();
-
-          const dragging =
-            list.querySelector(
-              ".dragging"
-            );
-
-          if(
-            !dragging ||
-            dragging === item
-          ){
-            return;
-          }
-
-          const rect =
-            item.getBoundingClientRect();
-
-          const after =
-            event.clientY -
-            rect.top >
-            rect.height / 2;
-
-          if(after){
-            item.after(
-              dragging
-            );
-          }else{
-            item.before(
-              dragging
-            );
-          }
-        }
-      );
-
-      item.addEventListener(
-        "drop",
-        () => {
-
-          const items =
-            [...list.children];
-
-          const newServices =
-            items.map(
-              element =>
-                state.services[
-                  Number(
-                    element.dataset.index
-                  )
-                ]
-            );
-
-          state.services =
-            newServices;
-
-          pushHistory();
-          saveState(false);
-
-          renderServices();
-
-        }
-      );
-
-      list.appendChild(item);
-
-    }
-  );
-
+    list.appendChild(item);
+  });
 }
 
-document.addEventListener(
-  "click",
-  event => {
-
-    const edit =
-      event.target.closest(
-        "[data-edit-service]"
-      );
-
-    if(edit){
-
-      const index =
-        Number(
-          edit.dataset.editService
-        );
-
-      editService(index);
-    }
-
-    const del =
-      event.target.closest(
-        "[data-delete-service]"
-      );
-
-    if(del){
-
-      const index =
-        Number(
-          del.dataset.deleteService
-        );
-
-      if(
-        confirm(
-          "ئەم خزمەتگوزارییە بسڕمەوە؟"
-        )
-      ){
-
-        state.services.splice(
-          index,
-          1
-        );
-
-        pushHistory();
-        saveState(false);
-        renderServices();
-        publishState();
-
-      }
-
-    }
-
+document.addEventListener("click", event => {
+  const edit = event.target.closest("[data-edit-service]");
+  if(edit){
+    const index = Number(edit.dataset.editService);
+    editService(index);
   }
-);
+
+  const del = event.target.closest("[data-delete-service]");
+  if(del){
+    const index = Number(del.dataset.deleteService);
+    if(confirm("ئەم خزمەتگوزارییە بسڕمەوە؟")){
+      state.services.splice(index, 1);
+      pushHistory();
+      saveState(false);
+      renderServices();
+      publishState();
+    }
+  }
+});
 
 function addService(){
-
-  const name =
-    prompt(
-      "ناوی خزمەتگوزاری:"
-    );
-
-  if(!name){
-    return;
-  }
-
-  const icon =
-    prompt(
-      "Icon:",
-      "⭐"
-    ) || "⭐";
-
-  state.services.push({
-    name,
-    icon
-  });
-
+  const name = prompt("ناوی خزمەتگوزاری:");
+  if(!name) return;
+  const icon = prompt("Icon:", "⭐") || "⭐";
+  state.services.push({ name, icon });
   pushHistory();
   saveState(false);
   renderServices();
   publishState();
-
 }
 
 function editService(index){
-
-  const service =
-    state.services[index];
-
-  if(!service){
-    return;
-  }
-
-  const name =
-    prompt(
-      "ناوی خزمەتگوزاری:",
-      service.name
-    );
-
-  if(name === null){
-    return;
-  }
-
-  const icon =
-    prompt(
-      "Icon:",
-      service.icon
-    );
-
-  if(icon === null){
-    return;
-  }
-
-  state.services[index] = {
-    name,
-    icon
-  };
-
+  const service = state.services[index];
+  if(!service) return;
+  const name = prompt("ناوی خزمەتگوزاری:", service.name);
+  if(name === null) return;
+  const icon = prompt("Icon:", service.icon);
+  if(icon === null) return;
+  state.services[index] = { name, icon };
   pushHistory();
   saveState(false);
   renderServices();
   publishState();
-
 }
 
-document
-  .getElementById(
-    "addServiceBtn"
-  )
-  .addEventListener(
-    "click",
-    addService
-  );
+document.getElementById("addServiceBtn").addEventListener("click", addService);
 
 /* ============================================================
    GALLERY
 ============================================================ */
 
 function renderGallery(){
-
-  const list =
-    document.getElementById(
-      "galleryList"
-    );
-
-  if(!list){
-    return;
-  }
-
+  const list = document.getElementById("galleryList");
+  if(!list) return;
   list.innerHTML = "";
 
   if(!state.gallery.length){
-
     list.innerHTML = `
-      <div style="
-        color:var(--muted);
-        padding:20px;
-        text-align:center
-      ">
+      <div style="color:var(--muted);padding:20px;text-align:center">
         هیچ وێنەیەک زیاد نەکراوە.
       </div>
     `;
-
     return;
   }
 
-  state.gallery.forEach(
-    (item,index) => {
-
-      const row =
-        document.createElement(
-          "div"
-        );
-
-      row.className =
-        "gallery-item";
-
-      row.innerHTML = `
-
-        <img
-          src="${escapeHTML(
-            item.url || ""
-          )}"
-          onerror="this.style.opacity='.3'"
-        >
-
-        <div>
-
-          <div class="field">
-
-            <label>
-              Image URL
-            </label>
-
-            <input
-              value="${escapeHTML(
-                item.url || ""
-              )}"
-              data-gallery-url="${index}"
-              dir="ltr"
-            >
-
-          </div>
-
-          <div class="field">
-
-            <label>
-              ناونیشان
-            </label>
-
-            <input
-              value="${escapeHTML(
-                item.title || ""
-              )}"
-              data-gallery-title="${index}"
-            >
-
-          </div>
-
+  state.gallery.forEach((item,index) => {
+    const row = document.createElement("div");
+    row.className = "gallery-item";
+    row.innerHTML = `
+      <img src="${escapeHTML(item.url || "")}" onerror="this.style.opacity='.3'">
+      <div>
+        <div class="field">
+          <label>Image URL / Data</label>
+          <input value="${escapeHTML(item.url || "")}" data-gallery-url="${index}" dir="ltr">
         </div>
-
-        <button
-          class="btn btn-danger"
-          data-delete-gallery="${index}"
-        >
-          🗑️
-        </button>
-
-      `;
-
-      list.appendChild(row);
-
-    }
-  );
-
+        <div class="field">
+          <label>ناونیشان</label>
+          <input value="${escapeHTML(item.title || "")}" data-gallery-title="${index}">
+        </div>
+      </div>
+      <button class="btn btn-danger" data-delete-gallery="${index}">🗑️</button>
+    `;
+    list.appendChild(row);
+  });
 }
 
-document.addEventListener(
-  "input",
-  event => {
-
-    if(
-      event.target.dataset.galleryUrl
-      !== undefined
-    ){
-
-      const index =
-        Number(
-          event.target.dataset.galleryUrl
-        );
-
-      state.gallery[index].url =
-        event.target.value;
-
-    }
-
-    if(
-      event.target.dataset.galleryTitle
-      !== undefined
-    ){
-
-      const index =
-        Number(
-          event.target.dataset.galleryTitle
-        );
-
-      state.gallery[index].title =
-        event.target.value;
-
-    }
-
+document.addEventListener("input", event => {
+  if(event.target.dataset.galleryUrl !== undefined){
+    const index = Number(event.target.dataset.galleryUrl);
+    state.gallery[index].url = event.target.value;
   }
-);
-
-document.addEventListener(
-  "click",
-  event => {
-
-    const del =
-      event.target.closest(
-        "[data-delete-gallery]"
-      );
-
-    if(del){
-
-      const index =
-        Number(
-          del.dataset.deleteGallery
-        );
-
-      state.gallery.splice(
-        index,
-        1
-      );
-
-      pushHistory();
-      saveState(false);
-      renderGallery();
-      publishState();
-
-    }
-
+  if(event.target.dataset.galleryTitle !== undefined){
+    const index = Number(event.target.dataset.galleryTitle);
+    state.gallery[index].title = event.target.value;
   }
-);
+});
 
-document
-  .getElementById(
-    "addGalleryBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
+document.addEventListener("click", event => {
+  const del = event.target.closest("[data-delete-gallery]");
+  if(del){
+    const index = Number(del.dataset.deleteGallery);
+    state.gallery.splice(index, 1);
+    pushHistory();
+    saveState(false);
+    renderGallery();
+    publishState();
+  }
+});
 
-      const url =
-        prompt(
-          "URL ـی وێنە:"
-        );
+document.getElementById("addGalleryBtn").addEventListener("click", () => {
+  const url = prompt("URL ـی وێنە:");
+  if(!url) return;
+  const title = prompt("ناونیشان:") || "";
+  state.gallery.push({ url, title });
+  pushHistory();
+  saveState(false);
+  renderGallery();
+  publishState();
+});
 
-      if(!url){
-        return;
-      }
-
-      const title =
-        prompt(
-          "ناونیشان:"
-        ) || "";
-
-      state.gallery.push({
-        url,
-        title
-      });
-
-      pushHistory();
-      saveState(false);
-      renderGallery();
-      publishState();
-
-    }
-  );
+// ئەپڵۆدی ڕاستەوخۆ بۆ گەلەری لە مۆبایلەوە
+document.getElementById("galleryUploadInput").addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if(!file) return;
+  toast("⏳ وێنەی گەلەری باردەکرێت...");
+  try{
+    const base64 = await compressImageFile(file, 1200, 0.82);
+    const title = prompt("ناونیشانی ئەم وێنەیە لە گەلەری (ئارەزوومەندانە):") || "KURDIA ADVENTURE";
+    state.gallery.push({ url: base64, title });
+    pushHistory();
+    saveState(false);
+    renderGallery();
+    publishState();
+    toast("✅ وێنەکە بە سەرکەوتوویی زیادکرا بۆ گەلەری");
+  }catch(err){
+    toast("❌ کێشە لە زیادکردنی وێنە");
+  }
+  e.target.value = "";
+});
 
 /* ============================================================
    FAQ
 ============================================================ */
 
 function renderFAQ(){
-
-  const list =
-    document.getElementById(
-      "faqList"
-    );
-
-  if(!list){
-    return;
-  }
-
+  const list = document.getElementById("faqList");
+  if(!list) return;
   list.innerHTML = "";
 
-  state.faq.forEach(
-    (item,index) => {
-
-      const box =
-        document.createElement(
-          "div"
-        );
-
-      box.className =
-        "faq-item";
-
-      box.innerHTML = `
-
-        <div class="field">
-
-          <label>
-            پرسیار
-          </label>
-
-          <input
-            value="${escapeHTML(
-              item.q || ""
-            )}"
-            data-faq-q="${index}"
-          >
-
-        </div>
-
-        <div class="field">
-
-          <label>
-            وەڵام
-          </label>
-
-          <textarea
-            data-faq-a="${index}"
-          >${escapeHTML(
-            item.a || ""
-          )}</textarea>
-
-        </div>
-
-        <button
-          class="btn btn-danger"
-          data-delete-faq="${index}"
-        >
-          🗑️ سڕینەوە
-        </button>
-
-      `;
-
-      list.appendChild(box);
-
-    }
-  );
-
+  state.faq.forEach((item,index) => {
+    const box = document.createElement("div");
+    box.className = "faq-item";
+    box.innerHTML = `
+      <div class="field">
+        <label>پرسیار</label>
+        <input value="${escapeHTML(item.q || "")}" data-faq-q="${index}">
+      </div>
+      <div class="field">
+        <label>وەڵام</label>
+        <textarea data-faq-a="${index}">${escapeHTML(item.a || "")}</textarea>
+      </div>
+      <button class="btn btn-danger" data-delete-faq="${index}">🗑️ سڕینەوە</button>
+    `;
+    list.appendChild(box);
+  });
 }
 
-document.addEventListener(
-  "input",
-  event => {
-
-    if(
-      event.target.dataset.faqQ
-      !== undefined
-    ){
-
-      const index =
-        Number(
-          event.target.dataset.faqQ
-        );
-
-      state.faq[index].q =
-        event.target.value;
-
-    }
-
-    if(
-      event.target.dataset.faqA
-      !== undefined
-    ){
-
-      const index =
-        Number(
-          event.target.dataset.faqA
-        );
-
-      state.faq[index].a =
-        event.target.value;
-
-    }
-
+document.addEventListener("input", event => {
+  if(event.target.dataset.faqQ !== undefined){
+    const index = Number(event.target.dataset.faqQ);
+    state.faq[index].q = event.target.value;
   }
-);
-
-document.addEventListener(
-  "click",
-  event => {
-
-    const del =
-      event.target.closest(
-        "[data-delete-faq]"
-      );
-
-    if(del){
-
-      const index =
-        Number(
-          del.dataset.deleteFaq
-        );
-
-      state.faq.splice(
-        index,
-        1
-      );
-
-      pushHistory();
-      saveState(false);
-      renderFAQ();
-      publishState();
-
-    }
-
+  if(event.target.dataset.faqA !== undefined){
+    const index = Number(event.target.dataset.faqA);
+    state.faq[index].a = event.target.value;
   }
-);
+});
 
-document
-  .getElementById(
-    "addFaqBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
+document.addEventListener("click", event => {
+  const del = event.target.closest("[data-delete-faq]");
+  if(del){
+    const index = Number(del.dataset.deleteFaq);
+    state.faq.splice(index, 1);
+    pushHistory();
+    saveState(false);
+    renderFAQ();
+    publishState();
+  }
+});
 
-      state.faq.push({
-        q:"پرسیاری نوێ",
-        a:"وەڵامی نوێ"
-      });
-
-      pushHistory();
-      saveState(false);
-      renderFAQ();
-      publishState();
-
-    }
-  );
+document.getElementById("addFaqBtn").addEventListener("click", () => {
+  state.faq.push({ q:"پرسیاری نوێ", a:"وەڵامی نوێ" });
+  pushHistory();
+  saveState(false);
+  renderFAQ();
+  publishState();
+});
 
 /* ============================================================
-   HEALTH
+   HEALTH & WORKER
 ============================================================ */
 
 async function checkHealth(){
-
-  const url =
-    workerURL();
-
+  const url = workerURL();
   try{
+    result("dashboardResult", "⏳ پشکنین...", "info");
+    const response = await fetch(url + "/api/health", { method:"GET", cache:"no-store" });
+    const data = await response.json();
+    if(!response.ok) throw new Error(data.error || "Worker error");
 
-    result(
-      "dashboardResult",
-      "⏳ پشکنین...",
-      "info"
-    );
+    document.getElementById("dashGemini").textContent = data.gemini?.configured ? "ON" : "OFF";
+    document.getElementById("dashTelegram").textContent = data.telegram?.configured ? "ON" : "OFF";
+    document.getElementById("dashWhatsApp").textContent = data.whatsapp?.configured ? "ON" : "OFF";
+    document.getElementById("aiModel").textContent = "Model: " + (data.gemini?.model || "Auto");
 
-    const response =
-      await fetch(
-        url +
-        "/api/health",
-        {
-          method:"GET",
-          cache:"no-store"
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if(!response.ok){
-      throw new Error(
-        data.error ||
-        "Worker error"
-      );
-    }
-
-    document.getElementById(
-      "dashGemini"
-    ).textContent =
-      data.gemini
-        ? "ON"
-        : "OFF";
-
-    document.getElementById(
-      "dashTelegram"
-    ).textContent =
-      data.telegram
-        ? "ON"
-        : "OFF";
-
-    document.getElementById(
-      "dashWhatsApp"
-    ).textContent =
-      data.whatsapp
-        ? "ON"
-        : "OFF";
-
-    document.getElementById(
-      "aiModel"
-    ).textContent =
-      "Model: " +
-      (
-        data.model ||
-        "Auto"
-      );
-
-    const webhookOK =
-      data.webhook?.result?.url ||
-      data.webhook?.url;
-
-    document.getElementById(
-      "dashWebsite"
-    ).textContent =
-      "ONLINE";
-
-    result(
-      "dashboardResult",
-      JSON.stringify(
-        data,
-        null,
-        2
-      ),
-      "ok"
-    );
-
-    result(
-      "workerResult",
-      JSON.stringify(
-        data,
-        null,
-        2
-      ),
-      "ok"
-    );
-
-    log(
-      "Worker health OK"
-    );
-
+    document.getElementById("dashWebsite").textContent = "ONLINE";
+    result("dashboardResult", JSON.stringify(data, null, 2), "ok");
+    result("workerResult", JSON.stringify(data, null, 2), "ok");
+    log("Worker health OK");
   }catch(error){
-
-    result(
-      "dashboardResult",
-      "❌ " +
-      error.message,
-      "error"
-    );
-
-    result(
-      "workerResult",
-      "❌ " +
-      error.message,
-      "error"
-    );
-
-    document.getElementById(
-      "dashWebsite"
-    ).textContent =
-      "ERROR";
-
-    log(
-      "Worker error: " +
-      error.message
-    );
-
+    result("dashboardResult", "❌ " + error.message, "error");
+    result("workerResult", "❌ " + error.message, "error");
+    document.getElementById("dashWebsite").textContent = "ERROR";
+    log("Worker error: " + error.message);
   }
-
 }
 
-document
-  .getElementById(
-    "healthBtn"
-  )
-  .addEventListener(
-    "click",
-    checkHealth
-  );
-
-document
-  .getElementById(
-    "workerHealthBtn"
-  )
-  .addEventListener(
-    "click",
-    checkHealth
-  );
+document.getElementById("healthBtn").addEventListener("click", checkHealth);
+document.getElementById("workerHealthBtn").addEventListener("click", checkHealth);
 
 /* ============================================================
    TELEGRAM TEST
 ============================================================ */
 
 async function testTelegram(){
-
   try{
+    result("dashboardResult", "⏳ ناردنی Telegram...", "info");
+    const response = await fetch(workerURL() + "/test-telegram", { method:"POST" });
+    const data = await response.json();
+    if(!response.ok || !data.ok) throw new Error(data.error || data.description || "Telegram error");
 
-    result(
-      "dashboardResult",
-      "⏳ ناردنی Telegram...",
-      "info"
-    );
-
-    const response =
-      await fetch(
-        workerURL() +
-        "/test-telegram",
-        {
-          method:"POST"
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if(!response.ok || !data.ok){
-
-      throw new Error(
-        data.error ||
-        data.description ||
-        "Telegram error"
-      );
-
-    }
-
-    result(
-      "dashboardResult",
-      "✅ نامەی تاقیکردنەوە نێردرا بۆ Telegram.",
-      "ok"
-    );
-
-    toast(
-      "✅ Telegram کار دەکات"
-    );
-
-    log(
-      "Telegram test OK"
-    );
-
+    result("dashboardResult", "✅ نامەی تاقیکردنەوە نێردرا بۆ Telegram.", "ok");
+    toast("✅ Telegram کار دەکات");
+    log("Telegram test OK");
   }catch(error){
-
-    result(
-      "dashboardResult",
-      "❌ " +
-      error.message,
-      "error"
-    );
-
-    log(
-      "Telegram error: " +
-      error.message
-    );
-
+    result("dashboardResult", "❌ " + error.message, "error");
+    log("Telegram error: " + error.message);
   }
-
 }
 
-document
-  .getElementById(
-    "telegramTestBtn"
-  )
-  .addEventListener(
-    "click",
-    testTelegram
-  );
+document.getElementById("telegramTestBtn").addEventListener("click", testTelegram);
 
 /* ============================================================
    AI
 ============================================================ */
 
-async function askAI(
-  question
-){
-
-  const answer =
-    question ||
-    document.getElementById(
-      "aiQuestion"
-    ).value.trim();
-
+async function askAI(question){
+  const answer = question || document.getElementById("aiQuestion").value.trim();
   if(!answer){
-
-    result(
-      "aiResult",
-      "تکایە پرسیار بنووسە.",
-      "error"
-    );
-
+    result("aiResult", "تکایە پرسیار بنووسە.", "error");
     return;
   }
 
   try{
+    result("aiResult", "⏳ Gemini لە وەڵامدانەوەدایە...", "info");
+    const response = await fetch(workerURL() + "/api/ai", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ prompt: answer, website: state })
+    });
 
-    result(
-      "aiResult",
-      "⏳ Gemini لە وەڵامدانەوەدایە...",
-      "info"
-    );
+    const data = await response.json();
+    if(!response.ok || !data.ok) throw new Error(data.error || "Gemini error");
 
-    const response =
-      await fetch(
-        workerURL() +
-        "/api/ai",
-        {
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              message:
-                answer,
-
-              website:
-                state
-
-            })
-        }
-      );
-
-    const data =
-      await response.json();
-
-    if(
-      !response.ok ||
-      !data.ok
-    ){
-
-      throw new Error(
-        data.error ||
-        "Gemini error"
-      );
-
-    }
-
-    result(
-      "aiResult",
-      data.answer ||
-      "هیچ وەڵامێک نەهات.",
-      "ok"
-    );
-
-    log(
-      "Gemini response received"
-    );
-
+    result("aiResult", data.text || data.answer || "هیچ وەڵامێک نەهات.", "ok");
+    log("Gemini response received");
   }catch(error){
-
-    result(
-      "aiResult",
-      "❌ " +
-      error.message,
-      "error"
-    );
-
-    log(
-      "Gemini error: " +
-      error.message
-    );
-
+    result("aiResult", "❌ " + error.message, "error");
+    log("Gemini error: " + error.message);
   }
-
 }
 
-document
-  .getElementById(
-    "aiBtn"
-  )
-  .addEventListener(
-    "click",
-    () => askAI()
-  );
+document.getElementById("aiBtn").addEventListener("click", () => askAI());
+document.getElementById("aiQuickBtn").addEventListener("click", () => {
+  showPage("ai");
+  askAI("تەنها وەڵام بدە: سڵاو KURDIA");
+});
 
-document
-  .getElementById(
-    "aiQuickBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      showPage("ai");
-
-      askAI(
-        "تەنها وەڵام بدە: سڵاو KURDIA"
-      );
-
-    }
-  );
-
-document
-  .getElementById(
-    "aiGenerateBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const prompt =
-        document.getElementById(
-          "aiQuestion"
-        ).value.trim();
-
-      if(!prompt){
-
-        result(
-          "aiResult",
-          "تکایە جۆری دەقەکە بنووسە.",
-          "error"
-        );
-
-        return;
-      }
-
-      askAI(
-`دەقێکی پیشەیی و جوانی کوردیی سۆرانی بۆ KURDIA ADVENTURE دروست بکە.
-
-داواکاری:
-${prompt}`
-      );
-
-    }
-  );
+document.getElementById("aiGenerateBtn").addEventListener("click", () => {
+  const prompt = document.getElementById("aiQuestion").value.trim();
+  if(!prompt){
+    result("aiResult", "تکایە جۆری دەقەکە بنووسە.", "error");
+    return;
+  }
+  askAI(`دەقێکی پیشەیی و جوانی کوردیی سۆرانی بۆ KURDIA ADVENTURE دروست بکە.\nداواکاری: ${prompt}`);
+});
 
 /* ============================================================
    AI ICON
 ============================================================ */
 
-document
-  .getElementById(
-    "iconAIBtn"
-  )
-  .addEventListener(
-    "click",
-    async () => {
+document.getElementById("iconAIBtn").addEventListener("click", async () => {
+  const name = document.getElementById("iconServiceName").value.trim();
+  if(!name){
+    result("iconResult", "ناوی خزمەتگوزاری بنووسە.", "error");
+    return;
+  }
 
-      const name =
-        document.getElementById(
-          "iconServiceName"
-        ).value.trim();
+  try{
+    result("iconResult", "⏳ AI هەڵی دەبژێرێت...", "info");
+    const response = await fetch(workerURL() + "/api/ai", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        prompt: `بۆ خزمەتگوزاریی "${name}" تەنها یەک emoji گونجاو هەڵبژێرە. تەنها emoji بنووسە.`
+      })
+    });
 
-      if(!name){
-
-        result(
-          "iconResult",
-          "ناوی خزمەتگوزاری بنووسە.",
-          "error"
-        );
-
-        return;
-      }
-
-      try{
-
-        result(
-          "iconResult",
-          "⏳ AI هەڵی دەبژێرێت...",
-          "info"
-        );
-
-        const response =
-          await fetch(
-            workerURL() +
-            "/api/ai",
-            {
-              method:"POST",
-
-              headers:{
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-
-                  message:
-`بۆ خزمەتگوزاریی "${name}" تەنها یەک emoji ـی گونجاو هەڵبژێرە.
-
-تەنها emoji ـکە بنووسە.
-هیچ وشەیەکی تر مەنووسە.`,
-
-                  website:
-                    state
-
-                })
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if(!response.ok || !data.ok){
-          throw new Error(
-            data.error ||
-            "AI error"
-          );
-        }
-
-        const icon =
-          (
-            data.answer ||
-            "⭐"
-          ).trim();
-
-        result(
-          "iconResult",
-          "🤖 Icon:\n" +
-          icon,
-          "ok"
-        );
-
-        toast(
-          "🤖 Icon هەڵبژێردرا"
-        );
-
-      }catch(error){
-
-        result(
-          "iconResult",
-          "❌ " +
-          error.message,
-          "error"
-        );
-
-      }
-
-    }
-  );
+    const data = await response.json();
+    if(!response.ok || !data.ok) throw new Error(data.error || "AI error");
+    const icon = (data.text || data.answer || "⭐").trim();
+    result("iconResult", "🤖 Icon:\n" + icon, "ok");
+    toast("🤖 Icon هەڵبژێردرا");
+  }catch(error){
+    result("iconResult", "❌ " + error.message, "error");
+  }
+});
 
 /* ============================================================
    REGISTRATION RECEIPT PREVIEW
 ============================================================ */
 
-document
-  .getElementById(
-    "regReceipt"
-  )
-  .addEventListener(
-    "change",
-    event => {
-
-      const file =
-        event.target.files?.[0];
-
-      const preview =
-        document.getElementById(
-          "receiptPreview"
-        );
-
-      if(!file){
-
-        preview.style.display =
-          "none";
-
-        return;
-      }
-
-      const url =
-        URL.createObjectURL(
-          file
-        );
-
-      preview.src =
-        url;
-
-      preview.style.display =
-        "block";
-
-    }
-  );
+document.getElementById("regReceipt").addEventListener("change", event => {
+  const file = event.target.files?.[0];
+  const preview = document.getElementById("receiptPreview");
+  if(!file){
+    preview.style.display = "none";
+    return;
+  }
+  const url = URL.createObjectURL(file);
+  preview.src = url;
+  preview.style.display = "block";
+});
 
 /* ============================================================
    REGISTRATION
 ============================================================ */
 
-document
-  .getElementById(
-    "registerBtn"
-  )
-  .addEventListener(
-    "click",
-    async () => {
+document.getElementById("registerBtn").addEventListener("click", async () => {
+  const name = document.getElementById("regName").value.trim();
+  const phone = document.getElementById("regPhone").value.trim();
+  const trip = document.getElementById("regTrip").value.trim();
+  const people = document.getElementById("regPeople").value.trim();
+  const receipt = document.getElementById("regReceipt").files?.[0];
 
-      const name =
-        document.getElementById(
-          "regName"
-        ).value.trim();
+  if(!name || !phone || !trip){
+    result("registrationResult", "❌ ناو، ژمارە و ناوی گەشت پێویستن.", "error");
+    return;
+  }
 
-      const phone =
-        document.getElementById(
-          "regPhone"
-        ).value.trim();
+  try{
+    result("registrationResult", "⏳ تۆمارەکە دەنێردرێت...", "info");
+    const form = new FormData();
+    form.append("name", name);
+    form.append("phone", phone);
+    form.append("trip", trip);
+    form.append("people", people || "1");
+    if(receipt) form.append("receipt", receipt, receipt.name);
 
-      const trip =
-        document.getElementById(
-          "regTrip"
-        ).value.trim();
+    const response = await fetch(workerURL() + "/api/register", { method:"POST", body:form });
+    const data = await response.json();
+    if(!response.ok || !data.ok) throw new Error(data.error || "Registration failed");
 
-      const people =
-        document.getElementById(
-          "regPeople"
-        ).value.trim();
+    result("registrationResult", `✅ تۆمارەکە نێردرا.\n🆔 ${data.registrationId || "—"}\n📩 نێردرا بۆ Telegram.\n⏳ چاوەڕوانی پشتڕاستکردنەوەی Admin.`, "ok");
+    toast("✅ Registration نێردرا");
+  }catch(error){
+    result("registrationResult", "❌ " + error.message, "error");
+  }
+});
 
-      const receipt =
-        document.getElementById(
-          "regReceipt"
-        ).files?.[0];
-
-      if(
-        !name ||
-        !phone ||
-        !trip
-      ){
-
-        result(
-          "registrationResult",
-          "❌ ناو، ژمارە و ناوی گەشت پێویستن.",
-          "error"
-        );
-
-        return;
-      }
-
-      try{
-
-        result(
-          "registrationResult",
-          "⏳ تۆمارەکە دەنێردرێت...",
-          "info"
-        );
-
-        const form =
-          new FormData();
-
-        form.append(
-          "name",
-          name
-        );
-
-        form.append(
-          "phone",
-          phone
-        );
-
-        form.append(
-          "trip",
-          trip
-        );
-
-        form.append(
-          "people",
-          people || "1"
-        );
-
-        if(receipt){
-
-          form.append(
-            "receipt",
-            receipt,
-            receipt.name
-          );
-
-        }
-
-        const response =
-          await fetch(
-            workerURL() +
-            "/api/register",
-            {
-              method:"POST",
-              body:form
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if(
-          !response.ok ||
-          !data.ok
-        ){
-
-          throw new Error(
-            data.error ||
-            "Registration failed"
-          );
-
-        }
-
-        result(
-          "registrationResult",
-`✅ تۆمارەکە نێردرا.
-
-🆔 ${data.registration_id || "—"}
-
-📩 نێردرا بۆ Telegram.
-
-⏳ چاوەڕوانی پشتڕاستکردنەوەی Admin.`,
-          "ok"
-        );
-
-        toast(
-          "✅ Registration نێردرا"
-        );
-
-      }catch(error){
-
-        result(
-          "registrationResult",
-          "❌ " +
-          error.message,
-          "error"
-        );
-
-      }
-
-    }
-  );
-
-document
-  .getElementById(
-    "clearRegBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      [
-        "regName",
-        "regPhone",
-        "regTrip"
-      ].forEach(id => {
-
-        document.getElementById(
-          id
-        ).value = "";
-
-      });
-
-      document.getElementById(
-        "regPeople"
-      ).value = "1";
-
-      document.getElementById(
-        "regReceipt"
-      ).value = "";
-
-      document.getElementById(
-        "receiptPreview"
-      ).style.display =
-        "none";
-
-      document.getElementById(
-        "registrationResult"
-      ).className =
-        "result";
-
-    }
-  );
+document.getElementById("clearRegBtn").addEventListener("click", () => {
+  ["regName", "regPhone", "regTrip"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("regPeople").value = "1";
+  document.getElementById("regReceipt").value = "";
+  document.getElementById("receiptPreview").style.display = "none";
+  document.getElementById("registrationResult").className = "result";
+});
 
 /* ============================================================
    CONTENT AI
 ============================================================ */
 
-document
-  .getElementById(
-    "contentAIBtn"
-  )
-  .addEventListener(
-    "click",
-    async () => {
+document.getElementById("contentAIBtn").addEventListener("click", async () => {
+  const title = document.getElementById("contentTitle").value.trim();
+  if(!title){
+    result("contentText", "ناونیشان بنووسە.", "error");
+    return;
+  }
 
-      const title =
-        document.getElementById(
-          "contentTitle"
-        ).value.trim();
+  try{
+    const response = await fetch(workerURL() + "/api/ai", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        prompt: `بۆ KURDIA ADVENTURE دەقی پیشەیی و کورت بۆ ئەم بابەتە دروست بکە:\n${title}\nبە کوردی سۆرانی.`
+      })
+    });
+    const data = await response.json();
+    if(!response.ok || !data.ok) throw new Error(data.error || "AI error");
+    document.getElementById("contentText").value = data.text || data.answer || "";
+  }catch(error){
+    toast("❌ " + error.message);
+  }
+});
 
-      if(!title){
-
-        result(
-          "contentText",
-          "ناونیشان بنووسە.",
-          "error"
-        );
-
-        return;
-      }
-
-      try{
-
-        const response =
-          await fetch(
-            workerURL() +
-            "/api/ai",
-            {
-              method:"POST",
-
-              headers:{
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-
-                  message:
-`بۆ KURDIA ADVENTURE دەقی پیشەیی و کورت بۆ ئەم بابەتە دروست بکە:
-
-${title}
-
-بە کوردیی سۆرانی.
-جوان، ڕوون و ڕێکلامی بێت.`,
-
-                  website:
-                    state
-
-                })
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if(!response.ok || !data.ok){
-
-          throw new Error(
-            data.error ||
-            "AI error"
-          );
-
-        }
-
-        document.getElementById(
-          "contentText"
-        ).value =
-          data.answer || "";
-
-      }catch(error){
-
-        toast(
-          "❌ " +
-          error.message
-        );
-
-      }
-
-    }
-  );
-
-document
-  .getElementById(
-    "contentApplyBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const title =
-        document.getElementById(
-          "contentTitle"
-        ).value.trim();
-
-      const text =
-        document.getElementById(
-          "contentText"
-        ).value;
-
-      if(!title){
-        return;
-      }
-
-      /*
-        ئەمە ناوەڕۆکەکە بە شێوەی generic
-        هەڵدەگرێت بۆ بەکارهێنانی Admin.
-      */
-
-      state.customContent =
-        state.customContent || {};
-
-      state.customContent[
-        title
-      ] = text;
-
-      pushHistory();
-      saveState();
-
-    }
-  );
+document.getElementById("contentApplyBtn").addEventListener("click", () => {
+  const title = document.getElementById("contentTitle").value.trim();
+  const text = document.getElementById("contentText").value;
+  if(!title) return;
+  state.customContent = state.customContent || {};
+  state.customContent[title] = text;
+  pushHistory();
+  saveState();
+});
 
 /* ============================================================
-   SETTINGS
+   SETTINGS & WEBHOOK
 ============================================================ */
 
 function loadSettings(){
-
-  const url =
-    workerURL();
-
-  setValue(
-    "workerUrl",
-    url
-  );
-
-  setValue(
-    "settingsWorker",
-    url
-  );
-
+  const url = workerURL();
+  setValue("workerUrl", url);
+  setValue("settingsWorker", url);
 }
 
-document
-  .getElementById(
-    "settingsSaveBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
+document.getElementById("settingsSaveBtn").addEventListener("click", () => {
+  const url = document.getElementById("settingsWorker").value.trim();
+  if(!url) return;
+  localStorage.setItem("KURDIA_WORKER_URL", url.replace(/\/+$/,""));
+  document.getElementById("workerUrl").value = url.replace(/\/+$/,"");
+  result("settingsResult", "✅ ڕێکخستنەکان پاشەکەوت کران.", "ok");
+  toast("✅ پاشەکەوت کرا");
+  checkHealth();
+});
 
-      const url =
-        document.getElementById(
-          "settingsWorker"
-        ).value.trim();
+document.getElementById("workerUrl").addEventListener("change", event => {
+  const value = event.target.value.trim().replace(/\/+$/,"");
+  localStorage.setItem("KURDIA_WORKER_URL", value);
+  document.getElementById("settingsWorker").value = value;
+});
 
-      if(!url){
-        return;
-      }
-
-      localStorage.setItem(
-        "KURDIA_WORKER_URL",
-        url.replace(/\/+$/,"")
-      );
-
-      document.getElementById(
-        "workerUrl"
-      ).value =
-        url.replace(/\/+$/,"");
-
-      result(
-        "settingsResult",
-        "✅ ڕێکخستنەکان پاشەکەوت کران.",
-        "ok"
-      );
-
-      toast(
-        "✅ پاشەکەوت کرا"
-      );
-
-      checkHealth();
-
-    }
-  );
-
-/* ============================================================
-   WORKER URL SYNC
-============================================================ */
-
-document
-  .getElementById(
-    "workerUrl"
-  )
-  .addEventListener(
-    "change",
-    event => {
-
-      const value =
-        event.target.value
-          .trim()
-          .replace(/\/+$/,"");
-
-      localStorage.setItem(
-        "KURDIA_WORKER_URL",
-        value
-      );
-
-      document.getElementById(
-        "settingsWorker"
-      ).value =
-        value;
-
-    }
-  );
-
-document
-  .getElementById(
-    "workerWebhookBtn"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      try{
-
-        const response =
-          await fetch(
-            workerURL() +
-            "/api/telegram/set-webhook",
-            {
-              method:"POST"
-            }
-          );
-
-        const data =
-          await response.json();
-
-        result(
-          "workerResult",
-          JSON.stringify(
-            data,
-            null,
-            2
-          ),
-          data.ok
-            ? "ok"
-            : "error"
-        );
-
-      }catch(error){
-
-        result(
-          "workerResult",
-          "❌ " +
-          error.message,
-          "error"
-        );
-
-      }
-
-    }
-  );
+document.getElementById("workerWebhookBtn").addEventListener("click", async () => {
+  try{
+    const response = await fetch(workerURL() + "/api/telegram/set-webhook", { method:"POST" });
+    const data = await response.json();
+    result("workerResult", JSON.stringify(data, null, 2), data.ok ? "ok" : "error");
+  }catch(error){
+    result("workerResult", "❌ " + error.message, "error");
+  }
+});
 
 /* ============================================================
    SAVE / PUBLISH
 ============================================================ */
 
-document
-  .getElementById(
-    "saveBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
+document.getElementById("saveBtn").addEventListener("click", () => {
+  pushHistory();
+  saveState();
+  const status = document.getElementById("builderStatus");
+  if(status) status.textContent = "Saved";
+});
 
-      pushHistory();
-      saveState();
+document.getElementById("publishBtn").addEventListener("click", () => {
+  normalizeState();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  publishState();
+  toast("🚀 Website state Publish کرا");
+  const status = document.getElementById("builderStatus");
+  if(status) status.textContent = "Published";
+});
 
-      const status =
-        document.getElementById(
-          "builderStatus"
-        );
+document.getElementById("undoBtn").addEventListener("click", undo);
+document.getElementById("redoBtn").addEventListener("click", redo);
 
-      if(status){
-        status.textContent =
-          "Saved";
-      }
-
-    }
-  );
-
-document
-  .getElementById(
-    "publishBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      normalizeState();
-
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(state)
-      );
-
-      publishState();
-
-      toast(
-        "🚀 Website state Publish کرا"
-      );
-
-      const status =
-        document.getElementById(
-          "builderStatus"
-        );
-
-      if(status){
-        status.textContent =
-          "Published";
-      }
-
-    }
-  );
-
-document
-  .getElementById(
-    "undoBtn"
-  )
-  .addEventListener(
-    "click",
-    undo
-  );
-
-document
-  .getElementById(
-    "redoBtn"
-  )
-  .addEventListener(
-    "click",
-    redo
-  );
-
-document
-  .getElementById(
-    "resetBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      if(
-        !confirm(
-          "هەموو ڕێکخستنەکانی Builder بگەڕێنمەوە بۆ بنەڕەت؟"
-        )
-      ){
-        return;
-      }
-
-      state =
-        deepClone(
-          DEFAULT_STATE
-        );
-
-      pushHistory();
-      saveState();
-      renderAll();
-      publishState();
-
-    }
-  );
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if(!confirm("هەموو ڕێکخستنەکانی Builder بگەڕێنمەوە بۆ بنەڕەت؟")) return;
+  state = deepClone(DEFAULT_STATE);
+  pushHistory();
+  saveState();
+  renderAll();
+  publishState();
+});
 
 /* ============================================================
    PREVIEW DEVICE
 ============================================================ */
 
-document.addEventListener(
-  "click",
-  event => {
+document.addEventListener("click", event => {
+  const btn = event.target.closest("[data-device]");
+  if(!btn) return;
+  document.querySelectorAll("[data-device]").forEach(x => x.classList.remove("active"));
+  btn.classList.add("active");
 
-    const btn =
-      event.target.closest(
-        "[data-device]"
-      );
+  const iframe = document.getElementById("sitePreview");
+  if(!iframe) return;
+  const device = btn.dataset.device;
 
-    if(!btn){
-      return;
-    }
+  if(device === "desktop") iframe.style.width = "100%";
+  else if(device === "tablet") iframe.style.width = "768px";
+  else iframe.style.width = "390px";
 
-    document
-      .querySelectorAll(
-        "[data-device]"
-      )
-      .forEach(
-        x =>
-          x.classList.remove(
-            "active"
-          )
-      );
+  iframe.style.margin = "0 auto";
+  iframe.style.display = "block";
+});
 
-    btn.classList.add(
-      "active"
-    );
-
-    const iframe =
-      document.getElementById(
-        "sitePreview"
-      );
-
-    if(!iframe){
-      return;
-    }
-
-    const device =
-      btn.dataset.device;
-
-    if(device === "desktop"){
-
-      iframe.style.width =
-        "100%";
-
-    }else if(device === "tablet"){
-
-      iframe.style.width =
-        "768px";
-
-    }else{
-
-      iframe.style.width =
-        "390px";
-
-    }
-
-    iframe.style.margin =
-      "0 auto";
-
-    iframe.style.display =
-      "block";
-
-  }
-);
-
-/* ============================================================
-   PREVIEW LOAD
-============================================================ */
-
-document
-  .getElementById(
-    "sitePreview"
-  )
-  .addEventListener(
-    "load",
-    () => {
-
-      publishState();
-
-      log(
-        "Preview loaded"
-      );
-
-    }
-  );
+document.getElementById("sitePreview").addEventListener("load", () => {
+  publishState();
+  log("Preview loaded");
+});
 
 /* ============================================================
    BACKUP
 ============================================================ */
 
-document
-  .getElementById(
-    "exportBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
+document.getElementById("exportBtn").addEventListener("click", () => {
+  normalizeState();
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "kurdia-backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
+  result("backupResult", "✅ Backup دروست کرا.", "ok");
+});
 
-      normalizeState();
+document.getElementById("importBtn").addEventListener("click", () => {
+  document.getElementById("importFile").click();
+});
 
-      const blob =
-        new Blob(
-          [
-            JSON.stringify(
-              state,
-              null,
-              2
-            )
-          ],
-          {
-            type:
-              "application/json"
-          }
-        );
+document.getElementById("importFile").addEventListener("change", async event => {
+  const file = event.target.files?.[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    state = JSON.parse(text);
+    normalizeState();
+    pushHistory();
+    saveState(false);
+    renderAll();
+    publishState();
+    result("backupResult", "✅ Backup بە سەرکەوتوویی restore کرا.", "ok");
+  }catch(error){
+    result("backupResult", "❌ فایلەکە دروست نییە.", "error");
+  }
+  event.target.value = "";
+});
 
-      const url =
-        URL.createObjectURL(
-          blob
-        );
-
-      const a =
-        document.createElement(
-          "a"
-        );
-
-      a.href =
-        url;
-
-      a.download =
-        "kurdia-backup.json";
-
-      a.click();
-
-      URL.revokeObjectURL(
-        url
-      );
-
-      result(
-        "backupResult",
-        "✅ Backup دروست کرا.",
-        "ok"
-      );
-
-    }
-  );
-
-document
-  .getElementById(
-    "importBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document.getElementById(
-        "importFile"
-      ).click();
-
-    }
-  );
-
-document
-  .getElementById(
-    "importFile"
-  )
-  .addEventListener(
-    "change",
-    async event => {
-
-      const file =
-        event.target.files?.[0];
-
-      if(!file){
-        return;
-      }
-
-      try{
-
-        const text =
-          await file.text();
-
-        const imported =
-          JSON.parse(text);
-
-        state =
-          imported;
-
-        normalizeState();
-
-        pushHistory();
-        saveState(false);
-        renderAll();
-        publishState();
-
-        result(
-          "backupResult",
-          "✅ Backup بە سەرکەوتوویی restore کرا.",
-          "ok"
-        );
-
-      }catch(error){
-
-        result(
-          "backupResult",
-          "❌ فایلەکە دروست نییە.",
-          "error"
-        );
-
-      }
-
-      event.target.value = "";
-
-    }
-  );
-
-document
-  .getElementById(
-    "clearDataBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      if(
-        !confirm(
-          "دڵنیایت هەموو Data ـی Builder بسڕینەوە؟"
-        )
-      ){
-        return;
-      }
-
-      localStorage.removeItem(
-        STORAGE_KEY
-      );
-
-      state =
-        deepClone(
-          DEFAULT_STATE
-        );
-
-      pushHistory();
-      renderAll();
-      publishState();
-
-      result(
-        "backupResult",
-        "🗑️ Data پاککرایەوە.",
-        "ok"
-      );
-
-    }
-  );
+document.getElementById("clearDataBtn").addEventListener("click", () => {
+  if(!confirm("دڵنیایت هەموو Data ـی Builder بسڕینەوە؟")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = deepClone(DEFAULT_STATE);
+  pushHistory();
+  renderAll();
+  publishState();
+  result("backupResult", "🗑️ Data پاککرایەوە.", "ok");
+});
 
 /* ============================================================
-   NAVIGATION EVENTS
+   NAVIGATION & LOGIN
 ============================================================ */
 
-document
-  .querySelectorAll(
-    ".nav button"
-  )
-  .forEach(
-    button => {
+document.querySelectorAll(".nav button").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.page));
+});
 
-      button.addEventListener(
-        "click",
-        () => {
-
-          showPage(
-            button.dataset.page
-          );
-
-        }
-      );
-
-    }
-  );
-
-document
-  .getElementById(
-    "menuBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "sidebar"
-        )
-        .classList.toggle(
-          "open"
-        );
-
-    }
-  );
-
-/* ============================================================
-   LOGIN
-============================================================ */
+document.getElementById("menuBtn").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("open");
+});
 
 function login(){
-
-  const pin =
-    document.getElementById(
-      "loginPin"
-    ).value;
-
+  const pin = document.getElementById("loginPin").value;
   if(pin !== ADMIN_PIN){
-
-    result(
-      "loginError",
-      "❌ PIN هەڵەیە.",
-      "error"
-    );
-
+    result("loginError", "❌ PIN هەڵەیە.", "error");
     return;
-
   }
-
-  sessionStorage.setItem(
-    "KURDIA_ADMIN_AUTH",
-    "1"
-  );
-
-  document.getElementById(
-    "loginScreen"
-  ).style.display =
-    "none";
-
-  document.getElementById(
-    "app"
-  ).style.display =
-    "block";
-
+  sessionStorage.setItem("KURDIA_ADMIN_AUTH", "1");
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
   init();
-
 }
 
-document
-  .getElementById(
-    "loginBtn"
-  )
-  .addEventListener(
-    "click",
-    login
-  );
-
-document
-  .getElementById(
-    "loginPin"
-  )
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if(
-        event.key === "Enter"
-      ){
-        login();
-      }
-
-    }
-  );
+document.getElementById("loginBtn").addEventListener("click", login);
+document.getElementById("loginPin").addEventListener("keydown", event => {
+  if(event.key === "Enter") login();
+});
 
 /* ============================================================
-   RENDER ALL
+   RENDER ALL & INIT
 ============================================================ */
 
 function renderAll(){
-
   normalizeState();
-
   renderBuilder();
   renderServices();
   renderGallery();
   renderFAQ();
-
 }
-
-/* ============================================================
-   INIT
-============================================================ */
 
 async function init(){
-
   loadSettings();
-
   loadState();
-
   renderAll();
-
-  setTimeout(
-    checkHealth,
-    500
-  );
-
-  log(
-    "KURDIA ADMIN initialized"
-  );
-
+  setTimeout(checkHealth, 500);
+  log("KURDIA ADMIN initialized");
 }
 
-/* ============================================================
-   AUTH CHECK
-============================================================ */
-
-if(
-  sessionStorage.getItem(
-    "KURDIA_ADMIN_AUTH"
-  ) === "1"
-){
-
-  document.getElementById(
-    "loginScreen"
-  ).style.display =
-    "none";
-
-  document.getElementById(
-    "app"
-  ).style.display =
-    "block";
-
+if(sessionStorage.getItem("KURDIA_ADMIN_AUTH") === "1"){
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
   init();
-
 }
-
 </script>
 
 </body>
