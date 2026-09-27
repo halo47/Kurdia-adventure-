@@ -4404,7 +4404,33 @@ function booking(){
         class="input"
         placeholder="تێبینییەکی کورت"
        >
+<div class="receipt-upload">
+  <label
+    for="bookReceipt"
+    class="block text-sm font-bold mb-2"
+  >
+    🧾 بەڵگەی پارەدان
+  </label>
 
+  <input
+    id="bookReceipt"
+    type="file"
+    accept="image/jpeg,image/png,image/webp"
+    class="input"
+    required
+  >
+
+  <div
+    id="receiptPreview"
+    class="mt-3 hidden"
+  >
+    <img
+      id="receiptPreviewImage"
+      class="rounded-2xl w-full max-h-64 object-contain"
+      alt="Receipt preview"
+    >
+  </div>
+</div>
        <button
         type="submit"
         class="primary submit-button full"
@@ -4849,7 +4875,63 @@ function getTelegramConfig(){
 /* =========================================================
    BOOKING
 ========================================================= */
+/* =========================================================
+   RECEIPT PREVIEW
+========================================================= */
 
+document.addEventListener("change", function(event){
+
+  if(event.target.id !== "bookReceipt"){
+    return;
+  }
+
+  const file =
+    event.target.files?.[0];
+
+  const preview =
+    document.getElementById(
+      "receiptPreview"
+    );
+
+  const image =
+    document.getElementById(
+      "receiptPreviewImage"
+    );
+
+  if(!file){
+    preview?.classList.add("hidden");
+    return;
+  }
+
+  if(!file.type.startsWith("image/")){
+    toast("تکایە تەنها وێنەی بەڵگەی پارەدان هەڵبژێرە.");
+    event.target.value="";
+    return;
+  }
+
+  if(file.size > 10 * 1024 * 1024){
+    toast("قەبارەی وێنەکە نابێت لە 10MB زیاتر بێت.");
+    event.target.value="";
+    return;
+  }
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(e){
+
+    image.src =
+      e.target.result;
+
+    preview.classList.remove(
+      "hidden"
+    );
+
+  };
+
+  reader.readAsDataURL(file);
+
+});
 async function submitBooking(event){
 
  event.preventDefault();
