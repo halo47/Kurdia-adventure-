@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>KURDIA ADVENTURE — گەشت، سروشت و سەرکێشی</title>
-<meta id="metaDescription" name="description" content="KURDIA ADVENTURE — پلاتفۆرمی فەrmیی گەشتە شاخەوانی و سروشتییەکان لە کوردستان">
+<meta id="metaDescription" name="description" content="KURDIA ADVENTURE — پلاتفۆرمی فەرمیی گەشتە شاخەوانی و سروشتییەکان لە کوردستان">
 <meta name="theme-color" content="#070a10">
 
 <!-- FONTS & ICONS -->
@@ -344,7 +344,6 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
     <a href="#location" id="nav_location">شوێن</a>
    </nav>
 
-   <!-- HEADER ACTIONS: ONLY MUSIC, STORY & HAMBURGER (NO CROWDED LANGUAGES) -->
    <div class="flex items-center gap-2 sm:gap-3">
      <button id="musicToggleBtn" onclick="toggleMusic()" class="music-btn" title="Ambient Sound">
        <div class="sound-wave">
@@ -367,10 +366,8 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    </div>
   </div>
 
-  <!-- MOBILE HAMBURGER MENU (LANGUAGES PLACED INSIDE) -->
   <div id="mobileMenu" class="mobile-menu">
    <div class="container py-4">
-    <!-- Clean Language Switcher inside Menu -->
     <div class="menu-lang-box">
       <span class="text-xs font-bold text-gray-400">زمان / Language:</span>
       <div class="flex items-center gap-1">
@@ -440,6 +437,13 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
         <button onclick="shareStoryWhatsApp()" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400"><i data-lucide="share-2" class="w-4 h-4"></i> پشکەشکردن</button>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="lightboxModal" onclick="closeLightbox()">
+  <div class="max-w-4xl max-h-[85vh] relative flex items-center justify-center">
+    <img id="lightboxImg" class="max-w-full max-h-[85vh] rounded-2xl border border-white/20 shadow-2xl" src="" alt="Zoom">
+    <button class="absolute top-4 right-4 bg-black/70 text-white p-2 rounded-full"><i data-lucide="x"></i></button>
   </div>
 </div>
 
@@ -525,7 +529,7 @@ const I18N = {
     book_title: "ئامادەیت بۆ سەرکێشی؟", book_label: "ناونووسینی فەرمی",
     book_desc_otp: "سەرەتا مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاست بکەرەوە، پاشان تێچووەکە لە ڕێگەی کارتی بانکی FIB بنێرە و وێنەی پسوولەکە هاوپێچ بکە.",
     book_desc_no_otp: "زانیارییەکانت بنووسە، پارەکە بە FIB بنێرە و وێنەی پسوولەکەت بار بکە.",
-    fib_label: "هەژماری فەrmیی First Iraqi Bank (FIB):", fib_note: "تکایە لە کاتی ناردنی پارە، ناوی تەواوی خۆت لە تێبینی بنووسە.",
+    fib_label: "هەژماری فەرمیی First Iraqi Bank (FIB):", fib_note: "تکایە لە کاتی ناردنی پارە، ناوی تەواوی خۆت لە تێبینی بنووسە.",
     coupon_ask: "کۆدی داشکاندن (Coupon) هەتە؟", btn_apply: "چالاککردن",
     name_ph: "ناوی تەواوی بەشداربوو", phone_ph: "ژمارەی مۆبایل (WhatsApp)", btn_send_code: "کۆد بنێرە", btn_resend: "دووبارە", otp_ph: "کۆدی ٤ ژمارەیی", btn_verify: "سەلماندن",
     person_1: "١ کەس (تەنها خۆم)", person_multi: "{n} کەس", extra_ph: "ناوی کەسی {n}", note_ph: "تێبینی، نەخۆشی تایبەت یان شوێنی سەرکەوتن...",
@@ -746,9 +750,25 @@ function closeStoryModal(){ document.getElementById("storyModal").classList.remo
 function previewStoryImage(event){
   const file = event.target.files?.[0];
   if(!file) return;
+  
   const reader = new FileReader();
   reader.onload = function(e){
-    document.getElementById("stMediaBase64").value = e.target.result;
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement("canvas");
+      const maxDim = 800;
+      let w = img.width, h = img.height;
+      if (w > h && w > maxDim) { h = Math.round((h * maxDim) / w); w = maxDim; }
+      else if (h > maxDim) { w = Math.round((w * maxDim) / h); h = maxDim; }
+      
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      
+      document.getElementById("stMediaBase64").value = canvas.toDataURL("image/jpeg", 0.75);
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
