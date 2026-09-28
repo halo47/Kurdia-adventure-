@@ -31,21 +31,30 @@
 *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 html, body{
   width:100%; height:100%; overflow:hidden;
-  background:var(--bg); color:var(--text);
+  background:
+    radial-gradient(circle at 10% 5%, rgba(157,28,50,.18), transparent 28%),
+    radial-gradient(circle at 90% 35%, rgba(30,64,175,.1), transparent 28%),
+    radial-gradient(circle at 50% 85%, rgba(157,28,50,.12), transparent 30%),
+    var(--bg);
+  color:var(--text);
   font-family:"Vazirmatn", sans-serif;
 }
 .app-container{ display:flex; width:100%; height:100%; position:relative; }
 #adminAuthModal{
-  position:fixed; inset:0; background:rgba(7,10,16,0.98); backdrop-filter:blur(15px);
+  position:fixed; inset:0; background:rgba(7,10,16,0.95); backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
   z-index:999999; display:flex; align-items:center; justify-content:center; padding:20px;
 }
 .auth-box{
-  background:var(--surface); border:1px solid var(--border); border-radius:24px;
+  background:linear-gradient(145deg, rgba(19,28,41,.9), rgba(8,12,19,.95));
+  backdrop-filter:blur(25px);
+  border:1px solid var(--border); border-radius:24px;
   width:100%; max-width:380px; padding:32px 24px; text-align:center;
-  box-shadow:0 25px 60px rgba(0,0,0,0.8);
+  box-shadow:0 30px 70px rgba(0,0,0,0.85);
 }
 .sidebar{
-  width:var(--sidebar-w); background:#0a0f17; border-left:1px solid var(--border);
+  width:var(--sidebar-w); background:rgba(10,15,23,.85); backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px); border-left:1px solid var(--border);
   display:flex; flex-direction:column; flex-shrink:0; z-index:100;
   transition:transform .3s cubic-bezier(0.4, 0, 0.2, 1); height:100%;
 }
@@ -58,6 +67,7 @@ html, body{
   width:38px; height:38px; border-radius:12px;
   background:linear-gradient(135deg, var(--primary), var(--primary2));
   display:flex; align-items:center; justify-content:center; color:#fff;
+  box-shadow:0 8px 20px rgba(157,28,50,.35);
 }
 .brand-text h2{ font-size:15px; font-weight:900; line-height:1; }
 .brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.18em; font-weight:800; }
@@ -67,20 +77,21 @@ html, body{
   text-align:right; padding:11px 14px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:700;
   display:flex; align-items:center; gap:12px; font-family:inherit; transition:.2s;
 }
-.nav-btn:hover{ background:rgba(255,255,255,.04); color:#fff; }
+.nav-btn:hover{ background:rgba(255,255,255,.05); color:#fff; }
 .nav-btn.active{
   background:linear-gradient(135deg, rgba(157,28,50,.35), rgba(201,43,73,.2));
   color:#fff; border:1px solid rgba(201,43,73,.35);
 }
 .sidebar-footer{ padding:14px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
 .sidebar-backdrop{
-  position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(5px);
+  position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(8px);
   z-index:90; opacity:0; pointer-events:none; transition:.25s ease;
 }
 .sidebar-backdrop.active{ opacity:1; pointer-events:auto; }
 .workspace{ flex:1; display:flex; flex-direction:column; width:100%; height:100%; overflow:hidden; }
 .topbar{
-  height:64px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.96);
+  height:64px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.8);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
   display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0;
 }
 .topbar-right{ display:flex; align-items:center; gap:12px; }
@@ -90,7 +101,12 @@ html, body{
   cursor:pointer;
 }
 .content-body{ flex:1; overflow-y:auto; padding:20px; -webkit-overflow-scrolling:touch; }
-.card{ background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:18px; }
+.card{
+  background:linear-gradient(145deg, rgba(19,28,41,.75), rgba(8,12,19,.85));
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:18px;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
 .card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
 .card-title{ font-size:15px; font-weight:800; display:flex; align-items:center; gap:8px; }
 .field{ margin-bottom:14px; }
@@ -100,7 +116,7 @@ input, textarea, select{
   background:rgba(255,255,255,.04); color:#fff; padding:12px 14px; outline:none; font:inherit; font-size:13px;
   transition:.2s;
 }
-input:focus, textarea:focus, select:focus{ border-color:var(--primary2); box-shadow:0 0 0 3px rgba(157,28,50,.15); }
+input:focus, textarea:focus, select:focus{ border-color:var(--primary2); box-shadow:0 0 0 3px rgba(157,28,50,.2); }
 textarea{ min-height:85px; resize:vertical; }
 .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
@@ -111,7 +127,7 @@ textarea{ min-height:85px; resize:vertical; }
   display:inline-flex; align-items:center; gap:8px; font-size:13px; justify-content:center; text-align:center;
 }
 .btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
-.btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow:0 8px 24px rgba(157,28,50,.25); }
+.btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow:0 8px 24px rgba(157,28,50,.3); }
 .btn-success{ background:linear-gradient(135deg, #10b981, #059669); }
 .btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--border); }
 .btn-danger{ background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); }
@@ -119,7 +135,7 @@ textarea{ min-height:85px; resize:vertical; }
   border:2px dashed rgba(255,255,255,.14); border-radius:16px; padding:20px; text-align:center;
   cursor:pointer; background:rgba(255,255,255,.02); position:relative; overflow:hidden; transition:.2s;
 }
-.uploader-dropzone:hover{ border-color:var(--primary2); background:rgba(157,28,50,.04); }
+.uploader-dropzone:hover{ border-color:var(--primary2); background:rgba(157,28,50,.05); }
 .dropzone-preview{
   width:100%; height:150px; border-radius:12px; background-size:cover; background-position:center;
   display:none; margin-top:10px; border:1px solid var(--border);
@@ -127,7 +143,7 @@ textarea{ min-height:85px; resize:vertical; }
 .dropzone-preview.active{ display:block; }
 .item-row{
   display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
-  background:var(--surface2); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
+  background:rgba(19,28,41,.6); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
 }
 .gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:10px; margin-top:10px; }
 .gallery-thumb{ height:90px; border-radius:12px; background-size:cover; background-position:center; position:relative; overflow:hidden; border:1px solid var(--border); }
@@ -154,7 +170,7 @@ textarea{ min-height:85px; resize:vertical; }
   width:100%; max-width:540px; padding:18px; display:flex; flex-direction:column; gap:12px;
 }
 .crop-img-holder{ width:100%; height:320px; background:#000; border-radius:12px; overflow:hidden; }
-.lang-box-tab{ border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:14px; background:rgba(255,255,255,.015); }
+.lang-box-tab{ border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:14px; background:rgba(255,255,255,.02); }
 @media(max-width:850px){
   .sidebar{ position:fixed; top:0; right:0; bottom:0; transform:translateX(100%); box-shadow:-12px 0 35px rgba(0,0,0,.8); }
   .sidebar.open{ transform:translateX(0); }
@@ -235,19 +251,19 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- DASHBOARD -->
       <section class="page-tab active" id="tab-dashboard">
         <div class="grid-4 mb-4">
-          <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
             <div class="text-xs text-gray-400 font-bold">کۆی کورسییەکان</div>
             <div class="text-2xl font-black text-white mt-1" id="dashTotalCap">40</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
             <div class="text-xs text-gray-400 font-bold">ناونووسراوەکان</div>
             <div class="text-2xl font-black text-rose-500 mt-1" id="dashBooked">29</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
             <div class="text-xs text-gray-400 font-bold">شوێنی بەردەست</div>
             <div class="text-2xl font-black text-emerald-400 mt-1" id="dashAvailable">11</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
             <div class="text-xs text-gray-400 font-bold">دۆخی وەرگرتن</div>
             <div class="text-2xl font-black text-amber-400 mt-1" id="dashStatus">کراوەیە</div>
           </div>
@@ -370,7 +386,7 @@ textarea{ min-height:85px; resize:vertical; }
             <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
           </div>
 
-          <div class="grid-3 p-4 bg-white/[0.02] border border-white/5 rounded-2xl mb-4">
+          <div class="grid-3 p-4 bg-white/[0.03] border border-white/10 rounded-2xl mb-4 backdrop-blur-md">
             <div class="field">
               <label>⏰ کاتژمێری پێچەوانە (Countdown)</label>
               <input type="datetime-local" id="tripTargetDate" onchange="autoSync()">
@@ -557,7 +573,7 @@ textarea{ min-height:85px; resize:vertical; }
         <div class="card">
           <div class="card-title"><i data-lucide="table"></i> بەشداربووان لە Google Sheets</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
-            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ هاوکات لەگەڵ ئەم پەنێڵە دەچنە ناو خشتەکەت لە Google Sheets:
+            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ هاوکات لەگەڵ ئەم پەنێڵە دەچنە ناو خشتەکەت لە Google Sheets[span_2](start_span)[span_2](end_span):
           </p>
           <button class="btn btn-secondary w-full" onclick="openSheets()"><i data-lucide="file-spreadsheet"></i> کردنەوەی ڕاستەوخۆی Google Sheets</button>
         </div>
@@ -744,7 +760,7 @@ function applyCropAndSave(){
   const base64 = canvas.toDataURL("image/jpeg", 0.78);
 
   if(cropTarget.prop === "gallery"){
-    appState.gallery.push({ url: base64 });
+    appState.gallery.push({ url: base64, title: "KURDIA ADVENTURE" });
     renderGallery();
   } else {
     appState[cropTarget.prop] = base64;
@@ -790,7 +806,7 @@ function renderRegistrations(list){
   }
 
   c.innerHTML = list.map(reg => `
-    <div class="p-4 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+    <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
       <div>
         <div class="flex items-center gap-2">
           <span class="font-extrabold text-sm text-white">${reg.name}</span>
@@ -837,7 +853,7 @@ function renderAdminStories(list){
     return;
   }
   c.innerHTML = list.map(st => `
-    <div class="p-4 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+    <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
       <div class="flex items-center gap-3">
         <img src="${st.mediaUrl}" class="w-12 h-12 rounded-lg object-cover border border-white/20">
         <div>
@@ -860,7 +876,7 @@ async function moderateStory(id, action){
     const res = await fetch(`${WORKER_URL}/api/stories/moderation/${id}/${action}`, { method: "POST" });
     const d = await res.json();
     if(d.ok){
-      toast("✅ کردەکە سەرکەوتوو بوو");
+      toast("✅ کردارەکە سەرکەوتوو بوو");
       fetchAdminStories();
     } else {
       toast("❌ هەڵە لە ئەنجامدان");
