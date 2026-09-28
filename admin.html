@@ -12,6 +12,10 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 
+<!-- CROPPER.JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
 <style>
 :root{
   --primary:#9d1c32;
@@ -32,6 +36,17 @@ html, body{
 }
 
 .app-container{ display:flex; width:100%; height:100%; position:relative; }
+
+/* AUTH LOCK SCREEN */
+#adminAuthModal{
+  position:fixed; inset:0; background:rgba(7,10,16,0.98); backdrop-filter:blur(15px);
+  z-index:999999; display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.auth-box{
+  background:var(--surface); border:1px solid var(--border); border-radius:24px;
+  width:100%; max-width:380px; padding:32px 24px; text-align:center;
+  box-shadow:0 25px 60px rgba(0,0,0,0.8);
+}
 
 /* SIDEBAR DRAWER */
 .sidebar{
@@ -150,12 +165,18 @@ textarea{ min-height:85px; resize:vertical; }
 }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* KPI GRID */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-.kpi{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(157,28,50,.16),var(--surface));border:1px solid var(--border)}
-.kpi-num{font-size:25px;font-weight:900}.kpi-label{font-size:11px;color:var(--muted);margin-top:4px}
-.small-note{font-size:11px;color:var(--muted);line-height:1.8}
-@media(max-width:850px){.kpi-grid{grid-template-columns:1fr 1fr}}
+/* CROPPING MODAL */
+#cropModalWrapper{
+  position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:99999;
+  display:none; align-items:center; justify-content:center; padding:16px;
+}
+.crop-container-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:20px;
+  width:100%; max-width:540px; padding:18px; display:flex; flex-direction:column; gap:12px;
+}
+.crop-img-holder{
+  width:100%; height:320px; background:#000; border-radius:12px; overflow:hidden;
+}
 
 /* RESPONSIVE */
 @media(max-width:850px){
@@ -167,6 +188,19 @@ textarea{ min-height:85px; resize:vertical; }
 </style>
 </head>
 <body>
+
+<!-- AUTH LOCK SCREEN -->
+<div id="adminAuthModal">
+  <div class="auth-box">
+    <div class="brand-icon mx-auto mb-4"><i data-lucide="lock"></i></div>
+    <h2 class="text-lg font-black mb-1">تەختەی کۆنترۆڵی KURDIA</h2>
+    <p class="text-xs text-gray-400 mb-6">تکایە وشەی نهێنی یان PIN بنووسە بۆ چوونەژوورەوە</p>
+    <div class="field text-right mb-4">
+      <input type="password" id="adminPinInput" placeholder="PIN یان وشەی نهێنی..." style="text-align:center;letter-spacing:4px;font-size:16px;">
+    </div>
+    <button class="btn btn-primary w-full" onclick="checkAdminAuth()"><i data-lucide="check"></i> چوونەژوورەوە</button>
+  </div>
+</div>
 
 <div class="app-container">
   <div class="sidebar-backdrop" id="backdrop" onclick="toggleSidebar()"></div>
@@ -190,6 +224,7 @@ textarea{ min-height:85px; resize:vertical; }
       <li><button class="nav-btn active" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و بەشی سەرەکی</button></li>
       <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامە، کات و کەشوهەوا</button></li>
       <li><button class="nav-btn" onclick="switchTab('booking')"><i data-lucide="ticket-check"></i> Booking & OTP Switch</button></li>
+      <li><button class="nav-btn" onclick="switchTab('live_registrations')"><i data-lucide="user-check"></i> بەشداربووان و پەسەندکردن</button></li>
       <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> نامەی بیرخستنەوە (Broadcast)</button></li>
       <li><button class="nav-btn" onclick="switchTab('reviews')"><i data-lucide="message-circle"></i> بیروڕا و فیدباکەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</button></li>
@@ -258,11 +293,10 @@ textarea{ min-height:85px; resize:vertical; }
             <textarea id="heroSubtitle" oninput="autoSync()"></textarea>
           </div>
           <div class="field">
-            <label>وێنەی کاڤەری سەرەکی لە مۆبایل</label>
-            <div class="uploader-dropzone" onclick="document.getElementById('heroFileInput').click()">
+            <label>وێنەی کاڤەری سەرەکی لە مۆبایل (لەگەڵ بڕین / Crop)</label>
+            <div class="uploader-dropzone" onclick="triggerCropUpload('heroImageUrl', 'heroDropPreview', 16/9)">
               <i data-lucide="upload-cloud" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:12px;color:var(--muted);margin-top:5px;">پەنجە بنێ بۆ هەڵبژاردنی وێنە لە مۆبایل</p>
-              <input type="file" id="heroFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'heroImageUrl', 'heroDropPreview')">
+              <p style="font-size:12px;color:var(--muted);margin-top:5px;">پەنجە بنێ بۆ هەڵبژاردن و بڕینی وێنە</p>
               <div id="heroDropPreview" class="dropzone-preview"></div>
             </div>
           </div>
@@ -307,18 +341,17 @@ textarea{ min-height:85px; resize:vertical; }
             <textarea id="tripDesc" style="min-height:110px;" oninput="autoSync()"></textarea>
           </div>
           <div class="field">
-            <label>وێنەی تایبەتی گەشتەکە</label>
-            <div class="uploader-dropzone" onclick="document.getElementById('tripFileInput').click()">
+            <label>وێنەی تایبەتی گەشتەکە (لەگەڵ بڕین / Crop)</label>
+            <div class="uploader-dropzone" onclick="triggerCropUpload('tripImageUrl', 'tripDropPreview', 4/3)">
               <i data-lucide="image-plus" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی گەشتەکە دیاری بکە</p>
-              <input type="file" id="tripFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'tripImageUrl', 'tripDropPreview')">
+              <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی گەشتەکە دیاری بکە و بیبڕە</p>
               <div id="tripDropPreview" class="dropzone-preview"></div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 3. BOOKING & OTP SWITCH TAB (NEW & CRUCIAL!) -->
+      <!-- 3. BOOKING & OTP SWITCH TAB -->
       <section class="page-tab" id="tab-booking">
         <div class="card">
           <div class="card-title"><i data-lucide="shield-check"></i> کۆنترۆڵی سیستەمی OTP و ناونووسین</div>
@@ -337,6 +370,23 @@ textarea{ min-height:85px; resize:vertical; }
           <div class="grid-2">
             <div class="field"><label>کۆی کورسییەکان (Capacity)</label><input id="capacityInput" type="number" min="1"></div>
             <div class="field"><label>کورسییە گیراوەکان (Booked)</label><input id="bookedInput" type="number" min="0"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NEW: LIVE REGISTRATIONS & MANAGEMENT -->
+      <section class="page-tab" id="tab-live_registrations">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="users"></i> بەڕێوەبردنی ڕاستەوخۆی بەشداربووان</div>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary text-xs" onclick="fetchLiveRegistrations()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
+              <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
+            </div>
+          </div>
+          
+          <div id="registrationsContainer" class="flex flex-col gap-3">
+            <div class="text-center py-8 text-gray-400 text-xs">کلیک لەسەر نوێکردنەوە بکە بۆ هێنانی لیستی نوێ...</div>
           </div>
         </div>
       </section>
@@ -404,10 +454,9 @@ textarea{ min-height:85px; resize:vertical; }
       <section class="page-tab" id="tab-gallery">
         <div class="card">
           <div class="card-title"><i data-lucide="image"></i> گەلەری وێنەکان</div>
-          <div class="uploader-dropzone" onclick="document.getElementById('galleryFileInput').click()">
+          <div class="uploader-dropzone" onclick="triggerCropUpload('gallery', null, NaN)">
             <i data-lucide="upload" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-            <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی نوێ لە مۆبایل زیاد بکە</p>
-            <input type="file" id="galleryFileInput" accept="image/*" style="display:none" onchange="addGalleryPhoto(event)">
+            <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی نوێ بپشکنە، بیبڕە و زیادی بکە</p>
           </div>
           <div class="gallery-grid" id="galleryContainer"></div>
         </div>
@@ -462,12 +511,31 @@ textarea{ min-height:85px; resize:vertical; }
   </main>
 </div>
 
+<!-- CROPPING MODAL -->
+<div id="cropModalWrapper">
+  <div class="crop-container-card">
+    <div class="flex justify-between items-center">
+      <h3 class="font-extrabold text-sm flex items-center gap-2"><i data-lucide="crop"></i> دیاریکردن و بڕینی وێنە</h3>
+      <button class="text-gray-400 hover:text-white" onclick="closeCropModal()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="crop-img-holder">
+      <img id="imageForCropper" style="max-width:100%; display:block;" />
+    </div>
+    <div class="flex gap-2 justify-end mt-2">
+      <button class="btn btn-secondary" onclick="closeCropModal()">پاشگەزبوونەوە</button>
+      <button class="btn btn-primary" onclick="applyCropAndSave()"><i data-lucide="check"></i> بڕین و دانان</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="hiddenUniversalInput" accept="image/*" style="display:none;">
 <div id="toast" class="toast"></div>
 
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
 const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
+const ADMIN_SECRET_PIN = "2026"; // PINی ئاسایشی ئەدمین (دەتوانیت بیگۆڕیت)
 
 let appState = {
   gradColor1: "#9d1c32",
@@ -489,7 +557,7 @@ let appState = {
   weatherTemp: "١٨°C",
   weatherCondition: "ساماڵ و خۆرەتاو ☀️",
   bookingOpen: true,
-  otpRequired: true, // ئایا OTP داوا بکرێت؟
+  otpRequired: true,
   capacity: 40,
   booked: 0,
   fibAccount: "07503130360",
@@ -511,6 +579,191 @@ let appState = {
   waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت پەسەند نەکرا. ❌\n\n🆔 *کۆد:* {id}\n⚠️ *هۆکار:* {reason}`
 };
 
+let cachedRegistrations = [];
+
+// ==========================================
+// AUTH CHECK
+// ==========================================
+function checkAdminAuth(){
+  const val = document.getElementById("adminPinInput").value.trim();
+  if(val === ADMIN_SECRET_PIN || sessionStorage.getItem("admin_authenticated") === "true"){
+    sessionStorage.setItem("admin_authenticated", "true");
+    document.getElementById("adminAuthModal").style.display = "none";
+    toast("بەخێربێیت بۆ دەستەی کۆنترۆڵ 🏔️");
+  } else {
+    toast("❌ وشەی نهێنی یان PIN هەڵەیە");
+  }
+}
+
+// ==========================================
+// CROPPER CONTROLS
+// ==========================================
+let cropperInstance = null;
+let cropTarget = { prop: "", previewId: "", aspect: NaN };
+
+function triggerCropUpload(prop, previewId, aspect = NaN){
+  cropTarget = { prop, previewId, aspect };
+  const input = document.getElementById("hiddenUniversalInput");
+  input.value = "";
+  input.click();
+}
+
+document.getElementById("hiddenUniversalInput").addEventListener("change", function(e){
+  const file = e.target.files?.[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    const modal = document.getElementById("cropModalWrapper");
+    const img = document.getElementById("imageForCropper");
+    img.src = evt.target.result;
+    modal.style.display = "flex";
+
+    if(cropperInstance) cropperInstance.destroy();
+    cropperInstance = new Cropper(img, {
+      aspectRatio: cropTarget.aspect,
+      viewMode: 1,
+      autoCropArea: 0.85,
+      responsive: true
+    });
+  };
+  reader.readAsDataURL(file);
+});
+
+function closeCropModal(){
+  document.getElementById("cropModalWrapper").style.display = "none";
+  if(cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+}
+
+function applyCropAndSave(){
+  if(!cropperInstance) return;
+  const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1000, maxHeight: 1000 });
+  const base64 = canvas.toDataURL("image/jpeg", 0.78);
+
+  if(cropTarget.prop === "gallery"){
+    appState.gallery.push({ url: base64 });
+    renderGallery();
+  } else {
+    appState[cropTarget.prop] = base64;
+    if(cropTarget.previewId){
+      const p = document.getElementById(cropTarget.previewId);
+      p.style.backgroundImage = `url('${base64}')`;
+      p.classList.add("active");
+    }
+  }
+
+  autoSync();
+  closeCropModal();
+  toast("✅ وێنەکە بە سەرکەوتوویی بڕدرا و دانرا");
+}
+
+// ==========================================
+// LIVE REGISTRATIONS & VERIFY / REJECT
+// ==========================================
+async function fetchLiveRegistrations(){
+  toast("⏳ خەریکی هێنانی زانیارییەکانە...");
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/registrations`);
+    const data = await res.json();
+    if(data.ok && Array.isArray(data.registrations)){
+      cachedRegistrations = data.registrations;
+      renderRegistrations(cachedRegistrations);
+      toast(`✅ ${cachedRegistrations.length} داواکاری بارکرا`);
+    } else {
+      renderRegistrations([]);
+      toast("هیچ داتایەک نەدۆزرایەوە یان سێرڤەر وەڵامی نەدایەوە");
+    }
+  }catch(e){
+    toast("کێشە لە پەیوەندی بە وۆرکەر");
+  }
+}
+
+function renderRegistrations(list){
+  const c = document.getElementById("registrationsContainer");
+  if(!c) return;
+
+  if(!list.length){
+    c.innerHTML = `<div class="text-center py-8 text-gray-400 text-xs">هیچ داواکارییەکی تۆمارکراو نییە.</div>`;
+    return;
+  }
+
+  c.innerHTML = list.map((reg, idx) => `
+    <div class="p-4 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold text-sm text-white">${reg.name}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full ${reg.status?.includes('پەسەند') ? 'bg-emerald-500/20 text-emerald-400' : (reg.status?.includes('ڕەت') ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400')}">${reg.status || 'چاوەڕوان'}</span>
+        </div>
+        <div class="text-xs text-gray-400 mt-1 flex flex-wrap gap-x-3">
+          <span>📱 ${reg.phone}</span>
+          <span>👥 ${reg.people || 1} کەس</span>
+          <span>🆔 ${reg.id}</span>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check"></i> پەسەندکردن (WhatsApp)</button>
+        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
+      </div>
+    </div>
+  `).join("");
+  if(window.lucide) lucide.createIcons();
+}
+
+async function directVerify(id, phone){
+  if(!confirm(`ئایا دڵنیایت لە پەسەندکردنی ئەم بەشداربووە و ناردنی نامەی فەرمی بۆ ${phone}؟`)) return;
+  toast("⏳ دەنێردرێت...");
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/verify-booking`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ id, phone })
+    });
+    const d = await res.json();
+    if(res.ok && d.ok){
+      toast("✅ نامەی پەسەندکردن بە سەرکەوتوویی نێردرا");
+      fetchLiveRegistrations();
+    } else {
+      toast("❌ هەڵە لە ناردن: " + (d.error || ""));
+    }
+  }catch(e){ toast("کێشە لە پەیوەندی"); }
+}
+
+async function directReject(id, phone){
+  const reason = prompt("تکایە هۆکاری ڕەتکردنەوە بنووسە:", "پسوولەکە ناڕوونە یان بڕی پارەکە تەواو نییە");
+  if(!reason) return;
+  toast("⏳ دەنێردرێت...");
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/reject-booking`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ id, phone, reason })
+    });
+    const d = await res.json();
+    if(res.ok && d.ok){
+      toast("❌ نامەی ڕەتکردنەوە نێردرا");
+      fetchLiveRegistrations();
+    } else {
+      toast("❌ هەڵە لە ناردن: " + (d.error || ""));
+    }
+  }catch(e){ toast("کێشە لە پەیوەندی"); }
+}
+
+function exportRegistrationsToCSV(){
+  if(!cachedRegistrations.length) return toast("هیچ داتایەک نییە بۆ دابەزاندن");
+  let csv = "\uFEFFناوی بەشداربوو,ژمارەی مۆبایل,کۆی کەس,کۆدی داواکاری,دۆخ\n";
+  cachedRegistrations.forEach(r => {
+    csv += `"${r.name}","${r.phone}","${r.people || 1}","${r.id}","${r.status || ''}"\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `kurdia-members-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ==========================================
+// GENERAL CONTROLS & SYNC
+// ==========================================
 function toast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg;
@@ -525,7 +778,8 @@ function toggleSidebar(){
 
 function switchTab(tabId){
   document.querySelectorAll(".page-tab").forEach(tab => tab.classList.remove("active"));
-  document.getElementById("tab-" + tabId).classList.add("active");
+  const target = document.getElementById("tab-" + tabId);
+  if(target) target.classList.add("active");
 
   document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
   event.currentTarget.classList.add("active");
@@ -534,6 +788,7 @@ function switchTab(tabId){
     design: "ڕەنگ و بەشی سەرەکی",
     trip: "بەرنامە، کات و کەشوهەوا",
     booking: "Booking & OTP Switch",
+    live_registrations: "بەشداربووان و پەسەندکردن",
     broadcast: "نامەی بیرخستنەوە (Broadcast)",
     reviews: "بیروڕا و فیدباکەکان",
     services: "خزمەتگوزارییەکان",
@@ -546,43 +801,6 @@ function switchTab(tabId){
   };
   document.getElementById("topbarTitle").textContent = titles[tabId] || "کۆنترۆڵی ماڵپەڕ";
   if(window.innerWidth <= 850) toggleSidebar();
-}
-
-function compressImage(file, maxWidth = 900, quality = 0.72){
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        let w = img.width, h = img.height;
-        if(w > maxWidth){ h = Math.round((h * maxWidth) / w); w = maxWidth; }
-        const canvas = document.createElement("canvas");
-        canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      img.onerror = reject;
-      img.src = ev.target.result;
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-async function handleImageUpload(e, stateProp, previewId){
-  const file = e.target.files?.[0];
-  if(!file) return;
-  toast("⏳ وێنەکە ئامادە دەکرێت...");
-  try{
-    const compressed = await compressImage(file, 900, 0.75);
-    appState[stateProp] = compressed;
-    const prev = document.getElementById(previewId);
-    prev.style.backgroundImage = `url('${compressed}')`;
-    prev.classList.add("active");
-    autoSync();
-    toast("✅ وێنەکە دانرا");
-  }catch(err){ toast("❌ کێشە لە وێنە"); }
 }
 
 async function sendBroadcastReminder(){
@@ -623,7 +841,6 @@ function autoSync(){
   appState.weatherTemp = document.getElementById("weatherTemp").value;
   appState.weatherCondition = document.getElementById("weatherCondition").value;
 
-  // سوویچی OTP
   appState.otpRequired = document.getElementById("otpRequiredSwitch").checked;
   appState.capacity = Number(document.getElementById("capacityInput").value || 40);
   appState.booked = Number(document.getElementById("bookedInput").value || 0);
@@ -728,12 +945,6 @@ function renderGallery(){
   const c = document.getElementById("galleryContainer"); if(!c) return;
   c.innerHTML = (appState.gallery||[]).map((img,i)=>`<div class="gallery-thumb" style="background-image:url('${img.url||img}')"><button class="gallery-delete" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync();">✕</button></div>`).join("");
 }
-async function addGalleryPhoto(e){
-  const file = e.target.files?.[0]; if(!file) return;
-  toast("⏳ وێنە زیاد دەکرێت...");
-  const compressed = await compressImage(file, 750, 0.70);
-  appState.gallery.push({url:compressed}); renderGallery(); autoSync(); toast("✅ زیادکرا");
-}
 
 async function saveWhatsAppToCloud(){
   autoSync(); toast("⏳ لە سێرڤەر سەیڤ دەکرێت...");
@@ -774,6 +985,9 @@ function importBackup(e){
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  if(sessionStorage.getItem("admin_authenticated") === "true"){
+    document.getElementById("adminAuthModal").style.display = "none";
+  }
   loadState();
   if(window.lucide) lucide.createIcons();
 });
