@@ -196,6 +196,7 @@ textarea{ min-height:85px; resize:vertical; }
       <li><button class="nav-btn active" onclick="switchTab('dashboard')"><i data-lucide="layout-dashboard"></i> داشبۆردی سەرەکی</button></li>
       <li><button class="nav-btn" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و بەشی سەرەکی</button></li>
       <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامەی گەشت (٣ زمان)</button></li>
+      <li><button class="nav-btn" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> بەڕێوەبردنی ستۆرییەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('booking')"><i data-lucide="ticket-check"></i> دۆخی ناونووسین و OTP</button></li>
       <li><button class="nav-btn" onclick="switchTab('live_registrations')"><i data-lucide="user-check"></i> بەشداربووان و پەسەندکردن</button></li>
       <li><button class="nav-btn" onclick="switchTab('achievements')"><i data-lucide="trophy"></i> دەستکەوت و ئامارەکان</button></li>
@@ -255,8 +256,21 @@ textarea{ min-height:85px; resize:vertical; }
           <div class="card-title"><i data-lucide="zap"></i> کرداری خێرا</div>
           <div class="grid-3 mt-3">
             <button class="btn btn-secondary" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> بەشداربووان</button>
-            <button class="btn btn-secondary" onclick="switchTab('broadcast')"><i data-lucide="send"></i> پەیامی بەکۆمەڵ</button>
+            <button class="btn btn-secondary" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> ستۆرییەکان</button>
             <button class="btn btn-secondary" onclick="exportBackup()"><i data-lucide="download"></i> دابەزاندنی Backup</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STORIES MANAGEMENT -->
+      <section class="page-tab" id="tab-stories_tab">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="sparkles"></i> بەڕێوەبردنی ستۆرییەکان (Community Stories)</div>
+            <button class="btn btn-secondary text-xs" onclick="fetchAdminStories()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
+          </div>
+          <div id="adminStoriesContainer" class="flex flex-col gap-3">
+            <div class="text-xs text-gray-400 text-center py-6">هیچ ستۆرییەک نییە یان پێویستی بە نوێکردنەوەیە.</div>
           </div>
         </div>
       </section>
@@ -761,6 +775,7 @@ async function fetchLiveRegistrations(){
       toast("هیچ داتایەک نەدۆزرایەوە");
     }
   }catch(e){
+    renderRegistrations([]);
     toast("کێشە لە پەیوەندی بە وۆرکەر");
   }
 }
@@ -770,7 +785,7 @@ function renderRegistrations(list){
   if(!c) return;
 
   if(!list.length){
-    c.innerHTML = `<div class="text-center py-8 text-gray-400 text-xs">هیچ داواکارییەکی تۆمارکراو نییە.</div>`;
+    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە یان داتا نەدۆزرایەوە.</div>`;
     return;
   }
 
@@ -794,6 +809,63 @@ function renderRegistrations(list){
     </div>
   `).join("");
   if(window.lucide) lucide.createIcons();
+}
+
+// STORIES MODERATION ADMIN
+async function fetchAdminStories(){
+  toast("⏳ بارکردنی ستۆرییەکان...");
+  try{
+    const res = await fetch(`${WORKER_URL}/api/stories`);
+    const data = await res.json();
+    if(data.ok && Array.isArray(data.stories)){
+      renderAdminStories(data.stories);
+      toast("✅ ستۆرییەکان بارکران");
+    } else {
+      renderAdminStories([]);
+    }
+  }catch(e){
+    renderAdminStories([]);
+    toast("کێشە لە پەیوەندی ستۆرییەکان");
+  }
+}
+
+function renderAdminStories(list){
+  const c = document.getElementById("adminStoriesContainer");
+  if(!c) return;
+  if(!list.length){
+    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-6">هیچ ستۆرییەک نییە.</div>`;
+    return;
+  }
+  c.innerHTML = list.map(st => `
+    <div class="p-4 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+      <div class="flex items-center gap-3">
+        <img src="${st.mediaUrl}" class="w-12 h-12 rounded-lg object-cover border border-white/20">
+        <div>
+          <div class="font-extrabold text-sm text-white">${st.name} <span class="text-xs font-normal text-gray-400">(${st.city})</span></div>
+          <div class="text-xs text-gray-300 mt-1">«${st.text}»</div>
+          <div class="text-[10px] text-gray-400 mt-1">❤️ ${st.likes || 0} لایک | 👁️ ${st.views || 0} ڤیو | گەشت: ${st.tripName}</div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn btn-success text-xs py-2 px-3" onclick="moderateStory('${st.id}', 'approve')"><i data-lucide="check"></i> پەسەندکردن</button>
+        <button class="btn btn-danger text-xs py-2 px-3" onclick="moderateStory('${st.id}', 'delete')"><i data-lucide="trash"></i> سڕینەوە</button>
+      </div>
+    </div>
+  `).join("");
+  if(window.lucide) lucide.createIcons();
+}
+
+async function moderateStory(id, action){
+  try{
+    const res = await fetch(`${WORKER_URL}/api/stories/moderation/${id}/${action}`, { method: "POST" });
+    const d = await res.json();
+    if(d.ok){
+      toast("✅ کردەکە سەرکەوتوو بوو");
+      fetchAdminStories();
+    } else {
+      toast("❌ هەڵە لە ئەنجامدان");
+    }
+  }catch(e){ toast("کێشەی سێرڤەر"); }
 }
 
 async function directVerify(id, phone){
