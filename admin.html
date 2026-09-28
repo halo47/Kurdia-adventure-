@@ -7,7 +7,7 @@
 
 <!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -34,10 +34,7 @@ html, body{
   background:var(--bg); color:var(--text);
   font-family:"Vazirmatn", sans-serif;
 }
-
 .app-container{ display:flex; width:100%; height:100%; position:relative; }
-
-/* AUTH LOCK SCREEN */
 #adminAuthModal{
   position:fixed; inset:0; background:rgba(7,10,16,0.98); backdrop-filter:blur(15px);
   z-index:999999; display:flex; align-items:center; justify-content:center; padding:20px;
@@ -47,8 +44,6 @@ html, body{
   width:100%; max-width:380px; padding:32px 24px; text-align:center;
   box-shadow:0 25px 60px rgba(0,0,0,0.8);
 }
-
-/* SIDEBAR DRAWER */
 .sidebar{
   width:var(--sidebar-w); background:#0a0f17; border-left:1px solid var(--border);
   display:flex; flex-direction:column; flex-shrink:0; z-index:100;
@@ -66,7 +61,6 @@ html, body{
 }
 .brand-text h2{ font-size:15px; font-weight:900; line-height:1; }
 .brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.18em; font-weight:800; }
-
 .nav-list{ list-style:none; padding:12px 10px; display:flex; flex-direction:column; gap:4px; flex:1; overflow-y:auto; }
 .nav-btn{
   width:100%; border:0; background:transparent; color:#cbd5e1;
@@ -79,15 +73,11 @@ html, body{
   color:#fff; border:1px solid rgba(201,43,73,.35);
 }
 .sidebar-footer{ padding:14px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
-
-/* BACKDROP FOR MOBILE */
 .sidebar-backdrop{
   position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(5px);
   z-index:90; opacity:0; pointer-events:none; transition:.25s ease;
 }
 .sidebar-backdrop.active{ opacity:1; pointer-events:auto; }
-
-/* WORKSPACE */
 .workspace{ flex:1; display:flex; flex-direction:column; width:100%; height:100%; overflow:hidden; }
 .topbar{
   height:64px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.96);
@@ -99,10 +89,7 @@ html, body{
   color:#fff; width:38px; height:38px; border-radius:10px; align-items:center; justify-content:center;
   cursor:pointer;
 }
-
 .content-body{ flex:1; overflow-y:auto; padding:20px; -webkit-overflow-scrolling:touch; }
-
-/* CARDS & CONTROLS */
 .card{ background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:18px; }
 .card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
 .card-title{ font-size:15px; font-weight:800; display:flex; align-items:center; gap:8px; }
@@ -115,11 +102,9 @@ input, textarea, select{
 }
 input:focus, textarea:focus, select:focus{ border-color:var(--primary2); box-shadow:0 0 0 3px rgba(157,28,50,.15); }
 textarea{ min-height:85px; resize:vertical; }
-
 .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
 .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-
 .btn{
   border:0; border-radius:12px; padding:11px 18px; color:#fff;
   font-weight:800; cursor:pointer; background:var(--primary); transition:.2s; font-family:inherit;
@@ -130,7 +115,6 @@ textarea{ min-height:85px; resize:vertical; }
 .btn-success{ background:linear-gradient(135deg, #10b981, #059669); }
 .btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--border); }
 .btn-danger{ background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); }
-
 .uploader-dropzone{
   border:2px dashed rgba(255,255,255,.14); border-radius:16px; padding:20px; text-align:center;
   cursor:pointer; background:rgba(255,255,255,.02); position:relative; overflow:hidden; transition:.2s;
@@ -141,7 +125,6 @@ textarea{ min-height:85px; resize:vertical; }
   display:none; margin-top:10px; border:1px solid var(--border);
 }
 .dropzone-preview.active{ display:block; }
-
 .item-row{
   display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
   background:var(--surface2); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
@@ -152,12 +135,9 @@ textarea{ min-height:85px; resize:vertical; }
   position:absolute; top:4px; left:4px; width:22px; height:22px; border-radius:6px;
   background:rgba(0,0,0,.75); color:#ef4444; border:0; display:flex; align-items:center; justify-content:center;
 }
-
 .page-tab{ display:none; }
 .page-tab.active{ display:block; animation:fadeIn .2s ease; }
 @keyframes fadeIn{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:translateY(0); } }
-
-/* TOAST */
 .toast{
   position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
   padding:14px 22px; border-radius:14px; background:#111827; border:1px solid var(--border);
@@ -165,8 +145,6 @@ textarea{ min-height:85px; resize:vertical; }
   font-weight:800; font-size:12px; white-space:nowrap;
 }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
-/* CROPPING MODAL */
 #cropModalWrapper{
   position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:99999;
   display:none; align-items:center; justify-content:center; padding:16px;
@@ -175,11 +153,8 @@ textarea{ min-height:85px; resize:vertical; }
   background:var(--surface); border:1px solid var(--border); border-radius:20px;
   width:100%; max-width:540px; padding:18px; display:flex; flex-direction:column; gap:12px;
 }
-.crop-img-holder{
-  width:100%; height:320px; background:#000; border-radius:12px; overflow:hidden;
-}
-
-/* RESPONSIVE */
+.crop-img-holder{ width:100%; height:320px; background:#000; border-radius:12px; overflow:hidden; }
+.lang-box-tab{ border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:14px; background:rgba(255,255,255,.015); }
 @media(max-width:850px){
   .sidebar{ position:fixed; top:0; right:0; bottom:0; transform:translateX(100%); box-shadow:-12px 0 35px rgba(0,0,0,.8); }
   .sidebar.open{ transform:translateX(0); }
@@ -190,7 +165,6 @@ textarea{ min-height:85px; resize:vertical; }
 </head>
 <body>
 
-<!-- AUTH LOCK SCREEN -->
 <div id="adminAuthModal">
   <div class="auth-box">
     <div class="brand-icon mx-auto mb-4"><i data-lucide="lock"></i></div>
@@ -206,7 +180,6 @@ textarea{ min-height:85px; resize:vertical; }
 <div class="app-container">
   <div class="sidebar-backdrop" id="backdrop" onclick="toggleSidebar()"></div>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="brand">
@@ -216,19 +189,17 @@ textarea{ min-height:85px; resize:vertical; }
           <span>STUDIO BUILDER</span>
         </div>
       </div>
-      <button onclick="toggleSidebar()" style="background:none;border:0;color:#cbd5e1;cursor:pointer;">
-        <i data-lucide="x"></i>
-      </button>
+      <button onclick="toggleSidebar()" style="background:none;border:0;color:#cbd5e1;cursor:pointer;"><i data-lucide="x"></i></button>
     </div>
 
     <ul class="nav-list">
       <li><button class="nav-btn active" onclick="switchTab('dashboard')"><i data-lucide="layout-dashboard"></i> داشبۆردی سەرەکی</button></li>
       <li><button class="nav-btn" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و بەشی سەرەکی</button></li>
-      <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامەی گەشت و کەشوهەوا</button></li>
+      <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامەی گەشت (٣ زمان)</button></li>
       <li><button class="nav-btn" onclick="switchTab('booking')"><i data-lucide="ticket-check"></i> دۆخی ناونووسین و OTP</button></li>
       <li><button class="nav-btn" onclick="switchTab('live_registrations')"><i data-lucide="user-check"></i> بەشداربووان و پەسەندکردن</button></li>
       <li><button class="nav-btn" onclick="switchTab('achievements')"><i data-lucide="trophy"></i> دەستکەوت و ئامارەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('timeline_tab')"><i data-lucide="footprints"></i> هەنگاوەکانی ئەزموون</button></li>
+      <li><button class="nav-btn" onclick="switchTab('itinerary_tab')"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</button></li>
       <li><button class="nav-btn" onclick="switchTab('safety_tab')"><i data-lucide="shield-check"></i> پرۆتۆکۆلی سەلامەتی</button></li>
       <li><button class="nav-btn" onclick="switchTab('coupon')"><i data-lucide="tag"></i> کۆدی داشکاندن (Coupon)</button></li>
       <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> پەیامی بەکۆمەڵ (Broadcast)</button></li>
@@ -237,6 +208,7 @@ textarea{ min-height:85px; resize:vertical; }
       <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="image"></i> گەلەری وێنەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('whatsapp')"><i data-lucide="message-square"></i> نامەکانی WhatsApp & Maps</button></li>
       <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="credit-card"></i> دارایی و FIB</button></li>
+      <li><button class="nav-btn" onclick="switchTab('sheets_tab')"><i data-lucide="file-spreadsheet"></i> پەیوەندی بە Sheets</button></li>
       <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
     </ul>
 
@@ -246,7 +218,6 @@ textarea{ min-height:85px; resize:vertical; }
     </div>
   </aside>
 
-  <!-- WORKSPACE -->
   <main class="workspace">
     <header class="topbar">
       <div class="topbar-right">
@@ -260,7 +231,7 @@ textarea{ min-height:85px; resize:vertical; }
 
     <div class="content-body">
 
-      <!-- 0. DASHBOARD TAB -->
+      <!-- DASHBOARD -->
       <section class="page-tab active" id="tab-dashboard">
         <div class="grid-4 mb-4">
           <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
@@ -280,21 +251,20 @@ textarea{ min-height:85px; resize:vertical; }
             <div class="text-2xl font-black text-amber-400 mt-1" id="dashStatus">کراوەیە</div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-title"><i data-lucide="zap"></i> کرداری خێرا</div>
           <div class="grid-3 mt-3">
-            <button class="btn btn-secondary" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> بەڕێوەبردنی بەشداربووان</button>
-            <button class="btn btn-secondary" onclick="switchTab('broadcast')"><i data-lucide="send"></i> ناردنی نامەی بەکۆمەڵ</button>
+            <button class="btn btn-secondary" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> بەشداربووان</button>
+            <button class="btn btn-secondary" onclick="switchTab('broadcast')"><i data-lucide="send"></i> پەیامی بەکۆمەڵ</button>
             <button class="btn btn-secondary" onclick="exportBackup()"><i data-lucide="download"></i> دابەزاندنی Backup</button>
           </div>
         </div>
       </section>
 
-      <!-- 1. DESIGN TAB -->
+      <!-- DESIGN -->
       <section class="page-tab" id="tab-design">
         <div class="card">
-          <div class="card-title"><i data-lucide="pipette"></i> ڕەنگەکانی ماڵپەڕ (Brand Colors)</div>
+          <div class="card-title"><i data-lucide="palette"></i> ڕەنگەکانی ماڵپەڕ (Brand Colors)</div>
           <div class="grid-2">
             <div class="field">
               <label>ڕەنگی سەرەکی براند (Primary Accent)</label>
@@ -308,27 +278,28 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
 
         <div class="card">
-          <div class="card-title"><i data-lucide="layout"></i> بەشی سەرەکی (Hero Section)</div>
-          <div class="grid-2">
-            <div class="field">
-              <label>ناونیشانی پەڕە (SEO Title)</label>
-              <input id="seoTitle" oninput="autoSync()">
-            </div>
-            <div class="field">
-              <label>باجی سەرەوە (Badge Text)</label>
-              <input id="heroBadge" oninput="autoSync()">
-            </div>
+          <div class="card-title"><i data-lucide="layout"></i> بەشی سەرەکی بە سێ زمان (Hero Section)</div>
+          
+          <div class="lang-box-tab">
+            <h4 class="font-bold text-xs text-rose-400 mb-2">☀️ بە کوردی</h4>
+            <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
+            <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
           </div>
-          <div class="field">
-            <label>ناونیشانی گەورەی سەرەکی</label>
-            <input id="heroTitle" oninput="autoSync()">
+
+          <div class="lang-box-tab">
+            <h4 class="font-bold text-xs text-rose-400 mb-2">🌴 بالعربية</h4>
+            <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
+            <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
           </div>
-          <div class="field">
-            <label>پێناسەی ژێر ناونیشان</label>
-            <textarea id="heroSubtitle" oninput="autoSync()"></textarea>
+
+          <div class="lang-box-tab">
+            <h4 class="font-bold text-xs text-rose-400 mb-2">🌐 In English</h4>
+            <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
+            <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
           </div>
+
           <div class="field">
-            <label>وێنەی کاڤەری سەرەکی (لەگەڵ بڕین / Crop)</label>
+            <label>وێنەی کاڤەری سەرەکی</label>
             <div class="uploader-dropzone" onclick="triggerCropUpload('heroImageUrl', 'heroDropPreview', 16/9)">
               <i data-lucide="upload-cloud" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
               <p style="font-size:12px;color:var(--muted);margin-top:5px;">پەنجە بنێ بۆ هەڵبژاردن و بڕینی وێنە</p>
@@ -338,22 +309,51 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 2. TRIP & WEATHER TAB -->
+      <!-- TRIP -->
       <section class="page-tab" id="tab-trip">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="compass"></i> زانیاری گەشت، کات و کەشوهەوا</div>
+            <div class="card-title"><i data-lucide="compass"></i> زانیاری گەشتەکە بە ٣ زمان</div>
             <label class="flex items-center gap-2 cursor-pointer text-xs font-bold">
               <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:18px;height:18px;">
               دۆخی ناونووسین کراوەیە
             </label>
           </div>
-          <div class="field"><label>ناوی گەشت</label><input id="tripTitle" oninput="autoSync()"></div>
-          <div class="grid-2">
-            <div class="field"><label>نرخی بەشداری</label><input id="tripPrice" oninput="autoSync()"></div>
-            <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation" oninput="autoSync()"></div>
-            <div class="field"><label>کات و بەرواری بەڕێکەوتن</label><input id="tripTime" oninput="autoSync()"></div>
-            <div class="field"><label>ماوەی گەشت</label><input id="tripDuration" oninput="autoSync()"></div>
+
+          <!-- KRG -->
+          <div class="lang-box-tab">
+            <h4 class="font-bold text-xs text-rose-400 mb-2">☀️ بە زمانی کوردی</h4>
+            <div class="grid-2">
+              <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" oninput="autoSync()"></div>
+              <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" oninput="autoSync()"></div>
+              <div class="field"><label>نرخ</label><input id="tripPrice_ku" oninput="autoSync()"></div>
+              <div class="field"><label>کات و بەروار</label><input id="tripTime_ku" oninput="autoSync()"></div>
+            </div>
+            <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" oninput="autoSync()"></textarea></div>
+          </div>
+
+          <!-- ARABIC -->
+          <div class="lang-box-tab">
+            <h4 class="font-bold text-xs text-rose-400 mb-2">🌴 باللغة العربية</h4>
+            <div class="grid-2">
+              <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" oninput="autoSync()"></div>
+              <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" oninput="autoSync()"></div>
+              <div class="field"><label>السعر</label><input id="tripPrice_ar" oninput="autoSync()"></div>
+              <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" oninput="autoSync()"></div>
+            </div>
+            <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" oninput="autoSync()"></textarea></div>
+          </div>
+
+          <!-- ENGLISH -->
+          <div class="lang-box-tab">
+            <h4 class="font-bold text-xs text-rose-400 mb-2">🌐 In English</h4>
+            <div class="grid-2">
+              <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" oninput="autoSync()"></div>
+              <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" oninput="autoSync()"></div>
+              <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" oninput="autoSync()"></div>
+              <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" oninput="autoSync()"></div>
+            </div>
+            <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
           </div>
 
           <div class="grid-3 p-4 bg-white/[0.02] border border-white/5 rounded-2xl mb-4">
@@ -363,20 +363,16 @@ textarea{ min-height:85px; resize:vertical; }
             </div>
             <div class="field">
               <label>🌡️ پلەی گەرمیی پێشبینیکراو</label>
-              <input id="weatherTemp" placeholder="وەک: ١٨°C" oninput="autoSync()">
+              <input id="weatherTemp" placeholder="18°C" oninput="autoSync()">
             </div>
             <div class="field">
               <label>☀️ دۆخی کەشوهەوا</label>
-              <input id="weatherCondition" placeholder="وەک: ساماڵ و خۆرەتاو ☀️" oninput="autoSync()">
+              <input id="weatherCondition" placeholder="ساماڵ ☀️" oninput="autoSync()">
             </div>
           </div>
 
           <div class="field">
-            <label>تەواوی وردەکاری و بەرنامەی گەشت</label>
-            <textarea id="tripDesc" style="min-height:110px;" oninput="autoSync()"></textarea>
-          </div>
-          <div class="field">
-            <label>وێنەی تایبەتی گەشتەکە (لەگەڵ بڕین / Crop)</label>
+            <label>وێنەی تایبەتی گەشتەکە</label>
             <div class="uploader-dropzone" onclick="triggerCropUpload('tripImageUrl', 'tripDropPreview', 4/3)">
               <i data-lucide="image-plus" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
               <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی گەشتەکە دیاری بکە و بیبڕە</p>
@@ -386,15 +382,14 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 3. BOOKING & CAPACITY TAB -->
+      <!-- BOOKING & CAPACITY -->
       <section class="page-tab" id="tab-booking">
         <div class="card">
           <div class="card-title"><i data-lucide="shield-check"></i> دۆخی ناونووسین و توانست</div>
-          
           <div class="p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl mb-5 flex items-center justify-between">
             <div>
               <div class="font-extrabold text-sm text-white">داواکردنی کۆدی سەلماندنی WhatsApp (OTP)</div>
-              <div class="text-xs text-gray-400 mt-1">ئەگەر بکوژێنرێتەوە، بەشداربووان بەبێ کۆدی OTP ڕاستەوخۆ فۆڕمەکە دەنێرن.</div>
+              <div class="text-xs text-gray-400 mt-1">ئەگەر بکوژێنرێتەوە، بەشداربووان بەبێ کۆدی OTP فۆڕمەکە دەنێرن.</div>
             </div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" class="sr-only peer">
@@ -409,7 +404,7 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 4. LIVE REGISTRATIONS TAB -->
+      <!-- LIVE REGISTRATIONS -->
       <section class="page-tab" id="tab-live_registrations">
         <div class="card">
           <div class="card-header">
@@ -419,40 +414,37 @@ textarea{ min-height:85px; resize:vertical; }
               <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
             </div>
           </div>
-          
-          <div id="registrationsContainer" class="flex flex-col gap-3">
-            <div class="text-center py-8 text-gray-400 text-xs">کلیک لەسەر نوێکردنەوە بکە بۆ هێنانی لیستی نوێ...</div>
-          </div>
+          <div id="registrationsContainer" class="flex flex-col gap-3"></div>
         </div>
       </section>
 
-      <!-- 5. ACHIEVEMENTS & STATS TAB -->
+      <!-- ACHIEVEMENTS -->
       <section class="page-tab" id="tab-achievements">
         <div class="card">
-          <div class="card-title"><i data-lucide="trophy"></i> ئامار و دەستکەوتەکانی KURDIA ADVENTURE</div>
+          <div class="card-title"><i data-lucide="trophy"></i> ئامار و دەستکەوتەکان</div>
           <div class="grid-2">
             <div class="field"><label>ژمارە / باج (وەک: 39+)</label><input id="newStatNum" placeholder="39+"></div>
-            <div class="field"><label>پێناسە (وەک: بەشداربووی هەڵگورد)</label><input id="newStatLabel" placeholder="بەشداربووی لووتکەی هەڵگورد"></div>
+            <div class="field"><label>پێناسە</label><input id="newStatLabel" placeholder="بەشداربووی لووتکەی هەڵگورد"></div>
           </div>
           <button class="btn btn-primary w-full mb-3" onclick="addStatItem()"><i data-lucide="plus"></i> زیادکردنی ئامار</button>
           <div id="statsList"></div>
         </div>
       </section>
 
-      <!-- 6. TIMELINE (HOW IT WORKS) TAB -->
-      <section class="page-tab" id="tab-timeline_tab">
+      <!-- ITINERARY / TIMELINE -->
+      <section class="page-tab" id="tab-itinerary_tab">
         <div class="card">
-          <div class="card-title"><i data-lucide="footprints"></i> هەنگاوەکانی ئەزموونی گەشت</div>
+          <div class="card-title"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</div>
           <div class="grid-2">
-            <div class="field"><label>ناونیشانی هەنگاو</label><input id="newTimelineTitle" placeholder="کۆبوونەوە"></div>
-            <div class="field"><label>ڕوونکردنەوەی کورت</label><input id="newTimelineDesc" placeholder="لە شوێنی دیاریکراو بە پاس بەڕێدەکەوین..."></div>
+            <div class="field"><label>ناونیشان (وەک: کۆبوونەوە)</label><input id="newItineraryTitle" placeholder="کۆبوونەوە"></div>
+            <div class="field"><label>ڕوونکردنەوە (وەک: کاتژمێر ٥ی بەیانی)</label><input id="newItineraryText" placeholder="کاتژمێر ٥ی بەیانی"></div>
           </div>
-          <button class="btn btn-primary w-full mb-3" onclick="addTimelineItem()"><i data-lucide="plus"></i> زیادکردن</button>
-          <div id="timelineAdminList"></div>
+          <button class="btn btn-primary w-full mb-3" onclick="addItineraryItem()"><i data-lucide="plus"></i> زیادکردن</button>
+          <div id="itineraryList"></div>
         </div>
       </section>
 
-      <!-- 7. SAFETY TAB -->
+      <!-- SAFETY -->
       <section class="page-tab" id="tab-safety_tab">
         <div class="card">
           <div class="card-title"><i data-lucide="shield-check"></i> پرۆتۆکۆلی سەلامەتی</div>
@@ -463,42 +455,28 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 8. COUPON TAB -->
+      <!-- COUPON -->
       <section class="page-tab" id="tab-coupon">
         <div class="card">
           <div class="card-title"><i data-lucide="tag"></i> کۆدی داشکاندن (Coupon Code)</div>
           <div class="grid-2 mt-2">
-            <div class="field">
-              <label>دەقی کۆدی داشکاندن</label>
-              <input id="couponCodeInput" placeholder="وەک: KURDIA10" oninput="autoSync()">
-            </div>
-            <div class="field">
-              <label>ڕێژەی داشکاندن (%)</label>
-              <input id="couponDiscountInput" type="number" placeholder="وەک: 10" oninput="autoSync()">
-            </div>
+            <div class="field"><label>دەقی کۆدی داشکاندن</label><input id="couponCodeInput" placeholder="KURDIA10" oninput="autoSync()"></div>
+            <div class="field"><label>ڕێژەی داشکاندن (%)</label><input id="couponDiscountInput" type="number" placeholder="10" oninput="autoSync()"></div>
           </div>
         </div>
       </section>
 
-      <!-- 9. BROADCAST TAB -->
+      <!-- BROADCAST -->
       <section class="page-tab" id="tab-broadcast">
         <div class="card">
           <div class="card-title"><i data-lucide="send"></i> پەیامی بەکۆمەڵ لە ڕێگەی WhatsApp</div>
-          <div class="field">
-            <label>دەقی پەیام</label>
-            <textarea id="broadcastMessage" style="min-height:140px;line-height:1.8;" placeholder="سڵاو بەڕێزان 🌿..."></textarea>
-          </div>
-          <div class="field">
-            <label>لیستی ژمارەی مۆبایلەکان (هەر دێڕەی یەک ژمارە)</label>
-            <textarea id="broadcastPhones" style="min-height:90px;" placeholder="07500000000&#10;07501111111"></textarea>
-          </div>
-          <button class="btn btn-primary w-full h-11" onclick="sendBroadcastReminder()">
-            <i data-lucide="send"></i> ناردنی ڕاستەوخۆ بۆ هەمووان لە WhatsApp
-          </button>
+          <div class="field"><label>دەقی پەیام</label><textarea id="broadcastMessage" style="min-height:140px;line-height:1.8;"></textarea></div>
+          <div class="field"><label>لیستی ژمارەی مۆبایلەکان</label><textarea id="broadcastPhones" style="min-height:90px;" placeholder="07500000000&#10;07501111111"></textarea></div>
+          <button class="btn btn-primary w-full h-11" onclick="sendBroadcastReminder()"><i data-lucide="send"></i> ناردن بۆ هەمووان لە WhatsApp</button>
         </div>
       </section>
 
-      <!-- 10. REVIEWS TAB -->
+      <!-- REVIEWS -->
       <section class="page-tab" id="tab-reviews">
         <div class="card">
           <div class="card-title"><i data-lucide="message-circle"></i> بەڕێوەبردنی بیروڕای شاخەوانان</div>
@@ -512,7 +490,7 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 11. SERVICES TAB -->
+      <!-- SERVICES -->
       <section class="page-tab" id="tab-services">
         <div class="card">
           <div class="card-title"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</div>
@@ -526,7 +504,7 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 12. GALLERY TAB -->
+      <!-- GALLERY -->
       <section class="page-tab" id="tab-gallery">
         <div class="card">
           <div class="card-title"><i data-lucide="image"></i> گەلەری وێنەکان</div>
@@ -538,7 +516,7 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 13. WHATSAPP & MAPS -->
+      <!-- WHATSAPP & MAPS -->
       <section class="page-tab" id="tab-whatsapp">
         <div class="card">
           <div class="card-title"><i data-lucide="message-square"></i> نامەکانی WhatsApp و شوێنی کۆبوونەوە</div>
@@ -549,7 +527,7 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 14. FINANCE & FIB -->
+      <!-- FINANCE -->
       <section class="page-tab" id="tab-finance">
         <div class="card">
           <div class="card-title"><i data-lucide="credit-card"></i> هەژماری دارایی و FIB</div>
@@ -560,7 +538,18 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 15. BACKUP -->
+      <!-- GOOGLE SHEETS -->
+      <section class="page-tab" id="tab-sheets_tab">
+        <div class="card">
+          <div class="card-title"><i data-lucide="table"></i> بەشداربووان لە Google Sheets</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
+            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ هاوکات لەگەڵ ئەم پەنێڵە دەچنە ناو خشتەکەت لە Google Sheets:
+          </p>
+          <button class="btn btn-secondary w-full" onclick="openSheets()"><i data-lucide="file-spreadsheet"></i> کردنەوەی ڕاستەوخۆی Google Sheets</button>
+        </div>
+      </section>
+
+      <!-- BACKUP -->
       <section class="page-tab" id="tab-backup">
         <div class="card">
           <div class="card-title"><i data-lucide="hard-drive"></i> پاراستن و هێنانەوەی زانیارییەکان</div>
@@ -599,27 +588,17 @@ textarea{ min-height:85px; resize:vertical; }
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
+const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
 const ADMIN_SECRET_PIN = "2026";
 
 let appState = {
   gradColor1: "#9d1c32",
   gradColor2: "#c92b49",
-  seoTitle: "KURDIA ADVENTURE — گەشت، سروشت و سەرکێشی",
-  heroBadge: "KURDIA ADVENTURE",
-  heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
-  heroSubtitle: "گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت سروشت ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی جوان دروست بکەن.",
   heroImageUrl: "",
-  tripTitle: "گەشتی لووتکەی چیای هەڵگورد",
-  tripPrice: "٣٥،٠٠٠ دینار",
-  tripLocation: "باڵەکایەتی — چیای هەڵگورد",
-  tripTime: "بەیانی ٠٥:٠٠",
-  tripDuration: "١ ڕۆژ",
-  tripDifficulty: "مامناوەند",
-  tripDesc: "گەشتێکی پڕ جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ لووتکە.",
   tripImageUrl: "",
   tripTargetDate: "2026-10-02T05:00",
-  weatherTemp: "١٨°C",
-  weatherCondition: "ساماڵ و خۆرەتاو ☀️",
+  weatherTemp: "18°C",
+  weatherCondition: "ساماڵ ☀️",
   bookingOpen: true,
   otpRequired: true,
   capacity: 40,
@@ -627,36 +606,71 @@ let appState = {
   couponCode: "KURDIA10",
   couponDiscount: 10,
   fibAccount: "07503130360",
+  waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
+  waVerifyTemplate: `سڵاو بەڕێزم 🌿\nپیرۆزە! ناونووسینەکەت پشتڕاستکرایەوە. ✅\n\n🆔 *کۆدی داواکاری:* {id}\n📍 *شوێن:* {maps}`,
+  waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت پەسەند نەکرا. ❌\n\n🆔 *کۆد:* {id}\n⚠️ *هۆکار:* {reason}`,
+  
+  i18n: {
+    ku: {
+      heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
+      heroSubtitle: "گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت جوانییە بێوێنەکانی کوردستان ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی پڕ وزە دروست بکەن.",
+      tripTitle: "گەشتی لووتکەی چیای هەڵگورد",
+      tripLocation: "باڵەکایەتی — چیای هەڵگورد",
+      tripPrice: "٣٥،٠٠٠ دینار",
+      tripTime: "بەیانی ٠٥:٠٠",
+      tripDesc: "گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان."
+    },
+    ar: {
+      heroTitle: "استكشف سحر الطبيعة معنا بطريقة مختلفة",
+      heroSubtitle: "رحلاتنا مخصصة لأولئك الذين يرغبون في رؤية جمال كوردستان الخلاب، وتكوين صداقات جديدة، وصنع ذكريات مليئة بالطاقة.",
+      tripTitle: "رحلة قمة جبل هلكورد",
+      tripLocation: "بالكايتي — جبل هلكورد",
+      tripPrice: "35,000 دينار",
+      tripTime: "صباحاً 05:00",
+      tripDesc: "مغامرة شيقة بصحبة مرشدين محترفين، تشمل النقل بالحافلات السياحية، وجبة الإفطار، وشاي الفحم، والصعود إلى أعلى قمة في كوردستان والعراق."
+    },
+    en: {
+      heroTitle: "Experience Kurdistan Nature Differently With Us",
+      heroSubtitle: "Our expeditions are crafted for those seeking to discover breathtaking mountain views, build new friendships, and create unforgettable adventures.",
+      tripTitle: "Mount Halgurd Summit Expedition",
+      tripLocation: "Balakayati — Mount Halgurd",
+      tripPrice: "35,000 IQD",
+      tripTime: "05:00 AM",
+      tripDesc: "An exhilarating summit journey accompanied by certified mountain guides, VIP bus transportation, traditional breakfast, charcoal tea, and scaling the highest peak."
+    }
+  },
+
   stats: [
     { num: "39+", label: "بەشداربووی هەڵگورد" },
     { num: "15+", label: "لووتکە و ناوچە" },
     { num: "100%", label: "گەشتی سەرکەوتوو" },
     { num: "4.9★", label: "ڕەزامەندی شاخەوانان" }
   ],
-  timeline: [
-    { title: "کۆبوونەوە و دابەشبوون", desc: "لە شوێنی دیاریکراوی هەولێر کۆدەبینەوە و بەڕێدەکەوین." },
-    { title: "نانی بەیانی و چا", desc: "لە سروشتدا چای خەڵووز و نانی بەیانی دەخۆین." },
-    { title: "ڕێپێوان بەرەو لووتکە", desc: "بە هەنگاوی هاوسەنگ بەرەو لووتکە سەردەکەوین." },
-    { title: "تۆمارکردنی سەرکەوتن", desc: "گەیشتن بە لووتکە، وێنەگرتن و بینینی دیمەنەکان." }
+
+  itinerary: [
+    { title: "کۆبوونەوە", text: "لە شوێنی دیاریکراو کۆدەبینەوە و بەڕێدەکەوین." },
+    { title: "نانی بەیانی", text: "لە سروشتدا چای خەڵووز و نانی بەیانی دەخۆین." },
+    { title: "سەرکەوتن", text: "بە هەنگاوی هاوسەنگ بەرەو لووتکە سەردەکەوین." },
+    { title: "گەڕانەوە", text: "دوای وێنەگرتن بەرەو شار دەگەڕێینەوە." }
   ],
+
   safety: [
-    { title: "ڕێبەرانی بەئەزموون", desc: "تیمەکەمان شارەزای تەواوی ڕێڕەوەکانە.", icon: "compass" },
-    { title: "فریاگوزاری سەرەتایی", desc: "کەرەستەی پزیشکی بەردەوام لەگەڵمانە.", icon: "shield-plus" },
-    { title: "چاودێری کەشوهەوا", desc: "پشکنینی بەردەوامی پێشبینی کەشوهەوا.", icon: "cloud-sun" }
+    { title: "ڕێبەرانی بەئەزموون", desc: "تیمەکەمان شارەزای تەواوی ڕێڕەوەکانە." },
+    { title: "فریاگوزاری سەرەتایی", desc: "کەرەستەی پزیشکی بەردەوام لەگەڵمانە." },
+    { title: "چاودێری کەشوهەوا", desc: "پشکنینی بەردەوامی پێشبینی کەشوهەوا." }
   ],
+
   services: [
     { name: "پاسی گەشتیاری مۆدێرن", icon: "bus-front" },
     { name: "نان و خواردنی بەیانی", icon: "utensils" },
-    { name: "چای سەر خەڵووز", icon: "coffee" },
-    { name: "وێنەگری فۆتۆگرافەر", icon: "camera" }
+    { name: "چای سەر خەڵووز", icon: "coffee" }
   ],
+
   reviews: [
-    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە خۆشترین و ڕێکخراوترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
+    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
   ],
-  gallery: [],
-  waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
-  waVerifyTemplate: `سڵاو بەڕێزم 🌿\nپیرۆزە! ناونووسینەکەت پشتڕاستکرایەوە. ✅\n\n🆔 *کۆدی داواکاری:* {id}\n📍 *شوێن:* {maps}`,
-  waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت پەسەند نەکرا. ❌\n\n🆔 *کۆد:* {id}\n⚠️ *هۆکار:* {reason}`
+
+  gallery: []
 };
 
 let cachedRegistrations = [];
@@ -668,7 +682,7 @@ function checkAdminAuth(){
     document.getElementById("adminAuthModal").style.display = "none";
     toast("بەخێربێیت بۆ دەستەی کۆنترۆڵ 🏔️");
   } else {
-    toast("❌ PINی نهێنی هەڵەیە");
+    toast("❌ PIN هەڵەیە");
   }
 }
 
@@ -729,7 +743,7 @@ function applyCropAndSave(){
 
   autoSync();
   closeCropModal();
-  toast("✅ وێنەکە بە سەرکەوتوویی بڕدرا و دانرا");
+  toast("✅ وێنەکە دانرا");
 }
 
 // LIVE REGISTRATIONS
@@ -796,7 +810,7 @@ async function directVerify(id, phone){
       toast("✅ نامەی پەسەندکردن نێردرا");
       fetchLiveRegistrations();
     } else {
-      toast("❌ هەڵە لە ناردن: " + (d.error || ""));
+      toast("❌ هەڵە: " + (d.error || ""));
     }
   }catch(e){ toast("کێشە لە پەیوەندی"); }
 }
@@ -816,7 +830,7 @@ async function directReject(id, phone){
       toast("❌ نامەی ڕەتکردنەوە نێردرا");
       fetchLiveRegistrations();
     } else {
-      toast("❌ هەڵە لە ناردن: " + (d.error || ""));
+      toast("❌ هەڵە: " + (d.error || ""));
     }
   }catch(e){ toast("کێشە لە پەیوەندی"); }
 }
@@ -832,6 +846,144 @@ function exportRegistrationsToCSV(){
   a.href = URL.createObjectURL(blob);
   a.download = `kurdia-members-${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
+}
+
+function autoSync(){
+  appState.gradColor1 = document.getElementById("gradColor1").value;
+  appState.gradColor2 = document.getElementById("gradColor2").value;
+
+  appState.i18n.ku.heroTitle = document.getElementById("heroTitle_ku").value;
+  appState.i18n.ku.heroSubtitle = document.getElementById("heroSubtitle_ku").value;
+  appState.i18n.ar.heroTitle = document.getElementById("heroTitle_ar").value;
+  appState.i18n.ar.heroSubtitle = document.getElementById("heroSubtitle_ar").value;
+  appState.i18n.en.heroTitle = document.getElementById("heroTitle_en").value;
+  appState.i18n.en.heroSubtitle = document.getElementById("heroSubtitle_en").value;
+
+  appState.i18n.ku.tripTitle = document.getElementById("tripTitle_ku").value;
+  appState.i18n.ku.tripLocation = document.getElementById("tripLocation_ku").value;
+  appState.i18n.ku.tripPrice = document.getElementById("tripPrice_ku").value;
+  appState.i18n.ku.tripTime = document.getElementById("tripTime_ku").value;
+  appState.i18n.ku.tripDesc = document.getElementById("tripDesc_ku").value;
+
+  appState.i18n.ar.tripTitle = document.getElementById("tripTitle_ar").value;
+  appState.i18n.ar.tripLocation = document.getElementById("tripLocation_ar").value;
+  appState.i18n.ar.tripPrice = document.getElementById("tripPrice_ar").value;
+  appState.i18n.ar.tripTime = document.getElementById("tripTime_ar").value;
+  appState.i18n.ar.tripDesc = document.getElementById("tripDesc_ar").value;
+
+  appState.i18n.en.tripTitle = document.getElementById("tripTitle_en").value;
+  appState.i18n.en.tripLocation = document.getElementById("tripLocation_en").value;
+  appState.i18n.en.tripPrice = document.getElementById("tripPrice_en").value;
+  appState.i18n.en.tripTime = document.getElementById("tripTime_en").value;
+  appState.i18n.en.tripDesc = document.getElementById("tripDesc_en").value;
+
+  appState.bookingOpen = document.getElementById("bookingOpen").checked;
+  appState.tripTargetDate = document.getElementById("tripTargetDate").value;
+  appState.weatherTemp = document.getElementById("weatherTemp").value;
+  appState.weatherCondition = document.getElementById("weatherCondition").value;
+
+  appState.otpRequired = document.getElementById("otpRequiredSwitch").checked;
+  appState.capacity = Number(document.getElementById("capacityInput").value || 40);
+  appState.booked = Number(document.getElementById("bookedInput").value || 0);
+
+  appState.couponCode = document.getElementById("couponCodeInput").value.trim();
+  appState.couponDiscount = Number(document.getElementById("couponDiscountInput").value || 10);
+
+  appState.fibAccount = document.getElementById("fibAccount").value;
+  appState.waMapsUrl = document.getElementById("waMapsUrl").value;
+  appState.waVerifyTemplate = document.getElementById("waVerifyTemplate").value;
+  appState.waRejectTemplate = document.getElementById("waRejectTemplate").value;
+
+  document.getElementById("dashTotalCap").textContent = appState.capacity;
+  document.getElementById("dashBooked").textContent = appState.booked;
+  document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
+  document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("KURDIA_BUILDER_STATE");
+    if(raw){
+      const parsed = JSON.parse(raw);
+      appState = Object.assign({}, appState, parsed);
+      if(!appState.i18n) appState.i18n = DEFAULT_DATA.i18n;
+      if(!Array.isArray(appState.stats)) appState.stats = DEFAULT_DATA.stats;
+      if(!Array.isArray(appState.itinerary)) appState.itinerary = DEFAULT_DATA.itinerary;
+      if(!Array.isArray(appState.safety)) appState.safety = DEFAULT_DATA.safety;
+    }
+  }catch(e){}
+
+  document.getElementById("gradColor1").value = appState.gradColor1 || "#9d1c32";
+  document.getElementById("gradColor2").value = appState.gradColor2 || "#c92b49";
+
+  const i18 = appState.i18n || {};
+  document.getElementById("heroTitle_ku").value = i18.ku?.heroTitle || "";
+  document.getElementById("heroSubtitle_ku").value = i18.ku?.heroSubtitle || "";
+  document.getElementById("heroTitle_ar").value = i18.ar?.heroTitle || "";
+  document.getElementById("heroSubtitle_ar").value = i18.ar?.heroSubtitle || "";
+  document.getElementById("heroTitle_en").value = i18.en?.heroTitle || "";
+  document.getElementById("heroSubtitle_en").value = i18.en?.heroSubtitle || "";
+
+  document.getElementById("tripTitle_ku").value = i18.ku?.tripTitle || "";
+  document.getElementById("tripLocation_ku").value = i18.ku?.tripLocation || "";
+  document.getElementById("tripPrice_ku").value = i18.ku?.tripPrice || "";
+  document.getElementById("tripTime_ku").value = i18.ku?.tripTime || "";
+  document.getElementById("tripDesc_ku").value = i18.ku?.tripDesc || "";
+
+  document.getElementById("tripTitle_ar").value = i18.ar?.tripTitle || "";
+  document.getElementById("tripLocation_ar").value = i18.ar?.tripLocation || "";
+  document.getElementById("tripPrice_ar").value = i18.ar?.tripPrice || "";
+  document.getElementById("tripTime_ar").value = i18.ar?.tripTime || "";
+  document.getElementById("tripDesc_ar").value = i18.ar?.tripDesc || "";
+
+  document.getElementById("tripTitle_en").value = i18.en?.tripTitle || "";
+  document.getElementById("tripLocation_en").value = i18.en?.tripLocation || "";
+  document.getElementById("tripPrice_en").value = i18.en?.tripPrice || "";
+  document.getElementById("tripTime_en").value = i18.en?.tripTime || "";
+  document.getElementById("tripDesc_en").value = i18.en?.tripDesc || "";
+
+  document.getElementById("bookingOpen").checked = appState.bookingOpen !== false;
+  document.getElementById("tripTargetDate").value = appState.tripTargetDate || "2026-10-02T05:00";
+  document.getElementById("weatherTemp").value = appState.weatherTemp || "18°C";
+  document.getElementById("weatherCondition").value = appState.weatherCondition || "ساماڵ ☀️";
+
+  document.getElementById("otpRequiredSwitch").checked = appState.otpRequired !== false;
+  document.getElementById("capacityInput").value = appState.capacity || 40;
+  document.getElementById("bookedInput").value = appState.booked || 29;
+
+  document.getElementById("couponCodeInput").value = appState.couponCode || "KURDIA10";
+  document.getElementById("couponDiscountInput").value = appState.couponDiscount || 10;
+
+  document.getElementById("fibAccount").value = appState.fibAccount || "07503130360";
+  document.getElementById("waMapsUrl").value = appState.waMapsUrl || "";
+  document.getElementById("waVerifyTemplate").value = appState.waVerifyTemplate || "";
+  document.getElementById("waRejectTemplate").value = appState.waRejectTemplate || "";
+
+  if(appState.heroImageUrl){
+    const h = document.getElementById("heroDropPreview");
+    h.style.backgroundImage = `url('${appState.heroImageUrl}')`;
+    h.classList.add("active");
+  }
+  if(appState.tripImageUrl){
+    const t = document.getElementById("tripDropPreview");
+    t.style.backgroundImage = `url('${appState.tripImageUrl}')`;
+    t.classList.add("active");
+  }
+
+  document.getElementById("dashTotalCap").textContent = appState.capacity;
+  document.getElementById("dashBooked").textContent = appState.booked;
+  document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
+  document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
+
+  renderServices();
+  renderReviews();
+  renderGallery();
+  renderStatsList();
+  renderItinerary();
+  renderSafetyList();
 }
 
 function toast(msg){
@@ -853,149 +1005,7 @@ function switchTab(tabId){
 
   document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
   if(event?.currentTarget?.classList) event.currentTarget.classList.add("active");
-
-  const titles = {
-    dashboard: "داشبۆردی سەرەکی",
-    design: "ڕەنگ و بەشی سەرەکی",
-    trip: "بەرنامەی گەشت و کەشوهەوا",
-    booking: "دۆخی ناونووسین و OTP",
-    live_registrations: "بەشداربووان و پەسەندکردن",
-    achievements: "دەستکەوت و ئامارەکان",
-    timeline_tab: "هەنگاوەکانی ئەزموون",
-    safety_tab: "پرۆتۆکۆلی سەلامەتی",
-    coupon: "کۆدی داشکاندن (Coupon)",
-    broadcast: "پەیامی بەکۆمەڵ (Broadcast)",
-    reviews: "بیروڕا و فیدباکەکان",
-    services: "خزمەتگوزارییەکان",
-    gallery: "گەلەری وێنەکان",
-    whatsapp: "نامەکانی WhatsApp & Maps",
-    finance: "دارایی و FIB",
-    backup: "Backup & Restore"
-  };
-  document.getElementById("topbarTitle").textContent = titles[tabId] || "کۆنترۆڵی ماڵپەڕ";
   if(window.innerWidth <= 850) toggleSidebar();
-}
-
-async function sendBroadcastReminder(){
-  const msg = document.getElementById("broadcastMessage").value.trim();
-  const rawPhones = document.getElementById("broadcastPhones").value.trim();
-  if(!msg || !rawPhones) return toast("تکایە دەقی نامە و ژمارەکان دیاری بکە");
-  const phones = rawPhones.split(/[\n,،]+/).map(p => p.trim()).filter(Boolean);
-  toast(`⏳ دەنێردرێت بۆ ${phones.length} کەس...`);
-  try{
-    const res = await fetch(`${WORKER_URL}/api/admin/send-broadcast`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ message: msg, phones })
-    });
-    const d = await res.json();
-    if(res.ok && d.ok) toast(`✅ بە سەرکەوتوویی بۆ ${d.sent} کەس نێردرا`);
-    else toast("❌ کێشەیەک ڕوویدا: " + (d.error || ""));
-  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); }
-}
-
-function autoSync(){
-  appState.gradColor1 = document.getElementById("gradColor1").value;
-  appState.gradColor2 = document.getElementById("gradColor2").value;
-  appState.seoTitle = document.getElementById("seoTitle").value;
-  appState.heroBadge = document.getElementById("heroBadge").value;
-  appState.heroTitle = document.getElementById("heroTitle").value;
-  appState.heroSubtitle = document.getElementById("heroSubtitle").value;
-
-  appState.tripTitle = document.getElementById("tripTitle").value;
-  appState.tripPrice = document.getElementById("tripPrice").value;
-  appState.tripLocation = document.getElementById("tripLocation").value;
-  appState.tripTime = document.getElementById("tripTime").value;
-  appState.tripDuration = document.getElementById("tripDuration").value;
-  appState.tripDesc = document.getElementById("tripDesc").value;
-  appState.bookingOpen = document.getElementById("bookingOpen").checked;
-
-  appState.tripTargetDate = document.getElementById("tripTargetDate").value;
-  appState.weatherTemp = document.getElementById("weatherTemp").value;
-  appState.weatherCondition = document.getElementById("weatherCondition").value;
-
-  appState.otpRequired = document.getElementById("otpRequiredSwitch").checked;
-  appState.capacity = Number(document.getElementById("capacityInput").value || 40);
-  appState.booked = Number(document.getElementById("bookedInput").value || 0);
-
-  appState.couponCode = document.getElementById("couponCodeInput").value.trim();
-  appState.couponDiscount = Number(document.getElementById("couponDiscountInput").value || 10);
-
-  appState.fibAccount = document.getElementById("fibAccount").value;
-  appState.waMapsUrl = document.getElementById("waMapsUrl").value;
-  appState.waVerifyTemplate = document.getElementById("waVerifyTemplate").value;
-  appState.waRejectTemplate = document.getElementById("waRejectTemplate").value;
-
-  // KPI داشبۆرد
-  document.getElementById("dashTotalCap").textContent = appState.capacity;
-  document.getElementById("dashBooked").textContent = appState.booked;
-  document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
-  document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
-}
-
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("KURDIA_BUILDER_STATE");
-    if(raw) appState = Object.assign({}, appState, JSON.parse(raw));
-  }catch(e){}
-
-  document.getElementById("gradColor1").value = appState.gradColor1 || "#9d1c32";
-  document.getElementById("gradColor2").value = appState.gradColor2 || "#c92b49";
-  document.getElementById("seoTitle").value = appState.seoTitle || "KURDIA ADVENTURE";
-  document.getElementById("heroBadge").value = appState.heroBadge || "KURDIA ADVENTURE";
-  document.getElementById("heroTitle").value = appState.heroTitle || "";
-  document.getElementById("heroSubtitle").value = appState.heroSubtitle || "";
-
-  document.getElementById("tripTitle").value = appState.tripTitle || "";
-  document.getElementById("tripPrice").value = appState.tripPrice || "";
-  document.getElementById("tripLocation").value = appState.tripLocation || "";
-  document.getElementById("tripTime").value = appState.tripTime || "";
-  document.getElementById("tripDuration").value = appState.tripDuration || "";
-  document.getElementById("tripDesc").value = appState.tripDesc || "";
-  document.getElementById("bookingOpen").checked = appState.bookingOpen !== false;
-
-  document.getElementById("tripTargetDate").value = appState.tripTargetDate || "2026-10-02T05:00";
-  document.getElementById("weatherTemp").value = appState.weatherTemp || "١٨°C";
-  document.getElementById("weatherCondition").value = appState.weatherCondition || "ساماڵ و خۆرەتاو ☀️";
-
-  document.getElementById("otpRequiredSwitch").checked = appState.otpRequired !== false;
-  document.getElementById("capacityInput").value = appState.capacity || 40;
-  document.getElementById("bookedInput").value = appState.booked || 0;
-
-  document.getElementById("couponCodeInput").value = appState.couponCode || "KURDIA10";
-  document.getElementById("couponDiscountInput").value = appState.couponDiscount || 10;
-
-  document.getElementById("fibAccount").value = appState.fibAccount || "07503130360";
-  document.getElementById("waMapsUrl").value = appState.waMapsUrl || "";
-  document.getElementById("waVerifyTemplate").value = appState.waVerifyTemplate || "";
-  document.getElementById("waRejectTemplate").value = appState.waRejectTemplate || "";
-
-  if(appState.heroImageUrl){
-    const h = document.getElementById("heroDropPreview");
-    h.style.backgroundImage = `url('${appState.heroImageUrl}')`;
-    h.classList.add("active");
-  }
-  if(appState.tripImageUrl){
-    const t = document.getElementById("tripDropPreview");
-    t.style.backgroundImage = `url('${appState.tripImageUrl}')`;
-    t.classList.add("active");
-  }
-
-  // Dashboard KPI
-  document.getElementById("dashTotalCap").textContent = appState.capacity;
-  document.getElementById("dashBooked").textContent = appState.booked;
-  document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
-  document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
-
-  renderServices();
-  renderReviews();
-  renderGallery();
-  renderStatsList();
-  renderTimelineList();
-  renderSafetyList();
 }
 
 // ACHIEVEMENTS ADMIN
@@ -1019,25 +1029,25 @@ function addStatItem(){
   renderStatsList(); autoSync();
 }
 
-// TIMELINE ADMIN
-function renderTimelineList(){
-  const c = document.getElementById("timelineAdminList"); if(!c) return;
-  c.innerHTML = (appState.timeline||[]).map((tl, i) => `
+// ITINERARY ADMIN
+function renderItinerary(){
+  const c = document.getElementById("itineraryList"); if(!c) return;
+  c.innerHTML = (appState.itinerary||[]).map((it, i) => `
     <div class="item-row">
-      <div><b>${tl.title}</b><div class="text-xs text-gray-400">${tl.desc}</div></div>
-      <button class="btn btn-danger" onclick="appState.timeline.splice(${i},1);renderTimelineList();autoSync();">سڕینەوە</button>
+      <div><b>${it.title}</b><div class="small-note text-xs text-gray-400">${it.text}</div></div>
+      <button class="btn btn-danger" onclick="appState.itinerary.splice(${i},1);renderItinerary();autoSync();">سڕینەوە</button>
     </div>
   `).join("");
 }
-function addTimelineItem(){
-  const title = document.getElementById("newTimelineTitle").value.trim();
-  const desc = document.getElementById("newTimelineDesc").value.trim();
-  if(!title || !desc) return;
-  if(!appState.timeline) appState.timeline = [];
-  appState.timeline.push({ title, desc });
-  document.getElementById("newTimelineTitle").value = "";
-  document.getElementById("newTimelineDesc").value = "";
-  renderTimelineList(); autoSync();
+function addItineraryItem(){
+  const t = document.getElementById("newItineraryTitle").value.trim();
+  const d = document.getElementById("newItineraryText").value.trim();
+  if(!t) return;
+  if(!appState.itinerary) appState.itinerary = [];
+  appState.itinerary.push({ title: t, text: d });
+  document.getElementById("newItineraryTitle").value = "";
+  document.getElementById("newItineraryText").value = "";
+  renderItinerary(); autoSync();
 }
 
 // SAFETY ADMIN
@@ -1055,7 +1065,7 @@ function addSafetyItem(){
   const desc = document.getElementById("newSafetyDesc").value.trim();
   if(!title || !desc) return;
   if(!appState.safety) appState.safety = [];
-  appState.safety.push({ title, desc, icon: "shield-check" });
+  appState.safety.push({ title, desc });
   document.getElementById("newSafetyTitle").value = "";
   document.getElementById("newSafetyDesc").value = "";
   renderSafetyList(); autoSync();
@@ -1075,7 +1085,7 @@ function addServiceItem(){
 
 function renderReviews(){
   const c = document.getElementById("reviewsList"); if(!c) return;
-  c.innerHTML = (appState.reviews||[]).map((r,i)=>`<div class="item-row"><div><b>${r.name} (${r.city})</b><div class="small-note">${r.text}</div></div><button class="btn btn-danger" onclick="appState.reviews.splice(${i},1);renderReviews();autoSync();">سڕینەوە</button></div>`).join("");
+  c.innerHTML = (appState.reviews||[]).map((r,i)=>`<div class="item-row"><div><b>${r.name} (${r.city})</b><div class="small-note text-xs text-gray-400">${r.text}</div></div><button class="btn btn-danger" onclick="appState.reviews.splice(${i},1);renderReviews();autoSync();">سڕینەوە</button></div>`).join("");
 }
 function addReviewItem(){
   const n = document.getElementById("newReviewName").value.trim(), c = document.getElementById("newReviewCity").value.trim(), t = document.getElementById("newReviewText").value.trim();
@@ -1090,6 +1100,24 @@ function renderGallery(){
   c.innerHTML = (appState.gallery||[]).map((img,i)=>`<div class="gallery-thumb" style="background-image:url('${img.url||img}')"><button class="gallery-delete" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync();">✕</button></div>`).join("");
 }
 
+async function sendBroadcastReminder(){
+  const msg = document.getElementById("broadcastMessage").value.trim();
+  const rawPhones = document.getElementById("broadcastPhones").value.trim();
+  if(!msg || !rawPhones) return toast("تکایە دەقی نامە و ژمارەکان دیاری بکە");
+  const phones = rawPhones.split(/[\n,،]+/).map(p => p.trim()).filter(Boolean);
+  toast(`⏳ دەنێردرێت بۆ ${phones.length} کەس...`);
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/send-broadcast`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ message: msg, phones })
+    });
+    const d = await res.json();
+    if(res.ok && d.ok) toast(`✅ بە سەرکەوتوویی بۆ ${d.sent} کەس نێردرا`);
+    else toast("❌ کێشەیەک ڕوویدا: " + (d.error || ""));
+  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); }
+}
+
 async function saveWhatsAppToCloud(){
   autoSync(); toast("⏳ لە سێرڤەر سەیڤ دەکرێت...");
   try{
@@ -1098,16 +1126,18 @@ async function saveWhatsAppToCloud(){
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({ mapsUrl:appState.waMapsUrl, verifyTemplate:appState.waVerifyTemplate, rejectTemplate:appState.waRejectTemplate })
     });
-    if(res.ok) toast("✅ ڕێکخستنی WhatsApp لە Cloud سەیڤ کرا");
+    if(res.ok) toast("✅ لە Cloud پاشەکەوت کرا");
     else toast("❌ کێشە لە سەیڤکردن");
-  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); }
+  }catch(e){ toast("کێشە لە پەیوەندی"); }
 }
 
 function publishLive(){
   autoSync(); saveWhatsAppToCloud();
-  toast("🚀 تەواوی گۆڕانکارییەکان بڵاوکرانەوە!");
+  toast("🚀 تەواوی گۆڕانکارییەکان بە سێ زمان بڵاوکرانەوە!");
 }
 function openLiveSite(){ window.open("index.html", "_blank"); }
+function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
+
 function exportBackup(){
   autoSync();
   const a = document.createElement("a");
@@ -1121,7 +1151,7 @@ function importBackup(e){
     try{
       appState = JSON.parse(ev.target.result);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-      loadState(); autoSync(); toast("✅ هەموو شت گەڕێنرایەوە");
+      loadState(); autoSync(); toast("✅ گەڕێنرایەوە");
     }catch(err){ toast("❌ فایلی نادروست"); }
   };
   reader.readAsText(file);
