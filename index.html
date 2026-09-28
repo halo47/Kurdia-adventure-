@@ -114,6 +114,15 @@ button{ cursor:pointer; }
 @keyframes soundAnim{ 0%{ height:20%; } 100%{ height:100%; } }
 .music-btn:not(.playing) .sound-bar{ animation:none; height:30%; }
 
+/* STORIES BAR */
+.stories-container{ display:flex; gap:16px; overflow-x:auto; padding:10px 0; scrollbar-width:none; }
+.stories-container::-webkit-scrollbar{ display:none; }
+.story-item{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; flex-shrink:0; }
+.story-ring{ width:72px; height:72px; border-radius:50%; padding:3px; background:linear-gradient(135deg, var(--primary), #f59e0b); display:flex; align-items:center; justify-content:center; }
+.story-avatar-wrap{ width:66px; height:66px; border-radius:50%; background:#000; overflow:hidden; border:2px solid var(--bg); display:flex; align-items:center; justify-content:center; }
+.story-avatar-wrap img{ width:100%; height:100%; object-fit:cover; }
+.story-name{ font-size:11px; font-weight:700; color:#cbd5e1; max-width:76px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+
 /* HERO */
 .hero{ min-height:860px; position:relative; overflow:hidden; display:flex; align-items:center; }
 .hero-media{ position:absolute; inset:0; background-position:center; background-size:cover; transform:scale(1.02); }
@@ -215,11 +224,16 @@ button{ cursor:pointer; }
 .gallery-card img{ width:100%; height:100%; object-fit:cover; transition:.3s; }
 .gallery-card:hover img{ transform:scale(1.05); }
 
-/* LIGHTBOX */
+/* LIGHTBOX & MODALS */
 #lightboxModal{
   position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
   z-index:999999; display:none; align-items:center; justify-content:center; padding:20px;
 }
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
+  z-index:999999; display:none; align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.active{ display:flex; }
 
 /* BOOKING */
 .booking-wrap{ border-radius:30px; padding:45px; background:linear-gradient(135deg, rgba(157,28,50,.18), rgba(18,26,38,.97) 45%, rgba(7,10,16,.99)); border:1px solid var(--border); }
@@ -308,6 +322,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    <nav class="desktop-nav">
     <a href="#home" id="nav_home">سەرەتا</a>
     <a href="#trip" id="nav_trip">گەشت</a>
+    <a href="#stories" id="nav_stories">ستۆری</a>
     <a href="#about" id="nav_about">ئێمە کێین</a>
     <a href="#timeline" id="nav_timeline">ئەزموون</a>
     <a href="#safety" id="nav_safety">سەلامەتی</a>
@@ -325,6 +340,10 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
          <span class="sound-bar"></span>
        </div>
        <span id="musicBtnLabel">مۆسیقا</span>
+     </button>
+
+     <button onclick="openStoryUploadModal()" class="secondary px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5">
+       <i data-lucide="plus-circle" class="w-4 h-4 text-rose-500"></i> ستۆری
      </button>
 
      <div class="lang-switcher">
@@ -345,6 +364,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    <div class="container py-3">
     <a href="#home" onclick="closeMenu()" id="m_nav_home">سەرەتا</a>
     <a href="#trip" onclick="closeMenu()" id="m_nav_trip">گەشت</a>
+    <a href="#stories" onclick="closeMenu()" id="m_nav_stories">ستۆری</a>
     <a href="#about" onclick="closeMenu()" id="m_nav_about">ئێمە کێین</a>
     <a href="#timeline" onclick="closeMenu()" id="m_nav_timeline">ئەزموونی گەشت</a>
     <a href="#safety" onclick="closeMenu()" id="m_nav_safety">سەلامەتی</a>
@@ -359,6 +379,45 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 </header>
 
 <main id="app"></main>
+
+<!-- STORY UPLOAD MODAL -->
+<div id="storyModal" class="modal-overlay">
+  <div class="surface p-6 rounded-3xl max-w-md w-full relative">
+    <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg">ناردنی ستۆری / یادەوەری</h3><button onclick="closeStoryModal()"><i data-lucide="x"></i></button></div>
+    <form onsubmit="submitStory(event)" class="flex flex-col gap-3">
+      <input id="stName" class="input text-xs" placeholder="ناوی تەواو" required>
+      <input id="stCity" class="input text-xs" placeholder="شار (مثال: هەولێر)">
+      <input id="stTrip" class="input text-xs" placeholder="ناوی گەشت (مثال: هەڵگورد)">
+      <textarea id="stText" class="input text-xs" placeholder="دەقی ستۆری یان یادەوەری..." rows="3" required></textarea>
+      <input id="stMedia" class="input text-xs" placeholder="بەستەری وێنە یان ڤیدیۆ (URL)" required>
+      <button type="submit" class="primary submit-button text-xs font-bold py-3">ناردنی ستۆری بۆ پەسەندکردن</button>
+    </form>
+  </div>
+</div>
+
+<!-- STORY VIEWER MODAL -->
+<div id="storyViewerModal" class="modal-overlay" style="background:rgba(0,0,0,.96);">
+  <div class="max-w-md w-full h-[85vh] relative flex flex-col justify-between p-4 bg-gray-900 rounded-3xl border border-white/10 overflow-hidden">
+    <div class="absolute top-0 left-0 right-0 h-1 bg-white/20 z-20"><div id="storyProgressBar" class="h-full bg-rose-500 w-0 transition-all duration-100"></div></div>
+    <div class="flex justify-between items-center z-10 pt-2">
+      <div class="flex items-center gap-2">
+        <div id="viewerAvatar" class="w-9 h-9 rounded-full bg-rose-600 flex items-center justify-center font-bold text-xs">K</div>
+        <div><div id="viewerName" class="font-bold text-xs text-white">ناو</div><div id="viewerTime" class="text-[10px] text-gray-400">کات</div></div>
+      </div>
+      <button onclick="closeStoryViewer()" class="text-white p-1.5 rounded-full bg-white/10"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div class="flex-1 flex items-center justify-center relative my-2 overflow-hidden rounded-2xl bg-black">
+      <img id="viewerImage" class="max-h-full max-w-full object-contain" src="" alt="Story">
+    </div>
+    <div class="z-10 bg-black/40 backdrop-blur-md p-3 rounded-2xl flex flex-col gap-2">
+      <div id="viewerText" class="text-xs text-gray-200">دەقی ستۆری...</div>
+      <div class="flex justify-between items-center pt-2 border-t border-white/10">
+        <button onclick="likeCurrentStory()" class="flex items-center gap-1.5 text-xs font-bold text-rose-400"><i data-lucide="heart" class="w-4 h-4"></i> <span id="viewerLikes">0</span></button>
+        <button onclick="shareStoryWhatsApp()" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400"><i data-lucide="share-2" class="w-4 h-4"></i> پشکەشکردن</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="lightboxModal" onclick="closeLightbox()">
   <div class="max-w-4xl max-h-[85vh] relative flex items-center justify-center">
@@ -405,6 +464,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    <div class="flex flex-col gap-2 text-xs text-gray-400">
     <a href="#home" id="f_home">سەرەتا</a>
     <a href="#trip" id="f_trip">گەشتەکان</a>
+    <a href="#stories" id="f_stories">ستۆرییەکان</a>
     <a href="#about" id="f_about">ئێمە کێین</a>
     <a href="#safety" id="f_safety">سەلامەتی</a>
     <a href="#gear" id="f_gear">کەلوپەل</a>
@@ -431,7 +491,7 @@ const I18N = {
   ku: {
     dir: "rtl",
     music_label: "مۆسیقا",
-    nav_home: "سەرەتا", nav_trip: "گەشت", nav_about: "ئێمە کێین", nav_timeline: "ئەزموون", nav_safety: "سەلامەتی", nav_gear: "پێداویستی", nav_reviews: "فیدباک", nav_gallery: "گەلەری", nav_location: "شوێن", nav_book: "بەشداری لە گەشت",
+    nav_home: "سەرەتا", nav_trip: "گەشت", nav_stories: "ستۆری", nav_about: "ئێمە کێین", nav_timeline: "ئەزموون", nav_safety: "سەلامەتی", nav_gear: "پێداویستی", nav_reviews: "فیدباک", nav_gallery: "گەلەری", nav_location: "شوێن", nav_book: "بەشداری لە گەشت",
     cd_label: "کاتی ماوە بۆ بەڕێکەوتن:", cd_d: "ڕۆژ", cd_h: "کاتژمێر", cd_m: "خولەک", cd_s: "چرکە",
     btn_join: "بەشداری لە گەشت", btn_trip_info: "زانیاری گەشت", btn_about: "ئێمە کێین؟",
     meta_loc: "شوێن", meta_time: "کات", meta_dur: "ماوە", meta_diff: "ئاست",
@@ -462,7 +522,7 @@ const I18N = {
   ar: {
     dir: "rtl",
     music_label: "موسيقى",
-    nav_home: "الرئيسية", nav_trip: "الرحلة", nav_about: "من نحن", nav_timeline: "المسار", nav_safety: "السلامة", nav_gear: "المعدات", nav_reviews: "الآراء", nav_gallery: "الصور", nav_location: "الموقع", nav_book: "المشاركة بالرحلة",
+    nav_home: "الرئيسية", nav_trip: "الرحلة", nav_stories: "القصص", nav_about: "من نحن", nav_timeline: "المسار", nav_safety: "السلامة", nav_gear: "المعدات", nav_reviews: "الآراء", nav_gallery: "الصور", nav_location: "الموقع", nav_book: "المشاركة بالرحلة",
     cd_label: "الوقت المتبقي للانطلاق:", cd_d: "يوم", cd_h: "ساعة", cd_m: "دقيقة", cd_s: "ثانية",
     btn_join: "المشاركة في الرحلة", btn_trip_info: "تفاصيل الرحلة", btn_about: "من نحن؟",
     meta_loc: "المكان", meta_time: "الوقت", meta_dur: "المدة", meta_diff: "المستوى",
@@ -493,7 +553,7 @@ const I18N = {
   en: {
     dir: "ltr",
     music_label: "Music",
-    nav_home: "Home", nav_trip: "Trip", nav_about: "About Us", nav_timeline: "Timeline", nav_safety: "Safety", nav_gear: "Gear", nav_reviews: "Reviews", nav_gallery: "Gallery", nav_location: "Location", nav_book: "Join Trip",
+    nav_home: "Home", nav_trip: "Trip", nav_stories: "Stories", nav_about: "About Us", nav_timeline: "Timeline", nav_safety: "Safety", nav_gear: "Gear", nav_reviews: "Reviews", nav_gallery: "Gallery", nav_location: "Location", nav_book: "Join Trip",
     cd_label: "Time left until departure:", cd_d: "Days", cd_h: "Hours", cd_m: "Mins", cd_s: "Secs",
     btn_join: "Join Upcoming Trip", btn_trip_info: "Trip Details", btn_about: "About Us",
     meta_loc: "Location", meta_time: "Time", meta_dur: "Duration", meta_diff: "Difficulty",
@@ -573,10 +633,18 @@ const DEFAULT_DATA = {
  reviews:[
   { name:"دەرباز سەعید", city:"هەولێر", text:"یەکێک لە ڕێکخراوترین و پڕ وزەترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
  ],
- gallery:[]
+ gallery:[
+  { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" },
+  { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba" },
+  { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb" },
+  { url: "https://images.unsplash.com/photo-1426604966848-d7adacbd02bff" }
+ ]
 };
 
 let siteData = Object.assign({}, DEFAULT_DATA);
+let activeStoriesList = [];
+let currentStoryIdx = 0;
+let storyTimer = null;
 let isPhoneVerified = false;
 let appliedDiscountPercent = 0;
 let isAudioPlaying = false;
@@ -595,18 +663,10 @@ function toggleMusic(){
   const audio = document.getElementById("bgAudio");
   const btn = document.getElementById("musicToggleBtn");
   if(!audio) return;
-
   if(isAudioPlaying){
-    audio.pause();
-    isAudioPlaying = false;
-    btn.classList.remove("playing");
+    audio.pause(); isAudioPlaying = false; btn.classList.remove("playing");
   } else {
-    audio.play().then(()=>{
-      isAudioPlaying = true;
-      btn.classList.add("playing");
-    }).catch(()=>{
-      toast("تکایە کلیک لە شاشە بکە بۆ ڕێگەدان بە لێدانی دەنگ");
-    });
+    audio.play().then(()=>{ isAudioPlaying = true; btn.classList.add("playing"); }).catch(()=>{ toast("تکایە کلیک لە شاشە بکە بۆ ڕێگەدان بە لێدانی دەنگ"); });
   }
 }
 
@@ -620,7 +680,7 @@ function updateStaticText(t){
   document.documentElement.lang = currentLang;
   document.documentElement.dir = t.dir;
 
-  const navKeys = ["home", "trip", "about", "timeline", "safety", "gear", "reviews", "gallery", "location"];
+  const navKeys = ["home", "trip", "stories", "about", "timeline", "safety", "gear", "reviews", "gallery", "location"];
   navKeys.forEach(k => {
     const el = document.getElementById(`nav_${k}`);
     const mel = document.getElementById(`m_nav_${k}`);
@@ -642,18 +702,6 @@ function updateStaticText(t){
     const b = document.getElementById(`btn_${l}`);
     if(b) b.classList.toggle("active", l === currentLang);
   });
-
-  const fd = document.getElementById("footer_desc"); if(fd) fd.textContent = t.footer_desc;
-  const flt = document.getElementById("footer_links_title"); if(flt) flt.textContent = t.footer_links;
-  const fct = document.getElementById("footer_contact_title"); if(fct) fct.textContent = t.footer_contact;
-  const fcity = document.getElementById("footer_city"); if(fcity) fcity.textContent = t.footer_city;
-  const fq = document.getElementById("footer_quick"); if(fq) fq.textContent = t.footer_quick;
-  const fc = document.getElementById("f_copy"); if(fc) fc.textContent = t.copy;
-  const fs = document.getElementById("f_sub"); if(fs) fs.textContent = t.sub_copy;
-
-  const at = document.getElementById("ai_title"); if(at) at.textContent = t.ai_title;
-  const aw = document.getElementById("ai_welcome"); if(aw) aw.textContent = t.ai_welcome;
-  const aiInp = document.getElementById("aiInput"); if(aiInp) aiInp.placeholder = t.ai_ph;
 }
 
 function loadData(){
@@ -668,6 +716,7 @@ function loadData(){
     if(!Array.isArray(siteData.gear)) siteData.gear = DEFAULT_DATA.gear;
     if(!Array.isArray(siteData.services)) siteData.services = DEFAULT_DATA.services;
     if(!Array.isArray(siteData.reviews)) siteData.reviews = DEFAULT_DATA.reviews;
+    if(!Array.isArray(siteData.gallery)) siteData.gallery = DEFAULT_DATA.gallery;
   }
  }catch(e){
    siteData = Object.assign({}, DEFAULT_DATA);
@@ -682,16 +731,127 @@ function closeLightbox(){
   document.getElementById("lightboxModal").style.display = "none";
 }
 
+function openStoryUploadModal(){ document.getElementById("storyModal").classList.add("active"); }
+function closeStoryModal(){ document.getElementById("storyModal").classList.remove("active"); }
+
+async function fetchStories(){
+  try{
+    const res = await fetch(`${WORKER_ENDPOINT}/api/stories`);
+    const data = await res.json();
+    if(data.ok && Array.isArray(data.stories)){
+      activeStoriesList = data.stories;
+      renderStoriesBar(activeStoriesList);
+    }
+  }catch(e){console.error(e);}
+}
+
+function renderStoriesBar(stories){
+  const bar = document.getElementById("storiesBar");
+  if(!bar) return;
+  if(stories.length === 0){
+    bar.innerHTML = `<div class="text-xs text-gray-500">هێشتا هیچ ستۆرییەک نییە. یەکەم کەس بە کە ستۆری دەنێریت!</div>`;
+    return;
+  }
+  bar.innerHTML = stories.map((st, idx) => `
+    <div class="story-item" onclick="openStoryViewer(${idx})">
+      <div class="story-ring">
+        <div class="story-avatar-wrap">
+          <img src="${st.mediaUrl || 'https://images.unsplash.com/photo-1542332213-9b5a5a3fad35'}" alt="${esc(st.name)}">
+        </div>
+      </div>
+      <span class="story-name">${esc(st.name)}</span>
+    </div>
+  `).join("");
+}
+
+async function openStoryViewer(idx){
+  currentStoryIdx = idx;
+  const st = activeStoriesList[idx];
+  if(!st) return;
+
+  document.getElementById("viewerAvatar").textContent = st.name ? st.name[0] : "K";
+  document.getElementById("viewerName").textContent = st.name;
+  document.getElementById("viewerTime").textContent = st.tripName || "کوردیا";
+  document.getElementById("viewerImage").src = st.mediaUrl;
+  document.getElementById("viewerText").textContent = st.text;
+  document.getElementById("viewerLikes").textContent = st.likes || 0;
+  
+  document.getElementById("storyViewerModal").classList.add("active");
+  fetch(`${WORKER_ENDPOINT}/api/stories/${st.id}/view`, { method: "POST" }).catch(()=>{});
+
+  const bar = document.getElementById("storyProgressBar");
+  bar.style.width = "0%";
+  setTimeout(() => bar.style.width = "100%", 50);
+
+  if(storyTimer) clearTimeout(storyTimer);
+  storyTimer = setTimeout(() => {
+    if(currentStoryIdx + 1 < activeStoriesList.length){
+      openStoryViewer(currentStoryIdx + 1);
+    } else {
+      closeStoryViewer();
+    }
+  }, 6000);
+}
+
+function closeStoryViewer(){
+  document.getElementById("storyViewerModal").classList.remove("active");
+  if(storyTimer) clearTimeout(storyTimer);
+}
+
+async function likeCurrentStory(){
+  const st = activeStoriesList[currentStoryIdx];
+  if(!st) return;
+  try{
+    const res = await fetch(`${WORKER_ENDPOINT}/api/stories/${st.id}/like`, { method: "POST" });
+    const data = await res.json();
+    if(data.ok){
+      st.likes = data.likes;
+      document.getElementById("viewerLikes").textContent = st.likes;
+      toast("❤️ لایک کرا!");
+    }
+  }catch(e){toast("کێشە لە پەیوەندی");}
+}
+
+function shareStoryWhatsApp(){
+  const st = activeStoriesList[currentStoryIdx];
+  if(!st) return;
+  const text = encodeURIComponent(`چاو لەم ستۆرییە بکە لە KURDIA ADVENTURE: "${st.text}" - ${st.mediaUrl}`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+async function submitStory(e){
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById("stName").value,
+    city: document.getElementById("stCity").value,
+    tripName: document.getElementById("stTrip").value,
+    text: document.getElementById("stText").value,
+    mediaUrl: document.getElementById("stMedia").value
+  };
+  try{
+    const res = await fetch(`${WORKER_ENDPOINT}/api/stories`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(data.ok){
+      toast(data.message);
+      closeStoryModal();
+      e.target.reset();
+    }else{toast("❌ " + data.error);}
+  }catch(e){toast("کێشەی سێرڤەر");}
+}
+
 function applyCoupon(){
-  const t = I18N[currentLang];
   const inp = document.getElementById("couponInput").value.trim().toUpperCase();
   if(!inp) return;
   if(inp === (siteData.couponCode || "KURDIA10")){
     appliedDiscountPercent = siteData.couponDiscount || 10;
-    document.getElementById("couponStatus").innerHTML = `<span class="text-emerald-400 font-bold text-xs">✅ Coupon Active (${appliedDiscountPercent}%)</span>`;
-    toast(`🎉 ${appliedDiscountPercent}% applied`);
+    document.getElementById("couponStatus").innerHTML = `<span class="text-emerald-400 font-bold text-xs">✅ داشکاندن چالاک کرا (${appliedDiscountPercent}%)</span>`;
+    toast(`🎉 ${appliedDiscountPercent}% داشکاندن ئەژمار کرا`);
   } else {
-    toast("❌ Invalid Coupon");
+    toast("❌ کۆدی داشکاندن هەڵەیە");
   }
 }
 
@@ -713,19 +873,7 @@ function render(){
  const remaining = Math.max(0, capacity - booked);
  const percentage = Math.min(100, Math.round((booked / capacity) * 100));
 
- const langData = (siteData.i18n && siteData.i18n[currentLang]) ? siteData.i18n[currentLang] : {};
-
- const curHeroTitle = langData.heroTitle || t.heroTitle;
- const curHeroSubtitle = langData.heroSubtitle || t.heroSubtitle;
- const curTripTitle = langData.tripTitle || t.tripTitle;
- const curTripLocation = langData.tripLocation || t.tripLocation;
- const curTripPrice = langData.tripPrice || t.tripPrice;
- const curTripTime = langData.tripTime || t.tripTime;
- const curTripDuration = langData.tripDuration || t.tripDuration;
- const curTripDifficulty = langData.tripDifficulty || t.tripDifficulty;
- const curTripDesc = langData.tripDesc || t.tripDesc;
-
- document.getElementById("waDirectBtn").href = `https://wa.me/9647503130360?text=${encodeURIComponent("Hello KURDIA ADVENTURE:")}`;
+ document.getElementById("waDirectBtn").href = `https://wa.me/9647503130360?text=${encodeURIComponent("سڵاو KURDIA ADVENTURE:")}`;
 
  app.innerHTML = `
  <!-- HERO -->
@@ -734,8 +882,8 @@ function render(){
   <div class="hero-gradient"></div>
   <div class="container hero-content">
    <div class="hero-badge"><span class="hero-dot"></span>${esc(siteData.heroBadge)}</div>
-   <h1 class="hero-title">${esc(curHeroTitle)}</h1>
-   <p class="hero-subtitle">${esc(curHeroSubtitle)}</p>
+   <h1 class="hero-title">${esc(siteData.seoTitle || "گەشت، سروشت و سەرکێشی لە چیاکانی کوردستان")}</h1>
+   <p class="hero-subtitle">پلاتفۆرمی فەرمیی بۆ ڕێکخستنی گەشتە شاخەوانییەکان و برەودان بە هاوڕێیەتی و پاراستنی ژینگە.</p>
 
    <div class="countdown-box">
      <div class="text-xs font-bold text-gray-300 mb-2">${t.cd_label}</div>
@@ -747,6 +895,12 @@ function render(){
      </div>
    </div>
 
+   <!-- STORIES BAR SECTION -->
+   <div class="mt-8">
+     <div class="text-xs font-bold text-gray-400 mb-2">ستۆریی بەشداربووان (Stories):</div>
+     <div id="storiesBar" class="stories-container"></div>
+   </div>
+
    <div class="hero-actions">
     ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary hero-action">${t.btn_join}</a>` : ""}
     <a href="#trip" class="secondary hero-action">${t.btn_trip_info}</a>
@@ -754,10 +908,10 @@ function render(){
    </div>
 
    <div class="hero-meta">
-    <div class="meta-card"><div class="meta-label">${t.meta_loc}</div><div class="meta-value">${esc(curTripLocation)}</div></div>
-    <div class="meta-card"><div class="meta-label">${t.meta_time}</div><div class="meta-value">${esc(curTripTime)}</div></div>
-    <div class="meta-card"><div class="meta-label">${t.meta_dur}</div><div class="meta-value">${esc(curTripDuration)}</div></div>
-    <div class="meta-card"><div class="meta-label">${t.meta_diff}</div><div class="meta-value">${esc(curTripDifficulty)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_loc}</div><div class="meta-value">${esc(siteData.tripLocation || "باڵەکایەتی")}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_time}</div><div class="meta-value">${esc(siteData.tripTime || "٠٥:٠٠")}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_dur}</div><div class="meta-value">١ ڕۆژ</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_diff}</div><div class="meta-value">مامناوەند</div></div>
    </div>
   </div>
  </section>
@@ -768,11 +922,11 @@ function render(){
    <div class="surface trip-card">
     <div class="trip-photo" style="background-image:url('${tripImg}');">
      <div class="trip-photo-badge">KURDIA</div>
-     <div class="trip-photo-bottom"><div class="trip-photo-title">${esc(curTripLocation)}</div></div>
+     <div class="trip-photo-bottom"><div class="trip-photo-title">${esc(siteData.tripLocation || "چیای هەڵگورد")}</div></div>
     </div>
     <div class="trip-content">
      <div class="section-label"><i data-lucide="compass"></i> ${t.trip_badge}</div>
-     <h2 class="text-3xl font-black mt-2 mb-4">${esc(curTripTitle)}</h2>
+     <h2 class="text-3xl font-black mt-2 mb-4">${esc(siteData.tripTitle || "گەشتی لووتکەی چیای هەڵگورد")}</h2>
      
      <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-4">
        <div class="flex justify-between items-center text-xs font-bold mb-2">
@@ -785,8 +939,8 @@ function render(){
      </div>
 
      <div class="trip-info-grid">
-      <div class="trip-info"><div class="trip-info-label">${t.meta_time}</div><div class="trip-info-value">${esc(curTripTime)}</div></div>
-      <div class="trip-info"><div class="trip-info-label">${t.meta_dur}</div><div class="trip-info-value">${esc(curTripDuration)}</div></div>
+      <div class="trip-info"><div class="trip-info-label">${t.meta_time}</div><div class="trip-info-value">${esc(siteData.tripTime || "بەیانی ٠٥:٠٠")}</div></div>
+      <div class="trip-info"><div class="trip-info-label">${t.meta_dur}</div><div class="trip-info-value">١ ڕۆژ</div></div>
      </div>
 
      <div class="weather-badge-box">
@@ -799,11 +953,11 @@ function render(){
 
      <div class="trip-detail">
        <div class="trip-detail-title">${t.trip_full_desc}</div>
-       <div class="trip-detail-text">${esc(curTripDesc)}</div>
+       <div class="trip-detail-text">${esc(siteData.tripDesc || "گەشتێکی پڕ لە جوش و خڕۆش بە هاوڕێیەتی ڕێبەری شارەزا...")}</div>
      </div>
 
      <div class="trip-price-row">
-       <div><div class="trip-price-label">${t.trip_price_lbl}</div><div class="trip-price">${esc(curTripPrice)}</div></div>
+       <div><div class="trip-price-label">${t.trip_price_lbl}</div><div class="trip-price">${esc(siteData.tripPrice || "٣٥،٠٠٠ دینار")}</div></div>
        ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary px-6 py-3 rounded-xl font-bold">${t.btn_register}</a>` : `<div class="text-gray-500 font-bold">${t.btn_closed}</div>`}
      </div>
     </div>
@@ -877,22 +1031,6 @@ function render(){
          <ul class="flex flex-col gap-2 text-xs text-gray-300">
            ${(g.items || []).map(it=>`<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> ${esc(it)}</li>`).join("")}
          </ul>
-       </div>
-     `).join("")}
-   </div>
-  </div>
- </section>
-
- <!-- SERVICES -->
- <section id="services" class="section pt-0">
-  <div class="container">
-   <div class="section-label"><i data-lucide="sparkles"></i> ${t.serv_label}</div>
-   <h2 class="section-title mt-2">${t.serv_title}</h2>
-   <div class="service-grid">
-     ${(siteData.services || []).map(s=>`
-       <div class="service">
-         <div class="service-icon"><i data-lucide="${s.icon || 'check'}"></i></div>
-         <div class="font-bold text-sm mt-3">${esc(typeof s === "string" ? s : s.name)}</div>
        </div>
      `).join("")}
    </div>
@@ -1038,6 +1176,7 @@ function render(){
 
  if(window.lucide) lucide.createIcons();
  startCountdown();
+ fetchStories();
 }
 
 function handlePeopleCount(val){
@@ -1058,7 +1197,7 @@ async function requestOtpCode(){
   const t = I18N[currentLang] || I18N.ku;
   const phone = document.getElementById("bookPhone").value.trim();
   const btn = document.getElementById("otpSendBtn");
-  if(!phone){ toast("Please enter phone"); return; }
+  if(!phone){ toast("ژمارەی مۆبایل بنووسە"); return; }
   btn.disabled = true; btn.textContent = "...";
   try{
     const res = await fetch(`${WORKER_ENDPOINT}/api/otp/send`, {
@@ -1068,26 +1207,25 @@ async function requestOtpCode(){
     });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("📩 WhatsApp OTP sent");
+      toast("📩 کۆدی دڵنیابوونەوە نێردرا");
       document.getElementById("otpInputContainer").classList.remove("hidden");
       btn.textContent = t.btn_resend;
     }else{ 
-      toast("❌ " + (d.error || "Error"));
+      toast("❌ " + (d.error || "هەڵە"));
       btn.textContent = t.btn_send_code; 
     }
   }catch(e){ 
-    toast("Server connection error"); 
+    toast("کێشەی پەیوەندی بە سێرڤەر"); 
     btn.textContent = t.btn_send_code; 
   }
   finally{ btn.disabled = false; }
 }
 
 async function verifyOtpCode(){
-  const t = I18N[currentLang] || I18N.ku;
   const phone = document.getElementById("bookPhone").value.trim();
   const code = document.getElementById("bookOtp").value.trim();
   const subBtn = document.getElementById("bookSubmitBtn");
-  if(!code || code.length !== 4){ toast("Enter 4-digit code"); return; }
+  if(!code || code.length !== 4){ toast("کۆدی ٤ ژمارەیی بنووسە"); return; }
   try{
     const res = await fetch(`${WORKER_ENDPOINT}/api/otp/verify`, {
       method:"POST",
@@ -1097,22 +1235,22 @@ async function verifyOtpCode(){
     const d = await res.json();
     if(res.ok && d.verified){
       isPhoneVerified = true;
-      toast("✅ Verified!");
-      document.getElementById("otpInputContainer").innerHTML = `<div class="p-2 bg-green-500/10 text-green-400 font-bold text-xs rounded-xl">✅ Phone Verified</div>`;
+      toast("✅ مۆبایلەکەت سەلمێنرا!");
+      document.getElementById("otpInputContainer").innerHTML = `<div class="p-2 bg-green-500/10 text-green-400 font-bold text-xs rounded-xl">✅ ژمارە سەلمێنرا</div>`;
       document.getElementById("bookPhone").readOnly = true;
       document.getElementById("otpSendBtn").style.display = "none";
       subBtn.disabled = false;
       subBtn.classList.remove("opacity-50", "cursor-not-allowed");
-      subBtn.textContent = t.btn_submit;
-    }else{ toast("❌ Invalid code"); }
-  }catch(e){ toast("Server error"); }
+      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی FIB";
+    }else{ toast("❌ کۆدەکە هەڵەیە"); }
+  }catch(e){ toast("کێشەی سێرڤەر"); }
 }
 
 async function submitBooking(e){
   e.preventDefault();
   const needsOtp = siteData.otpRequired !== false;
   if(needsOtp && !isPhoneVerified){ 
-    toast("Verify phone first"); 
+    toast("سەرەتا مۆبایلەکەت بسەلمێنە"); 
     return; 
   }
   
@@ -1126,30 +1264,30 @@ async function submitBooking(e){
   const extraInputs = document.querySelectorAll(".extra-person-name");
   const extraNames = Array.from(extraInputs).map(inp => inp.value.trim()).filter(Boolean).join("، ");
 
-  subBtn.disabled = true; subBtn.textContent = "Wait...";
+  subBtn.disabled = true; subBtn.textContent = "چاوەڕوان بە...";
   try{
     const formData = new FormData();
     formData.append("name", name);
     formData.append("phone", phone);
-    formData.append("trip", siteData.tripTitle || "KURDIA ADVENTURE");
+    formData.append("trip", siteData.tripTitle || "گەشتی لووتکەی چیای هەڵگورد");
     formData.append("people", people);
     formData.append("extra_names", extraNames);
-    formData.append("note", (appliedDiscountPercent > 0 ? `[Discount ${appliedDiscountPercent}%] ` : "") + note);
+    formData.append("note", (appliedDiscountPercent > 0 ? `[داشکاندن ${appliedDiscountPercent}%] ` : "") + note);
     if(receipt) formData.append("receipt", receipt);
 
     const res = await fetch(`${WORKER_ENDPOINT}/api/register`, { method:"POST", body:formData });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("🎉 Booking successful!");
+      toast("🎉 داواکارییەکەت سەرکەوتووانە نێردرا!");
       e.target.reset();
       isPhoneVerified = false;
       render();
     }else{
-      toast("❌ " + (d.error || "Error"));
+      toast("❌ " + (d.error || "هەڵە"));
       subBtn.disabled = false;
     }
   }catch(err){
-    toast("Server connection error");
+    toast("کێشەی سێرڤەر");
     subBtn.disabled = false;
   }
 }
@@ -1178,8 +1316,6 @@ function startCountdown(){
 
 function toggleMenu(){ document.getElementById("mobileMenu").classList.toggle("open"); }
 function closeMenu(){ document.getElementById("mobileMenu").classList.remove("open"); }
-
-function toggleAI(){ document.getElementById("aiWindow").classList.toggle("hidden"); }
 
 async function sendAI(){
   const inp = document.getElementById("aiInput");
