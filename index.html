@@ -353,6 +353,7 @@ const DEFAULT_DATA = {
  weatherTemp:"١٨°C",
  weatherCondition:"ساماڵ و خۆرەتاو ☀️",
  bookingOpen:true,
+ otpRequired:true, // ئەگەر false بێت OTP داناخرێت
  fibAccount:"07503130360",
  services:[
   { name:"پاسی گەشتیاری", icon:"bus-front" },
@@ -373,7 +374,7 @@ const DEFAULT_DATA = {
  ],
  gallery:[],
  faq:[
-  { q:"چۆن بەشداری بکەم؟", a:"لە بەشی بەشداری ژمارەی WhatsAppەکەت پشتڕاست بکەرەوە، فۆڕمەکە پڕ بکەرەوە و پسوولەی پارەدانی FIB بنێرە." },
+  { q:"چۆن بەشداری بکەم؟", a:"لە بەشی بەشداری فۆڕمەکە پڕ بکەرەوە و پسوولەی پارەدانی FIB بنێرە." },
   { q:"شێوازی پارەدان چۆنە؟", a:"پارەدان تەنها لە ڕێگەی کارتی بانکی FIB دەبێت بۆ هەژماری فەرمی." }
  ]
 };
@@ -406,6 +407,8 @@ function render(){
  const app = document.getElementById("app");
  const heroImg = safeUrl(siteData.heroImageUrl);
  const tripImg = safeUrl(siteData.tripImageUrl || siteData.heroImageUrl);
+
+ const needsOtp = siteData.otpRequired !== false;
 
  app.innerHTML = `
  <!-- HERO -->
@@ -574,7 +577,7 @@ function render(){
         <div class="section-label">بەشداری</div>
         <h2 class="text-3xl font-black mt-2">ئامادەیت بۆ ئەم گەشتە؟</h2>
         <p class="text-gray-400 text-xs mt-3 leading-relaxed">
-          سەرەتا مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاست بکەرەوە، ئینجا بڕی پارەکە لە ڕێگەی کارتی FIB ڕەوانە بکە و وێنەی پسوولەکە بنێرە.
+          ${needsOtp ? "سەرەتا مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاست بکەرەوە، ئینجا بڕی پارەکە لە ڕێگەی کارتی FIB ڕەوانە بکە و وێنەی پسوولەکە بنێرە." : "زانیارییەکانت بنووسە، پارەکە بە کارتی FIB بنێرە و وێنەی پسوولەکەت بار بکە."}
         </p>
         <div class="p-4 bg-white/5 rounded-2xl border border-white/10 mt-6">
           <div class="text-xs text-gray-400 font-bold">هەژماری فەرمیی FIB:</div>
@@ -584,17 +587,22 @@ function render(){
 
       <form onsubmit="submitBooking(event)" class="booking-form">
         <input id="bookName" class="input" placeholder="ناوی تەواو" required>
+        
         <div class="flex gap-2">
           <input id="bookPhone" class="input" placeholder="ژمارەی WhatsApp" required inputmode="tel">
-          <button type="button" id="otpSendBtn" onclick="requestOtpCode()" class="secondary px-4 rounded-xl text-xs font-bold whitespace-nowrap">کۆد بنێرە</button>
+          ${needsOtp ? `
+            <button type="button" id="otpSendBtn" onclick="requestOtpCode()" class="secondary px-4 rounded-xl text-xs font-bold whitespace-nowrap">کۆد بنێرە</button>
+          ` : ""}
         </div>
 
-        <div id="otpInputContainer" class="hidden full">
-          <div class="flex gap-2">
-            <input id="bookOtp" class="input" placeholder="کۆدی ٤ ژمارەیی" maxlength="4" inputmode="numeric">
-            <button type="button" onclick="verifyOtpCode()" class="primary px-5 rounded-xl text-xs font-bold">سەلماندن</button>
+        ${needsOtp ? `
+          <div id="otpInputContainer" class="hidden full">
+            <div class="flex gap-2">
+              <input id="bookOtp" class="input" placeholder="کۆدی ٤ ژمارەیی" maxlength="4" inputmode="numeric">
+              <button type="button" onclick="verifyOtpCode()" class="primary px-5 rounded-xl text-xs font-bold">سەلماندن</button>
+            </div>
           </div>
-        </div>
+        ` : ""}
 
         <select id="bookPeople" class="input full" onchange="handlePeopleCount(this.value)">
           <option value="1">١ کەس (تەنها خۆم)</option>
@@ -611,8 +619,8 @@ function render(){
           <input id="bookReceipt" type="file" accept="image/*" class="input" required>
         </div>
 
-        <button type="submit" id="bookSubmitBtn" class="primary submit-button full opacity-50 cursor-not-allowed" disabled>
-          🔒 سەرەتا مۆبایلەکەت بسەلمێنە
+        <button type="submit" id="bookSubmitBtn" class="primary submit-button full ${needsOtp ? 'opacity-50 cursor-not-allowed' : ''}" ${needsOtp ? 'disabled' : ''}>
+          ${needsOtp ? '🔒 سەرەتا مۆبایلەکەت بسەلمێنە' : '🚀 ناردنی داواکاری و پسوولەی FIB'}
         </button>
       </form>
     </div>
@@ -693,7 +701,12 @@ async function verifyOtpCode(){
 
 async function submitBooking(e){
   e.preventDefault();
-  if(!isPhoneVerified){ toast("سەرەتا مۆبایلەکەت لە WhatsApp بسەلمێنە"); return; }
+  const needsOtp = siteData.otpRequired !== false;
+  if(needsOtp && !isPhoneVerified){ 
+    toast("سەرەتا مۆبایلەکەت لە WhatsApp بسەلمێنە"); 
+    return; 
+  }
+  
   const subBtn = document.getElementById("bookSubmitBtn");
   const name = document.getElementById("bookName").value.trim();
   const phone = document.getElementById("bookPhone").value.trim();
