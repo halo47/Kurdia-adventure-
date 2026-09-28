@@ -154,7 +154,7 @@ button{ cursor:pointer; }
 .achieve-num{ font-size:2.2rem; font-weight:900; color:#fff; }
 .achieve-lbl{ font-size:12px; color:var(--muted); margin-top:4px; font-weight:700; }
 
-/* TIMELINE (HOW IT WORKS) */
+/* TIMELINE */
 .timeline-wrap{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:35px; }
 .timeline-step{
   background:var(--surface); border:1px solid var(--border); border-radius:20px;
@@ -182,12 +182,6 @@ button{ cursor:pointer; }
 .gallery-card:nth-child(n+4){ grid-column:span 4; }
 .gallery-card img{ width:100%; height:100%; object-fit:cover; transition:.3s; }
 .gallery-card:hover img{ transform:scale(1.05); }
-
-/* LIGHTBOX */
-#lightboxModal{
-  position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
-  z-index:999999; display:none; align-items:center; justify-content:center; padding:20px;
-}
 
 /* BOOKING */
 .booking-wrap{ border-radius:30px; padding:45px; background:linear-gradient(135deg, rgba(157,28,50,.18), rgba(18,26,38,.97) 45%, rgba(7,10,16,.99)); border:1px solid var(--border); }
@@ -307,14 +301,6 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 
 <main id="app"></main>
 
-<!-- LIGHTBOX MODAL -->
-<div id="lightboxModal" onclick="closeLightbox()">
-  <div class="max-w-4xl max-h-[85vh] relative flex items-center justify-center">
-    <img id="lightboxImg" class="max-w-full max-h-[85vh] rounded-2xl border border-white/20 shadow-2xl" src="" alt="Zoom">
-    <button class="absolute top-4 right-4 bg-black/70 text-white p-2 rounded-full"><i data-lucide="x"></i></button>
-  </div>
-</div>
-
 <!-- FLOATING ACTIONS -->
 <div class="floating-actions">
  <a id="waDirectBtn" target="_blank" class="floating-btn floating-whatsapp" title="پەیوەندی لە WhatsApp">
@@ -332,7 +318,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
   <button onclick="toggleAI()"><i data-lucide="x"></i></button>
  </div>
  <div id="messages" class="ai-messages">
-   <div class="ai-message ai">سڵاو! من یاریدەدەری زیرەکی KURDIA ADVENTUREـم. هەر پرسیارێکت لەسەر کەشوهەوا، بەرنامە، کەرەستەی شاخەوانی یان بەشداری هەیە بپرسە.</div>
+   <div class="ai-message ai">سڵاو! من یاریدەدەری زیرەکی KURDIA ADVENTUREـم. هەر پرسیارێکت هەیە بپرسە.</div>
  </div>
  <div class="p-2 border-t border-white/10 flex gap-2">
   <input id="aiInput" class="input py-2 text-xs" placeholder="پرسیارەکەت بنووسە..." onkeydown="if(event.key==='Enter') sendAI()">
@@ -349,12 +335,6 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    <div class="font-black text-lg">KURDIA ADVENTURE</div>
    <div class="text-gray-400 text-xs mt-3 leading-relaxed">
      پلاتفۆرمی فەرمیی گەشتیاری و شاخەوانی لە کوردستان؛ ئامانجمان ناساندنی سروشتی کوردستان، برەودان بە تەندروستی، هاوڕێیەتی و پاراستنی ژینگەیە.
-   </div>
-   <div class="flex items-center gap-3 mt-4 text-gray-400 text-sm">
-     <a href="https://instagram.com" target="_blank" class="hover:text-white"><i data-lucide="instagram"></i></a>
-     <a href="https://facebook.com" target="_blank" class="hover:text-white"><i data-lucide="facebook"></i></a>
-     <a href="https://tiktok.com" target="_blank" class="hover:text-white"><i data-lucide="video"></i></a>
-     <a href="https://wa.me/9647503130360" target="_blank" class="hover:text-white"><i data-lucide="message-circle"></i></a>
    </div>
   </div>
   <div>
@@ -432,19 +412,14 @@ const DEFAULT_DATA = {
   { name:"پاسی گەشتیاری مۆدێرن", icon:"bus-front" },
   { name:"نان و خواردنی بەیانی", icon:"utensils" },
   { name:"چای سەر خەڵووز", icon:"coffee" },
-  { name:"وێنەگری فۆتۆگرافەر", icon:"camera" },
-  { name:"فریاگوزاری سەرەتایی", icon:"shield-check" },
-  { name:"تێنت و سێبەری پشوو", icon:"tent-tree" }
+  { name:"وێنەگری فۆتۆگرافەر", icon:"camera" }
  ],
  gear:[
   { title:"کەلوپەلی زۆر پێویست", items:["پێڵاوی تایبەتی شاخەوانی پتەو","کۆڵەپشتی گونجاو (٢٠ تا ٣٠ لیتر)","ئاوی خواردنەوە (لانیکەم ٢ لیتر)","ناسنامەی باری شارستانی"] },
-  { title:"جلوبەرگی گونجاو", items:["جلوبەرگی وەرزشی و فێنک","چاکەتی دژە با (Windbreaker)","کڵاو و چاویلکەی خۆرپارێز","گۆرەویی زیادەی پەمۆ"] },
-  { title:"پێشنیازکراو بۆ ئاسوودەیی", items:["گۆچانی شاخەوانی (Trekking Poles)","دژە خۆر و شێدارکەرەوەی لێو","خواردنی وزەبەخش (خورما، چەرەسات)","پاوەربانک بۆ بارگاویکردنەوە"] }
+  { title:"جلوبەرگی گونجاو", items:["جلوبەرگی وەرزشی و فێنک","چاکەتی دژە با (Windbreaker)","کڵاو و چاویلکەی خۆرپارێز","گۆرەویی زیادەی پەمۆ"] }
  ],
  reviews:[
-  { name:"دەرباز سەعید", city:"هەولێر", text:"یەکێک لە ڕێکخراوترین و پڕ وزەترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا. هەموو وردەکارییەکان بێ وێنە بوون!" },
-  { name:"ڕەوەند عەلی", city:"سلێمانی", text:"ڕێبەرەکان زۆر بەئەزموون بوون و تەواوی کەرەستەی سەلامەتی و خزمەتگوزارییان لە ئاستی نایاب دابین کردبوو." },
-  { name:"سارا مەحموود", city:"دهۆک", text:"کەشێکی یەکجار دۆستانە و پڕ ڕێز بوو، بە تایبەتی لەسەر لووتکەی هەڵگورد هەستێکی پێناسەنەکراو بوو." }
+  { name:"دەرباز سەعید", city:"هەولێر", text:"یەکێک لە ڕێکخراوترین و پڕ وزەترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
  ],
  gallery:[]
 };
@@ -466,16 +441,19 @@ function toast(msg){
 function loadData(){
  try{
   const local = localStorage.getItem("kurdia_builder_published_v3") || localStorage.getItem("KURDIA_BUILDER_STATE");
-  if(local) siteData = Object.assign({}, DEFAULT_DATA, JSON.parse(local));
- }catch(e){}
-}
-
-function openLightbox(url){
-  document.getElementById("lightboxImg").src = url;
-  document.getElementById("lightboxModal").style.display = "flex";
-}
-function closeLightbox(){
-  document.getElementById("lightboxModal").style.display = "none";
+  if(local){
+    const parsed = JSON.parse(local);
+    siteData = Object.assign({}, DEFAULT_DATA, parsed);
+    if(!Array.isArray(siteData.stats)) siteData.stats = DEFAULT_DATA.stats;
+    if(!Array.isArray(siteData.timeline)) siteData.timeline = DEFAULT_DATA.timeline;
+    if(!Array.isArray(siteData.safety)) siteData.safety = DEFAULT_DATA.safety;
+    if(!Array.isArray(siteData.gear)) siteData.gear = DEFAULT_DATA.gear;
+    if(!Array.isArray(siteData.services)) siteData.services = DEFAULT_DATA.services;
+    if(!Array.isArray(siteData.reviews)) siteData.reviews = DEFAULT_DATA.reviews;
+  }
+ }catch(e){
+   siteData = Object.assign({}, DEFAULT_DATA);
+ }
 }
 
 function applyCoupon(){
@@ -554,14 +532,13 @@ function render(){
      <div class="section-label"><i data-lucide="compass"></i> گەشتی چالاکی داهاتوو</div>
      <h2 class="text-3xl font-black mt-2 mb-4">${esc(siteData.tripTitle)}</h2>
      
-     <!-- CAPACITY PROGRESS BAR -->
      <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-4">
        <div class="flex justify-between items-center text-xs font-bold mb-2">
          <span class="text-gray-300">کورسییە گیراوەکان: ${booked} لە ${capacity}</span>
          <span class="text-rose-400 font-black">${remaining > 0 ? `تەنها ${remaining} شوێن ماوە!` : 'تەواو پڕ بووە (Closed)'}</span>
        </div>
        <div class="w-full bg-white/10 h-2.5 rounded-full overflow-hidden">
-         <div class="bg-gradient-to-r from-rose-500 to-rose-700 h-full rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+         <div class="bg-gradient-to-r from-rose-500 to-rose-700 h-full rounded-full" style="width: ${percentage}%"></div>
        </div>
      </div>
 
@@ -598,7 +575,7 @@ function render(){
     <div class="section-label"><i data-lucide="mountain"></i> KURDIA ADVENTURE</div>
     <h2 class="section-title mt-2">ئێمە کێین و دەستکەوتەکانمان</h2>
     <p class="text-gray-300 text-sm max-w-3xl mt-3 leading-relaxed">
-      گرووپی کوردیا ئەدڤێنتچەر لە ساڵی ٢٠٢٤ـەوە وەک یەکێک لە چالاکترین تیمەکانی شاخەوانی و گەشتیاری لە کوردستان دامەزراوە. ئامانجمان تەنها شاخەوانی نییە، بەڵکو دروستکردنی فەرهەنگێکی تەندروست، پەروەردەی ژینگەیی و ڕێزگرتنە لە سەروەریی سروشتی کوردستان.
+      گرووپی کوردیا ئەدڤێنتچەر لە ساڵی ٢٠٢٤ـەوە وەک یەکێک لە چالاکترین تیمەکانی شاخەوانی لە کوردستان دامەزراوە؛ ئامانجمان ناساندنی سروشتی کوردستان، برەودان بە تەندروستی و دروستکردنی هاوڕێیەتی نوێیە.
     </p>
 
     <div class="achieve-grid">
@@ -612,7 +589,7 @@ function render(){
   </div>
  </section>
 
- <!-- 2. TIMELINE (HOW IT WORKS) -->
+ <!-- 2. TIMELINE -->
  <section id="timeline" class="section pt-0">
   <div class="container">
     <div class="section-label"><i data-lucide="footprints"></i> هەنگاوەکانی گەشت</div>
@@ -658,7 +635,7 @@ function render(){
            <i data-lucide="check-circle-2"></i> ${esc(g.title)}
          </div>
          <ul class="flex flex-col gap-2 text-xs text-gray-300">
-           ${g.items.map(it=>`<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> ${esc(it)}</li>`).join("")}
+           ${(g.items || []).map(it=>`<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> ${esc(it)}</li>`).join("")}
          </ul>
        </div>
      `).join("")}
@@ -692,7 +669,7 @@ function render(){
      </div>
      <div class="p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
        <div class="text-2xl font-black text-amber-400">4.9 / 5</div>
-       <div class="text-xs text-gray-400">★★★★★<br>زیاتر لە ٩٨٪ بەشداربووان گەشتەکەیان پەسەند کردووە</div>
+       <div class="text-xs text-gray-400">★★★★★<br>ڕەزامەندی زیاتر لە ٩٨٪ بەشداربووان</div>
      </div>
    </div>
    <div class="reviews-grid">
@@ -709,7 +686,7 @@ function render(){
   </div>
  </section>
 
- <!-- GALLERY (WITH LIGHTBOX) -->
+ <!-- GALLERY -->
  <section id="gallery" class="section pt-0">
   <div class="container">
    <div class="section-label"><i data-lucide="image"></i> گەلەری</div>
@@ -718,7 +695,7 @@ function render(){
      ${(siteData.gallery || []).map(g=>{
        const u = safeUrl(typeof g === 'string' ? g : g.url);
        return `
-       <div class="gallery-card" onclick="openLightbox('${esc(u)}')">
+       <div class="gallery-card">
          <img src="${esc(u)}" alt="Kurdia Adventure">
        </div>`;
      }).join("")}
@@ -733,7 +710,7 @@ function render(){
      <div>
        <div class="section-label"><i data-lucide="map-pin"></i> شوێنی کۆبوونەوە</div>
        <h2 class="text-2xl font-black mt-2">نەخشەی شوێنی بەڕێکەوتن</h2>
-       <p class="text-xs text-gray-400 mt-2 leading-relaxed">پاسی گەشت لە شوێنی دیاریکراو ئامادە دەبێت. بۆ ئاسانکاری و ڕێڕەو کلیک لە دوگمەکە بکە یان کۆدەکە سکان بکە.</p>
+       <p class="text-xs text-gray-400 mt-2 leading-relaxed">پاسی گەشت لە شوێنی دیاریکراو ئامادە دەبێت؛ بۆ ڕێڕەو کلیک لە دوگمەکە بکە.</p>
        <a href="${esc(siteData.waMapsUrl || '#')}" target="_blank" class="primary inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-xl font-bold text-xs">
          <i data-lucide="navigation"></i> کردنەوە لە Google Maps
        </a>
@@ -764,7 +741,6 @@ function render(){
           <div class="text-[11px] text-gray-400 mt-2">تکایە لە کاتی ناردنی پارە، ناوی تەواوی خۆت لە تێبینی بنووسە.</div>
         </div>
 
-        <!-- COUPON DISCOUNT SECTION -->
         <div class="mt-4 p-4 bg-white/[0.03] border border-white/10 rounded-2xl">
           <div class="text-xs font-bold text-gray-300 mb-2">کۆدی داشکاندن (Coupon) هەتە؟</div>
           <div class="flex gap-2">
@@ -979,31 +955,26 @@ async function sendAI(){
     const res = await fetch(`${WORKER_ENDPOINT}/api/ai`, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ prompt: `تۆ یاریدەدەری فەرمیی شاخەوانی KURDIA ADVENTUREیت. بە کوردی وەڵامی کورت و سوودبەخش بدەرەوە بۆ ئەم پرسیارە: ${q}` })
+      body:JSON.stringify({ prompt: `تۆ یاریدەدەری فەرمیی شاخەوانی KURDIA ADVENTUREیت. بە کوردی وەڵامی کورت بدەرەوە: ${q}` })
     });
     const d = await res.json();
     if(d.ok && d.text){
       box.innerHTML += `<div class="ai-message ai">${esc(d.text)}</div>`;
     }else{
-      box.innerHTML += `<div class="ai-message ai">بۆ زانیاری زیاتر دەتوانیت لە ڕێگەی WhatsApp پەیوەندیمان پێوە بکەیت: 07503130360</div>`;
+      box.innerHTML += `<div class="ai-message ai">بۆ زانیاری زیاتر لە ڕێگەی WhatsApp پەیوەندیمان پێوە بکە: 07503130360</div>`;
     }
   }catch(e){
-    box.innerHTML += `<div class="ai-message ai">پەیوەندی لەگەڵ AI نائامادەیە؛ دەتوانیت لە خوارەوە پەیوەندی بە WhatsApp بکەیت.</div>`;
+    box.innerHTML += `<div class="ai-message ai">پەیوەندی لەگەڵ AI نائامادەیە؛ دەتوانیت لە ڕێگەی WhatsApp نامە بنێریت.</div>`;
   }finally{
     btn.disabled = false;
     box.scrollTop = box.scrollHeight;
   }
 }
 
-window.addEventListener("message", ev => {
- if(ev.data && ev.data.type === "KURDIA_BUILDER_STATE"){
-  siteData = Object.assign({}, DEFAULT_DATA, ev.data.state || {});
+window.addEventListener("DOMContentLoaded", () => {
+  loadData();
   render();
- }
 });
-
-loadData();
-render();
 </script>
 </body>
 </html>
