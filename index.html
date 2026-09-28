@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>KURDIA ADVENTURE</title>
-<meta id="metaDescription" name="description" content="KURDIA ADVENTURE — گەشت، سروشت، هاوڕێتی و سەرکێشی">
+<title>KURDIA ADVENTURE — گەشت، سروشت و سەرکێشی</title>
+<meta id="metaDescription" name="description" content="KURDIA ADVENTURE — پلاتفۆرمی فەرمیی گەشتە شاخەوانی و سروشتییەکان لە کوردستان">
 <meta name="theme-color" content="#070a10">
 
 <!-- FONTS & ICONS -->
@@ -61,9 +61,9 @@ button{ cursor:pointer; }
 }
 .secondary:hover{ background:rgba(255,255,255,.09); transform:translateY(-2px); }
 
-.section{ padding:80px 0; }
-.section-label{ color:#aeb7c5; font-size:.92rem; font-weight:800; }
-.section-title{ font-size:clamp(1.9rem,4vw,3.6rem); line-height:1.2; font-weight:900; letter-spacing:-.04em; }
+.section{ padding:75px 0; }
+.section-label{ color:#aeb7c5; font-size:.92rem; font-weight:800; display:flex; align-items:center; gap:6px; }
+.section-title{ font-size:clamp(1.9rem,4vw,3.2rem); line-height:1.2; font-weight:900; letter-spacing:-.04em; }
 
 /* HEADER */
 .site-header{ position:fixed; top:0; left:0; right:0; z-index:1000; }
@@ -76,7 +76,7 @@ button{ cursor:pointer; }
 .logo-title{ font-weight:900; line-height:1; }
 .logo-sub{ font-size:9px; color:#64748b; letter-spacing:.25em; margin-top:5px; }
 
-.desktop-nav{ display:flex; align-items:center; gap:24px; font-size:14px; color:#cbd5e1; }
+.desktop-nav{ display:flex; align-items:center; gap:20px; font-size:13px; color:#cbd5e1; }
 .desktop-nav a:hover{ color:#fff; }
 
 .mobile-menu{ display:none; border-top:1px solid rgba(255,255,255,.06); background:#0c1119; }
@@ -97,10 +97,11 @@ button{ cursor:pointer; }
   backdrop-filter:blur(18px); color:#e2e8f0; font-size:13px; font-weight:700;
 }
 .hero-dot{ width:8px; height:8px; border-radius:50%; background:var(--primary2); }
-.hero-title{ max-width:950px; margin-top:24px; font-size:clamp(2.4rem, 8vw, 6.5rem); font-weight:900; line-height:1.05; letter-spacing:-.05em; }
+.hero-title{ max-width:950px; margin-top:24px; font-size:clamp(2.4rem, 8vw, 6rem); font-weight:900; line-height:1.05; letter-spacing:-.05em; }
 .hero-subtitle{ max-width:680px; margin-top:22px; color:#d1d5db; font-size:clamp(1rem,1.4vw,1.2rem); line-height:2; }
 .hero-actions{ margin-top:30px; display:flex; flex-wrap:wrap; gap:12px; }
 .hero-action{ padding:14px 24px; border-radius:16px; font-weight:800; text-align:center; }
+
 .hero-meta{ margin-top:40px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; max-width:850px; }
 .meta-card{ padding:16px; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.10); border-radius:18px; backdrop-filter:blur(16px); }
 .meta-label{ color:#94a3b8; font-size:11px; }
@@ -144,33 +145,49 @@ button{ cursor:pointer; }
 .trip-price-label{ color:#64748b; font-size:11px; }
 .trip-price{ margin-top:4px; font-size:1.8rem; font-weight:900; }
 
+/* ACHIEVEMENTS KPI */
+.achieve-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:30px; }
+.achieve-card{
+  background:linear-gradient(145deg, rgba(157,28,50,.12), var(--surface));
+  border:1px solid var(--border); border-radius:22px; padding:24px 20px; text-align:center;
+}
+.achieve-num{ font-size:2.2rem; font-weight:900; color:#fff; }
+.achieve-lbl{ font-size:12px; color:var(--muted); margin-top:4px; font-weight:700; }
+
+/* TIMELINE (HOW IT WORKS) */
+.timeline-wrap{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:35px; }
+.timeline-step{
+  background:var(--surface); border:1px solid var(--border); border-radius:20px;
+  padding:22px; position:relative; overflow:hidden;
+}
+.step-badge{
+  width:32px; height:32px; border-radius:10px; background:var(--primary); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px; margin-bottom:12px;
+}
+
 /* REVIEWS & SERVICES */
-.reviews-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:35px; }
+.reviews-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:30px; }
 .review-card{ padding:22px; border-radius:20px; background:var(--surface); border:1px solid var(--border); }
 .review-author{ margin-top:18px; display:flex; align-items:center; gap:10px; }
 .review-avatar{ width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, var(--primary), var(--primary2)); display:flex; align-items:center; justify-content:center; font-weight:900; }
 
-.service-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:35px; }
-.service{ padding:20px; border-radius:20px; background:var(--surface); border:1px solid var(--border); }
-.service-icon{ width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:rgba(157,28,50,.25); }
+.service-grid, .gear-grid, .safety-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:30px; }
+.service, .gear-card, .safety-card{ padding:22px; border-radius:20px; background:var(--surface); border:1px solid var(--border); }
+.service-icon{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:rgba(157,28,50,.25); }
 
-.itinerary{ margin-top:35px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.itinerary-item{ display:flex; gap:14px; padding:20px; border-radius:20px; background:var(--surface); border:1px solid var(--border); }
-.itinerary-number{ flex:0 0 44px; width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, var(--primary), var(--primary2)); font-weight:900; }
-
-.gallery-grid{ margin-top:35px; display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); grid-auto-rows:220px; gap:10px; }
-.gallery-card{ position:relative; overflow:hidden; border-radius:20px; border:1px solid var(--border); background:#0c1119; }
-.gallery-card:nth-child(1){ grid-column:span 7; grid-row:span 2; }
-.gallery-card:nth-child(2), .gallery-card:nth-child(3){ grid-column:span 5; }
+.gallery-grid{ margin-top:30px; display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); grid-auto-rows:220px; gap:10px; }
+.gallery-card{ position:relative; overflow:hidden; border-radius:20px; border:1px solid var(--border); background:#0c1119; cursor:pointer; }
+.gallery-card:nth-child(1){ grid-column:span 6; grid-row:span 2; }
+.gallery-card:nth-child(2), .gallery-card:nth-child(3){ grid-column:span 6; }
 .gallery-card:nth-child(n+4){ grid-column:span 4; }
-.gallery-card img{ width:100%; height:100%; object-fit:cover; }
+.gallery-card img{ width:100%; height:100%; object-fit:cover; transition:.3s; }
+.gallery-card:hover img{ transform:scale(1.05); }
 
-.faq-list{ margin-top:35px; display:grid; gap:8px; }
-.faq{ overflow:hidden; border-radius:18px; background:var(--surface); border:1px solid var(--border); }
-.faq-button{ width:100%; padding:18px; display:flex; align-items:center; justify-content:space-between; text-align:right; }
-.faq-answer{ max-height:0; overflow:hidden; transition:max-height .3s ease; }
-.faq.open .faq-answer{ max-height:500px; }
-.faq-answer-inner{ padding:0 18px 20px; color:#94a3b8; line-height:2; font-size:13px; }
+/* LIGHTBOX */
+#lightboxModal{
+  position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
+  z-index:999999; display:none; align-items:center; justify-content:center; padding:20px;
+}
 
 /* BOOKING */
 .booking-wrap{ border-radius:30px; padding:45px; background:linear-gradient(135deg, rgba(157,28,50,.18), rgba(18,26,38,.97) 45%, rgba(7,10,16,.99)); border:1px solid var(--border); }
@@ -187,8 +204,11 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 .footer-grid{ padding:50px 0; display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; }
 .footer-bottom{ padding:20px 0; border-top:1px solid rgba(255,255,255,.05); color:#64748b; font-size:12px; display:flex; justify-content:space-between; }
 
-/* TOAST & AI */
-.ai-button{ position:fixed; left:20px; bottom:20px; z-index:900; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+/* FLOATING */
+.floating-actions{ position:fixed; left:20px; bottom:20px; z-index:900; display:flex; flex-direction:column; gap:10px; }
+.floating-btn{ width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(0,0,0,0.5); }
+.floating-whatsapp{ background:#25d366; color:#fff; }
+
 .ai-window{ position:fixed; left:16px; right:16px; bottom:85px; max-width:400px; margin:auto; z-index:901; border-radius:24px; overflow:hidden; }
 .ai-window.hidden{ display:none; }
 .ai-messages{ height:320px; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:8px; }
@@ -203,29 +223,29 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 }
 #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* MOBILE RESPONSIVE FIXES */
+/* MOBILE RESPONSIVE */
 @media(max-width:900px){
   .trip-card{ grid-template-columns:1fr !important; }
   .trip-photo{ min-height:340px; }
   .trip-content{ padding:24px; }
-  .booking-wrap{ padding:26px; }
+  .booking-wrap{ padding:24px; }
   .booking-grid{ grid-template-columns:1fr; gap:25px; }
-  .service-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .service-grid, .gear-grid, .safety-grid, .timeline-wrap, .achieve-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .reviews-grid{ grid-template-columns:1fr; }
   .desktop-nav, .header-inner > .primary{ display:none !important; }
 }
-@media(max-width:768px){
-  .section{ padding:60px 0; }
-  .hero{ min-height:760px; }
+@media(max-width:640px){
+  .section{ padding:55px 0; }
+  .hero{ min-height:740px; }
   .hero-content{ padding-top:110px; padding-bottom:50px; }
-  .hero-title{ font-size:clamp(2.2rem, 10vw, 4rem); }
+  .hero-title{ font-size:clamp(2.1rem, 9vw, 3.8rem); }
   .hero-meta{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .itinerary{ grid-template-columns:1fr; }
   .gallery-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:160px; }
   .gallery-card:nth-child(1){ grid-column:span 2; grid-row:span 2; }
   .gallery-card:nth-child(2), .gallery-card:nth-child(3), .gallery-card:nth-child(n+4){ grid-column:span 1; }
   .footer-grid{ grid-template-columns:1fr; gap:25px; }
   .footer-bottom{ flex-direction:column; gap:8px; }
+  .timeline-wrap, .achieve-grid{ grid-template-columns:1fr; }
 }
 @media(max-width:520px){
   .booking-form{ grid-template-columns:1fr; }
@@ -252,14 +272,16 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    <nav class="desktop-nav">
     <a href="#home">سەرەتا</a>
     <a href="#trip">گەشت</a>
-    <a href="#services">خزمەتگوزاری</a>
-    <a href="#itinerary">بەرنامە</a>
+    <a href="#about">ئێمە کێین</a>
+    <a href="#timeline">ئەزموون</a>
+    <a href="#safety">سەلامەتی</a>
+    <a href="#gear">پێداویستی</a>
     <a href="#reviews">فیدباک</a>
-    <a href="#gallery">وێنەکان</a>
-    <a href="#faq">پرسیارەکان</a>
+    <a href="#gallery">گەلەری</a>
+    <a href="#location">شوێن</a>
    </nav>
 
-   <a href="#booking" class="primary hidden md:flex px-5 py-2.5 rounded-xl font-bold text-xs">بەشداری</a>
+   <a href="#booking" class="primary hidden md:flex px-5 py-2.5 rounded-xl font-bold text-xs">بەشداری لە گەشت</a>
 
    <button onclick="toggleMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
     <i data-lucide="menu"></i>
@@ -270,12 +292,14 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    <div class="container py-3">
     <a href="#home" onclick="closeMenu()">سەرەتا</a>
     <a href="#trip" onclick="closeMenu()">گەشت</a>
-    <a href="#services" onclick="closeMenu()">خزمەتگوزاری</a>
-    <a href="#itinerary" onclick="closeMenu()">بەرنامە</a>
+    <a href="#about" onclick="closeMenu()">ئێمە کێین</a>
+    <a href="#timeline" onclick="closeMenu()">ئەزموونی گەشت</a>
+    <a href="#safety" onclick="closeMenu()">سەلامەتی</a>
+    <a href="#gear" onclick="closeMenu()">پێداویستییەکان</a>
     <a href="#reviews" onclick="closeMenu()">فیدباک</a>
-    <a href="#gallery" onclick="closeMenu()">وێنەکان</a>
-    <a href="#faq" onclick="closeMenu()">پرسیارەکان</a>
-    <a href="#booking" onclick="closeMenu()" class="primary text-center font-bold mt-2">بەشداری</a>
+    <a href="#gallery" onclick="closeMenu()">گەلەری</a>
+    <a href="#location" onclick="closeMenu()">شوێنی کۆبوونەوە</a>
+    <a href="#booking" onclick="closeMenu()" class="primary text-center font-bold mt-2">بەشداری لە گەشت</a>
    </div>
   </div>
  </div>
@@ -283,20 +307,36 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 
 <main id="app"></main>
 
-<!-- AI ASSISTANT -->
-<button onclick="toggleAI()" class="ai-button primary">
- <i data-lucide="message-circle"></i>
-</button>
+<!-- LIGHTBOX MODAL -->
+<div id="lightboxModal" onclick="closeLightbox()">
+  <div class="max-w-4xl max-h-[85vh] relative flex items-center justify-center">
+    <img id="lightboxImg" class="max-w-full max-h-[85vh] rounded-2xl border border-white/20 shadow-2xl" src="" alt="Zoom">
+    <button class="absolute top-4 right-4 bg-black/70 text-white p-2 rounded-full"><i data-lucide="x"></i></button>
+  </div>
+</div>
 
+<!-- FLOATING ACTIONS -->
+<div class="floating-actions">
+ <a id="waDirectBtn" target="_blank" class="floating-btn floating-whatsapp" title="پەیوەندی لە WhatsApp">
+   <i data-lucide="message-circle"></i>
+ </a>
+ <button onclick="toggleAI()" class="floating-btn primary" title="یارمەتیدەری زیرەک">
+   <i data-lucide="bot"></i>
+ </button>
+</div>
+
+<!-- AI WINDOW -->
 <div id="aiWindow" class="ai-window surface hidden">
  <div class="p-3 border-b border-white/10 flex justify-between items-center">
-  <div class="font-bold text-sm">Kurdia Assistant</div>
+  <div class="font-bold text-sm flex items-center gap-2"><i data-lucide="sparkles" class="text-rose-500"></i> یاریدەدەری زیرەکی کوردیا</div>
   <button onclick="toggleAI()"><i data-lucide="x"></i></button>
  </div>
- <div id="messages" class="ai-messages"></div>
+ <div id="messages" class="ai-messages">
+   <div class="ai-message ai">سڵاو! من یاریدەدەری زیرەکی KURDIA ADVENTUREـم. هەر پرسیارێکت لەسەر کەشوهەوا، بەرنامە، کەرەستەی شاخەوانی یان بەشداری هەیە بپرسە.</div>
+ </div>
  <div class="p-2 border-t border-white/10 flex gap-2">
-  <input id="aiInput" class="input py-2 text-xs" placeholder="پرسیارێک بنووسە..." onkeydown="if(event.key==='Enter') sendAI()">
-  <button onclick="sendAI()" class="primary px-3 rounded-xl"><i data-lucide="send"></i></button>
+  <input id="aiInput" class="input py-2 text-xs" placeholder="پرسیارەکەت بنووسە..." onkeydown="if(event.key==='Enter') sendAI()">
+  <button id="aiSendBtn" onclick="sendAI()" class="primary px-3 rounded-xl"><i data-lucide="send"></i></button>
  </div>
 </div>
 
@@ -307,26 +347,37 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
  <div class="container footer-grid">
   <div>
    <div class="font-black text-lg">KURDIA ADVENTURE</div>
-   <div class="text-gray-400 text-xs mt-3 leading-relaxed">گەشت، سروشت، هاوڕێتی و دروستکردنی یادەوەرییە جوانەکان.</div>
+   <div class="text-gray-400 text-xs mt-3 leading-relaxed">
+     پلاتفۆرمی فەرمیی گەشتیاری و شاخەوانی لە کوردستان؛ ئامانجمان ناساندنی سروشتی کوردستان، برەودان بە تەندروستی، هاوڕێیەتی و پاراستنی ژینگەیە.
+   </div>
+   <div class="flex items-center gap-3 mt-4 text-gray-400 text-sm">
+     <a href="https://instagram.com" target="_blank" class="hover:text-white"><i data-lucide="instagram"></i></a>
+     <a href="https://facebook.com" target="_blank" class="hover:text-white"><i data-lucide="facebook"></i></a>
+     <a href="https://tiktok.com" target="_blank" class="hover:text-white"><i data-lucide="video"></i></a>
+     <a href="https://wa.me/9647503130360" target="_blank" class="hover:text-white"><i data-lucide="message-circle"></i></a>
+   </div>
   </div>
   <div>
    <div class="font-bold text-sm mb-3">بەستەرە خێراکان</div>
    <div class="flex flex-col gap-2 text-xs text-gray-400">
     <a href="#home">سەرەتا</a>
-    <a href="#trip">گەشت</a>
-    <a href="#services">خزمەتگوزاری</a>
-    <a href="#gallery">وێنەکان</a>
-    <a href="#faq">پرسیارەکان</a>
+    <a href="#trip">گەشتەکان</a>
+    <a href="#about">ئێمە کێین</a>
+    <a href="#safety">سەلامەتی</a>
+    <a href="#gear">کەلوپەل</a>
+    <a href="#location">شوێنی کۆبوونەوە</a>
    </div>
   </div>
   <div>
-   <div class="font-bold text-sm mb-3">پەیوەندی</div>
-   <div class="text-xs text-gray-400 leading-relaxed">بۆ هەر پرسیار و هەماهەنگییەک لە ڕێگەی WhatsApp پەیوەندیمان پێوە بکە.</div>
+   <div class="font-bold text-sm mb-3">پەیوەندی ڕاستەوخۆ</div>
+   <div class="text-xs text-gray-400 leading-relaxed mb-2">هەولێر — کوردستان</div>
+   <div class="text-xs text-gray-400 leading-relaxed mb-2">بۆ هەماهەنگی و پەیوەندی خێرا:</div>
+   <div class="text-sm font-bold text-white select-all">07503130360</div>
   </div>
  </div>
  <div class="container footer-bottom">
-  <div>© 2026 KURDIA ADVENTURE</div>
-  <div>هەموو مافەکان پارێزراون.</div>
+  <div>© 2026 KURDIA ADVENTURE — هەموو مافەکان پارێزراون.</div>
+  <div>دیزاینکراوە بە خۆشەویستی بۆ سروشتی کوردستان 🏔️</div>
  </div>
 </footer>
 
@@ -336,10 +387,10 @@ const WORKER_ENDPOINT = "https://kurdia.alwandssalh.workers.dev";
 const DEFAULT_DATA = {
  gradColor1:"#9d1c32",
  gradColor2:"#c92b49",
- seoTitle:"KURDIA ADVENTURE",
+ seoTitle:"KURDIA ADVENTURE — گەشت، سروشت و سەرکێشی",
  heroBadge:"KURDIA ADVENTURE",
  heroTitle:"لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
- heroSubtitle:"گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت سروشت ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی جوان دروست بکەن.",
+ heroSubtitle:"گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت جوانییە بێوێنەکانی کوردستان ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی پڕ وزە دروست بکەن.",
  heroImageUrl:"",
  tripTitle:"گەشتی لووتکەی چیای هەڵگورد",
  tripPrice:"٣٥،٠٠٠ دینار",
@@ -347,40 +398,60 @@ const DEFAULT_DATA = {
  tripDuration:"١ ڕۆژ",
  tripTime:"بەیانی ٠٥:٠٠",
  tripLocation:"باڵەکایەتی — چیای هەڵگورد",
- tripDesc:"گەشتێکی پڕ جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ لووتکە.",
+ tripDesc:"گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا و پڕۆفیشناڵ، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان.",
  tripImageUrl:"",
  tripTargetDate:"2026-10-02T05:00",
  weatherTemp:"١٨°C",
  weatherCondition:"ساماڵ و خۆرەتاو ☀️",
  bookingOpen:true,
- otpRequired:true, // ئەگەر false بێت OTP داناخرێت
+ otpRequired:true,
+ capacity:40,
+ booked:29,
  fibAccount:"07503130360",
+ couponCode:"KURDIA10",
+ couponDiscount:10,
+ waMapsUrl:"https://maps.app.goo.gl/kurdia-adventure-meeting",
+ stats:[
+  { num:"39+", label:"بەشداربووی هەڵگورد" },
+  { num:"15+", label:"لووتکە و ناوچە" },
+  { num:"100%", label:"گەشتی سەرکەوتوو" },
+  { num:"4.9★", label:"ڕەزامەندی شاخەوانان" }
+ ],
+ timeline:[
+  { title:"کۆبوونەوە و دابەشبوون", desc:"لە شوێنی دیاریکراوی هەولێر کۆدەبینەوە و بە پاسی گەشتیاری بەرەو دەڤەرەکە بەڕێدەکەوین." },
+  { title:"نانی بەیانی و ئامادەکاری", desc:"لە سروشتدا چای سەر خەڵووز و نانی بەیانی دەخۆین و ڕێنماییە سەرەتاییەکان دەدرێت." },
+  { title:"ڕێپێوان بەرەو لووتکە", desc:"بە هەنگاوی هاوسەنگ، بە پشووی پێویست و لەژێر چاودێری ڕێبەران سەردەکەوین." },
+  { title:"تۆمارکردنی سەرکەوتن", desc:"گەیشتن بە لووتکە، وێنەگرتنی پڕۆفیشناڵ و ئاهەنگگێڕان بە دیمەنی سەرنجڕاکێشی چیاکان." }
+ ],
+ safety:[
+  { title:"ڕێبەرانی بەئەزموون", desc:"تیمەکەمان پێکهاتووە لە ڕێبەرانی شارەزا بە ڕێگاکانی کوردستان و شارەزای هەڵسوکەوت لە چیا.", icon:"compass" },
+  { title:"فریاگوزاری سەرەتایی", desc:"لە تەواوی ڕێڕەوەکەدا ستافی فریاگوزاری سەرەتایی و کەرەستەی پزیشکی لەگەڵ تیمی گەشتەکەیە.", icon:"shield-plus" },
+  { title:"چاودێری کەشوهەوا", desc:"پێش هەر جوڵەیەک بە وردی نەخشەی کەشوهەوا و بارودۆخی کەشناسی دەپشکنرێت بۆ سەلامەتی.", icon:"cloud-sun" }
+ ],
  services:[
-  { name:"پاسی گەشتیاری", icon:"bus-front" },
-  { name:"نان و خواردن", icon:"utensils" },
+  { name:"پاسی گەشتیاری مۆدێرن", icon:"bus-front" },
+  { name:"نان و خواردنی بەیانی", icon:"utensils" },
   { name:"چای سەر خەڵووز", icon:"coffee" },
-  { name:"خێوەت و تێنت", icon:"tent-tree" }
+  { name:"وێنەگری فۆتۆگرافەر", icon:"camera" },
+  { name:"فریاگوزاری سەرەتایی", icon:"shield-check" },
+  { name:"تێنت و سێبەری پشوو", icon:"tent-tree" }
+ ],
+ gear:[
+  { title:"کەلوپەلی زۆر پێویست", items:["پێڵاوی تایبەتی شاخەوانی پتەو","کۆڵەپشتی گونجاو (٢٠ تا ٣٠ لیتر)","ئاوی خواردنەوە (لانیکەم ٢ لیتر)","ناسنامەی باری شارستانی"] },
+  { title:"جلوبەرگی گونجاو", items:["جلوبەرگی وەرزشی و فێنک","چاکەتی دژە با (Windbreaker)","کڵاو و چاویلکەی خۆرپارێز","گۆرەویی زیادەی پەمۆ"] },
+  { title:"پێشنیازکراو بۆ ئاسوودەیی", items:["گۆچانی شاخەوانی (Trekking Poles)","دژە خۆر و شێدارکەرەوەی لێو","خواردنی وزەبەخش (خورما، چەرەسات)","پاوەربانک بۆ بارگاویکردنەوە"] }
  ],
  reviews:[
-  { name:"دەرباز سەعید", city:"هەولێر", text:"یەکێک لە خۆشترین و ڕێکخراوترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا. دەستتان خۆش بێت!" },
-  { name:"ڕەوەند عەلی", city:"سلێمانی", text:"ڕێبەرەکان زۆر بەئەزموون بوون و هەموو کەرەستەیەکی سەلامەتییان ئامادە کردبوو." },
-  { name:"سارا مەحموود", city:"دهۆک", text:"کەشێکی یەکجار دۆستانە و هاوڕێیانە بوو، بە تایبەتی لەسەر لووتکە." }
+  { name:"دەرباز سەعید", city:"هەولێر", text:"یەکێک لە ڕێکخراوترین و پڕ وزەترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا. هەموو وردەکارییەکان بێ وێنە بوون!" },
+  { name:"ڕەوەند عەلی", city:"سلێمانی", text:"ڕێبەرەکان زۆر بەئەزموون بوون و تەواوی کەرەستەی سەلامەتی و خزمەتگوزارییان لە ئاستی نایاب دابین کردبوو." },
+  { name:"سارا مەحموود", city:"دهۆک", text:"کەشێکی یەکجار دۆستانە و پڕ ڕێز بوو، بە تایبەتی لەسەر لووتکەی هەڵگورد هەستێکی پێناسەنەکراو بوو." }
  ],
- itinerary:[
-  { title:"کۆبوونەوە", text:"لە شوێنی دیاریکراو کۆدەبینەوە." },
-  { title:"دەستپێکردنی گەشت", text:"بەرەو شوێنی گەشت بە کۆمەڵ دەڕۆین." },
-  { title:"سروشت و چالاکی", text:"کاتێک بۆ گەشت، وێنەگرتن و خۆشحاڵی." },
-  { title:"گەڕانەوە", text:"لە کۆتایی ڕۆژدا بە یادەوەرییەکی جوان دەگەڕێینەوە." }
- ],
- gallery:[],
- faq:[
-  { q:"چۆن بەشداری بکەم؟", a:"لە بەشی بەشداری فۆڕمەکە پڕ بکەرەوە و پسوولەی پارەدانی FIB بنێرە." },
-  { q:"شێوازی پارەدان چۆنە؟", a:"پارەدان تەنها لە ڕێگەی کارتی بانکی FIB دەبێت بۆ هەژماری فەرمی." }
- ]
+ gallery:[]
 };
 
 let siteData = Object.assign({}, DEFAULT_DATA);
 let isPhoneVerified = false;
+let appliedDiscountPercent = 0;
 
 function esc(v){ return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
 function safeUrl(v){ return (v && typeof v === "string" && (v.startsWith("http") || v.startsWith("data:image/"))) ? v : ""; }
@@ -399,6 +470,26 @@ function loadData(){
  }catch(e){}
 }
 
+function openLightbox(url){
+  document.getElementById("lightboxImg").src = url;
+  document.getElementById("lightboxModal").style.display = "flex";
+}
+function closeLightbox(){
+  document.getElementById("lightboxModal").style.display = "none";
+}
+
+function applyCoupon(){
+  const inp = document.getElementById("couponInput").value.trim().toUpperCase();
+  if(!inp) return;
+  if(inp === (siteData.couponCode || "KURDIA10")){
+    appliedDiscountPercent = siteData.couponDiscount || 10;
+    document.getElementById("couponStatus").innerHTML = `<span class="text-emerald-400 font-bold text-xs">✅ کۆدی داشکاندن (${appliedDiscountPercent}%) چالاک کرا!</span>`;
+    toast(`🎉 داشکاندنی ${appliedDiscountPercent}% جێبەجێ کرا`);
+  } else {
+    toast("❌ کۆدی داشکاندن هەڵەیە");
+  }
+}
+
 function render(){
  document.documentElement.style.setProperty("--primary", siteData.gradColor1 || "#9d1c32");
  document.documentElement.style.setProperty("--primary2", siteData.gradColor2 || "#c92b49");
@@ -409,6 +500,12 @@ function render(){
  const tripImg = safeUrl(siteData.tripImageUrl || siteData.heroImageUrl);
 
  const needsOtp = siteData.otpRequired !== false;
+ const capacity = Number(siteData.capacity || 40);
+ const booked = Number(siteData.booked || 0);
+ const remaining = Math.max(0, capacity - booked);
+ const percentage = Math.min(100, Math.round((booked / capacity) * 100));
+
+ document.getElementById("waDirectBtn").href = `https://wa.me/9647503130360?text=${encodeURIComponent("سڵاو KURDIA ADVENTURE، پرسیارم هەبوو دەربارەی گەشتەکە:")}`;
 
  app.innerHTML = `
  <!-- HERO -->
@@ -431,8 +528,9 @@ function render(){
    </div>
 
    <div class="hero-actions">
-    ${siteData.bookingOpen ? `<a href="#booking" class="primary hero-action">بەشداری لە گەشت</a>` : ""}
+    ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary hero-action">بەشداری لە گەشت</a>` : ""}
     <a href="#trip" class="secondary hero-action">زانیاری گەشت</a>
+    <a href="#about" class="secondary hero-action">ئێمە کێین؟</a>
    </div>
 
    <div class="hero-meta">
@@ -453,12 +551,23 @@ function render(){
      <div class="trip-photo-bottom"><div class="trip-photo-title">${esc(siteData.tripLocation)}</div></div>
     </div>
     <div class="trip-content">
-     <div class="section-label">گەشتی داهاتوو</div>
+     <div class="section-label"><i data-lucide="compass"></i> گەشتی چالاکی داهاتوو</div>
      <h2 class="text-3xl font-black mt-2 mb-4">${esc(siteData.tripTitle)}</h2>
      
+     <!-- CAPACITY PROGRESS BAR -->
+     <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-4">
+       <div class="flex justify-between items-center text-xs font-bold mb-2">
+         <span class="text-gray-300">کورسییە گیراوەکان: ${booked} لە ${capacity}</span>
+         <span class="text-rose-400 font-black">${remaining > 0 ? `تەنها ${remaining} شوێن ماوە!` : 'تەواو پڕ بووە (Closed)'}</span>
+       </div>
+       <div class="w-full bg-white/10 h-2.5 rounded-full overflow-hidden">
+         <div class="bg-gradient-to-r from-rose-500 to-rose-700 h-full rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+       </div>
+     </div>
+
      <div class="trip-info-grid">
-      <div class="trip-info"><div class="trip-info-label">کات</div><div class="trip-info-value">${esc(siteData.tripTime)}</div></div>
-      <div class="trip-info"><div class="trip-info-label">ماوە</div><div class="trip-info-value">${esc(siteData.tripDuration)}</div></div>
+      <div class="trip-info"><div class="trip-info-label">کات و بەروار</div><div class="trip-info-value">${esc(siteData.tripTime)}</div></div>
+      <div class="trip-info"><div class="trip-info-label">ماوەی گەشت</div><div class="trip-info-value">${esc(siteData.tripDuration)}</div></div>
      </div>
 
      <div class="weather-badge-box">
@@ -470,24 +579,122 @@ function render(){
      </div>
 
      <div class="trip-detail">
-       <div class="trip-detail-title">تەواوی وردەکاری</div>
+       <div class="trip-detail-title">تەواوی وردەکاری و بەرنامە</div>
        <div class="trip-detail-text">${esc(siteData.tripDesc)}</div>
      </div>
 
      <div class="trip-price-row">
-       <div><div class="trip-price-label">نرخ</div><div class="trip-price">${esc(siteData.tripPrice)}</div></div>
-       ${siteData.bookingOpen ? `<a href="#booking" class="primary px-6 py-3 rounded-xl font-bold">بەشداری</a>` : `<div class="text-gray-500">داخراوە</div>`}
+       <div><div class="trip-price-label">تێچووی هەر بەشداربوویەک</div><div class="trip-price">${esc(siteData.tripPrice)}</div></div>
+       ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary px-6 py-3 rounded-xl font-bold">ناونووسین بکە</a>` : `<div class="text-gray-500 font-bold">داخراوە</div>`}
      </div>
     </div>
    </div>
   </div>
  </section>
 
- <!-- REVIEWS -->
+ <!-- 1. ABOUT US & ACHIEVEMENTS -->
+ <section id="about" class="section pt-0">
+  <div class="container">
+    <div class="section-label"><i data-lucide="mountain"></i> KURDIA ADVENTURE</div>
+    <h2 class="section-title mt-2">ئێمە کێین و دەستکەوتەکانمان</h2>
+    <p class="text-gray-300 text-sm max-w-3xl mt-3 leading-relaxed">
+      گرووپی کوردیا ئەدڤێنتچەر لە ساڵی ٢٠٢٤ـەوە وەک یەکێک لە چالاکترین تیمەکانی شاخەوانی و گەشتیاری لە کوردستان دامەزراوە. ئامانجمان تەنها شاخەوانی نییە، بەڵکو دروستکردنی فەرهەنگێکی تەندروست، پەروەردەی ژینگەیی و ڕێزگرتنە لە سەروەریی سروشتی کوردستان.
+    </p>
+
+    <div class="achieve-grid">
+      ${(siteData.stats || []).map(st => `
+        <div class="achieve-card">
+          <div class="achieve-num">${esc(st.num)}</div>
+          <div class="achieve-lbl">${esc(st.label)}</div>
+        </div>
+      `).join("")}
+    </div>
+  </div>
+ </section>
+
+ <!-- 2. TIMELINE (HOW IT WORKS) -->
+ <section id="timeline" class="section pt-0">
+  <div class="container">
+    <div class="section-label"><i data-lucide="footprints"></i> هەنگاوەکانی گەشت</div>
+    <h2 class="section-title mt-2">ئەزموونی شاخەوانی لەگەڵ ئێمە</h2>
+    <div class="timeline-wrap">
+      ${(siteData.timeline || []).map((tl, i) => `
+        <div class="timeline-step">
+          <div class="step-badge">${i+1}</div>
+          <div class="font-bold text-sm text-white">${esc(tl.title)}</div>
+          <div class="text-xs text-gray-400 mt-2 leading-relaxed">${esc(tl.desc)}</div>
+        </div>
+      `).join("")}
+    </div>
+  </div>
+ </section>
+
+ <!-- 3. SAFETY PROTOCOLS -->
+ <section id="safety" class="section pt-0">
+  <div class="container">
+    <div class="section-label"><i data-lucide="shield-check"></i> پارێزراوی و متمانە</div>
+    <h2 class="section-title mt-2">پرۆتۆکۆلی سەلامەتی شاخەوانان</h2>
+    <div class="safety-grid">
+      ${(siteData.safety || []).map(sf => `
+        <div class="safety-card">
+          <div class="service-icon"><i data-lucide="${sf.icon || 'shield'}"></i></div>
+          <div class="font-bold text-sm mt-3 text-white">${esc(sf.title)}</div>
+          <p class="text-xs text-gray-400 mt-2 leading-relaxed">${esc(sf.desc)}</p>
+        </div>
+      `).join("")}
+    </div>
+  </div>
+ </section>
+
+ <!-- 4. GEAR CHECKLIST -->
+ <section id="gear" class="section pt-0">
+  <div class="container">
+   <div class="section-label"><i data-lucide="backpack"></i> ئامادەکاری پێش دەرچوون</div>
+   <h2 class="section-title mt-2">چی لەگەڵ خۆت دەهێنیت؟</h2>
+   <div class="gear-grid">
+     ${(siteData.gear || []).map(g=>`
+       <div class="gear-card">
+         <div class="font-bold text-base text-rose-400 flex items-center gap-2 mb-3">
+           <i data-lucide="check-circle-2"></i> ${esc(g.title)}
+         </div>
+         <ul class="flex flex-col gap-2 text-xs text-gray-300">
+           ${g.items.map(it=>`<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> ${esc(it)}</li>`).join("")}
+         </ul>
+       </div>
+     `).join("")}
+   </div>
+  </div>
+ </section>
+
+ <!-- SERVICES -->
+ <section id="services" class="section pt-0">
+  <div class="container">
+   <div class="section-label"><i data-lucide="sparkles"></i> خزمەتگوزارییەکان</div>
+   <h2 class="section-title mt-2">ئەوەی گەشتەکەمان پێشکەشی دەکات</h2>
+   <div class="service-grid">
+     ${(siteData.services || []).map(s=>`
+       <div class="service">
+         <div class="service-icon"><i data-lucide="${s.icon || 'check'}"></i></div>
+         <div class="font-bold text-sm mt-3">${esc(typeof s === "string" ? s : s.name)}</div>
+       </div>
+     `).join("")}
+   </div>
+  </div>
+ </section>
+
+ <!-- REVIEWS & RATING -->
  <section id="reviews" class="section pt-0">
   <div class="container">
-   <div class="section-label">ئەزموونی شاخەوانان</div>
-   <h2 class="section-title mt-2">بیروڕای بەشداربووان</h2>
+   <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+     <div>
+       <div class="section-label"><i data-lucide="star"></i> بیروڕای شاخەوانان</div>
+       <h2 class="section-title mt-2">ئەزموونی بەشداربووان</h2>
+     </div>
+     <div class="p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
+       <div class="text-2xl font-black text-amber-400">4.9 / 5</div>
+       <div class="text-xs text-gray-400">★★★★★<br>زیاتر لە ٩٨٪ بەشداربووان گەشتەکەیان پەسەند کردووە</div>
+     </div>
+   </div>
    <div class="reviews-grid">
      ${(siteData.reviews || []).map(r=>`
        <div class="review-card">
@@ -502,68 +709,39 @@ function render(){
   </div>
  </section>
 
- <!-- SERVICES -->
- <section id="services" class="section pt-0">
-  <div class="container">
-   <div class="section-label">خزمەتگوزاری</div>
-   <h2 class="section-title mt-2">هەموو شتێک بۆ گەشتێکی باشتر</h2>
-   <div class="service-grid">
-     ${(siteData.services || []).map(s=>`
-       <div class="service">
-         <div class="service-icon"><i data-lucide="check"></i></div>
-         <div class="font-bold text-sm mt-3">${esc(typeof s === "string" ? s : s.name)}</div>
-       </div>
-     `).join("")}
-   </div>
-  </div>
- </section>
-
- <!-- ITINERARY -->
- <section id="itinerary" class="section pt-0">
-  <div class="container">
-   <div class="section-label">بەرنامەی گەشت</div>
-   <h2 class="section-title mt-2">لە سەرەتاوە تا کۆتایی</h2>
-   <div class="itinerary">
-     ${(siteData.itinerary || []).map((it, idx)=>`
-       <div class="itinerary-item">
-         <div class="itinerary-number">${idx+1}</div>
-         <div><div class="font-bold text-sm">${esc(it.title)}</div><div class="text-xs text-gray-400 mt-1">${esc(it.text)}</div></div>
-       </div>
-     `).join("")}
-   </div>
-  </div>
- </section>
-
- <!-- GALLERY -->
+ <!-- GALLERY (WITH LIGHTBOX) -->
  <section id="gallery" class="section pt-0">
   <div class="container">
-   <div class="section-label">گەلەری</div>
-   <h2 class="section-title mt-2">وێنە و یادەوەرییەکان</h2>
+   <div class="section-label"><i data-lucide="image"></i> گەلەری</div>
+   <h2 class="section-title mt-2">ساتە تۆمارکراوەکان لە چیا</h2>
    <div class="gallery-grid">
-     ${(siteData.gallery || []).map(g=>`
-       <div class="gallery-card">
-         <img src="${esc(safeUrl(typeof g === 'string' ? g : g.url))}" alt="Kurdia Adventure">
-       </div>
-     `).join("")}
+     ${(siteData.gallery || []).map(g=>{
+       const u = safeUrl(typeof g === 'string' ? g : g.url);
+       return `
+       <div class="gallery-card" onclick="openLightbox('${esc(u)}')">
+         <img src="${esc(u)}" alt="Kurdia Adventure">
+       </div>`;
+     }).join("")}
    </div>
   </div>
  </section>
 
- <!-- FAQ -->
- <section id="faq" class="section pt-0">
-  <div class="container max-w-3xl">
-   <div class="section-label text-center">پرسیارەکان</div>
-   <h2 class="section-title text-center mt-2">پرسیارە باوەکان</h2>
-   <div class="faq-list">
-     ${(siteData.faq || []).map(f=>`
-       <div class="faq">
-         <button class="faq-button" onclick="this.parentElement.classList.toggle('open')">
-           <span class="font-bold text-sm">${esc(f.q)}</span>
-           <i data-lucide="chevron-down"></i>
-         </button>
-         <div class="faq-answer"><div class="faq-answer-inner">${esc(f.a)}</div></div>
-       </div>
-     `).join("")}
+ <!-- LOCATION & MAP -->
+ <section id="location" class="section pt-0">
+  <div class="container">
+   <div class="surface p-8 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6">
+     <div>
+       <div class="section-label"><i data-lucide="map-pin"></i> شوێنی کۆبوونەوە</div>
+       <h2 class="text-2xl font-black mt-2">نەخشەی شوێنی بەڕێکەوتن</h2>
+       <p class="text-xs text-gray-400 mt-2 leading-relaxed">پاسی گەشت لە شوێنی دیاریکراو ئامادە دەبێت. بۆ ئاسانکاری و ڕێڕەو کلیک لە دوگمەکە بکە یان کۆدەکە سکان بکە.</p>
+       <a href="${esc(siteData.waMapsUrl || '#')}" target="_blank" class="primary inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-xl font-bold text-xs">
+         <i data-lucide="navigation"></i> کردنەوە لە Google Maps
+       </a>
+     </div>
+     <div class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center">
+       <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(siteData.waMapsUrl || 'https://maps.app.goo.gl')}" alt="Meeting Point QR" class="w-28 h-28">
+       <span class="text-[10px] text-gray-800 font-bold mt-1">Scan for Map</span>
+     </div>
    </div>
   </div>
  </section>
@@ -574,22 +752,34 @@ function render(){
    <div class="booking-wrap">
     <div class="booking-grid">
       <div>
-        <div class="section-label">بەشداری</div>
-        <h2 class="text-3xl font-black mt-2">ئامادەیت بۆ ئەم گەشتە؟</h2>
+        <div class="section-label"><i data-lucide="ticket"></i> ناونووسینی فەرمی</div>
+        <h2 class="text-3xl font-black mt-2">ئامادەیت بۆ سەرکێشی؟</h2>
         <p class="text-gray-400 text-xs mt-3 leading-relaxed">
-          ${needsOtp ? "سەرەتا مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاست بکەرەوە، ئینجا بڕی پارەکە لە ڕێگەی کارتی FIB ڕەوانە بکە و وێنەی پسوولەکە بنێرە." : "زانیارییەکانت بنووسە، پارەکە بە کارتی FIB بنێرە و وێنەی پسوولەکەت بار بکە."}
+          ${needsOtp ? "سەرەتا مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاست بکەرەوە، پاشان تێچووەکە لە ڕێگەی کارتی بانکی FIB بنێرە و وێنەی پسوولەکە هاوپێچ بکە." : "زانیارییەکانت بنووسە، پارەکە بە FIB بنێرە و وێنەی پسوولەکەت بار بکە."}
         </p>
+
         <div class="p-4 bg-white/5 rounded-2xl border border-white/10 mt-6">
-          <div class="text-xs text-gray-400 font-bold">هەژماری فەرمیی FIB:</div>
-          <div class="text-lg font-black text-white mt-1 select-all">${esc(siteData.fibAccount || "07503130360")}</div>
+          <div class="text-xs text-gray-400 font-bold">هەژماری فەرمیی First Iraqi Bank (FIB):</div>
+          <div class="text-xl font-black text-white mt-1 select-all">${esc(siteData.fibAccount || "07503130360")}</div>
+          <div class="text-[11px] text-gray-400 mt-2">تکایە لە کاتی ناردنی پارە، ناوی تەواوی خۆت لە تێبینی بنووسە.</div>
+        </div>
+
+        <!-- COUPON DISCOUNT SECTION -->
+        <div class="mt-4 p-4 bg-white/[0.03] border border-white/10 rounded-2xl">
+          <div class="text-xs font-bold text-gray-300 mb-2">کۆدی داشکاندن (Coupon) هەتە؟</div>
+          <div class="flex gap-2">
+            <input id="couponInput" class="input py-2 text-xs uppercase" placeholder="وەک: KURDIA10">
+            <button type="button" onclick="applyCoupon()" class="secondary px-4 rounded-xl text-xs font-bold">چالاککردن</button>
+          </div>
+          <div id="couponStatus" class="mt-2"></div>
         </div>
       </div>
 
       <form onsubmit="submitBooking(event)" class="booking-form">
-        <input id="bookName" class="input" placeholder="ناوی تەواو" required>
+        <input id="bookName" class="input" placeholder="ناوی تەواوی بەشداربوو" required>
         
         <div class="flex gap-2">
-          <input id="bookPhone" class="input" placeholder="ژمارەی WhatsApp" required inputmode="tel">
+          <input id="bookPhone" class="input" placeholder="ژمارەی مۆبایل (WhatsApp)" required inputmode="tel">
           ${needsOtp ? `
             <button type="button" id="otpSendBtn" onclick="requestOtpCode()" class="secondary px-4 rounded-xl text-xs font-bold whitespace-nowrap">کۆد بنێرە</button>
           ` : ""}
@@ -613,9 +803,10 @@ function render(){
         </select>
         <div id="extraNamesContainer" class="full"></div>
 
-        <input id="bookNote" class="input full" placeholder="تێبینییەکی کورت...">
+        <input id="bookNote" class="input full" placeholder="تێبینی، نەخۆشی تایبەت یان شوێنی سەرکەوتن...">
+        
         <div class="full">
-          <label class="block text-xs font-bold text-gray-400 mb-1">🧾 وێنەی پسوولەی FIB</label>
+          <label class="block text-xs font-bold text-gray-400 mb-1">🧾 وێنەی پسوولەی پارەدانی FIB</label>
           <input id="bookReceipt" type="file" accept="image/*" class="input" required>
         </div>
 
@@ -663,12 +854,11 @@ async function requestOtpCode(){
       document.getElementById("otpInputContainer").classList.remove("hidden");
       btn.textContent = "دووبارە";
     }else{ 
-      const detail = d.details ? (typeof d.details === "object" ? JSON.stringify(d.details) : d.details) : (d.error || "کێشەیەک ڕوویدا");
-      toast("❌ " + detail);
+      toast("❌ " + (d.error || "کێشەیەک لە ناردنی کۆد ڕوویدا"));
       btn.textContent = "کۆد بنێرە"; 
     }
   }catch(e){ 
-    toast("کێشە لە پەیوەندی بە سێرڤەر: " + e.message); 
+    toast("کێشە لە پەیوەندی بە سێرڤەر"); 
     btn.textContent = "کۆد بنێرە"; 
   }
   finally{ btn.disabled = false; }
@@ -725,7 +915,7 @@ async function submitBooking(e){
     formData.append("trip", siteData.tripTitle);
     formData.append("people", people);
     formData.append("extra_names", extraNames);
-    formData.append("note", note);
+    formData.append("note", (appliedDiscountPercent > 0 ? `[داشکاندنی ${appliedDiscountPercent}% جێبەجێکراوە] ` : "") + note);
     if(receipt) formData.append("receipt", receipt);
 
     const res = await fetch(`${WORKER_ENDPOINT}/api/register`, { method:"POST", body:formData });
@@ -772,15 +962,37 @@ function toggleMenu(){ document.getElementById("mobileMenu").classList.toggle("o
 function closeMenu(){ document.getElementById("mobileMenu").classList.remove("open"); }
 
 function toggleAI(){ document.getElementById("aiWindow").classList.toggle("hidden"); }
-function sendAI(){
+
+async function sendAI(){
   const inp = document.getElementById("aiInput");
   const q = inp.value.trim();
   if(!q) return;
   inp.value = "";
   const box = document.getElementById("messages");
   box.innerHTML += `<div class="ai-message user">${esc(q)}</div>`;
-  box.innerHTML += `<div class="ai-message ai">بەخێربێیت بۆ KURDIA ADVENTURE! بۆ زانیاری گەشت یان بەشداری پەیوەندیمان پێوە بکە.</div>`;
   box.scrollTop = box.scrollHeight;
+
+  const btn = document.getElementById("aiSendBtn");
+  btn.disabled = true;
+
+  try{
+    const res = await fetch(`${WORKER_ENDPOINT}/api/ai`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ prompt: `تۆ یاریدەدەری فەرمیی شاخەوانی KURDIA ADVENTUREیت. بە کوردی وەڵامی کورت و سوودبەخش بدەرەوە بۆ ئەم پرسیارە: ${q}` })
+    });
+    const d = await res.json();
+    if(d.ok && d.text){
+      box.innerHTML += `<div class="ai-message ai">${esc(d.text)}</div>`;
+    }else{
+      box.innerHTML += `<div class="ai-message ai">بۆ زانیاری زیاتر دەتوانیت لە ڕێگەی WhatsApp پەیوەندیمان پێوە بکەیت: 07503130360</div>`;
+    }
+  }catch(e){
+    box.innerHTML += `<div class="ai-message ai">پەیوەندی لەگەڵ AI نائامادەیە؛ دەتوانیت لە خوارەوە پەیوەندی بە WhatsApp بکەیت.</div>`;
+  }finally{
+    btn.disabled = false;
+    box.scrollTop = box.scrollHeight;
+  }
 }
 
 window.addEventListener("message", ev => {
