@@ -115,13 +115,13 @@ button{ cursor:pointer; }
 .music-btn:not(.playing) .sound-bar{ animation:none; height:30%; }
 
 /* STORIES BAR */
-.stories-container{ display:flex; gap:16px; overflow-x:auto; padding:10px 0; scrollbar-width:none; }
+.stories-container{ display:flex; gap:14px; overflow-x:auto; padding:10px 0; scrollbar-width:none; width:100%; }
 .stories-container::-webkit-scrollbar{ display:none; }
 .story-item{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; flex-shrink:0; }
-.story-ring{ width:72px; height:72px; border-radius:50%; padding:3px; background:linear-gradient(135deg, var(--primary), #f59e0b); display:flex; align-items:center; justify-content:center; }
-.story-avatar-wrap{ width:66px; height:66px; border-radius:50%; background:#000; overflow:hidden; border:2px solid var(--bg); display:flex; align-items:center; justify-content:center; }
+.story-ring{ width:66px; height:66px; border-radius:50%; padding:3px; background:linear-gradient(135deg, var(--primary), #f59e0b); display:flex; align-items:center; justify-content:center; }
+.story-avatar-wrap{ width:60px; height:60px; border-radius:50%; background:#000; overflow:hidden; border:2px solid var(--bg); display:flex; align-items:center; justify-content:center; }
 .story-avatar-wrap img{ width:100%; height:100%; object-fit:cover; }
-.story-name{ font-size:11px; font-weight:700; color:#cbd5e1; max-width:76px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
+.story-name{ font-size:11px; font-weight:700; color:#cbd5e1; max-width:70px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; }
 
 /* HERO */
 .hero{ min-height:860px; position:relative; overflow:hidden; display:flex; align-items:center; }
@@ -130,15 +130,15 @@ button{ cursor:pointer; }
   position:absolute; inset:0;
   background:linear-gradient(to bottom, rgba(7,10,16,.4) 0%, rgba(7,10,16,.85) 75%, var(--bg) 100%);
 }
-.hero-content{ position:relative; z-index:3; padding-top:130px; padding-bottom:80px; }
+.hero-content{ position:relative; z-index:3; padding-top:130px; padding-bottom:80px; width:100%; }
 .hero-badge{
   display:inline-flex; align-items:center; gap:9px; padding:8px 16px;
   border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.35); border-radius:999px;
   backdrop-filter:blur(18px); color:#e2e8f0; font-size:13px; font-weight:700;
 }
 .hero-dot{ width:8px; height:8px; border-radius:50%; background:var(--primary2); }
-.hero-title{ max-width:950px; margin-top:24px; font-size:clamp(2.4rem, 8vw, 6rem); font-weight:900; line-height:1.05; letter-spacing:-.05em; }
-.hero-subtitle{ max-width:680px; margin-top:22px; color:#d1d5db; font-size:clamp(1rem,1.4vw,1.2rem); line-height:2; }
+.hero-title{ max-width:950px; margin-top:24px; font-size:clamp(2.1rem, 7vw, 5rem); font-weight:900; line-height:1.05; letter-spacing:-.05em; }
+.hero-subtitle{ max-width:680px; margin-top:22px; color:#d1d5db; font-size:clamp(0.95rem,1.4vw,1.2rem); line-height:2; }
 .hero-actions{ margin-top:30px; display:flex; flex-wrap:wrap; gap:12px; }
 .hero-action{ padding:14px 24px; border-radius:16px; font-weight:800; text-align:center; }
 
@@ -150,11 +150,11 @@ button{ cursor:pointer; }
 /* TIMER */
 .countdown-box{
   background:rgba(14,20,30,.85); border:1px solid var(--border); border-radius:20px;
-  padding:18px; margin-top:30px; backdrop-filter:blur(16px); max-width:580px;
+  padding:18px; margin-top:30px; backdrop-filter:blur(16px); max-width:580px; width:100%;
 }
 .timer-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; text-align:center; }
 .timer-cell{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:10px 4px; }
-.timer-num{ font-size:1.6rem; font-weight:900; color:var(--primary2); line-height:1; }
+.timer-num{ font-size:1.5rem; font-weight:900; color:var(--primary2); line-height:1; }
 .timer-lbl{ font-size:11px; color:#94a3b8; margin-top:4px; font-weight:700; }
 
 /* TRIP */
@@ -224,14 +224,14 @@ button{ cursor:pointer; }
 .gallery-card img{ width:100%; height:100%; object-fit:cover; transition:.3s; }
 .gallery-card:hover img{ transform:scale(1.05); }
 
-/* LIGHTBOX & MODALS */
+/* LIGHTBOX & MOBILE-FRIENDLY MODALS */
 #lightboxModal{
   position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
   z-index:999999; display:none; align-items:center; justify-content:center; padding:20px;
 }
 .modal-overlay{
   position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
-  z-index:999999; display:none; align-items:center; justify-content:center; padding:20px;
+  z-index:999999; display:none; align-items:center; justify-content:center; padding:16px;
 }
 .modal-overlay.active{ display:flex; }
 
@@ -270,12 +270,12 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 }
 #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* MOBILE RESPONSIVE */
+/* MOBILE RESPONSIVE FIXES */
 @media(max-width:900px){
   .trip-card{ grid-template-columns:1fr !important; }
   .trip-photo{ min-height:340px; }
   .trip-content{ padding:24px; }
-  .booking-wrap{ padding:24px; }
+  .booking-wrap{ padding:20px; }
   .booking-grid{ grid-template-columns:1fr; gap:25px; }
   .service-grid, .gear-grid, .safety-grid, .timeline-wrap, .achieve-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .reviews-grid{ grid-template-columns:1fr; }
@@ -284,8 +284,8 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 @media(max-width:640px){
   .section{ padding:55px 0; }
   .hero{ min-height:740px; }
-  .hero-content{ padding-top:110px; padding-bottom:50px; }
-  .hero-title{ font-size:clamp(2.1rem, 9vw, 3.8rem); }
+  .hero-content{ padding-top:100px; padding-bottom:40px; }
+  .hero-title{ font-size:clamp(1.9rem, 8vw, 3.2rem); }
   .hero-meta{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .gallery-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:160px; }
   .gallery-card:nth-child(1){ grid-column:span 2; grid-row:span 2; }
@@ -293,11 +293,9 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
   .footer-grid{ grid-template-columns:1fr; gap:25px; }
   .footer-bottom{ flex-direction:column; gap:8px; }
   .timeline-wrap, .achieve-grid{ grid-template-columns:1fr; }
-}
-@media(max-width:520px){
-  .booking-form{ grid-template-columns:1fr; }
-  .trip-info-grid{ grid-template-columns:1fr; }
-  .trip-price-row{ flex-direction:column; align-items:stretch; }
+  
+  /* Modal mobile safety */
+  .modal-overlay > div { max-width: 100% !important; margin: 10px; padding: 20px !important; }
 }
 </style>
 </head>
@@ -332,7 +330,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
     <a href="#location" id="nav_location">شوێن</a>
    </nav>
 
-   <div class="flex items-center gap-3">
+   <div class="flex items-center gap-2 sm:gap-3">
      <button id="musicToggleBtn" onclick="toggleMusic()" class="music-btn" title="Ambient Sound">
        <div class="sound-wave">
          <span class="sound-bar"></span>
@@ -380,31 +378,37 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 
 <main id="app"></main>
 
-<!-- STORY UPLOAD MODAL -->
+<!-- STORY UPLOAD MODAL (FIXED FOR MOBILE UPLOAD & SIZE) -->
 <div id="storyModal" class="modal-overlay">
-  <div class="surface p-6 rounded-3xl max-w-md w-full relative">
-    <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg">ناردنی ستۆری / یادەوەری</h3><button onclick="closeStoryModal()"><i data-lucide="x"></i></button></div>
+  <div class="surface p-5 sm:p-6 rounded-3xl max-w-sm w-full relative">
+    <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-sm sm:text-base">ناردنی ستۆری / یادەوەری</h3><button onclick="closeStoryModal()" class="p-1"><i data-lucide="x" class="w-5 h-5"></i></button></div>
     <form onsubmit="submitStory(event)" class="flex flex-col gap-3">
       <input id="stName" class="input text-xs" placeholder="ناوی تەواو" required>
       <input id="stCity" class="input text-xs" placeholder="شار (مثال: هەولێر)">
       <input id="stTrip" class="input text-xs" placeholder="ناوی گەشت (مثال: هەڵگورد)">
-      <textarea id="stText" class="input text-xs" placeholder="دەقی ستۆری یان یادەوەری..." rows="3" required></textarea>
-      <input id="stMedia" class="input text-xs" placeholder="بەستەری وێنە یان ڤیدیۆ (URL)" required>
-      <button type="submit" class="primary submit-button text-xs font-bold py-3">ناردنی ستۆری بۆ پەسەندکردن</button>
+      <textarea id="stText" class="input text-xs" placeholder="دەقی ستۆری یان یادەوەری..." rows="2" required></textarea>
+      
+      <div>
+        <label class="block text-[11px] font-bold text-gray-300 mb-1">وێنەی ستۆری لە مۆبایلەوە:</label>
+        <input id="stMediaFile" type="file" accept="image/*" class="input text-xs py-2" required onchange="previewStoryImage(event)">
+      </div>
+      <input type="hidden" id="stMediaBase64">
+
+      <button type="submit" class="primary submit-button text-xs font-bold py-3 mt-1">ناردنی ستۆری بۆ پەسەندکردن</button>
     </form>
   </div>
 </div>
 
 <!-- STORY VIEWER MODAL -->
 <div id="storyViewerModal" class="modal-overlay" style="background:rgba(0,0,0,.96);">
-  <div class="max-w-md w-full h-[85vh] relative flex flex-col justify-between p-4 bg-gray-900 rounded-3xl border border-white/10 overflow-hidden">
+  <div class="max-w-xs sm:max-w-sm w-full h-[80vh] relative flex flex-col justify-between p-3 sm:p-4 bg-gray-900 rounded-3xl border border-white/10 overflow-hidden">
     <div class="absolute top-0 left-0 right-0 h-1 bg-white/20 z-20"><div id="storyProgressBar" class="h-full bg-rose-500 w-0 transition-all duration-100"></div></div>
     <div class="flex justify-between items-center z-10 pt-2">
       <div class="flex items-center gap-2">
-        <div id="viewerAvatar" class="w-9 h-9 rounded-full bg-rose-600 flex items-center justify-center font-bold text-xs">K</div>
+        <div id="viewerAvatar" class="w-8 h-8 rounded-full bg-rose-600 flex items-center justify-center font-bold text-xs">K</div>
         <div><div id="viewerName" class="font-bold text-xs text-white">ناو</div><div id="viewerTime" class="text-[10px] text-gray-400">کات</div></div>
       </div>
-      <button onclick="closeStoryViewer()" class="text-white p-1.5 rounded-full bg-white/10"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <button onclick="closeStoryViewer()" class="text-white p-1 rounded-full bg-white/10"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
     <div class="flex-1 flex items-center justify-center relative my-2 overflow-hidden rounded-2xl bg-black">
       <img id="viewerImage" class="max-h-full max-w-full object-contain" src="" alt="Story">
@@ -734,6 +738,16 @@ function closeLightbox(){
 function openStoryUploadModal(){ document.getElementById("storyModal").classList.add("active"); }
 function closeStoryModal(){ document.getElementById("storyModal").classList.remove("active"); }
 
+function previewStoryImage(event){
+  const file = event.target.files?.[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    document.getElementById("stMediaBase64").value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 async function fetchStories(){
   try{
     const res = await fetch(`${WORKER_ENDPOINT}/api/stories`);
@@ -821,12 +835,15 @@ function shareStoryWhatsApp(){
 
 async function submitStory(e){
   e.preventDefault();
+  const mediaBase64 = document.getElementById("stMediaBase64").value;
+  if(!mediaBase64){ toast("تکایە وێنەیەک هەڵبژێرە"); return; }
+
   const payload = {
     name: document.getElementById("stName").value,
     city: document.getElementById("stCity").value,
     tripName: document.getElementById("stTrip").value,
     text: document.getElementById("stText").value,
-    mediaUrl: document.getElementById("stMedia").value
+    mediaUrl: mediaBase64
   };
   try{
     const res = await fetch(`${WORKER_ENDPOINT}/api/stories`, {
@@ -839,6 +856,7 @@ async function submitStory(e){
       toast(data.message);
       closeStoryModal();
       e.target.reset();
+      document.getElementById("stMediaBase64").value = "";
     }else{toast("❌ " + data.error);}
   }catch(e){toast("کێشەی سێرڤەر");}
 }
@@ -1241,7 +1259,7 @@ async function verifyOtpCode(){
       document.getElementById("otpSendBtn").style.display = "none";
       subBtn.disabled = false;
       subBtn.classList.remove("opacity-50", "cursor-not-allowed");
-      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی FIB";
+      subBtn.textContent = t.btn_submit;
     }else{ toast("❌ کۆدەکە هەڵەیە"); }
   }catch(e){ toast("کێشەی سێرڤەر"); }
 }
