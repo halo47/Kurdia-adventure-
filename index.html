@@ -76,14 +76,14 @@ button{ cursor:pointer; }
 .logo-title{ font-weight:900; line-height:1; }
 .logo-sub{ font-size:9px; color:#64748b; letter-spacing:.25em; margin-top:5px; }
 
-.desktop-nav{ display:flex; align-items:center; gap:18px; font-size:13px; color:#cbd5e1; }
+.desktop-nav{ display:flex; align-items:center; gap:16px; font-size:13px; color:#cbd5e1; }
 .desktop-nav a:hover{ color:#fff; }
 
 .mobile-menu{ display:none; border-top:1px solid rgba(255,255,255,.06); background:#0c1119; }
 .mobile-menu.open{ display:block; }
 .mobile-menu a{ display:block; padding:12px 16px; border-radius:12px; }
 
-/* LANG SWITCHER PILL */
+/* LANG SWITCHER */
 .lang-switcher{
   display:flex; align-items:center; background:rgba(255,255,255,.06); border:1px solid var(--border);
   border-radius:10px; padding:3px; gap:2px; font-size:11px; font-weight:800;
@@ -94,6 +94,25 @@ button{ cursor:pointer; }
 .lang-btn.active{
   background:var(--primary); color:#fff;
 }
+
+/* MUSIC TOGGLE BUTTON */
+.music-btn{
+  display:flex; align-items:center; gap:6px; background:rgba(255,255,255,.06); border:1px solid var(--border);
+  padding:6px 12px; border-radius:12px; font-size:12px; font-weight:700; color:#e2e8f0; transition:.25s;
+}
+.music-btn.playing{
+  border-color:var(--primary2); background:rgba(157,28,50,.18); color:#fff;
+}
+.sound-wave{
+  display:flex; align-items:flex-end; gap:2px; height:12px;
+}
+.sound-bar{
+  width:2px; height:100%; background:currentColor; border-radius:1px; animation:soundAnim 1s infinite alternate;
+}
+.sound-bar:nth-child(2){ animation-delay:.2s; }
+.sound-bar:nth-child(3){ animation-delay:.4s; }
+@keyframes soundAnim{ 0%{ height:20%; } 100%{ height:100%; } }
+.music-btn:not(.playing) .sound-bar{ animation:none; height:30%; }
 
 /* HERO */
 .hero{ min-height:860px; position:relative; overflow:hidden; display:flex; align-items:center; }
@@ -196,6 +215,12 @@ button{ cursor:pointer; }
 .gallery-card img{ width:100%; height:100%; object-fit:cover; transition:.3s; }
 .gallery-card:hover img{ transform:scale(1.05); }
 
+/* LIGHTBOX */
+#lightboxModal{
+  position:fixed; inset:0; background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
+  z-index:999999; display:none; align-items:center; justify-content:center; padding:20px;
+}
+
 /* BOOKING */
 .booking-wrap{ border-radius:30px; padding:45px; background:linear-gradient(135deg, rgba(157,28,50,.18), rgba(18,26,38,.97) 45%, rgba(7,10,16,.99)); border:1px solid var(--border); }
 .booking-grid{ display:grid; grid-template-columns:.9fr 1.1fr; gap:40px; align-items:start; }
@@ -265,6 +290,11 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 
 <body>
 
+<!-- AUDIO PLAYER (NATURE & MOUNTAIN AMBIENCE) -->
+<audio id="bgAudio" loop preload="none">
+  <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=nature-ambient-21865.mp3" type="audio/mpeg">
+</audio>
+
 <!-- HEADER -->
 <header class="site-header">
  <div class="glass">
@@ -290,6 +320,16 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    </nav>
 
    <div class="flex items-center gap-3">
+     <!-- MUSIC TOGGLE BUTTON -->
+     <button id="musicToggleBtn" onclick="toggleMusic()" class="music-btn" title="Ambient Sound">
+       <div class="sound-wave">
+         <span class="sound-bar"></span>
+         <span class="sound-bar"></span>
+         <span class="sound-bar"></span>
+       </div>
+       <span id="musicBtnLabel">مۆسیقا</span>
+     </button>
+
      <!-- LANGUAGE SWITCHER -->
      <div class="lang-switcher">
        <button class="lang-btn" id="btn_ku" onclick="setLanguage('ku')">کوردی</button>
@@ -323,6 +363,14 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 </header>
 
 <main id="app"></main>
+
+<!-- LIGHTBOX MODAL -->
+<div id="lightboxModal" onclick="closeLightbox()">
+  <div class="max-w-4xl max-h-[85vh] relative flex items-center justify-center">
+    <img id="lightboxImg" class="max-w-full max-h-[85vh] rounded-2xl border border-white/20 shadow-2xl" src="" alt="Zoom">
+    <button class="absolute top-4 right-4 bg-black/70 text-white p-2 rounded-full"><i data-lucide="x"></i></button>
+  </div>
+</div>
 
 <!-- FLOATING ACTIONS -->
 <div class="floating-actions">
@@ -387,10 +435,11 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 <script>
 const WORKER_ENDPOINT = "https://kurdia.alwandssalh.workers.dev";
 
-// DICTIONARY FOR MULTI-LANGUAGE
+// COMPLETE I18N DICTIONARY
 const I18N = {
   ku: {
     dir: "rtl",
+    music_label: "مۆسیقا",
     nav_home: "سەرەتا", nav_trip: "گەشت", nav_about: "ئێمە کێین", nav_timeline: "ئەزموون", nav_safety: "سەلامەتی", nav_gear: "پێداویستی", nav_reviews: "فیدباک", nav_gallery: "گەلەری", nav_location: "شوێن", nav_book: "بەشداری لە گەشت",
     cd_label: "کاتی ماوە بۆ بەڕێکەوتن:", cd_d: "ڕۆژ", cd_h: "کاتژمێر", cd_m: "خولەک", cd_s: "چرکە",
     btn_join: "بەشداری لە گەشت", btn_trip_info: "زانیاری گەشت", btn_about: "ئێمە کێین؟",
@@ -417,10 +466,22 @@ const I18N = {
     ai_title: "یاریدەدەری زیرەکی کوردیا", ai_welcome: "سڵاو! من یاریدەدەری زیرەکی KURDIA ADVENTUREـم. هەر پرسیارێکت هەیە بپرسە.", ai_ph: "پرسیارەکەت بنووسە...",
     footer_desc: "پلاتفۆرمی فەرمیی گەشتیاری و شاخەوانی لە کوردستان؛ ئامانجمان ناساندنی سروشتی کوردستان، برەودان بە تەندروستی، هاوڕێیەتی و پاراستنی ژینگەیە.",
     footer_links: "بەستەرە خێراکان", footer_contact: "پەیوەندی ڕاستەوخۆ", footer_city: "هەولێر — کوردستان", footer_quick: "بۆ هەماهەنگی و پەیوەندی خێرا:",
-    copy: "هەموو مافەکان پارێزراون.", sub_copy: "دیزاینکراوە بە خۆشەویستی بۆ سروشتی کوردستان 🏔️"
+    copy: "هەموو مافەکان پارێزراون.", sub_copy: "دیزاینکراوە بە خۆشەویستی بۆ سروشتی کوردستان 🏔️",
+    
+    // Default text translations if not in state
+    heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
+    heroSubtitle: "گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت جوانییە بێوێنەکانی کوردستان ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی پڕ وزە دروست بکەن.",
+    tripTitle: "گەشتی لووتکەی چیای هەڵگورد",
+    tripLocation: "باڵەکایەتی — چیای هەڵگورد",
+    tripPrice: "٣٥،٠٠٠ دینار",
+    tripTime: "بەیانی ٠٥:٠٠",
+    tripDuration: "١ ڕۆژ",
+    tripDifficulty: "مامناوەند",
+    tripDesc: "گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان."
   },
   ar: {
     dir: "rtl",
+    music_label: "موسيقى",
     nav_home: "الرئيسية", nav_trip: "الرحلة", nav_about: "من نحن", nav_timeline: "المسار", nav_safety: "السلامة", nav_gear: "المعدات", nav_reviews: "الآراء", nav_gallery: "الصور", nav_location: "الموقع", nav_book: "المشاركة بالرحلة",
     cd_label: "الوقت المتبقي للانطلاق:", cd_d: "يوم", cd_h: "ساعة", cd_m: "دقيقة", cd_s: "ثانية",
     btn_join: "المشاركة في الرحلة", btn_trip_info: "تفاصيل الرحلة", btn_about: "من نحن؟",
@@ -447,10 +508,21 @@ const I18N = {
     ai_title: "مساعد كورديا الذكي", ai_welcome: "مرحباً! أنا المساعد الذكي لـ KURDIA ADVENTURE. تفضل بأي استفسار.", ai_ph: "اكتب سؤالك...",
     footer_desc: "المنصة الرسمية لرياضة تسلق الجبال والمغامرات في كوردستان؛ هدفنا التعريف بالطبيعة، تعزيز الصحة والبيئة.",
     footer_links: "روابط سريعة", footer_contact: "اتصال مباشر", footer_city: "أربيل — كوردستان", footer_quick: "للتنسيق والاستفسار السريع:",
-    copy: "جميع الحقوق محفوظة.", sub_copy: "صُمم بكل حب لطبيعة كوردستان الساحرة 🏔️"
+    copy: "جميع الحقوق محفوظة.", sub_copy: "صُمم بكل حب لطبيعة كوردستان الساحرة 🏔️",
+
+    heroTitle: "استكشف سحر الطبيعة معنا بطريقة مختلفة",
+    heroSubtitle: "رحلاتنا مخصصة لأولئك الذين يرغبون في رؤية جمال كوردستان الخلاب، وتكوين صداقات جديدة، وصنع ذكريات مليئة بالطاقة.",
+    tripTitle: "رحلة قمة جبل هلكورد",
+    tripLocation: "بالكايتي — جبل هلكورد",
+    tripPrice: "35,000 دينار",
+    tripTime: "صباحاً 05:00",
+    tripDuration: "يوم واحد",
+    tripDifficulty: "متوسط",
+    tripDesc: "مغامرة شيقة بصحبة مرشدين محترفين، تشمل النقل بالحافلات السياحية، وجبة الإفطار، وشاي الفحم، والصعود إلى أعلى قمة في كوردستان والعراق."
   },
   en: {
     dir: "ltr",
+    music_label: "Music",
     nav_home: "Home", nav_trip: "Trip", nav_about: "About Us", nav_timeline: "Timeline", nav_safety: "Safety", nav_gear: "Gear", nav_reviews: "Reviews", nav_gallery: "Gallery", nav_location: "Location", nav_book: "Join Trip",
     cd_label: "Time left until departure:", cd_d: "Days", cd_h: "Hours", cd_m: "Mins", cd_s: "Secs",
     btn_join: "Join Upcoming Trip", btn_trip_info: "Trip Details", btn_about: "About Us",
@@ -477,7 +549,17 @@ const I18N = {
     ai_title: "Kurdia AI Assistant", ai_welcome: "Hello! I am the AI Assistant of KURDIA ADVENTURE. Ask me anything.", ai_ph: "Type your question...",
     footer_desc: "Official hiking and outdoor adventure platform in Kurdistan; promoting wellness, ecotourism and friendship.",
     footer_links: "Quick Links", footer_contact: "Contact", footer_city: "Erbil — Kurdistan", footer_quick: "For inquiries & booking:",
-    copy: "All rights reserved.", sub_copy: "Crafted with love for Kurdistan mountains 🏔️"
+    copy: "All rights reserved.", sub_copy: "Crafted with love for Kurdistan mountains 🏔️",
+
+    heroTitle: "Experience Kurdistan Nature Differently With Us",
+    heroSubtitle: "Our expeditions are crafted for those seeking to discover breathtaking mountain views, build new friendships, and create unforgettable adventures.",
+    tripTitle: "Mount Halgurd Summit Expedition",
+    tripLocation: "Balakayati — Mount Halgurd",
+    tripPrice: "35,000 IQD",
+    tripTime: "05:00 AM",
+    tripDuration: "1 Day",
+    tripDifficulty: "Moderate",
+    tripDesc: "An exhilarating summit journey accompanied by certified mountain guides, VIP bus transportation, traditional breakfast, charcoal tea, and scaling the highest peak."
   }
 };
 
@@ -488,20 +570,11 @@ const DEFAULT_DATA = {
  gradColor2:"#c92b49",
  seoTitle:"KURDIA ADVENTURE — گەشت، سروشت و سەرکێشی",
  heroBadge:"KURDIA ADVENTURE",
- heroTitle:"لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
- heroSubtitle:"گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت جوانییە بێوێنەکانی کوردستان ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی پڕ وزە دروست بکەن.",
  heroImageUrl:"",
- tripTitle:"گەشتی لووتکەی چیای هەڵگورد",
- tripPrice:"٣٥،٠٠٠ دینار",
- tripDifficulty:"مامناوەند",
- tripDuration:"١ ڕۆژ",
- tripTime:"بەیانی ٠٥:٠٠",
- tripLocation:"باڵەکایەتی — چیای هەڵگورد",
- tripDesc:"گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا و پڕۆفیشناڵ، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان.",
  tripImageUrl:"",
  tripTargetDate:"2026-10-02T05:00",
- weatherTemp:"١٨°C",
- weatherCondition:"ساماڵ و خۆرەتاو ☀️",
+ weatherTemp:"18°C",
+ weatherCondition:"ساماڵ ☀️",
  bookingOpen:true,
  otpRequired:true,
  capacity:40,
@@ -517,15 +590,15 @@ const DEFAULT_DATA = {
   { num:"4.9★", label:"ڕەزامەندی شاخەوانان" }
  ],
  timeline:[
-  { title:"کۆبوونەوە و دابەشبوون", desc:"لە شوێنی دیاریکراوی هەولێر کۆدەبینەوە و بە پاسی گەشتیاری بەرەو دەڤەرەکە بەڕێدەکەوین." },
-  { title:"نانی بەیانی و ئامادەکاری", desc:"لە سروشتدا چای سەر خەڵووز و نانی بەیانی دەخۆین و ڕێنماییە سەرەتاییەکان دەدرێت." },
-  { title:"ڕێپێوان بەرەو لووتکە", desc:"بە هەنگاوی هاوسەنگ، بە پشووی پێویست و لەژێر چاودێری ڕێبەران سەردەکەوین." },
-  { title:"تۆمارکردنی سەرکەوتن", desc:"گەیشتن بە لووتکە، وێنەگرتنی پڕۆفیشناڵ و ئاهەنگگێڕان بە دیمەنی سەرنجڕاکێشی چیاکان." }
+  { title:"کۆبوونەوە و دابەشبوون", desc:"لە شوێنی دیاریکراوی هەولێر کۆدەبینەوە و بەڕێدەکەوین." },
+  { title:"نانی بەیانی و ئامادەکاری", desc:"لە سروشتدا چای سەر خەڵووز و نانی بەیانی دەخۆین." },
+  { title:"ڕێپێوان بەرەو لووتکە", desc:"بە هەنگاوی هاوسەنگ بەرەو لووتکە سەردەکەوین." },
+  { title:"تۆمارکردنی سەرکەوتن", desc:"گەیشتن بە لووتکە، وێنەگرتن و بینینی دیمەنەکان." }
  ],
  safety:[
-  { title:"ڕێبەرانی بەئەزموون", desc:"تیمەکەمان پێکهاتووە لە ڕێبەرانی شارەزا بە ڕێگاکانی کوردستان و شارەزای هەڵسوکەوت لە چیا.", icon:"compass" },
-  { title:"فریاگوزاری سەرەتایی", desc:"لە تەواوی ڕێڕەوەکەدا ستافی فریاگوزاری سەرەتایی و کەرەستەی پزیشکی لەگەڵ تیمی گەشتەکەیە.", icon:"shield-plus" },
-  { title:"چاودێری کەشوهەوا", desc:"پێش هەر جوڵەیەک بە وردی نەخشەی کەشوهەوا و بارودۆخی کەشناسی دەپشکنرێت بۆ سەلامەتی.", icon:"cloud-sun" }
+  { title:"ڕێبەرانی بەئەزموون", desc:"تیمەکەمان شارەزای تەواوی ڕێڕەوەکانە.", icon:"compass" },
+  { title:"فریاگوزاری سەرەتایی", desc:"کەرەستەی پزیشکی بەردەوام لەگەڵمانە.", icon:"shield-plus" },
+  { title:"چاودێری کەشوهەوا", desc:"پشکنینی بەردەوامی پێشبینی کەشوهەوا.", icon:"cloud-sun" }
  ],
  services:[
   { name:"پاسی گەشتیاری مۆدێرن", icon:"bus-front" },
@@ -546,6 +619,7 @@ const DEFAULT_DATA = {
 let siteData = Object.assign({}, DEFAULT_DATA);
 let isPhoneVerified = false;
 let appliedDiscountPercent = 0;
+let isAudioPlaying = false;
 
 function esc(v){ return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
 function safeUrl(v){ return (v && typeof v === "string" && (v.startsWith("http") || v.startsWith("data:image/"))) ? v : ""; }
@@ -555,6 +629,26 @@ function toast(msg){
  el.textContent = msg;
  el.classList.add("show");
  setTimeout(()=> el.classList.remove("show"), 4000);
+}
+
+// MUSIC CONTROLLER
+function toggleMusic(){
+  const audio = document.getElementById("bgAudio");
+  const btn = document.getElementById("musicToggleBtn");
+  if(!audio) return;
+
+  if(isAudioPlaying){
+    audio.pause();
+    isAudioPlaying = false;
+    btn.classList.remove("playing");
+  } else {
+    audio.play().then(()=>{
+      isAudioPlaying = true;
+      btn.classList.add("playing");
+    }).catch(()=>{
+      toast("تکایە کلیک لە شاشە بکە بۆ ڕێگەدان بە لێدانی دەنگ");
+    });
+  }
 }
 
 function setLanguage(lang){
@@ -567,7 +661,6 @@ function updateStaticText(t){
   document.documentElement.lang = currentLang;
   document.documentElement.dir = t.dir;
 
-  // Header & Mobile Nav
   const navKeys = ["home", "trip", "about", "timeline", "safety", "gear", "reviews", "gallery", "location"];
   navKeys.forEach(k => {
     const el = document.getElementById(`nav_${k}`);
@@ -583,13 +676,14 @@ function updateStaticText(t){
   if(nb) nb.textContent = t.nav_book;
   if(mnb) mnb.textContent = t.nav_book;
 
-  // Switcher Active state
+  const mLabel = document.getElementById("musicBtnLabel");
+  if(mLabel) mLabel.textContent = t.music_label;
+
   ["ku", "ar", "en"].forEach(l => {
     const b = document.getElementById(`btn_${l}`);
     if(b) b.classList.toggle("active", l === currentLang);
   });
 
-  // Footer Static
   const fd = document.getElementById("footer_desc"); if(fd) fd.textContent = t.footer_desc;
   const flt = document.getElementById("footer_links_title"); if(flt) flt.textContent = t.footer_links;
   const fct = document.getElementById("footer_contact_title"); if(fct) fct.textContent = t.footer_contact;
@@ -598,7 +692,6 @@ function updateStaticText(t){
   const fc = document.getElementById("f_copy"); if(fc) fc.textContent = t.copy;
   const fs = document.getElementById("f_sub"); if(fs) fs.textContent = t.sub_copy;
 
-  // AI Window
   const at = document.getElementById("ai_title"); if(at) at.textContent = t.ai_title;
   const aw = document.getElementById("ai_welcome"); if(aw) aw.textContent = t.ai_welcome;
   const aiInp = document.getElementById("aiInput"); if(aiInp) aiInp.placeholder = t.ai_ph;
@@ -620,6 +713,14 @@ function loadData(){
  }catch(e){
    siteData = Object.assign({}, DEFAULT_DATA);
  }
+}
+
+function openLightbox(url){
+  document.getElementById("lightboxImg").src = url;
+  document.getElementById("lightboxModal").style.display = "flex";
+}
+function closeLightbox(){
+  document.getElementById("lightboxModal").style.display = "none";
 }
 
 function applyCoupon(){
@@ -653,6 +754,19 @@ function render(){
  const remaining = Math.max(0, capacity - booked);
  const percentage = Math.min(100, Math.round((booked / capacity) * 100));
 
+ // Read language-specific content
+ const langData = (siteData.i18n && siteData.i18n[currentLang]) ? siteData.i18n[currentLang] : {};
+
+ const curHeroTitle = langData.heroTitle || t.heroTitle || siteData.heroTitle;
+ const curHeroSubtitle = langData.heroSubtitle || t.heroSubtitle || siteData.heroSubtitle;
+ const curTripTitle = langData.tripTitle || t.tripTitle || siteData.tripTitle;
+ const curTripLocation = langData.tripLocation || t.tripLocation || siteData.tripLocation;
+ const curTripPrice = langData.tripPrice || t.tripPrice || siteData.tripPrice;
+ const curTripTime = langData.tripTime || t.tripTime || siteData.tripTime;
+ const curTripDuration = langData.tripDuration || t.tripDuration || siteData.tripDuration;
+ const curTripDifficulty = langData.tripDifficulty || t.tripDifficulty || siteData.tripDifficulty;
+ const curTripDesc = langData.tripDesc || t.tripDesc || siteData.tripDesc;
+
  document.getElementById("waDirectBtn").href = `https://wa.me/9647503130360?text=${encodeURIComponent("Hello KURDIA ADVENTURE:")}`;
 
  app.innerHTML = `
@@ -662,8 +776,8 @@ function render(){
   <div class="hero-gradient"></div>
   <div class="container hero-content">
    <div class="hero-badge"><span class="hero-dot"></span>${esc(siteData.heroBadge)}</div>
-   <h1 class="hero-title">${esc(siteData.heroTitle)}</h1>
-   <p class="hero-subtitle">${esc(siteData.heroSubtitle)}</p>
+   <h1 class="hero-title">${esc(curHeroTitle)}</h1>
+   <p class="hero-subtitle">${esc(curHeroSubtitle)}</p>
 
    <div class="countdown-box">
      <div class="text-xs font-bold text-gray-300 mb-2">${t.cd_label}</div>
@@ -682,10 +796,10 @@ function render(){
    </div>
 
    <div class="hero-meta">
-    <div class="meta-card"><div class="meta-label">${t.meta_loc}</div><div class="meta-value">${esc(siteData.tripLocation)}</div></div>
-    <div class="meta-card"><div class="meta-label">${t.meta_time}</div><div class="meta-value">${esc(siteData.tripTime)}</div></div>
-    <div class="meta-card"><div class="meta-label">${t.meta_dur}</div><div class="meta-value">${esc(siteData.tripDuration)}</div></div>
-    <div class="meta-card"><div class="meta-label">${t.meta_diff}</div><div class="meta-value">${esc(siteData.tripDifficulty)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_loc}</div><div class="meta-value">${esc(curTripLocation)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_time}</div><div class="meta-value">${esc(curTripTime)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_dur}</div><div class="meta-value">${esc(curTripDuration)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_diff}</div><div class="meta-value">${esc(curTripDifficulty)}</div></div>
    </div>
   </div>
  </section>
@@ -696,11 +810,11 @@ function render(){
    <div class="surface trip-card">
     <div class="trip-photo" style="background-image:url('${tripImg}');">
      <div class="trip-photo-badge">KURDIA</div>
-     <div class="trip-photo-bottom"><div class="trip-photo-title">${esc(siteData.tripLocation)}</div></div>
+     <div class="trip-photo-bottom"><div class="trip-photo-title">${esc(curTripLocation)}</div></div>
     </div>
     <div class="trip-content">
      <div class="section-label"><i data-lucide="compass"></i> ${t.trip_badge}</div>
-     <h2 class="text-3xl font-black mt-2 mb-4">${esc(siteData.tripTitle)}</h2>
+     <h2 class="text-3xl font-black mt-2 mb-4">${esc(curTripTitle)}</h2>
      
      <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-4">
        <div class="flex justify-between items-center text-xs font-bold mb-2">
@@ -713,25 +827,25 @@ function render(){
      </div>
 
      <div class="trip-info-grid">
-      <div class="trip-info"><div class="trip-info-label">${t.meta_time}</div><div class="trip-info-value">${esc(siteData.tripTime)}</div></div>
-      <div class="trip-info"><div class="trip-info-label">${t.meta_dur}</div><div class="trip-info-value">${esc(siteData.tripDuration)}</div></div>
+      <div class="trip-info"><div class="trip-info-label">${t.meta_time}</div><div class="trip-info-value">${esc(curTripTime)}</div></div>
+      <div class="trip-info"><div class="trip-info-label">${t.meta_dur}</div><div class="trip-info-value">${esc(curTripDuration)}</div></div>
      </div>
 
      <div class="weather-badge-box">
        <div>
          <div class="text-xs text-gray-400 font-bold">${t.weather_lbl}</div>
-         <div class="text-sm font-black text-white">${esc(siteData.weatherCondition || "ساماڵ")}</div>
+         <div class="text-sm font-black text-white">${esc(siteData.weatherCondition || "ساماڵ ☀️")}</div>
        </div>
-       <div class="text-xl font-black text-amber-400">${esc(siteData.weatherTemp || "١٨°C")}</div>
+       <div class="text-xl font-black text-amber-400">${esc(siteData.weatherTemp || "18°C")}</div>
      </div>
 
      <div class="trip-detail">
        <div class="trip-detail-title">${t.trip_full_desc}</div>
-       <div class="trip-detail-text">${esc(siteData.tripDesc)}</div>
+       <div class="trip-detail-text">${esc(curTripDesc)}</div>
      </div>
 
      <div class="trip-price-row">
-       <div><div class="trip-price-label">${t.trip_price_lbl}</div><div class="trip-price">${esc(siteData.tripPrice)}</div></div>
+       <div><div class="trip-price-label">${t.trip_price_lbl}</div><div class="trip-price">${esc(curTripPrice)}</div></div>
        ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary px-6 py-3 rounded-xl font-bold">${t.btn_register}</a>` : `<div class="text-gray-500 font-bold">${t.btn_closed}</div>`}
      </div>
     </div>
@@ -863,7 +977,7 @@ function render(){
      ${(siteData.gallery || []).map(g=>{
        const u = safeUrl(typeof g === 'string' ? g : g.url);
        return `
-       <div class="gallery-card">
+       <div class="gallery-card" onclick="openLightbox('${esc(u)}')">
          <img src="${esc(u)}" alt="Kurdia Adventure">
        </div>`;
      }).join("")}
@@ -1059,7 +1173,7 @@ async function submitBooking(e){
     const formData = new FormData();
     formData.append("name", name);
     formData.append("phone", phone);
-    formData.append("trip", siteData.tripTitle);
+    formData.append("trip", siteData.tripTitle || "KURDIA ADVENTURE");
     formData.append("people", people);
     formData.append("extra_names", extraNames);
     formData.append("note", (appliedDiscountPercent > 0 ? `[Discount ${appliedDiscountPercent}%] ` : "") + note);
