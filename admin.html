@@ -150,8 +150,7 @@ textarea{ min-height:85px; resize:vertical; }
 }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-
-/* KURDIA EXPANSION ADMIN */
+/* KPI GRID */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .kpi{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(157,28,50,.16),var(--surface));border:1px solid var(--border)}
 .kpi-num{font-size:25px;font-weight:900}.kpi-label{font-size:11px;color:var(--muted);margin-top:4px}
@@ -190,23 +189,16 @@ textarea{ min-height:85px; resize:vertical; }
     <ul class="nav-list">
       <li><button class="nav-btn active" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و بەشی سەرەکی</button></li>
       <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامە، کات و کەشوهەوا</button></li>
+      <li><button class="nav-btn" onclick="switchTab('booking')"><i data-lucide="ticket-check"></i> Booking & OTP Switch</button></li>
       <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> نامەی بیرخستنەوە (Broadcast)</button></li>
       <li><button class="nav-btn" onclick="switchTab('reviews')"><i data-lucide="message-circle"></i> بیروڕا و فیدباکەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('sections')"><i data-lucide="layers"></i> بەڕێوەبردنی بەشەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('itinerary')"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</button></li>
       <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="image"></i> گەلەری وێنەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('whatsapp')"><i data-lucide="message-square"></i> شابلۆنی نامەکان & Maps</button></li>
       <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="credit-card"></i> هەژماری دارایی و FIB</button></li>
       <li><button class="nav-btn" onclick="switchTab('registrations')"><i data-lucide="users"></i> بەشداربووان لە Sheets</button></li>
-      <li><button class="nav-btn" onclick="switchTab('dashboard')"><i data-lucide="layout-dashboard"></i> Dashboard</button></li>
-       <li><button class="nav-btn" onclick="switchTab('trips')"><i data-lucide="map"></i> گەشتەکانی داهاتوو</button></li>
-       <li><button class="nav-btn" onclick="switchTab('booking')"><i data-lucide="ticket-check"></i> Booking & Capacity</button></li>
-       <li><button class="nav-btn" onclick="switchTab('content')"><i data-lucide="book-open"></i> About & Safety</button></li>
-       <li><button class="nav-btn" onclick="switchTab('achievements')"><i data-lucide="trophy"></i> دەستکەوتەکان</button></li>
-       <li><button class="nav-btn" onclick="switchTab('seo')"><i data-lucide="search"></i> SEO & Social</button></li>
-       <li><button class="nav-btn" onclick="switchTab('settings')"><i data-lucide="settings"></i> Settings</button></li>
-       <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
+      <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
     </ul>
 
     <div class="sidebar-footer">
@@ -295,7 +287,6 @@ textarea{ min-height:85px; resize:vertical; }
             <div class="field"><label>ماوەی گەشت</label><input id="tripDuration" oninput="autoSync()"></div>
           </div>
 
-          <!-- COUNTDOWN & WEATHER FIELDS -->
           <div class="grid-3 p-4 bg-white/[0.02] border border-white/5 rounded-2xl mb-4">
             <div class="field">
               <label>⏰ بەرواری کاتژمێری پێچەوانە (Countdown)</label>
@@ -327,49 +318,58 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 3. BROADCAST REMINDER TAB (NEW!) -->
+      <!-- 3. BOOKING & OTP SWITCH TAB (NEW & CRUCIAL!) -->
+      <section class="page-tab" id="tab-booking">
+        <div class="card">
+          <div class="card-title"><i data-lucide="shield-check"></i> کۆنترۆڵی سیستەمی OTP و ناونووسین</div>
+          
+          <div class="p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl mb-5 flex items-center justify-between">
+            <div>
+              <div class="font-extrabold text-sm text-white">داواکردنی کۆدی سەلماندنی WhatsApp (OTP)</div>
+              <div class="text-xs text-gray-400 mt-1">ئەگەر ئەمە بکوژێنیتەوە، خەڵک دەتوانن ڕاستەوخۆ و بێ داواکردنی کۆدی OTP ناو بنووسن.</div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" class="sr-only peer">
+              <div class="w-12 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600"></div>
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <div class="field"><label>کۆی کورسییەکان (Capacity)</label><input id="capacityInput" type="number" min="1"></div>
+            <div class="field"><label>کورسییە گیراوەکان (Booked)</label><input id="bookedInput" type="number" min="0"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. BROADCAST REMINDER TAB -->
       <section class="page-tab" id="tab-broadcast">
         <div class="card">
           <div class="card-title"><i data-lucide="send"></i> ناردنی نامەی بیرخستنەوەی شەوی پێش گەشت بە WhatsApp</div>
-          <p style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
-            لێرە دەتوانیت دەقی نامەی بیرخستنەوە بنووسیت و بە یەک کلیک لە ڕێگەی WhatsApp بۆ هەموو ئەو بەشداربووانەی بنێریت کە ژمارەیان لە خوارەوە دادەنێیت:
-          </p>
-          
           <div class="field">
-            <label>دەقی نامەی بیرخستنەوە (کاتی بەڕێکەوتن، کەلوپەل، ئامۆژگاری کۆتایی)</label>
-            <textarea id="broadcastMessage" style="min-height:140px;line-height:1.8;" placeholder="سڵاو بەڕێزان 🌿&#10;شەوتان باش. بیرخستنەوەیەک بۆ گەشتی سبەینێ:&#10;١. کاتژمێر ٠٥:٠٠ی بەیانی لە شوێنی دیاریکراو ئامادەبن.&#10;٢. تکایە چاکەتی باراناوی و پێڵاوی شاخەوانی لەبیر مەکەن..."></textarea>
+            <label>دەقی نامەی بیرخستنەوە</label>
+            <textarea id="broadcastMessage" style="min-height:140px;line-height:1.8;" placeholder="سڵاو بەڕێزان 🌿..."></textarea>
           </div>
-
           <div class="field">
-            <label>لیستی ژمارەی مۆبایلەکان (دەتوانیت لە Google Sheets کۆپی بکەیت و لێرە دایبنێیت بە فاریزە یان دێڕ بە دێڕ)</label>
-            <textarea id="broadcastPhones" style="min-height:90px;" placeholder="07500000000&#10;07501111111&#10;07702222222"></textarea>
+            <label>لیستی ژمارەی مۆبایلەکان</label>
+            <textarea id="broadcastPhones" style="min-height:90px;" placeholder="07500000000&#10;07501111111"></textarea>
           </div>
-
           <button class="btn btn-primary" style="width:100%;height:46px;" onclick="sendBroadcastReminder()">
             <i data-lucide="send"></i> ناردنی ڕاستەوخۆ بۆ بەشداربووان لە WhatsApp
           </button>
         </div>
       </section>
 
-      <!-- 4. REVIEWS & FEEDBACK TAB (NEW!) -->
+      <!-- 5. REVIEWS TAB -->
       <section class="page-tab" id="tab-reviews">
         <div class="card">
           <div class="card-title"><i data-lucide="message-circle"></i> بەڕێوەبردنی بیروڕای شاخەوانان (Reviews)</div>
           <div class="grid-2">
-            <div class="field"><label>ناوی شاخەوان / بەشداربوو</label><input id="newReviewName" placeholder="وەک: ڕەوەند عەلی"></div>
-            <div class="field"><label>شار / ناوچە</label><input id="newReviewCity" placeholder="وەک: هەولێر"></div>
+            <div class="field"><label>ناوی شاخەوان</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
+            <div class="field"><label>شار</label><input id="newReviewCity" placeholder="هەولێر"></div>
           </div>
-          <div class="field"><label>دەقی فیدباکەکەی</label><textarea id="newReviewText" placeholder="بیروڕاکەی بنووسە..."></textarea></div>
-          <button class="btn btn-primary" style="width:100%;margin-bottom:14px;" onclick="addReviewItem()"><i data-lucide="plus"></i> زیادکردنی فیدباک</button>
+          <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText" placeholder="بیروڕاکەی بنووسە..."></textarea></div>
+          <button class="btn btn-primary" style="width:100%;margin-bottom:14px;" onclick="addReviewItem()"><i data-lucide="plus"></i> زیادکردن</button>
           <div id="reviewsList"></div>
-        </div>
-      </section>
-
-      <!-- 5. SECTIONS MANAGER TAB -->
-      <section class="page-tab" id="tab-sections">
-        <div class="card">
-          <div class="card-title"><i data-lucide="layers"></i> بەڕێوەبردنی دەرکەوتنی بەشەکانی وێبسایت</div>
-          <div id="sectionsList"></div>
         </div>
       </section>
 
@@ -379,7 +379,7 @@ textarea{ min-height:85px; resize:vertical; }
           <div class="card-title"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</div>
           <div class="field">
             <div style="display:flex;gap:8px;">
-              <input id="newServiceName" placeholder="وەک: پاسی مۆدێرن، چای سەر خەڵووز...">
+              <input id="newServiceName" placeholder="پاسی گەشتیاری...">
               <button class="btn btn-primary" onclick="addServiceItem()"><i data-lucide="plus"></i></button>
             </div>
           </div>
@@ -390,9 +390,9 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- 7. ITINERARY TAB -->
       <section class="page-tab" id="tab-itinerary">
         <div class="card">
-          <div class="card-title"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت (Itinerary)</div>
+          <div class="card-title"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</div>
           <div class="grid-2">
-            <div class="field"><label>ناونیشانی هەنگاو</label><input id="newItineraryTitle" placeholder="کۆبوونەوە"></div>
+            <div class="field"><label>ناونیشان</label><input id="newItineraryTitle" placeholder="کۆبوونەوە"></div>
             <div class="field"><label>ڕوونکردنەوە</label><input id="newItineraryText" placeholder="کاتژمێر ٥ی بەیانی"></div>
           </div>
           <button class="btn btn-primary" style="width:100%;margin-bottom:14px;" onclick="addItineraryItem()"><i data-lucide="plus"></i> زیادکردن</button>
@@ -417,26 +417,17 @@ textarea{ min-height:85px; resize:vertical; }
       <section class="page-tab" id="tab-whatsapp">
         <div class="card">
           <div class="card-title"><i data-lucide="message-square"></i> نامەکانی WhatsApp و لۆکەیشن</div>
-          <div class="field">
-            <label>📍 لینکی شوێنی کۆبوونەوە لە Google Maps</label>
-            <input id="waMapsUrl" dir="ltr" oninput="autoSync()">
-          </div>
-          <div class="field">
-            <label>✅ دەقی نامەی پەسەندکردن (Verify Template)</label>
-            <textarea id="waVerifyTemplate" style="min-height:140px;"></textarea>
-          </div>
-          <div class="field">
-            <label>❌ دەقی نامەی ڕەتکردنەوە (Reject Template)</label>
-            <textarea id="waRejectTemplate" style="min-height:100px;"></textarea>
-          </div>
+          <div class="field"><label>📍 لینکی شوێنی کۆبوونەوە لە Google Maps</label><input id="waMapsUrl" dir="ltr" oninput="autoSync()"></div>
+          <div class="field"><label>✅ دەقی نامەی پەسەندکردن</label><textarea id="waVerifyTemplate" style="min-height:140px;"></textarea></div>
+          <div class="field"><label>❌ دەقی نامەی ڕەتکردنەوە</label><textarea id="waRejectTemplate" style="min-height:100px;"></textarea></div>
           <button class="btn btn-success" style="width:100%;margin-top:8px;" onclick="saveWhatsAppToCloud()">💾 پاشەکەوتکردن لە Cloud</button>
         </div>
       </section>
 
-      <!-- 10. FINANCE & FIB TAB -->
+      <!-- 10. FINANCE & FIB -->
       <section class="page-tab" id="tab-finance">
         <div class="card">
-          <div class="card-title"><i data-lucide="credit-card"></i> هەژماری دارایی و پارەدان (FIB)</div>
+          <div class="card-title"><i data-lucide="credit-card"></i> هەژماری دارایی و FIB</div>
           <div class="field">
             <label>ژمارەی هەژماری فەرمیی First Iraqi Bank (FIB)</label>
             <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
@@ -444,131 +435,18 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 11. REGISTRATIONS TAB -->
+      <!-- 11. REGISTRATIONS -->
       <section class="page-tab" id="tab-registrations">
         <div class="card">
           <div class="card-title"><i data-lucide="table"></i> بەشداربووان لە Google Sheets</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
-            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ لە خشتەکەتن. کلیک بکە بۆ بینینیان:
+            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ دەچنە ناو خشتەکەت:
           </p>
           <button class="btn btn-secondary" style="width:100%;" onclick="openSheets()"><i data-lucide="file-spreadsheet"></i> کردنەوەی Google Sheets</button>
         </div>
       </section>
 
-
-      <!-- EXPANSION: DASHBOARD -->
-      <section class="page-tab" id="tab-dashboard">
-        <div class="card">
-          <div class="card-title"><i data-lucide="layout-dashboard"></i> Dashboard</div>
-          <div class="kpi-grid">
-            <div class="kpi"><div class="kpi-num" id="kpiTrips">0</div><div class="kpi-label">گەشتەکانی داهاتوو</div></div>
-            <div class="kpi"><div class="kpi-num" id="kpiCapacity">0/0</div><div class="kpi-label">Booking / Capacity</div></div>
-            <div class="kpi"><div class="kpi-num" id="kpiReviews">0</div><div class="kpi-label">Reviews</div></div>
-            <div class="kpi"><div class="kpi-num" id="kpiGallery">0</div><div class="kpi-label">Gallery</div></div>
-          </div>
-          <div class="small-note">تێبینی: ئەم Dashboard ـە بە زانیارییەکانی هەمان appState کار دەکات؛ هیچ endpoint ـی نوێ بۆ Telegram/WhatsApp زیاد ناکات.</div>
-        </div>
-      </section>
-
-      <!-- EXPANSION: UPCOMING TRIPS -->
-      <section class="page-tab" id="tab-trips">
-        <div class="card">
-          <div class="card-title"><i data-lucide="map"></i> زیادکردنی گەشتی داهاتوو</div>
-          <div class="grid-2">
-            <div class="field"><label>ناوی گەشت</label><input id="newTripTitle"></div>
-            <div class="field"><label>بەروار</label><input id="newTripDate" placeholder="٢٥/١٠/٢٠٢٦"></div>
-            <div class="field"><label>شوێن</label><input id="newTripLocation"></div>
-            <div class="field"><label>نرخ</label><input id="newTripPrice"></div>
-            <div class="field full"><label>وێنەی URL (ئاختیاری)</label><input id="newTripImage" dir="ltr"></div>
-          </div>
-          <button class="btn btn-primary" style="width:100%" onclick="addUpcomingTrip()">زیادکردنی گەشت</button>
-          <div id="upcomingTripsList" style="margin-top:14px"></div>
-        </div>
-      </section>
-
-      <!-- EXPANSION: BOOKING -->
-      <section class="page-tab" id="tab-booking">
-        <div class="card">
-          <div class="card-title"><i data-lucide="ticket-check"></i> Booking & Capacity</div>
-          <div class="grid-2">
-            <div class="field"><label>کۆی ظرفیت</label><input id="capacityInput" type="number" min="1"></div>
-            <div class="field"><label>ژمارەی Booked (دەستکاریکراو)</label><input id="bookedInput" type="number" min="0"></div>
-          </div>
-          <div class="field"><label>کۆدی داشکان</label><input id="couponCode" placeholder="KURDIA10"></div>
-          <div class="grid-2">
-            <div class="field"><label>ڕێژەی داشکان %</label><input id="couponPercent" type="number" min="0" max="100"></div>
-            <div class="field"><label>دۆخی داشکان</label><label style="display:flex;gap:8px;align-items:center"><input id="couponActive" type="checkbox" style="width:18px"> چالاک</label></div>
-          </div>
-          <button class="btn btn-primary" style="width:100%" onclick="saveBookingSettings()">پاشەکەوتکردن</button>
-          <div class="small-note" style="margin-top:10px">Booking ـەکانی ڕاستەقینە هەر لە API/Google Sheets ـی ئێستاتەوە بەڕێوەدەچن؛ ئەم بەشە تەنها Capacity/Coupon ـی ناو سایت کۆنترۆڵ دەکات.</div>
-        </div>
-      </section>
-
-      <!-- EXPANSION: CONTENT -->
-      <section class="page-tab" id="tab-content">
-        <div class="card">
-          <div class="card-title"><i data-lucide="book-open"></i> About / Safety / Packing</div>
-          <div class="field"><label>ناونیشانی About</label><input id="aboutTitle"></div>
-          <div class="field"><label>دەقی About</label><textarea id="aboutText"></textarea></div>
-          <div class="grid-2">
-            <div class="field"><label>Safety — هەر دانە لە دێڕێک</label><textarea id="safetyItems"></textarea></div>
-            <div class="field"><label>Packing Checklist — هەر دانە لە دێڕێک</label><textarea id="packingItems"></textarea></div>
-          </div>
-          <div class="grid-3">
-            <div class="field"><label>ژمارەی گەشت</label><input id="statTrips"></div>
-            <div class="field"><label>ژمارەی بەشداربوو</label><input id="statPeople"></div>
-            <div class="field"><label>ژمارەی شوێن</label><input id="statPlaces"></div>
-          </div>
-          <div class="field"><label>ساڵی ئەزموون</label><input id="statYears"></div>
-          <button class="btn btn-primary" style="width:100%" onclick="saveContentSettings()">پاشەکەوتکردن</button>
-        </div>
-      </section>
-
-      <!-- EXPANSION: ACHIEVEMENTS -->
-      <section class="page-tab" id="tab-achievements">
-        <div class="card">
-          <div class="card-title"><i data-lucide="trophy"></i> دەستکەوتەکان</div>
-          <div class="grid-2">
-            <div class="field"><label>ناونیشان</label><input id="achievementTitle"></div>
-            <div class="field"><label>ڕوونکردنەوە</label><input id="achievementText"></div>
-          </div>
-          <button class="btn btn-primary" style="width:100%" onclick="addAchievement()">زیادکردن</button>
-          <div id="achievementsList" style="margin-top:14px"></div>
-        </div>
-      </section>
-
-      <!-- EXPANSION: SEO SOCIAL -->
-      <section class="page-tab" id="tab-seo">
-        <div class="card">
-          <div class="card-title"><i data-lucide="search"></i> SEO & Social</div>
-          <div class="field"><label>SEO Description</label><textarea id="seoDescription"></textarea></div>
-          <div class="field"><label>Map Embed URL</label><input id="mapEmbedUrl" dir="ltr"></div>
-          <div class="grid-2">
-            <div class="field"><label>Instagram</label><input id="socialInstagram" dir="ltr"></div>
-            <div class="field"><label>Facebook</label><input id="socialFacebook" dir="ltr"></div>
-            <div class="field"><label>TikTok</label><input id="socialTiktok" dir="ltr"></div>
-            <div class="field"><label>Snapchat</label><input id="socialSnapchat" dir="ltr"></div>
-            <div class="field"><label>WhatsApp</label><input id="socialWhatsapp" dir="ltr"></div>
-          </div>
-          <button class="btn btn-primary" style="width:100%" onclick="saveSeoSocial()">پاشەکەوتکردن</button>
-        </div>
-      </section>
-
-      <!-- EXPANSION: SETTINGS -->
-      <section class="page-tab" id="tab-settings">
-        <div class="card">
-          <div class="card-title"><i data-lucide="settings"></i> Settings</div>
-          <div class="field"><label>لوگۆ / ناوی براند</label><input id="brandName" value="KURDIA ADVENTURE"></div>
-          <div class="field"><label>ژمارەی پەیوەندی</label><input id="contactPhone" value="07503130360"></div>
-          <div class="field"><label>Email</label><input id="contactEmail" value="kurdiaadventure@gmail.com" dir="ltr"></div>
-          <div class="field"><label>Telegram</label><input id="telegramLink" dir="ltr" placeholder="لینکی Telegram ـی ئێستات"></div>
-          <p class="small-note">گرنگ: ئەم خانەی Telegram تەنها بۆ نمایش/لینکە. هیچ کۆدی Telegram ـی پێشوو دەستکاری ناکرێت و هیچ endpoint ـی نوێ بۆی دانانرێت.</p>
-          <div class="field"><label>Footer Text</label><textarea id="footerText"></textarea></div>
-          <button class="btn btn-primary" style="width:100%" onclick="saveGeneralSettings()">پاشەکەوتکردن</button>
-        </div>
-      </section>
-
-      <!-- 12. BACKUP TAB -->
+      <!-- 12. BACKUP -->
       <section class="page-tab" id="tab-backup">
         <div class="card">
           <div class="card-title"><i data-lucide="hard-drive"></i> پاراستن و هێنانەوەی زانیارییەکان</div>
@@ -595,7 +473,6 @@ let appState = {
   gradColor1: "#9d1c32",
   gradColor2: "#c92b49",
   seoTitle: "KURDIA ADVENTURE",
-  seoDescription: "KURDIA ADVENTURE — گەشت، سروشت، هاوڕێتی و سەرکێشی",
   heroBadge: "KURDIA ADVENTURE",
   heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
   heroSubtitle: "گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت سروشت ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی جوان دروست بکەن.",
@@ -612,57 +489,26 @@ let appState = {
   weatherTemp: "١٨°C",
   weatherCondition: "ساماڵ و خۆرەتاو ☀️",
   bookingOpen: true,
+  otpRequired: true, // ئایا OTP داوا بکرێت؟
+  capacity: 40,
+  booked: 0,
   fibAccount: "07503130360",
-  aboutTitle:"کوردیا ئەدڤێنتچەر — گەشتێک زیاتر لە تەنها گەشتە",
-  aboutText:"ئێمە باوەڕمان وایە گەشت تەنها گەیشتن بە شوێنێک نییە؛ بەڵکو ئەزموونی سروشت، هاوڕێتی و دروستکردنی یادەوەرییەکی جیاوازە.",
-  stats:{trips:"50+",people:"500+",places:"30+",years:"5+"},
-  safetyItems:["ڕێبەری شارەزا","First Aid و پلانی فریاکەوتن","پشکنینی کەشوهەوا پێش گەشت","هەماهەنگی لەگەڵ بەشداربووان"],
-  packingItems:["پێڵاوی شاخ","جلی گونجاو بۆ کەشوهەوا","ئاوی خواردنەوە","Power Bank","عینەی خۆر","کەلوپەلی کەسی"],
-  upcomingTrips:[],
-  achievements:[],
-  capacity:40,
-  booked:0,
-  coupon:{code:"",percent:0,active:false},
-  social:{instagram:"https://instagram.com/kurdiaadventure",facebook:"https://facebook.com/kurdiaadventure",tiktok:"https://tiktok.com/@Kurdia_adventure",snapchat:"https://www.snapchat.com/add/kurdiaadventure",whatsapp:"https://wa.me/9647503130360"},
-  mapEmbedUrl:"",
-  telegramLink:"",
-  contactPhone:"07503130360",
-  contactEmail:"kurdiaadventure@gmail.com",
-  footerText:"گەشت، سروشت، هاوڕێتی و دروستکردنی یادەوەرییە جوانەکان.",
   services: [
     { name: "پاس", icon: "bus-front" },
     { name: "نان و خواردن", icon: "utensils" },
     { name: "خواردنەوە", icon: "coffee" },
-    { name: "خێوەت", icon: "tent-tree" },
-    { name: "کارەبا و ڕووناکی", icon: "lightbulb" },
-    { name: "کورسی و مێز", icon: "armchair" }
+    { name: "خێوەت", icon: "tent-tree" }
   ],
   reviews: [
-    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە خۆشترین و ڕێکخراوترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا. دەستتان خۆش بێت!" },
-    { name: "ڕەوەند عەلی", city: "سلێمانی", text: "ڕێبەرەکان زۆر بەئەزموون بوون و هەموو کەرەستەیەکی سەلامەتییان ئامادە کردبوو." },
-    { name: "سارا مەحموود", city: "دهۆک", text: "کەشێکی یەکجار دۆستانە و هاوڕێیانە بوو، بە تایبەتی چای سەر خەڵووزەکە بێ وێنە بوو!" }
-  ],
-  sections: [
-    { id: "hero", type: "hero", visible: true, label: "بەشی سەرەکی (Hero)" },
-    { id: "trip", type: "trip", visible: true, label: "زانیاری گەشت (Trip)" },
-    { id: "services", type: "services", visible: true, label: "خزمەتگوزارییەکان" },
-    { id: "itinerary", type: "itinerary", visible: true, label: "بەرنامەی گەشت" },
-    { id: "reviews", type: "reviews", visible: true, label: "بیروڕا و فیدباکەکان" },
-    { id: "steps", type: "steps", visible: true, label: "هەنگاوەکانی بەشداری" },
-    { id: "gallery", type: "gallery", visible: true, label: "گەلەری وێنەکان" },
-    { id: "faq", type: "faq", visible: true, label: "پرسیارە باوەکان" },
-    { id: "booking", type: "booking", visible: true, label: "فۆڕمی ناونووسین" }
+    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە خۆشترین و ڕێکخراوترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
   ],
   itinerary: [
-    { title: "کۆبوونەوە", text: "لە شوێنی دیاریکراو کۆدەبینەوە." },
-    { title: "دەستپێکردنی گەشت", text: "بەرەو شوێنی گەشت بە کۆمەڵ دەڕۆین." },
-    { title: "سروشت و چالاکی", text: "کاتێک بۆ گەشت، وێنەگرتن و خۆشحاڵی." },
-    { title: "گەڕانەوە", text: "لە کۆتایی ڕۆژدا بە یادەوەرییەکی جوان دەگەڕێینەوە." }
+    { title: "کۆبوونەوە", text: "لە شوێنی دیاریکراو کۆدەبینەوە." }
   ],
   gallery: [],
   waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
-  waVerifyTemplate: `سڵاو بەڕێزم 🌿\nپیرۆزە! ناونووسینەکەت لەلایەن *KURDIA ADVENTURE* بە سەرکەوتوویی پشتڕاستکرایەوە. ✅\n\n🆔 *کۆدی داواکاری:* {id}\n\n📍 *شوێنی کۆبوونەوە لەسەر نەخشەی گۆگڵ:*\n{maps}\n\n⚠️ *تکایە ئەم خاڵانە لەبەرچاو بگرە:*\n١. پێڵاوی شاخەوانی و جلی گونجاو ئامادە بکە.\n٢. هێنانی ناسنامەی باری شارستانی یان کارتی نیشتمانی ناچارییە.\n٣. ڕۆژێک پێش گەشتەکە پەیوەندیت پێوە دەکرێت بۆ هەماهەنگی کۆتایی.\n\nزۆر بەخێربێن! 🏔️✨`,
-  waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت لەلایەن *KURDIA ADVENTURE* پەسەند نەکرا. ❌\n\n🆔 *کۆدی داواکاری:* {id}\n⚠️ *هۆکاری ڕەتکردنەوە:* {reason}.\n\nتکایە دەتوانیت لە ڕێگەی ماڵپەڕەوە بە پسوولەی دروست فۆڕمەکە پڕبکەیتەوە. 💬`
+  waVerifyTemplate: `سڵاو بەڕێزم 🌿\nپیرۆزە! ناونووسینەکەت پشتڕاستکرایەوە. ✅\n\n🆔 *کۆدی داواکاری:* {id}\n📍 *شوێن:* {maps}`,
+  waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت پەسەند نەکرا. ❌\n\n🆔 *کۆد:* {id}\n⚠️ *هۆکار:* {reason}`
 };
 
 function toast(msg){
@@ -673,10 +519,8 @@ function toast(msg){
 }
 
 function toggleSidebar(){
-  const s = document.getElementById("sidebar");
-  const b = document.getElementById("backdrop");
-  s.classList.toggle("open");
-  b.classList.toggle("active");
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("backdrop").classList.toggle("active");
 }
 
 function switchTab(tabId){
@@ -689,29 +533,19 @@ function switchTab(tabId){
   const titles = {
     design: "ڕەنگ و بەشی سەرەکی",
     trip: "بەرنامە، کات و کەشوهەوا",
+    booking: "Booking & OTP Switch",
     broadcast: "نامەی بیرخستنەوە (Broadcast)",
     reviews: "بیروڕا و فیدباکەکان",
-    sections: "بەڕێوەبردنی بەشەکان",
     services: "خزمەتگوزارییەکان",
     itinerary: "خشتەی کاتیی گەشت",
     gallery: "گەلەری وێنەکان",
     whatsapp: "شابلۆنی نامەکان & Maps",
     finance: "هەژماری دارایی و FIB",
     registrations: "بەشداربووان لە Sheets",
-    backup: "Backup & Restore",
-    dashboard:"Dashboard",
-    trips:"گەشتەکانی داهاتوو",
-    booking:"Booking & Capacity",
-    content:"About & Safety",
-    achievements:"دەستکەوتەکان",
-    seo:"SEO & Social",
-    settings:"Settings"
+    backup: "Backup & Restore"
   };
   document.getElementById("topbarTitle").textContent = titles[tabId] || "کۆنترۆڵی ماڵپەڕ";
-
-  if(window.innerWidth <= 850){
-    toggleSidebar();
-  }
+  if(window.innerWidth <= 850) toggleSidebar();
 }
 
 function compressImage(file, maxWidth = 900, quality = 0.72){
@@ -748,33 +582,15 @@ async function handleImageUpload(e, stateProp, previewId){
     prev.classList.add("active");
     autoSync();
     toast("✅ وێنەکە دانرا");
-  }catch(err){
-    toast("❌ کێشە لە وێنە");
-  }
+  }catch(err){ toast("❌ کێشە لە وێنە"); }
 }
 
-/* BROADCAST REMINDER (NEW LOGIC) */
 async function sendBroadcastReminder(){
   const msg = document.getElementById("broadcastMessage").value.trim();
   const rawPhones = document.getElementById("broadcastPhones").value.trim();
-
-  if(!msg){
-    toast("تکایە دەقی نامەی بیرخستنەوە بنووسە");
-    return;
-  }
-  if(!rawPhones){
-    toast("تکایە لیستی ژمارەکان بنووسە یان دابنێ");
-    return;
-  }
-
+  if(!msg || !rawPhones) return toast("تکایە دەقی نامە و ژمارەکان دیاری بکە");
   const phones = rawPhones.split(/[\n,،]+/).map(p => p.trim()).filter(Boolean);
-  if(!phones.length){
-    toast("هیچ ژمارەیەکی دروست نەدۆزرایەوە");
-    return;
-  }
-
-  toast(`⏳ نامەی بیرخستنەوە دەنێردرێت بۆ ${phones.length} بەشداربوو...`);
-
+  toast(`⏳ دەنێردرێت بۆ ${phones.length} کەس...`);
   try{
     const res = await fetch(`${WORKER_URL}/api/admin/send-broadcast`, {
       method:"POST",
@@ -782,249 +598,11 @@ async function sendBroadcastReminder(){
       body:JSON.stringify({ message: msg, phones })
     });
     const d = await res.json();
-    if(res.ok && d.ok){
-      toast(`✅ نامەی بیرخستنەوە بە سەرکەوتوویی بۆ ${d.sent} کەس لە WhatsApp نێردرا`);
-    }else{
-      toast("❌ کێشەیەک ڕوویدا: " + (d.error || ""));
-    }
-  }catch(e){
-    toast("کێشە لە پەیوەندی بە سێرڤەر");
-  }
+    if(res.ok && d.ok) toast(`✅ بە سەرکەوتوویی بۆ ${d.sent} کەس نێردرا`);
+    else toast("❌ کێشەیەک ڕوویدا: " + (d.error || ""));
+  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); }
 }
 
-/* REVIEWS */
-function addReviewItem(){
-  const name = document.getElementById("newReviewName").value.trim();
-  const city = document.getElementById("newReviewCity").value.trim();
-  const text = document.getElementById("newReviewText").value.trim();
-  if(!name || !text) return;
-  appState.reviews.push({ name, city, text });
-  document.getElementById("newReviewName").value = "";
-  document.getElementById("newReviewCity").value = "";
-  document.getElementById("newReviewText").value = "";
-  renderReviews();
-  autoSync();
-}
-
-function removeReviewItem(idx){
-  appState.reviews.splice(idx, 1);
-  renderReviews();
-  autoSync();
-}
-
-function renderReviews(){
-  const container = document.getElementById("reviewsList");
-  container.innerHTML = "";
-  (appState.reviews || []).forEach((r, idx) => {
-    const row = document.createElement("div");
-    row.className = "item-row";
-    row.innerHTML = `
-      <div>
-        <div style="font-size:13px;font-weight:800;">${r.name} (${r.city})</div>
-        <div style="font-size:11px;color:var(--muted);">${r.text}</div>
-      </div>
-      <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeReviewItem(${idx})">سڕینەوە</button>
-    `;
-    container.appendChild(row);
-  });
-}
-
-/* SERVICES */
-function addServiceItem(){
-  const input = document.getElementById("newServiceName");
-  const val = input.value.trim();
-  if(!val) return;
-  appState.services.push({ name: val, icon: "check" });
-  input.value = "";
-  renderServices();
-  autoSync();
-}
-
-function removeServiceItem(idx){
-  appState.services.splice(idx, 1);
-  renderServices();
-  autoSync();
-}
-
-function renderServices(){
-  const container = document.getElementById("servicesList");
-  container.innerHTML = "";
-  (appState.services || []).forEach((s, idx) => {
-    const name = typeof s === "string" ? s : s.name;
-    const row = document.createElement("div");
-    row.className = "item-row";
-    row.innerHTML = `
-      <span style="font-size:13px;font-weight:700;">${name}</span>
-      <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeServiceItem(${idx})">سڕینەوە</button>
-    `;
-    container.appendChild(row);
-  });
-}
-
-/* ITINERARY */
-function addItineraryItem(){
-  const t = document.getElementById("newItineraryTitle").value.trim();
-  const d = document.getElementById("newItineraryText").value.trim();
-  if(!t) return;
-  appState.itinerary.push({ title: t, text: d });
-  document.getElementById("newItineraryTitle").value = "";
-  document.getElementById("newItineraryText").value = "";
-  renderItinerary();
-  autoSync();
-}
-
-function removeItineraryItem(idx){
-  appState.itinerary.splice(idx, 1);
-  renderItinerary();
-  autoSync();
-}
-
-function renderItinerary(){
-  const container = document.getElementById("itineraryList");
-  container.innerHTML = "";
-  (appState.itinerary || []).forEach((it, idx) => {
-    const row = document.createElement("div");
-    row.className = "item-row";
-    row.innerHTML = `
-      <div>
-        <div style="font-size:13px;font-weight:800;">${it.title}</div>
-        <div style="font-size:11px;color:var(--muted);">${it.text}</div>
-      </div>
-      <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeItineraryItem(${idx})">سڕینەوە</button>
-    `;
-    container.appendChild(row);
-  });
-}
-
-/* SECTIONS */
-function renderSectionsList(){
-  const container = document.getElementById("sectionsList");
-  container.innerHTML = "";
-  (appState.sections || []).forEach((sec, idx) => {
-    const row = document.createElement("div");
-    row.className = "item-row";
-    row.innerHTML = `
-      <span style="font-size:13px;font-weight:800;">${sec.label || sec.type}</span>
-      <label class="flex items-center gap-2 cursor-pointer text-xs font-bold">
-        <input type="checkbox" ${sec.visible !== false ? "checked" : ""} onchange="toggleSectionVisible(${idx}, this.checked)" style="width:16px;height:16px;">
-        پیشاندانی بەش
-      </label>
-    `;
-    container.appendChild(row);
-  });
-}
-
-function toggleSectionVisible(idx, checked){
-  appState.sections[idx].visible = checked;
-  autoSync();
-}
-
-/* GALLERY */
-async function addGalleryPhoto(e){
-  const file = e.target.files?.[0];
-  if(!file) return;
-  toast("⏳ وێنەی گەلەری زیاد دەکرێت...");
-  try{
-    const compressed = await compressImage(file, 750, 0.70);
-    appState.gallery.push({ url: compressed, title: "KURDIA ADVENTURE" });
-    renderGallery();
-    autoSync();
-    toast("✅ زیادکرا");
-  }catch(err){
-    toast("❌ کێشە لە وێنە");
-  }
-}
-
-function removeGalleryPhoto(idx){
-  appState.gallery.splice(idx, 1);
-  renderGallery();
-  autoSync();
-}
-
-function renderGallery(){
-  const container = document.getElementById("galleryContainer");
-  container.innerHTML = "";
-  (appState.gallery || []).forEach((img, idx) => {
-    const url = typeof img === "string" ? img : img.url;
-    const el = document.createElement("div");
-    el.className = "gallery-thumb";
-    el.style.backgroundImage = `url('${url}')`;
-    el.innerHTML = `<button class="gallery-delete" onclick="removeGalleryPhoto(${idx})">✕</button>`;
-    container.appendChild(el);
-  });
-}
-
-
-/* KURDIA EXPANSION FUNCTIONS — intentionally no Telegram/WhatsApp endpoint changes */
-function addUpcomingTrip(){
-  const title=document.getElementById("newTripTitle").value.trim();
-  if(!title) return toast("ناوی گەشت بنووسە");
-  appState.upcomingTrips=appState.upcomingTrips||[];
-  appState.upcomingTrips.push({
-    title,
-    date:document.getElementById("newTripDate").value.trim(),
-    location:document.getElementById("newTripLocation").value.trim(),
-    price:document.getElementById("newTripPrice").value.trim(),
-    image:document.getElementById("newTripImage").value.trim()
-  });
-  ["newTripTitle","newTripDate","newTripLocation","newTripPrice","newTripImage"].forEach(id=>document.getElementById(id).value="");
-  renderUpcomingTrips(); autoSync(); toast("✅ گەشت زیادکرا");
-}
-function removeUpcomingTrip(i){appState.upcomingTrips.splice(i,1);renderUpcomingTrips();autoSync()}
-function renderUpcomingTrips(){
- const c=document.getElementById("upcomingTripsList"); if(!c)return;
- c.innerHTML=(appState.upcomingTrips||[]).map((t,i)=>`<div class="item-row"><div><b>${t.title}</b><div class="small-note">${t.date||""} — ${t.location||""} — ${t.price||""}</div></div><button class="btn btn-danger" onclick="removeUpcomingTrip(${i})">سڕینەوە</button></div>`).join("");
-}
-function saveBookingSettings(){
- appState.capacity=Math.max(1,Number(document.getElementById("capacityInput").value||40));
- appState.booked=Math.max(0,Number(document.getElementById("bookedInput").value||0));
- appState.coupon={code:document.getElementById("couponCode").value.trim(),percent:Number(document.getElementById("couponPercent").value||0),active:document.getElementById("couponActive").checked};
- autoSync(); renderDashboard(); toast("✅ ڕێکخستنی Booking پاشەکەوت کرا");
-}
-function saveContentSettings(){
- appState.aboutTitle=document.getElementById("aboutTitle").value.trim();
- appState.aboutText=document.getElementById("aboutText").value.trim();
- appState.safetyItems=document.getElementById("safetyItems").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
- appState.packingItems=document.getElementById("packingItems").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
- appState.stats={trips:document.getElementById("statTrips").value,people:document.getElementById("statPeople").value,places:document.getElementById("statPlaces").value,years:document.getElementById("statYears").value};
- autoSync(); toast("✅ ناوەڕۆک پاشەکەوت کرا");
-}
-function addAchievement(){
- const title=document.getElementById("achievementTitle").value.trim(), text=document.getElementById("achievementText").value.trim();
- if(!title)return;
- appState.achievements=appState.achievements||[]; appState.achievements.push({title,text});
- document.getElementById("achievementTitle").value="";document.getElementById("achievementText").value="";
- renderAchievements();autoSync();
-}
-function removeAchievement(i){appState.achievements.splice(i,1);renderAchievements();autoSync()}
-function renderAchievements(){
- const c=document.getElementById("achievementsList");if(!c)return;
- c.innerHTML=(appState.achievements||[]).map((x,i)=>`<div class="item-row"><div><b>${x.title}</b><div class="small-note">${x.text||""}</div></div><button class="btn btn-danger" onclick="removeAchievement(${i})">سڕینەوە</button></div>`).join("");
-}
-function saveSeoSocial(){
- appState.seoDescription=document.getElementById("seoDescription").value.trim();
- appState.mapEmbedUrl=document.getElementById("mapEmbedUrl").value.trim();
- appState.social={instagram:document.getElementById("socialInstagram").value.trim(),facebook:document.getElementById("socialFacebook").value.trim(),tiktok:document.getElementById("socialTiktok").value.trim(),snapchat:document.getElementById("socialSnapchat").value.trim(),whatsapp:document.getElementById("socialWhatsapp").value.trim()};
- autoSync();toast("✅ SEO و Social پاشەکەوت کران");
-}
-function saveGeneralSettings(){
- appState.brandName=document.getElementById("brandName").value.trim();
- appState.contactPhone=document.getElementById("contactPhone").value.trim();
- appState.contactEmail=document.getElementById("contactEmail").value.trim();
- appState.telegramLink=document.getElementById("telegramLink").value.trim();
- appState.footerText=document.getElementById("footerText").value.trim();
- autoSync();toast("✅ Settings پاشەکەوت کران");
-}
-function renderDashboard(){
- const q=id=>document.getElementById(id);
- if(!q("kpiTrips"))return;
- q("kpiTrips").textContent=(appState.upcomingTrips||[]).length;
- q("kpiCapacity").textContent=`${appState.booked||0}/${appState.capacity||40}`;
- q("kpiReviews").textContent=(appState.reviews||[]).length;
- q("kpiGallery").textContent=(appState.gallery||[]).length;
-}
-
-/* SYNC & LOAD */
 function autoSync(){
   appState.gradColor1 = document.getElementById("gradColor1").value;
   appState.gradColor2 = document.getElementById("gradColor2").value;
@@ -1045,25 +623,15 @@ function autoSync(){
   appState.weatherTemp = document.getElementById("weatherTemp").value;
   appState.weatherCondition = document.getElementById("weatherCondition").value;
 
+  // سوویچی OTP
+  appState.otpRequired = document.getElementById("otpRequiredSwitch").checked;
+  appState.capacity = Number(document.getElementById("capacityInput").value || 40);
+  appState.booked = Number(document.getElementById("bookedInput").value || 0);
+
   appState.fibAccount = document.getElementById("fibAccount").value;
   appState.waMapsUrl = document.getElementById("waMapsUrl").value;
   appState.waVerifyTemplate = document.getElementById("waVerifyTemplate").value;
   appState.waRejectTemplate = document.getElementById("waRejectTemplate").value;
-
-  // Expansion state — does not touch existing Telegram/WhatsApp API logic.
-  const v=id=>document.getElementById(id);
-  if(v("seoDescription")) appState.seoDescription=v("seoDescription").value;
-  if(v("mapEmbedUrl")) appState.mapEmbedUrl=v("mapEmbedUrl").value;
-  if(v("aboutTitle")) appState.aboutTitle=v("aboutTitle").value;
-  if(v("aboutText")) appState.aboutText=v("aboutText").value;
-  if(v("safetyItems")) appState.safetyItems=v("safetyItems").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  if(v("packingItems")) appState.packingItems=v("packingItems").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  if(v("capacityInput")) appState.capacity=Number(v("capacityInput").value||appState.capacity||40);
-  if(v("bookedInput")) appState.booked=Number(v("bookedInput").value||appState.booked||0);
-  if(v("telegramLink")) appState.telegramLink=v("telegramLink").value;
-  if(v("contactPhone")) appState.contactPhone=v("contactPhone").value;
-  if(v("contactEmail")) appState.contactEmail=v("contactEmail").value;
-  if(v("footerText")) appState.footerText=v("footerText").value;
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
@@ -1094,36 +662,14 @@ function loadState(){
   document.getElementById("weatherTemp").value = appState.weatherTemp || "١٨°C";
   document.getElementById("weatherCondition").value = appState.weatherCondition || "ساماڵ و خۆرەتاو ☀️";
 
+  document.getElementById("otpRequiredSwitch").checked = appState.otpRequired !== false;
+  document.getElementById("capacityInput").value = appState.capacity || 40;
+  document.getElementById("bookedInput").value = appState.booked || 0;
+
   document.getElementById("fibAccount").value = appState.fibAccount || "07503130360";
   document.getElementById("waMapsUrl").value = appState.waMapsUrl || "";
   document.getElementById("waVerifyTemplate").value = appState.waVerifyTemplate || "";
   document.getElementById("waRejectTemplate").value = appState.waRejectTemplate || "";
-
-  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val??""};
-  set("seoDescription",appState.seoDescription||"");
-  set("mapEmbedUrl",appState.mapEmbedUrl||"");
-  set("aboutTitle",appState.aboutTitle||"");
-  set("aboutText",appState.aboutText||"");
-  set("safetyItems",(appState.safetyItems||[]).join("\n"));
-  set("packingItems",(appState.packingItems||[]).join("\n"));
-  set("statTrips",appState.stats?.trips||"");
-  set("statPeople",appState.stats?.people||"");
-  set("statPlaces",appState.stats?.places||"");
-  set("statYears",appState.stats?.years||"");
-  set("capacityInput",appState.capacity||40);
-  set("bookedInput",appState.booked||0);
-  set("couponCode",appState.coupon?.code||"");
-  set("couponPercent",appState.coupon?.percent||0);
-  const ca=document.getElementById("couponActive"); if(ca) ca.checked=!!appState.coupon?.active;
-  set("socialInstagram",appState.social?.instagram||"");
-  set("socialFacebook",appState.social?.facebook||"");
-  set("socialTiktok",appState.social?.tiktok||"");
-  set("socialSnapchat",appState.social?.snapchat||"");
-  set("socialWhatsapp",appState.social?.whatsapp||"");
-  set("telegramLink",appState.telegramLink||"");
-  set("contactPhone",appState.contactPhone||"07503130360");
-  set("contactEmail",appState.contactEmail||"kurdiaadventure@gmail.com");
-  set("footerText",appState.footerText||"گەشت، سروشت، هاوڕێتی و دروستکردنی یادەوەرییە جوانەکان.");
 
   if(appState.heroImageUrl){
     const h = document.getElementById("heroDropPreview");
@@ -1136,93 +682,93 @@ function loadState(){
     t.classList.add("active");
   }
 
-  renderSectionsList();
   renderServices();
   renderItinerary();
   renderReviews();
   renderGallery();
-  renderUpcomingTrips();
-  renderAchievements();
-  renderDashboard();
-  loadCloudWASettings();
 }
 
-async function loadCloudWASettings(){
-  try{
-    const res = await fetch(`${WORKER_URL}/api/admin/wa-settings`);
-    const data = await res.json();
-    if(res.ok && data.settings){
-      if(data.settings.mapsUrl) document.getElementById("waMapsUrl").value = data.settings.mapsUrl;
-      if(data.settings.verifyTemplate) document.getElementById("waVerifyTemplate").value = data.settings.verifyTemplate;
-      if(data.settings.rejectTemplate) document.getElementById("waRejectTemplate").value = data.settings.rejectTemplate;
-      autoSync();
-    }
-  }catch(e){}
+function renderServices(){
+  const c = document.getElementById("servicesList"); if(!c) return;
+  c.innerHTML = (appState.services||[]).map((s,i)=>`<div class="item-row"><span>${s.name||s}</span><button class="btn btn-danger" onclick="appState.services.splice(${i},1);renderServices();autoSync();">سڕینەوە</button></div>`).join("");
+}
+function addServiceItem(){
+  const val = document.getElementById("newServiceName").value.trim();
+  if(!val) return;
+  appState.services.push({name:val, icon:"check"});
+  document.getElementById("newServiceName").value="";
+  renderServices(); autoSync();
+}
+
+function renderItinerary(){
+  const c = document.getElementById("itineraryList"); if(!c) return;
+  c.innerHTML = (appState.itinerary||[]).map((it,i)=>`<div class="item-row"><div><b>${it.title}</b><div class="small-note">${it.text}</div></div><button class="btn btn-danger" onclick="appState.itinerary.splice(${i},1);renderItinerary();autoSync();">سڕینەوە</button></div>`).join("");
+}
+function addItineraryItem(){
+  const t = document.getElementById("newItineraryTitle").value.trim(), d = document.getElementById("newItineraryText").value.trim();
+  if(!t) return;
+  appState.itinerary.push({title:t, text:d});
+  document.getElementById("newItineraryTitle").value=""; document.getElementById("newItineraryText").value="";
+  renderItinerary(); autoSync();
+}
+
+function renderReviews(){
+  const c = document.getElementById("reviewsList"); if(!c) return;
+  c.innerHTML = (appState.reviews||[]).map((r,i)=>`<div class="item-row"><div><b>${r.name} (${r.city})</b><div class="small-note">${r.text}</div></div><button class="btn btn-danger" onclick="appState.reviews.splice(${i},1);renderReviews();autoSync();">سڕینەوە</button></div>`).join("");
+}
+function addReviewItem(){
+  const n = document.getElementById("newReviewName").value.trim(), c = document.getElementById("newReviewCity").value.trim(), t = document.getElementById("newReviewText").value.trim();
+  if(!n || !t) return;
+  appState.reviews.push({name:n, city:c, text:t});
+  document.getElementById("newReviewName").value=""; document.getElementById("newReviewCity").value=""; document.getElementById("newReviewText").value="";
+  renderReviews(); autoSync();
+}
+
+function renderGallery(){
+  const c = document.getElementById("galleryContainer"); if(!c) return;
+  c.innerHTML = (appState.gallery||[]).map((img,i)=>`<div class="gallery-thumb" style="background-image:url('${img.url||img}')"><button class="gallery-delete" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync();">✕</button></div>`).join("");
+}
+async function addGalleryPhoto(e){
+  const file = e.target.files?.[0]; if(!file) return;
+  toast("⏳ وێنە زیاد دەکرێت...");
+  const compressed = await compressImage(file, 750, 0.70);
+  appState.gallery.push({url:compressed}); renderGallery(); autoSync(); toast("✅ زیادکرا");
 }
 
 async function saveWhatsAppToCloud(){
-  autoSync();
-  toast("⏳ لە سێرڤەر سەیڤ دەکرێت...");
+  autoSync(); toast("⏳ لە سێرڤەر سەیڤ دەکرێت...");
   try{
     const res = await fetch(`${WORKER_URL}/api/admin/wa-settings`, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        mapsUrl: appState.waMapsUrl,
-        verifyTemplate: appState.waVerifyTemplate,
-        rejectTemplate: appState.waRejectTemplate
-      })
+      body:JSON.stringify({ mapsUrl:appState.waMapsUrl, verifyTemplate:appState.waVerifyTemplate, rejectTemplate:appState.waRejectTemplate })
     });
-    const d = await res.json();
-    if(res.ok && d.ok){
-      toast("✅ ڕێکخستنی WhatsApp لە Cloud سەیڤ کرا");
-    }else{
-      toast("❌ کێشە لە پاشەکەوتکردن");
-    }
-  }catch(e){
-    toast("کێشە لە پەیوەندی بە سێرڤەر");
-  }
+    if(res.ok) toast("✅ ڕێکخستنی WhatsApp لە Cloud سەیڤ کرا");
+    else toast("❌ کێشە لە سەیڤکردن");
+  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); }
 }
 
 function publishLive(){
-  autoSync();
-  saveWhatsAppToCloud();
-  toast("🚀 تەواوی گۆڕانکارییەکان بە سەرکەوتوویی بڵاوکرانەوە!");
+  autoSync(); saveWhatsAppToCloud();
+  toast("🚀 تەواوی گۆڕانکارییەکان بڵاوکرانەوە!");
 }
-
-function openLiveSite(){
-  window.open("index.html", "_blank");
-}
-
-function openSheets(){
-  window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank");
-}
-
+function openLiveSite(){ window.open("index.html", "_blank"); }
+function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
 function exportBackup(){
   autoSync();
-  const data = JSON.stringify(appState, null, 2);
-  const blob = new Blob([data], { type: "application/json" });
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `kurdia-full-backup-${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  toast("📥 فایلی یەدەگ دابەزییە ناو مۆبایلەکەت");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(appState, null, 2)], {type:"application/json"}));
+  a.download = `kurdia-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
 }
-
 function importBackup(e){
-  const file = e.target.files?.[0];
-  if(!file) return;
+  const file = e.target.files?.[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     try{
       appState = JSON.parse(ev.target.result);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-      loadState();
-      autoSync();
-      toast("✅ گەڕێندرایەوە");
-    }catch(err){
-      toast("❌ فایلی نادروست");
-    }
+      loadState(); autoSync(); toast("✅ هەموو شت گەڕێنرایەوە");
+    }catch(err){ toast("❌ فایلی نادروست"); }
   };
   reader.readAsText(file);
 }
