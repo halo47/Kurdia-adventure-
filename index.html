@@ -434,7 +434,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
       <div id="viewerText" class="text-xs text-gray-200">دەقی ستۆری...</div>
       <div class="flex justify-between items-center pt-2 border-t border-white/10">
         <button onclick="likeCurrentStory()" class="flex items-center gap-1.5 text-xs font-bold text-rose-400"><i data-lucide="heart" class="w-4 h-4"></i> <span id="viewerLikes">0</span></button>
-        <button onclick="shareStoryWhatsApp()" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400"><i data-lucide="share-2" class="w-4 h-4"></i> پشکەشکردن</button>
+        <button onclick="shareStoryWhatsApp()" class="flex items-center gap-1.5 text-xs font-bold text-emerald-400"><i data-lucide="copy" class="w-4 h-4"></i> کۆپیکردنی لینک</button>
       </div>
     </div>
   </div>
@@ -852,10 +852,34 @@ async function likeCurrentStory(){
 }
 
 function shareStoryWhatsApp(){
-  const st = activeStoriesList[currentStoryIdx];
-  if(!st) return;
-  const text = encodeURIComponent(`چاو لەم ستۆرییە بکە لە KURDIA ADVENTURE: "${st.text}" - ${st.mediaUrl}`);
-  window.open(`https://wa.me/?text=${text}`, '_blank');
+  const siteUrl = window.location.origin + window.location.pathname + "#stories";
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(siteUrl).then(() => {
+      toast("🔗 لینکی ستۆری کۆپی کرا!");
+    }).catch(() => {
+      fallbackCopyText(siteUrl);
+    });
+  } else {
+    fallbackCopyText(siteUrl);
+  }
+}
+
+function fallbackCopyText(text) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.left = "-999999px";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    toast("🔗 لینکی ستۆری کۆپی کرا!");
+  } catch (err) {
+    toast("❌ نەتوانرا کۆپی بکرێت");
+  }
+  document.body.removeChild(textArea);
 }
 
 async function submitStory(e){
