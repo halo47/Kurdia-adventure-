@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>KURDIA ADVENTURE — دەستەی کۆنترۆڵ</title>
+<title>KURDIA ADVENTURE — دەستەی کۆنترۆڵی پێشکەوتوو</title>
 
 <!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
@@ -18,10 +19,11 @@
   --bg:#070a10;
   --surface:#0e141e;
   --surface2:#131c29;
+  --surface3:#182232;
   --border:rgba(255,255,255,.08);
   --text:#ffffff;
   --muted:#94a3b8;
-  --sidebar-w:270px;
+  --sidebar-w:280px;
 }
 *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 html, body{
@@ -36,25 +38,25 @@ html, body{
 .sidebar{
   width:var(--sidebar-w); background:#0a0f17; border-left:1px solid var(--border);
   display:flex; flex-direction:column; flex-shrink:0; z-index:100;
-  transition:transform .3s ease; height:100%;
+  transition:transform .3s cubic-bezier(0.4, 0, 0.2, 1); height:100%;
 }
 .sidebar-header{
-  padding:18px; border-bottom:1px solid var(--border);
+  padding:18px 20px; border-bottom:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between;
 }
 .brand{ display:flex; align-items:center; gap:10px; }
 .brand-icon{
-  width:36px; height:36px; border-radius:10px;
+  width:38px; height:38px; border-radius:12px;
   background:linear-gradient(135deg, var(--primary), var(--primary2));
   display:flex; align-items:center; justify-content:center; color:#fff;
 }
 .brand-text h2{ font-size:15px; font-weight:900; line-height:1; }
-.brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.15em; font-weight:700; }
+.brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.18em; font-weight:800; }
 
-.nav-list{ list-style:none; padding:12px 8px; display:flex; flex-direction:column; gap:5px; flex:1; overflow-y:auto; }
+.nav-list{ list-style:none; padding:12px 10px; display:flex; flex-direction:column; gap:4px; flex:1; overflow-y:auto; }
 .nav-btn{
   width:100%; border:0; background:transparent; color:#cbd5e1;
-  text-align:right; padding:12px 14px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:700;
+  text-align:right; padding:11px 14px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:700;
   display:flex; align-items:center; gap:12px; font-family:inherit; transition:.2s;
 }
 .nav-btn:hover{ background:rgba(255,255,255,.04); color:#fff; }
@@ -62,11 +64,11 @@ html, body{
   background:linear-gradient(135deg, rgba(157,28,50,.35), rgba(201,43,73,.2));
   color:#fff; border:1px solid rgba(201,43,73,.35);
 }
-.sidebar-footer{ padding:12px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+.sidebar-footer{ padding:14px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
 
 /* BACKDROP FOR MOBILE */
 .sidebar-backdrop{
-  position:fixed; inset:0; background:rgba(0,0,0,.65); backdrop-filter:blur(4px);
+  position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(5px);
   z-index:90; opacity:0; pointer-events:none; transition:.25s ease;
 }
 .sidebar-backdrop.active{ opacity:1; pointer-events:auto; }
@@ -74,8 +76,8 @@ html, body{
 /* WORKSPACE */
 .workspace{ flex:1; display:flex; flex-direction:column; width:100%; height:100%; overflow:hidden; }
 .topbar{
-  height:60px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.95);
-  display:flex; align-items:center; justify-content:space-between; padding:0 16px; flex-shrink:0;
+  height:64px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.96);
+  display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0;
 }
 .topbar-right{ display:flex; align-items:center; gap:12px; }
 .menu-toggle{
@@ -84,76 +86,77 @@ html, body{
   cursor:pointer;
 }
 
-.content-body{ flex:1; overflow-y:auto; padding:16px; -webkit-overflow-scrolling:touch; }
+.content-body{ flex:1; overflow-y:auto; padding:20px; -webkit-overflow-scrolling:touch; }
 
-/* CARDS & FIELDS */
-.card{ background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:18px; margin-bottom:16px; }
-.card-title{ font-size:14px; font-weight:800; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
-.field{ margin-bottom:12px; }
+/* CARDS & CONTROLS */
+.card{ background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:18px; }
+.card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.card-title{ font-size:15px; font-weight:800; display:flex; align-items:center; gap:8px; }
+.field{ margin-bottom:14px; }
 .field label{ display:block; font-size:11px; font-weight:800; margin-bottom:6px; color:#cbd5e1; }
 input, textarea, select{
   width:100%; border:1px solid var(--border); border-radius:12px;
-  background:rgba(255,255,255,.04); color:#fff; padding:11px 12px; outline:none; font:inherit; font-size:13px;
+  background:rgba(255,255,255,.04); color:#fff; padding:12px 14px; outline:none; font:inherit; font-size:13px;
+  transition:.2s;
 }
-input:focus, textarea:focus, select:focus{ border-color:var(--primary2); }
+input:focus, textarea:focus, select:focus{ border-color:var(--primary2); box-shadow:0 0 0 3px rgba(157,28,50,.15); }
 textarea{ min-height:85px; resize:vertical; }
 
-.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
 
 .btn{
-  border:0; border-radius:12px; padding:11px 16px; color:#fff;
+  border:0; border-radius:12px; padding:11px 18px; color:#fff;
   font-weight:800; cursor:pointer; background:var(--primary); transition:.2s; font-family:inherit;
   display:inline-flex; align-items:center; gap:8px; font-size:13px; justify-content:center; text-align:center;
 }
 .btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
-.btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); }
+.btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow:0 8px 24px rgba(157,28,50,.25); }
 .btn-success{ background:linear-gradient(135deg, #10b981, #059669); }
 .btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--border); }
 .btn-danger{ background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); }
 
 .uploader-dropzone{
-  border:2px dashed rgba(255,255,255,.12); border-radius:14px; padding:18px; text-align:center;
-  cursor:pointer; background:rgba(255,255,255,.02); position:relative; overflow:hidden;
+  border:2px dashed rgba(255,255,255,.14); border-radius:16px; padding:20px; text-align:center;
+  cursor:pointer; background:rgba(255,255,255,.02); position:relative; overflow:hidden; transition:.2s;
 }
+.uploader-dropzone:hover{ border-color:var(--primary2); background:rgba(157,28,50,.04); }
 .dropzone-preview{
-  width:100%; height:140px; border-radius:10px; background-size:cover; background-position:center;
-  display:none; margin-top:8px; border:1px solid var(--border);
+  width:100%; height:150px; border-radius:12px; background-size:cover; background-position:center;
+  display:none; margin-top:10px; border:1px solid var(--border);
 }
 .dropzone-preview.active{ display:block; }
 
 .item-row{
-  display:flex; align-items:center; justify-content:space-between; padding:10px 12px;
-  background:var(--surface2); border:1px solid var(--border); border-radius:10px; margin-bottom:8px;
+  display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
+  background:var(--surface2); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
 }
-.gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(80px, 1fr)); gap:8px; margin-top:10px; }
-.gallery-thumb{ height:80px; border-radius:10px; background-size:cover; background-position:center; position:relative; }
+.gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:10px; margin-top:10px; }
+.gallery-thumb{ height:90px; border-radius:12px; background-size:cover; background-position:center; position:relative; overflow:hidden; border:1px solid var(--border); }
 .gallery-delete{
   position:absolute; top:4px; left:4px; width:22px; height:22px; border-radius:6px;
-  background:rgba(0,0,0,.7); color:#ef4444; border:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.75); color:#ef4444; border:0; display:flex; align-items:center; justify-content:center;
 }
 
 .page-tab{ display:none; }
-.page-tab.active{ display:block; }
+.page-tab.active{ display:block; animation:fadeIn .2s ease; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:translateY(0); } }
 
 /* TOAST */
 .toast{
-  position:fixed; left:50%; bottom:20px; transform:translateX(-50%) translateY(70px);
-  padding:12px 18px; border-radius:12px; background:#111827; border:1px solid var(--border);
-  box-shadow:0 15px 40px rgba(0,0,0,.7); opacity:0; transition:.3s; z-index:99999;
+  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
+  padding:14px 22px; border-radius:14px; background:#111827; border:1px solid var(--border);
+  box-shadow:0 20px 50px rgba(0,0,0,.8); opacity:0; transition:.3s; z-index:99999;
   font-weight:800; font-size:12px; white-space:nowrap;
 }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
 /* RESPONSIVE */
 @media(max-width:850px){
-  .sidebar{
-    position:fixed; top:0; right:0; bottom:0;
-    transform:translateX(100%);
-    box-shadow:-10px 0 30px rgba(0,0,0,.7);
-  }
+  .sidebar{ position:fixed; top:0; right:0; bottom:0; transform:translateX(100%); box-shadow:-12px 0 35px rgba(0,0,0,.8); }
   .sidebar.open{ transform:translateX(0); }
   .menu-toggle{ display:flex; }
-  .grid-2{ grid-template-columns:1fr; }
+  .grid-2, .grid-3{ grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -178,18 +181,26 @@ textarea{ min-height:85px; resize:vertical; }
     </div>
 
     <ul class="nav-list">
-      <li><button class="nav-btn active" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و بەشی سەرەکی</button></li>
+      <li><button class="nav-btn active" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و هەیکەلی سەرەکی</button></li>
       <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامە و زانیاری گەشت</button></li>
+      <li><button class="nav-btn" onclick="switchTab('sections')"><i data-lucide="layers"></i> بەڕێوەبردنی بەشەکان (Sections)</button></li>
       <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</button></li>
+      <li><button class="nav-btn" onclick="switchTab('itinerary')"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت (Itinerary)</button></li>
+      <li><button class="nav-btn" onclick="switchTab('highlights')"><i data-lucide="sparkles"></i> خاڵە گرنگەکان (Highlights)</button></li>
+      <li><button class="nav-btn" onclick="switchTab('stats')"><i data-lucide="bar-chart-2"></i> ژمارە و ئامارەکان (Stats)</button></li>
+      <li><button class="nav-btn" onclick="switchTab('steps')"><i data-lucide="list-ordered"></i> هەنگاوەکانی بەشداری (Steps)</button></li>
       <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="image"></i> گەلەری وێنەکان</button></li>
+      <li><button class="nav-btn" onclick="switchTab('faq')"><i data-lucide="help-circle"></i> پرسیارە باوەکان (FAQ)</button></li>
       <li><button class="nav-btn" onclick="switchTab('whatsapp')"><i data-lucide="message-square"></i> پەیامەکانی WhatsApp & Maps</button></li>
+      <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="credit-card"></i> هەژماری دارایی و FIB</button></li>
+      <li><button class="nav-btn" onclick="switchTab('api')"><i data-lucide="cpu"></i> کلیلەکانی Gemini & Telegram</button></li>
       <li><button class="nav-btn" onclick="switchTab('registrations')"><i data-lucide="users"></i> بەشداربووان لە Sheets</button></li>
       <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
     </ul>
 
     <div class="sidebar-footer">
       <button class="btn btn-primary" onclick="publishLive()"><i data-lucide="send"></i> بڵاوکردنەوەی فەرمی (Publish)</button>
-      <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> وێبسایت بکەرەوە</button>
+      <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> ماڵپەڕ بکەرەوە</button>
     </div>
   </aside>
 
@@ -198,9 +209,9 @@ textarea{ min-height:85px; resize:vertical; }
     <header class="topbar">
       <div class="topbar-right">
         <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
-        <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">ڕەنگ و بەشی سەرەکی</h1>
+        <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">ڕەنگ و هەیکەلی سەرەکی</h1>
       </div>
-      <button class="btn btn-success" style="padding:7px 12px;font-size:12px;" onclick="publishLive()">
+      <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="publishLive()">
         <i data-lucide="save"></i> Publish
       </button>
     </header>
@@ -213,21 +224,31 @@ textarea{ min-height:85px; resize:vertical; }
           <div class="card-title"><i data-lucide="pipette"></i> ڕەنگەکانی ماڵپەڕ (Brand Colors)</div>
           <div class="grid-2">
             <div class="field">
-              <label>ڕەنگی سەرەکی</label>
-              <input type="color" id="gradColor1" onchange="autoSync()" style="height:42px;padding:4px;cursor:pointer;">
+              <label>ڕەنگی سەرەکی براند (Primary Accent)</label>
+              <input type="color" id="gradColor1" onchange="autoSync()" style="height:44px;padding:4px;cursor:pointer;">
             </div>
             <div class="field">
-              <label>ڕەنگی دووەم</label>
-              <input type="color" id="gradColor2" onchange="autoSync()" style="height:42px;padding:4px;cursor:pointer;">
+              <label>ڕەنگی دووەم (Gradient Accent)</label>
+              <input type="color" id="gradColor2" onchange="autoSync()" style="height:44px;padding:4px;cursor:pointer;">
             </div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-title"><i data-lucide="layout"></i> بەشی سەرەکی (Hero Section)</div>
+          <div class="grid-2">
+            <div class="field">
+              <label>ناونیشانی پەڕە (SEO Title)</label>
+              <input id="seoTitle" oninput="autoSync()">
+            </div>
+            <div class="field">
+              <label>باجی سەرەوە (Badge Text)</label>
+              <input id="heroBadge" oninput="autoSync()">
+            </div>
+          </div>
           <div class="field">
-            <label>باجی سەرەوە (Badge Text)</label>
-            <input id="heroBadge" oninput="autoSync()">
+            <label>پێناسەی SEO (Meta Description)</label>
+            <input id="seoDescription" oninput="autoSync()">
           </div>
           <div class="field">
             <label>ناونیشانی گەورەی سەرەکی</label>
@@ -240,8 +261,8 @@ textarea{ min-height:85px; resize:vertical; }
           <div class="field">
             <label>وێنەی کاڤەری سەرەکی لە مۆبایل</label>
             <div class="uploader-dropzone" onclick="document.getElementById('heroFileInput').click()">
-              <i data-lucide="upload-cloud" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:11px;color:var(--muted);margin-top:4px;">پەنجە بنێ بۆ هەڵبژاردنی وێنە</p>
+              <i data-lucide="upload-cloud" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
+              <p style="font-size:12px;color:var(--muted);margin-top:5px;">پەنجە بنێ بۆ هەڵبژاردنی وێنە لە مۆبایل</p>
               <input type="file" id="heroFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'heroImageUrl', 'heroDropPreview')">
               <div id="heroDropPreview" class="dropzone-preview"></div>
             </div>
@@ -252,24 +273,30 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- 2. TRIP TAB -->
       <section class="page-tab" id="tab-trip">
         <div class="card">
-          <div class="card-title"><i data-lucide="compass"></i> زانیاری و بەرنامەی گەشت</div>
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="compass"></i> زانیاری و بەرنامەی گەشت</div>
+            <label class="flex items-center gap-2 cursor-pointer text-xs font-bold">
+              <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:18px;height:18px;">
+              دۆخی ناونووسین کراوەیە
+            </label>
+          </div>
           <div class="field"><label>ناوی گەشت</label><input id="tripTitle" oninput="autoSync()"></div>
           <div class="grid-2">
             <div class="field"><label>نرخی بەشداری</label><input id="tripPrice" oninput="autoSync()"></div>
-            <div class="field"><label>شوێن</label><input id="tripLocation" oninput="autoSync()"></div>
-            <div class="field"><label>کات و بەروار</label><input id="tripTime" oninput="autoSync()"></div>
+            <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation" oninput="autoSync()"></div>
+            <div class="field"><label>کات و بەرواری بەڕێکەوتن</label><input id="tripTime" oninput="autoSync()"></div>
             <div class="field"><label>ماوەی گەشت</label><input id="tripDuration" oninput="autoSync()"></div>
-            <div class="field"><label>ئاستی گەشت</label><input id="tripDifficulty" oninput="autoSync()"></div>
+            <div class="field"><label>ئاستی گەشت (Difficulty)</label><input id="tripDifficulty" oninput="autoSync()"></div>
           </div>
           <div class="field">
-            <label>تەواوی وردەکاری و خشتەی گەشت</label>
-            <textarea id="tripDesc" oninput="autoSync()"></textarea>
+            <label>تەواوی وردەکاری و بەرنامەی گەشت</label>
+            <textarea id="tripDesc" style="min-height:110px;" oninput="autoSync()"></textarea>
           </div>
           <div class="field">
             <label>وێنەی تایبەتی گەشتەکە</label>
             <div class="uploader-dropzone" onclick="document.getElementById('tripFileInput').click()">
-              <i data-lucide="image-plus" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:11px;color:var(--muted);margin-top:4px;">وێنەی گەشتەکە دیاری بکە</p>
+              <i data-lucide="image-plus" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
+              <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی گەشتەکە دیاری بکە</p>
               <input type="file" id="tripFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'tripImageUrl', 'tripDropPreview')">
               <div id="tripDropPreview" class="dropzone-preview"></div>
             </div>
@@ -277,14 +304,23 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 3. SERVICES TAB -->
+      <!-- 3. SECTIONS MANAGER TAB -->
+      <section class="page-tab" id="tab-sections">
+        <div class="card">
+          <div class="card-title"><i data-lucide="layers"></i> بەڕێوەبردنی دەرکەوتنی بەشەکانی وێبسایت</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">دەتوانیت هەر بەشێک کە حەزت لێیەتی دەرپەڕێنیت یان لە ناو وێبسایتەکە بیشاریتەوە:</p>
+          <div id="sectionsList"></div>
+        </div>
+      </section>
+
+      <!-- 4. SERVICES TAB -->
       <section class="page-tab" id="tab-services">
         <div class="card">
-          <div class="card-title"><i data-lucide="sparkles"></i> خزمەتگوزارییەکان</div>
+          <div class="card-title"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</div>
           <div class="field">
-            <label>خزمەتگوزاری نوێ</label>
+            <label>زیادکردنی خزمەتگوزاری نوێ</label>
             <div style="display:flex;gap:8px;">
-              <input id="newServiceName" placeholder="وەک: چای سەر خەڵووز">
+              <input id="newServiceName" placeholder="وەک: پاسی مۆدێرن، چای سەر خەڵووز...">
               <button class="btn btn-primary" onclick="addServiceItem()"><i data-lucide="plus"></i></button>
             </div>
           </div>
@@ -292,58 +328,151 @@ textarea{ min-height:85px; resize:vertical; }
         </div>
       </section>
 
-      <!-- 4. GALLERY TAB -->
+      <!-- 5. ITINERARY TAB -->
+      <section class="page-tab" id="tab-itinerary">
+        <div class="card">
+          <div class="card-title"><i data-lucide="calendar"></i> خشتەی کاتی و هەنگاوەکانی گەشت (Itinerary)</div>
+          <div class="grid-2">
+            <div class="field"><label>ناونیشانی هەنگاو</label><input id="newItineraryTitle" placeholder="وەک: کۆبوونەوە و بەڕێکەوتن"></div>
+            <div class="field"><label>ڕوونکردنەوەی کورت</label><input id="newItineraryText" placeholder="وەک: کاتژمێر ٥ی بەیانی لە بەردەم ماجیدی مۆڵ"></div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-bottom:14px;" onclick="addItineraryItem()"><i data-lucide="plus"></i> زیادکردنی هەنگاو بۆ بەرنامە</button>
+          <div id="itineraryList"></div>
+        </div>
+      </section>
+
+      <!-- 6. HIGHLIGHTS TAB -->
+      <section class="page-tab" id="tab-highlights">
+        <div class="card">
+          <div class="card-title"><i data-lucide="sparkles"></i> بۆچی لەگەڵ KURDIA؟ (Highlights)</div>
+          <div class="grid-2">
+            <div class="field"><label>ناونیشانی تایبەتمەندی</label><input id="newHighlightTitle" placeholder="وەک: گەشتێکی پارێزراو"></div>
+            <div class="field"><label>ڕوونکردنەوە</label><input id="newHighlightText" placeholder="وەک: بە یاوەری تیمی فریاگوزاری و شارەزا"></div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-bottom:14px;" onclick="addHighlightItem()"><i data-lucide="plus"></i> زیادکردن بۆ خاڵە گرنگەکان</button>
+          <div id="highlightsList"></div>
+        </div>
+      </section>
+
+      <!-- 7. STATS TAB -->
+      <section class="page-tab" id="tab-stats">
+        <div class="card">
+          <div class="card-title"><i data-lucide="bar-chart-2"></i> ژمارە و ئامارەکان (Stats)</div>
+          <div class="grid-2">
+            <div class="field"><label>ژمارە یان دەق</label><input id="newStatNumber" placeholder="وەک: 100% یان +50"></div>
+            <div class="field"><label>ناوی ئامارەکە</label><input id="newStatLabel" placeholder="وەک: ڕەزامەندی شاخەوانان"></div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-bottom:14px;" onclick="addStatItem()"><i data-lucide="plus"></i> زیادکردنی ئامار</button>
+          <div id="statsList"></div>
+        </div>
+      </section>
+
+      <!-- 8. STEPS TAB -->
+      <section class="page-tab" id="tab-steps">
+        <div class="card">
+          <div class="card-title"><i data-lucide="list-ordered"></i> چۆن بەشداری بکەیت؟ (٤ هەنگاو)</div>
+          <div class="field"><label>هەنگاوی ١</label><input id="step1" oninput="autoSync()"></div>
+          <div class="field"><label>هەنگاوی ٢</label><input id="step2" oninput="autoSync()"></div>
+          <div class="field"><label>هەنگاوی ٣</label><input id="step3" oninput="autoSync()"></div>
+          <div class="field"><label>هەنگاوی ٤</label><input id="step4" oninput="autoSync()"></div>
+        </div>
+      </section>
+
+      <!-- 9. GALLERY TAB -->
       <section class="page-tab" id="tab-gallery">
         <div class="card">
-          <div class="card-title"><i data-lucide="images"></i> گەلەری وێنەکانی سروشت</div>
+          <div class="card-title"><i data-lucide="image"></i> گەلەری وێنەکانی سروشت</div>
           <div class="uploader-dropzone" onclick="document.getElementById('galleryFileInput').click()">
             <i data-lucide="upload" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-            <p style="font-size:11px;color:var(--muted);margin-top:4px;">وێنەی نوێ لە مۆبایلەکەتەوە زیاد بکە</p>
+            <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی نوێ لە مۆبایلەکەتەوە زیاد بکە</p>
             <input type="file" id="galleryFileInput" accept="image/*" style="display:none" onchange="addGalleryPhoto(event)">
           </div>
           <div class="gallery-grid" id="galleryContainer"></div>
         </div>
       </section>
 
-      <!-- 5. WHATSAPP & MAPS -->
+      <!-- 10. FAQ TAB -->
+      <section class="page-tab" id="tab-faq">
+        <div class="card">
+          <div class="card-title"><i data-lucide="help-circle"></i> پرسیار و وەڵامە باوەکان (FAQ)</div>
+          <div class="field"><label>پرسیار</label><input id="newFaqQ" placeholder="پرسیار بنووسە..."></div>
+          <div class="field"><label>وەڵام</label><textarea id="newFaqA" placeholder="وەڵامەکەی بنووسە..."></textarea></div>
+          <button class="btn btn-primary" style="width:100%;margin-bottom:14px;" onclick="addFaqItem()"><i data-lucide="plus"></i> زیادکردنی پرسیار و وەڵام</button>
+          <div id="faqList"></div>
+        </div>
+      </section>
+
+      <!-- 11. WHATSAPP & MAPS -->
       <section class="page-tab" id="tab-whatsapp">
         <div class="card">
-          <div class="card-title"><i data-lucide="navigation"></i> نامەکانی WhatsApp و لۆکەیشن</div>
+          <div class="card-title"><i data-lucide="message-square"></i> نامەکانی WhatsApp و لۆکەیشن</div>
           <div class="field">
             <label>📍 لینکی شوێنی کۆبوونەوە لە Google Maps</label>
             <input id="waMapsUrl" dir="ltr" oninput="autoSync()">
           </div>
           <div class="field">
             <label>✅ دەقی نامەی پەسەندکردن (Verify Template)</label>
-            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆد)، <code>{maps}</code> (نەخشە)</p>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆدی گەشت)، <code>{maps}</code> (لینکی نەخشە)</p>
             <textarea id="waVerifyTemplate" style="min-height:140px;"></textarea>
           </div>
           <div class="field">
             <label>❌ دەقی نامەی ڕەتکردنەوە (Reject Template)</label>
-            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆد)، <code>{reason}</code> (هۆکار)</p>
+            <p style="font-size:11px;color:var(--muted);margin-bottom:6px;">کلیلەکان: <code>{id}</code> (کۆدی گەشت)، <code>{reason}</code> (هۆکاری ڕەتکردنەوە)</p>
             <textarea id="waRejectTemplate" style="min-height:100px;"></textarea>
           </div>
-          <button class="btn btn-success" style="width:100%;margin-top:8px;" onclick="saveWhatsAppToCloud()">💾 پاشەکەوتکردن لە سێرڤەر</button>
+          <button class="btn btn-success" style="width:100%;margin-top:8px;" onclick="saveWhatsAppToCloud()">💾 پاشەکەوتکردن لە Cloud</button>
         </div>
       </section>
 
-      <!-- 6. REGISTRATIONS TAB -->
+      <!-- 12. FINANCE & FIB TAB -->
+      <section class="page-tab" id="tab-finance">
+        <div class="card">
+          <div class="card-title"><i data-lucide="credit-card"></i> هەژماری دارایی و پارەدان (FIB)</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">تەنها هەژماری فەرمیی FIB لە وێبسایت بۆ بەشداربووان پیشان دەدرێت:</p>
+          <div class="field">
+            <label>ژمارەی هەژماری فەرمیی First Iraqi Bank (FIB)</label>
+            <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
+          </div>
+        </div>
+      </section>
+
+      <!-- 13. API KEYS & TELEGRAM TAB -->
+      <section class="page-tab" id="tab-api">
+        <div class="card">
+          <div class="card-title"><i data-lucide="cpu"></i> کلیلەکانی سیستەم و زیرەکی دەستکرد</div>
+          <div class="field">
+            <label>Google Gemini API Key (بۆ یاریدەدەری زیرەک و پشکنینی پسوولە)</label>
+            <input id="geminiApiKey" type="password" placeholder="AIzaSy..." onchange="saveApiKeys()">
+          </div>
+          <div class="field">
+            <label>Telegram Bot Token</label>
+            <input id="telegramBotToken" type="password" placeholder="123456:ABC-DEF..." onchange="saveApiKeys()">
+          </div>
+          <div class="field">
+            <label>Telegram Chat ID</label>
+            <input id="telegramChatId" placeholder="-100... یان 12345..." onchange="saveApiKeys()">
+          </div>
+          <button class="btn btn-success" style="width:100%;margin-top:8px;" onclick="saveApiKeys()">💾 پاراستنی کلیلەکان لە براوسەر</button>
+        </div>
+      </section>
+
+      <!-- 14. REGISTRATIONS TAB -->
       <section class="page-tab" id="tab-registrations">
         <div class="card">
           <div class="card-title"><i data-lucide="table"></i> بەشداربووان لە Google Sheets</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
-            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ دەچنە ناو خشتەکەت. کلیک لە خوارەوە بکە بۆ بینینی ناوەکان:
+            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ دەچنە ناو خشتەکەت. کلیک لە خوارەوە بکە بۆ بینینی خشتەکە بە ڕاستەوخۆ:
           </p>
           <button class="btn btn-secondary" style="width:100%;" onclick="openSheets()"><i data-lucide="file-spreadsheet"></i> کردنەوەی Google Sheets</button>
         </div>
       </section>
 
-      <!-- 7. BACKUP TAB -->
+      <!-- 15. BACKUP TAB -->
       <section class="page-tab" id="tab-backup">
         <div class="card">
-          <div class="card-title"><i data-lucide="save"></i> پاراستن و هێنانەوەی زانیارییەکان</div>
+          <div class="card-title"><i data-lucide="hard-drive"></i> پاراستن و هێنانەوەی زانیارییەکان</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
-            دەتوانیت تەواوی زانیاری و ڕێکخستنەکان بە شێوەی فایل لە مۆبایلەکەت پاشەکەوت بکەیت:
+            دەتوانیت تەواوی فایل، داتا، وێنە و ڕێکخستنەکان لە مۆبایلەکەت وەک فایلێکی JSON پاشەکەوت بکەیت:
           </p>
           <div style="display:flex;gap:8px;">
             <button class="btn btn-secondary" style="flex:1;" onclick="exportBackup()"><i data-lucide="download"></i> Backup</button>
@@ -367,9 +496,11 @@ const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
 let appState = {
   gradColor1: "#9d1c32",
   gradColor2: "#c92b49",
+  seoTitle: "KURDIA ADVENTURE",
+  seoDescription: "KURDIA ADVENTURE — گەشت، سروشت، هاوڕێتی و سەرکێشی",
   heroBadge: "KURDIA ADVENTURE",
-  heroTitle: "سەرکێشییەکی ڕاستەقینە لە لووتکەکانی کوردستان",
-  heroSubtitle: "گەشتەکانمان تەنها چوونە دەرەوە نییە؛ گەشتێکە بۆ دۆزینەوەی بەهێزیی خۆت و چێژوەرگرتن لە سروشتی کوردستان.",
+  heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
+  heroSubtitle: "گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت سروشت ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی جوان دروست بکەن.",
   heroImageUrl: "",
   tripTitle: "گەشتی نوێی چیای هەڵگورد",
   tripPrice: "٣٥،٠٠٠ دینار",
@@ -379,13 +510,54 @@ let appState = {
   tripDifficulty: "مامناوەند",
   tripDesc: "گەشتێکی پڕ جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ لووتکە.",
   tripImageUrl: "",
+  bookingOpen: true,
+  fibAccount: "07503130360",
+  step1: "شوێنی گەشت هەڵبژێرە",
+  step2: "ژمارەی WhatsApp بسەلمێنە و تۆمار بکە",
+  step3: "لەگەڵ ئێمە بەڕێبکەوە",
+  step4: "یادەوەرییەکی جوان دروست بکە",
   services: [
-    "پاسی تایبەتی گەشتیاری و پارێزراو",
-    "تیمی ڕێبەری شاخەوانی و فریاگوزاری",
-    "فۆتۆگرافەری تایبەت بۆ یادەوەری",
-    "خواردنەوە و چای سەر خەڵووز"
+    { name: "پاس", icon: "bus-front" },
+    { name: "نان و خواردن", icon: "utensils" },
+    { name: "خواردنەوە", icon: "coffee" },
+    { name: "خێوەت", icon: "tent-tree" },
+    { name: "کارەبا و ڕووناکی", icon: "lightbulb" },
+    { name: "کورسی و مێز", icon: "armchair" }
+  ],
+  sections: [
+    { id: "hero", type: "hero", visible: true, label: "بەشی سەرەکی (Hero)" },
+    { id: "trip", type: "trip", visible: true, label: "زانیاری گەشت (Trip)" },
+    { id: "highlights", type: "highlights", visible: true, label: "خاڵە گرنگەکان (Highlights)" },
+    { id: "services", type: "services", visible: true, label: "خزمەتگوزارییەکان (Services)" },
+    { id: "itinerary", type: "itinerary", visible: true, label: "بەرنامەی گەشت (Itinerary)" },
+    { id: "stats", type: "stats", visible: true, label: "ئامارەکان (Stats)" },
+    { id: "steps", type: "steps", visible: true, label: "هەنگاوەکانی بەشداری (Steps)" },
+    { id: "gallery", type: "gallery", visible: true, label: "گەلەری وێنەکان (Gallery)" },
+    { id: "faq", type: "faq", visible: true, label: "پرسیارە باوەکان (FAQ)" },
+    { id: "booking", type: "booking", visible: true, label: "فۆڕمی ناونووسین (Booking)" }
+  ],
+  itinerary: [
+    { title: "کۆبوونەوە", text: "لە شوێنی دیاریکراو کۆدەبینەوە." },
+    { title: "دەستپێکردنی گەشت", text: "بەرەو شوێنی گەشت بە کۆمەڵ دەڕۆین." },
+    { title: "سروشت و چالاکی", text: "کاتێک بۆ گەشت، وێنەگرتن و خۆشحاڵی." },
+    { title: "گەڕانەوە", text: "لە کۆتایی ڕۆژدا بە یادەوەرییەکی جوان دەگەڕێینەوە." }
+  ],
+  highlights: [
+    { title: "گەشتێکی ڕێکخراو", text: "هەموو وردەکارییەکانی گەشت بە شێوەیەکی ڕوون ڕێکخراون." },
+    { title: "هاوڕێی نوێ", text: "لەگەڵ کۆمەڵێک خەڵکی خۆشەویست و عاشقی سروشت بگەڕێ." },
+    { title: "یادەوەرییەکی جیاواز", text: "تەنها گەشت ناکەین؛ یادەوەرییەک دروست دەکەین." }
+  ],
+  stats: [
+    { number: "∞", label: "سەرکێشی" },
+    { number: "100%", label: "خۆشی" },
+    { number: "24/7", label: "هاوڕێتی" },
+    { number: "KURDIA", label: "لەگەڵ تۆ" }
   ],
   gallery: [],
+  faq: [
+    { q: "چۆن بەشداری بکەم؟", a: "لە بەشی بەشداری ژمارەی WhatsAppەکەت پشتڕاست بکەرەوە، فۆڕمەکە پڕ بکەرەوە و پسوولەی پارەدان بنێرە." },
+    { q: "شێوازی پارەدان چۆنە؟", a: "پارەدان تەنها لە ڕێگەی کارتی بانکی FIB دەبێت بۆ هەژماری دیاریکراو." }
+  ],
   waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
   waVerifyTemplate: `سڵاو بەڕێزم 🌿\nپیرۆزە! ناونووسینەکەت لەلایەن *KURDIA ADVENTURE* بە سەرکەوتوویی پشتڕاستکرایەوە. ✅\n\n🆔 *کۆدی داواکاری:* {id}\n\n📍 *شوێنی کۆبوونەوە لەسەر نەخشەی گۆگڵ:*\n{maps}\n\n⚠️ *تکایە ئەم خاڵانە لەبەرچاو بگرە:*\n١. پێڵاوی شاخەوانی و جلی گونجاو ئامادە بکە.\n٢. هێنانی ناسنامەی باری شارستانی یان کارتی نیشتمانی ناچارییە.\n٣. ڕۆژێک پێش گەشتەکە پەیوەندیت پێوە دەکرێت بۆ هەماهەنگی کۆتایی.\n\nزۆر بەخێربێن! 🏔️✨`,
   waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت لەلایەن *KURDIA ADVENTURE* پەسەند نەکرا. ❌\n\n🆔 *کۆدی داواکاری:* {id}\n⚠️ *هۆکاری ڕەتکردنەوە:* {reason}.\n\nتکایە دەتوانیت لە ڕێگەی ماڵپەڕەوە بە پسوولەی دروست فۆڕمەکە پڕبکەیتەوە. 💬`
@@ -395,7 +567,7 @@ function toast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg;
   t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 3000);
+  setTimeout(()=> t.classList.remove("show"), 3200);
 }
 
 function toggleSidebar(){
@@ -413,11 +585,19 @@ function switchTab(tabId){
   event.currentTarget.classList.add("active");
 
   const titles = {
-    design: "ڕەنگ و بەشی سەرەکی",
+    design: "ڕەنگ و هەیکەلی سەرەکی",
     trip: "بەرنامە و زانیاری گەشت",
+    sections: "بەڕێوەبردنی بەشەکان",
     services: "خزمەتگوزارییەکان",
+    itinerary: "خشتەی کاتیی گەشت",
+    highlights: "خاڵە گرنگەکان",
+    stats: "ژمارە و ئامارەکان",
+    steps: "هەنگاوەکانی بەشداری",
     gallery: "گەلەری وێنەکانی سروشت",
+    faq: "پرسیارە باوەکان (FAQ)",
     whatsapp: "پەیامەکانی WhatsApp & Maps",
+    finance: "هەژماری دارایی و FIB",
+    api: "کلیلەکانی Gemini & Telegram",
     registrations: "بەشداربووان لە Sheets",
     backup: "Backup & Restore"
   };
@@ -461,17 +641,41 @@ async function handleImageUpload(e, stateProp, previewId){
     prev.style.backgroundImage = `url('${compressed}')`;
     prev.classList.add("active");
     autoSync();
-    toast("✅ وێنەکە دانرا");
+    toast("✅ وێنەکە بە سەرکەوتوویی دانرا");
   }catch(err){
-    toast("❌ کێشە لە وێنە");
+    toast("❌ کێشە لە بارکردنی وێنە");
   }
 }
 
+/* SECTIONS MANAGER */
+function renderSectionsList(){
+  const container = document.getElementById("sectionsList");
+  container.innerHTML = "";
+  (appState.sections || []).forEach((sec, idx) => {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.innerHTML = `
+      <span style="font-size:13px;font-weight:800;">${sec.label || sec.type}</span>
+      <label class="flex items-center gap-2 cursor-pointer text-xs font-bold">
+        <input type="checkbox" ${sec.visible !== false ? "checked" : ""} onchange="toggleSectionVisible(${idx}, this.checked)" style="width:16px;height:16px;">
+        پیشاندانی بەش
+      </label>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function toggleSectionVisible(idx, checked){
+  appState.sections[idx].visible = checked;
+  autoSync();
+}
+
+/* SERVICES */
 function addServiceItem(){
   const input = document.getElementById("newServiceName");
   const val = input.value.trim();
   if(!val) return;
-  appState.services.push(val);
+  appState.services.push({ name: val, icon: "check" });
   input.value = "";
   renderServices();
   autoSync();
@@ -486,27 +690,169 @@ function removeServiceItem(idx){
 function renderServices(){
   const container = document.getElementById("servicesList");
   container.innerHTML = "";
-  appState.services.forEach((s, idx) => {
+  (appState.services || []).forEach((s, idx) => {
+    const name = typeof s === "string" ? s : s.name;
     const row = document.createElement("div");
     row.className = "item-row";
     row.innerHTML = `
-      <span style="font-size:13px;font-weight:700;">${s}</span>
+      <span style="font-size:13px;font-weight:700;">${name}</span>
       <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeServiceItem(${idx})">سڕینەوە</button>
     `;
     container.appendChild(row);
   });
 }
 
+/* ITINERARY */
+function addItineraryItem(){
+  const t = document.getElementById("newItineraryTitle").value.trim();
+  const d = document.getElementById("newItineraryText").value.trim();
+  if(!t) return;
+  appState.itinerary.push({ title: t, text: d });
+  document.getElementById("newItineraryTitle").value = "";
+  document.getElementById("newItineraryText").value = "";
+  renderItinerary();
+  autoSync();
+}
+
+function removeItineraryItem(idx){
+  appState.itinerary.splice(idx, 1);
+  renderItinerary();
+  autoSync();
+}
+
+function renderItinerary(){
+  const container = document.getElementById("itineraryList");
+  container.innerHTML = "";
+  (appState.itinerary || []).forEach((it, idx) => {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.innerHTML = `
+      <div>
+        <div style="font-size:13px;font-weight:800;">${it.title}</div>
+        <div style="font-size:11px;color:var(--muted);">${it.text}</div>
+      </div>
+      <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeItineraryItem(${idx})">سڕینەوە</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* HIGHLIGHTS */
+function addHighlightItem(){
+  const t = document.getElementById("newHighlightTitle").value.trim();
+  const d = document.getElementById("newHighlightText").value.trim();
+  if(!t) return;
+  appState.highlights.push({ title: t, text: d, icon: "sparkles" });
+  document.getElementById("newHighlightTitle").value = "";
+  document.getElementById("newHighlightText").value = "";
+  renderHighlights();
+  autoSync();
+}
+
+function removeHighlightItem(idx){
+  appState.highlights.splice(idx, 1);
+  renderHighlights();
+  autoSync();
+}
+
+function renderHighlights(){
+  const container = document.getElementById("highlightsList");
+  container.innerHTML = "";
+  (appState.highlights || []).forEach((h, idx) => {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.innerHTML = `
+      <div>
+        <div style="font-size:13px;font-weight:800;">${h.title}</div>
+        <div style="font-size:11px;color:var(--muted);">${h.text}</div>
+      </div>
+      <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeHighlightItem(${idx})">سڕینەوە</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* STATS */
+function addStatItem(){
+  const n = document.getElementById("newStatNumber").value.trim();
+  const l = document.getElementById("newStatLabel").value.trim();
+  if(!n) return;
+  appState.stats.push({ number: n, label: l });
+  document.getElementById("newStatNumber").value = "";
+  document.getElementById("newStatLabel").value = "";
+  renderStats();
+  autoSync();
+}
+
+function removeStatItem(idx){
+  appState.stats.splice(idx, 1);
+  renderStats();
+  autoSync();
+}
+
+function renderStats(){
+  const container = document.getElementById("statsList");
+  container.innerHTML = "";
+  (appState.stats || []).forEach((st, idx) => {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.innerHTML = `
+      <div>
+        <span style="font-size:14px;font-weight:900;color:var(--primary2);">${st.number}</span>
+        <span style="font-size:12px;margin-right:8px;">${st.label}</span>
+      </div>
+      <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeStatItem(${idx})">سڕینەوە</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* FAQ */
+function addFaqItem(){
+  const q = document.getElementById("newFaqQ").value.trim();
+  const a = document.getElementById("newFaqA").value.trim();
+  if(!q) return;
+  appState.faq.push({ q, a });
+  document.getElementById("newFaqQ").value = "";
+  document.getElementById("newFaqA").value = "";
+  renderFaq();
+  autoSync();
+}
+
+function removeFaqItem(idx){
+  appState.faq.splice(idx, 1);
+  renderFaq();
+  autoSync();
+}
+
+function renderFaq(){
+  const container = document.getElementById("faqList");
+  container.innerHTML = "";
+  (appState.faq || []).forEach((f, idx) => {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.innerHTML = `
+      <div style="max-width:80%;">
+        <div style="font-size:13px;font-weight:800;">${f.q}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${f.a}</div>
+      </div>
+      <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="removeFaqItem(${idx})">سڕینەوە</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* GALLERY */
 async function addGalleryPhoto(e){
   const file = e.target.files?.[0];
   if(!file) return;
-  toast("⏳ وێنە دادەنرێت...");
+  toast("⏳ وێنەی گەلەری زیاد دەکرێت...");
   try{
     const compressed = await compressImage(file, 750, 0.70);
-    appState.gallery.push(compressed);
+    appState.gallery.push({ url: compressed, title: "KURDIA ADVENTURE" });
     renderGallery();
     autoSync();
-    toast("✅ زیادکرا");
+    toast("✅ وێنە بۆ گەلەری زیادکرا");
   }catch(err){
     toast("❌ کێشە لە وێنە");
   }
@@ -521,18 +867,22 @@ function removeGalleryPhoto(idx){
 function renderGallery(){
   const container = document.getElementById("galleryContainer");
   container.innerHTML = "";
-  appState.gallery.forEach((img, idx) => {
+  (appState.gallery || []).forEach((img, idx) => {
+    const url = typeof img === "string" ? img : img.url;
     const el = document.createElement("div");
     el.className = "gallery-thumb";
-    el.style.backgroundImage = `url('${img}')`;
+    el.style.backgroundImage = `url('${url}')`;
     el.innerHTML = `<button class="gallery-delete" onclick="removeGalleryPhoto(${idx})">✕</button>`;
     container.appendChild(el);
   });
 }
 
+/* SYNC & LOAD */
 function autoSync(){
   appState.gradColor1 = document.getElementById("gradColor1").value;
   appState.gradColor2 = document.getElementById("gradColor2").value;
+  appState.seoTitle = document.getElementById("seoTitle").value;
+  appState.seoDescription = document.getElementById("seoDescription").value;
   appState.heroBadge = document.getElementById("heroBadge").value;
   appState.heroTitle = document.getElementById("heroTitle").value;
   appState.heroSubtitle = document.getElementById("heroSubtitle").value;
@@ -544,6 +894,14 @@ function autoSync(){
   appState.tripDuration = document.getElementById("tripDuration").value;
   appState.tripDifficulty = document.getElementById("tripDifficulty").value;
   appState.tripDesc = document.getElementById("tripDesc").value;
+  appState.bookingOpen = document.getElementById("bookingOpen").checked;
+
+  appState.fibAccount = document.getElementById("fibAccount").value;
+
+  appState.step1 = document.getElementById("step1").value;
+  appState.step2 = document.getElementById("step2").value;
+  appState.step3 = document.getElementById("step3").value;
+  appState.step4 = document.getElementById("step4").value;
 
   appState.waMapsUrl = document.getElementById("waMapsUrl").value;
   appState.waVerifyTemplate = document.getElementById("waVerifyTemplate").value;
@@ -559,19 +917,29 @@ function loadState(){
     if(raw) appState = Object.assign({}, appState, JSON.parse(raw));
   }catch(e){}
 
-  document.getElementById("gradColor1").value = appState.gradColor1;
-  document.getElementById("gradColor2").value = appState.gradColor2;
-  document.getElementById("heroBadge").value = appState.heroBadge;
-  document.getElementById("heroTitle").value = appState.heroTitle;
-  document.getElementById("heroSubtitle").value = appState.heroSubtitle;
+  document.getElementById("gradColor1").value = appState.gradColor1 || "#9d1c32";
+  document.getElementById("gradColor2").value = appState.gradColor2 || "#c92b49";
+  document.getElementById("seoTitle").value = appState.seoTitle || "KURDIA ADVENTURE";
+  document.getElementById("seoDescription").value = appState.seoDescription || "";
+  document.getElementById("heroBadge").value = appState.heroBadge || "KURDIA ADVENTURE";
+  document.getElementById("heroTitle").value = appState.heroTitle || "";
+  document.getElementById("heroSubtitle").value = appState.heroSubtitle || "";
 
-  document.getElementById("tripTitle").value = appState.tripTitle;
-  document.getElementById("tripPrice").value = appState.tripPrice;
-  document.getElementById("tripLocation").value = appState.tripLocation;
-  document.getElementById("tripTime").value = appState.tripTime;
-  document.getElementById("tripDuration").value = appState.tripDuration;
-  document.getElementById("tripDifficulty").value = appState.tripDifficulty;
-  document.getElementById("tripDesc").value = appState.tripDesc;
+  document.getElementById("tripTitle").value = appState.tripTitle || "";
+  document.getElementById("tripPrice").value = appState.tripPrice || "";
+  document.getElementById("tripLocation").value = appState.tripLocation || "";
+  document.getElementById("tripTime").value = appState.tripTime || "";
+  document.getElementById("tripDuration").value = appState.tripDuration || "";
+  document.getElementById("tripDifficulty").value = appState.tripDifficulty || "";
+  document.getElementById("tripDesc").value = appState.tripDesc || "";
+  document.getElementById("bookingOpen").checked = appState.bookingOpen !== false;
+
+  document.getElementById("fibAccount").value = appState.fibAccount || "07503130360";
+
+  document.getElementById("step1").value = appState.step1 || "شوێنی گەشت هەڵبژێرە";
+  document.getElementById("step2").value = appState.step2 || "تۆمار بکە";
+  document.getElementById("step3").value = appState.step3 || "لەگەڵ ئێمە بڕۆ";
+  document.getElementById("step4").value = appState.step4 || "یادەوەرییەکی جوان دروست بکە";
 
   document.getElementById("waMapsUrl").value = appState.waMapsUrl || "";
   document.getElementById("waVerifyTemplate").value = appState.waVerifyTemplate || "";
@@ -588,9 +956,30 @@ function loadState(){
     t.classList.add("active");
   }
 
+  // API Keys
+  document.getElementById("geminiApiKey").value = localStorage.getItem("KURDIA_GEMINI_KEY") || "";
+  document.getElementById("telegramBotToken").value = localStorage.getItem("KURDIA_TELEGRAM_TOKEN") || "";
+  document.getElementById("telegramChatId").value = localStorage.getItem("KURDIA_TELEGRAM_CHAT_ID") || "";
+
+  renderSectionsList();
   renderServices();
+  renderItinerary();
+  renderHighlights();
+  renderStats();
   renderGallery();
+  renderFaq();
   loadCloudWASettings();
+}
+
+function saveApiKeys(){
+  const gKey = document.getElementById("geminiApiKey").value.trim();
+  const tToken = document.getElementById("telegramBotToken").value.trim();
+  const tChat = document.getElementById("telegramChatId").value.trim();
+
+  localStorage.setItem("KURDIA_GEMINI_KEY", gKey);
+  localStorage.setItem("KURDIA_TELEGRAM_TOKEN", tToken);
+  localStorage.setItem("KURDIA_TELEGRAM_CHAT_ID", tChat);
+  toast("✅ کلیلەکانی API لە براوسەر پاشەکەوت کران");
 }
 
 async function loadCloudWASettings(){
@@ -608,7 +997,7 @@ async function loadCloudWASettings(){
 
 async function saveWhatsAppToCloud(){
   autoSync();
-  toast("⏳ خەزن دەکرێت...");
+  toast("⏳ لە سێرڤەر پاشەکەوت دەکرێت...");
   try{
     const res = await fetch(`${WORKER_URL}/api/admin/wa-settings`, {
       method:"POST",
@@ -621,9 +1010,9 @@ async function saveWhatsAppToCloud(){
     });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("✅ لە Cloud سەیڤ کرا");
+      toast("✅ ڕێکخستنی WhatsApp لە Cloud سەیڤ کرا");
     }else{
-      toast("❌ کێشە لە خەزنکردن");
+      toast("❌ کێشە لە پاشەکەوتکردن");
     }
   }catch(e){
     toast("کێشە لە پەیوەندی بە سێرڤەر");
@@ -633,7 +1022,7 @@ async function saveWhatsAppToCloud(){
 function publishLive(){
   autoSync();
   saveWhatsAppToCloud();
-  toast("🚀 پیرۆزە! هەموو بەشەکان بڵاوکرانەوە");
+  toast("🚀 تەواوی گۆڕانکارییەکان بە سەرکەوتوویی بڵاوکرانەوە!");
 }
 
 function openLiveSite(){
@@ -650,9 +1039,9 @@ function exportBackup(){
   const blob = new Blob([data], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `kurdia-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `kurdia-full-backup-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
-  toast("📥 فایلی یەدەگ دابەزی");
+  toast("📥 فایلی تەواوی باکئەپ دابەزییە ناو مۆبایلەکەت");
 }
 
 function importBackup(e){
@@ -665,9 +1054,9 @@ function importBackup(e){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       loadState();
       autoSync();
-      toast("✅ گەڕێندرایەوە");
+      toast("✅ هەموو بەش و زانیارییەکان گەڕێنرانەوە");
     }catch(err){
-      toast("❌ فایلی هەڵە");
+      toast("❌ فایلی نادروست");
     }
   };
   reader.readAsText(file);
