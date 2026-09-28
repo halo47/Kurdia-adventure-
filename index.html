@@ -137,7 +137,7 @@ button{ cursor:pointer; }
   backdrop-filter:blur(18px); color:#e2e8f0; font-size:13px; font-weight:700;
 }
 .hero-dot{ width:8px; height:8px; border-radius:50%; background:var(--primary2); }
-.hero-title{ max-width:950px; margin-top:24px; font-size:clamp(2.1rem, 7vw, 5rem); font-weight:900; line-height:1.05; letter-spacing:-.05em; }
+.hero-title{ max-width:950px; margin-top:24px; font-size:clamp(2.1rem, 7vm, 5rem); font-weight:900; line-height:1.05; letter-spacing:-.05em; }
 .hero-subtitle{ max-width:680px; margin-top:22px; color:#d1d5db; font-size:clamp(0.95rem,1.4vw,1.2rem); line-height:2; }
 .hero-actions{ margin-top:30px; display:flex; flex-wrap:wrap; gap:12px; }
 .hero-action{ padding:14px 24px; border-radius:16px; font-weight:800; text-align:center; }
@@ -284,7 +284,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 @media(max-width:640px){
   .section{ padding:55px 0; }
   .hero{ min-height:740px; }
-  .hero-content{ padding-top:100px; padding-bottom:40px; width:100%; }
+  .hero-content{ padding-top:90px; padding-bottom:40px; width:100%; }
   .hero-title{ font-size:clamp(1.9rem, 7vw, 3.2rem); }
   .hero-meta{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .gallery-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:160px; }
@@ -300,6 +300,11 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
   .timer-num { font-size: 1.3rem; }
   
   .modal-overlay > div { max-width: 92% !important; margin: auto; padding: 16px !important; }
+  
+  /* Header adjustments for mobile */
+  .header-inner { padding: 0 4px; }
+  .header-inner .flex.items-center { gap: 4px !important; }
+  .music-btn, .secondary.px-3, .lang-switcher { padding: 3px 6px !important; font-size: 10px !important; }
 }
 </style>
 </head>
@@ -344,8 +349,8 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
        <span id="musicBtnLabel">مۆسیقا</span>
      </button>
 
-     <button onclick="openStoryUploadModal()" class="secondary px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5">
-       <i data-lucide="plus-circle" class="w-4 h-4 text-rose-500"></i> ستۆری
+     <button onclick="openStoryUploadModal()" class="secondary px-2.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1">
+       <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-rose-500"></i> ستۆری
      </button>
 
      <div class="lang-switcher">
@@ -356,7 +361,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 
      <a href="#booking" id="nav_book_btn" class="primary hidden md:flex px-5 py-2.5 rounded-xl font-bold text-xs">بەشداری</a>
 
-     <button onclick="toggleMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+     <button onclick="toggleMenu()" class="lg:hidden w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
       <i data-lucide="menu"></i>
      </button>
    </div>
