@@ -9,7 +9,7 @@
 
 <!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -76,12 +76,24 @@ button{ cursor:pointer; }
 .logo-title{ font-weight:900; line-height:1; }
 .logo-sub{ font-size:9px; color:#64748b; letter-spacing:.25em; margin-top:5px; }
 
-.desktop-nav{ display:flex; align-items:center; gap:20px; font-size:13px; color:#cbd5e1; }
+.desktop-nav{ display:flex; align-items:center; gap:18px; font-size:13px; color:#cbd5e1; }
 .desktop-nav a:hover{ color:#fff; }
 
 .mobile-menu{ display:none; border-top:1px solid rgba(255,255,255,.06); background:#0c1119; }
 .mobile-menu.open{ display:block; }
 .mobile-menu a{ display:block; padding:12px 16px; border-radius:12px; }
+
+/* LANG SWITCHER PILL */
+.lang-switcher{
+  display:flex; align-items:center; background:rgba(255,255,255,.06); border:1px solid var(--border);
+  border-radius:10px; padding:3px; gap:2px; font-size:11px; font-weight:800;
+}
+.lang-btn{
+  padding:4px 8px; border-radius:7px; color:#94a3b8; transition:.2s; border:0; background:transparent;
+}
+.lang-btn.active{
+  background:var(--primary); color:#fff;
+}
 
 /* HERO */
 .hero{ min-height:860px; position:relative; overflow:hidden; display:flex; align-items:center; }
@@ -126,6 +138,7 @@ button{ cursor:pointer; }
   background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.14); border-radius:999px;
   font-size:12px; font-weight:800;
 }
+[dir="ltr"] .trip-photo-badge{ right:auto; left:20px; }
 .trip-photo-bottom{ position:absolute; z-index:2; right:25px; left:25px; bottom:25px; }
 .trip-photo-title{ font-size:1.8rem; font-weight:900; }
 .trip-content{ padding:36px; }
@@ -200,6 +213,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 
 /* FLOATING */
 .floating-actions{ position:fixed; left:20px; bottom:20px; z-index:900; display:flex; flex-direction:column; gap:10px; }
+[dir="ltr"] .floating-actions{ left:auto; right:20px; }
 .floating-btn{ width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(0,0,0,0.5); }
 .floating-whatsapp{ background:#25d366; color:#fff; }
 
@@ -264,36 +278,45 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
    </a>
 
    <nav class="desktop-nav">
-    <a href="#home">سەرەتا</a>
-    <a href="#trip">گەشت</a>
-    <a href="#about">ئێمە کێین</a>
-    <a href="#timeline">ئەزموون</a>
-    <a href="#safety">سەلامەتی</a>
-    <a href="#gear">پێداویستی</a>
-    <a href="#reviews">فیدباک</a>
-    <a href="#gallery">گەلەری</a>
-    <a href="#location">شوێن</a>
+    <a href="#home" id="nav_home">سەرەتا</a>
+    <a href="#trip" id="nav_trip">گەشت</a>
+    <a href="#about" id="nav_about">ئێمە کێین</a>
+    <a href="#timeline" id="nav_timeline">ئەزموون</a>
+    <a href="#safety" id="nav_safety">سەلامەتی</a>
+    <a href="#gear" id="nav_gear">پێداویستی</a>
+    <a href="#reviews" id="nav_reviews">فیدباک</a>
+    <a href="#gallery" id="nav_gallery">گەلەری</a>
+    <a href="#location" id="nav_location">شوێن</a>
    </nav>
 
-   <a href="#booking" class="primary hidden md:flex px-5 py-2.5 rounded-xl font-bold text-xs">بەشداری لە گەشت</a>
+   <div class="flex items-center gap-3">
+     <!-- LANGUAGE SWITCHER -->
+     <div class="lang-switcher">
+       <button class="lang-btn" id="btn_ku" onclick="setLanguage('ku')">کوردی</button>
+       <button class="lang-btn" id="btn_ar" onclick="setLanguage('ar')">عربي</button>
+       <button class="lang-btn" id="btn_en" onclick="setLanguage('en')">EN</button>
+     </div>
 
-   <button onclick="toggleMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-    <i data-lucide="menu"></i>
-   </button>
+     <a href="#booking" id="nav_book_btn" class="primary hidden md:flex px-5 py-2.5 rounded-xl font-bold text-xs">بەشداری</a>
+
+     <button onclick="toggleMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+      <i data-lucide="menu"></i>
+     </button>
+   </div>
   </div>
 
   <div id="mobileMenu" class="mobile-menu">
    <div class="container py-3">
-    <a href="#home" onclick="closeMenu()">سەرەتا</a>
-    <a href="#trip" onclick="closeMenu()">گەشت</a>
-    <a href="#about" onclick="closeMenu()">ئێمە کێین</a>
-    <a href="#timeline" onclick="closeMenu()">ئەزموونی گەشت</a>
-    <a href="#safety" onclick="closeMenu()">سەلامەتی</a>
-    <a href="#gear" onclick="closeMenu()">پێداویستییەکان</a>
-    <a href="#reviews" onclick="closeMenu()">فیدباک</a>
-    <a href="#gallery" onclick="closeMenu()">گەلەری</a>
-    <a href="#location" onclick="closeMenu()">شوێنی کۆبوونەوە</a>
-    <a href="#booking" onclick="closeMenu()" class="primary text-center font-bold mt-2">بەشداری لە گەشت</a>
+    <a href="#home" onclick="closeMenu()" id="m_nav_home">سەرەتا</a>
+    <a href="#trip" onclick="closeMenu()" id="m_nav_trip">گەشت</a>
+    <a href="#about" onclick="closeMenu()" id="m_nav_about">ئێمە کێین</a>
+    <a href="#timeline" onclick="closeMenu()" id="m_nav_timeline">ئەزموونی گەشت</a>
+    <a href="#safety" onclick="closeMenu()" id="m_nav_safety">سەلامەتی</a>
+    <a href="#gear" onclick="closeMenu()" id="m_nav_gear">پێداویستییەکان</a>
+    <a href="#reviews" onclick="closeMenu()" id="m_nav_reviews">فیدباک</a>
+    <a href="#gallery" onclick="closeMenu()" id="m_nav_gallery">گەلەری</a>
+    <a href="#location" onclick="closeMenu()" id="m_nav_location">شوێنی کۆبوونەوە</a>
+    <a href="#booking" onclick="closeMenu()" id="m_nav_book_btn" class="primary text-center font-bold mt-2">بەشداری لە گەشت</a>
    </div>
   </div>
  </div>
@@ -303,10 +326,10 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 
 <!-- FLOATING ACTIONS -->
 <div class="floating-actions">
- <a id="waDirectBtn" target="_blank" class="floating-btn floating-whatsapp" title="پەیوەندی لە WhatsApp">
+ <a id="waDirectBtn" target="_blank" class="floating-btn floating-whatsapp" title="WhatsApp">
    <i data-lucide="message-circle"></i>
  </a>
- <button onclick="toggleAI()" class="floating-btn primary" title="یارمەتیدەری زیرەک">
+ <button onclick="toggleAI()" class="floating-btn primary" title="AI Assistant">
    <i data-lucide="bot"></i>
  </button>
 </div>
@@ -314,14 +337,14 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
 <!-- AI WINDOW -->
 <div id="aiWindow" class="ai-window surface hidden">
  <div class="p-3 border-b border-white/10 flex justify-between items-center">
-  <div class="font-bold text-sm flex items-center gap-2"><i data-lucide="sparkles" class="text-rose-500"></i> یاریدەدەری زیرەکی کوردیا</div>
+  <div class="font-bold text-sm flex items-center gap-2"><i data-lucide="sparkles" class="text-rose-500"></i> <span id="ai_title">یاریدەدەری زیرەک</span></div>
   <button onclick="toggleAI()"><i data-lucide="x"></i></button>
  </div>
  <div id="messages" class="ai-messages">
-   <div class="ai-message ai">سڵاو! من یاریدەدەری زیرەکی KURDIA ADVENTUREـم. هەر پرسیارێکت هەیە بپرسە.</div>
+   <div class="ai-message ai" id="ai_welcome">سڵاو! من یاریدەدەری زیرەکی KURDIA ADVENTUREـم. هەر پرسیارێکت هەیە بپرسە.</div>
  </div>
  <div class="p-2 border-t border-white/10 flex gap-2">
-  <input id="aiInput" class="input py-2 text-xs" placeholder="پرسیارەکەت بنووسە..." onkeydown="if(event.key==='Enter') sendAI()">
+  <input id="aiInput" class="input py-2 text-xs" placeholder="..." onkeydown="if(event.key==='Enter') sendAI()">
   <button id="aiSendBtn" onclick="sendAI()" class="primary px-3 rounded-xl"><i data-lucide="send"></i></button>
  </div>
 </div>
@@ -333,36 +356,132 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
  <div class="container footer-grid">
   <div>
    <div class="font-black text-lg">KURDIA ADVENTURE</div>
-   <div class="text-gray-400 text-xs mt-3 leading-relaxed">
+   <div class="text-gray-400 text-xs mt-3 leading-relaxed" id="footer_desc">
      پلاتفۆرمی فەرمیی گەشتیاری و شاخەوانی لە کوردستان؛ ئامانجمان ناساندنی سروشتی کوردستان، برەودان بە تەندروستی، هاوڕێیەتی و پاراستنی ژینگەیە.
    </div>
   </div>
   <div>
-   <div class="font-bold text-sm mb-3">بەستەرە خێراکان</div>
+   <div class="font-bold text-sm mb-3" id="footer_links_title">بەستەرە خێراکان</div>
    <div class="flex flex-col gap-2 text-xs text-gray-400">
-    <a href="#home">سەرەتا</a>
-    <a href="#trip">گەشتەکان</a>
-    <a href="#about">ئێمە کێین</a>
-    <a href="#safety">سەلامەتی</a>
-    <a href="#gear">کەلوپەل</a>
-    <a href="#location">شوێنی کۆبوونەوە</a>
+    <a href="#home" id="f_home">سەرەتا</a>
+    <a href="#trip" id="f_trip">گەشتەکان</a>
+    <a href="#about" id="f_about">ئێمە کێین</a>
+    <a href="#safety" id="f_safety">سەلامەتی</a>
+    <a href="#gear" id="f_gear">کەلوپەل</a>
+    <a href="#location" id="f_loc">شوێنی کۆبوونەوە</a>
    </div>
   </div>
   <div>
-   <div class="font-bold text-sm mb-3">پەیوەندی ڕاستەوخۆ</div>
-   <div class="text-xs text-gray-400 leading-relaxed mb-2">هەولێر — کوردستان</div>
-   <div class="text-xs text-gray-400 leading-relaxed mb-2">بۆ هەماهەنگی و پەیوەندی خێرا:</div>
+   <div class="font-bold text-sm mb-3" id="footer_contact_title">پەیوەندی ڕاستەوخۆ</div>
+   <div class="text-xs text-gray-400 leading-relaxed mb-2" id="footer_city">هەولێر — کوردستان</div>
+   <div class="text-xs text-gray-400 leading-relaxed mb-2" id="footer_quick">بۆ هەماهەنگی و پەیوەندی خێرا:</div>
    <div class="text-sm font-bold text-white select-all">07503130360</div>
   </div>
  </div>
  <div class="container footer-bottom">
-  <div>© 2026 KURDIA ADVENTURE — هەموو مافەکان پارێزراون.</div>
-  <div>دیزاینکراوە بە خۆشەویستی بۆ سروشتی کوردستان 🏔️</div>
+  <div>© 2026 KURDIA ADVENTURE — <span id="f_copy">هەموو مافەکان پارێزراون.</span></div>
+  <div id="f_sub">دیزاینکراوە بە خۆشەویستی بۆ سروشتی کوردستان 🏔️</div>
  </div>
 </footer>
 
 <script>
 const WORKER_ENDPOINT = "https://kurdia.alwandssalh.workers.dev";
+
+// DICTIONARY FOR MULTI-LANGUAGE
+const I18N = {
+  ku: {
+    dir: "rtl",
+    nav_home: "سەرەتا", nav_trip: "گەشت", nav_about: "ئێمە کێین", nav_timeline: "ئەزموون", nav_safety: "سەلامەتی", nav_gear: "پێداویستی", nav_reviews: "فیدباک", nav_gallery: "گەلەری", nav_location: "شوێن", nav_book: "بەشداری لە گەشت",
+    cd_label: "کاتی ماوە بۆ بەڕێکەوتن:", cd_d: "ڕۆژ", cd_h: "کاتژمێر", cd_m: "خولەک", cd_s: "چرکە",
+    btn_join: "بەشداری لە گەشت", btn_trip_info: "زانیاری گەشت", btn_about: "ئێمە کێین؟",
+    meta_loc: "شوێن", meta_time: "کات", meta_dur: "ماوە", meta_diff: "ئاست",
+    trip_badge: "گەشتی چالاکی داهاتوو", capacity_booked: "کورسییە گیراوەکان:", capacity_rem: "تەنها {n} شوێن ماوە!", capacity_full: "تەواو پڕ بووە",
+    weather_lbl: "کەشی پێشبینیکراو:", trip_full_desc: "تەواوی وردەکاری و بەرنامە", trip_price_lbl: "تێچووی هەر بەشداربوویەک", btn_register: "ناونووسین بکە", btn_closed: "داخراوە",
+    about_title: "ئێمە کێین و دەستکەوتەکانمان",
+    timeline_title: "ئەزموونی شاخەوانی لەگەڵ ئێمە", timeline_label: "هەنگاوەکانی گەشت",
+    safety_title: "پرۆتۆکۆلی سەلامەتی شاخەوانان", safety_label: "پارێزراوی و متمانە",
+    gear_title: "چی لەگەڵ خۆت دەهێنیت؟", gear_label: "ئامادەکاری پێش دەرچوون",
+    serv_title: "ئەوەی گەشتەکەمان پێشکەشی دەکات", serv_label: "خزمەتگوزارییەکان",
+    rev_title: "ئەزموونی بەشداربووان", rev_label: "بیروڕای شاخەوانان", rev_stats: "ڕەزامەندی زیاتر لە ٩٨٪ بەشداربووان",
+    gal_title: "ساتە تۆمارکراوەکان لە چیا", gal_label: "گەلەری",
+    loc_title: "نەخشەی شوێنی بەڕێکەوتن", loc_label: "شوێنی کۆبوونەوە", loc_desc: "پاسی گەشت لە شوێنی دیاریکراو ئامادە دەبێت؛ بۆ ڕێڕەو کلیک لە دوگمەکە بکە.", btn_maps: "کردنەوە لە Google Maps",
+    book_title: "ئامادەیت بۆ سەرکێشی؟", book_label: "ناونووسینی فەرمی",
+    book_desc_otp: "سەرەتا مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاست بکەرەوە، پاشان تێچووەکە لە ڕێگەی کارتی بانکی FIB بنێرە و وێنەی پسوولەکە هاوپێچ بکە.",
+    book_desc_no_otp: "زانیارییەکانت بنووسە، پارەکە بە FIB بنێرە و وێنەی پسوولەکەت بار بکە.",
+    fib_label: "هەژماری فەرمیی First Iraqi Bank (FIB):", fib_note: "تکایە لە کاتی ناردنی پارە، ناوی تەواوی خۆت لە تێبینی بنووسە.",
+    coupon_ask: "کۆدی داشکاندن (Coupon) هەتە؟", btn_apply: "چالاککردن",
+    name_ph: "ناوی تەواوی بەشداربوو", phone_ph: "ژمارەی مۆبایل (WhatsApp)", btn_send_code: "کۆد بنێرە", btn_resend: "دووبارە", otp_ph: "کۆدی ٤ ژمارەیی", btn_verify: "سەلماندن",
+    person_1: "١ کەس (تەنها خۆم)", person_multi: "{n} کەس", extra_ph: "ناوی کەسی {n}", note_ph: "تێبینی، نەخۆشی تایبەت یان شوێنی سەرکەوتن...",
+    receipt_lbl: "🧾 وێنەی پسوولەی پارەدانی FIB",
+    btn_submit: "🚀 ناردنی داواکاری و پسوولەی FIB", btn_need_verify: "🔒 سەرەتا مۆبایلەکەت بسەلمێنە",
+    ai_title: "یاریدەدەری زیرەکی کوردیا", ai_welcome: "سڵاو! من یاریدەدەری زیرەکی KURDIA ADVENTUREـم. هەر پرسیارێکت هەیە بپرسە.", ai_ph: "پرسیارەکەت بنووسە...",
+    footer_desc: "پلاتفۆرمی فەرمیی گەشتیاری و شاخەوانی لە کوردستان؛ ئامانجمان ناساندنی سروشتی کوردستان، برەودان بە تەندروستی، هاوڕێیەتی و پاراستنی ژینگەیە.",
+    footer_links: "بەستەرە خێراکان", footer_contact: "پەیوەندی ڕاستەوخۆ", footer_city: "هەولێر — کوردستان", footer_quick: "بۆ هەماهەنگی و پەیوەندی خێرا:",
+    copy: "هەموو مافەکان پارێزراون.", sub_copy: "دیزاینکراوە بە خۆشەویستی بۆ سروشتی کوردستان 🏔️"
+  },
+  ar: {
+    dir: "rtl",
+    nav_home: "الرئيسية", nav_trip: "الرحلة", nav_about: "من نحن", nav_timeline: "المسار", nav_safety: "السلامة", nav_gear: "المعدات", nav_reviews: "الآراء", nav_gallery: "الصور", nav_location: "الموقع", nav_book: "المشاركة بالرحلة",
+    cd_label: "الوقت المتبقي للانطلاق:", cd_d: "يوم", cd_h: "ساعة", cd_m: "دقيقة", cd_s: "ثانية",
+    btn_join: "المشاركة في الرحلة", btn_trip_info: "تفاصيل الرحلة", btn_about: "من نحن؟",
+    meta_loc: "المكان", meta_time: "الوقت", meta_dur: "المدة", meta_diff: "المستوى",
+    trip_badge: "الرحلة القادمة", capacity_booked: "المقاعد المحجوزة:", capacity_rem: "متبقي {n} مقاعد فقط!", capacity_full: "اكتمل العدد",
+    weather_lbl: "الطقس المتوقع:", trip_full_desc: "تفاصيل وبرنامج الرحلة", trip_price_lbl: "تكلفة المشاركة للشخص", btn_register: "سجّل الآن", btn_closed: "مغلق",
+    about_title: "من نحن وإنجازاتنا",
+    timeline_title: "تجربة التسلق معنا", timeline_label: "خطوات الرحلة",
+    safety_title: "بروتوكول سلامة المغامرين", safety_label: "الأمان والثقة",
+    gear_title: "ماذا تجلب معك؟", gear_label: "التجهيزات المطلوبة",
+    serv_title: "ما تقدمه رحلتنا", serv_label: "الخدمات",
+    rev_title: "آراء المشاركين", rev_label: "تقييمات المغامرين", rev_stats: "أكثر من 98% نسبة رضا المشاركين",
+    gal_title: "لحظات من قمم الجبال", gal_label: "معرض الصور",
+    loc_title: "موقع نقطة التجمع", loc_label: "نقطة الانطلاق", loc_desc: "ستتواجد حافلة الرحلة في الموقع المحدد؛ انقر للمسار.", btn_maps: "فتح عبر Google Maps",
+    book_title: "هل أنت جاهز للمغامرة؟", book_label: "التسجيل الرسمي",
+    book_desc_otp: "أولاً قم بتأكيد رقمك عبر واتساب، ثم حوّل المبلغ عبر مصرف FIB وأرفق صورة الوصل.",
+    book_desc_no_otp: "أدخل معلوماتك، حوّل المبلغ عبر FIB وأرفق صورة الوصل.",
+    fib_label: "حساب First Iraqi Bank (FIB) الرسمي:", fib_note: "يرجى كتابة اسمك الكامل في الملاحظات عند التحويل.",
+    coupon_ask: "هل لديك كود خصم (Coupon)؟", btn_apply: "تفعيل",
+    name_ph: "الاسم الكامل للمشارك", phone_ph: "رقم الهاتف (WhatsApp)", btn_send_code: "إرسال الرمز", btn_resend: "إعادة", otp_ph: "رمز التحقق (4 أرقام)", btn_verify: "تأكيد الرمز",
+    person_1: "شخص واحد (أنا فقط)", person_multi: "{n} أشخاص", extra_ph: "اسم الشخص {n}", note_ph: "ملاحظات، أمراض معينة أو مكان الصعود...",
+    receipt_lbl: "🧾 صورة وصل الدفع من FIB",
+    btn_submit: "🚀 إرسال الطلب مع وصل FIB", btn_need_verify: "🔒 يرجى تأكيد رقمك أولاً",
+    ai_title: "مساعد كورديا الذكي", ai_welcome: "مرحباً! أنا المساعد الذكي لـ KURDIA ADVENTURE. تفضل بأي استفسار.", ai_ph: "اكتب سؤالك...",
+    footer_desc: "المنصة الرسمية لرياضة تسلق الجبال والمغامرات في كوردستان؛ هدفنا التعريف بالطبيعة، تعزيز الصحة والبيئة.",
+    footer_links: "روابط سريعة", footer_contact: "اتصال مباشر", footer_city: "أربيل — كوردستان", footer_quick: "للتنسيق والاستفسار السريع:",
+    copy: "جميع الحقوق محفوظة.", sub_copy: "صُمم بكل حب لطبيعة كوردستان الساحرة 🏔️"
+  },
+  en: {
+    dir: "ltr",
+    nav_home: "Home", nav_trip: "Trip", nav_about: "About Us", nav_timeline: "Timeline", nav_safety: "Safety", nav_gear: "Gear", nav_reviews: "Reviews", nav_gallery: "Gallery", nav_location: "Location", nav_book: "Join Trip",
+    cd_label: "Time left until departure:", cd_d: "Days", cd_h: "Hours", cd_m: "Mins", cd_s: "Secs",
+    btn_join: "Join Upcoming Trip", btn_trip_info: "Trip Details", btn_about: "About Us",
+    meta_loc: "Location", meta_time: "Time", meta_dur: "Duration", meta_diff: "Difficulty",
+    trip_badge: "Upcoming Adventure", capacity_booked: "Booked Seats:", capacity_rem: "Only {n} seats left!", capacity_full: "Fully Booked",
+    weather_lbl: "Expected Weather:", trip_full_desc: "Complete Itinerary & Details", trip_price_lbl: "Price per person", btn_register: "Register Now", btn_closed: "Closed",
+    about_title: "Who We Are & Our Achievements",
+    timeline_title: "The Mountain Experience", timeline_label: "How It Works",
+    safety_title: "Safety & Emergency Protocols", safety_label: "Safety First",
+    gear_title: "What Should You Bring?", gear_label: "Gear Checklist",
+    serv_title: "What We Provide", serv_label: "Our Services",
+    rev_title: "Adventurer Reviews", rev_label: "Testimonials", rev_stats: "Over 98% positive participant rating",
+    gal_title: "Captured Moments in Nature", gal_label: "Gallery",
+    loc_title: "Meeting Point & Navigation", loc_label: "Departure Location", loc_desc: "Tour bus will arrive at the scheduled spot; click for map navigation.", btn_maps: "Open in Google Maps",
+    book_title: "Ready for the Adventure?", book_label: "Official Booking",
+    book_desc_otp: "First verify your phone via WhatsApp, then transfer the fee via FIB and attach your receipt.",
+    book_desc_no_otp: "Fill in details, transfer the payment via FIB and upload receipt.",
+    fib_label: "Official First Iraqi Bank (FIB) Account:", fib_note: "Please include your full name in transaction notes.",
+    coupon_ask: "Have a Discount Coupon?", btn_apply: "Apply",
+    name_ph: "Full Name", phone_ph: "Phone Number (WhatsApp)", btn_send_code: "Send Code", btn_resend: "Resend", otp_ph: "4-Digit Code", btn_verify: "Verify",
+    person_1: "1 Person (Just me)", person_multi: "{n} People", extra_ph: "Name of Person {n}", note_ph: "Notes, medical conditions or pickup point...",
+    receipt_lbl: "🧾 Payment Receipt Image (FIB)",
+    btn_submit: "🚀 Submit Booking & Receipt", btn_need_verify: "🔒 Verify your phone first",
+    ai_title: "Kurdia AI Assistant", ai_welcome: "Hello! I am the AI Assistant of KURDIA ADVENTURE. Ask me anything.", ai_ph: "Type your question...",
+    footer_desc: "Official hiking and outdoor adventure platform in Kurdistan; promoting wellness, ecotourism and friendship.",
+    footer_links: "Quick Links", footer_contact: "Contact", footer_city: "Erbil — Kurdistan", footer_quick: "For inquiries & booking:",
+    copy: "All rights reserved.", sub_copy: "Crafted with love for Kurdistan mountains 🏔️"
+  }
+};
+
+let currentLang = localStorage.getItem("kurdia_lang") || "ku";
 
 const DEFAULT_DATA = {
  gradColor1:"#9d1c32",
@@ -438,6 +557,53 @@ function toast(msg){
  setTimeout(()=> el.classList.remove("show"), 4000);
 }
 
+function setLanguage(lang){
+  currentLang = lang;
+  localStorage.setItem("kurdia_lang", lang);
+  render();
+}
+
+function updateStaticText(t){
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = t.dir;
+
+  // Header & Mobile Nav
+  const navKeys = ["home", "trip", "about", "timeline", "safety", "gear", "reviews", "gallery", "location"];
+  navKeys.forEach(k => {
+    const el = document.getElementById(`nav_${k}`);
+    const mel = document.getElementById(`m_nav_${k}`);
+    const fel = document.getElementById(`f_${k}`);
+    if(el) el.textContent = t[`nav_${k}`];
+    if(mel) mel.textContent = t[`nav_${k}`];
+    if(fel) fel.textContent = t[`nav_${k}`];
+  });
+
+  const nb = document.getElementById("nav_book_btn");
+  const mnb = document.getElementById("m_nav_book_btn");
+  if(nb) nb.textContent = t.nav_book;
+  if(mnb) mnb.textContent = t.nav_book;
+
+  // Switcher Active state
+  ["ku", "ar", "en"].forEach(l => {
+    const b = document.getElementById(`btn_${l}`);
+    if(b) b.classList.toggle("active", l === currentLang);
+  });
+
+  // Footer Static
+  const fd = document.getElementById("footer_desc"); if(fd) fd.textContent = t.footer_desc;
+  const flt = document.getElementById("footer_links_title"); if(flt) flt.textContent = t.footer_links;
+  const fct = document.getElementById("footer_contact_title"); if(fct) fct.textContent = t.footer_contact;
+  const fcity = document.getElementById("footer_city"); if(fcity) fcity.textContent = t.footer_city;
+  const fq = document.getElementById("footer_quick"); if(fq) fq.textContent = t.footer_quick;
+  const fc = document.getElementById("f_copy"); if(fc) fc.textContent = t.copy;
+  const fs = document.getElementById("f_sub"); if(fs) fs.textContent = t.sub_copy;
+
+  // AI Window
+  const at = document.getElementById("ai_title"); if(at) at.textContent = t.ai_title;
+  const aw = document.getElementById("ai_welcome"); if(aw) aw.textContent = t.ai_welcome;
+  const aiInp = document.getElementById("aiInput"); if(aiInp) aiInp.placeholder = t.ai_ph;
+}
+
 function loadData(){
  try{
   const local = localStorage.getItem("kurdia_builder_published_v3") || localStorage.getItem("KURDIA_BUILDER_STATE");
@@ -457,18 +623,22 @@ function loadData(){
 }
 
 function applyCoupon(){
+  const t = I18N[currentLang];
   const inp = document.getElementById("couponInput").value.trim().toUpperCase();
   if(!inp) return;
   if(inp === (siteData.couponCode || "KURDIA10")){
     appliedDiscountPercent = siteData.couponDiscount || 10;
-    document.getElementById("couponStatus").innerHTML = `<span class="text-emerald-400 font-bold text-xs">✅ کۆدی داشکاندن (${appliedDiscountPercent}%) چالاک کرا!</span>`;
-    toast(`🎉 داشکاندنی ${appliedDiscountPercent}% جێبەجێ کرا`);
+    document.getElementById("couponStatus").innerHTML = `<span class="text-emerald-400 font-bold text-xs">✅ Coupon Active (${appliedDiscountPercent}%)</span>`;
+    toast(`🎉 ${appliedDiscountPercent}% applied`);
   } else {
-    toast("❌ کۆدی داشکاندن هەڵەیە");
+    toast("❌ Invalid Coupon");
   }
 }
 
 function render(){
+ const t = I18N[currentLang] || I18N.ku;
+ updateStaticText(t);
+
  document.documentElement.style.setProperty("--primary", siteData.gradColor1 || "#9d1c32");
  document.documentElement.style.setProperty("--primary2", siteData.gradColor2 || "#c92b49");
  document.title = siteData.seoTitle || "KURDIA ADVENTURE";
@@ -483,7 +653,7 @@ function render(){
  const remaining = Math.max(0, capacity - booked);
  const percentage = Math.min(100, Math.round((booked / capacity) * 100));
 
- document.getElementById("waDirectBtn").href = `https://wa.me/9647503130360?text=${encodeURIComponent("سڵاو KURDIA ADVENTURE، پرسیارم هەبوو دەربارەی گەشتەکە:")}`;
+ document.getElementById("waDirectBtn").href = `https://wa.me/9647503130360?text=${encodeURIComponent("Hello KURDIA ADVENTURE:")}`;
 
  app.innerHTML = `
  <!-- HERO -->
@@ -496,26 +666,26 @@ function render(){
    <p class="hero-subtitle">${esc(siteData.heroSubtitle)}</p>
 
    <div class="countdown-box">
-     <div class="text-xs font-bold text-gray-300 mb-2">کاتی ماوە بۆ بەڕێکەوتن:</div>
+     <div class="text-xs font-bold text-gray-300 mb-2">${t.cd_label}</div>
      <div class="timer-grid">
-       <div class="timer-cell"><div class="timer-num" id="cdDays">00</div><div class="timer-lbl">ڕۆژ</div></div>
-       <div class="timer-cell"><div class="timer-num" id="cdHours">00</div><div class="timer-lbl">کاتژمێر</div></div>
-       <div class="timer-cell"><div class="timer-num" id="cdMins">00</div><div class="timer-lbl">خولەک</div></div>
-       <div class="timer-cell"><div class="timer-num" id="cdSecs">00</div><div class="timer-lbl">چرکە</div></div>
+       <div class="timer-cell"><div class="timer-num" id="cdDays">00</div><div class="timer-lbl">${t.cd_d}</div></div>
+       <div class="timer-cell"><div class="timer-num" id="cdHours">00</div><div class="timer-lbl">${t.cd_h}</div></div>
+       <div class="timer-cell"><div class="timer-num" id="cdMins">00</div><div class="timer-lbl">${t.cd_m}</div></div>
+       <div class="timer-cell"><div class="timer-num" id="cdSecs">00</div><div class="timer-lbl">${t.cd_s}</div></div>
      </div>
    </div>
 
    <div class="hero-actions">
-    ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary hero-action">بەشداری لە گەشت</a>` : ""}
-    <a href="#trip" class="secondary hero-action">زانیاری گەشت</a>
-    <a href="#about" class="secondary hero-action">ئێمە کێین؟</a>
+    ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary hero-action">${t.btn_join}</a>` : ""}
+    <a href="#trip" class="secondary hero-action">${t.btn_trip_info}</a>
+    <a href="#about" class="secondary hero-action">${t.btn_about}</a>
    </div>
 
    <div class="hero-meta">
-    <div class="meta-card"><div class="meta-label">شوێن</div><div class="meta-value">${esc(siteData.tripLocation)}</div></div>
-    <div class="meta-card"><div class="meta-label">کات</div><div class="meta-value">${esc(siteData.tripTime)}</div></div>
-    <div class="meta-card"><div class="meta-label">ماوە</div><div class="meta-value">${esc(siteData.tripDuration)}</div></div>
-    <div class="meta-card"><div class="meta-label">ئاست</div><div class="meta-value">${esc(siteData.tripDifficulty)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_loc}</div><div class="meta-value">${esc(siteData.tripLocation)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_time}</div><div class="meta-value">${esc(siteData.tripTime)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_dur}</div><div class="meta-value">${esc(siteData.tripDuration)}</div></div>
+    <div class="meta-card"><div class="meta-label">${t.meta_diff}</div><div class="meta-value">${esc(siteData.tripDifficulty)}</div></div>
    </div>
   </div>
  </section>
@@ -529,54 +699,52 @@ function render(){
      <div class="trip-photo-bottom"><div class="trip-photo-title">${esc(siteData.tripLocation)}</div></div>
     </div>
     <div class="trip-content">
-     <div class="section-label"><i data-lucide="compass"></i> گەشتی چالاکی داهاتوو</div>
+     <div class="section-label"><i data-lucide="compass"></i> ${t.trip_badge}</div>
      <h2 class="text-3xl font-black mt-2 mb-4">${esc(siteData.tripTitle)}</h2>
      
      <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-4">
        <div class="flex justify-between items-center text-xs font-bold mb-2">
-         <span class="text-gray-300">کورسییە گیراوەکان: ${booked} لە ${capacity}</span>
-         <span class="text-rose-400 font-black">${remaining > 0 ? `تەنها ${remaining} شوێن ماوە!` : 'تەواو پڕ بووە (Closed)'}</span>
+         <span class="text-gray-300">${t.capacity_booked} ${booked} / ${capacity}</span>
+         <span class="text-rose-400 font-black">${remaining > 0 ? t.capacity_rem.replace('{n}', remaining) : t.capacity_full}</span>
        </div>
        <div class="w-full bg-white/10 h-2.5 rounded-full overflow-hidden">
-         <div class="bg-gradient-to-r from-rose-500 to-rose-700 h-full rounded-full" style="width: ${percentage}%"></div>
+         <div class="bg-gradient-to-r from-rose-500 to-rose-700 h-full rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
        </div>
      </div>
 
      <div class="trip-info-grid">
-      <div class="trip-info"><div class="trip-info-label">کات و بەروار</div><div class="trip-info-value">${esc(siteData.tripTime)}</div></div>
-      <div class="trip-info"><div class="trip-info-label">ماوەی گەشت</div><div class="trip-info-value">${esc(siteData.tripDuration)}</div></div>
+      <div class="trip-info"><div class="trip-info-label">${t.meta_time}</div><div class="trip-info-value">${esc(siteData.tripTime)}</div></div>
+      <div class="trip-info"><div class="trip-info-label">${t.meta_dur}</div><div class="trip-info-value">${esc(siteData.tripDuration)}</div></div>
      </div>
 
      <div class="weather-badge-box">
        <div>
-         <div class="text-xs text-gray-400 font-bold">کەشی پێشبینیکراو:</div>
+         <div class="text-xs text-gray-400 font-bold">${t.weather_lbl}</div>
          <div class="text-sm font-black text-white">${esc(siteData.weatherCondition || "ساماڵ")}</div>
        </div>
        <div class="text-xl font-black text-amber-400">${esc(siteData.weatherTemp || "١٨°C")}</div>
      </div>
 
      <div class="trip-detail">
-       <div class="trip-detail-title">تەواوی وردەکاری و بەرنامە</div>
+       <div class="trip-detail-title">${t.trip_full_desc}</div>
        <div class="trip-detail-text">${esc(siteData.tripDesc)}</div>
      </div>
 
      <div class="trip-price-row">
-       <div><div class="trip-price-label">تێچووی هەر بەشداربوویەک</div><div class="trip-price">${esc(siteData.tripPrice)}</div></div>
-       ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary px-6 py-3 rounded-xl font-bold">ناونووسین بکە</a>` : `<div class="text-gray-500 font-bold">داخراوە</div>`}
+       <div><div class="trip-price-label">${t.trip_price_lbl}</div><div class="trip-price">${esc(siteData.tripPrice)}</div></div>
+       ${siteData.bookingOpen && remaining > 0 ? `<a href="#booking" class="primary px-6 py-3 rounded-xl font-bold">${t.btn_register}</a>` : `<div class="text-gray-500 font-bold">${t.btn_closed}</div>`}
      </div>
     </div>
    </div>
   </div>
  </section>
 
- <!-- 1. ABOUT US & ACHIEVEMENTS -->
+ <!-- ABOUT US & ACHIEVEMENTS -->
  <section id="about" class="section pt-0">
   <div class="container">
     <div class="section-label"><i data-lucide="mountain"></i> KURDIA ADVENTURE</div>
-    <h2 class="section-title mt-2">ئێمە کێین و دەستکەوتەکانمان</h2>
-    <p class="text-gray-300 text-sm max-w-3xl mt-3 leading-relaxed">
-      گرووپی کوردیا ئەدڤێنتچەر لە ساڵی ٢٠٢٤ـەوە وەک یەکێک لە چالاکترین تیمەکانی شاخەوانی لە کوردستان دامەزراوە؛ ئامانجمان ناساندنی سروشتی کوردستان، برەودان بە تەندروستی و دروستکردنی هاوڕێیەتی نوێیە.
-    </p>
+    <h2 class="section-title mt-2">${t.about_title}</h2>
+    <p class="text-gray-300 text-sm max-w-3xl mt-3 leading-relaxed">${t.footer_desc}</p>
 
     <div class="achieve-grid">
       ${(siteData.stats || []).map(st => `
@@ -589,11 +757,11 @@ function render(){
   </div>
  </section>
 
- <!-- 2. TIMELINE -->
+ <!-- TIMELINE -->
  <section id="timeline" class="section pt-0">
   <div class="container">
-    <div class="section-label"><i data-lucide="footprints"></i> هەنگاوەکانی گەشت</div>
-    <h2 class="section-title mt-2">ئەزموونی شاخەوانی لەگەڵ ئێمە</h2>
+    <div class="section-label"><i data-lucide="footprints"></i> ${t.timeline_label}</div>
+    <h2 class="section-title mt-2">${t.timeline_title}</h2>
     <div class="timeline-wrap">
       ${(siteData.timeline || []).map((tl, i) => `
         <div class="timeline-step">
@@ -606,11 +774,11 @@ function render(){
   </div>
  </section>
 
- <!-- 3. SAFETY PROTOCOLS -->
+ <!-- SAFETY PROTOCOLS -->
  <section id="safety" class="section pt-0">
   <div class="container">
-    <div class="section-label"><i data-lucide="shield-check"></i> پارێزراوی و متمانە</div>
-    <h2 class="section-title mt-2">پرۆتۆکۆلی سەلامەتی شاخەوانان</h2>
+    <div class="section-label"><i data-lucide="shield-check"></i> ${t.safety_label}</div>
+    <h2 class="section-title mt-2">${t.safety_title}</h2>
     <div class="safety-grid">
       ${(siteData.safety || []).map(sf => `
         <div class="safety-card">
@@ -623,11 +791,11 @@ function render(){
   </div>
  </section>
 
- <!-- 4. GEAR CHECKLIST -->
+ <!-- GEAR CHECKLIST -->
  <section id="gear" class="section pt-0">
   <div class="container">
-   <div class="section-label"><i data-lucide="backpack"></i> ئامادەکاری پێش دەرچوون</div>
-   <h2 class="section-title mt-2">چی لەگەڵ خۆت دەهێنیت؟</h2>
+   <div class="section-label"><i data-lucide="backpack"></i> ${t.gear_label}</div>
+   <h2 class="section-title mt-2">${t.gear_title}</h2>
    <div class="gear-grid">
      ${(siteData.gear || []).map(g=>`
        <div class="gear-card">
@@ -646,8 +814,8 @@ function render(){
  <!-- SERVICES -->
  <section id="services" class="section pt-0">
   <div class="container">
-   <div class="section-label"><i data-lucide="sparkles"></i> خزمەتگوزارییەکان</div>
-   <h2 class="section-title mt-2">ئەوەی گەشتەکەمان پێشکەشی دەکات</h2>
+   <div class="section-label"><i data-lucide="sparkles"></i> ${t.serv_label}</div>
+   <h2 class="section-title mt-2">${t.serv_title}</h2>
    <div class="service-grid">
      ${(siteData.services || []).map(s=>`
        <div class="service">
@@ -664,12 +832,12 @@ function render(){
   <div class="container">
    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
      <div>
-       <div class="section-label"><i data-lucide="star"></i> بیروڕای شاخەوانان</div>
-       <h2 class="section-title mt-2">ئەزموونی بەشداربووان</h2>
+       <div class="section-label"><i data-lucide="star"></i> ${t.rev_label}</div>
+       <h2 class="section-title mt-2">${t.rev_title}</h2>
      </div>
      <div class="p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
        <div class="text-2xl font-black text-amber-400">4.9 / 5</div>
-       <div class="text-xs text-gray-400">★★★★★<br>ڕەزامەندی زیاتر لە ٩٨٪ بەشداربووان</div>
+       <div class="text-xs text-gray-400">★★★★★<br>${t.rev_stats}</div>
      </div>
    </div>
    <div class="reviews-grid">
@@ -689,8 +857,8 @@ function render(){
  <!-- GALLERY -->
  <section id="gallery" class="section pt-0">
   <div class="container">
-   <div class="section-label"><i data-lucide="image"></i> گەلەری</div>
-   <h2 class="section-title mt-2">ساتە تۆمارکراوەکان لە چیا</h2>
+   <div class="section-label"><i data-lucide="image"></i> ${t.gal_label}</div>
+   <h2 class="section-title mt-2">${t.gal_title}</h2>
    <div class="gallery-grid">
      ${(siteData.gallery || []).map(g=>{
        const u = safeUrl(typeof g === 'string' ? g : g.url);
@@ -708,11 +876,11 @@ function render(){
   <div class="container">
    <div class="surface p-8 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6">
      <div>
-       <div class="section-label"><i data-lucide="map-pin"></i> شوێنی کۆبوونەوە</div>
-       <h2 class="text-2xl font-black mt-2">نەخشەی شوێنی بەڕێکەوتن</h2>
-       <p class="text-xs text-gray-400 mt-2 leading-relaxed">پاسی گەشت لە شوێنی دیاریکراو ئامادە دەبێت؛ بۆ ڕێڕەو کلیک لە دوگمەکە بکە.</p>
+       <div class="section-label"><i data-lucide="map-pin"></i> ${t.loc_label}</div>
+       <h2 class="text-2xl font-black mt-2">${t.loc_title}</h2>
+       <p class="text-xs text-gray-400 mt-2 leading-relaxed">${t.loc_desc}</p>
        <a href="${esc(siteData.waMapsUrl || '#')}" target="_blank" class="primary inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-xl font-bold text-xs">
-         <i data-lucide="navigation"></i> کردنەوە لە Google Maps
+         <i data-lucide="navigation"></i> ${t.btn_maps}
        </a>
      </div>
      <div class="bg-white p-3 rounded-2xl flex flex-col items-center justify-center">
@@ -729,65 +897,65 @@ function render(){
    <div class="booking-wrap">
     <div class="booking-grid">
       <div>
-        <div class="section-label"><i data-lucide="ticket"></i> ناونووسینی فەرمی</div>
-        <h2 class="text-3xl font-black mt-2">ئامادەیت بۆ سەرکێشی؟</h2>
+        <div class="section-label"><i data-lucide="ticket"></i> ${t.book_label}</div>
+        <h2 class="text-3xl font-black mt-2">${t.book_title}</h2>
         <p class="text-gray-400 text-xs mt-3 leading-relaxed">
-          ${needsOtp ? "سەرەتا مۆبایلەکەت لە ڕێگەی WhatsApp پشتڕاست بکەرەوە، پاشان تێچووەکە لە ڕێگەی کارتی بانکی FIB بنێرە و وێنەی پسوولەکە هاوپێچ بکە." : "زانیارییەکانت بنووسە، پارەکە بە FIB بنێرە و وێنەی پسوولەکەت بار بکە."}
+          ${needsOtp ? t.book_desc_otp : t.book_desc_no_otp}
         </p>
 
         <div class="p-4 bg-white/5 rounded-2xl border border-white/10 mt-6">
-          <div class="text-xs text-gray-400 font-bold">هەژماری فەرمیی First Iraqi Bank (FIB):</div>
+          <div class="text-xs text-gray-400 font-bold">${t.fib_label}</div>
           <div class="text-xl font-black text-white mt-1 select-all">${esc(siteData.fibAccount || "07503130360")}</div>
-          <div class="text-[11px] text-gray-400 mt-2">تکایە لە کاتی ناردنی پارە، ناوی تەواوی خۆت لە تێبینی بنووسە.</div>
+          <div class="text-[11px] text-gray-400 mt-2">${t.fib_note}</div>
         </div>
 
         <div class="mt-4 p-4 bg-white/[0.03] border border-white/10 rounded-2xl">
-          <div class="text-xs font-bold text-gray-300 mb-2">کۆدی داشکاندن (Coupon) هەتە؟</div>
+          <div class="text-xs font-bold text-gray-300 mb-2">${t.coupon_ask}</div>
           <div class="flex gap-2">
-            <input id="couponInput" class="input py-2 text-xs uppercase" placeholder="وەک: KURDIA10">
-            <button type="button" onclick="applyCoupon()" class="secondary px-4 rounded-xl text-xs font-bold">چالاککردن</button>
+            <input id="couponInput" class="input py-2 text-xs uppercase" placeholder="KURDIA10">
+            <button type="button" onclick="applyCoupon()" class="secondary px-4 rounded-xl text-xs font-bold">${t.btn_apply}</button>
           </div>
           <div id="couponStatus" class="mt-2"></div>
         </div>
       </div>
 
       <form onsubmit="submitBooking(event)" class="booking-form">
-        <input id="bookName" class="input" placeholder="ناوی تەواوی بەشداربوو" required>
+        <input id="bookName" class="input" placeholder="${t.name_ph}" required>
         
         <div class="flex gap-2">
-          <input id="bookPhone" class="input" placeholder="ژمارەی مۆبایل (WhatsApp)" required inputmode="tel">
+          <input id="bookPhone" class="input" placeholder="${t.phone_ph}" required inputmode="tel">
           ${needsOtp ? `
-            <button type="button" id="otpSendBtn" onclick="requestOtpCode()" class="secondary px-4 rounded-xl text-xs font-bold whitespace-nowrap">کۆد بنێرە</button>
+            <button type="button" id="otpSendBtn" onclick="requestOtpCode()" class="secondary px-4 rounded-xl text-xs font-bold whitespace-nowrap">${t.btn_send_code}</button>
           ` : ""}
         </div>
 
         ${needsOtp ? `
           <div id="otpInputContainer" class="hidden full">
             <div class="flex gap-2">
-              <input id="bookOtp" class="input" placeholder="کۆدی ٤ ژمارەیی" maxlength="4" inputmode="numeric">
-              <button type="button" onclick="verifyOtpCode()" class="primary px-5 rounded-xl text-xs font-bold">سەلماندن</button>
+              <input id="bookOtp" class="input" placeholder="${t.otp_ph}" maxlength="4" inputmode="numeric">
+              <button type="button" onclick="verifyOtpCode()" class="primary px-5 rounded-xl text-xs font-bold">${t.btn_verify}</button>
             </div>
           </div>
         ` : ""}
 
         <select id="bookPeople" class="input full" onchange="handlePeopleCount(this.value)">
-          <option value="1">١ کەس (تەنها خۆم)</option>
-          <option value="2">٢ کەس</option>
-          <option value="3">٣ کەس</option>
-          <option value="4">٤ کەس</option>
-          <option value="5">٥ کەس</option>
+          <option value="1">${t.person_1}</option>
+          <option value="2">${t.person_multi.replace('{n}', '2')}</option>
+          <option value="3">${t.person_multi.replace('{n}', '3')}</option>
+          <option value="4">${t.person_multi.replace('{n}', '4')}</option>
+          <option value="5">${t.person_multi.replace('{n}', '5')}</option>
         </select>
         <div id="extraNamesContainer" class="full"></div>
 
-        <input id="bookNote" class="input full" placeholder="تێبینی، نەخۆشی تایبەت یان شوێنی سەرکەوتن...">
+        <input id="bookNote" class="input full" placeholder="${t.note_ph}">
         
         <div class="full">
-          <label class="block text-xs font-bold text-gray-400 mb-1">🧾 وێنەی پسوولەی پارەدانی FIB</label>
+          <label class="block text-xs font-bold text-gray-400 mb-1">${t.receipt_lbl}</label>
           <input id="bookReceipt" type="file" accept="image/*" class="input" required>
         </div>
 
         <button type="submit" id="bookSubmitBtn" class="primary submit-button full ${needsOtp ? 'opacity-50 cursor-not-allowed' : ''}" ${needsOtp ? 'disabled' : ''}>
-          ${needsOtp ? '🔒 سەرەتا مۆبایلەکەت بسەلمێنە' : '🚀 ناردنی داواکاری و پسوولەی FIB'}
+          ${needsOtp ? t.btn_need_verify : t.btn_submit}
         </button>
       </form>
     </div>
@@ -801,6 +969,7 @@ function render(){
 }
 
 function handlePeopleCount(val){
+  const t = I18N[currentLang] || I18N.ku;
   const c = document.getElementById("extraNamesContainer");
   c.innerHTML = "";
   const num = parseInt(val, 10);
@@ -808,16 +977,17 @@ function handlePeopleCount(val){
   for(let i=2; i<=num; i++){
     const div = document.createElement("div");
     div.className = "extra-name-box";
-    div.innerHTML = `<input class="input text-xs extra-person-name" placeholder="ناوی کەسی ${i}" required>`;
+    div.innerHTML = `<input class="input text-xs extra-person-name" placeholder="${t.extra_ph.replace('{n}', i)}" required>`;
     c.appendChild(div);
   }
 }
 
 async function requestOtpCode(){
+  const t = I18N[currentLang] || I18N.ku;
   const phone = document.getElementById("bookPhone").value.trim();
   const btn = document.getElementById("otpSendBtn");
-  if(!phone){ toast("سەرەتا ژمارەی مۆبایل بنووسە"); return; }
-  btn.disabled = true; btn.textContent = "دەنێردرێت...";
+  if(!phone){ toast("Please enter phone"); return; }
+  btn.disabled = true; btn.textContent = "...";
   try{
     const res = await fetch(`${WORKER_ENDPOINT}/api/otp/send`, {
       method:"POST",
@@ -826,25 +996,26 @@ async function requestOtpCode(){
     });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("📩 کۆد بۆ WhatsApp نێردرا");
+      toast("📩 WhatsApp OTP sent");
       document.getElementById("otpInputContainer").classList.remove("hidden");
-      btn.textContent = "دووبارە";
+      btn.textContent = t.btn_resend;
     }else{ 
-      toast("❌ " + (d.error || "کێشەیەک لە ناردنی کۆد ڕوویدا"));
-      btn.textContent = "کۆد بنێرە"; 
+      toast("❌ " + (d.error || "Error"));
+      btn.textContent = t.btn_send_code; 
     }
   }catch(e){ 
-    toast("کێشە لە پەیوەندی بە سێرڤەر"); 
-    btn.textContent = "کۆد بنێرە"; 
+    toast("Server connection error"); 
+    btn.textContent = t.btn_send_code; 
   }
   finally{ btn.disabled = false; }
 }
 
 async function verifyOtpCode(){
+  const t = I18N[currentLang] || I18N.ku;
   const phone = document.getElementById("bookPhone").value.trim();
   const code = document.getElementById("bookOtp").value.trim();
   const subBtn = document.getElementById("bookSubmitBtn");
-  if(!code || code.length !== 4){ toast("کۆدی ٤ ژمارەیی بنووسە"); return; }
+  if(!code || code.length !== 4){ toast("Enter 4-digit code"); return; }
   try{
     const res = await fetch(`${WORKER_ENDPOINT}/api/otp/verify`, {
       method:"POST",
@@ -854,22 +1025,22 @@ async function verifyOtpCode(){
     const d = await res.json();
     if(res.ok && d.verified){
       isPhoneVerified = true;
-      toast("✅ مۆبایلەکەت سەلمێندرا!");
-      document.getElementById("otpInputContainer").innerHTML = `<div class="p-2 bg-green-500/10 text-green-400 font-bold text-xs rounded-xl">✅ ژمارەکەت لە WhatsApp سەلمێندرا</div>`;
+      toast("✅ Verified!");
+      document.getElementById("otpInputContainer").innerHTML = `<div class="p-2 bg-green-500/10 text-green-400 font-bold text-xs rounded-xl">✅ Phone Verified</div>`;
       document.getElementById("bookPhone").readOnly = true;
       document.getElementById("otpSendBtn").style.display = "none";
       subBtn.disabled = false;
       subBtn.classList.remove("opacity-50", "cursor-not-allowed");
-      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی FIB";
-    }else{ toast("❌ کۆدەکە هەڵەیە"); }
-  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); }
+      subBtn.textContent = t.btn_submit;
+    }else{ toast("❌ Invalid code"); }
+  }catch(e){ toast("Server error"); }
 }
 
 async function submitBooking(e){
   e.preventDefault();
   const needsOtp = siteData.otpRequired !== false;
   if(needsOtp && !isPhoneVerified){ 
-    toast("سەرەتا مۆبایلەکەت لە WhatsApp بسەلمێنە"); 
+    toast("Verify phone first"); 
     return; 
   }
   
@@ -883,7 +1054,7 @@ async function submitBooking(e){
   const extraInputs = document.querySelectorAll(".extra-person-name");
   const extraNames = Array.from(extraInputs).map(inp => inp.value.trim()).filter(Boolean).join("، ");
 
-  subBtn.disabled = true; subBtn.textContent = "تکایە چاوەڕێبە...";
+  subBtn.disabled = true; subBtn.textContent = "Wait...";
   try{
     const formData = new FormData();
     formData.append("name", name);
@@ -891,23 +1062,22 @@ async function submitBooking(e){
     formData.append("trip", siteData.tripTitle);
     formData.append("people", people);
     formData.append("extra_names", extraNames);
-    formData.append("note", (appliedDiscountPercent > 0 ? `[داشکاندنی ${appliedDiscountPercent}% جێبەجێکراوە] ` : "") + note);
+    formData.append("note", (appliedDiscountPercent > 0 ? `[Discount ${appliedDiscountPercent}%] ` : "") + note);
     if(receipt) formData.append("receipt", receipt);
 
     const res = await fetch(`${WORKER_ENDPOINT}/api/register`, { method:"POST", body:formData });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("🎉 ناونووسینەکەت بە سەرکەوتوویی تۆمارکرا!");
+      toast("🎉 Booking successful!");
       e.target.reset();
       isPhoneVerified = false;
       render();
     }else{
-      toast("❌ " + (d.error || "کێشەیەک ڕوویدا"));
+      toast("❌ " + (d.error || "Error"));
       subBtn.disabled = false;
-      subBtn.textContent = "🚀 ناردنی داواکاری و پسوولەی FIB";
     }
   }catch(err){
-    toast("کێشە لە پەیوەندی بە سێرڤەر");
+    toast("Server connection error");
     subBtn.disabled = false;
   }
 }
@@ -955,16 +1125,16 @@ async function sendAI(){
     const res = await fetch(`${WORKER_ENDPOINT}/api/ai`, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ prompt: `تۆ یاریدەدەری فەرمیی شاخەوانی KURDIA ADVENTUREیت. بە کوردی وەڵامی کورت بدەرەوە: ${q}` })
+      body:JSON.stringify({ prompt: `You are the official assistant of KURDIA ADVENTURE. Answer briefly in language '${currentLang}': ${q}` })
     });
     const d = await res.json();
     if(d.ok && d.text){
       box.innerHTML += `<div class="ai-message ai">${esc(d.text)}</div>`;
     }else{
-      box.innerHTML += `<div class="ai-message ai">بۆ زانیاری زیاتر لە ڕێگەی WhatsApp پەیوەندیمان پێوە بکە: 07503130360</div>`;
+      box.innerHTML += `<div class="ai-message ai">For more details, contact us on WhatsApp: 07503130360</div>`;
     }
   }catch(e){
-    box.innerHTML += `<div class="ai-message ai">پەیوەندی لەگەڵ AI نائامادەیە؛ دەتوانیت لە ڕێگەی WhatsApp نامە بنێریت.</div>`;
+    box.innerHTML += `<div class="ai-message ai">AI offline. Please message us on WhatsApp.</div>`;
   }finally{
     btn.disabled = false;
     box.scrollTop = box.scrollHeight;
