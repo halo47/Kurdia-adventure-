@@ -64,7 +64,6 @@ button{ cursor:pointer; }
 .section{ padding:80px 0; }
 .section-label{ color:#aeb7c5; font-size:.92rem; font-weight:800; }
 .section-title{ font-size:clamp(1.9rem,4vw,3.6rem); line-height:1.2; font-weight:900; letter-spacing:-.04em; }
-.section-description{ color:#94a3b8; line-height:2; max-width:720px; }
 
 /* HEADER */
 .site-header{ position:fixed; top:0; left:0; right:0; z-index:1000; }
@@ -257,7 +256,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
     <a href="#itinerary">بەرنامە</a>
     <a href="#reviews">فیدباک</a>
     <a href="#gallery">وێنەکان</a>
-    <a href="#about">ئێمە</a><a href="#upcoming">گەشتەکان</a><a href="#safety">سەلامەتی</a><a href="#gallery">وێنەکان</a><a href="#faq">پرسیارەکان</a>
+    <a href="#faq">پرسیارەکان</a>
    </nav>
 
    <a href="#booking" class="primary hidden md:flex px-5 py-2.5 rounded-xl font-bold text-xs">بەشداری</a>
@@ -275,7 +274,7 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
     <a href="#itinerary" onclick="closeMenu()">بەرنامە</a>
     <a href="#reviews" onclick="closeMenu()">فیدباک</a>
     <a href="#gallery" onclick="closeMenu()">وێنەکان</a>
-    <a href="#about" onclick="closeMenu()">ئێمە</a><a href="#upcoming" onclick="closeMenu()">گەشتەکان</a><a href="#safety" onclick="closeMenu()">سەلامەتی</a><a href="#gallery" onclick="closeMenu()">وێنەکان</a><a href="#faq" onclick="closeMenu()">پرسیارەکان</a>
+    <a href="#faq" onclick="closeMenu()">پرسیارەکان</a>
     <a href="#booking" onclick="closeMenu()" class="primary text-center font-bold mt-2">بەشداری</a>
    </div>
   </div>
@@ -323,7 +322,6 @@ footer{ border-top:1px solid var(--border); background:#05080d; }
   <div>
    <div class="font-bold text-sm mb-3">پەیوەندی</div>
    <div class="text-xs text-gray-400 leading-relaxed">بۆ هەر پرسیار و هەماهەنگییەک لە ڕێگەی WhatsApp پەیوەندیمان پێوە بکە.</div>
-    <div id="socialLinks" class="social-row"></div>
   </div>
  </div>
  <div class="container footer-bottom">
@@ -390,7 +388,7 @@ function toast(msg){
  const el = document.getElementById("toast");
  el.textContent = msg;
  el.classList.add("show");
- setTimeout(()=> el.classList.remove("show"), 3200);
+ setTimeout(()=> el.classList.remove("show"), 4000);
 }
 
 function loadData(){
@@ -533,6 +531,21 @@ function render(){
   </div>
  </section>
 
+ <!-- GALLERY -->
+ <section id="gallery" class="section pt-0">
+  <div class="container">
+   <div class="section-label">گەلەری</div>
+   <h2 class="section-title mt-2">وێنە و یادەوەرییەکان</h2>
+   <div class="gallery-grid">
+     ${(siteData.gallery || []).map(g=>`
+       <div class="gallery-card">
+         <img src="${esc(safeUrl(typeof g === 'string' ? g : g.url))}" alt="Kurdia Adventure">
+       </div>
+     `).join("")}
+   </div>
+  </div>
+ </section>
+
  <!-- FAQ -->
  <section id="faq" class="section pt-0">
   <div class="container max-w-3xl">
@@ -641,8 +654,15 @@ async function requestOtpCode(){
       toast("📩 کۆد بۆ WhatsApp نێردرا");
       document.getElementById("otpInputContainer").classList.remove("hidden");
       btn.textContent = "دووبارە";
-    }else{ toast("❌ " + (d.error || "کێشەیەک ڕوویدا")); btn.textContent = "کۆد بنێرە"; }
-  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); btn.textContent = "کۆد بنێرە"; }
+    }else{ 
+      const detail = d.details ? (typeof d.details === "object" ? JSON.stringify(d.details) : d.details) : (d.error || "کێشەیەک ڕوویدا");
+      toast("❌ " + detail);
+      btn.textContent = "کۆد بنێرە"; 
+    }
+  }catch(e){ 
+    toast("کێشە لە پەیوەندی بە سێرڤەر: " + e.message); 
+    btn.textContent = "کۆد بنێرە"; 
+  }
   finally{ btn.disabled = false; }
 }
 
