@@ -551,8 +551,15 @@ textarea{ min-height:85px; resize:vertical; }
         <div class="card">
           <div class="card-title"><i data-lucide="message-square"></i> نامەکانی WhatsApp و شوێنی کۆبوونەوە</div>
           <div class="field"><label>📍 لینکی شوێنی کۆبوونەوە لە Google Maps</label><input id="waMapsUrl" dir="ltr" oninput="autoSync()"></div>
-          <div class="field"><label>✅ دەقی نامەی پەسەندکردن</label><textarea id="waVerifyTemplate" style="min-height:140px;"></textarea></div>
-          <div class="field"><label>❌ دەقی نامەی ڕەتکردنەوە</label><textarea id="waRejectTemplate" style="min-height:100px;"></textarea></div>
+          <div class="field"><label>🔐 Template ـەکانی Meta WhatsApp</label>
+            <div class="small-note">
+              <div>🔐 OTP: <b>kurdia_notification</b> — 1 variable</div>
+              <div>✅ پشتڕاستکردنەوە: <b>trip_confirmation</b> — 4 variables</div>
+              <div>❌ ڕەتکردنەوە: <b>trip_rejected</b> — 2 variables</div>
+              <div>📢 ئاگاداری: <b>trip_notification</b> — 1 variable</div>
+            </div>
+          </div>
+          <div class="small-note">دەقی Template ـەکان لە Meta WhatsApp Manager ـەوە کۆنترۆڵ دەکرێن؛ ئەم پانێڵە تەنها لینکی Maps پاشەکەوت دەکات. دەقی ئاگاداریی گشتی لە بەشی «پەیامی بەکۆمەڵ» دەنێردرێت و دەخرێتە ناو {{1}} ـی <b>trip_notification</b>.</div>
           <button class="btn btn-success w-full mt-2" onclick="saveWhatsAppToCloud()">💾 پاشەکەوتکردن لە Cloud</button>
         </div>
       </section>
@@ -637,8 +644,6 @@ let appState = {
   couponDiscount: 10,
   fibAccount: "07503130360",
   waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
-  waVerifyTemplate: `سڵاو بەڕێزم 🌿\nپیرۆزە! ناونووسینەکەت پشتڕاستکرایەوە. ✅\n\n🆔 *کۆدی داواکاری:* {id}\n📍 *شوێن:* {maps}`,
-  waRejectTemplate: `سڵاو بەڕێزم 🌿\nداواکاری ناونووسینەکەت پەسەند نەکرا. ❌\n\n🆔 *کۆد:* {id}\n⚠️ *هۆکار:* {reason}`,
   
   i18n: {
     ku: {
@@ -1000,8 +1005,6 @@ function autoSync(){
 
   appState.fibAccount = document.getElementById("fibAccount").value;
   appState.waMapsUrl = document.getElementById("waMapsUrl").value;
-  appState.waVerifyTemplate = document.getElementById("waVerifyTemplate").value;
-  appState.waRejectTemplate = document.getElementById("waRejectTemplate").value;
 
   document.getElementById("dashTotalCap").textContent = appState.capacity;
   document.getElementById("dashBooked").textContent = appState.booked;
@@ -1068,8 +1071,6 @@ function loadState(){
 
   document.getElementById("fibAccount").value = appState.fibAccount || "07503130360";
   document.getElementById("waMapsUrl").value = appState.waMapsUrl || "";
-  document.getElementById("waVerifyTemplate").value = appState.waVerifyTemplate || "";
-  document.getElementById("waRejectTemplate").value = appState.waRejectTemplate || "";
 
   if(appState.heroImageUrl){
     const h = document.getElementById("heroDropPreview");
@@ -1237,7 +1238,7 @@ async function saveWhatsAppToCloud(){
     const res = await fetch(`${WORKER_URL}/api/admin/wa-settings`, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ mapsUrl:appState.waMapsUrl, verifyTemplate:appState.waVerifyTemplate, rejectTemplate:appState.waRejectTemplate })
+      body:JSON.stringify({ mapsUrl:appState.waMapsUrl })
     });
     if(res.ok) toast("✅ لە Cloud پاشەکەوت کرا");
     else toast("❌ کێشە لە سەیڤکردن");
