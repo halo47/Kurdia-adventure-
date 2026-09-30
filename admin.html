@@ -183,92 +183,30 @@ textarea{ min-height:85px; resize:vertical; }
 .status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .status-chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
 @media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
-</style>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<style id="kurdia-v5-merged-css">
-
-/* ===== KURDIA V5 VISUAL SYSTEM — merged into original Admin ===== */
-:root{
-  --k5-bg:#06080d;--k5-panel:#0c1119;--k5-panel2:#111824;
-  --k5-line:rgba(255,255,255,.08);--k5-text:#f7f8fa;--k5-muted:#929dad;
-  --k5-red:#a91d37;--k5-red2:#d53350;--k5-green:#32c985;
-}
-body{
-  background:radial-gradient(circle at 20% 0,rgba(169,29,55,.12),transparent 28%),#06080d!important;
-}
-.sidebar{
-  background:rgba(8,11,17,.94)!important;
-  backdrop-filter:blur(20px)!important;
-  border-left:1px solid rgba(255,255,255,.08)!important;
-}
-.topbar{
-  background:rgba(6,8,13,.82)!important;
-  backdrop-filter:blur(18px)!important;
-  border-bottom:1px solid rgba(255,255,255,.08)!important;
-}
-.content-body{max-width:1400px!important;margin:auto!important}
-.card,.p-5.rounded-2xl{
-  background:rgba(12,17,25,.9)!important;
-  border-color:rgba(255,255,255,.08)!important;
-  box-shadow:0 10px 30px rgba(0,0,0,.12);
-}
-.btn-primary{
-  background:linear-gradient(135deg,#d53350,#8d142c)!important;
-}
-.k5-nav-sep{
-  margin:12px 5px 4px!important;color:#626c7b!important;font-size:9px!important;
-  font-weight:800!important;letter-spacing:1px!important;list-style:none!important;
-}
-.k5-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:10px;color:#cbd3de}
-.k5-status{display:inline-flex;align-items:center;gap:6px}.k5-dot{width:8px;height:8px;border-radius:50%;background:#32c985;box-shadow:0 0 12px rgba(50,201,133,.6)}.k5-dot.warn{background:#f0b44b}.k5-dot.err{background:#d53350}
-.k5-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.k5-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.k5-mini{padding:13px;border-radius:17px;background:#0a0f16;border:1px solid rgba(255,255,255,.08)}.k5-mini b{display:block;font-size:18px}.k5-mini small{color:#929dad;font-size:10px}
-.k5-table{width:100%;border-collapse:separate;border-spacing:0 7px}.k5-table th{font-size:10px;color:#8f99a8;text-align:right;padding:4px 8px}.k5-table td{background:#0a0f16;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);padding:10px 8px;font-size:11px}.k5-table td:first-child{border-right:1px solid rgba(255,255,255,.08);border-radius:0 12px 12px 0}.k5-table td:last-child{border-left:1px solid rgba(255,255,255,.08);border-radius:12px 0 0 12px}
-.k5-publish{position:relative;overflow:hidden}.k5-publish:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 0,rgba(211,47,78,.16),transparent 45%);pointer-events:none}
-.k5-preview{min-height:260px;background:#05070b;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:18px}.k5-preview .pv-hero{padding:20px;border-radius:18px;background:linear-gradient(135deg,rgba(169,29,55,.22),rgba(255,255,255,.03));margin-bottom:12px}.k5-preview .pv-title{font-size:25px;font-weight:900}.k5-preview .pv-card{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;margin-top:9px}
-.k5-log{max-height:390px;overflow:auto;display:grid;gap:7px}.k5-filter{max-width:260px}.k5-actions{display:flex;gap:7px;flex-wrap:wrap}.k5-section-note{font-size:11px;color:#929dad;line-height:1.8}.k5-progress{height:8px;background:#080d14;border:1px solid rgba(255,255,255,.08);border-radius:99px;overflow:hidden}.k5-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#8d142c,#d53350);border-radius:99px}.k5-lock{font-size:10px;color:#ff8ba0}.k5-danger{border-color:rgba(211,47,78,.28)!important;background:rgba(211,47,78,.06)!important}
-@media(max-width:850px){.k5-grid3,.k5-grid2{grid-template-columns:1fr}.k5-table{display:block;overflow:auto}.k5-table th,.k5-table td{white-space:nowrap}.k5-filter{max-width:none;width:100%}}
-
-</style>
-
-<style id="kurdia-v8-mobile-fix">
+/* MOBILE FIX — keep the exact same visual design, remove desktop overflow */
 @media (max-width:850px){
-  html,body{width:100%;min-width:0;overflow-x:hidden}
-  body{margin:0}
-  .main{margin-right:0!important;width:100%!important;min-width:0!important}
-  .top{width:100%!important;height:70px;padding:0 12px!important}
-  .content{width:100%!important;max-width:none!important;margin:0!important;padding:12px!important}
-  .content>*{max-width:none!important;width:100%!important}
-  .hero,.card{width:100%!important;margin-left:0!important;margin-right:0!important}
-  .grid{grid-template-columns:1fr 1fr!important;width:100%!important}
-  .formgrid{grid-template-columns:1fr!important;width:100%!important}
-  .toolbar{width:100%;gap:8px}
-  .toolbar .btn{flex:1 1 auto}
-  .row{width:100%;max-width:none!important}
-  .k5-grid3,.k5-grid2{grid-template-columns:1fr!important;width:100%!important}
-  .k5-table{width:100%!important}
-  .preview,.k5-preview{width:100%!important}
-  .mobilebar{display:block}
+  html,body{overflow:hidden;width:100%;max-width:100%;}
+  .app-container{width:100%;min-width:0;overflow:hidden;}
+  .workspace{width:100%;min-width:0;max-width:100%;}
+  .content-body{width:100%;min-width:0;padding:12px;overflow-x:hidden;}
+  .topbar{width:100%;min-width:0;padding:0 12px;}
+  .topbar-right{min-width:0;}
+  #topbarTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;}
+  .card{width:100%;max-width:100%;padding:16px;border-radius:18px;}
+  .grid-2,.grid-3,.grid-4{width:100%;grid-template-columns:1fr;gap:10px;}
+  .item-row{width:100%;min-width:0;flex-wrap:wrap;gap:8px;}
+  .btn{max-width:100%;}
+  .sidebar{width:min(320px,88vw);}
+  .sidebar.open{transform:translateX(0);}
 }
-@media (max-width:520px){
-  .content{padding:10px!important}
-  .top{padding:0 10px!important}
-  .top .toolbar .btn{padding:9px 10px;font-size:11px}
-  .grid{grid-template-columns:1fr 1fr!important;gap:8px}
-  .stat{min-width:0;padding:14px 10px}
-  .stat b{font-size:20px}
-  .card{padding:14px;border-radius:19px}
-  .hero{padding:16px;border-radius:20px}
-  .hero h1{font-size:22px}
-  .k5-mini{padding:13px}
-  .k5-actions .btn{width:100%;flex:1 1 100%}
-  .row{padding:10px}
-  .row .grow{min-width:0!important;width:100%}
-  .thumb{width:56px;height:48px}
+@media (min-width:851px){
+  .workspace{min-width:0;}
 }
 </style>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 <body>
 
@@ -318,18 +256,6 @@ body{
       <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="credit-card"></i> دارایی و FIB</button></li>
       <li><button class="nav-btn" onclick="switchTab('sheets_tab')"><i data-lucide="file-spreadsheet"></i> پەیوەندی بە Sheets</button></li>
       <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
-
-      <li class="k5-nav-sep">CONTROL CENTER V5</li>
-      <li><button class="nav-btn" onclick="switchTab('k5_analytics')"><i data-lucide="bar-chart-3"></i> ئامار و چاودێری</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users"></i> کۆمەڵگا</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_coupons')"><i data-lucide="ticket"></i> Coupons & Offers</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_finance')"><i data-lucide="wallet"></i> Finance Center</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_communications')"><i data-lucide="messages-square"></i> پەیوەندییەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_activity')"><i data-lucide="history"></i> Activity Log</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_diagnostics')"><i data-lucide="stethoscope"></i> Diagnostics</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_settings')"><i data-lucide="settings"></i> Settings</button></li>
-
     </ul>
 
     <div class="sidebar-footer">
@@ -741,17 +667,6 @@ body{
         </div>
       </section>
 
-
-<section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
-<section id="tab-k5_publish" class="page-tab"><div class="card k5-publish"><h2>🚀 Publish Center</h2><p class="k5-section-note">هیچ گۆڕانکارییەک پێش Preview بڵاوناکرێتەوە. Draft و Preview لێرە کۆنترۆڵ دەکرێن.</p><div class="k5-actions"><button class="btn ghost" onclick="k5Preview()">Preview</button><button class="btn ghost" onclick="k5SaveDraft()">Save Draft</button><button class="btn red" onclick="publishLive()">Publish</button><button class="btn danger" onclick="k5UnpublishNotice()">Unpublish</button></div></div><div class="k5-grid2"><div class="card"><h3>Draft</h3><div id="k5DraftInfo" class="k5-section-note">دوایین draft: ـ</div></div><div class="card"><h3>Live</h3><div id="k5LiveInfo" class="k5-section-note">دوایین publish: ـ</div></div></div><div class="card"><h3>Preview</h3><div id="k5Preview" class="k5-preview"><div class="muted">Preview لێرە دەردەکەوێت.</div></div></div></section>
-<section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
-<section id="tab-k5_coupons" class="page-tab"><div class="card"><h2>🎟️ Coupons & Offers</h2><p class="k5-section-note">کۆدی داشکاندن بە شێوەیەکی ڕوون بەڕێوەبەرە.</p><div class="formgrid"><div class="field"><label>کۆد</label><input id="k5CouponCode" class="input" placeholder="KURDIA10"></div><div class="field"><label>داشکاندن %</label><input id="k5CouponPercent" class="input" type="number" min="0" max="100" value="10"></div><div class="field"><label>تا بەروار</label><input id="k5CouponExpiry" class="input" type="date"></div><div class="field"><label>ژمارەی بەکارهێنان</label><input id="k5CouponLimit" class="input" type="number" min="1" value="100"></div></div><div class="k5-actions" style="margin-top:10px"><button class="btn red" onclick="k5AddCoupon()">زیادکردن</button></div></div><div class="card"><div id="k5CouponList" class="list"></div></div></section>
-<section id="tab-k5_finance" class="page-tab"><div class="hero"><div class="eyebrow">FINANCE</div><h1>پارە و FIB</h1><p class="muted">زانیاری پارەدان و receipt ـەکان بۆ چاودێرییە، نەک بۆ گۆڕینی داتای بانکی لێرە.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Paid</small><b id="k5Paid">—</b></div><div class="k5-mini"><small>Pending</small><b id="k5Pending">—</b></div><div class="k5-mini"><small>Receipts</small><b id="k5Receipts">—</b></div></div><div class="card"><h3>FIB Configuration</h3><div class="formgrid"><div class="field"><label>ناوی هەژمار</label><input id="k5FibName" class="input"></div><div class="field"><label>ژمارە/ID ـی هەژمار</label><input id="k5FibAccount" class="input"></div></div><div class="k5-lock" style="margin-top:8px">زانیاری هەژماری بانکی تەنها لە Worker/CMS ـی پارێزراو هەڵبگرە.</div></div></section>
-<section id="tab-k5_communications" class="page-tab"><div class="card"><h2>💬 Communications</h2><div class="k5-grid2"><div class="k5-mini"><b>WhatsApp</b><span id="k5WaStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>Telegram</b><span id="k5TgStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>AI</b><span id="k5AiStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>Google Sheets</b><span id="k5SheetStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div></div></div><div class="card"><h3>WhatsApp Templates</h3><table class="k5-table"><thead><tr><th>Template</th><th>بەکارهێنان</th><th>دۆخ</th></tr></thead><tbody><tr><td>kurdia_notification</td><td>OTP</td><td>Active</td></tr><tr><td>trip_confirmation</td><td>پشتڕاستکردنەوەی گەشت</td><td>Active</td></tr><tr><td>trip_rejected</td><td>ڕەتکردنەوە</td><td>Active</td></tr><tr><td>trip_notification</td><td>ئاگاداری گەشت</td><td>Active</td></tr></tbody></table></div></section>
-<section id="tab-k5_activity" class="page-tab"><div class="card"><div class="toolbar"><h2 style="margin:0;flex:1">🕒 Activity Log</h2><button class="btn ghost" onclick="k5ClearLogs()">پاککردنەوە</button></div><div id="k5Activity" class="k5-log"></div></div></section>
-<section id="tab-k5_diagnostics" class="page-tab"><div class="hero"><div class="eyebrow">SYSTEM</div><h1>Diagnostics</h1><p class="muted">پشکنینی Worker و integration ـە سەرەکییەکان.</p></div><div class="toolbar"><button class="btn red" onclick="k5Diagnostics()">Run Diagnostics</button><span id="k5DiagTime" class="k5-badge">هێشتا پشکنین نەکراوە</span></div><div id="k5Diagnostics" class="list"></div></section>
-<section id="tab-k5_settings" class="page-tab"><div class="card"><h2>⚙️ Settings</h2><div class="formgrid"><div class="field"><label>ناوی براند</label><input id="k5Brand" class="input" value="KURDIA ADVENTURE"></div><div class="field"><label>زمانی سەرەکی</label><select id="k5Lang" class="select"><option value="ku">کوردی</option><option value="ar">عەرەبی</option><option value="en">English</option></select></div><div class="field"><label>Theme</label><select id="k5Theme" class="select"><option>Dark Cinematic</option></select></div><div class="field"><label>Maintenance Mode</label><label class="switch"><input id="k5Maintenance" type="checkbox"> چالاککردن</label></div></div><button class="btn red" style="margin-top:10px" onclick="k5SaveSettings()">پاشەکەوتی Settings</button></div><div class="card k5-danger"><h3>Danger Zone</h3><p class="k5-section-note">Reset ـی local CMS تەنها داتای ناوخۆیی ئەم Admin ـە دەسڕێتەوە.</p><button class="btn danger" onclick="resetData()">Reset Local CMS</button></div></section>
-
     </div>
   </main>
 </div>
@@ -864,26 +779,14 @@ let appState = {
 
 let cachedRegistrations = [];
 
-function checkAdminAuth(ev){
-  if(ev) ev.preventDefault();
-  const input = document.getElementById('adminPin');
-  const overlay = document.getElementById('authOverlay');
-  const pin = String(input?.value ?? '').trim();
-  if(pin === '2026'){
-    try { sessionStorage.setItem('kurdia_admin_auth','1'); } catch(e) {}
-    if(overlay){
-      overlay.classList.add('hidden');
-      overlay.style.display = 'none';
-      overlay.setAttribute('aria-hidden','true');
-    }
-    document.body.classList.remove('locked');
-    if(typeof toast === 'function') toast('بەخێربێیت ✓');
-  }else{
-    if(input){
-      input.focus();
-      input.select();
-    }
-    if(typeof toast === 'function') toast('PIN هەڵەیە');
+function checkAdminAuth(){
+  const val = document.getElementById("adminPinInput").value.trim();
+  if(val === ADMIN_SECRET_PIN || sessionStorage.getItem("admin_auth") === "true"){
+    sessionStorage.setItem("admin_auth", "true"); sessionStorage.setItem("kurdia_admin_key", val);
+    document.getElementById("adminAuthModal").style.display = "none";
+    toast("بەخێربێیت بۆ دەستەی کۆنترۆڵ 🏔️");
+  } else {
+    toast("❌ PIN هەڵەیە");
   }
 }
 
@@ -1339,8 +1242,8 @@ function switchTab(tabId){
   if(target) target.classList.add("active");
 
   document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
-  if(event?.currentTarget?.classList) event.currentTarget.classList.add("active");
-  if(window.innerWidth <= 850) toggleSidebar();
+  if(window.event?.currentTarget?.classList) window.event.currentTarget.classList.add("active");
+  if(window.innerWidth <= 850 && document.getElementById("sidebar")?.classList.contains("open")) toggleSidebar();
 
   if(tabId === 'stories_tab'){
     fetchAdminStories();
@@ -1528,105 +1431,14 @@ function importBackup(e){
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  const pin=document.getElementById("adminPinInput");
+  if(pin) pin.addEventListener("keydown", e=>{ if(e.key==="Enter") checkAdminAuth(); });
   if(sessionStorage.getItem("admin_auth") === "true"){
     document.getElementById("adminAuthModal").style.display = "none";
   }
   loadState();
   if(window.lucide) lucide.createIcons();
 });
-
-/* ===== KURDIA V5 MERGED CONTROL CENTER ===== */
-(function(){
-  const K5={activityKey:'kurdia_admin_activity',couponKey:'kurdia_admin_coupons',draftKey:'kurdia_admin_draft',settingsKey:'kurdia_admin_settings'};
-  function esc(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));}
-  function klog(action,detail){
-    let a=[];try{a=JSON.parse(localStorage.getItem(K5.activityKey)||'[]')}catch{}
-    a.unshift({at:new Date().toISOString(),action,detail});localStorage.setItem(K5.activityKey,JSON.stringify(a.slice(0,100)));k5RenderLogs();
-  }
-  function k5RenderLogs(){
-    const box=document.getElementById('k5Activity');if(!box)return;
-    let a=[];try{a=JSON.parse(localStorage.getItem(K5.activityKey)||'[]')}catch{}
-    box.innerHTML=a.length?a.map(x=>`<div class="item-row"><div><b>${esc(x.action)}</b><div class="text-xs text-gray-400">${esc(x.detail||'')}</div></div><small>${new Date(x.at).toLocaleString('ku-IQ')}</small></div>`).join(''):'<div class="text-gray-400 text-sm">هیچ activity ـی نییە.</div>';
-  }
-  window.k5Preview=function(){
-    const d=window.appState||{};
-    const hero=d.i18n?.ku?.heroTitle||'KURDIA ADVENTURE';
-    const text=d.i18n?.ku?.heroSubtitle||'گەشت، سروشت و ئەزموونی جیاواز.';
-    const title=d.i18n?.ku?.tripTitle||'گەشتی ئەم هەفتەیە';
-    const loc=d.i18n?.ku?.tripLocation||'شوێنی گەشت';
-    const price=d.i18n?.ku?.tripPrice||'';
-    const box=document.getElementById('k5Preview');
-    if(!box)return;
-    box.innerHTML=`<div class="pv-hero"><div class="eyebrow">KURDIA ADVENTURE</div><div class="pv-title">${esc(hero)}</div><p class="muted">${esc(text)}</p></div><div class="pv-card"><b>${esc(title)}</b><div class="k5-section-note">${esc(loc)} ${price?' · '+esc(price):''}</div></div>`;
-    klog('Preview','پێشبینینی Home دروست کرا');
-  };
-  window.k5SaveDraft=function(){
-    try{autoSync();localStorage.setItem(K5.draftKey,JSON.stringify(appState||{}));const el=document.getElementById('k5DraftInfo');if(el)el.textContent='Draft پاشەکەوت کرا: '+new Date().toLocaleString('ku-IQ');klog('Draft','Draft پاشەکەوت کرا');toast('Draft پاشەکەوت کرا ✓')}catch(e){toast('Draft هەڵەی هەیە')}}
-  window.k5UnpublishNotice=function(){toast('Unpublish بۆ Worker route ـی تایبەت پێویستە؛ داتای Live نەگۆڕدرا.');klog('Unpublish','داواکاری Unpublish تۆمار کرا');};
-  window.k5AddCoupon=function(){
-    const code=document.getElementById('k5CouponCode')?.value.trim();if(!code)return toast('کۆد بنووسە');
-    const c={code,percent:Number(document.getElementById('k5CouponPercent')?.value)||0,expiry:document.getElementById('k5CouponExpiry')?.value||'',limit:Number(document.getElementById('k5CouponLimit')?.value)||1};
-    let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{};a.push(c);localStorage.setItem(K5.couponKey,JSON.stringify(a));document.getElementById('k5CouponCode').value='';k5RenderCoupons();klog('Coupon','کۆدی '+c.code+' زیادکرا');
-  };
-  function k5RenderCoupons(){
-    const box=document.getElementById('k5CouponList');if(!box)return;let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{}
-    box.innerHTML=a.length?a.map((x,i)=>`<div class="item-row"><div><b>${esc(x.code)}</b><div class="text-xs text-gray-400">${x.percent}% · ${esc(x.expiry||'بێ سنوور')} · ${x.limit} بەکارهێنان</div></div><button class="btn btn-danger" onclick="k5DeleteCoupon(${i})">سڕینەوە</button></div>`).join(''):'<div class="text-gray-400 text-sm">هیچ Coupon ـێک نییە.</div>';
-  }
-  window.k5DeleteCoupon=function(i){let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{};a.splice(i,1);localStorage.setItem(K5.couponKey,JSON.stringify(a));k5RenderCoupons();klog('Coupon','کۆد سڕایەوە')};
-  window.k5FilterCommunity=function(){
-    const q=(document.getElementById('k5CommunitySearch')?.value||'').toLowerCase();
-    const list=(appState?.stories||[]).filter(x=>String(x.name||x.title||'').toLowerCase().includes(q));
-    const box=document.getElementById('k5CommunityList');if(!box)return;
-    box.innerHTML=list.map(x=>`<div class="item-row"><div><b>${esc(x.name||x.title||'Story')}</b><div class="text-xs text-gray-400">${esc(x.status||'local')}</div></div></div>`).join('')||'<div class="text-gray-400 text-sm">هیچ ئەنجامێک نییە.</div>';
-  };
-  window.k5ClearLogs=function(){localStorage.removeItem(K5.activityKey);k5RenderLogs();};
-  window.k5SaveSettings=function(){
-    const s={brand:document.getElementById('k5Brand')?.value||'KURDIA ADVENTURE',lang:document.getElementById('k5Lang')?.value||'ku',theme:document.getElementById('k5Theme')?.value||'Dark Cinematic',maintenance:!!document.getElementById('k5Maintenance')?.checked};
-    localStorage.setItem(K5.settingsKey,JSON.stringify(s));klog('Settings','Settings پاشەکەوت کرا');toast('Settings پاشەکەوت کرا ✓');
-  };
-  window.k5Diagnostics=async function(){
-    const box=document.getElementById('k5Diagnostics');if(!box)return;box.innerHTML='<div class="item-row">پشکنین دەکرێت...</div>';
-    const checks=[];
-    try{
-      const r=await adminFetch(`${WORKER_URL}/api/admin/diagnostics`,{headers:{'x-admin-key':ADMIN_SECRET_PIN}});
-      const x=await r.json().catch(()=>({}));
-      if(Array.isArray(x.checks))x.checks.forEach(c=>checks.push(c));else checks.push({name:'Worker Diagnostics',status:r.ok?'online':'error',detail:r.status});
-    }catch(e){checks.push({name:'Worker Diagnostics',status:'error',detail:'پەیوەندی نییە'});}
-    box.innerHTML=checks.map(c=>`<div class="item-row"><span class="k5-status"><i class="k5-dot ${c.status==='online'?'':'err'}"></i></span><div style="flex:1"><b>${esc(c.name||'Service')}</b><div class="text-xs text-gray-400">${esc(c.detail||c.status||'')}</div></div><span class="k5-badge">${esc(c.status||'')}</span></div>`).join('');
-    const tm=document.getElementById('k5DiagTime');if(tm)tm.textContent='دوایین پشکنین: '+new Date().toLocaleTimeString('ku-IQ');klog('Diagnostics','پشکنینی سیستم ئەنجامدرا');
-  };
-  window.k5LoadOps=async function(){
-    try{
-      const h={headers:{'x-admin-key':ADMIN_SECRET_PIN}};
-      const [b,p]=await Promise.all([adminFetch(`${WORKER_URL}/api/admin/registrations`,h),adminFetch(`${WORKER_URL}/api/admin/private-requests`,h)]);
-      const bj=await b.json().catch(()=>({})),pj=await p.json().catch(()=>({}));
-      const bs=bj.registrations||[],ps=pj.requests||[];
-      const bc=document.getElementById('k5BookCount');if(bc)bc.textContent=bs.length;
-      const pc=document.getElementById('k5PrivateCount');if(pc)pc.textContent=ps.length;
-      const sc=document.getElementById('k5StoryPending');if(sc)sc.textContent=(appState?.stories||[]).filter(x=>x.status==='pending'||!x.status).length;
-      const cap=Number(appState?.capacity)||0,book=Number(appState?.booked)||0,pct=cap?Math.min(100,Math.round(book/cap*100)):0;
-      const bar=document.getElementById('k5CapacityBar');if(bar)bar.style.width=pct+'%';
-      const txt=document.getElementById('k5CapacityText');if(txt)txt.textContent=`${book} / ${cap||'—'} بەشداربوو · ${pct}% پڕبوون`;
-      const paid=bs.filter(x=>['paid','approved','confirmed'].includes(String(x.status||'').toLowerCase())).length;
-      if(document.getElementById('k5Paid'))document.getElementById('k5Paid').textContent=paid;
-      if(document.getElementById('k5Pending'))document.getElementById('k5Pending').textContent=Math.max(0,bs.length-paid);
-      if(document.getElementById('k5Receipts'))document.getElementById('k5Receipts').textContent=bs.filter(x=>x.receipt||x.receiptUrl).length;
-    }catch(e){}
-  };
-  const oldSwitch=window.switchTab;
-  window.switchTab=function(id){
-    oldSwitch(id);
-    if(id==='k5_analytics')k5LoadOps();
-    if(id==='k5_publish')k5Preview();
-    if(id==='k5_community')k5FilterCommunity();
-    if(id==='k5_coupons')k5RenderCoupons();
-    if(id==='k5_activity')k5RenderLogs();
-  };
-  const oldPublish=window.publishLive;
-  window.publishLive=async function(){await oldPublish();klog('Publish','CMS بڵاوکرایەوە');const el=document.getElementById('k5LiveInfo');if(el)el.textContent='دوایین Publish: '+new Date().toLocaleString('ku-IQ');};
-  k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
-})();
-
 </script>
 </body>
 </html>
