@@ -1481,9 +1481,40 @@ async function saveWhatsAppToCloud(){
 }
 
 
+async function uploadCMSImage(value, prefix){
+  const v=String(value||"");
+  if(!v.startsWith("data:image/")) return v;
+  const mime=(v.match(/^data:(image\/[^;]+);base64,/)||[])[1]||"image/jpeg";
+  const ext=(mime.split("/")[1]||"jpeg").replace("jpeg","jpg");
+  const name=`${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+  const r=await adminFetch(`${WORKER_URL}/api/admin/media`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({name,contentType:mime,base64:v})
+  });
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok || !d.ok || !d.url) throw new Error(d.error||"Media upload failed");
+  return d.url;
+}
+
+async function prepareCMSMedia(){
+  appState.heroImageUrl=await uploadCMSImage(appState.heroImageUrl,"hero");
+  appState.tripImageUrl=await uploadCMSImage(appState.tripImageUrl,"trip");
+  if(Array.isArray(appState.gallery)){
+    const out=[];
+    for(const item of appState.gallery){
+      if(typeof item==="string") out.push(await uploadCMSImage(item,"gallery"));
+      else out.push({...item,url:await uploadCMSImage(item?.url,"gallery")});
+    }
+    appState.gallery=out;
+  }
+}
+
 async function saveStudioToCloud(){
  try{
   autoSync();
+  await prepareCMSMedia();
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));
   const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms`);
   const current=await currentRes.json();
   const data=current.data||{};
