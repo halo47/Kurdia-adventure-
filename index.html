@@ -168,6 +168,56 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .more-card>svg:last-child{color:var(--muted)}
 @media(max-width:700px){.more-grid{grid-template-columns:1fr}.more-card{padding:15px}}
 </style>
+
+<style id="kurdia-mobile-polish">
+/* Mobile polish: preserve the current design, but make navigation readable
+   even when external icon fonts/scripts fail to load. */
+.topin{min-height:70px;display:grid;grid-template-columns:48px 1fr 48px 48px;align-items:center;gap:8px}
+.iconbtn{width:48px;height:48px;border-radius:16px;border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.035);color:#f6f7f9;display:grid;place-items:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);transition:.2s}
+.iconbtn:active{transform:scale(.95);background:rgba(255,255,255,.08)}
+.brand{text-align:center;letter-spacing:5px;font-weight:900;font-size:18px;line-height:1.05}
+.brand small{display:block;font-size:9px;letter-spacing:5px;margin-top:8px;color:#fff}
+.iconbtn i,.navitem i,.ai i{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center}
+.navitem{position:relative;min-width:0}
+.navitem .ico{width:21px;height:21px;stroke-width:2}
+.navitem:not(.navjoin){padding-top:4px}
+.navjoin{position:relative}
+.navjoin .ico{width:22px;height:22px}
+.bottom{display:grid!important;grid-template-columns:1fr 1fr 1.05fr 1fr 1fr;align-items:center;gap:5px;padding:5px 7px}
+@media(max-width:520px){
+  .top{padding-left:12px;padding-right:12px}
+  .topin{grid-template-columns:44px 1fr 44px 44px;gap:6px}
+  .iconbtn{width:44px;height:44px;border-radius:15px}
+  .brand{font-size:17px;letter-spacing:4px}
+  .brand small{font-size:8px;letter-spacing:4px}
+  .hero{min-height:calc(100svh - 70px);max-height:none}
+  .hero .container{padding:0 18px 108px}
+  .hero h1{font-size:clamp(42px,12.5vw,68px);letter-spacing:-1.5px}
+  .hero p{font-size:13px;line-height:1.9}
+  .hero .actions{display:grid;grid-template-columns:1fr 1.15fr;gap:10px}
+  .hero .actions .btn{min-height:56px}
+  .bottom{left:10px;right:10px;height:76px;border-radius:25px}
+  .navitem{height:62px;font-size:8px}
+  .navjoin{height:68px;margin-top:-18px;border-radius:24px}
+  .navitem .ico{width:20px;height:20px}
+}
+</style>
+
+<style id="kurdia-more-polish">
+#more .section-head{padding-top:8px}
+#more .section-head h2{font-size:clamp(28px,8vw,44px);letter-spacing:-1px;margin:6px 0}
+#more .section-head p{max-width:560px;line-height:1.9}
+.more-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.more-card{min-height:96px}
+.more-card b{font-size:15px}
+@media(max-width:520px){
+  #more{padding-bottom:24px}
+  .more-grid{grid-template-columns:1fr;gap:10px}
+  .more-card{min-height:88px}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -414,7 +464,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
   <a class="navitem" data-page="weather" href="#weather"><i data-lucide="cloud-sun" class="ico"></i>کەشوهەوا</a>
   <a class="navitem navjoin" data-page="booking" href="#booking"><i data-lucide="ticket" class="ico"></i>بەشداری</a>
   <a class="navitem" data-page="private" href="#private"><i data-lucide="crown" class="ico"></i>تایبەت</a>
-  <a class="navitem" data-page="more" href="#destinations"><i data-lucide="menu" class="ico"></i>زیاتر</a>
+  <a class="navitem" data-page="more" href="#more"><i data-lucide="menu" class="ico"></i>زیاتر</a>
 </nav>
 
 <div id="searchModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('searchModal')"><i data-lucide="x"></i></button><h3>گەڕان لە KURDIA</h3><input id="siteSearch" class="input" placeholder="شوێن، گەشت، کەمپینگ..." oninput="filterSearch()"><div id="searchResults" class="articleList" style="margin-top:12px"></div></div></div>
@@ -602,4 +652,37 @@ async function submitStory(e){e.preventDefault();const media=$('stMediaBase64')?
 function startCountdown(){clearInterval(countdownTimer);const target=new Date((data.trip?.date||'2026-10-03')+'T05:00:00').getTime();const t=()=>{let d=target-Date.now();if(d<0)d=0;const a=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);if($('cdDays'))$('cdDays').textContent=String(a).padStart(2,'0');if($('cdHours'))$('cdHours').textContent=String(h).padStart(2,'0');if($('cdMins'))$('cdMins').textContent=String(m).padStart(2,'0');if($('cdSecs'))$('cdSecs').textContent=String(s).padStart(2,'0')};t();countdownTimer=setInterval(t,1000)}
 
 loadRemote().finally(()=>{render();route();startCountdown();fetchStories()});
-</script></body></html>
+</script>
+<script id="kurdia-icon-fallback">
+(function(){
+  const P={
+    "chevron-right":'<path d="m9 18 6-6-6-6"/>',
+    "music":'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+    "search":'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+    "home":'<path d="m3 10 9-7 9 7v10H3z"/><path d="M9 21v-6h6v6"/>',
+    "cloud-sun":'<path d="M12 3v2M4.22 4.22l1.42 1.42M3 12h2M4.22 19.78l1.42-1.42M20 12h1M18.36 5.64l1.42-1.42"/><circle cx="12" cy="12" r="4"/><path d="M16 17a4 4 0 1 0 0-8 5 5 0 0 0-4 2"/>',
+    "ticket":'<path d="M2 9a3 3 0 0 0 0 6v4h20v-4a3 3 0 0 0 0-6V5H2z"/><path d="M13 5v14"/>',
+    "crown":'<path d="m3 7 4 4 5-7 5 7 4-4-2 12H5z"/>',
+    "menu":'<path d="M4 6h16M4 12h16M4 18h16"/>',
+    "plus":'<path d="M12 5v14M5 12h14"/>',
+    "arrow-left":'<path d="M19 12H5M12 19l-7-7 7-7"/>',
+    "map-pin":'<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+    "shield-check":'<path d="M12 3 4 6v5c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/><path d="m8 12 2.5 2.5L16 9"/>',
+    "backpack":'<path d="M6 8V6a6 6 0 0 1 12 0v2"/><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M8 12h8M9 16h6"/>',
+    "sparkles":'<path d="m12 3 1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5z"/><path d="m19 16 .7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7z"/>',
+    "crown":'<path d="m3 7 4 4 5-7 5 7 4-4-2 12H5z"/>'
+  };
+  function fallback(){
+    document.querySelectorAll('[data-lucide]').forEach(function(el){
+      if(el.querySelector('svg')) return;
+      var n=el.getAttribute('data-lucide'), d=P[n]||P['sparkles'];
+      el.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';
+    });
+  }
+  window.kurdiaIconsFallback=fallback;
+  function paint(){try{if(window.lucide&&typeof lucide.createIcons==='function'){lucide.createIcons();}else fallback();}catch(e){fallback();}}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',paint); else paint();
+  window.addEventListener('load',function(){setTimeout(paint,250)});
+})();
+</script>
+</body></html>
