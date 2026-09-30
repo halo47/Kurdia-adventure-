@@ -1495,9 +1495,10 @@ async function saveStudioToCloud(){
 
 async function publishLive(){
   autoSync();
-  await saveStudioToCloud();
+  const ok=await saveStudioToCloud();
+  if(!ok){ toast('❌ Publish سەرکەوتوو نەبوو — گۆڕانکارییەکان تەنها Local مایەوە'); return; }
   await saveWhatsAppToCloud();
-  toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!");
+  toast('🚀 گۆڕانکارییەکان بۆ Cloud CMS نێردران و Publish کران!');
 }
 function openLiveSite(){ window.open("index.html", "_blank"); }
 function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
