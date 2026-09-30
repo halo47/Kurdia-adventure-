@@ -325,7 +325,7 @@ body{
       <li><button class="nav-btn" onclick="switchTab('achievements')"><i data-lucide="trophy"></i> دەستکەوت و ئامارەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('itinerary_tab')"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</button></li>
       <li><button class="nav-btn" onclick="switchTab('safety_tab')"><i data-lucide="shield-check"></i> پرۆتۆکۆلی سەلامەتی</button></li>
-      <li><button class="nav-btn" onclick="switchTab('coupon')"><i data-lucide="tag"></i> کۆدی داشکاندن (Coupon)</button></li>
+      <li style="display:none"><button class="nav-btn" onclick="switchTab('coupon')"><i data-lucide="tag"></i> کۆدی داشکاندن (Coupon)</button></li>
       <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> پەیامی بەکۆمەڵ (Broadcast)</button></li>
       <li><button class="nav-btn" onclick="switchTab('reviews')"><i data-lucide="message-circle"></i> بیروڕا و فیدباکەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</button></li>
@@ -679,15 +679,9 @@ body{
         </div>
       </section>
 
-      <!-- COUPON -->
+      <!-- COUPON LEGACY -->
       <section class="page-tab" id="tab-coupon">
-        <div class="card">
-          <div class="card-title"><i data-lucide="tag"></i> کۆدی داشکاندن (Coupon Code)</div>
-          <div class="grid-2 mt-2">
-            <div class="field"><label>دەقی کۆدی داشکاندن</label><input id="couponCodeInput" placeholder="KURDIA10" oninput="autoSync()"></div>
-            <div class="field"><label>ڕێژەی داشکاندن (%)</label><input id="couponDiscountInput" type="number" placeholder="10" oninput="autoSync()"></div>
-          </div>
-        </div>
+        <div class="card"><div class="card-title"><i data-lucide="tag"></i> کۆدی داشکاندن</div><p class="k5-section-note">بۆ بەڕێوەبردنی چەندین کۆد، لە «Coupons & Offers» بەکاربهێنە.</p><button class="btn btn-primary" onclick="switchTab('k5_coupons')">کردنەوەی بەشی کۆدەکان</button></div>
       </section>
 
       <!-- BROADCAST -->
@@ -862,7 +856,35 @@ body{
 <section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
 <section id="tab-k5_publish" class="page-tab"><div class="card k5-publish"><h2>🚀 Publish Center</h2><p class="k5-section-note">هیچ گۆڕانکارییەک پێش Preview بڵاوناکرێتەوە. Draft و Preview لێرە کۆنترۆڵ دەکرێن.</p><div class="k5-actions"><button class="btn ghost" onclick="k5Preview()">Preview</button><button class="btn ghost" onclick="k5SaveDraft()">Save Draft</button><button class="btn red" onclick="publishLive()">Publish</button><button class="btn danger" onclick="k5UnpublishNotice()">Unpublish</button></div></div><div class="k5-grid2"><div class="card"><h3>Draft</h3><div id="k5DraftInfo" class="k5-section-note">دوایین draft: ـ</div></div><div class="card"><h3>Live</h3><div id="k5LiveInfo" class="k5-section-note">دوایین publish: ـ</div></div></div><div class="card"><h3>Preview</h3><div id="k5Preview" class="k5-preview"><div class="muted">Preview لێرە دەردەکەوێت.</div></div></div></section>
 <section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
-<section id="tab-k5_coupons" class="page-tab"><div class="card"><h2>🎟️ Coupons & Offers</h2><p class="k5-section-note">کۆدی داشکاندن بە شێوەیەکی ڕوون بەڕێوەبەرە.</p><div class="formgrid"><div class="field"><label>کۆد</label><input id="k5CouponCode" class="input" placeholder="KURDIA10"></div><div class="field"><label>داشکاندن %</label><input id="k5CouponPercent" class="input" type="number" min="0" max="100" value="10"></div><div class="field"><label>تا بەروار</label><input id="k5CouponExpiry" class="input" type="date"></div><div class="field"><label>ژمارەی بەکارهێنان</label><input id="k5CouponLimit" class="input" type="number" min="1" value="100"></div></div><div class="k5-actions" style="margin-top:10px"><button class="btn red" onclick="k5AddCoupon()">زیادکردن</button></div></div><div class="card"><div id="k5CouponList" class="list"></div></div></section>
+<section id="tab-k5_coupons" class="page-tab">
+ <div class="hero">
+  <div class="eyebrow">COUPONS & OFFERS</div>
+  <h1>🎟️ کۆدەکانی داشکاندن</h1>
+  <p class="muted">هەرچەند کۆدێکت دەوێت زیاد بکە؛ هەر کۆدێک کاتی دەستپێکردن، کاتی بەسەرچوون و سنووری بەکارهێنانی جیاواز هەیە.</p>
+ </div>
+ <div class="card">
+  <div class="card-title"><i data-lucide="plus-circle"></i> زیادکردنی کۆدی نوێ</div>
+  <div class="formgrid">
+   <div class="field"><label>کۆدی داشکاندن</label><input id="k5CouponCode" class="input" placeholder="KURDIA10" autocomplete="off"></div>
+   <div class="field"><label>جۆری داشکاندن</label><select id="k5CouponType" class="input"><option value="percent">ڕێژەیی (%)</option><option value="fixed">بڕی دیاریکراو (IQD)</option></select></div>
+   <div class="field"><label>بڕی داشکاندن</label><input id="k5CouponValue" class="input" type="number" min="0" step="0.01" value="10"></div>
+   <div class="field"><label>کاتی دەستپێکردن</label><input id="k5CouponStart" class="input" type="datetime-local"></div>
+   <div class="field"><label>کاتی بەسەرچوون</label><input id="k5CouponExpiry" class="input" type="datetime-local"></div>
+   <div class="field"><label>زۆرترین جار بەکارهێنان</label><input id="k5CouponLimit" class="input" type="number" min="0" value="100"><small class="text-xs text-gray-400">0 = بێ سنوور</small></div>
+   <div class="field"><label>ژمارەی بەکارهێنراو تا ئێستا</label><input id="k5CouponUsed" class="input" type="number" min="0" value="0"></div>
+   <div class="field"><label>دۆخ</label><label style="display:flex;align-items:center;gap:10px;margin-top:9px"><input id="k5CouponActive" type="checkbox" checked style="width:18px;height:18px"> چالاک</label></div>
+  </div>
+  <div class="k5-actions" style="margin-top:12px">
+   <button class="btn red" id="k5CouponSaveBtn" onclick="k5AddCoupon()">➕ زیادکردنی کۆد</button>
+   <button class="btn ghost" onclick="k5ClearCouponForm()">پاککردنەوە</button>
+  </div>
+  <div id="k5CouponEditInfo" class="k5-section-note" style="margin-top:8px"></div>
+ </div>
+ <div class="card">
+  <div class="toolbar" style="margin-bottom:10px"><input id="k5CouponSearch" class="input k5-filter" placeholder="گەڕان بە کۆد..." oninput="k5RenderCoupons()"><button class="btn ghost" onclick="k5RenderCoupons()">نوێکردنەوە</button></div>
+  <div id="k5CouponList" class="list"></div>
+ </div>
+</section>
 <section id="tab-k5_finance" class="page-tab"><div class="hero"><div class="eyebrow">FINANCE</div><h1>پارە و FIB</h1><p class="muted">زانیاری پارەدان و receipt ـەکان بۆ چاودێرییە، نەک بۆ گۆڕینی داتای بانکی لێرە.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Paid</small><b id="k5Paid">—</b></div><div class="k5-mini"><small>Pending</small><b id="k5Pending">—</b></div><div class="k5-mini"><small>Receipts</small><b id="k5Receipts">—</b></div></div><div class="card"><h3>FIB Configuration</h3><div class="formgrid"><div class="field"><label>ناوی هەژمار</label><input id="k5FibName" class="input"></div><div class="field"><label>ژمارە/ID ـی هەژمار</label><input id="k5FibAccount" class="input"></div></div><div class="k5-lock" style="margin-top:8px">زانیاری هەژماری بانکی تەنها لە Worker/CMS ـی پارێزراو هەڵبگرە.</div></div></section>
 <section id="tab-k5_communications" class="page-tab"><div class="card"><h2>💬 Communications</h2><div class="k5-grid2"><div class="k5-mini"><b>WhatsApp</b><span id="k5WaStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>Telegram</b><span id="k5TgStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>AI</b><span id="k5AiStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>Google Sheets</b><span id="k5SheetStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div></div></div><div class="card"><h3>WhatsApp Templates</h3><table class="k5-table"><thead><tr><th>Template</th><th>بەکارهێنان</th><th>دۆخ</th></tr></thead><tbody><tr><td>kurdia_notification</td><td>OTP</td><td>Active</td></tr><tr><td>trip_confirmation</td><td>پشتڕاستکردنەوەی گەشت</td><td>Active</td></tr><tr><td>trip_rejected</td><td>ڕەتکردنەوە</td><td>Active</td></tr><tr><td>trip_notification</td><td>ئاگاداری گەشت</td><td>Active</td></tr></tbody></table></div></section>
 <section id="tab-k5_activity" class="page-tab"><div class="card"><div class="toolbar"><h2 style="margin:0;flex:1">🕒 Activity Log</h2><button class="btn ghost" onclick="k5ClearLogs()">پاککردنەوە</button></div><div id="k5Activity" class="k5-log"></div></div></section>
@@ -1354,6 +1376,8 @@ function autoSync(){
   document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
   document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
 
+  // Modern multi-coupon manager is stored in appState and therefore included in Cloud Publish.
+  if(!Array.isArray(appState.coupons)) appState.coupons=[];
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
 }
@@ -1368,6 +1392,7 @@ function loadState(){
       if(!Array.isArray(appState.stats)) appState.stats = DEFAULT_DATA.stats;
       if(!Array.isArray(appState.itinerary)) appState.itinerary = DEFAULT_DATA.itinerary;
       if(!Array.isArray(appState.safety)) appState.safety = DEFAULT_DATA.safety;
+      if(!Array.isArray(appState.coupons)) appState.coupons = [];
     }
   }catch(e){}
 
@@ -1610,6 +1635,7 @@ async function saveStudioToCloud(){
   trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
   data.trips=[trip,...data.trips.slice(1)];
   data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
+  data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
   const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
   const d=await r.json();
   if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
@@ -1702,16 +1728,60 @@ function resetData(){
   window.k5SaveDraft=function(){
     try{autoSync();localStorage.setItem(K5.draftKey,JSON.stringify(appState||{}));const el=document.getElementById('k5DraftInfo');if(el)el.textContent='Draft پاشەکەوت کرا: '+new Date().toLocaleString('ku-IQ');klog('Draft','Draft پاشەکەوت کرا');toast('Draft پاشەکەوت کرا ✓')}catch(e){toast('Draft هەڵەی هەیە')}}
   window.k5UnpublishNotice=function(){toast('Unpublish بۆ Worker route ـی تایبەت پێویستە؛ داتای Live نەگۆڕدرا.');klog('Unpublish','داواکاری Unpublish تۆمار کرا');};
-  window.k5AddCoupon=function(){
-    const code=document.getElementById('k5CouponCode')?.value.trim();if(!code)return toast('کۆد بنووسە');
-    const c={code,percent:Number(document.getElementById('k5CouponPercent')?.value)||0,expiry:document.getElementById('k5CouponExpiry')?.value||'',limit:Number(document.getElementById('k5CouponLimit')?.value)||1};
-    let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{};a.push(c);localStorage.setItem(K5.couponKey,JSON.stringify(a));document.getElementById('k5CouponCode').value='';k5RenderCoupons();klog('Coupon','کۆدی '+c.code+' زیادکرا');
-  };
-  function k5RenderCoupons(){
-    const box=document.getElementById('k5CouponList');if(!box)return;let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{}
-    box.innerHTML=a.length?a.map((x,i)=>`<div class="item-row"><div><b>${esc(x.code)}</b><div class="text-xs text-gray-400">${x.percent}% · ${esc(x.expiry||'بێ سنوور')} · ${x.limit} بەکارهێنان</div></div><button class="btn btn-danger" onclick="k5DeleteCoupon(${i})">سڕینەوە</button></div>`).join(''):'<div class="text-gray-400 text-sm">هیچ Coupon ـێک نییە.</div>';
+  function k5Coupons(){
+    if(!Array.isArray(appState.coupons)) appState.coupons=[];
+    return appState.coupons;
   }
-  window.k5DeleteCoupon=function(i){let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{};a.splice(i,1);localStorage.setItem(K5.couponKey,JSON.stringify(a));k5RenderCoupons();klog('Coupon','کۆد سڕایەوە')};
+  function k5CouponStatus(x){
+    const now=Date.now();
+    if(x.active===false) return ['ناچالاک','muted'];
+    if(x.startsAt && now < new Date(x.startsAt).getTime()) return ['لە چاوەڕوانیدا','warn'];
+    if(x.expiresAt && now > new Date(x.expiresAt).getTime()) return ['بەسەرچوو','err'];
+    if(Number(x.maxUses)>0 && Number(x.usedCount||0)>=Number(x.maxUses)) return ['تەواوبوو','err'];
+    return ['چالاک','ok'];
+  }
+  function k5FormatDate(v){if(!v)return 'بێ سنوور';try{return new Date(v).toLocaleString('ku-IQ',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return v}}
+  function k5CouponValueLabel(x){return x.type==='fixed'?`${Number(x.value||0).toLocaleString('en-US')} IQD`:`${Number(x.value||0)}%`}
+  window.k5ClearCouponForm=function(){
+    ['k5CouponCode','k5CouponValue','k5CouponStart','k5CouponExpiry','k5CouponLimit','k5CouponUsed'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=id==='k5CouponValue'?'10':id==='k5CouponLimit'?'100':id==='k5CouponUsed'?'0':''});
+    const t=document.getElementById('k5CouponType');if(t)t.value='percent';const a=document.getElementById('k5CouponActive');if(a)a.checked=true;
+    const b=document.getElementById('k5CouponSaveBtn');if(b){b.textContent='➕ زیادکردنی کۆد';b.onclick=window.k5AddCoupon}
+    const info=document.getElementById('k5CouponEditInfo');if(info)info.textContent='';delete window.__editingCouponIndex;
+  };
+  window.k5AddCoupon=function(){
+    const code=document.getElementById('k5CouponCode')?.value.trim().toUpperCase();
+    const type=document.getElementById('k5CouponType')?.value||'percent';
+    const value=Number(document.getElementById('k5CouponValue')?.value||0);
+    const startsAt=document.getElementById('k5CouponStart')?.value||'';
+    const expiresAt=document.getElementById('k5CouponExpiry')?.value||'';
+    const maxUses=Math.max(0,Number(document.getElementById('k5CouponLimit')?.value||0));
+    const usedCount=Math.max(0,Number(document.getElementById('k5CouponUsed')?.value||0));
+    const active=!!document.getElementById('k5CouponActive')?.checked;
+    if(!code)return toast('کۆدی داشکاندن بنووسە');
+    if(!value || value<0 || (type==='percent'&&value>100))return toast('بڕی داشکاندن دروست نییە');
+    if(startsAt && expiresAt && new Date(expiresAt)<=new Date(startsAt))return toast('کاتی بەسەرچوون دەبێت دوای دەستپێکردن بێت');
+    const a=k5Coupons();
+    const editing=Number.isInteger(window.__editingCouponIndex)?window.__editingCouponIndex:-1;
+    const duplicate=a.findIndex((x,i)=>String(x.code).toUpperCase()===code&&i!==editing);
+    if(duplicate>=0)return toast('ئەم کۆدە پێشتر هەیە');
+    const item={id:editing>=0?(a[editing].id||('cp_'+Date.now().toString(36))):('cp_'+Date.now().toString(36)),code,type,value,startsAt,expiresAt,maxUses,usedCount,active,updatedAt:new Date().toISOString()};
+    if(editing>=0){a[editing]=item;klog('Coupon','کۆدی '+code+' نوێکرایەوە')}else{a.unshift(item);klog('Coupon','کۆدی '+code+' زیادکرا')}
+    appState.coupons=a;localStorage.setItem(K5.couponKey,JSON.stringify(a));autoSync();k5RenderCoupons();k5ClearCouponForm();toast(editing>=0?'کۆد نوێکرایەوە ✓':'کۆد زیادکرا ✓');
+  };
+  window.k5EditCoupon=function(i){
+    const x=k5Coupons()[i];if(!x)return;
+    document.getElementById('k5CouponCode').value=x.code||'';document.getElementById('k5CouponType').value=x.type||'percent';document.getElementById('k5CouponValue').value=x.value??10;document.getElementById('k5CouponStart').value=x.startsAt||'';document.getElementById('k5CouponExpiry').value=x.expiresAt||'';document.getElementById('k5CouponLimit').value=x.maxUses??0;document.getElementById('k5CouponUsed').value=x.usedCount??0;document.getElementById('k5CouponActive').checked=x.active!==false;
+    window.__editingCouponIndex=i;const b=document.getElementById('k5CouponSaveBtn');if(b)b.textContent='💾 پاشەکەوتکردنی گۆڕانکاری';const info=document.getElementById('k5CouponEditInfo');if(info)info.textContent='دەستکاریکردنی کۆدی: '+x.code;window.scrollTo({top:0,behavior:'smooth'});
+  };
+  window.k5DeleteCoupon=function(i){const a=k5Coupons();if(!a[i])return;if(!confirm('دڵنیایت لە سڕینەوەی ئەم کۆدە؟'))return;const code=a[i].code;a.splice(i,1);appState.coupons=a;localStorage.setItem(K5.couponKey,JSON.stringify(a));autoSync();k5RenderCoupons();klog('Coupon','کۆدی '+code+' سڕایەوە');toast('کۆد سڕایەوە ✓')};
+  window.k5ToggleCoupon=function(i){const a=k5Coupons();if(!a[i])return;a[i].active=a[i].active===false;appState.coupons=a;localStorage.setItem(K5.couponKey,JSON.stringify(a));autoSync();k5RenderCoupons();klog('Coupon','دۆخی '+a[i].code+' گۆڕدرا')};
+  window.k5ResetCouponUses=function(i){const a=k5Coupons();if(!a[i])return;a[i].usedCount=0;appState.coupons=a;localStorage.setItem(K5.couponKey,JSON.stringify(a));autoSync();k5RenderCoupons();klog('Coupon','بەکارهێنانی '+a[i].code+' صفر کرایەوە');toast('ژمارەی بەکارهێنان صفر کرایەوە')};
+  function k5RenderCoupons(){
+    const box=document.getElementById('k5CouponList');if(!box)return;
+    const q=(document.getElementById('k5CouponSearch')?.value||'').trim().toUpperCase();
+    const a=k5Coupons().map((x,i)=>({...x,__i:i})).filter(x=>!q||String(x.code||'').toUpperCase().includes(q));
+    box.innerHTML=a.length?a.map(x=>{const [status,kind]=k5CouponStatus(x);const uses=Number(x.maxUses||0)===0?`${Number(x.usedCount||0)} / ∞`:`${Number(x.usedCount||0)} / ${Number(x.maxUses||0)}`;return `<div class="item-row" style="align-items:flex-start;gap:12px"><div style="flex:1;min-width:0"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b style="font-size:15px;letter-spacing:.4px">${esc(x.code)}</b><span class="k5-badge">${esc(status)}</span></div><div class="text-xs text-gray-400" style="margin-top:5px">داشکاندن: <b>${esc(k5CouponValueLabel(x))}</b> · بەکارهێنان: <b>${uses}</b></div><div class="text-xs text-gray-500" style="margin-top:3px">دەستپێکردن: ${esc(k5FormatDate(x.startsAt))} · بەسەرچوون: ${esc(k5FormatDate(x.expiresAt))}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn ghost" onclick="k5EditCoupon(${x.__i})">دەستکاری</button><button class="btn ghost" onclick="k5ToggleCoupon(${x.__i})">${x.active===false?'چالاککردن':'ناچالاککردن'}</button><button class="btn ghost" onclick="k5ResetCouponUses(${x.__i})">صفرکردن</button><button class="btn btn-danger" onclick="k5DeleteCoupon(${x.__i})">سڕینەوە</button></div></div>`}).join(''):'<div class="text-gray-400 text-sm">هیچ کۆدێک نییە.</div>';
+  }
   window.k5FilterCommunity=function(){
     const q=(document.getElementById('k5CommunitySearch')?.value||'').toLowerCase();
     const list=(appState?.stories||[]).filter(x=>String(x.name||x.title||'').toLowerCase().includes(q));
@@ -1763,6 +1833,7 @@ function resetData(){
   };
   const oldPublish=window.publishLive;
   window.publishLive=async function(){await oldPublish();klog('Publish','CMS بڵاوکرایەوە');const el=document.getElementById('k5LiveInfo');if(el)el.textContent='دوایین Publish: '+new Date().toLocaleString('ku-IQ');};
+  try{if(!Array.isArray(appState.coupons)||!appState.coupons.length){const old=JSON.parse(localStorage.getItem(K5.couponKey)||'[]');if(Array.isArray(old)&&old.length){appState.coupons=old.map(x=>({id:'cp_'+Math.random().toString(36).slice(2),code:String(x.code||'').toUpperCase(),type:'percent',value:Number(x.percent||0),startsAt:'',expiresAt:x.expiry?String(x.expiry)+'T23:59':'',maxUses:Number(x.limit||0),usedCount:Number(x.usedCount||0),active:true}));localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));}}}catch(e){}
   k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
 })();
 
