@@ -158,23 +158,15 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 @media(max-width:520px){.coupon-row{flex-direction:column}.coupon-row .btn{width:100%}}
 </style>
 
-<style id="kurdia-legacy-same-design">
-.legacy-stat{padding:18px;text-align:center;border:1px solid var(--line);background:var(--panel);border-radius:22px}
-.legacy-stat b{display:block;font-size:27px;color:#fff}.legacy-stat span{font-size:10px;color:var(--muted)}
-.legacy-card{padding:17px;border:1px solid var(--line);background:var(--panel);border-radius:20px}
-.legacy-card .legacy-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(169,29,55,.16);color:#ff5c76}
-.legacy-card h3{font-size:14px;margin:10px 0 5px}.legacy-card p{font-size:11px;color:var(--muted);line-height:1.9;margin:0}
-.legacy-review{padding:18px;border:1px solid var(--line);background:var(--panel);border-radius:22px}
-.legacy-review .avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--red2),var(--red));font-weight:900}
-.legacy-photo{position:relative;min-height:180px;overflow:hidden;border-radius:20px;border:1px solid var(--line);background:#111}
-.legacy-photo img{width:100%;height:100%;min-height:180px;object-fit:cover;display:block;transition:.3s}
-.legacy-photo div{position:absolute;inset:auto 0 0;padding:18px;background:linear-gradient(transparent,rgba(0,0,0,.8));font-weight:800}
-.legacy-photo:hover img{transform:scale(1.04)}
-@media(min-width:720px){
-  #legacyStats{grid-template-columns:repeat(4,1fr)}
-  #legacyTimeline,#legacyServices,#legacySafety,#legacyReviews{grid-template-columns:repeat(3,1fr)}
-  #legacyGallery{grid-template-columns:repeat(4,1fr)}
-}
+<style id="more-page-style">
+.more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.more-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:17px;border:1px solid var(--line);background:var(--panel);border-radius:20px;color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,background .2s}
+.more-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
+.more-card b{display:block;font-size:14px;margin-bottom:5px}
+.more-card span{display:block;color:var(--muted);font-size:11px;line-height:1.8}
+.more-icon{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:rgba(169,29,55,.15);color:#ff5b75}
+.more-card>svg:last-child{color:var(--muted)}
+@media(max-width:700px){.more-grid{grid-template-columns:1fr}.more-card{padding:15px}}
 </style>
 </head>
 <body>
@@ -262,61 +254,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
         </div>
       </div>
     </section>
-
-<!-- Restored legacy content — same current KURDIA design -->
-<section class="section">
-  <div class="sectionhead"><div><h2>دەستکەوت و ئەزموون</h2><p>ژمارە و ئەو شتانەی KURDIA لەسەریان کار دەکات</p></div></div>
-  <div id="legacyStats" class="grid2"></div>
-</section>
-
-<section class="section">
-  <div class="sectionhead"><div><h2>چۆن گەشتەکانمان بەڕێوەدەچن؟</h2><p>هەنگاوە سەرەکییەکانی ئەزموونی گەشت</p></div></div>
-  <div id="legacyTimeline" class="grid2"></div>
-</section>
-
-<section class="section">
-  <div class="sectionhead"><div><h2>ئێمە چی دابین دەکەین؟</h2><p>خزمەتگوزارییە سەرەکییەکانی KURDIA</p></div></div>
-  <div id="legacyServices" class="grid2"></div>
-</section>
-
-<section class="section">
-  <div class="sectionhead"><div><h2>سەلامەتی و چاودێری گەشت</h2><p>زانیاری و ڕێنمایییە گشتییەکانی گەشت</p></div><button class="link" style="background:none;border:0" onclick="go('safety')">زیاتر</button></div>
-  <div id="legacySafety" class="grid2"></div>
-</section>
-
-<section class="section">
-  <div class="sectionhead"><div><h2>بیروڕای بەشداربووان</h2><p>ئەزموونی خەڵکی KURDIA</p></div></div>
-  <div id="legacyReviews" class="grid2"></div>
-</section>
-
-<section class="section">
-  <div class="sectionhead"><div><h2>گەلەری</h2><p>هەندێک لە یادەوەرییەکانی گەشت</p></div></div>
-  <div id="legacyGallery" class="grid2"></div>
-</section>
-
-<section class="section">
-  <div class="glass">
-    <div class="eyebrow">MEETING POINT</div>
-    <h2 style="margin:7px 0">شوێنی کۆبوونەوە و نەخشە</h2>
-    <p class="muted" style="line-height:1.9">بۆ شوێنی کۆبوونەوە و ڕێنماییی گەیشتن، نەخشەکە بکەرەوە.</p>
-    <a class="btn red" style="display:inline-flex;align-items:center;gap:7px" href="https://maps.app.goo.gl/kurdia-adventure-meeting" target="_blank" rel="noopener">
-      <i data-lucide="map-pin"></i> کردنەوەی Google Maps
-    </a>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="glass">
-    <b>KURDIA ADVENTURE</b>
-    <p style="line-height:1.9;margin:8px 0">گەشت، سروشت، کەمپینگ و ئەزموونی جیاواز لەگەڵ هاوڕێکانت.</p>
-    <div class="actions">
-      <a class="btn ghost" href="https://wa.me/9647503130360" target="_blank" rel="noopener">WhatsApp</a>
-      <a class="btn ghost" href="tel:+9647503130360">پەیوەندی</a>
-    </div>
-    <small style="display:block;margin-top:12px">© KURDIA ADVENTURE — هەموو مافەکان پارێزراون.</small>
-  </div>
-</footer>
-
   </div>
 </section>
 
@@ -394,27 +331,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
           </div>
           <input type="hidden" name="otp_verified" id="otpVerified" value="0">
           <select class="select" name="trip" id="bookingTrip"></select>
-          <input class="input" id="bookingPeople" name="people" type="number" min="1" value="1" placeholder="ژمارەی کەس" oninput="handlePeopleCount(this.value)">
-
-<div id="bookingExtraNames" class="glass" style="padding:13px">
-  <label><span class="muted">ناوی بەشداربووانی تر</span><div id="extraNamesContainer" class="extra-names"></div></label>
-</div>
-<div class="glass" style="padding:13px">
-  <span class="muted">کۆپۆنی داشکاندن</span>
-  <div class="coupon-row" style="margin-top:7px">
-    <input id="couponInput" class="input" placeholder="کۆدی داشکاندن...">
-    <button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button>
-  </div>
-  <div id="couponStatus" class="coupon-status"></div>
-</div>
-<div class="glass" style="padding:13px">
-  <b>FIB — زانیاری پارەدان</b>
-  <div class="muted" style="margin-top:6px;line-height:1.8">
-    ژمارەی هەژمار: <strong id="fibAccountDisplay">07503130360</strong><br>
-    تکایە ناوی تەواوت لە تێبینی گواستنەوەکە بنووسە.
-  </div>
-</div>
-
+          <input class="input" name="people" type="number" min="1" value="1" placeholder="ژمارەی کەس">
           <div class="receipt-box">
             <b>پسوڵەی پارەدان</b>
             <small>وێنەی پسوڵەکەت هەڵبژێرە بۆ ئەوەی لەگەڵ داواکارییەکەت بنێردرێت.</small>
@@ -510,89 +427,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
 const DEFAULT={heroTitle:'زیاتر لە گەشت.',heroText:'ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.',trip:{title:'دریاچەی دووکان',location:'دووکان · سلێمانی',date:'2026-10-03',price:'150,000 IQD',capacity:35,booked:28,desc:'ڕۆژێک لەگەڵ سروشت، دەریاچە و هاوڕێیەتی.'},destinations:[{name:'دەریاچەی دووکان',type:'دریاچە',img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=80'},{name:'ئاوشاری گۆیژە',type:'ئاوشار',img:'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=700&q=80'},{name:'هەڵگورد',type:'شاخ',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80'},{name:'دارستان',type:'سروشت',img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&q=80'},{name:'شوێنە مێژووییەکان',type:'مێژوو',img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=700&q=80'},{name:'ڕێگای دۆکان',type:'Road Trip',img:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=700&q=80'}],stories:[{name:'Hawar',img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=200&q=80'},{name:'Dalan',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80'},{name:'Sara',img:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=200&q=80'},{name:'Rebin',img:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=200&q=80'}],safety:[['☀','گەرما و ئاودان','ئاو، پشوودان و نیشتەجێبوون لە شوێنی سێبەر.'],['❄','سەرما','جل و کەرەستەی گونجاو و پاراستنی دەست و پێ.'],['☼','UV و خۆر','کریم، کڵاو، ئاو و کەمکردنەوەی ماوەی ڕاستەوخۆ لە خۆر.'],['△','سەلامەتی لە بەرزی','هەنگاو بە هێواشی، پشوودان و ئاگاداری لە نیشانەکانی نەخۆشی بەرزی.'],['✚','First Aid','کیتێکی سەرەتایی و زانیاری پەیوەندییە فۆرییەکان.'],['ϟ','برووسکە و تۆفان','لە شوێنی کراوە دووربکەوە و ڕێنمایی ڕێبەر پەیڕەو بکە.'],['💧','ئاو و خواردن','ئاو و خواردنی بەس بۆ ماوەی گەشت هەڵبگرە.'],['✹','مێروو و حەشرات','دژە حەشرە و پۆشینی گونجاو بۆ شوێنە سروشتییەکان.']],prep:[['Camping','کەمپینگ','🎒'],['Nature','سروشت','🌿'],['Waterfall','ئاوشار','💧'],['Road Trip','Road Trip','🚙'],['Family','خێزان','👨‍👩‍👧‍👦']]};
-
-const LEGACY = {
-  stats:[
-    {num:"39+",label:"بەشداربووی KURDIA"},
-    {num:"15+",label:"شوێن و ئەزموون"},
-    {num:"100%",label:"ئەزموونی سەرکەوتوو"},
-    {num:"4.9★",label:"ڕەزامەندی بەشداربووان"}
-  ],
-  timeline:[
-    {title:"کۆبوونەوە و دابەشبوون",desc:"لە شوێنی دیاریکراو کۆدەبینەوە و بەڕێدەکەوین."},
-    {title:"نانی بەیانی و ئامادەکاری",desc:"لە سروشتدا چای سەر خەڵووز و نانی بەیانی دەخۆین."},
-    {title:"ڕێپێوان و ئەزموون",desc:"بە هەنگاوی هاوسەنگ بە شوێنی ئامانج دەگەین."},
-    {title:"تۆمارکردنی سەرکەوتن",desc:"وێنەگرتن، بینینی دیمەنەکان و دروستکردنی یادەوەری."}
-  ],
-  safetyDetails:[
-    {title:"ڕێبەرانی بەئەزموون",desc:"تیمەکەمان شارەزای ڕێڕەو و ڕێکخستنی گەشتەکانە.",icon:"compass"},
-    {title:"فریاگوزاری سەرەتایی",desc:"کەرەستەی یارمەتیی سەرەتایی لەگەڵ تیمەکەمانە.",icon:"shield-plus"},
-    {title:"چاودێری کەشوهەوا",desc:"پشکنینی پێشبینی کەشوهەوا بۆ ڕێکخستنی گەشت.",icon:"cloud-sun"}
-  ],
-  services:[
-    {name:"پاسی گەشتیاری مۆدێرن",icon:"bus-front"},
-    {name:"نان و خواردنی بەیانی",icon:"utensils"},
-    {name:"چای سەر خەڵووز",icon:"coffee"},
-    {name:"وێنەگری فۆتۆگرافەر",icon:"camera"}
-  ],
-  reviews:[
-    {name:"دەرباز سەعید",city:"هەولێر",text:"یەکێک لە ڕێکخراوترین و پڕ وزەترین گەشتەکانم بوو لەگەڵ تیمی کوردیا."}
-  ],
-  gallery:[
-    {url:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",title:"چیای هەڵگورد"},
-    {url:"https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1000&q=85",title:"کەمپی شەوانە"},
-    {url:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=85",title:"سروشتی کوردستان"},
-    {url:"https://images.unsplash.com/photo-1426604966848-d7adacbd02bff?auto=format&fit=crop&w=1000&q=85",title:"ڕێڕەوی گەشت"}
-  ],
-  quick:[
-    {title:"کەشوهەوا",desc:"کەشی هەر شوێنێک بگەڕێ.",icon:"cloud-sun",action:"weather"},
-    {title:"سەلامەتی",desc:"ڕێنماییەکانی پێش گەشت.",icon:"shield-check",action:"safety"},
-    {title:"ئامادەکاری",desc:"Check-list بۆ جۆری گەشت.",icon:"backpack",action:"prep"},
-    {title:"شوێنەکان",desc:"شوێنە جیاوازەکانی کوردستان.",icon:"map-pin",action:"destinations"},
-    {title:"گەشتی تایبەت",desc:"داواکاری بکە، ئێمە ڕێکی دەخەین.",icon:"crown",action:"private"},
-    {title:"ستۆری",desc:"ئەزموونی بەشداربووان ببینە.",icon:"sparkles",action:"stories"}
-  ]
-};
-
 let data=JSON.parse(localStorage.getItem('kurdia_premium_data')||'null')||DEFAULT;
 async function loadRemote(){try{const r=await fetch(WORKER+'/api/site/config');if(r.ok){const x=await r.json();if(x.ok&&x.config){data={...data,...x.config};localStorage.setItem('kurdia_premium_data',JSON.stringify(data));}}}catch(e){}}
 function save(){localStorage.setItem('kurdia_premium_data',JSON.stringify(data))}
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function go(id){if(document.getElementById(id)?.classList.contains('page')){location.hash=id;return} location.hash='home'; setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'}),30)}
-function route(){let id=location.hash.slice(1)||'home';if(id==='more')id='destinations';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));window.scrollTo(0,0);renderPage(id);if(window.lucide)lucide.createIcons();}
+function go(id){location.hash=id}
+function route(){let id=location.hash.slice(1)||'home';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));window.scrollTo(0,0);renderPage(id);if(window.lucide)lucide.createIcons();}
 window.addEventListener('hashchange',route);
-
-function renderLegacySections(){
-  const statBox=$('legacyStats');
-  if(statBox){
-    const arr=data.stats||LEGACY.stats;
-    statBox.innerHTML=arr.map(x=>`<div class="legacy-stat"><b>${esc(x.num)}</b><span>${esc(x.label)}</span></div>`).join('');
-  }
-  const timelineBox=$('legacyTimeline');
-  if(timelineBox){
-    timelineBox.innerHTML=(data.timeline||LEGACY.timeline).map((x,i)=>`<div class="legacy-card"><div class="legacy-icon">${i+1}</div><h3>${esc(x.title)}</h3><p>${esc(x.desc)}</p></div>`).join('');
-  }
-  const serviceBox=$('legacyServices');
-  if(serviceBox){
-    serviceBox.innerHTML=(data.services||LEGACY.services).map(x=>`<div class="legacy-card"><div class="legacy-icon"><i data-lucide="${esc(x.icon||'sparkles')}"></i></div><h3>${esc(x.name||x.title||'')}</h3></div>`).join('');
-  }
-  const safetyBox=$('legacySafety');
-  if(safetyBox){
-    safetyBox.innerHTML=(data.safetyDetails||LEGACY.safetyDetails).map(x=>`<div class="legacy-card"><div class="legacy-icon"><i data-lucide="${esc(x.icon||'shield-check')}"></i></div><h3>${esc(x.title)}</h3><p>${esc(x.desc)}</p></div>`).join('');
-  }
-  const reviewBox=$('legacyReviews');
-  if(reviewBox){
-    reviewBox.innerHTML=(data.reviews||LEGACY.reviews).map(x=>`<div class="legacy-review"><div style="font-size:20px">★★★★★</div><p class="muted" style="line-height:1.9;font-size:11px">« ${esc(x.text)} »</p><div style="display:flex;gap:10px;align-items:center;margin-top:12px"><div class="avatar">${esc((x.name||'K')[0])}</div><div><b>${esc(x.name||'KURDIA')}</b><small class="muted" style="display:block">${esc(x.city||'')}</small></div></div></div>`).join('');
-  }
-  const galleryBox=$('legacyGallery');
-  if(galleryBox){
-    galleryBox.innerHTML=(data.gallery||LEGACY.gallery).map(x=>`<div class="legacy-photo"><img src="${esc(x.url)}" alt="${esc(x.title||'KURDIA ADVENTURE')}"><div>${esc(x.title||'KURDIA ADVENTURE')}</div></div>`).join('');
-  }
-  if($('fibAccountDisplay')) $('fibAccountDisplay').textContent=data.fibAccount||'07503130360';
-  if(window.lucide) lucide.createIcons();
-}
-
 function render(){
  $('heroTitle').textContent=data.heroTitle;$('heroText').textContent=data.heroText;
  const t=data.trip;$('tripTitle').textContent=t.title;$('tripLocation').textContent=t.location;$('tripDesc').textContent=t.desc;$('tripDate').textContent=new Date(t.date).toLocaleDateString('ku-IQ',{month:'2-digit',day:'2-digit'});$('tripPrice').textContent=t.price;$('tripCapacity').textContent=`${t.booked}/${t.capacity}`;
@@ -613,7 +455,7 @@ function render(){
 function renderPage(id){if(id==='weather'){renderWeather();setTimeout(initWeatherMap,80)}if(id==='private'){setTimeout(initPrivateMap,80)}}
 function weatherIcon(code){if(code===0)return'☀️';if([1,2].includes(code))return'🌤️';if(code===3)return'☁️';if([45,48].includes(code))return'🌫️';if([51,53,55,56,57].includes(code))return'🌦️';if([61,63,65,66,67,80,81,82].includes(code))return'🌧️';if([71,73,75,77,85,86].includes(code))return'🌨️';if([95,96,99].includes(code))return'⛈️';return'🌤️'}
 function weatherText(code){if(code===0)return'ڕوون';if([1,2].includes(code))return'هەوری کەم';if(code===3)return'هەوری';if([45,48].includes(code))return'تەم';if([51,53,55,56,57].includes(code))return'بارانی سووک';if([61,63,65,80,81,82].includes(code))return'باران';if([71,73,75,77,85,86].includes(code))return'بەفر';if([95,96,99].includes(code))return'تۆفان';return'کەشوهەوا'}
-function renderWeather(){if(!$('hourly')||!$('days'))return;if(!$('hourly').children.length){$('hourly').innerHTML='<div class="muted">شوێنێک بگەڕێ یان لە نەخشە دیاری بکە.</div>';$('days').innerHTML='<div class="muted">پێشبینی لێرە پیشان دەدرێت.</div>'}}
+function renderWeather(){if(!$('hourly')\vert{}\vert{}!$('days'))return;if(!$('hourly').children.length){$('hourly').innerHTML='<div class="muted">شوێنێک بگەڕێ یان لە نەخشە دیاری بکە.</div>';$('days').innerHTML='<div class="muted">پێشبینی لێرە پیشان دەدرێت.</div>'}}
 let weatherMap,weatherMarker,privateMap,privateMarker;
 function createMap(id,lat,lng,onPick){
  const el=$(id); if(!el||typeof L==='undefined') return null;
@@ -656,7 +498,7 @@ function applyWeather(d,label){
  $('wUpdated').textContent=new Date().toLocaleTimeString('ku-IQ',{hour:'2-digit',minute:'2-digit'});$('wSource').textContent='Open-Meteo';
 }
 async function searchWeather(){
- const q=$('weatherInput').value.trim()||'هەولێر';$('wLocation').textContent='⏳ گەڕان...';
+ const q=$('weatherInput').value.trim()\vert{}\vert{}'هەولێر';$('wLocation').textContent='⏳ گەڕان...';
  try{
    const r=await fetch(`${WORKER}/api/weather/search?q=${encodeURIComponent(q)}`);const x=await r.json();
    if(x?.ok&&x.weather){if(x.weather.latitude&&weatherMap){weatherMarker=setMapMarker(weatherMap,weatherMarker,x.weather.latitude,x.weather.longitude);}$('wLocation').textContent=x.weather.location||q;applyWeather(x.weather,x.weather.location||q);return}
@@ -670,8 +512,10 @@ async function searchWeather(){
 }
 function initWeatherMap(){if(weatherMap)return;weatherMap=createMap('weatherMap',36.19,44.01,async({lat,lng})=>{weatherMarker=setMapMarker(weatherMap,weatherMarker,lat,lng);await fetchWeatherByCoords(lat,lng,`شوێنی ${lat.toFixed(4)}, ${lng.toFixed(4)}`)})}
 function initPrivateMap(){if(privateMap)return;privateMap=createMap('privateMap',36.19,44.01,async({lat,lng})=>{privateMarker=setMapMarker(privateMap,privateMarker,lat,lng);$('privateLat').value=lat.toFixed(6);$('privateLng').value=lng.toFixed(6);try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ku`).then(r=>r.json());const n=g?.display_name;if(n){const d=document.querySelector('input[name="destination"]');if(d&&!d.value)d.value=n;const h=document.getElementById('privatePlaceHint');if(h)h.textContent='شوێنی دیاریکراو: '+n}}catch(e){}})}
-function prep(i){const name=data.prep[i]?.[0]||'Camping';const items={Camping:['خێمە','کیسەی خەوتن','چرای سەر','ئاو','کەرەستەی پزیشکی'],Nature:['جل و پێڵاو','ئاو','کریم خۆر','نەخشە/GPS','Power Bank'],Waterfall:['پێڵاوی دژ بە ئاو','جل گۆڕین','ئاو','کریم خۆر','کیت یارمەتیدانی یەکەم'], 'Road Trip':['شۆفێری','سووتەمەنی','چارەسەری پەنچر','شارژەر','نەخشە'],Family:['خواردن','ئاو','کەرەستەی منداڵ','First Aid','پلانێکی ئارام']}[name]||[];$('prepChecklist').innerHTML=items.map(x=>`<label><input type="checkbox">${x}</label>`).join('')}
-function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value||'').toLowerCase();const all=[...data.destinations.map(x=>x.name),...data.safety.map(x=>x[1]),...data.prep.map(x=>x[0])];$('searchResults').innerHTML=all.filter(x=>x.toLowerCase().includes(q)).slice(0,8).map(x=>`<div class="article"><div class="articleIcon"><i data-lucide="search"></i></div><div><b>${esc(x)}</b><small>KURDIA ADVENTURE</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';if(window.lucide)lucide.createIcons();}function openAI(){$('aiModal').classList.add('show')}function closeModal(id){$(id).classList.remove('show')}
+function prep(i){const name=data.prep[i]?.[0]||'Camping';const items={Camping:['خێمە','کیسەی خەوتن','چرای سەر','ئاو','کەرەستەی پزیشکی'],Nature:['جل و پێڵاو','ئاو','کریم خۆر','نەخشە/GPS','Power Bank'],Waterfall:['پێڵاوی دژ بە ئاو','جل گۆڕین','ئاو','کریم خۆر','کیت یارمەتیدانی یەکەم'], 'Road Trip':['شۆفێری','سووتەمەنی','چارەسەری پەنچر','شارژەر','نەخشە'],Family:['خواردن','ئاو','کەرەستەی منداڵ','First Aid','پلانێکی ئارام']}[name]||[];$('prepChecklist').innerHTML=items.map(x=>`<label><input type="checkbox">${x}</label>
+<div class="glass" style="padding:13px"><label><span class="muted">ناوی بەشداربووانی تر</span><div id="extraNamesContainer" class="extra-names"></div></label></div>
+<div><span class="muted">کۆپۆنی داشکاندن</span><div class="coupon-row" style="margin-top:7px"><input id="couponInput" class="input" placeholder="کۆدی داشکاندن..."><button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button></div><div id="couponStatus" class="coupon-status"></div></div>`).join('')}
+function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value\vert{}\vert{}'').toLowerCase();const all=[...data.destinations.map(x=>x.name),...data.safety.map(x=>x[1]),...data.prep.map(x=>x[0])];$('searchResults').innerHTML=all.filter(x=>x.toLowerCase().includes(q)).slice(0,8).map(x=>`<div class="article"><div class="articleIcon"><i data-lucide="search"></i></div><div><b>${esc(x)}</b><small>KURDIA ADVENTURE</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';if(window.lucide)lucide.createIcons();}function openAI(){$('aiModal').classList.add('show')}function closeModal(id){$(id).classList.remove('show')}
 async function askAI(e){e.preventDefault();const q=$('aiInput').value.trim();if(!q)return;const box=$('aiAnswer');box.textContent='لە چاوەڕوانی وەڵام...';try{const r=await fetch(WORKER+'/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q,lang:'ku',siteState:data})});const x=await r.json();box.textContent=x.text||'بۆ زانیاری زیاتر پەیوەندی بە KURDIA بکە.'}catch(e){box.textContent='بۆ زانیاری زیاتر پەیوەندی بە KURDIA بکە.'}}
 async function sendBookingOTP(){
   const phoneEl=$('bookingPhone'), btn=$('sendOtpBtn');
@@ -689,7 +533,7 @@ async function sendBookingOTP(){
   finally{btn.disabled=false;btn.textContent='دووبارە ناردنی OTP'}
 }
 async function verifyBookingOTP(){
-  const phone=($('bookingPhone')?.value||'').trim(), code=($('bookingOtp')?.value||'').trim();
+  const phone=($('bookingPhone')?.value\vert{}\vert{}'').trim(), code=($('bookingOtp')?.value||'').trim();
   if(!phone||!code){toast('ژمارە و کۆدی OTP پڕ بکەرەوە');return}
   try{
     const r=await fetch(WORKER+'/api/otp/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,code})});
@@ -749,20 +593,13 @@ async function fetchStories(refresh=false){try{const r=await fetch(WORKER+'/api/
 function storyList(){return activeStoriesList.length?activeStoriesList:data.stories.map((s,i)=>({id:'local-'+i,name:s.name,mediaUrl:s.img,text:'ئەزموونی KURDIA',tripName:'KURDIA',likes:0}))}
 function renderStoriesBar(){const l=storyList();if(!$('homeStories'))return;const addStoryBtn = `<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,0.05);border:1px dashed var(--muted);"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;$('homeStories').innerHTML= addStoryBtn + l.slice(0,12).map((s,i)=>`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryViewer(${i})"><div class="ring"><img src="${esc(s.mediaUrl||s.img||'')}" alt="${esc(s.name||'KURDIA')}"></div><small>${esc(s.name||'KURDIA')}</small></button>`).join('');if(window.lucide)lucide.createIcons();}
 function renderStoryGrid(){const l=storyList();if(!$('storyGrid'))return;$('storyGrid').innerHTML=l.map((s,i)=>`<button class="tile" style="background:url('${esc(s.mediaUrl||s.img||'')}') center/cover;border:0;color:#fff;text-align:right" onclick="openStoryViewer(${i})"><div><b>${esc(s.name||'KURDIA')}</b><small>${esc(s.text||'ئەزموونی KURDIA')}</small></div></button>`).join('')}
-function openStoryViewer(i){const l=storyList(),s=l[i];if(!s)return;activeStoriesList=l;currentStoryIdx=i;$('viewerAvatar').textContent=(s.name||'K')[0];$('viewerName').textContent=s.name||'KURDIA';$('viewerTime').textContent=s.tripName||'KURDIA';$('viewerImage').src=s.mediaUrl||s.img||'';$('viewerText').textContent=s.text||'';$('viewerLikes').textContent=s.likes||0;$('storyViewerModal').classList.add('show');const p=$('storyProgressBar');p.style.width='0%';setTimeout(()=>p.style.width='100%',30);if(s.id&&!String(s.id).startsWith('local-'))fetch(WORKER+`/api/stories/${encodeURIComponent(s.id)}/view`,{method:'POST'}).catch(()=>{});clearTimeout(storyTimer);storyTimer=setTimeout(()=>i+1<l.length?openStoryViewer(i+1):closeStoryViewer(),6000)}
+function openStoryViewer(i){const l=storyList(),s=l[i];if(!s)return;activeStoriesList=l;currentStoryIdx=i;$('viewerAvatar').textContent=(s.name\vert{}\vert{}'K')[0];$('viewerName').textContent=s.name||'KURDIA';$('viewerTime').textContent=s.tripName\vert{}\vert{}'KURDIA';$('viewerImage').src=s.mediaUrl||s.img||'';$('viewerText').textContent=s.text\vert{}\vert{}'';$('viewerLikes').textContent=s.likes||0;$('storyViewerModal').classList.add('show');const p=$('storyProgressBar');p.style.width='0%';setTimeout(()=>p.style.width='100%',30);if(s.id&&!String(s.id).startsWith('local-'))fetch(WORKER+`/api/stories/${encodeURIComponent(s.id)}/view`,{method:'POST'}).catch(()=>{});clearTimeout(storyTimer);storyTimer=setTimeout(()=>i+1<l.length?openStoryViewer(i+1):closeStoryViewer(),6000)}
 function closeStoryViewer(){clearTimeout(storyTimer);$('storyViewerModal')?.classList.remove('show')}
 async function likeCurrentStory(){const s=activeStoriesList[currentStoryIdx];if(!s)return;if(String(s.id).startsWith('local-')){s.likes=(s.likes||0)+1;$('viewerLikes').textContent=s.likes;return}try{const r=await fetch(WORKER+`/api/stories/${encodeURIComponent(s.id)}/like`,{method:'POST'});const x=await r.json();if(x.ok){s.likes=x.likes;$('viewerLikes').textContent=x.likes}}catch(e){toast('لایک نەکرا')}}
 function shareStoryWhatsApp(){const s=activeStoriesList[currentStoryIdx];if(!s)return;window.open('https://wa.me/?text='+encodeURIComponent(`${s.name||'KURDIA'} — ${s.text||'ئەزموونی KURDIA'}
 ${location.origin+location.pathname}#stories`),'_blank')}
 async function submitStory(e){e.preventDefault();const media=$('stMediaBase64')?.value;if(!media)return toast('تکایە وێنەیەک هەڵبژێرە');const payload={name:$('stName').value.trim(),city:$('stCity').value.trim(),tripName:$('stTrip').value.trim(),text:$('stText').value.trim(),mediaUrl:media};try{const r=await fetch(WORKER+'/api/stories',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const x=await r.json();if(x.ok){toast(x.message||'ستۆری نێردرا ✓');closeStoryModal();e.target.reset();$('stMediaBase64').value='';$('storyPreview').textContent='هیچ وێنەیەک هەڵنەبژێردراوە';fetchStories(true)}else toast(x.error||'ناردنی ستۆری سەرکەوتوو نەبوو')}catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}}
 function startCountdown(){clearInterval(countdownTimer);const target=new Date((data.trip?.date||'2026-10-03')+'T05:00:00').getTime();const t=()=>{let d=target-Date.now();if(d<0)d=0;const a=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);if($('cdDays'))$('cdDays').textContent=String(a).padStart(2,'0');if($('cdHours'))$('cdHours').textContent=String(h).padStart(2,'0');if($('cdMins'))$('cdMins').textContent=String(m).padStart(2,'0');if($('cdSecs'))$('cdSecs').textContent=String(s).padStart(2,'0')};t();countdownTimer=setInterval(t,1000)}
-
-
-document.addEventListener('DOMContentLoaded',()=>{
-  const people=$('bookingPeople');
-  if(people) handlePeopleCount(people.value);
-  if(window.lucide) lucide.createIcons();
-});
 
 loadRemote().finally(()=>{render();route();startCountdown();fetchStories()});
 </script></body></html>
