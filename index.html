@@ -519,7 +519,53 @@ DEFAULT.about={title:'گەشت، سروشت، هاوڕێیەتی.',text:'ئێم�
 DEFAULT.contact={whatsapp:'+9647503130360',phone:'+9647503130360',city:'هەولێر — کوردستان',email:'',mapUrl:''};
 DEFAULT.social={instagram:'',tiktok:'',youtube:'',facebook:'',telegram:''};
 let data=JSON.parse(localStorage.getItem('kurdia_premium_data')||'null')||DEFAULT;
-async function loadRemote(){try{const r=await fetch(WORKER+'/api/site/config');if(r.ok){const x=await r.json();if(x.ok&&x.config){data={...data,...x.config};normalizePublicData();localStorage.setItem('kurdia_premium_data',JSON.stringify(data));}}}catch(e){}}
+function normalizeRemoteCMS(config){
+  // Cloud CMS is stored by Admin in a structured shape. The public site uses
+  // a flatter rendering model, so normalize BOTH shapes here.
+  if(!config || typeof config!=='object') return data;
+  const home=config.home||{};
+  const hero=home.hero||{};
+  const trips=Array.isArray(config.trips)?config.trips:[];
+  const t=trips.find(x=>x && (x.published!==false)) || trips[0] || {};
+  const out={...data};
+  if(hero.title!==undefined) out.heroTitle=hero.title;
+  if(hero.subtitle!==undefined) out.heroText=hero.subtitle;
+  if(hero.text!==undefined && hero.subtitle===undefined) out.heroText=hero.text;
+  if(hero.imageUrl!==undefined) out.heroImageUrl=hero.imageUrl;
+  if(Object.keys(t).length){
+    out.trip={...out.trip,
+      title:t.title??out.trip?.title,
+      location:t.location??out.trip?.location,
+      date:t.date??t.targetDate??out.trip?.date,
+      price:t.price??out.trip?.price,
+      capacity:Number(t.capacity??out.trip?.capacity??35),
+      booked:Number(t.booked??out.trip?.booked??0),
+      desc:t.description??t.desc??out.trip?.desc,
+      imageUrl:t.heroImageUrl??t.imageUrl??out.trip?.imageUrl
+    };
+  }
+  ['destinations','safety','prep','gallery','reviews','about','contact','social','stories'].forEach(k=>{
+    if(config[k]!==undefined) out[k]=config[k];
+  });
+  if(config.weather!==undefined) out.weather=config.weather;
+  if(config.settings!==undefined) out.settings=config.settings;
+  return out;
+}
+async function loadRemote(){
+  try{
+    const r=await fetch(WORKER+'/api/site/config',{cache:'no-store'});
+    if(!r.ok) throw new Error('CMS HTTP '+r.status);
+    const x=await r.json();
+    const config=x.config||x.data||x;
+    if(x.ok!==false && config && typeof config==='object'){
+      data=normalizeRemoteCMS(config);
+      normalizePublicData();
+      localStorage.setItem('kurdia_premium_data',JSON.stringify(data));
+    }
+  }catch(e){
+    console.warn('KURDIA CMS load failed:',e);
+  }
+}
 function save(){localStorage.setItem('kurdia_premium_data',JSON.stringify(data))}
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
