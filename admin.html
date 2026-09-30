@@ -827,14 +827,26 @@ let appState = {
 
 let cachedRegistrations = [];
 
-function checkAdminAuth(){
-  const val = document.getElementById("adminPinInput").value.trim();
-  if(val === ADMIN_SECRET_PIN || sessionStorage.getItem("admin_auth") === "true"){
-    sessionStorage.setItem("admin_auth", "true"); sessionStorage.setItem("kurdia_admin_key", val);
-    document.getElementById("adminAuthModal").style.display = "none";
-    toast("بەخێربێیت بۆ دەستەی کۆنترۆڵ 🏔️");
-  } else {
-    toast("❌ PIN هەڵەیە");
+function checkAdminAuth(ev){
+  if(ev) ev.preventDefault();
+  const input = document.getElementById('adminPin');
+  const overlay = document.getElementById('authOverlay');
+  const pin = String(input?.value ?? '').trim();
+  if(pin === '2026'){
+    try { sessionStorage.setItem('kurdia_admin_auth','1'); } catch(e) {}
+    if(overlay){
+      overlay.classList.add('hidden');
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden','true');
+    }
+    document.body.classList.remove('locked');
+    if(typeof toast === 'function') toast('بەخێربێیت ✓');
+  }else{
+    if(input){
+      input.focus();
+      input.select();
+    }
+    if(typeof toast === 'function') toast('PIN هەڵەیە');
   }
 }
 
