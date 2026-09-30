@@ -1311,6 +1311,21 @@ function toast(msg){
   setTimeout(()=> t.classList.remove("show"), 3200);
 }
 
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(!t || !t.id) return;
+  if(/^hero|^trip|^dest|^pubSafe|^pubPrep|^pubReview|^about|^contact|^social|^gallery|^review|^service|^capacity|^booked|^bookingOpen|^tripTargetDate|^weather/.test(t.id)){
+    try{autoSync();queueCloudSync();}catch(_){}
+  }
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(!t || !t.id) return;
+  if(/^hero|^trip|^dest|^pubSafe|^pubPrep|^pubReview|^about|^contact|^social|^gallery|^review|^service|^capacity|^booked|^bookingOpen|^tripTargetDate|^weather/.test(t.id)){
+    try{autoSync();queueCloudSync(500);}catch(_){}
+  }
+});
+
 function toggleSidebar(){
   document.getElementById("sidebar").classList.toggle("open");
   document.getElementById("backdrop").classList.toggle("active");
@@ -1472,15 +1487,34 @@ async function saveStudioToCloud(){
   const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms`);
   const current=await currentRes.json();
   const data=current.data||{};
-  data.home={...(data.home||{}),hero:{...(data.home?.hero||{}),title:appState.i18n?.ku?.heroTitle||"",subtitle:appState.i18n?.ku?.heroSubtitle||"",imageUrl:appState.heroImageUrl||""}};
+  data.i18n={...(data.i18n||{}),...(appState.i18n||{})};
+  data.home={...(data.home||{}),hero:{
+    ...(data.home?.hero||{}),
+    title:appState.i18n?.ku?.heroTitle||"",
+    subtitle:appState.i18n?.ku?.heroSubtitle||"",
+    imageUrl:appState.heroImageUrl||"",
+    i18n:appState.i18n||{}
+  }};
   data.trips=Array.isArray(data.trips)?data.trips:[];
   let trip=data.trips[0]||{id:"trip-main"};
-  trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
+  trip={...trip,
+    title:appState.i18n?.ku?.tripTitle||trip.title||"",
+    location:appState.i18n?.ku?.tripLocation||trip.location||"",
+    price:appState.i18n?.ku?.tripPrice||trip.price||"",
+    time:appState.i18n?.ku?.tripTime||trip.time||"",
+    description:appState.i18n?.ku?.tripDesc||trip.description||"",
+    heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",
+    capacity:Number(appState.capacity||trip.capacity||40),
+    booked:Number(appState.booked||trip.booked||0),
+    published:true,status:"active",
+    i18n:appState.i18n||{}
+  };
   data.trips=[trip,...data.trips.slice(1)];
   data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
   data.destinations=appState.destinations||[];
   data.safety=appState.safety||[];
   data.prep=appState.prep||[];
+  data.preparation=appState.prep||data.preparation||[];
   data.gallery=appState.gallery||[];
   data.reviews=appState.reviews||[];
   data.about=appState.about||{};
@@ -1491,6 +1525,20 @@ async function saveStudioToCloud(){
   if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
   return true;
  }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
+}
+
+let cloudSyncTimer=null;
+let cloudSyncBusy=false;
+function queueCloudSync(delay=1200){
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer=setTimeout(async()=>{
+    if(cloudSyncBusy)return;
+    cloudSyncBusy=true;
+    try{
+      const ok=await saveStudioToCloud();
+      if(ok) toast("☁️ گۆڕانکارییەکە بۆ ویبسایت Sync کرا");
+    }finally{cloudSyncBusy=false;}
+  },delay);
 }
 
 async function publishLive(){
