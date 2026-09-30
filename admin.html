@@ -185,7 +185,13 @@ textarea{ min-height:85px; resize:vertical; }
 @media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
 </style>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+
+<style id="kurdia-v11-upload-test-css">
+.ss-image-field{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:end}.ss-upload-btn{white-space:nowrap;height:38px}.ss-image-preview{margin-top:7px;display:flex;align-items:center;gap:8px}.ss-image-preview img{width:74px;height:50px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.09)}
+.api-lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.api-lab-card{background:#0a0f16;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px}.api-lab-response{margin-top:10px;background:#05070b;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;min-height:80px;white-space:pre-wrap;word-break:break-word;font-family:monospace;font-size:11px;line-height:1.65}.api-ok{border-color:rgba(50,201,133,.35)!important}.api-err{border-color:rgba(211,51,80,.45)!important}.api-row{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center}.api-history{display:grid;gap:7px;max-height:330px;overflow:auto}.api-history-item{padding:9px;border-radius:12px;background:#070b11;border:1px solid rgba(255,255,255,.07);font-size:10px}.api-history-item.ok{border-color:rgba(50,201,133,.25)}.api-history-item.err{border-color:rgba(211,51,80,.3)}
+@media(max-width:850px){.api-lab-grid{grid-template-columns:1fr}.api-row{grid-template-columns:1fr}.ss-image-field{grid-template-columns:1fr}.ss-upload-btn{width:100%}}
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <style id="kurdia-v5-merged-css">
 
@@ -338,6 +344,7 @@ body{
       <li><button class="nav-btn" onclick="switchTab('k5_communications')"><i data-lucide="messages-square"></i> پەیوەندییەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('k5_activity')"><i data-lucide="history"></i> Activity Log</button></li>
       <li><button class="nav-btn" onclick="switchTab('k5_diagnostics')"><i data-lucide="stethoscope"></i> Diagnostics</button></li>
+      <li><button class="nav-btn" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> تاقیکردنەوەی هەموو API ـەکان</button></li>
       <li><button class="nav-btn" onclick="switchTab('k5_settings')"><i data-lucide="settings"></i> Settings</button></li>
 
     </ul>
@@ -805,6 +812,32 @@ body{
  </div>
 </section>
 
+<!-- API LAB / TEST CENTER -->
+<section class="page-tab" id="tab-api_lab">
+ <div class="hero"><div class="eyebrow">KURDIA TEST CENTER</div><h1>تاقیکردنەوەی هەموو پەیوەندییەکان</h1><p class="muted">لە یەک شوێنەوە API، WhatsApp، OTP، Cloud CMS، Media، Weather، Review، Story، Private Trip و AI تاقی بکەرەوە. هەر هەڵەیەک لە HTTP، Worker یان JSON بە وردی پیشان دەدرێت.</p></div>
+ <div class="api-lab-card">
+  <div class="card-title">🧪 API Test Runner</div>
+  <div class="api-row">
+   <select id="apiPreset" class="input" onchange="apiPresetChanged()">
+    <option value="diagnostics">Diagnostics — Worker</option><option value="cms">CMS — GET</option><option value="publicConfig">Site Config — GET</option><option value="weather">Weather — Search</option><option value="media">Media — Upload Image</option><option value="otpSend">OTP — Send WhatsApp</option><option value="otpVerify">OTP — Verify</option><option value="privateTrip">Private Trip — Create</option><option value="reviewPost">Review — Create</option><option value="storyPost">Story — Create</option><option value="bookingConfirm">WhatsApp — Confirmation</option><option value="bookingReject">WhatsApp — Rejection</option><option value="broadcast">WhatsApp — Broadcast</option><option value="tripNotification">WhatsApp — Trip Notification</option><option value="ai">AI — API</option>
+   </select>
+   <input id="apiPath" class="input" dir="ltr" value="/api/admin/diagnostics">
+   <button class="btn red" onclick="runApiTest()">تاقیکردنەوە</button>
+  </div>
+  <div class="grid-2" style="margin-top:10px">
+   <div class="field"><label>Method</label><select id="apiMethod" class="input"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select></div>
+   <div class="field"><label>بۆشایی/تێبینی</label><input id="apiLabel" class="input" placeholder="ناوی تاقیکردنەوە"></div>
+  </div>
+  <div class="field"><label>JSON Body — بۆ POST/PUT/PATCH</label><textarea id="apiBody" class="input" style="min-height:180px;font-family:monospace" dir="ltr">{}</textarea></div>
+  <div class="k5-actions"><button class="btn ghost" onclick="apiCheckOnly()">تاقیکردنەوەی پەیوەندی</button><button class="btn ghost" onclick="apiClearResult()">پاککردنەوە</button></div>
+  <div id="apiResult" class="api-lab-response">هێشتا هیچ تاقیکردنەوەیەک نەکراوە.</div>
+ </div>
+ <div class="api-lab-grid" style="margin-top:12px">
+  <div class="api-lab-card"><div class="card-title">📨 تاقیکردنەوەی نامەکان</div><p class="ss-help">ئەم بەشانە نامەی ڕاستەقینە دەنێرن. ژمارەی خۆت بنووسە بۆ تاقیکردنەوە.</p><div class="field"><label>ژمارەی WhatsApp ـی تاقیکردنەوە</label><input id="testPhone" class="input" dir="ltr" placeholder="0750xxxxxxx"></div><label class="ss-check"><input type="checkbox" id="testSendConfirm"> من دەزانم ئەمە نامەی ڕاستەقینە دەنێرێت.</label></div>
+  <div class="api-lab-card"><div class="card-title">📋 مێژووی تاقیکردنەوە</div><div id="apiHistory" class="api-history"><div class="ss-help">هیچ تاقیکردنەوەیەک نییە.</div></div></div>
+ </div>
+</section>
+
 <!-- DIAGNOSTICS -->
 <section class="page-tab" id="tab-diagnostics_tab">
  <div class="card">
@@ -1003,26 +1036,33 @@ function closeCropModal(){
   if(cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
 }
 
-function applyCropAndSave(){
+async function applyCropAndSave(){
   if(!cropperInstance) return;
-  const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1000, maxHeight: 1000 });
-  const base64 = canvas.toDataURL("image/jpeg", 0.78);
-
-  if(cropTarget.prop === "gallery"){
-    appState.gallery.push({ url: base64, title: "KURDIA ADVENTURE" });
-    renderGallery();
-  } else {
-    appState[cropTarget.prop] = base64;
-    if(cropTarget.previewId){
-      const p = document.getElementById(cropTarget.previewId);
-      p.style.backgroundImage = `url('${base64}')`;
-      p.classList.add("active");
+  try{
+    const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1600, maxHeight: 1600 });
+    const base64 = canvas.toDataURL("image/jpeg", 0.84).split(',')[1];
+    const name = `kurdia-${Date.now()}.jpg`;
+    toast("⏳ وێنەکە بۆ Cloud دەنێردرێت...");
+    const r = await adminFetch(`${WORKER_URL}/api/admin/media`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,contentType:"image/jpeg",base64})});
+    const j = await r.json().catch(()=>({}));
+    if(!r.ok || !j.ok) throw Error(j.error || `Upload failed (${r.status})`);
+    const url=j.url;
+    if(cropTarget.prop === "gallery"){
+      appState.gallery.push({ url, title: "KURDIA ADVENTURE" });
+      renderGallery();
+    } else {
+      appState[cropTarget.prop] = url;
+      if(cropTarget.previewId){
+        const p = document.getElementById(cropTarget.previewId);
+        if(p){p.style.backgroundImage = `url('${url}')`;p.classList.add("active");}
+      }
     }
+    autoSync();
+    closeCropModal();
+    toast("وێنەکە لە Cloud هەڵگیرا ✓");
+  }catch(e){
+    toast("❌ Upload ـی وێنە سەرکەوتوو نەبوو: "+(e.message||"هەڵە"));
   }
-
-  autoSync();
-  closeCropModal();
-  toast("✅ وێنەکە دانرا");
 }
 
 // LIVE REGISTRATIONS
@@ -1735,13 +1775,49 @@ window.addEventListener("DOMContentLoaded",()=>{
   if(sessionStorage.getItem("admin_auth")==="true" && modal) modal.style.display="none";
 });
 </script>
+<input id="ssMobileImageInput" type="file" accept="image/*" capture="environment" style="display:none"><div id="ssImageUploadStatus" style="display:none"></div>
+<script id="kurdia-v11-api-lab-js">
+(function(){
+ const $=id=>document.getElementById(id);
+ const presets={
+  diagnostics:{m:'GET',p:'/api/admin/diagnostics',b:{}},cms:{m:'GET',p:'/api/admin/cms',b:{}},publicConfig:{m:'GET',p:'/api/site/config',b:{}},
+  weather:{m:'GET',p:'/api/weather/search?lat=36.19&lon=44.01&q=Erbil',b:{}},
+  media:{m:'POST',p:'/api/admin/media',b:{name:'test.jpg',contentType:'image/jpeg',base64:''}},
+  otpSend:{m:'POST',p:'/api/otp/send',b:{phone:'07500000000'}},otpVerify:{m:'POST',p:'/api/otp/verify',b:{phone:'07500000000',code:'0000'}},
+  privateTrip:{m:'POST',p:'/api/private-trip',b:{name:'Test User',phone:'07500000000',destination:'Test',date:'2026-10-10',people:1,tripType:'Other',transportation:'',accommodation:'',guide:'',budget:'',specialRequests:'',lat:'',lng:''}},
+  reviewPost:{m:'POST',p:'/api/reviews',b:{name:'Test User',city:'Sulaymaniyah',rating:5,comment:'Test review'}},
+  storyPost:{m:'POST',p:'/api/stories',b:{name:'Test User',title:'Test Story',text:'Test story from Admin',mediaUrl:''}},
+  bookingConfirm:{m:'POST',p:'/api/admin/verify-booking',b:{phone:'07500000000',id:'TEST-BOOKING'}},bookingReject:{m:'POST',p:'/api/admin/reject-booking',b:{phone:'07500000000',id:'TEST-BOOKING',reason:'Test rejection'}},
+  broadcast:{m:'POST',p:'/api/admin/send-broadcast',b:{message:'KURDIA TEST MESSAGE',phones:['07500000000']}},tripNotification:{m:'POST',p:'/api/admin/send-trip-notification',b:{message:'KURDIA TEST NOTIFICATION',phones:['07500000000']}},ai:{m:'POST',p:'/api/ai',b:{message:'سڵاو، ئەمە تاقیکردنەوەی Admin ـە.'}}
+ };
+ window.apiPresetChanged=function(){const x=presets[$('apiPreset').value];if(!x)return;$('apiMethod').value=x.m;$('apiPath').value=x.p;$('apiBody').value=JSON.stringify(x.b,null,2);if($('apiLabel'))$('apiLabel').value=$('apiPreset').selectedOptions[0]?.textContent||''};
+ function show(data,ok,meta){const box=$('apiResult');if(!box)return;box.className='api-lab-response '+(ok?'api-ok':'api-err');box.textContent=meta+'\n\n'+(typeof data==='string'?data:JSON.stringify(data,null,2));}
+ function history(meta,ok){const box=$('apiHistory');if(!box)return;const el=document.createElement('div');el.className='api-history-item '+(ok?'ok':'err');el.textContent=meta;box.prepend(el);while(box.children.length>20)box.lastChild.remove();}
+ window.apiClearResult=()=>{show('هێشتا هیچ تاقیکردنەوەیەک نەکراوە.',true,'');};
+ window.runApiTest=async function(){
+   const path=$('apiPath').value.trim(),method=$('apiMethod').value;let body={};
+   try{body=JSON.parse($('apiBody').value||'{}')}catch(e){show({error:'JSON نادروستە',detail:e.message},false,'❌ JSON Error');return}
+   const isMsg=['/api/otp/send','/api/admin/verify-booking','/api/admin/reject-booking','/api/admin/send-broadcast','/api/admin/send-trip-notification'].some(x=>path.startsWith(x));
+   if(isMsg&&!$('testSendConfirm')?.checked){show({error:'پێش ناردنی نامەی ڕاستەقینە، checkbox ـی پشتڕاستکردنەوە چالاک بکە.'},false,'⚠️ Confirmation required');return}
+   const phone=$('testPhone')?.value.trim();if(isMsg&&phone){if(body.phone)body.phone=phone;if(Array.isArray(body.phones))body.phones=[phone]}
+   const started=performance.now();show('⏳ چاوەڕوان بە... ',true,`${method} ${path}`);
+   try{const opt={method,headers:{'Content-Type':'application/json'}};if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);const r=await adminFetch(WORKER_URL+path,opt);const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;show(data,r.ok,meta);history(meta,r.ok);}catch(e){const meta=`❌ NETWORK ERROR · ${Math.round(performance.now()-started)}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);}
+ };
+ window.apiCheckOnly=async function(){const old=$('apiPreset').value;$('apiPreset').value='diagnostics';apiPresetChanged();await runApiTest();$('apiPreset').value=old;};
+ document.addEventListener('DOMContentLoaded',apiPresetChanged);
+})();
+</script>
 <script id="kurdia-site-studio-js">
 (function(){
   const S={
     current:null,dirty:false,active:'global',key:'kurdia_site_studio_draft',
     esc(v){return String(v??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))},
     field(label,key,value='',type='text',full=false,extra=''){
-      return `<div class="ss-field ${full?'full':''}"><label>${this.esc(label)}</label>${type==='textarea'?`<textarea data-ss-key="${this.esc(key)}" ${extra}>${this.esc(value)}</textarea>`:type==='select'?`<select data-ss-key="${this.esc(key)}" ${extra}>${value}</select>`:`<input type="${type}" data-ss-key="${this.esc(key)}" value="${this.esc(value)}" ${extra}>`}</div>`
+      const isImage=/image|img|heroImage|imageUrl|\.url$/i.test(key);
+      const input=type==='textarea'?`<textarea data-ss-key="${this.esc(key)}" ${extra}>${this.esc(value)}</textarea>`:type==='select'?`<select data-ss-key="${this.esc(key)}" ${extra}>${value}</select>`:`<input type="${type}" data-ss-key="${this.esc(key)}" value="${this.esc(value)}" ${extra}>`;
+      const upload=isImage?`<button type="button" class="btn btn-secondary ss-upload-btn" onclick="ssPickImage('${this.esc(key)}')">📱 وێنە لە مۆبایل</button>`:'';
+      const preview=isImage&&value?`<div class="ss-image-preview"><img src="${this.esc(value)}" onerror="this.style.display='none'"><span class="ss-help">وێنەی هەڵبژێردراو</span></div>`:'';
+      return `<div class="ss-field ${full?'full':''}"><label>${this.esc(label)}</label><div class="${isImage?'ss-image-field':''}">${input}${upload}</div>${preview}</div>`
     },
     mark(){this.dirty=true;const x=document.getElementById('ssDirty');if(x)x.innerHTML='دۆخ: <b>گۆڕاوە</b>'},
     bind(root,cb){document.querySelector(root)?.addEventListener('input',e=>{if(e.target.matches('[data-ss-key]')){cb(e.target.dataset.ssKey,e.target.value,e.target);this.mark()}});document.querySelector(root)?.addEventListener('change',e=>{if(e.target.matches('[data-ss-key]')){cb(e.target.dataset.ssKey,e.target.value,e.target);this.mark()}})},
@@ -1772,13 +1848,13 @@ window.addEventListener("DOMContentLoaded",()=>{
     render(){this.renderGlobal();this.renderHero();this.renderTrips();this.renderDest();this.renderWeather();this.renderSafety();this.renderPrep();this.renderReviews();this.renderGallery();this.renderPrivate();this.renderFooter();this.renderSEO();if(window.lucide)lucide.createIcons();this.bindInputs();},
     renderGlobal(){const x=this.current,n=x.navigation||{},u=x.uiText||{};document.getElementById('ssGlobalForm').innerHTML=this.field('ناوی سەرەکی','navigation.home',n.home)+this.field('کەشوهەوا','navigation.weather',n.weather)+this.field('بەشداری گەشت','navigation.booking',n.booking)+this.field('تایبەت','navigation.private',n.private)+this.field('زیاتر / ستۆری','navigation.more',n.more)+this.field('Hero eyebrow','uiText.heroEyebrow',u.heroEyebrow)+this.field('Trip eyebrow','uiText.tripEyebrow',u.tripEyebrow)+this.field('Destinations eyebrow','uiText.destEyebrow',u.destEyebrow)+this.field('Destinations title','uiText.destTitle',u.destTitle)+this.field('Safety eyebrow','uiText.safetyEyebrow',u.safetyEyebrow)+this.field('Safety title','uiText.safetyTitle',u.safetyTitle)+this.field('Safety text','uiText.safetyText',u.safetyText,'textarea',true)+this.field('Preparation eyebrow','uiText.prepEyebrow',u.prepEyebrow)+this.field('Preparation title','uiText.prepTitle',u.prepTitle)+this.field('Private eyebrow','uiText.privateEyebrow',u.privateEyebrow)+this.field('Review title','uiText.reviewTitle',u.reviewTitle)+this.field('Gallery title','uiText.galleryTitle',u.galleryTitle)+this.field('Footer tagline','uiText.footerTagline',u.footerTagline)+this.field('Hero gradient 1','settings.heroGradient1',x.settings.heroGradient1||'#9d1c32')+this.field('Hero gradient 2','settings.heroGradient2',x.settings.heroGradient2||'#c92b49')},
     renderHero(){const x=this.current,h=x.home?.hero||{},i=x.i18n||{};document.getElementById('ssHeroForm').innerHTML=['ku','ar','en'].map(l=>`<div class="ss-card"><b style="display:block;margin-bottom:9px">${l.toUpperCase()}</b>${this.field('سەردێڕ',`i18n.${l}.heroTitle`,i[l]?.heroTitle||h.title||'')}${this.field('دەق',`i18n.${l}.heroSubtitle`,i[l]?.heroSubtitle||h.subtitle||'','textarea',true)}</div>`).join('');document.getElementById('ssHeroMedia').innerHTML=`<div class="ss-grid">${this.field('Hero Image URL','home.hero.imageUrl',h.imageUrl||x.heroImageUrl||'', 'text',true)}${this.field('Hero overlay / position','home.hero.overlay',h.overlay||'center center')}</div>`},
-    renderTrips(){const box=document.getElementById('ssTripList');box.innerHTML=this.current.trips.map((t,i)=>`<div class="ss-item"><div class="ss-item-main"><b>${this.esc(t.title||'گەشت')}</b><small>${this.esc(t.location||'')} · ${this.esc(t.price||'')} · ${this.esc(t.date||'')}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditTrip(${i})">دەستکاری</button><button class="btn ss-danger" onclick="ssDeleteTrip(${i})">سڕینەوە</button></div></div>`).join('')||'<div class="ss-help">هیچ گەشتێک نییە.</div>'},
-    renderDest(){const box=document.getElementById('ssDestList');box.innerHTML=this.current.destinations.map((d,i)=>`<div class="ss-item"><div class="ss-item-main"><b>${this.esc(d.name||'شوێن')}</b><small>${this.esc(d.type||'')} · ${this.esc(d.description||d.desc||'')}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditDestination(${i})">دەستکاری</button><button class="btn ss-danger" onclick="ssDeleteDestination(${i})">سڕینەوە</button></div></div>`).join('')||'<div class="ss-help">هیچ شوێنێک نییە.</div>'},
+    renderTrips(){const box=document.getElementById('ssTripList');box.innerHTML=this.current.trips.map((t,i)=>`<div class="ss-item"><div class="ss-item-main"><b>${this.esc(t.title||'گەشت')}</b><small>${this.esc(t.location||'')} · ${this.esc(t.price||'')} · ${this.esc(t.date||'')}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditTrip(${i})">دەستکاری</button><button class="btn btn-secondary" onclick="ssPickImage('trips.${i}.heroImageUrl')">📱 وێنە</button><button class="btn ss-danger" onclick="ssDeleteTrip(${i})">سڕینەوە</button></div></div>`).join('')||'<div class="ss-help">هیچ گەشتێک نییە.</div>'},
+    renderDest(){const box=document.getElementById('ssDestList');box.innerHTML=this.current.destinations.map((d,i)=>`<div class="ss-item"><div class="ss-item-main"><b>${this.esc(d.name||'شوێن')}</b><small>${this.esc(d.type||'')} · ${this.esc(d.description||d.desc||'')}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditDestination(${i})">دەستکاری</button><button class="btn btn-secondary" onclick="ssPickImage('destinations.${i}.img')">📱 وێنە</button><button class="btn ss-danger" onclick="ssDeleteDestination(${i})">سڕینەوە</button></div></div>`).join('')||'<div class="ss-help">هیچ شوێنێک نییە.</div>'},
     renderWeather(){const w=this.current.weather||{};document.getElementById('ssWeatherForm').innerHTML=this.field('شوێنی بنەڕەت','weather.defaultLocation',w.defaultLocation||'Erbil')+this.field('Latitude','weather.latitude',w.latitude??36.19,'number')+this.field('Longitude','weather.longitude',w.longitude??44.01,'number')+this.field('سەرچاوە','weather.sourceLabel',w.sourceLabel||'Open-Meteo')+this.field('ناونیشانی نوێکردنەوە','weather.updateLabel',w.updateLabel||'دوایین نوێکردنەوە')},
-    renderSafety(){const box=document.getElementById('ssSafetyList');box.innerHTML=this.current.safety.map((x,i)=>`<div class="ss-item"><div class="ss-item-main"><b>${this.esc(x.title||x[1]||'سەلامەتی')}</b><small>${this.esc(x.desc||x[2]||'')} ${x.imageUrl||x.image||x[3]?'· 🖼️ وێنە هەیە':''}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditSafety(${i})">دەستکاری</button><button class="btn ss-danger" onclick="ssDeleteSafety(${i})">سڕینەوە</button></div></div>`).join('')||'<div class="ss-help">هیچ بابەتێک نییە.</div>'},
+    renderSafety(){const box=document.getElementById('ssSafetyList');box.innerHTML=this.current.safety.map((x,i)=>`<div class="ss-item"><div class="ss-item-main"><b>${this.esc(x.title||x[1]||'سەلامەتی')}</b><small>${this.esc(x.desc||x[2]||'')} ${x.imageUrl||x.image||x[3]?'· 🖼️ وێنە هەیە':''}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditSafety(${i})">دەستکاری</button><button class="btn btn-secondary" onclick="ssPickImage('safety.${i}.imageUrl')">📱 وێنە</button><button class="btn ss-danger" onclick="ssDeleteSafety(${i})">سڕینەوە</button></div></div>`).join('')||'<div class="ss-help">هیچ بابەتێک نییە.</div>'},
     renderPrep(){const box=document.getElementById('ssPrepList');box.innerHTML=this.current.preparation.map((x,i)=>{const a=Array.isArray(x)?x:{name:x.name||x.title||'Checklist',label:x.label||x.name||x.title||'',icon:x.icon||'🎒',items:x.items||[]};return `<div class="ss-item"><div class="ss-item-main"><b>${this.esc(a.label||a.name)}</b><small>${this.esc((a.items||[]).join('، '))}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditPrep(${i})">دەستکاری</button><button class="btn ss-danger" onclick="ssDeletePrep(${i})">سڕینەوە</button></div></div>`}).join('')||'<div class="ss-help">هیچ checklist ـێک نییە.</div>'},
     renderReviews(){const box=document.getElementById('ssReviewList');box.innerHTML=this.current.reviews.map((r,i)=>`<div class="ss-item"><div class="ss-item-main"><b>${this.esc(r.name||'بەکارهێنەر')} · ${'★'.repeat(Math.min(5,Number(r.rating||5)))}</b><small>${this.esc(r.city||'')} · ${this.esc(r.comment||r.text||'')}</small></div><div class="ss-actions"><button class="btn btn-secondary" onclick="ssEditReview(${i})">دەستکاری</button><button class="btn ss-danger" onclick="ssDeleteReview(${i})">سڕینەوە</button></div></div>`).join('')||'<div class="ss-help">هیچ بیروڕایەک نییە.</div>'},
-    renderGallery(){const box=document.getElementById('ssGalleryList');box.innerHTML=this.current.gallery.map((g,i)=>`<div class="ss-item"><div class="ss-media"><img src="${this.esc(g.url||g)}" onerror="this.style.display='none'"><div><b>${this.esc(g.title||'KURDIA ADVENTURE')}</b><small>${this.esc(g.url||g)}</small></div></div><button class="btn ss-danger" onclick="ssDeleteGallery(${i})">سڕینەوە</button></div>`).join('')||'<div class="ss-help">گەلەری بەتاڵە.</div>'},
+    renderGallery(){const box=document.getElementById('ssGalleryList');box.innerHTML=this.current.gallery.map((g,i)=>`<div class="ss-item"><div class="ss-media"><img src="${this.esc(g.url||g)}" onerror="this.style.display='none'"><div><b>${this.esc(g.title||'KURDIA ADVENTURE')}</b><small>${this.esc(g.url||g)}</small><div class="ss-actions" style="margin-top:6px"><button class="btn btn-secondary" onclick="ssPickImage('gallery.${i}.url')">📱 گۆڕینی وێنە</button></div></div></div><button class="btn ss-danger" onclick="ssDeleteGallery(${i})">سڕینەوە</button></div>`).join('')||'<div class="ss-help">گەلەری بەتاڵە.</div>'},
     renderPrivate(){const p=this.current.privateTrip;document.getElementById('ssPrivateForm').innerHTML=this.field('سەردێڕ','privateTrip.title',p.title)+this.field('دەسخۆش / description','privateTrip.description',p.description,'textarea',true)+this.field('labelی بەروار','privateTrip.dateLabel',p.dateLabel)+this.field('labelی شوێن','privateTrip.destinationLabel',p.destinationLabel);document.getElementById('ssPrivateTypes').innerHTML=(p.types||[]).map((t,i)=>`<div class="ss-item"><div class="ss-grid3"><div class="ss-field"><label>Value</label><input data-private-type="${i}" data-private-k="value" value="${this.esc(t.value||'')}"></div><div class="ss-field"><label>Label</label><input data-private-type="${i}" data-private-k="label" value="${this.esc(t.label||'')}"></div><div class="ss-field"><label>Icon</label><input data-private-type="${i}" data-private-k="icon" value="${this.esc(t.icon||'more-horizontal')}"></div></div><button class="btn ss-danger" onclick="ssDeletePrivateType(${i})">سڕینەوە</button></div>`).join('')+`<button class="btn btn-secondary" onclick="ssAddPrivateType()">+ جۆری تر</button>`},
     renderFooter(){const x=this.current;document.getElementById('ssFooterForm').innerHTML=this.field('About title','about.title',x.about.title||'')+this.field('About text','about.text',x.about.text||'','textarea',true)+this.field('About image','about.imageUrl',x.about.imageUrl||'', 'text',true)+this.field('WhatsApp','contact.whatsapp',x.contact.whatsapp||'')+this.field('Phone','contact.phone',x.contact.phone||'')+this.field('City','contact.city',x.contact.city||'')+this.field('Instagram','social.instagram',x.social.instagram||'')+this.field('TikTok','social.tiktok',x.social.tiktok||'')+this.field('YouTube','social.youtube',x.social.youtube||'')+this.field('Telegram','social.telegram',x.social.telegram||'')+this.field('Footer description','footer.description',x.footer.description||'','textarea',true)},
     renderSEO(){const s=this.current.settings||{};document.getElementById('ssSeoForm').innerHTML=this.field('Site title','settings.siteTitle',s.siteTitle||'KURDIA ADVENTURE — گەشت، سروشت و سەرکێشی')+this.field('Meta description','settings.metaDescription',s.metaDescription||'گەشت، سروشت و شوێنە جیاوازەکانی کوردستان.','textarea',true)+this.field('Default language','settings.defaultLanguage',s.defaultLanguage||'ku')+`<div class="ss-field full"><label>Maintenance mode</label><label class="ss-check"><input type="checkbox" data-ss-key="settings.maintenance" ${s.maintenance?'checked':''}> دۆخی چاکسازی</label></div>`},
@@ -1796,13 +1872,41 @@ window.addEventListener("DOMContentLoaded",()=>{
     editReview(i){const r=this.current.reviews[i];r.name=prompt('ناو',r.name||'')??r.name;r.city=prompt('شار',r.city||'')??r.city;r.rating=Number(prompt('Rating 1-5',r.rating||5)??r.rating);r.comment=prompt('بیروڕا',r.comment||r.text||'')??(r.comment||r.text||'');r.text=r.comment;r.status=prompt('Status: published/pending/hidden',r.status||'published')??(r.status||'published');this.renderReviews();this.mark()},
     preview(){const h=this.current.i18n?.ku?.heroTitle||this.current.home?.hero?.title||'KURDIA ADVENTURE';const ht=this.current.i18n?.ku?.heroSubtitle||this.current.home?.hero?.subtitle||'';const t=this.current.trips[0]||{};const old=document.getElementById('ssPreviewModal');if(old)old.remove();const modal=document.createElement('div');modal.id='ssPreviewModal';modal.style='position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:999999;display:flex;align-items:center;justify-content:center;padding:16px';modal.innerHTML=`<div style="width:min(620px,100%);max-height:90vh;overflow:auto;background:#080c12;border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b>Preview — KURDIA ADVENTURE</b><button class="btn btn-secondary" id="ssClosePreview">داخستن</button></div><div class="ss-preview-frame"><div class="ss-preview-hero"><div class="eyebrow">${this.esc(this.current.uiText?.heroEyebrow||'KURDIA ADVENTURE')}</div><h2>${this.esc(h)}</h2><p>${this.esc(ht)}</p></div><div class="ss-preview-card"><b>${this.esc(t.title||'گەشتی ئەم هەفتەیە')}</b><div class="ss-help">${this.esc(t.location||'')} · ${this.esc(t.price||'')} · ${this.esc(t.date||'')}</div></div></div></div>`;document.body.appendChild(modal);document.getElementById('ssClosePreview').onclick=()=>modal.remove();modal.onclick=e=>{if(e.target===modal)modal.remove()};},
   };
+  // V11: mobile image upload -> Cloudflare R2 via existing Worker media endpoint
+  let ssImageTarget='';
+  window.ssPickImage=function(path){
+    ssImageTarget=path;
+    const input=document.getElementById('ssMobileImageInput');
+    if(input){input.value='';input.click();}
+  };
+  async function ssUploadImageFile(file){
+    const out=document.getElementById('ssImageUploadStatus');
+    if(out)out.textContent='⏳ وێنەکە ئامادە دەکرێت...';
+    if(!file||!/^image\//.test(file.type))throw Error('تەنها فایلەکانی وێنە ڕێگەپێدراون.');
+    const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
+    const img=await new Promise((resolve,reject)=>{const x=new Image();x.onload=()=>resolve(x);x.onerror=reject;x.src=data});
+    const max=1600,scale=Math.min(1,max/Math.max(img.width,img.height));
+    const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    const base64=c.toDataURL('image/jpeg',.84).split(',')[1];
+    const name='kurdia-'+Date.now()+'.jpg';
+    const r=await adminFetch(`${WORKER_URL}/api/admin/media`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,contentType:'image/jpeg',base64})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||!j.ok)throw Error(j.error||`Upload failed (${r.status})`);
+    return j.url;
+  }
+  document.addEventListener('DOMContentLoaded',()=>{
+    const input=document.getElementById('ssMobileImageInput');
+    input?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file||!ssImageTarget)return;try{const url=await ssUploadImageFile(file);if(ssImageTarget==='gallery.__new__'){S.current.gallery.push({url,title:'KURDIA ADVENTURE'});}else{S.setPath(ssImageTarget,url);}S.mark();S.render();toast('✅ وێنەکە لە Cloud هەڵگیرا');}catch(err){toast('❌ '+(err.message||'Upload هەڵەیە'));}finally{ssImageTarget='';}});
+  });
+  window.ssUploadNewGallery=async function(){ssImageTarget='gallery.__new__';document.getElementById('ssMobileImageInput')?.click()};
   window.ssLoadCloud=()=>S.load();window.ssSaveCloud=()=>S.save();window.ssPreview=()=>S.preview();window.ssResetDraft=()=>{if(confirm('Draft ـی ئەم Site Studio ـە بسڕمەوە؟')){localStorage.removeItem(S.key);S.load()}};
   window.ssEditTrip=i=>S.editTrip(i);window.ssDeleteTrip=i=>{if(confirm('سڕینەوە؟')){S.current.trips.splice(i,1);S.renderTrips();S.mark()}};window.ssAddTrip=()=>{S.current.trips.push({id:'trip-'+Date.now(),title:'گەشتی نوێ',location:'',price:'',time:'',date:'',description:'',heroImageUrl:'',capacity:0,booked:0,published:true,status:'draft'});S.renderTrips();S.mark()};
   window.ssEditDestination=i=>S.editDestination(i);window.ssDeleteDestination=i=>{if(confirm('سڕینەوە؟')){S.current.destinations.splice(i,1);S.renderDest();S.mark()}};window.ssAddDestination=()=>{S.current.destinations.push({id:'dest-'+Date.now(),name:'شوێنی نوێ',type:'',description:'',img:''});S.renderDest();S.mark()};
   window.ssEditSafety=i=>S.editSafety(i);window.ssDeleteSafety=i=>{if(confirm('سڕینەوە؟')){S.current.safety.splice(i,1);S.renderSafety();S.mark()}};window.ssAddSafety=()=>{S.current.safety.push({id:'safe-'+Date.now(),icon:'🛡️',title:'بابەتی نوێ',desc:'',imageUrl:''});S.renderSafety();S.mark()};
   window.ssEditPrep=i=>S.editPrep(i);window.ssDeletePrep=i=>{if(confirm('سڕینەوە؟')){S.current.preparation.splice(i,1);S.renderPrep();S.mark()}};window.ssAddPrep=()=>{S.current.preparation.push({id:'prep-'+Date.now(),name:'New',label:'Checklist نوێ',icon:'🎒',items:[]});S.renderPrep();S.mark()};
   window.ssEditReview=i=>S.editReview(i);window.ssDeleteReview=i=>{if(confirm('سڕینەوە؟')){S.current.reviews.splice(i,1);S.renderReviews();S.mark()}};window.ssAddReview=()=>{S.current.reviews.push({id:'review-'+Date.now(),name:'',city:'',rating:5,comment:'',text:'',status:'published'});S.renderReviews();S.mark()};
-  window.ssDeleteGallery=i=>{if(confirm('سڕینەوە؟')){S.current.gallery.splice(i,1);S.renderGallery();S.mark()}};window.ssAddGallery=()=>{const u=prompt('URLی وێنە');if(!u)return;S.current.gallery.push({url:u,title:'KURDIA ADVENTURE'});S.renderGallery();S.mark()};
+  window.ssDeleteGallery=i=>{if(confirm('سڕینەوە؟')){S.current.gallery.splice(i,1);S.renderGallery();S.mark()}};window.ssAddGallery=()=>window.ssUploadNewGallery();
   window.ssDeletePrivateType=i=>{S.current.privateTrip.types.splice(i,1);S.renderPrivate();S.mark()};window.ssAddPrivateType=()=>{S.current.privateTrip.types.push({value:'Other-'+Date.now(),label:'جۆری نوێ',icon:'more-horizontal'});S.renderPrivate();S.mark()};
   document.addEventListener('DOMContentLoaded',()=>{
     document.querySelectorAll('.ss-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.ss-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.ss-panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector(`[data-ss-panel="${b.dataset.ss}"]`)?.classList.add('active');S.active=b.dataset.ss;}));
