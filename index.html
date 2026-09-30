@@ -528,29 +528,62 @@ function normalizeRemoteCMS(config){
   const trips=Array.isArray(config.trips)?config.trips:[];
   const t=trips.find(x=>x && (x.published!==false)) || trips[0] || {};
   const out={...data};
-  if(hero.title!==undefined) out.heroTitle=hero.title;
-  if(hero.subtitle!==undefined) out.heroText=hero.subtitle;
-  if(hero.text!==undefined && hero.subtitle===undefined) out.heroText=hero.text;
+  out.cmsI18n=config.i18n||hero.i18n||t.i18n||out.cmsI18n||{};
+  const lang=localStorage.getItem('kurdia_language')||'ku';
+  const hi=out.cmsI18n?.[lang]||out.cmsI18n?.ku||{};
+  if(hi.heroTitle!==undefined) out.heroTitle=hi.heroTitle;
+  if(hi.heroSubtitle!==undefined) out.heroText=hi.heroSubtitle;
+  if(hero.title!==undefined && hi.heroTitle===undefined) out.heroTitle=hero.title;
+  if(hero.subtitle!==undefined && hi.heroSubtitle===undefined) out.heroText=hero.subtitle;
+  if(hero.text!==undefined && hero.subtitle===undefined && hi.heroSubtitle===undefined) out.heroText=hero.text;
   if(hero.imageUrl!==undefined) out.heroImageUrl=hero.imageUrl;
   if(Object.keys(t).length){
+    const ti=t.i18n||out.cmsI18n||{};
+    const lti=ti[lang]||ti.ku||{};
     out.trip={...out.trip,
-      title:t.title??out.trip?.title,
-      location:t.location??out.trip?.location,
+      title:lti.tripTitle??t.title??out.trip?.title,
+      location:lti.tripLocation??t.location??out.trip?.location,
       date:t.date??t.targetDate??out.trip?.date,
-      price:t.price??out.trip?.price,
+      price:lti.tripPrice??t.price??out.trip?.price,
+      time:lti.tripTime??t.time??out.trip?.time,
       capacity:Number(t.capacity??out.trip?.capacity??35),
       booked:Number(t.booked??out.trip?.booked??0),
-      desc:t.description??t.desc??out.trip?.desc,
+      desc:lti.tripDesc??t.description??t.desc??out.trip?.desc,
       imageUrl:t.heroImageUrl??t.imageUrl??out.trip?.imageUrl
     };
   }
-  ['destinations','safety','prep','gallery','reviews','about','contact','social','stories'].forEach(k=>{
+  ['destinations','safety','gallery','reviews','about','contact','social','stories'].forEach(k=>{
     if(config[k]!==undefined) out[k]=config[k];
   });
+  if(config.preparation!==undefined) out.prep=config.preparation; else if(config.prep!==undefined) out.prep=config.prep;
   if(config.weather!==undefined) out.weather=config.weather;
   if(config.settings!==undefined) out.settings=config.settings;
   return out;
 }
+window.setLanguage=function(lang){
+  if(!['ku','ar','en'].includes(lang)) lang='ku';
+  localStorage.setItem('kurdia_language',lang);
+  document.documentElement.lang=lang==='en'?'en':(lang==='ar'?'ar':'ku');
+  document.documentElement.dir=lang==='en'?'ltr':'rtl';
+  try{
+    const hi=data.cmsI18n?.[lang]||data.cmsI18n?.ku;
+    if(hi){
+      if(hi.heroTitle!==undefined)data.heroTitle=hi.heroTitle;
+      if(hi.heroSubtitle!==undefined)data.heroText=hi.heroSubtitle;
+      if(data.trip){
+        const ti=(data.cmsI18n?.[lang]||{});
+        data.trip.title=ti.tripTitle??data.trip.title;
+        data.trip.location=ti.tripLocation??data.trip.location;
+        data.trip.price=ti.tripPrice??data.trip.price;
+        data.trip.time=ti.tripTime??data.trip.time;
+        data.trip.desc=ti.tripDesc??data.trip.desc;
+      }
+      render();
+      route();
+    }
+  }catch(e){}
+};
+
 async function loadRemote(){
   try{
     const r=await fetch(WORKER+'/api/site/config',{cache:'no-store'});
@@ -776,7 +809,7 @@ ${location.origin+location.pathname}#stories`),'_blank')}
 async function submitStory(e){e.preventDefault();const media=$('stMediaBase64')?.value;if(!media)return toast('تکایە وێنەیەک هەڵبژێرە');const payload={name:$('stName').value.trim(),city:$('stCity').value.trim(),tripName:$('stTrip').value.trim(),text:$('stText').value.trim(),mediaUrl:media};try{const r=await fetch(WORKER+'/api/stories',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const x=await r.json();if(x.ok){toast(x.message||'ستۆری نێردرا ✓');closeStoryModal();e.target.reset();$('stMediaBase64').value='';$('storyPreview').textContent='هیچ وێنەیەک هەڵنەبژێردراوە';fetchStories(true)}else toast(x.error||'ناردنی ستۆری سەرکەوتوو نەبوو')}catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}}
 function startCountdown(){clearInterval(countdownTimer);const target=new Date((data.trip?.date||'2026-10-03')+'T05:00:00').getTime();const t=()=>{let d=target-Date.now();if(d<0)d=0;const a=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);if($('cdDays'))$('cdDays').textContent=String(a).padStart(2,'0');if($('cdHours'))$('cdHours').textContent=String(h).padStart(2,'0');if($('cdMins'))$('cdMins').textContent=String(m).padStart(2,'0');if($('cdSecs'))$('cdSecs').textContent=String(s).padStart(2,'0')};t();countdownTimer=setInterval(t,1000)}
 
-loadRemote().finally(()=>{render();route();startCountdown();fetchStories()});
+loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_language')||'ku');render();route();startCountdown();fetchStories()});
 </script>
 <script id="kurdia-icon-fallback">
 (function(){
