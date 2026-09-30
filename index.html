@@ -25,7 +25,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .iconbtn{width:42px;height:42px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;border-radius:14px;display:grid;place-items:center;transition:0.2s;}
 .iconbtn:active{transform:scale(0.95)}
 .hero{position:relative;min-height:650px;display:flex;align-items:flex-end;overflow:hidden}
-.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 20%,rgba(0,0,0,.72) 70%,#05070b 100%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85') center/cover}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 20%,rgba(0,0,0,.72) 70%,#05070b 100%),var(--hero-image,url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85')) center/cover}
 .hero .container{position:relative;padding-bottom:40px}
 .eyebrow{color:#ff667f;font-size:12px;font-weight:800;letter-spacing:2px}
 .hero h1{font-size:clamp(42px,13vw,82px);line-height:.95;margin:10px 0 14px;font-weight:900;letter-spacing:-2px}
@@ -629,8 +629,19 @@ function normalizePublicData(){
   if(!Array.isArray(data.safety)) data.safety=DEFAULT.safety||[];
   if(!Array.isArray(data.prep)) data.prep=DEFAULT.prep||[];
 }
+function safeImageUrl(value){
+ const v=String(value||"").trim();
+ if(/^https?:\/\//i.test(v)) return v;
+ if(/^data:image\/(jpeg|jpg|png|webp|gif);base64,/i.test(v)) return v;
+ if(v.startsWith("/media/")||v.startsWith("/api/media/")) return WORKER+v;
+ return "";
+}
 function render(){
  normalizePublicData();
+ const heroUrl=safeImageUrl(data.heroImageUrl);
+ document.documentElement.style.setProperty("--hero-image",heroUrl?`url("${heroUrl.replace(/"/g,'\\"')}")`:"url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85')");
+ const feature=document.querySelector('.featureimg');
+ if(feature){const tripUrl=safeImageUrl(data.trip?.imageUrl); if(tripUrl) feature.style.backgroundImage=`url("${tripUrl.replace(/"/g,'\\"')}")`;}
  $('heroTitle').textContent=data.heroTitle;$('heroText').textContent=data.heroText;
  const t=data.trip;$('tripTitle').textContent=t.title;$('tripLocation').textContent=t.location;$('tripDesc').textContent=t.desc;$('tripDate').textContent=new Date(t.date).toLocaleDateString('ku-IQ',{month:'2-digit',day:'2-digit'});$('tripPrice').textContent=t.price;$('tripCapacity').textContent=`${t.booked}/${t.capacity}`;
  const cards=data.destinations.map(x=>`<a class="dest" style="background-image:url('${esc(x.img)}')" href="#destinations"><span>${esc(x.name)}</span></a>`).join('');$('homeDests').innerHTML=cards;$('destList').innerHTML=cards;
