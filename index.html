@@ -5,11 +5,116 @@
 <meta name="theme-color" content="#070a10"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز">
 <title>KURDIA ADVENTURE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<!-- زیادکردنی Lucide بۆ ئایکۆنە مۆدێرنەکان -->
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-:root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 70% -10%,rgba(169,29,55,.16),transparent 34%),var(--bg);color:var(--text);font-family:'Noto Sans Arabic',system-ui,sans-serif;overflow-x:hidden}button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}.app{min-height:100vh;padding-bottom:calc(var(--nav) + 28px)}.page{display:none;min-height:100vh;animation:fade .28s ease}.page.active{display:block}@keyframes fade{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}.container{width:min(1100px,100%);margin:auto;padding:0 16px}.top{position:sticky;top:0;z-index:20;background:rgba(5,7,11,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}.topin{height:64px;display:flex;align-items:center;justify-content:space-between}.brand{font-weight:900;letter-spacing:2px}.brand small{display:block;font-size:8px;letter-spacing:4px;color:#c8ced8;margin-top:-3px}.iconbtn{width:42px;height:42px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;border-radius:14px;display:grid;place-items:center}.hero{position:relative;min-height:650px;display:flex;align-items:flex-end;overflow:hidden}.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 20%,rgba(0,0,0,.72) 70%,#05070b 100%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85') center/cover}.hero .container{position:relative;padding-bottom:40px}.eyebrow{color:#ff667f;font-size:12px;font-weight:800;letter-spacing:2px}.hero h1{font-size:clamp(42px,13vw,82px);line-height:.95;margin:10px 0 14px;font-weight:900;letter-spacing:-2px}.hero p{color:#d8dce3;line-height:1.9;max-width:620px;margin:0 0 22px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:16px;padding:13px 18px;font-weight:800}.btn.red{background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;box-shadow:0 12px 28px rgba(169,29,55,.3)}.btn.ghost{background:rgba(255,255,255,.07);color:#fff;border:1px solid var(--line)}.section{padding:28px 0}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:14px}.sectionhead h2{margin:0;font-size:22px}.sectionhead p{margin:5px 0 0;color:var(--muted);font-size:12px}.link{color:#ff5c76;font-size:12px;font-weight:800}.featured{overflow:hidden;border:1px solid var(--line);background:var(--panel);border-radius:28px}.featureimg{height:235px;background:center/cover url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85');position:relative}.pill{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.65);backdrop-filter:blur(12px);border:1px solid var(--line);padding:7px 10px;border-radius:999px;font-size:10px}.featurebody{padding:18px}.featurebody h3{margin:0 0 7px;font-size:20px}.muted{color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.stat{background:rgba(255,255,255,.04);border:1px solid var(--line);padding:11px;border-radius:16px;text-align:center}.stat b{display:block;font-size:14px}.stat span{font-size:9px;color:var(--muted)}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{min-height:155px;border-radius:22px;border:1px solid var(--line);overflow:hidden;position:relative;background:#111}.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75),transparent 65%)}.tile div{position:absolute;z-index:2;bottom:12px;right:12px;left:12px}.tile b{font-size:14px}.tile small{display:block;color:#c2c8d0;font-size:9px;margin-top:4px}.experiences .tile:nth-child(1){background:url('https://images.unsplash.com/photo-1504851149312-7a075b496cc7?auto=format&fit=crop&w=800&q=80') center/cover}.experiences .tile:nth-child(2){background:url('https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80') center/cover}.experiences .tile:nth-child(3){background:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80') center/cover}.experiences .tile:nth-child(4){background:url('https://images.unsplash.com/photo-1473445361085-b9a07f55608b?auto=format&fit=crop&w=800&q=80') center/cover}.destgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dest{height:150px;border-radius:20px;background:center/cover;position:relative;overflow:hidden;border:1px solid var(--line)}.dest:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.72),transparent)}.dest span{position:absolute;bottom:11px;right:11px;z-index:2;font-weight:800;font-size:13px}.stories{display:flex;gap:12px;overflow-x:auto;padding:3px 2px 10px;scrollbar-width:none}.stories::-webkit-scrollbar{display:none}.story{min-width:76px;text-align:center}.story .ring{width:68px;height:68px;border-radius:50%;padding:2px;background:linear-gradient(145deg,#ef4262,#6d1024);margin:auto}.story img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid #090c11}.story small{font-size:9px;color:#cfd4dc}.privateHero{padding:24px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(169,29,55,.18),rgba(255,255,255,.03));}.privateHero h2{margin:0 0 7px}.privateHero p{color:#c5cad2;line-height:1.9}.about{display:grid;grid-template-columns:1fr;gap:12px}.about img{width:100%;height:230px;object-fit:cover;border-radius:24px;border:1px solid var(--line)}.glass{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:24px;padding:18px}.form{display:grid;gap:10px}.input,.select,.textarea{width:100%;border:1px solid var(--line);background:#0b1017;color:#fff;border-radius:15px;padding:13px 14px;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:#c92d4b;box-shadow:0 0 0 3px rgba(201,45,75,.1)}.textarea{min-height:110px;resize:vertical}.weatherPage{padding-bottom:30px}.mapbox{height:310px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#101722}.maphint{font-size:11px;color:var(--muted);margin:8px 0 0}.coords{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.searchbar{display:flex;gap:8px;margin:16px 0}.searchbar .input{flex:1}.weatherCurrent{border-radius:28px;overflow:hidden;border:1px solid var(--line);background:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80') center/cover;position:relative}.weatherCurrent:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.86),rgba(0,0,0,.2))}.weatherContent{position:relative;z-index:1;padding:22px}.temp{font-size:60px;font-weight:900;line-height:1}.weatherMeta{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}.weatherMeta .stat{text-align:right}.hourly{display:flex;overflow-x:auto;gap:8px;padding-bottom:4px;scrollbar-width:none}.hour{min-width:78px;padding:12px 8px;text-align:center;border-radius:18px;background:var(--panel);border:1px solid var(--line)}.hour b{display:block;margin:7px 0}.days{display:grid;gap:7px}.dayrow{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);background:var(--panel);border-radius:17px;font-size:11px}.alert{border:1px solid rgba(255,193,7,.3);background:rgba(255,193,7,.07);border-radius:20px;padding:15px;color:#f8df8a}.articleList{display:grid;gap:9px}.article{display:flex;gap:12px;align-items:center;padding:13px;border:1px solid var(--line);background:var(--panel);border-radius:20px}.articleIcon{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(169,29,55,.16);font-size:20px;flex:0 0 44px}.article b{font-size:13px}.article small{display:block;color:var(--muted);margin-top:4px}.check{display:grid;gap:8px}.check label{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);background:var(--panel);border-radius:15px;font-size:12px}.check input{accent-color:var(--red2);width:18px;height:18px}.bottom{position:fixed;z-index:50;left:8px;right:8px;bottom:calc(7px + env(safe-area-inset-bottom));height:70px;border:1px solid rgba(255,255,255,.1);background:rgba(8,11,17,.88);backdrop-filter:blur(22px);border-radius:23px;display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr;align-items:end;padding:6px;box-shadow:0 18px 50px rgba(0,0,0,.45)}.navitem{height:55px;border-radius:17px;color:#8e98a7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:8px;font-weight:700}.navitem.active{color:#fff;background:rgba(169,29,55,.18)}.navjoin{height:67px;margin-top:-22px;border-radius:22px;background:linear-gradient(145deg,#d63350,#8e142c);color:#fff;box-shadow:0 12px 30px rgba(169,29,55,.5);border:1px solid rgba(255,255,255,.2)}.navitem .ico{font-size:19px;line-height:1}.ai{position:fixed;z-index:60;right:18px;bottom:calc(var(--nav) + 24px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,#e33958,#94162f);color:#fff;box-shadow:0 12px 32px rgba(169,29,55,.42);display:grid;place-items:center;font-size:21px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);z-index:100;display:none;align-items:end;padding:10px}.modal.show{display:flex}.sheet{width:min(680px,100%);margin:auto;background:#0b1017;border:1px solid var(--line);border-radius:28px;padding:20px;max-height:90vh;overflow:auto}.close{float:left}.footer{padding:35px 0 110px;color:#8893a3;font-size:11px}.toast{position:fixed;z-index:200;left:50%;bottom:100px;transform:translateX(-50%) translateY(15px);opacity:0;background:#161d27;border:1px solid var(--line);padding:11px 15px;border-radius:14px;font-size:11px;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(min-width:720px){.container{padding:0 24px}.hero{min-height:720px}.grid2{grid-template-columns:repeat(4,1fr)}.destgrid{grid-template-columns:repeat(3,1fr)}.about{grid-template-columns:1.1fr 1fr}.weatherMeta{grid-template-columns:repeat(4,1fr)}.articleList{grid-template-columns:repeat(2,1fr)}.bottom{left:50%;right:auto;width:640px;transform:translateX(-50%)}.ai{right:max(24px,calc(50% - 540px));}.section{padding:42px 0}}
+:root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 70% -10%,rgba(169,29,55,.16),transparent 34%),var(--bg);color:var(--text);font-family:'Noto Sans Arabic',system-ui,sans-serif;overflow-x:hidden}
+button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+.app{min-height:100vh;padding-bottom:calc(var(--nav) + 28px)}
+.page{display:none;min-height:100vh;animation:fade .28s ease}.page.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
+.container{width:min(1100px,100%);margin:auto;padding:0 16px}
+.top{position:sticky;top:0;z-index:20;background:rgba(5,7,11,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.topin{height:64px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:900;letter-spacing:2px}.brand small{display:block;font-size:8px;letter-spacing:4px;color:#c8ced8;margin-top:-3px}
+.iconbtn{width:42px;height:42px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;border-radius:14px;display:grid;place-items:center;transition:0.2s;}
+.iconbtn:active{transform:scale(0.95)}
+.hero{position:relative;min-height:650px;display:flex;align-items:flex-end;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 20%,rgba(0,0,0,.72) 70%,#05070b 100%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85') center/cover}
+.hero .container{position:relative;padding-bottom:40px}
+.eyebrow{color:#ff667f;font-size:12px;font-weight:800;letter-spacing:2px}
+.hero h1{font-size:clamp(42px,13vw,82px);line-height:.95;margin:10px 0 14px;font-weight:900;letter-spacing:-2px}
+.hero p{color:#d8dce3;line-height:1.9;max-width:620px;margin:0 0 22px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:16px;padding:13px 18px;font-weight:800;transition:0.2s;}
+.btn:active{transform:scale(0.98)}
+.btn.red{background:linear-gradient(135deg,var(--red2),var(--red));color:#fff;box-shadow:0 12px 28px rgba(169,29,55,.3)}
+.btn.ghost{background:rgba(255,255,255,.07);color:#fff;border:1px solid var(--line)}
+.section{padding:28px 0}
+.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:14px}
+.sectionhead h2{margin:0;font-size:22px}
+.sectionhead p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.link{color:#ff5c76;font-size:12px;font-weight:800}
+.featured{overflow:hidden;border:1px solid var(--line);background:var(--panel);border-radius:28px}
+.featureimg{height:235px;background:center/cover url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85');position:relative}
+.pill{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.65);backdrop-filter:blur(12px);border:1px solid var(--line);padding:7px 10px;border-radius:999px;font-size:10px}
+.featurebody{padding:18px}.featurebody h3{margin:0 0 7px;font-size:20px}.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}
+.stat{background:rgba(255,255,255,.04);border:1px solid var(--line);padding:11px;border-radius:16px;text-align:center}
+.stat b{display:block;font-size:14px}.stat span{font-size:9px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{min-height:155px;border-radius:22px;border:1px solid var(--line);overflow:hidden;position:relative;background:#111}
+.tile:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75),transparent 65%)}
+.tile div{position:absolute;z-index:2;bottom:12px;right:12px;left:12px}.tile b{font-size:14px}.tile small{display:block;color:#c2c8d0;font-size:9px;margin-top:4px}
+.experiences .tile:nth-child(1){background:url('https://images.unsplash.com/photo-1504851149312-7a075b496cc7?auto=format&fit=crop&w=800&q=80') center/cover}
+.experiences .tile:nth-child(2){background:url('https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80') center/cover}
+.experiences .tile:nth-child(3){background:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80') center/cover}
+.experiences .tile:nth-child(4){background:url('https://images.unsplash.com/photo-1473445361085-b9a07f55608b?auto=format&fit=crop&w=800&q=80') center/cover}
+.destgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.dest{height:150px;border-radius:20px;background:center/cover;position:relative;overflow:hidden;border:1px solid var(--line)}
+.dest:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.72),transparent)}.dest span{position:absolute;bottom:11px;right:11px;z-index:2;font-weight:800;font-size:13px}
+.stories{display:flex;gap:12px;overflow-x:auto;padding:3px 2px 10px;scrollbar-width:none}
+.stories::-webkit-scrollbar{display:none}
+.story{min-width:76px;text-align:center;position:relative;}
+.story .ring{width:68px;height:68px;border-radius:50%;padding:2px;background:linear-gradient(145deg,#ef4262,#6d1024);margin:auto;display:flex;align-items:center;justify-content:center;}
+.story img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid #090c11}
+.story small{font-size:9px;color:#cfd4dc;display:block;margin-top:4px;}
+.story-add-btn {position:absolute;bottom:18px;right:4px;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #05070b;font-weight:900;}
+.privateHero{padding:24px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(169,29,55,.18),rgba(255,255,255,.03));}
+.privateHero h2{margin:0 0 7px}.privateHero p{color:#c5cad2;line-height:1.9}
+.about{display:grid;grid-template-columns:1fr;gap:12px}
+.about img{width:100%;height:230px;object-fit:cover;border-radius:24px;border:1px solid var(--line)}
+.glass{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:24px;padding:18px}
+.form{display:grid;gap:10px}
+.input,.select,.textarea{width:100%;border:1px solid var(--line);background:#0b1017;color:#fff;border-radius:15px;padding:13px 14px;outline:none}
+.input:focus,.select:focus,.textarea:focus{border-color:#c92d4b;box-shadow:0 0 0 3px rgba(201,45,75,.1)}
+.textarea{min-height:110px;resize:vertical}
+.weatherPage{padding-bottom:30px}
+.mapbox{height:310px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#101722}
+.maphint{font-size:11px;color:var(--muted);margin:8px 0 0}
+.coords{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.searchbar{display:flex;gap:8px;margin:16px 0}.searchbar .input{flex:1}
+.weatherCurrent{border-radius:28px;overflow:hidden;border:1px solid var(--line);background:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80') center/cover;position:relative}
+.weatherCurrent:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.86),rgba(0,0,0,.2))}
+.weatherContent{position:relative;z-index:1;padding:22px}
+.temp{font-size:60px;font-weight:900;line-height:1}
+.weatherMeta{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}
+.weatherMeta .stat{text-align:right}
+.hourly{display:flex;overflow-x:auto;gap:8px;padding-bottom:4px;scrollbar-width:none}
+.hour{min-width:78px;padding:12px 8px;text-align:center;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.hour b{display:block;margin:7px 0;font-size:20px;}
+.days{display:grid;gap:7px}
+.dayrow{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);background:var(--panel);border-radius:17px;font-size:11px}
+.alert{border:1px solid rgba(255,193,7,.3);background:rgba(255,193,7,.07);border-radius:20px;padding:15px;color:#f8df8a}
+.articleList{display:grid;gap:9px}
+.article{display:flex;gap:12px;align-items:center;padding:13px;border:1px solid var(--line);background:var(--panel);border-radius:20px}
+.articleIcon{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(169,29,55,.16);font-size:20px;flex:0 0 44px;color:var(--red2)}
+.article b{font-size:13px}.article small{display:block;color:var(--muted);margin-top:4px}
+.check{display:grid;gap:8px}
+.check label{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);background:var(--panel);border-radius:15px;font-size:12px}
+.check input{accent-color:var(--red2);width:18px;height:18px}
+/* خوارەوە (Bottom Nav) */
+.bottom{position:fixed;z-index:50;left:8px;right:8px;bottom:calc(7px + env(safe-area-inset-bottom));height:70px;border:1px solid rgba(255,255,255,.1);background:rgba(8,11,17,.88);backdrop-filter:blur(22px);border-radius:23px;display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr;align-items:end;padding:6px;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.navitem{height:55px;border-radius:17px;color:#8e98a7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:8px;font-weight:700}
+.navitem.active{color:#fff;background:rgba(169,29,55,.18)}
+.navjoin{height:67px;margin-top:-22px;border-radius:22px;background:linear-gradient(145deg,#d63350,#8e142c);color:#fff;box-shadow:0 12px 30px rgba(169,29,55,.5);border:1px solid rgba(255,255,255,.2)}
+.navitem .ico{width:20px;height:20px;}
+.ai{position:fixed;z-index:60;right:18px;bottom:calc(var(--nav) + 24px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:linear-gradient(145deg,#e33958,#94162f);color:#fff;box-shadow:0 12px 32px rgba(169,29,55,.42);display:grid;place-items:center;font-size:21px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);z-index:100;display:none;align-items:end;padding:10px}
+.modal.show{display:flex}
+.sheet{width:min(680px,100%);margin:auto;background:#0b1017;border:1px solid var(--line);border-radius:28px;padding:20px;max-height:90vh;overflow:auto}
+.close{float:left}
+.footer{padding:35px 0 110px;color:#8893a3;font-size:11px}
+.toast{position:fixed;z-index:200;left:50%;bottom:100px;transform:translateX(-50%) translateY(15px);opacity:0;background:#161d27;border:1px solid var(--line);padding:11px 15px;border-radius:14px;font-size:11px;transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:720px){.container{padding:0 24px}.hero{min-height:720px}.grid2{grid-template-columns:repeat(4,1fr)}.destgrid{grid-template-columns:repeat(3,1fr)}.about{grid-template-columns:1.1fr 1fr}.weatherMeta{grid-template-columns:repeat(4,1fr)}.articleList{grid-template-columns:repeat(2,1fr)}.bottom{left:50%;right:auto;width:640px;transform:translateX(-50%)}.ai{right:max(24px,calc(50% - 540px));}.section{padding:42px 0}}
 
-
+/* OTP & Booking */
 .otp-row{display:flex;gap:8px;align-items:stretch}.otp-row .input{flex:1;min-width:0}.otp-btn{white-space:nowrap;padding-inline:14px}
 .otp-box,.receipt-box{padding:13px;border:1px solid var(--line);background:#090d14;border-radius:16px;display:grid;gap:9px}
 .otp-head{display:grid;gap:3px}.otp-head span{font-size:11px}
@@ -17,64 +122,295 @@
 .receipt-preview img{width:100%;max-height:180px;object-fit:contain;border-radius:10px;display:block}
 @media(max-width:520px){.otp-row{flex-direction:column}.otp-btn{width:100%}}
 
-/* INDEX features */
+/* Private Trip Toggles & Radio Grid */
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
+.type-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 5px;background:var(--panel);border:1px solid var(--line);border-radius:16px;font-size:11px;cursor:pointer;transition:0.2s;text-align:center;}
+.type-btn input{display:none;}
+.type-btn:has(input:checked){background:rgba(169,29,55,0.15);border-color:var(--red);color:var(--red);}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--panel);border-radius:16px;border:1px solid var(--line);font-size:12px;margin-bottom:8px;cursor:pointer;}
+.switch{appearance:none;width:40px;height:22px;background:var(--muted);border-radius:20px;position:relative;cursor:pointer;outline:none;transition:0.3s;flex-shrink:0;}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:0.3s;}
+.switch:checked{background:var(--red);}
+.switch:checked::after{transform:translateX(18px);}
+
+/* Music & Stories */
 .music-on{border-color:rgba(211,47,78,.55)!important;background:rgba(169,29,55,.18)!important}
-.story-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.story-action{border:1px solid var(--line);background:rgba(255,255,255,.045);color:#fff;border-radius:14px;padding:10px 13px;font-weight:800;font-size:11px}.story-action.red{background:rgba(169,29,55,.18);border-color:rgba(211,47,78,.35)}
-.story-modal,.story-viewer{position:fixed;inset:0;z-index:150;display:none;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:14px}.story-modal.show,.story-viewer.show{display:flex}.story-sheet{width:min(620px,100%);max-height:92vh;overflow:auto;background:#0b1017;border:1px solid var(--line);border-radius:28px;padding:20px}.story-viewer-card{width:min(430px,100%);height:min(760px,88vh);position:relative;overflow:hidden;border-radius:30px;background:#080b10}.story-viewer-card img{width:100%;height:100%;object-fit:cover}.story-viewer-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.6),transparent 35%,rgba(0,0,0,.78))}.story-viewer-top,.story-viewer-bottom{position:absolute;z-index:2;left:14px;right:14px;display:flex;align-items:center;gap:10px}.story-viewer-top{top:14px}.story-viewer-bottom{bottom:18px;align-items:flex-end}.story-viewer-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--red);font-weight:900}.story-viewer-info{flex:1}.story-viewer-info b{display:block}.story-viewer-info small{color:#d2d7df}.story-progress{position:absolute;z-index:3;left:14px;right:14px;top:8px;height:3px;background:rgba(255,255,255,.22);overflow:hidden}.story-progress i{display:block;width:0;height:100%;background:#fff;transition:6s linear}.story-viewer-close,.story-viewer-like{border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.38);color:#fff;border-radius:999px;padding:9px 12px}.extra-names{display:grid;gap:8px;margin-top:8px}.coupon-row{display:flex;gap:8px}.coupon-row .input{flex:1}.coupon-status{font-size:10px;color:var(--muted);margin-top:5px;min-height:15px}.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}.countdown .stat{padding:9px}.countdown b{font-size:16px}.countdown span{font-size:8px}@media(max-width:520px){.coupon-row{flex-direction:column}.coupon-row .btn{width:100%}}
-</style></head>
+.story-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.story-action{border:1px solid var(--line);background:rgba(255,255,255,.045);color:#fff;border-radius:14px;padding:10px 13px;font-weight:800;font-size:11px}
+.story-action.red{background:rgba(169,29,55,.18);border-color:rgba(211,47,78,.35)}
+.story-modal,.story-viewer{position:fixed;inset:0;z-index:150;display:none;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:14px}
+.story-modal.show,.story-viewer.show{display:flex}
+.story-sheet{width:min(620px,100%);max-height:92vh;overflow:auto;background:#0b1017;border:1px solid var(--line);border-radius:28px;padding:20px}
+.story-viewer-card{width:min(430px,100%);height:min(760px,88vh);position:relative;overflow:hidden;border-radius:30px;background:#080b10}
+.story-viewer-card img{width:100%;height:100%;object-fit:cover}
+.story-viewer-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.6),transparent 35%,rgba(0,0,0,.78))}
+.story-viewer-top,.story-viewer-bottom{position:absolute;z-index:2;left:14px;right:14px;display:flex;align-items:center;gap:10px}
+.story-viewer-top{top:14px}.story-viewer-bottom{bottom:18px;align-items:flex-end}
+.story-viewer-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--red);font-weight:900}
+.story-viewer-info{flex:1}.story-viewer-info b{display:block}.story-viewer-info small{color:#d2d7df}
+.story-progress{position:absolute;z-index:3;left:14px;right:14px;top:8px;height:3px;background:rgba(255,255,255,.22);overflow:hidden}
+.story-progress i{display:block;width:0;height:100%;background:#fff;transition:6s linear}
+.story-viewer-close,.story-viewer-like{border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.38);color:#fff;border-radius:999px;padding:9px 12px}
+.extra-names{display:grid;gap:8px;margin-top:8px}
+.coupon-row{display:flex;gap:8px}.coupon-row .input{flex:1}.coupon-status{font-size:10px;color:var(--muted);margin-top:5px;min-height:15px}
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}
+.countdown .stat{padding:9px}.countdown b{font-size:16px}.countdown span{font-size:8px}
+@media(max-width:520px){.coupon-row{flex-direction:column}.coupon-row .btn{width:100%}}
+</style>
+</head>
 <body>
 <div class="app">
-<header class="top"><div class="container topin"><button class="iconbtn" onclick="history.back()">‹</button><a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a><button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()">♫</button><button class="iconbtn" onclick="openSearch()">⌕</button></div></header>
-<main>
-<section id="home" class="page active"><div class="hero"><div class="container"><div class="eyebrow">KURDIA ADVENTURE</div><h1 id="heroTitle">زیاتر لە گەشت.</h1><p id="heroText">ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.</p><div class="actions"><button class="btn red" onclick="go('booking')">بەشداری گەشت ←</button><button class="btn ghost" onclick="go('destinations')">شوێنەکان</button></div></div></div>
-<div class="container"><section class="section"><div class="sectionhead"><div><h2>گەشتی ئەم هەفتەیە</h2><p>ئەو ئەزموونەی کە ئێستا چاوەڕێتە</p></div><a class="link" href="#booking">هەموو گەشتەکان</a></div><div class="featured"><div class="featureimg"><span class="pill" id="tripStatus">کراوە</span></div><div class="featurebody"><h3 id="tripTitle">دریاچەی دووکان</h3><div class="muted" id="tripLocation">دووکان · سلێمانی</div><p class="muted" id="tripDesc">ڕۆژێک لەگەڵ سروشت، دەریاچە و هاوڕێیەتی.</p><div class="stats"><div class="stat"><b id="tripDate">03/10</b><span>بەروار</span></div><div class="stat"><b id="tripPrice">150,000</b><span>نرخ</span></div><div class="stat"><b id="tripCapacity">28/35</b><span>بەشداربووان</span></div></div><button class="btn red" style="width:100%;margin-top:12px" onclick="go('booking')">بەشداری بکە</button></div></div></section>
-<section class="section experiences"><div class="sectionhead"><div><h2>ئەزموونەکان</h2><p>گەشت تەنها شاخ نییە</p></div></div><div class="grid2"><a class="tile" href="#destinations"><div><b>دەریاچە و ئاوشار</b><small>ئاو · ئارامی · وێنە</small></div></a><a class="tile" href="#destinations"><div><b>کەمپینگ</b><small>شەو لەگەڵ سروشت</small></div></a><a class="tile" href="#destinations"><div><b>دارستان و سروشت</b><small>ڕێگا و هەناسەی پاک</small></div></a><a class="tile" href="#destinations"><div><b>شوێنە مێژووییەکان</b><small>مێژوو · کەلتوور</small></div></a></div></section>
-<section class="section"><div class="sectionhead"><div><h2>شوێنەکان</h2><p>شوێنێک هەڵبژێرە و دەست بە گەشت بکە</p></div><a class="link" href="#destinations">هەموو</a></div><div id="homeDests" class="destgrid"></div></section>
-<section class="section"><div class="sectionhead"><div><h2>کۆمەڵگا</h2><p>ئەزموونی خەڵکی KURDIA</p></div><a class="link" href="#stories">بینینی هەموو</a></div><div id="homeStories" class="stories"></div><div class="story-actions"><button class="story-action red" onclick="openStoryUploadModal()">＋ ستۆری خۆت زیاد بکە</button></div></section>
-<section class="section"><div class="privateHero"><div class="eyebrow">PRIVATE EXPERIENCE</div><h2>گەشتەکەت خۆت دیاری بکە.</h2><p>شوێن، بەروار، ژمارەی کەس و شێوازی گەشت دیاری بکە؛ ئێمە بۆت ڕێکی دەخەین.</p><button class="btn red" onclick="go('private')">داواکاری گەشتی تایبەت</button></div></section>
-<section class="section"><div class="about"><img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85"><div class="glass"><div class="eyebrow">ABOUT KURDIA</div><h2>گەشتێکی باش، یادەوەرییەکی باشتر.</h2><p class="muted" style="line-height:2">KURDIA ADVENTURE پلاتفۆرمێکە بۆ گەشت، سروشت، کەمپینگ، ڕێگاکان، شوێنە مێژووییەکان و ئەزموونی هاوبەش. ئامانجمان دروستکردنی گەشتێکی ڕێکخراو و خۆشە.</p><button class="btn ghost" onclick="go('about')">دەربارەی کوردیا</button></div></div></section></div></section>
-<section id="weather" class="page weatherPage"><div class="container"><section class="section"><div class="sectionhead"><div><div class="eyebrow">WEATHER</div><h2>کەشوهەوا</h2><p>کەشوهەوای هەر شوێنێک بزانە</p></div></div><div class="searchbar"><input id="weatherInput" class="input" placeholder="ناوی شار یان شوێن بنووسە..." value="هەولێر"><button class="btn red" onclick="searchWeather()">گەڕان</button></div><div class="glass" style="margin-bottom:12px"><b>یان شوێنەکە لەسەر نەخشە دیاری بکە</b><div id="weatherMap" class="mapbox" style="margin-top:10px"></div><div class="maphint">کلیک لەسەر نەخشە بکە؛ کەشوهەوا بۆ هەمان خاڵ دەهێنرێت.</div></div><div class="weatherCurrent"><div class="weatherContent"><div class="muted" id="wLocation">هەولێر · کوردستان، عێراق</div><div class="temp" id="wTemp">28°C</div><div style="font-weight:800" id="wCond">خۆرەتاو</div><div class="weatherMeta"><div class="stat"><b id="wFeels">30°</b><span>هەستی پێکراو</span></div><div class="stat"><b id="wHum">45%</b><span>شێ</span></div><div class="stat"><b id="wWind">14 km/h</b><span>با</span></div><div class="stat"><b id="wRain">10%</b><span>ئەگەری باران</span></div><div class="stat"><b id="wUV">6</b><span>UV</span></div><div class="stat"><b>10 km</b><span>بینین</span></div><div class="stat"><b>05:42</b><span>هەڵاتنی خۆر</span></div><div class="stat"><b>18:28</b><span>ئاوابوونی خۆر</span></div></div></div></div></section>
-<section class="section"><div class="sectionhead"><h2>پێشبینی کاتژمێری</h2></div><div id="hourly" class="hourly"></div></section><section class="section"><div class="sectionhead"><h2>٧ ڕۆژی داهاتوو</h2></div><div id="days" class="days"></div></section><section id="weatherAlert" class="section" style="display:none"><div class="alert"><b>ئاگاداری کەشوهەوا</b><div id="alertText" style="margin-top:5px">ئاگادارییەکی توندی کەشوهەوا هەیە.</div></div></section><section class="section"><div class="glass"><b>سەرچاوەی کەشوهەوا</b><div class="muted" id="wSource" style="margin-top:5px">Open-Meteo</div><div class="muted" style="margin-top:10px">دوایین نوێکردنەوە: <span id="wUpdated">ئێستا</span></div></div></section></div></section>
-<section id="booking" class="page"><div class="container"><section class="section"><div class="eyebrow">JOIN A TRIP</div><h2>بەشداری گەشت</h2><p class="muted">گەشتی هەفتەییەکان ببینە و شوێنت بگرە.</p><div id="tripList" class="articleList"></div><div class="glass" style="margin-top:12px"><h3>تۆمارکردن</h3><form class="form" id="bookingForm" onsubmit="submitBooking(event)">
-<input class="input" name="name" placeholder="ناوی تەواو" required>
-<div class="otp-row">
-  <input class="input" id="bookingPhone" name="phone" inputmode="tel" autocomplete="tel" placeholder="ژمارەی WhatsApp" required>
-  <button type="button" class="btn ghost otp-btn" id="sendOtpBtn" onclick="sendBookingOTP()">ناردنی OTP</button>
-</div>
-<div id="otpBox" class="otp-box" style="display:none">
-  <div class="otp-head"><b>پشتڕاستکردنەوەی ژمارە</b><span id="otpStatus" class="muted">کۆدەکە بۆ WhatsApp ـت نێردراوە</span></div>
-  <div class="otp-row">
-    <input class="input" id="bookingOtp" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="کۆدی ٤ ژمارەیی">
-    <button type="button" class="btn green otp-btn" onclick="verifyBookingOTP()">پشتڕاستکردنەوە</button>
+<header class="top">
+  <div class="container topin">
+    <button class="iconbtn" onclick="history.back()"><i data-lucide="chevron-right"></i></button>
+    <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
+    <button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()"><i data-lucide="music"></i></button>
+    <button class="iconbtn" onclick="openSearch()"><i data-lucide="search"></i></button>
   </div>
-</div>
-<input type="hidden" name="otp_verified" id="otpVerified" value="0">
-<select class="select" name="trip" id="bookingTrip"></select>
-<input class="input" name="people" type="number" min="1" value="1" placeholder="ژمارەی کەس">
-<div class="receipt-box">
-  <b>پسوڵەی پارەدان</b>
-  <small>وێنەی پسوڵەکەت هەڵبژێرە بۆ ئەوەی لەگەڵ داواکارییەکەت بنێردرێت.</small>
-  <input class="input" id="receiptInput" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required>
-  <div id="receiptPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div>
-</div>
-<textarea class="textarea" name="note" placeholder="تێبینی..." ></textarea>
-<button class="btn red" id="bookingSubmitBtn">ناردنی داواکاری</button>
-</form></div></section></div></section>
-<section id="private" class="page"><div class="container"><section class="section"><div class="eyebrow">PRIVATE TRIP</div><h2>گەشتی تایبەت</h2><p class="muted">گەشتەکەت خۆت دیاری بکە، ئێمە بۆت ڕێکی دەخەین.</p><div class="glass"><form class="form" onsubmit="submitPrivate(event)"><input class="input" name="destination" placeholder="شوێنی مەبەست"><input class="input" name="date" type="date"><input class="input" name="people" type="number" min="1" placeholder="ژمارەی کەس"><select class="select" name="type"><option>Camping</option><option>Nature</option><option>Waterfall</option><option>Road Trip</option><option>Family</option></select><select class="select" name="transport"><option>گەیاندن لەلایەن KURDIA</option><option>سەیارەی خۆمان</option><option>پێویستی بە ڕێکخستن</option></select><select class="select" name="stay"><option>بێ مانەوە</option><option>کەمپینگ</option><option>هۆتێل</option><option>هەر جۆرێکی تر</option></select><select class="select" name="guide"><option>ڕێبەر پێویستە</option><option>ڕێبەر ناوێت</option></select><input class="input" name="budget" placeholder="بودجە"><textarea class="textarea" name="special" placeholder="داواکاری تایبەت"></textarea><div class="glass" style="padding:14px"><b>شوێنی وردی گەشت</b><div id="privateMap" class="mapbox" style="margin-top:10px"></div><div class="maphint">شوێنی گەشت لەسەر نەخشە دیاری بکە. ئەمە دەبێتە ناونیشانی وردی داواکارییەکەت.</div><div class="coords"><input class="input" id="privateLat" name="latitude" placeholder="Latitude" readonly><input class="input" id="privateLng" name="longitude" placeholder="Longitude" readonly></div><div class="maphint" id="privatePlaceHint">هێشتا شوێنێک دیاری نەکراوە.</div></div><button class="btn red">ناردنی داواکاری</button></form></div></section></div></section>
+</header>
+<main>
+
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="container">
+      <div class="eyebrow">KURDIA ADVENTURE</div>
+      <h1 id="heroTitle">زیاتر لە گەشت.</h1>
+      <p id="heroText">ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.</p>
+      <div class="actions">
+        <button class="btn red" onclick="go('booking')">بەشداری گەشت ←</button>
+        <button class="btn ghost" onclick="go('destinations')">شوێنەکان</button>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <section class="section">
+      <div class="sectionhead"><div><h2>گەشتی ئەم هەفتەیە</h2><p>ئەو ئەزموونەی کە ئێستا چاوەڕێتە</p></div><a class="link" href="#booking">هەموو گەشتەکان</a></div>
+      <div class="featured">
+        <div class="featureimg"><span class="pill" id="tripStatus">کراوە</span></div>
+        <div class="featurebody">
+          <h3 id="tripTitle">دریاچەی دووکان</h3>
+          <div class="muted" id="tripLocation">دووکان · سلێمانی</div>
+          <p class="muted" id="tripDesc">ڕۆژێک لەگەڵ سروشت، دەریاچە و هاوڕێیەتی.</p>
+          <div class="stats">
+            <div class="stat"><b id="tripDate">03/10</b><span>بەروار</span></div>
+            <div class="stat"><b id="tripPrice">150,000</b><span>نرخ</span></div>
+            <div class="stat"><b id="tripCapacity">28/35</b><span>بەشداربووان</span></div>
+          </div>
+          <button class="btn red" style="width:100%;margin-top:12px" onclick="go('booking')">بەشداری بکە</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section experiences">
+      <div class="sectionhead"><div><h2>ئەزموونەکان</h2><p>گەشت تەنها شاخ نییە</p></div></div>
+      <div class="grid2">
+        <a class="tile" href="#destinations"><div><b>دەریاچە و ئاوشار</b><small>ئاو · ئارامی · وێنە</small></div></a>
+        <a class="tile" href="#destinations"><div><b>کەمپینگ</b><small>شەو لەگەڵ سروشت</small></div></a>
+        <a class="tile" href="#destinations"><div><b>دارستان و سروشت</b><small>ڕێگا و هەناسەی پاک</small></div></a>
+        <a class="tile" href="#destinations"><div><b>شوێنە مێژووییەکان</b><small>مێژوو · کەلتوور</small></div></a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionhead"><div><h2>شوێنەکان</h2><p>شوێنێک هەڵبژێرە و دەست بە گەشت بکە</p></div><a class="link" href="#destinations">هەموو</a></div>
+      <div id="homeDests" class="destgrid"></div>
+    </section>
+
+    <section class="section">
+      <div class="sectionhead"><div><h2>کۆمەڵگا</h2><p>ئەزموونی خەڵکی KURDIA</p></div><a class="link" href="#stories">بینینی هەموو</a></div>
+      <div id="homeStories" class="stories">
+        <!-- The Add Story button will be pre-pended by JS -->
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="privateHero">
+        <div class="eyebrow">PRIVATE EXPERIENCE</div>
+        <h2>گەشتەکەت خۆت دیاری بکە.</h2>
+        <p>شوێن، بەروار، ژمارەی کەس و شێوازی گەشت دیاری بکە؛ ئێمە بۆت ڕێکی دەخەین.</p>
+        <button class="btn red" onclick="go('private')">داواکاری گەشتی تایبەت</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="about">
+        <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85">
+        <div class="glass">
+          <div class="eyebrow">ABOUT KURDIA</div>
+          <h2>گەشتێکی باش، یادەوەرییەکی باشتر.</h2>
+          <p class="muted" style="line-height:2">KURDIA ADVENTURE پلاتفۆرمێکە بۆ گەشت، سروشت، کەمپینگ، ڕێگاکان، شوێنە مێژووییەکان و ئەزموونی هاوبەش. ئامانجمان دروستکردنی گەشتێکی ڕێکخراو و خۆشە.</p>
+          <button class="btn ghost" onclick="go('about')">دەربارەی کوردیا</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<section id="weather" class="page weatherPage">
+  <div class="container">
+    <section class="section">
+      <div class="sectionhead"><div><div class="eyebrow">WEATHER</div><h2>کەشوهەوا</h2><p>کەشوهەوای هەر شوێنێک بزانە</p></div></div>
+      <div class="searchbar">
+        <input id="weatherInput" class="input" placeholder="ناوی شار یان شوێن بنووسە..." value="هەولێر">
+        <button class="btn red" onclick="searchWeather()"><i data-lucide="search"></i></button>
+      </div>
+      <div class="glass" style="margin-bottom:12px">
+        <b>یان شوێنەکە لەسەر نەخشە دیاری بکە</b>
+        <div id="weatherMap" class="mapbox" style="margin-top:10px"></div>
+        <div class="maphint">کلیک لەسەر نەخشە بکە؛ کەشوهەوا بۆ هەمان خاڵ دەهێنرێت.</div>
+      </div>
+      <div class="weatherCurrent">
+        <div class="weatherContent">
+          <div class="muted" id="wLocation">هەولێر · کوردستان، عێراق</div>
+          <div class="temp" id="wTemp">28°C</div>
+          <div style="font-weight:800" id="wCond">خۆرەتاو</div>
+          <div class="weatherMeta">
+            <div class="stat"><b id="wFeels">30°</b><span>هەستی پێکراو</span></div>
+            <div class="stat"><b id="wHum">45%</b><span>شێ</span></div>
+            <div class="stat"><b id="wWind">14 km/h</b><span>با</span></div>
+            <div class="stat"><b id="wRain">10%</b><span>ئەگەری باران</span></div>
+            <div class="stat"><b id="wUV">6</b><span>UV</span></div>
+            <div class="stat"><b>10 km</b><span>بینین</span></div>
+            <div class="stat"><b>05:42</b><span>هەڵاتنی خۆر</span></div>
+            <div class="stat"><b>18:28</b><span>ئاوابوونی خۆر</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="sectionhead"><h2>پێشبینی کاتژمێری</h2></div>
+      <div id="hourly" class="hourly"></div>
+    </section>
+    <section class="section">
+      <div class="sectionhead"><h2>٧ ڕۆژی داهاتوو</h2></div>
+      <div id="days" class="days"></div>
+    </section>
+    <section id="weatherAlert" class="section" style="display:none">
+      <div class="alert"><b>ئاگاداری کەشوهەوا</b><div id="alertText" style="margin-top:5px">ئاگادارییەکی توندی کەشوهەوا هەیە.</div></div>
+    </section>
+    <section class="section">
+      <div class="glass">
+        <b>سەرچاوەی کەشوهەوا</b>
+        <div class="muted" id="wSource" style="margin-top:5px">Open-Meteo</div>
+        <div class="muted" style="margin-top:10px">دوایین نوێکردنەوە: <span id="wUpdated">ئێستا</span></div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<section id="booking" class="page">
+  <div class="container">
+    <section class="section">
+      <div class="eyebrow">JOIN A TRIP</div><h2>بەشداری گەشت</h2><p class="muted">گەشتی هەفتەییەکان ببینە و شوێنت بگرە.</p>
+      <div id="tripList" class="articleList"></div>
+      <div class="glass" style="margin-top:12px">
+        <h3>تۆمارکردن</h3>
+        <form class="form" id="bookingForm" onsubmit="submitBooking(event)">
+          <input class="input" name="name" placeholder="ناوی تەواو" required>
+          <div class="otp-row">
+            <input class="input" id="bookingPhone" name="phone" inputmode="tel" autocomplete="tel" placeholder="ژمارەی WhatsApp" required>
+            <button type="button" class="btn ghost otp-btn" id="sendOtpBtn" onclick="sendBookingOTP()">ناردنی OTP</button>
+          </div>
+          <div id="otpBox" class="otp-box" style="display:none">
+            <div class="otp-head"><b>پشتڕاستکردنەوەی ژمارە</b><span id="otpStatus" class="muted">کۆدەکە بۆ WhatsApp ـت نێردراوە</span></div>
+            <div class="otp-row">
+              <input class="input" id="bookingOtp" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="کۆدی ٤ ژمارەیی">
+              <button type="button" class="btn green otp-btn" onclick="verifyBookingOTP()">پشتڕاستکردنەوە</button>
+            </div>
+          </div>
+          <input type="hidden" name="otp_verified" id="otpVerified" value="0">
+          <select class="select" name="trip" id="bookingTrip"></select>
+          <input class="input" name="people" type="number" min="1" value="1" placeholder="ژمارەی کەس">
+          <div class="receipt-box">
+            <b>پسوڵەی پارەدان</b>
+            <small>وێنەی پسوڵەکەت هەڵبژێرە بۆ ئەوەی لەگەڵ داواکارییەکەت بنێردرێت.</small>
+            <input class="input" id="receiptInput" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required>
+            <div id="receiptPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div>
+          </div>
+          <textarea class="textarea" name="note" placeholder="تێبینی..."></textarea>
+          <button class="btn red" id="bookingSubmitBtn">ناردنی داواکاری</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- گەشتی تایبەت بە دیزاینە نوێیەکە -->
+<section id="private" class="page">
+  <div class="container">
+    <section class="section">
+      <div class="eyebrow">PRIVATE TRIP</div><h2>گەشتی تایبەت</h2><p class="muted">گەشتەکەت خۆت دیاری بکە، ئێمە بۆت ڕێکی دەخەین.</p>
+      <div class="glass">
+        <form class="form" onsubmit="submitPrivate(event)">
+          <div class="glass" style="padding:14px; margin-bottom:8px;">
+            <b>شوێنی دڵخوازتان</b>
+            <div class="searchbar" style="margin-top:10px">
+              <input class="input" name="destination" placeholder="ناوی شوێن بنووسە...">
+            </div>
+          </div>
+
+          <input class="input" name="date" type="date" placeholder="بەرواری گەشت">
+          
+          <div style="display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:5px 14px;">
+            <label style="flex:1;font-size:12px;">ژمارەی کەسان *</label>
+            <input class="input" name="people" type="number" min="1" value="1" style="width:70px;background:transparent;border:0;text-align:center;">
+          </div>
+
+          <label style="font-size:12px;margin-top:10px;display:block;">جۆری گەشت *</label>
+          <div class="type-grid">
+            <label class="type-btn"><input type="radio" name="type" value="Hiking" checked><i data-lucide="mountain"></i> Hiking</label>
+            <label class="type-btn"><input type="radio" name="type" value="Camping"><i data-lucide="tent"></i> Camping</label>
+            <label class="type-btn"><input type="radio" name="type" value="Nature"><i data-lucide="leaf"></i> Nature</label>
+            <label class="type-btn"><input type="radio" name="type" value="Road Trip"><i data-lucide="car"></i> Road Trip</label>
+            <label class="type-btn"><input type="radio" name="type" value="Family"><i data-lucide="users"></i> Family</label>
+            <label class="type-btn"><input type="radio" name="type" value="Other"><i data-lucide="more-horizontal"></i> بێگومان</label>
+          </div>
+
+          <label class="toggle-row">گواستنەوە پێویستە؟ <input type="checkbox" name="transport" class="switch"></label>
+          <label class="toggle-row">هۆتێل / کەمپ؟ <input type="checkbox" name="stay" class="switch"></label>
+          <label class="toggle-row">ڕێبەر / فۆتۆگرافەر؟ <input type="checkbox" name="guide" class="switch"></label>
+
+          <input class="input" name="budget" placeholder="بودجەی نزیکەیی (دینار)">
+          <textarea class="textarea" name="special" placeholder="داواکاری تایبەت (پێداویستی، خواردن...)"></textarea>
+          
+          <div class="glass" style="padding:14px;display:none;">
+            <b>شوێنی وردی گەشت</b><div id="privateMap" class="mapbox" style="margin-top:10px"></div>
+            <div class="maphint">شوێنی گەشت لەسەر نەخشە دیاری بکە. ئەمە دەبێتە ناونیشانی وردی داواکارییەکەت.</div>
+            <div class="coords"><input class="input" id="privateLat" name="latitude" placeholder="Latitude" readonly><input class="input" id="privateLng" name="longitude" placeholder="Longitude" readonly></div>
+            <div class="maphint" id="privatePlaceHint">هێشتا شوێنێک دیاری نەکراوە.</div>
+          </div>
+          
+          <button class="btn red"><i data-lucide="send" style="width:16px;height:16px;display:inline-block;margin-left:5px;vertical-align:middle;"></i> ناردنی داواکاری</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</section>
+
 <section id="safety" class="page"><div class="container"><section class="section"><div class="eyebrow">SAFETY</div><h2>سەلامەتی گەشت</h2><p class="muted">زانیارییە هەمیشەییەکان بۆ گەشتێکی ئاگادارانە.</p><div id="safetyList" class="articleList"></div></section></div></section>
 <section id="prep" class="page"><div class="container"><section class="section"><div class="eyebrow">PREPARATION</div><h2>ئامادەکاری گەشت</h2><p class="muted">Check-list ـی خۆت بەپێی جۆری گەشت هەڵبژێرە.</p><div class="grid2" id="prepTypes"></div><div id="prepChecklist" class="check" style="margin-top:14px"></div></section></div></section>
 <section id="destinations" class="page"><div class="container"><section class="section"><div class="eyebrow">DESTINATIONS</div><h2>شوێنەکان</h2><p class="muted">دەریاچە، ئاوشار، شاخ، دارستان، مێژوو و ڕێگاکان.</p><div id="destList" class="destgrid"></div></section></div></section>
 <section id="stories" class="page"><div class="container"><section class="section"><div class="eyebrow">COMMUNITY</div><h2>ستۆرییەکان</h2><p class="muted">ئەزموونی بەشداربووان و هاوڕێکانی KURDIA.</p><div id="storyGrid" class="grid2"></div></section></div></section>
 <section id="about" class="page"><div class="container"><section class="section"><div class="about"><img src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=1000&q=85"><div><div class="eyebrow">KURDIA ADVENTURE</div><h2>گەشت، سروشت، هاوڕێیەتی.</h2><p class="muted" style="line-height:2">ئێمە باوەڕمان وایە گەشت تەنها گەیشتن بە شوێنێک نییە؛ ئەزموونێکە کە لەگەڵ خەڵک و سروشت دروست دەبێت.</p><div class="stats"><div class="stat"><b>20K+</b><span>بەشداربوو</span></div><div class="stat"><b>200+</b><span>گەشت</span></div><div class="stat"><b>4.9</b><span>هەڵسەنگاندن</span></div></div></div></div></section></div></section>
-<section id="contact" class="page"><div class="container"><section class="section"><div class="eyebrow">CONTACT</div><h2>پەیوەندی</h2><div class="articleList"><a class="article" href="https://wa.me/9647503130360"><div class="articleIcon">◉</div><div><b>WhatsApp</b><small>0750 313 0360</small></div></a><a class="article" href="tel:+9647503130360"><div class="articleIcon">☎</div><div><b>تەلەفۆن</b><small>پەیوەندی ڕاستەوخۆ</small></div></a><div class="article"><div class="articleIcon">⌖</div><div><b id="contactCity">هەولێر — کوردستان</b><small>شوێنی کار</small></div></div></div></section></div></section>
-</main></div>
-<button class="ai" onclick="openAI()">✦</button>
-<nav class="bottom"><a class="navitem active" data-page="home" href="#home"><span class="ico">⌂</span>سەرەکی</a><a class="navitem" data-page="weather" href="#weather"><span class="ico">☼</span>کەشوهەوا</a><a class="navitem navjoin" data-page="booking" href="#booking"><span class="ico">✦</span>بەشداری گەشت</a><a class="navitem" data-page="private" href="#private"><span class="ico">♛</span>تایبەت</a><a class="navitem" data-page="more" href="#destinations"><span class="ico">☰</span>زیاتر</a></nav>
-<div id="searchModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('searchModal')">×</button><h3>گەڕان لە KURDIA</h3><input id="siteSearch" class="input" placeholder="شوێن، گەشت، کەمپینگ..." oninput="filterSearch()"><div id="searchResults" class="articleList" style="margin-top:12px"></div></div></div>
-<div id="aiModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('aiModal')">×</button><h3>یاریدەدەری KURDIA</h3><p class="muted">هەر پرسیارێکت هەیە دەربارەی گەشت، ئامادەکاری یان KURDIA، بنووسە.</p><form class="form" onsubmit="askAI(event)"><input id="aiInput" class="input" placeholder="پرسیارەکەت بنووسە..."><button class="btn red">ناردن</button></form><div id="aiAnswer" class="glass" style="margin-top:10px;line-height:1.9">سڵاو! چۆن بتوانم یارمەتیت بدەم؟</div></div></div>
+<section id="contact" class="page"><div class="container"><section class="section"><div class="eyebrow">CONTACT</div><h2>پەیوەندی</h2><div class="articleList"><a class="article" href="https://wa.me/9647503130360"><div class="articleIcon"><i data-lucide="message-circle"></i></div><div><b>WhatsApp</b><small>0750 313 0360</small></div></a><a class="article" href="tel:+9647503130360"><div class="articleIcon"><i data-lucide="phone"></i></div><div><b>تەلەفۆن</b><small>پەیوەندی ڕاستەوخۆ</small></div></a><div class="article"><div class="articleIcon"><i data-lucide="map-pin"></i></div><div><b id="contactCity">هەولێر — کوردستان</b><small>شوێنی کار</small></div></div></div></section></div></section>
+</main>
+</div>
+<button class="ai" onclick="openAI()"><i data-lucide="bot"></i></button>
 
-<div id="storyModal" class="story-modal"><div class="story-sheet"><div class="sectionhead"><div><div class="eyebrow">COMMUNITY</div><h2>ستۆری خۆت بنێرە</h2></div><button class="iconbtn" onclick="closeStoryModal()">×</button></div><form class="form" onsubmit="submitStory(event)"><input id="stName" class="input" required placeholder="ناوی تۆ..."><input id="stCity" class="input" placeholder="شار..."><input id="stTrip" class="input" placeholder="ناوی گەشت..."><textarea id="stText" class="textarea" placeholder="چی بەسەر هات؟..."></textarea><input id="stMediaFile" class="input" type="file" accept="image/*" onchange="previewStoryImage(event)" required><input id="stMediaBase64" type="hidden"><div id="storyPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div><button class="btn red" type="submit">ناردنی ستۆری</button></form></div></div>
-<div id="storyViewerModal" class="story-viewer"><div class="story-viewer-card"><div class="story-progress"><i id="storyProgressBar"></i></div><img id="viewerImage"><div class="story-viewer-top"><div id="viewerAvatar" class="story-viewer-avatar">K</div><div class="story-viewer-info"><b id="viewerName">KURDIA</b><small id="viewerTime">کوردیا</small></div><button class="story-viewer-close" onclick="closeStoryViewer()">×</button></div><div class="story-viewer-bottom"><div id="viewerText" style="flex:1;font-size:12px;line-height:1.8"></div><button class="story-viewer-like" onclick="likeCurrentStory()">♥ <span id="viewerLikes">0</span></button><button class="story-viewer-like" onclick="shareStoryWhatsApp()">↗</button></div></div></div>
+<!-- Navigation مۆدێرنکراو بە ئایکۆنی Lucide -->
+<nav class="bottom">
+  <a class="navitem active" data-page="home" href="#home"><i data-lucide="home" class="ico"></i>سەرەکی</a>
+  <a class="navitem" data-page="weather" href="#weather"><i data-lucide="cloud-sun" class="ico"></i>کەشوهەوا</a>
+  <a class="navitem navjoin" data-page="booking" href="#booking"><i data-lucide="ticket" class="ico"></i>بەشداری</a>
+  <a class="navitem" data-page="private" href="#private"><i data-lucide="crown" class="ico"></i>تایبەت</a>
+  <a class="navitem" data-page="more" href="#destinations"><i data-lucide="menu" class="ico"></i>زیاتر</a>
+</nav>
+
+<div id="searchModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('searchModal')"><i data-lucide="x"></i></button><h3>گەڕان لە KURDIA</h3><input id="siteSearch" class="input" placeholder="شوێن، گەشت، کەمپینگ..." oninput="filterSearch()"><div id="searchResults" class="articleList" style="margin-top:12px"></div></div></div>
+<div id="aiModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('aiModal')"><i data-lucide="x"></i></button><h3>یاریدەدەری KURDIA</h3><p class="muted">هەر پرسیارێکت هەیە دەربارەی گەشت، ئامادەکاری یان KURDIA، بنووسە.</p><form class="form" onsubmit="askAI(event)"><input id="aiInput" class="input" placeholder="پرسیارەکەت بنووسە..."><button class="btn red">ناردن</button></form><div id="aiAnswer" class="glass" style="margin-top:10px;line-height:1.9">سڵاو! چۆن بتوانم یارمەتیت بدەم؟</div></div></div>
+
+<div id="storyModal" class="story-modal"><div class="story-sheet"><div class="sectionhead"><div><div class="eyebrow">COMMUNITY</div><h2>ستۆری خۆت بنێرە</h2></div><button class="iconbtn" onclick="closeStoryModal()"><i data-lucide="x"></i></button></div><form class="form" onsubmit="submitStory(event)"><input id="stName" class="input" required placeholder="ناوی تۆ..."><input id="stCity" class="input" placeholder="شار..."><input id="stTrip" class="input" placeholder="ناوی گەشت..."><textarea id="stText" class="textarea" placeholder="چی بەسەر هات؟..."></textarea><input id="stMediaFile" class="input" type="file" accept="image/*" onchange="previewStoryImage(event)" required><input id="stMediaBase64" type="hidden"><div id="storyPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div><button class="btn red" type="submit">ناردنی ستۆری</button></form></div></div>
+<div id="storyViewerModal" class="story-viewer"><div class="story-viewer-card"><div class="story-progress"><i id="storyProgressBar"></i></div><img id="viewerImage"><div class="story-viewer-top"><div id="viewerAvatar" class="story-viewer-avatar">K</div><div class="story-viewer-info"><b id="viewerName">KURDIA</b><small id="viewerTime">کوردیا</small></div><button class="story-viewer-close" onclick="closeStoryViewer()"><i data-lucide="x"></i></button></div><div class="story-viewer-bottom"><div id="viewerText" style="flex:1;font-size:12px;line-height:1.8"></div><button class="story-viewer-like" onclick="likeCurrentStory()"><i data-lucide="heart"></i> <span id="viewerLikes">0</span></button><button class="story-viewer-like" onclick="shareStoryWhatsApp()"><i data-lucide="share-2"></i></button></div></div></div>
 <audio id="bgAudio" loop preload="none"><source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=nature-ambient-21865.mp3" type="audio/mpeg"></audio>
 <div id="toast" class="toast"></div>
 <script>
@@ -86,24 +422,29 @@ function save(){localStorage.setItem('kurdia_premium_data',JSON.stringify(data))
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function go(id){location.hash=id}
-function route(){let id=location.hash.slice(1)||'home';if(id==='more')id='destinations';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));window.scrollTo(0,0);renderPage(id)}
+function route(){let id=location.hash.slice(1)||'home';if(id==='more')id='destinations';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));window.scrollTo(0,0);renderPage(id);if(window.lucide)lucide.createIcons();}
 window.addEventListener('hashchange',route);
 function render(){
  $('heroTitle').textContent=data.heroTitle;$('heroText').textContent=data.heroText;
  const t=data.trip;$('tripTitle').textContent=t.title;$('tripLocation').textContent=t.location;$('tripDesc').textContent=t.desc;$('tripDate').textContent=new Date(t.date).toLocaleDateString('ku-IQ',{month:'2-digit',day:'2-digit'});$('tripPrice').textContent=t.price;$('tripCapacity').textContent=`${t.booked}/${t.capacity}`;
  const cards=data.destinations.map(x=>`<a class="dest" style="background-image:url('${esc(x.img)}')" href="#destinations"><span>${esc(x.name)}</span></a>`).join('');$('homeDests').innerHTML=cards;
  $('destList').innerHTML=cards;
- $('homeStories').innerHTML=data.stories.map(s=>`<div class="story"><div class="ring"><img src="${esc(s.img)}"></div><small>${esc(s.name)}</small></div>`).join('');
+ 
+ // زیادکردنی دوگمەی + بۆ ستۆرییەکان ڕێک لە تەنیشت وێنەکان
+ const addStoryBtn = `<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,0.05);border:1px dashed var(--muted);"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;
+ $('homeStories').innerHTML= addStoryBtn + data.stories.map(s=>`<div class="story"><div class="ring"><img src="${esc(s.img)}"></div><small>${esc(s.name)}</small></div>`).join('');
+ 
  $('storyGrid').innerHTML=data.stories.map(s=>`<div class="tile" style="background:url('${esc(s.img)}') center/cover"><div><b>${esc(s.name)}</b><small>ئەزموونی KURDIA</small></div></div>`).join('');
  $('safetyList').innerHTML=data.safety.map(x=>`<a class="article" href="#safety"><div class="articleIcon">${x[0]}</div><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div></a>`).join('');
  $('prepTypes').innerHTML=data.prep.map((x,i)=>`<button class="article" style="text-align:right" onclick="prep(${i})"><div class="articleIcon">${x[2]}</div><div><b>${esc(x[0])}</b><small>${esc(x[1])}</small></div></button>`).join('');prep(0);
- $('tripList').innerHTML=[t].map(x=>`<div class="article"><div class="articleIcon">✦</div><div style="flex:1"><b>${esc(x.title)}</b><small>${esc(x.location)} · ${esc(x.date)} · ${esc(x.price)}</small></div><span class="link">${x.booked}/${x.capacity}</span></div>`).join('');$('bookingTrip').innerHTML=`<option>${esc(t.title)}</option>`;
- renderWeather();renderPage(location.hash.slice(1)||'home')
+ $('tripList').innerHTML=[t].map(x=>`<div class="article"><div class="articleIcon"><i data-lucide="compass"></i></div><div style="flex:1"><b>${esc(x.title)}</b><small>${esc(x.location)} · ${esc(x.date)} · ${esc(x.price)}</small></div><span class="link">${x.booked}/${x.capacity}</span></div>`).join('');$('bookingTrip').innerHTML=`<option>${esc(t.title)}</option>`;
+ renderWeather();renderPage(location.hash.slice(1)||'home');
+ if(window.lucide)lucide.createIcons();
 }
 function renderPage(id){if(id==='weather'){renderWeather();setTimeout(initWeatherMap,80)}if(id==='private'){setTimeout(initPrivateMap,80)}}
 function weatherIcon(code){if(code===0)return'☀️';if([1,2].includes(code))return'🌤️';if(code===3)return'☁️';if([45,48].includes(code))return'🌫️';if([51,53,55,56,57].includes(code))return'🌦️';if([61,63,65,66,67,80,81,82].includes(code))return'🌧️';if([71,73,75,77,85,86].includes(code))return'🌨️';if([95,96,99].includes(code))return'⛈️';return'🌤️'}
 function weatherText(code){if(code===0)return'ڕوون';if([1,2].includes(code))return'هەوری کەم';if(code===3)return'هەوری';if([45,48].includes(code))return'تەم';if([51,53,55,56,57].includes(code))return'بارانی سووک';if([61,63,65,80,81,82].includes(code))return'باران';if([71,73,75,77,85,86].includes(code))return'بەفر';if([95,96,99].includes(code))return'تۆفان';return'کەشوهەوا'}
-function renderWeather(){if(!$('hourly')||!$('days'))return;if(!$('hourly').children.length){$('hourly').innerHTML='<div class="muted">شوێنێک بگەڕێ یان لە نەخشە دیاری بکە.</div>';$('days').innerHTML='<div class="muted">پێشبینی لێرە پیشان دەدرێت.</div>'}}
+function renderWeather(){if(!$('hourly')\vert{}\vert{}!$('days'))return;if(!$('hourly').children.length){$('hourly').innerHTML='<div class="muted">شوێنێک بگەڕێ یان لە نەخشە دیاری بکە.</div>';$('days').innerHTML='<div class="muted">پێشبینی لێرە پیشان دەدرێت.</div>'}}
 let weatherMap,weatherMarker,privateMap,privateMarker;
 function createMap(id,lat,lng,onPick){
  const el=$(id); if(!el||typeof L==='undefined') return null;
@@ -133,8 +474,7 @@ function applyWeather(d,label){
  const c=d.current||{},daily=d.daily||{},hourly=d.hourly||{};
  $('wLocation').textContent=label||'شوێنی دیاریکراو';
  $('wTemp').textContent=`${Math.round(c.temperature_2m??0)}°C`;
- $('wCond').textContent=weatherText(c.weather_code);
- $('wFeels').textContent=`${Math.round(c.apparent_temperature??0)}°`;
+ $('wCond').textContent=weatherText(c.weather_code);$('wFeels').textContent=`${Math.round(c.apparent_temperature??0)}°`;
  $('wHum').textContent=`${Math.round(c.relative_humidity_2m??0)}%`;
  $('wWind').textContent=`${Math.round(c.wind_speed_10m??0)} km/h`;
  $('wRain').textContent=`${Math.round(daily.precipitation_probability_max?.[0]??0)}%`;
@@ -144,11 +484,10 @@ function applyWeather(d,label){
  const times=hourly.time||[],temps=hourly.temperature_2m||[],probs=hourly.precipitation_probability||[],codes=hourly.weather_code||[];
  $('hourly').innerHTML=times.slice(0,24).map((t,i)=>`<div class="hour"><small>${t.slice(11,16)}</small><b>${weatherIcon(codes[i])}</b><strong>${Math.round(temps[i]??0)}°</strong><small>${probs[i]??0}%</small></div>`).join('');
  const ds=daily.time||[];$('days').innerHTML=ds.map((day,i)=>`<div class="dayrow"><b>${day}</b><span>${weatherIcon(daily.weather_code?.[i])}</span><b>${Math.round(daily.temperature_2m_max?.[i]??0)}°</b><span class="muted">${Math.round(daily.temperature_2m_min?.[i]??0)}°</span><span class="muted">${daily.precipitation_probability_max?.[i]??0}%</span></div>`).join('');
- $('wUpdated').textContent=new Date().toLocaleTimeString('ku-IQ',{hour:'2-digit',minute:'2-digit'});
- $('wSource').textContent='Open-Meteo';
+ $('wUpdated').textContent=new Date().toLocaleTimeString('ku-IQ',{hour:'2-digit',minute:'2-digit'});$('wSource').textContent='Open-Meteo';
 }
 async function searchWeather(){
- const q=$('weatherInput').value.trim()||'هەولێر';$('wLocation').textContent='⏳ گەڕان...';
+ const q=$('weatherInput').value.trim()\vert{}\vert{}'هەولێر';$('wLocation').textContent='⏳ گەڕان...';
  try{
    const r=await fetch(`${WORKER}/api/weather/search?q=${encodeURIComponent(q)}`);const x=await r.json();
    if(x?.ok&&x.weather){if(x.weather.latitude&&weatherMap){weatherMarker=setMapMarker(weatherMap,weatherMarker,x.weather.latitude,x.weather.longitude);}$('wLocation').textContent=x.weather.location||q;applyWeather(x.weather,x.weather.location||q);return}
@@ -165,7 +504,7 @@ function initPrivateMap(){if(privateMap)return;privateMap=createMap('privateMap'
 function prep(i){const name=data.prep[i]?.[0]||'Camping';const items={Camping:['خێمە','کیسەی خەوتن','چرای سەر','ئاو','کەرەستەی پزیشکی'],Nature:['جل و پێڵاو','ئاو','کریم خۆر','نەخشە/GPS','Power Bank'],Waterfall:['پێڵاوی دژ بە ئاو','جل گۆڕین','ئاو','کریم خۆر','کیت یارمەتیدانی یەکەم'], 'Road Trip':['شۆفێری','سووتەمەنی','چارەسەری پەنچر','شارژەر','نەخشە'],Family:['خواردن','ئاو','کەرەستەی منداڵ','First Aid','پلانێکی ئارام']}[name]||[];$('prepChecklist').innerHTML=items.map(x=>`<label><input type="checkbox">${x}</label>
 <div class="glass" style="padding:13px"><label><span class="muted">ناوی بەشداربووانی تر</span><div id="extraNamesContainer" class="extra-names"></div></label></div>
 <div><span class="muted">کۆپۆنی داشکاندن</span><div class="coupon-row" style="margin-top:7px"><input id="couponInput" class="input" placeholder="کۆدی داشکاندن..."><button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button></div><div id="couponStatus" class="coupon-status"></div></div>`).join('')}
-function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value||'').toLowerCase();const all=[...data.destinations.map(x=>x.name),...data.safety.map(x=>x[1]),...data.prep.map(x=>x[0])];$('searchResults').innerHTML=all.filter(x=>x.toLowerCase().includes(q)).slice(0,8).map(x=>`<div class="article"><div class="articleIcon">⌕</div><div><b>${esc(x)}</b><small>KURDIA ADVENTURE</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>'}function openAI(){$('aiModal').classList.add('show')}function closeModal(id){$(id).classList.remove('show')}
+function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value\vert{}\vert{}'').toLowerCase();const all=[...data.destinations.map(x=>x.name),...data.safety.map(x=>x[1]),...data.prep.map(x=>x[0])];$('searchResults').innerHTML=all.filter(x=>x.toLowerCase().includes(q)).slice(0,8).map(x=>`<div class="article"><div class="articleIcon"><i data-lucide="search"></i></div><div><b>${esc(x)}</b><small>KURDIA ADVENTURE</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';if(window.lucide)lucide.createIcons();}function openAI(){$('aiModal').classList.add('show')}function closeModal(id){$(id).classList.remove('show')}
 async function askAI(e){e.preventDefault();const q=$('aiInput').value.trim();if(!q)return;const box=$('aiAnswer');box.textContent='لە چاوەڕوانی وەڵام...';try{const r=await fetch(WORKER+'/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q,lang:'ku',siteState:data})});const x=await r.json();box.textContent=x.text||'بۆ زانیاری زیاتر پەیوەندی بە KURDIA بکە.'}catch(e){box.textContent='بۆ زانیاری زیاتر پەیوەندی بە KURDIA بکە.'}}
 async function sendBookingOTP(){
   const phoneEl=$('bookingPhone'), btn=$('sendOtpBtn');
@@ -176,21 +515,20 @@ async function sendBookingOTP(){
     const r=await fetch(WORKER+'/api/otp/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})});
     const x=await r.json().catch(()=>({}));
     if(x.ok){
-      $('otpBox').style.display='grid'; $('otpVerified').value='0'; $('bookingOtp').value='';
-      $('otpStatus').textContent='کۆدەکە بۆ WhatsApp ـت نێردراوە';
+      $('otpBox').style.display='grid';$('otpVerified').value='0'; $('bookingOtp').value='';$('otpStatus').textContent='کۆدەکە بۆ WhatsApp ـت نێردراوە';
       toast('OTP نێردرا ✓');
     }else toast(x.error||'ناردنی OTP سەرکەوتوو نەبوو');
   }catch(e){toast('پەیوەندی بە سێرڤەر نەکرا')}
   finally{btn.disabled=false;btn.textContent='دووبارە ناردنی OTP'}
 }
 async function verifyBookingOTP(){
-  const phone=($('bookingPhone')?.value||'').trim(), code=($('bookingOtp')?.value||'').trim();
+  const phone=($('bookingPhone')?.value\vert{}\vert{}'').trim(), code=($('bookingOtp')?.value||'').trim();
   if(!phone||!code){toast('ژمارە و کۆدی OTP پڕ بکەرەوە');return}
   try{
     const r=await fetch(WORKER+'/api/otp/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,code})});
     const x=await r.json().catch(()=>({}));
     if(x.ok){
-      $('otpVerified').value='1'; $('otpStatus').textContent='ژمارەکەت پشتڕاستکرایەوە ✓';
+      $('otpVerified').value='1';$('otpStatus').textContent='ژمارەکەت پشتڕاستکرایەوە ✓';
       $('otpStatus').style.color='#49d18d'; toast('ژمارە پشتڕاستکرایەوە ✓');
     }else{$('otpVerified').value='0';toast(x.error||'کۆدی OTP هەڵەیە')}
   }catch(e){toast('پەیوەندی بە سێرڤەر نەکرا')}
@@ -214,12 +552,24 @@ async function submitBooking(e){
   }catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}
   finally{btn.disabled=false;btn.textContent='ناردنی داواکاری'}
 }
-$('bookingPhone')?.addEventListener('input',()=>{$('otpVerified').value='0';$('otpBox').style.display='none'});
-$('receiptInput')?.addEventListener('change',function(){
+$('bookingPhone')?.addEventListener('input',()=>{$('otpVerified').value='0';$('otpBox').style.display='none'});$('receiptInput')?.addEventListener('change',function(){
   const f=this.files?.[0], box=$('receiptPreview'); if(!f){box.textContent='هیچ وێنەیەک هەڵنەبژێردراوە';return}
   const url=URL.createObjectURL(f);box.innerHTML=`<img src="${url}" alt="پسوڵە"><span style="display:block;margin-top:6px">${esc(f.name)}</span>`;
 });
-async function submitPrivate(e){e.preventDefault();const body=Object.fromEntries(new FormData(e.target).entries());try{const r=await fetch(WORKER+'/api/private-trip',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const x=await r.json().catch(()=>({}));toast(x.ok?'داواکارییەکەت نێردرا ✓':'داواکارییەکەت وەرگیرا؛ تیمەکەمان پەیوەندیت پێوە دەکات.')}catch(e){toast('داواکارییەکەت وەرگیرا؛ تکایە لە WhatsApp ـیش پەیوەندی بکە.')}}
+async function submitPrivate(e){
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  // چارەسەرکردنی checkboxەکان بۆ ئەوەی بە جوانی بنێردرێن ئەگەر دیاری کرابوون
+  fd.set('transport', fd.get('transport') ? 'بەڵێ' : 'نەخێر');
+  fd.set('stay', fd.get('stay') ? 'بەڵێ' : 'نەخێر');
+  fd.set('guide', fd.get('guide') ? 'بەڵێ' : 'نەخێر');
+  const body = Object.fromEntries(fd.entries());
+  try{
+    const r=await fetch(WORKER+'/api/private-trip',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const x=await r.json().catch(()=>({}));
+    toast(x.ok?'داواکارییەکەت نێردرا ✓':'داواکارییەکەت وەرگیرا؛ تیمەکەمان پەیوەندیت پێوە دەکات.')
+  }catch(e){toast('داواکارییەکەت وەرگیرا؛ تکایە لە WhatsApp ـیش پەیوەندی بکە.')}
+}
 function toast(t){const x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove('show'),2400)}
 
 let activeStoriesList=[],currentStoryIdx=-1,storyTimer=null,appliedDiscountPercent=0,countdownTimer=null;
@@ -230,9 +580,9 @@ function previewStoryImage(e){const f=e.target.files?.[0];if(!f)return;if(!f.typ
 function openStoryUploadModal(){$('storyModal')?.classList.add('show')}function closeStoryModal(){$('storyModal')?.classList.remove('show')}
 async function fetchStories(refresh=false){try{const r=await fetch(WORKER+'/api/stories');const x=await r.json();if(x.ok&&Array.isArray(x.stories)){activeStoriesList=x.stories;renderStoriesBar();renderStoryGrid()}else if(refresh)toast('ستۆرییەکان نوێ نەکرانەوە')}catch(e){if(refresh)toast('نەتوانرا ستۆرییەکان نوێ بکرێنەوە')}}
 function storyList(){return activeStoriesList.length?activeStoriesList:data.stories.map((s,i)=>({id:'local-'+i,name:s.name,mediaUrl:s.img,text:'ئەزموونی KURDIA',tripName:'KURDIA',likes:0}))}
-function renderStoriesBar(){const l=storyList();if(!$('homeStories'))return;$('homeStories').innerHTML=l.slice(0,12).map((s,i)=>`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryViewer(${i})"><div class="ring"><img src="${esc(s.mediaUrl||s.img||'')}" alt="${esc(s.name||'KURDIA')}"></div><small>${esc(s.name||'KURDIA')}</small></button>`).join('')}
+function renderStoriesBar(){const l=storyList();if(!$('homeStories'))return;const addStoryBtn = `<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,0.05);border:1px dashed var(--muted);"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;$('homeStories').innerHTML= addStoryBtn + l.slice(0,12).map((s,i)=>`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryViewer(${i})"><div class="ring"><img src="${esc(s.mediaUrl||s.img||'')}" alt="${esc(s.name||'KURDIA')}"></div><small>${esc(s.name||'KURDIA')}</small></button>`).join('');if(window.lucide)lucide.createIcons();}
 function renderStoryGrid(){const l=storyList();if(!$('storyGrid'))return;$('storyGrid').innerHTML=l.map((s,i)=>`<button class="tile" style="background:url('${esc(s.mediaUrl||s.img||'')}') center/cover;border:0;color:#fff;text-align:right" onclick="openStoryViewer(${i})"><div><b>${esc(s.name||'KURDIA')}</b><small>${esc(s.text||'ئەزموونی KURDIA')}</small></div></button>`).join('')}
-function openStoryViewer(i){const l=storyList(),s=l[i];if(!s)return;activeStoriesList=l;currentStoryIdx=i;$('viewerAvatar').textContent=(s.name||'K')[0];$('viewerName').textContent=s.name||'KURDIA';$('viewerTime').textContent=s.tripName||'KURDIA';$('viewerImage').src=s.mediaUrl||s.img||'';$('viewerText').textContent=s.text||'';$('viewerLikes').textContent=s.likes||0;$('storyViewerModal').classList.add('show');const p=$('storyProgressBar');p.style.width='0%';setTimeout(()=>p.style.width='100%',30);if(s.id&&!String(s.id).startsWith('local-'))fetch(WORKER+`/api/stories/${encodeURIComponent(s.id)}/view`,{method:'POST'}).catch(()=>{});clearTimeout(storyTimer);storyTimer=setTimeout(()=>i+1<l.length?openStoryViewer(i+1):closeStoryViewer(),6000)}
+function openStoryViewer(i){const l=storyList(),s=l[i];if(!s)return;activeStoriesList=l;currentStoryIdx=i;$('viewerAvatar').textContent=(s.name\vert{}\vert{}'K')[0];$('viewerName').textContent=s.name||'KURDIA';$('viewerTime').textContent=s.tripName\vert{}\vert{}'KURDIA';$('viewerImage').src=s.mediaUrl||s.img||'';$('viewerText').textContent=s.text\vert{}\vert{}'';$('viewerLikes').textContent=s.likes||0;$('storyViewerModal').classList.add('show');const p=$('storyProgressBar');p.style.width='0%';setTimeout(()=>p.style.width='100%',30);if(s.id&&!String(s.id).startsWith('local-'))fetch(WORKER+`/api/stories/${encodeURIComponent(s.id)}/view`,{method:'POST'}).catch(()=>{});clearTimeout(storyTimer);storyTimer=setTimeout(()=>i+1<l.length?openStoryViewer(i+1):closeStoryViewer(),6000)}
 function closeStoryViewer(){clearTimeout(storyTimer);$('storyViewerModal')?.classList.remove('show')}
 async function likeCurrentStory(){const s=activeStoriesList[currentStoryIdx];if(!s)return;if(String(s.id).startsWith('local-')){s.likes=(s.likes||0)+1;$('viewerLikes').textContent=s.likes;return}try{const r=await fetch(WORKER+`/api/stories/${encodeURIComponent(s.id)}/like`,{method:'POST'});const x=await r.json();if(x.ok){s.likes=x.likes;$('viewerLikes').textContent=x.likes}}catch(e){toast('لایک نەکرا')}}
 function shareStoryWhatsApp(){const s=activeStoriesList[currentStoryIdx];if(!s)return;window.open('https://wa.me/?text='+encodeURIComponent(`${s.name||'KURDIA'} — ${s.text||'ئەزموونی KURDIA'}
