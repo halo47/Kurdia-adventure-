@@ -187,1428 +187,51 @@ textarea{ min-height:85px; resize:vertical; }
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-</head>
-<body>
+<style id="kurdia-v5-merged-css">
 
-<div id="adminAuthModal">
-  <div class="auth-box">
-    <div class="brand-icon mx-auto mb-4"><i data-lucide="lock"></i></div>
-    <h2 class="text-lg font-black mb-1">تەختەی کۆنترۆڵی KURDIA</h2>
-    <p class="text-xs text-gray-400 mb-6">تکایە PIN بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
-    <div class="field text-right mb-4">
-      <input type="password" id="adminPinInput" placeholder="PIN بنووسە..." style="text-align:center;letter-spacing:4px;font-size:16px;">
-    </div>
-    <button class="btn btn-primary w-full" onclick="checkAdminAuth()"><i data-lucide="check"></i> چوونەژوورەوە</button>
-  </div>
-</div>
-
-<div class="app-container">
-  <div class="sidebar-backdrop" id="backdrop" onclick="toggleSidebar()"></div>
-
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="brand">
-        <div class="brand-icon"><i data-lucide="mountain"></i></div>
-        <div class="brand-text">
-          <h2>KURDIA</h2>
-          <span>STUDIO BUILDER</span>
-        </div>
-      </div>
-      <button onclick="toggleSidebar()" style="background:none;border:0;color:#cbd5e1;cursor:pointer;"><i data-lucide="x"></i></button>
-    </div>
-
-    <ul class="nav-list">
-      <li><button class="nav-btn active" onclick="switchTab('dashboard')"><i data-lucide="layout-dashboard"></i> داشبۆردی سەرەکی</button></li>
-      <li><button class="nav-btn" onclick="switchTab('design')"><i data-lucide="palette"></i> ڕەنگ و بەشی سەرەکی</button></li>
-      <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> بەرنامەی گەشت (٣ زمان)</button></li>
-      <li><button class="nav-btn" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> بەڕێوەبردنی ستۆرییەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('booking')"><i data-lucide="ticket-check"></i> دۆخی ناونووسین و OTP</button></li>
-      <li><button class="nav-btn" onclick="switchTab('live_registrations')"><i data-lucide="user-check"></i> بەشداربووان و پەسەندکردن</button></li>
-      <li><button class="nav-btn" onclick="switchTab('achievements')"><i data-lucide="trophy"></i> دەستکەوت و ئامارەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('itinerary_tab')"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</button></li>
-      <li><button class="nav-btn" onclick="switchTab('safety_tab')"><i data-lucide="shield-check"></i> پرۆتۆکۆلی سەلامەتی</button></li>
-      <li><button class="nav-btn" onclick="switchTab('coupon')"><i data-lucide="tag"></i> کۆدی داشکاندن (Coupon)</button></li>
-      <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> پەیامی بەکۆمەڵ (Broadcast)</button></li>
-      <li><button class="nav-btn" onclick="switchTab('reviews')"><i data-lucide="message-circle"></i> بیروڕا و فیدباکەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('services')"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="image"></i> گەلەری وێنەکان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('whatsapp')"><i data-lucide="message-square"></i> نامەکانی WhatsApp & Maps</button></li>
-      <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="credit-card"></i> دارایی و FIB</button></li>
-      <li><button class="nav-btn" onclick="switchTab('sheets_tab')"><i data-lucide="file-spreadsheet"></i> پەیوەندی بە Sheets</button></li>
-      <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
-    </ul>
-
-    <div class="sidebar-footer">
-      <button class="btn btn-primary" onclick="publishLive()"><i data-lucide="send"></i> بڵاوکردنەوەی فەرمی (Publish)</button>
-      <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> ماڵپەڕ بکەرەوە</button>
-    </div>
-  </aside>
-
-  <main class="workspace">
-    <header class="topbar">
-      <div class="topbar-right">
-        <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
-        <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">داشبۆردی سەرەکی</h1>
-      </div>
-      <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="publishLive()">
-        <i data-lucide="save"></i> Publish
-      </button>
-    </header>
-
-    <div class="content-body">
-
-      <!-- DASHBOARD -->
-      <section class="page-tab active" id="tab-dashboard">
-        <div class="grid-4 mb-4">
-          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
-            <div class="text-xs text-gray-400 font-bold">کۆی کورسییەکان</div>
-            <div class="text-2xl font-black text-white mt-1" id="dashTotalCap">40</div>
-          </div>
-          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
-            <div class="text-xs text-gray-400 font-bold">ناونووسراوەکان</div>
-            <div class="text-2xl font-black text-rose-500 mt-1" id="dashBooked">29</div>
-          </div>
-          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
-            <div class="text-xs text-gray-400 font-bold">شوێنی بەردەست</div>
-            <div class="text-2xl font-black text-emerald-400 mt-1" id="dashAvailable">11</div>
-          </div>
-          <div class="p-5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
-            <div class="text-xs text-gray-400 font-bold">دۆخی وەرگرتن</div>
-            <div class="text-2xl font-black text-amber-400 mt-1" id="dashStatus">کراوەیە</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title"><i data-lucide="zap"></i> کرداری خێرا</div>
-          <div class="grid-3 mt-3">
-            <button class="btn btn-secondary" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> بەشداربووان</button>
-            <button class="btn btn-secondary" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> ستۆرییەکان</button>
-            <button class="btn btn-secondary" onclick="exportBackup()"><i data-lucide="download"></i> دابەزاندنی Backup</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- STORIES MANAGEMENT (RETAINS STORIES & DELETION) -->
-      <section class="page-tab" id="tab-stories_tab">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i data-lucide="sparkles"></i> بەڕێوەبردنی ستۆرییەکان (Community Stories)</div>
-            <button class="btn btn-secondary text-xs" onclick="fetchAdminStories()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
-          </div>
-          <div id="adminStoriesContainer" class="flex flex-col gap-3">
-            <div class="text-xs text-gray-400 text-center py-6">هیچ ستۆرییەک نییە یان پێویستی بە نوێکردنەوەیە.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- DESIGN -->
-      <section class="page-tab" id="tab-design">
-        <div class="card">
-          <div class="card-title"><i data-lucide="palette"></i> ڕەنگەکانی ماڵپەڕ (Brand Colors)</div>
-          <div class="grid-2">
-            <div class="field">
-              <label>ڕەنگی سەرەکی براند (Primary Accent)</label>
-              <input type="color" id="gradColor1" onchange="autoSync()" style="height:44px;padding:4px;cursor:pointer;">
-            </div>
-            <div class="field">
-              <label>ڕەنگی دووەم (Gradient Accent)</label>
-              <input type="color" id="gradColor2" onchange="autoSync()" style="height:44px;padding:4px;cursor:pointer;">
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><i data-lucide="layout"></i> بەشی سەرەکی بە سێ زمان (Hero Section)</div>
-          
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">☀️ بە کوردی</h4>
-            <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
-            <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌴 بالعربية</h4>
-            <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
-            <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌐 In English</h4>
-            <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
-            <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <div class="field">
-            <label>وێنەی کاڤەری سەرەکی</label>
-            <div class="uploader-dropzone" onclick="triggerCropUpload('heroImageUrl', 'heroDropPreview', 16/9)">
-              <i data-lucide="upload-cloud" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:12px;color:var(--muted);margin-top:5px;">پەنجە بنێ بۆ هەڵبژاردن و بڕینی وێنە</p>
-              <div id="heroDropPreview" class="dropzone-preview"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TRIP -->
-      <section class="page-tab" id="tab-trip">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i data-lucide="compass"></i> زانیاری گەشتەکە بە ٣ زمان</div>
-            <label class="flex items-center gap-2 cursor-pointer text-xs font-bold">
-              <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:18px;height:18px;">
-              دۆخی ناونووسین کراوەیە
-            </label>
-          </div>
-
-          <!-- KRG -->
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">☀️ بە زمانی کوردی</h4>
-            <div class="grid-2">
-              <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" oninput="autoSync()"></div>
-              <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" oninput="autoSync()"></div>
-              <div class="field"><label>نرخ</label><input id="tripPrice_ku" oninput="autoSync()"></div>
-              <div class="field"><label>کات و بەروار</label><input id="tripTime_ku" oninput="autoSync()"></div>
-            </div>
-            <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <!-- ARABIC -->
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌴 باللغة العربية</h4>
-            <div class="grid-2">
-              <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" oninput="autoSync()"></div>
-              <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" oninput="autoSync()"></div>
-              <div class="field"><label>السعر</label><input id="tripPrice_ar" oninput="autoSync()"></div>
-              <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" oninput="autoSync()"></div>
-            </div>
-            <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <!-- ENGLISH -->
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌐 In English</h4>
-            <div class="grid-2">
-              <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" oninput="autoSync()"></div>
-              <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" oninput="autoSync()"></div>
-              <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" oninput="autoSync()"></div>
-              <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" oninput="autoSync()"></div>
-            </div>
-            <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <div class="grid-3 p-4 bg-white/[0.03] border border-white/10 rounded-2xl mb-4 backdrop-blur-md">
-            <div class="field">
-              <label>⏰ کاتژمێری پێچەوانە (Countdown)</label>
-              <input type="datetime-local" id="tripTargetDate" onchange="autoSync()">
-            </div>
-            <div class="field">
-              <label>🌡️ پلەی گەرمیی پێشبینیکراو</label>
-              <input id="weatherTemp" placeholder="18°C" oninput="autoSync()">
-            </div>
-            <div class="field">
-              <label>☀️ دۆخی کەشوهەوا</label>
-              <input id="weatherCondition" placeholder="ساماڵ ☀️" oninput="autoSync()">
-            </div>
-          </div>
-
-          <div class="field">
-            <label>وێنەی تایبەتی گەشتەکە</label>
-            <div class="uploader-dropzone" onclick="triggerCropUpload('tripImageUrl', 'tripDropPreview', 4/3)">
-              <i data-lucide="image-plus" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی گەشتەکە دیاری بکە و بیبڕە</p>
-              <div id="tripDropPreview" class="dropzone-preview"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- BOOKING & CAPACITY -->
-      <section class="page-tab" id="tab-booking">
-        <div class="card">
-          <div class="card-title"><i data-lucide="shield-check"></i> دۆخی ناونووسین و توانست</div>
-          <div class="p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl mb-5 flex items-center justify-between">
-            <div>
-              <div class="font-extrabold text-sm text-white">داواکردنی کۆدی سەلماندنی WhatsApp (OTP)</div>
-              <div class="text-xs text-gray-400 mt-1">ئەگەر بکوژێنرێتەوە، بەشداربووان بەبێ کۆدی OTP فۆڕمەکە دەنێرن.</div>
-            </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" class="sr-only peer">
-              <div class="w-12 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600"></div>
-            </label>
-          </div>
-
-          <div class="grid-2">
-            <div class="field"><label>کۆی کورسییەکان (Capacity)</label><input id="capacityInput" type="number" min="1" oninput="autoSync()"></div>
-            <div class="field"><label>کورسییە گیراوەکان (Booked)</label><input id="bookedInput" type="number" min="0" oninput="autoSync()"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- LIVE REGISTRATIONS -->
-      <section class="page-tab" id="tab-live_registrations">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i data-lucide="users"></i> بەڕێوەبردنی ڕاستەوخۆی بەشداربووان</div>
-            <div class="flex gap-2">
-              <button class="btn btn-secondary text-xs" onclick="fetchLiveRegistrations()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
-              <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
-            </div>
-          </div>
-          <div id="registrationsContainer" class="flex flex-col gap-3"></div>
-        </div>
-      </section>
-
-      <!-- ACHIEVEMENTS -->
-      <section class="page-tab" id="tab-achievements">
-        <div class="card">
-          <div class="card-title"><i data-lucide="trophy"></i> ئامار و دەستکەوتەکان</div>
-          <div class="grid-2">
-            <div class="field"><label>ژمارە / باج (وەک: 39+)</label><input id="newStatNum" placeholder="39+"></div>
-            <div class="field"><label>پێناسە</label><input id="newStatLabel" placeholder="بەشداربووی لووتکەی هەڵگورد"></div>
-          </div>
-          <button class="btn btn-primary w-full mb-3" onclick="addStatItem()"><i data-lucide="plus"></i> زیادکردنی ئامار</button>
-          <div id="statsList"></div>
-        </div>
-      </section>
-
-      <!-- ITINERARY / TIMELINE -->
-      <section class="page-tab" id="tab-itinerary_tab">
-        <div class="card">
-          <div class="card-title"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</div>
-          <div class="grid-2">
-            <div class="field"><label>ناونیشان (وەک: کۆبوونەوە)</label><input id="newItineraryTitle" placeholder="کۆبوونەوە"></div>
-            <div class="field"><label>ڕوونکردنەوە (وەک: کاتژمێر ٥ی بەیانی)</label><input id="newItineraryText" placeholder="کاتژمێر ٥ی بەیانی"></div>
-          </div>
-          <button class="btn btn-primary w-full mb-3" onclick="addItineraryItem()"><i data-lucide="plus"></i> زیادکردن</button>
-          <div id="itineraryList"></div>
-        </div>
-      </section>
-
-      <!-- SAFETY -->
-      <section class="page-tab" id="tab-safety_tab">
-        <div class="card">
-          <div class="card-title"><i data-lucide="shield-check"></i> پرۆتۆکۆلی سەلامەتی</div>
-          <div class="field"><label>ناونیشانی سەلامەتی</label><input id="newSafetyTitle" placeholder="فریاگوزاری سەرەتایی"></div>
-          <div class="field"><label>ڕوونکردنەوە</label><textarea id="newSafetyDesc" placeholder="تیمی فریاگوزاری لەگەڵ گەشتەکە دەبێت..."></textarea></div>
-          <button class="btn btn-primary w-full mb-3" onclick="addSafetyItem()"><i data-lucide="plus"></i> زیادکردن</button>
-          <div id="safetyAdminList"></div>
-        </div>
-      </section>
-
-      <!-- COUPON -->
-      <section class="page-tab" id="tab-coupon">
-        <div class="card">
-          <div class="card-title"><i data-lucide="tag"></i> کۆدی داشکاندن (Coupon Code)</div>
-          <div class="grid-2 mt-2">
-            <div class="field"><label>دەقی کۆدی داشکاندن</label><input id="couponCodeInput" placeholder="KURDIA10" oninput="autoSync()"></div>
-            <div class="field"><label>ڕێژەی داشکاندن (%)</label><input id="couponDiscountInput" type="number" placeholder="10" oninput="autoSync()"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- BROADCAST -->
-      <section class="page-tab" id="tab-broadcast">
-        <div class="card">
-          <div class="card-title"><i data-lucide="send"></i> پەیامی بەکۆمەڵ لە ڕێگەی WhatsApp</div>
-          <div class="field"><label>دەقی پەیام</label><textarea id="broadcastMessage" style="min-height:140px;line-height:1.8;"></textarea></div>
-          <div class="field"><label>لیستی ژمارەی مۆبایلەکان</label><textarea id="broadcastPhones" style="min-height:90px;" placeholder="07500000000&#10;07501111111"></textarea></div>
-          <button class="btn btn-primary w-full h-11" onclick="sendBroadcastReminder()"><i data-lucide="send"></i> ناردن بۆ هەمووان لە WhatsApp</button>
-        </div>
-      </section>
-
-      <!-- REVIEWS -->
-      <section class="page-tab" id="tab-reviews">
-        <div class="card">
-          <div class="card-title"><i data-lucide="message-circle"></i> بەڕێوەبردنی بیروڕای شاخەوانان</div>
-          <div class="grid-2">
-            <div class="field"><label>ناوی بەشداربوو</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
-            <div class="field"><label>شار</label><input id="newReviewCity" placeholder="هەولێر"></div>
-          </div>
-          <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText" placeholder="بیروڕاکەی بنووسە..."></textarea></div>
-          <button class="btn btn-primary w-full mb-3" onclick="addReviewItem()"><i data-lucide="plus"></i> زیادکردن</button>
-          <div id="reviewsList"></div>
-        </div>
-      </section>
-
-      <!-- SERVICES -->
-      <section class="page-tab" id="tab-services">
-        <div class="card">
-          <div class="card-title"><i data-lucide="check-circle-2"></i> خزمەتگوزارییەکان</div>
-          <div class="field">
-            <div style="display:flex;gap:8px;">
-              <input id="newServiceName" placeholder="پاسی گەشتیاری مۆدێرن...">
-              <button class="btn btn-primary" onclick="addServiceItem()"><i data-lucide="plus"></i></button>
-            </div>
-          </div>
-          <div id="servicesList"></div>
-        </div>
-      </section>
-
-      <!-- GALLERY -->
-      <section class="page-tab" id="tab-gallery">
-        <div class="card">
-          <div class="card-title"><i data-lucide="image"></i> گەلەری وێنەکان</div>
-          <div class="uploader-dropzone" onclick="triggerCropUpload('gallery', null, NaN)">
-            <i data-lucide="upload" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-            <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی نوێ بپشکنە، بیبڕە و زیادی بکە</p>
-          </div>
-          <div class="gallery-grid" id="galleryContainer"></div>
-        </div>
-      </section>
-
-      <!-- WHATSAPP & MAPS -->
-      <section class="page-tab" id="tab-whatsapp">
-        <div class="card">
-          <div class="card-title"><i data-lucide="message-square"></i> نامەکانی WhatsApp و شوێنی کۆبوونەوە</div>
-          <div class="field"><label>📍 لینکی شوێنی کۆبوونەوە لە Google Maps</label><input id="waMapsUrl" dir="ltr" oninput="autoSync()"></div>
-          <div class="field"><label>🔐 Template ـەکانی Meta WhatsApp</label>
-            <div class="small-note">
-              <div>🔐 OTP: <b>kurdia_notification</b> — 1 variable</div>
-              <div>✅ پشتڕاستکردنەوە: <b>trip_confirmation</b> — 4 variables</div>
-              <div>❌ ڕەتکردنەوە: <b>trip_rejected</b> — 2 variables</div>
-              <div>📢 ئاگاداری: <b>trip_notification</b> — 1 variable</div>
-            </div>
-          </div>
-          <div class="small-note">دەقی Template ـەکان لە Meta WhatsApp Manager ـەوە کۆنترۆڵ دەکرێن؛ ئەم پانێڵە تەنها لینکی Maps پاشەکەوت دەکات. دەقی ئاگاداریی گشتی لە بەشی «پەیامی بەکۆمەڵ» دەنێردرێت و دەخرێتە ناو {{1}} ـی <b>trip_notification</b>.</div>
-          <button class="btn btn-success w-full mt-2" onclick="saveWhatsAppToCloud()">💾 پاشەکەوتکردن لە Cloud</button>
-        </div>
-      </section>
-
-      <!-- FINANCE -->
-      <section class="page-tab" id="tab-finance">
-        <div class="card">
-          <div class="card-title"><i data-lucide="credit-card"></i> هەژماری دارایی و FIB</div>
-          <div class="field">
-            <label>ژمارەی هەژماری فەرمیی First Iraqi Bank (FIB)</label>
-            <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
-          </div>
-        </div>
-      </section>
-
-      <!-- GOOGLE SHEETS -->
-      <section class="page-tab" id="tab-sheets_tab">
-        <div class="card">
-          <div class="card-title"><i data-lucide="table"></i> بەشداربووان لە Google Sheets</div>
-          <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
-            تەواوی ناونووسینەکان بە شێوەی ڕاستەوخۆ هاوکات لەگەڵ ئەم پەنێڵە دەچنە ناو خشتەکەت لە Google Sheets:
-          </p>
-          <button class="btn btn-secondary w-full" onclick="openSheets()"><i data-lucide="file-spreadsheet"></i> کردنەوەی ڕاستەوخۆی Google Sheets</button>
-        </div>
-      </section>
-
-
-<!-- WEATHER MANAGER -->
-<section class="page-tab" id="tab-weather_manager">
- <div class="card">
-  <div class="card-header"><div class="card-title"><i data-lucide="cloud-sun"></i> کەشوهەوا و شوێنی بنەڕەتی</div><button class="btn btn-secondary" onclick="loadWeatherTest()">تاقیکردنەوەی کەشوهەوا</button></div>
-  <div class="grid-2">
-   <div>
-    <div class="field"><label>شوێنی بنەڕەتی</label><input id="weatherDefaultLocationAdmin" placeholder="Erbil"></div>
-    <div class="grid-2">
-      <div class="field"><label>Latitude</label><input id="weatherLatAdmin" type="number" step="any"></div>
-      <div class="field"><label>Longitude</label><input id="weatherLonAdmin" type="number" step="any"></div>
-    </div>
-    <div class="field"><label>سەرچاوە</label><input id="weatherSourceAdmin" value="Open-Meteo"></div>
-    <button class="btn btn-primary" onclick="saveWeatherManager()">پاشەکەوتکردن لە Cloud</button>
-    <div id="weatherTestResult" class="mt-3 text-xs text-gray-400"></div>
-   </div>
-   <div>
-    <div id="adminWeatherMap" class="admin-map"></div>
-    <div class="text-[10px] text-gray-500 mt-2">لەسەر نەخشە کلیک بکە بۆ دیاریکردنی شوێنی بنەڕەتی.</div>
-   </div>
-  </div>
- </div>
-</section>
-
-<!-- PRIVATE REQUESTS -->
-<section class="page-tab" id="tab-private_requests">
- <div class="card">
-  <div class="card-header"><div class="card-title"><i data-lucide="crown"></i> داواکارییەکانی گەشتی تایبەت</div><button class="btn btn-secondary" onclick="loadPrivateRequests()">نوێکردنەوە</button></div>
-  <div id="privateRequestsContainer" class="flex flex-col gap-2"><div class="text-xs text-gray-400 text-center py-6">نوێکردنەوە بکە.</div></div>
- </div>
-</section>
-
-<!-- DIAGNOSTICS -->
-<section class="page-tab" id="tab-diagnostics_tab">
- <div class="card">
-  <div class="card-header"><div class="card-title"><i data-lucide="activity"></i> پشکنینی سیستەم</div><button class="btn btn-primary" onclick="runDiagnostics()">Run Diagnostics</button></div>
-  <div id="diagnosticsContainer" class="status-grid"></div>
- </div>
-</section>
-
-      <!-- BACKUP -->
-      <section class="page-tab" id="tab-backup">
-        <div class="card">
-          <div class="card-title"><i data-lucide="hard-drive"></i> پاراستن و هێنانەوەی زانیارییەکان</div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-secondary" style="flex:1;" onclick="exportBackup()"><i data-lucide="download"></i> Backup</button>
-            <button class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('importBackupInput').click()"><i data-lucide="upload"></i> Restore</button>
-            <input type="file" id="importBackupInput" accept=".json" style="display:none" onchange="importBackup(event)">
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-</div>
-
-<!-- CROPPING MODAL -->
-<div id="cropModalWrapper">
-  <div class="crop-container-card">
-    <div class="flex justify-between items-center">
-      <h3 class="font-extrabold text-sm flex items-center gap-2"><i data-lucide="crop"></i> دیاریکردن و بڕینی وێنە</h3>
-      <button class="text-gray-400 hover:text-white" onclick="closeCropModal()"><i data-lucide="x"></i></button>
-    </div>
-    <div class="crop-img-holder">
-      <img id="imageForCropper" style="max-width:100%; display:block;" />
-    </div>
-    <div class="flex gap-2 justify-end mt-2">
-      <button class="btn btn-secondary" onclick="closeCropModal()">پاشگەزبوونەوە</button>
-      <button class="btn btn-primary" onclick="applyCropAndSave()"><i data-lucide="check"></i> بڕین و دانان</button>
-    </div>
-  </div>
-</div>
-
-<input type="file" id="hiddenUniversalInput" accept="image/*" style="display:none;">
-<div id="toast" class="toast"></div>
-
-<script>
-const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
-const STORAGE_KEY = "kurdia_builder_published_v3";
-const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
-const ADMIN_SECRET_PIN = "2026";
-
-let appState = {
-  gradColor1: "#9d1c32",
-  gradColor2: "#c92b49",
-  heroImageUrl: "",
-  tripImageUrl: "",
-  tripTargetDate: "2026-10-02T05:00",
-  weatherTemp: "18°C",
-  weatherCondition: "ساماڵ ☀️",
-  bookingOpen: true,
-  otpRequired: true,
-  capacity: 40,
-  booked: 29,
-  couponCode: "KURDIA10",
-  couponDiscount: 10,
-  fibAccount: "07503130360",
-  waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
-  
-  i18n: {
-    ku: {
-      heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
-      heroSubtitle: "گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت جوانییە بێوێنەکانی کوردستان ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی پڕ وزە دروست بکەن.",
-      tripTitle: "گەشتی لووتکەی چیای هەڵگورد",
-      tripLocation: "باڵەکایەتی — چیای هەڵگورد",
-      tripPrice: "٣٥،٠٠٠ دینار",
-      tripTime: "بەیانی ٠٥:٠٠",
-      tripDesc: "گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان."
-    },
-    ar: {
-      heroTitle: "استكشف سحر الطبيعة معنا بطريقة مختلفة",
-      heroSubtitle: "رحلاتنا مخصصة لأولئك الذين يرغبون في رؤية جمال كوردستان الخلاب، وتكوين صداقات جديدة، وصنع ذكريات مليئة بالطاقة.",
-      tripTitle: "رحلة قمة جبل هلكورد",
-      tripLocation: "بالكايتي — جبل هلكورد",
-      tripPrice: "35,000 دينار",
-      tripTime: "صباحاً 05:00",
-      tripDesc: "مغامرة شيقة بصحبة مرشدين محترفين، تشمل النقل بالحافلات السياحية، وجبة الإفطار، وشاي الفحم، والصعود إلى أعلى قمة في كوردستان والعراق."
-    },
-    en: {
-      heroTitle: "Experience Kurdistan Nature Differently With Us",
-      heroSubtitle: "Our expeditions are crafted for those seeking to discover breathtaking mountain views, build new friendships, and create unforgettable adventures.",
-      tripTitle: "Mount Halgurd Summit Expedition",
-      tripLocation: "Balakayati — Mount Halgurd",
-      tripPrice: "35,000 IQD",
-      tripTime: "05:00 AM",
-      tripDesc: "An exhilarating summit journey accompanied by certified mountain guides, VIP bus transportation, traditional breakfast, charcoal tea, and scaling the highest peak."
-    }
-  },
-
-  stats: [
-    { num: "39+", label: "بەشداربووی هەڵگورد" },
-    { num: "15+", label: "لووتکە و ناوچە" },
-    { num: "100%", label: "گەشتی سەرکەوتوو" },
-    { num: "4.9★", label: "ڕەزامەندی شاخەوانان" }
-  ],
-
-  itinerary: [
-    { title: "کۆبوونەوە", text: "لە شوێنی دیاریکراو کۆدەبینەوە و بەڕێدەکەوین." },
-    { title: "نانی بەیانی", text: "لە سروشتدا چای خەڵووز و نانی بەیانی دەخۆین." },
-    { title: "سەرکەوتن", text: "بە هەنگاوی هاوسەنگ بەرەو لووتکە سەردەکەوین." },
-    { title: "گەڕانەوە", text: "دوای وێنەگرتن بەرەو شار دەگەڕێینەوە." }
-  ],
-
-  safety: [
-    { title: "ڕێبەرانی بەئەزموون", desc: "تیمەکەمان شارەزای تەواوی ڕێڕەوەکانە." },
-    { title: "فریاگوزاری سەرەتایی", desc: "کەرەستەی پزیشکی بەردەوام لەگەڵمانە." },
-    { title: "چاودێری کەشوهەوا", desc: "پشکنینی بەردەوامی پێشبینی کەشوهەوا." }
-  ],
-
-  services: [
-    { name: "پاسی گەشتیاری مۆدێرن", icon: "bus-front" },
-    { name: "نان و خواردنی بەیانی", icon: "utensils" },
-    { name: "چای سەر خەڵووز", icon: "coffee" }
-  ],
-
-  reviews: [
-    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
-  ],
-
-  gallery: []
-};
-
-let cachedRegistrations = [];
-
-function checkAdminAuth(){
-  const val = document.getElementById("adminPinInput").value.trim();
-  if(val === ADMIN_SECRET_PIN || sessionStorage.getItem("admin_auth") === "true"){
-    sessionStorage.setItem("admin_auth", "true"); sessionStorage.setItem("kurdia_admin_key", val);
-    document.getElementById("adminAuthModal").style.display = "none";
-    toast("بەخێربێیت بۆ دەستەی کۆنترۆڵ 🏔️");
-  } else {
-    toast("❌ PIN هەڵەیە");
-  }
-}
-
-// CROPPER
-let cropperInstance = null;
-let cropTarget = { prop: "", previewId: "", aspect: NaN };
-
-function triggerCropUpload(prop, previewId, aspect = NaN){
-  cropTarget = { prop, previewId, aspect };
-  const input = document.getElementById("hiddenUniversalInput");
-  input.value = "";
-  input.click();
-}
-
-document.getElementById("hiddenUniversalInput").addEventListener("change", function(e){
-  const file = e.target.files?.[0];
-  if(!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(evt){
-    const modal = document.getElementById("cropModalWrapper");
-    const img = document.getElementById("imageForCropper");
-    img.src = evt.target.result;
-    modal.style.display = "flex";
-
-    if(cropperInstance) cropperInstance.destroy();
-    cropperInstance = new Cropper(img, {
-      aspectRatio: cropTarget.aspect,
-      viewMode: 1,
-      autoCropArea: 0.85,
-      responsive: true
-    });
-  };
-  reader.readAsDataURL(file);
-});
-
-function closeCropModal(){
-  document.getElementById("cropModalWrapper").style.display = "none";
-  if(cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
-}
-
-function applyCropAndSave(){
-  if(!cropperInstance) return;
-  const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1000, maxHeight: 1000 });
-  const base64 = canvas.toDataURL("image/jpeg", 0.78);
-
-  if(cropTarget.prop === "gallery"){
-    appState.gallery.push({ url: base64, title: "KURDIA ADVENTURE" });
-    renderGallery();
-  } else {
-    appState[cropTarget.prop] = base64;
-    if(cropTarget.previewId){
-      const p = document.getElementById(cropTarget.previewId);
-      p.style.backgroundImage = `url('${base64}')`;
-      p.classList.add("active");
-    }
-  }
-
-  autoSync();
-  closeCropModal();
-  toast("✅ وێنەکە دانرا");
-}
-
-// LIVE REGISTRATIONS
-async function fetchLiveRegistrations(){
-  toast("⏳ داتا دەهێنرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/registrations`);
-    const data = await res.json();
-    if(data.ok && Array.isArray(data.registrations)){
-      cachedRegistrations = data.registrations;
-      renderRegistrations(cachedRegistrations);
-      toast(`✅ ${cachedRegistrations.length} داواکاری بارکرا`);
-    } else {
-      renderRegistrations([]);
-      toast("هیچ داتایەک نەدۆزرایەوە");
-    }
-  }catch(e){
-    renderRegistrations([]);
-    toast("کێشە لە پەیوەندی بە وۆرکەر");
-  }
-}
-
-function renderRegistrations(list){
-  const c = document.getElementById("registrationsContainer");
-  if(!c) return;
-
-  if(!list.length){
-    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە یان داتا نەدۆزرایەوە.</div>`;
-    return;
-  }
-
-  c.innerHTML = list.map(reg => `
-    <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="font-extrabold text-sm text-white">${reg.name}</span>
-          <span class="text-xs px-2 py-0.5 rounded-full ${reg.status?.includes('پەسەند') ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${reg.status || 'چاوەڕوان'}</span>
-        </div>
-        <div class="text-xs text-gray-400 mt-1 flex flex-wrap gap-x-3">
-          <span>📱 ${reg.phone}</span>
-          <span>👥 ${reg.people || 1} کەس</span>
-          <span>🆔 ${reg.id}</span>
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check"></i> پەسەندکردن (WhatsApp)</button>
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
-      </div>
-    </div>
-  `).join("");
-  if(window.lucide) lucide.createIcons();
-}
-
-// STORIES MODERATION ADMIN
-async function fetchAdminStories(){
-  toast("⏳ بارکردنی ستۆرییەکان...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/stories?admin=true`);
-    const data = await res.json();
-    if(data.ok && Array.isArray(data.stories)){
-      renderAdminStories(data.stories);
-      toast(`✅ ${data.stories.length} ستۆری دۆزرایەوە`);
-    } else {
-      renderAdminStories([]);
-      toast("هیچ ستۆرییەک نییە");
-    }
-  }catch(e){
-    renderAdminStories([]);
-    toast("کێشە لە پەیوەندی بە سێرڤەر");
-  }
-}
-
-function renderAdminStories(list){
-  const c = document.getElementById("adminStoriesContainer");
-  if(!c) return;
-  if(!list.length){
-    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-6">هیچ ستۆرییەک نییە.</div>`;
-    return;
-  }
-  c.innerHTML = list.map(st => {
-    const isApproved = st.status === 'approved';
-    return `
-    <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
-      <div class="flex items-center gap-3">
-        <img src="${st.mediaUrl}" class="w-14 h-14 rounded-xl object-cover border border-white/20">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-extrabold text-sm text-white">${st.name} <span class="text-xs font-normal text-gray-400">(${st.city || 'کوردستان'})</span></span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${isApproved ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
-              ${isApproved ? '✅ پەسەندکراو (چالاکە لە وێبسایت)' : '⏳ چاوەڕوان'}
-            </span>
-          </div>
-          <div class="text-xs text-gray-300 mt-1">«${st.text}»</div>
-          <div class="text-[10px] text-gray-400 mt-1">❤️ ${st.likes || 0} لایک | 👁️ ${st.views || 0} بینین | گەشت: ${st.tripName || 'کوردیا'}</div>
-        </div>
-      </div>
-      <div class="flex items-center gap-2 w-full md:w-auto justify-end">
-        ${!isApproved ? `
-          <button class="btn btn-success text-xs py-2 px-3" onclick="moderateStory('${st.id}', 'approve')">
-            <i data-lucide="check"></i> پەسەندکردن
-          </button>
-        ` : `
-          <span class="text-xs text-emerald-400 font-bold hidden md:inline-block ml-2">لە وێبسایت بڵاوکراوەتەوە</span>
-        `}
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="moderateStory('${st.id}', 'delete')">
-          <i data-lucide="trash"></i> سڕینەوە
-        </button>
-      </div>
-    </div>
-    `;
-  }).join("");
-  if(window.lucide) lucide.createIcons();
-}
-
-async function moderateStory(id, action){
-  if(action === 'delete'){
-    if(!confirm("ئایا دڵنیایت لە سڕینەوەی ئەم ستۆرییە لە وێبسایت و دەستەی کۆنترۆڵ؟")) return;
-  }
-  toast("⏳ کردارەکە جێبەجێ دەکرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/stories/moderation/${id}/${action}`, { method: "POST" });
-    const d = await res.json();
-    if(d.ok){
-      toast(action === 'delete' ? "🗑️ ستۆرییەکە سڕایەوە" : "✅ ستۆرییەکە پەسەندکرا و بڵاوکرایەوە");
-      fetchAdminStories();
-    } else {
-      toast("❌ هەڵە لە ئەنجامدان");
-    }
-  }catch(e){ toast("کێشەی سێرڤەر"); }
-}
-
-async function directVerify(id, phone){
-  if(!confirm(`ئایا دڵنیایت لە پەسەندکردن و ناردنی نامەی WhatsApp بۆ ${phone}؟`)) return;
-  toast("⏳ دەنێردرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/verify-booking`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ id, phone })
-    });
-    const d = await res.json();
-    if(res.ok && d.ok){
-      toast("✅ نامەی پەسەندکردن نێردرا");
-      fetchLiveRegistrations();
-    } else {
-      toast("❌ هەڵە: " + (d.error || ""));
-    }
-  }catch(e){ toast("کێشە لە پەیوەندی"); }
-}
-
-async function directReject(id, phone){
-  const reason = prompt("تکایە هۆکاری ڕەتکردنەوە بنووسە:", "پسوولەکە ناڕوونە یان بڕی پارەکە تەواو نییە");
-  if(!reason) return;
-  toast("⏳ دەنێردرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/reject-booking`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ id, phone, reason })
-    });
-    const d = await res.json();
-    if(res.ok && d.ok){
-      toast("❌ نامەی ڕەتکردنەوە نێردرا");
-      fetchLiveRegistrations();
-    } else {
-      toast("❌ هەڵە: " + (d.error || ""));
-    }
-  }catch(e){ toast("کێشە لە پەیوەندی"); }
-}
-
-function exportRegistrationsToCSV(){
-  if(!cachedRegistrations.length) return toast("هیچ داتایەک نییە بۆ دابەزاندن");
-  let csv = "\uFEFFناوی بەشداربوو,ژمارەی مۆبایل,کۆی کەس,کۆدی داواکاری,دۆخ\n";
-  cachedRegistrations.forEach(r => {
-    csv += `"${r.name}","${r.phone}","${r.people || 1}","${r.id}","${r.status || ''}"\n`;
-  });
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `kurdia-members-${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
-
-
-// ===== KURDIA v5 ADMIN ADDITIONS =====
-function getAdminKey(){return sessionStorage.getItem("kurdia_admin_key") || ADMIN_SECRET_PIN || "2026";}
-async function adminFetch(url,opts={}){
- const headers=new Headers(opts.headers||{});
- headers.set("X-Admin-Key",getAdminKey());
- return fetch(url,{...opts,headers});
-}
-let adminWeatherMap=null, adminWeatherMarker=null;
-function initAdminWeatherMap(){
- if(!window.L)return;
- if(!adminWeatherMap){
-  adminWeatherMap=L.map("adminWeatherMap").setView([36.19,44.01],8);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(adminWeatherMap);
-  adminWeatherMap.on("click",e=>{
-   document.getElementById("weatherLatAdmin").value=e.latlng.lat.toFixed(6);
-   document.getElementById("weatherLonAdmin").value=e.latlng.lng.toFixed(6);
-   setAdminWeatherMarker(e.latlng.lat,e.latlng.lng);
-  });
- }
- setTimeout(()=>adminWeatherMap.invalidateSize(),80);
-}
-function setAdminWeatherMarker(lat,lon){
- if(!adminWeatherMap)return;
- if(adminWeatherMarker)adminWeatherMarker.setLatLng([lat,lon]);else adminWeatherMarker=L.marker([lat,lon]).addTo(adminWeatherMap);
-}
-async function loadWeatherManager(){
- try{
-  const r=await adminFetch(`${WORKER_URL}/api/admin/cms`);const d=await r.json();const w=d.data?.weather||{};
-  const s=d.data?.settings||{};
-  document.getElementById("weatherDefaultLocationAdmin").value=w.defaultLocation||s.weatherDefaultLocation||"Erbil";
-  document.getElementById("weatherLatAdmin").value=w.latitude??"36.19";
-  document.getElementById("weatherLonAdmin").value=w.longitude??"44.01";
-  document.getElementById("weatherSourceAdmin").value=w.sourceLabel||"Open-Meteo";
-  if(w.latitude&&w.longitude)setAdminWeatherMarker(w.latitude,w.longitude);
- }catch(e){toast("کێشە لە بارکردنی Weather")}
-}
-async function saveWeatherManager(){
- const current=await (await adminFetch(`${WORKER_URL}/api/admin/cms`)).json();
- const data=current.data||{};
- data.weather={...(data.weather||{}),defaultLocation:document.getElementById("weatherDefaultLocationAdmin").value.trim()||"Erbil",latitude:Number(document.getElementById("weatherLatAdmin").value),longitude:Number(document.getElementById("weatherLonAdmin").value),sourceLabel:document.getElementById("weatherSourceAdmin").value.trim()||"Open-Meteo",updateLabel:"دوایین نوێکردنەوە"};
- const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
- const d=await r.json();toast(r.ok&&d.ok?"✅ Weather لە Cloud پاشەکەوت کرا":"❌ "+(d.error||"هەڵە"));
-}
-async function loadWeatherTest(){
- const q=document.getElementById("weatherDefaultLocationAdmin").value.trim()||"Erbil";const box=document.getElementById("weatherTestResult");box.textContent="⏳ ...";
- try{const r=await adminFetch(`${WORKER_URL}/api/weather/search?q=${encodeURIComponent(q)}`);const d=await r.json();box.textContent=r.ok&&d.ok?`✅ ${d.location?.name||q} — ${Math.round(d.current?.temperature_2m||0)}°C — Open-Meteo`:`❌ ${d.error||"کەشوهەوا بەردەست نییە"}`;}catch(e){box.textContent="❌ پەیوەندی بە Worker نەکرا";}
-}
-async function loadPrivateRequests(){
- const c=document.getElementById("privateRequestsContainer");c.innerHTML='<div class="text-xs text-gray-400">⏳ ...</div>';
- try{const r=await adminFetch(`${WORKER_URL}/api/admin/private-requests`);const d=await r.json();const items=d.items||[];c.innerHTML=items.length?items.map(x=>`<div class="item-row"><div><b>${x.name||"—"}</b><div class="text-[10px] text-gray-400">📱 ${x.phone||"—"} · 📍 ${x.destination||"—"} · 📅 ${x.date||"—"} · 👥 ${x.people||"—"}</div><div class="text-[10px] text-gray-500 mt-1">${x.latitude&&x.longitude?`📌 ${x.latitude}, ${x.longitude}`:"بێ Map"}</div></div><div class="flex gap-2"><button class="btn btn-success text-xs" onclick="updatePrivateRequest('${x.id}','contacted')">پەیوەندی کرا</button><button class="btn btn-danger text-xs" onclick="deletePrivateRequest('${x.id}')">سڕینەوە</button></div></div>`).join(""):'<div class="text-xs text-gray-400 text-center py-6">هیچ داواکارییەک نییە.</div>';}catch(e){c.innerHTML='<div class="text-xs text-red-300">کێشە لە Worker</div>'}
-}
-async function updatePrivateRequest(id,status){const r=await adminFetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status})});toast(r.ok?"✅ نوێکرایەوە":"❌ هەڵە");loadPrivateRequests();}
-async function deletePrivateRequest(id){if(!confirm("دڵنیایت؟"))return;const r=await adminFetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`,{method:"DELETE"});toast(r.ok?"🗑️ سڕایەوە":"❌ هەڵە");loadPrivateRequests();}
-async function runDiagnostics(){
- const c=document.getElementById("diagnosticsContainer");c.innerHTML='<div class="text-xs text-gray-400">⏳ پشکنین...</div>';
- try{const r=await adminFetch(`${WORKER_URL}/api/admin/diagnostics`);const d=await r.json();c.innerHTML=(d.checks||[]).map(x=>`<div class="status-chip"><div class="font-black text-sm">${x.status==="online"?"🟢":x.status==="warning"?"🟡":"🔴"} ${x.name}</div><div class="text-[10px] text-gray-400 mt-1">${x.detail||""}</div></div>`).join("");}catch(e){c.innerHTML='<div class="status-chip text-red-300">Worker وەڵام نادات.</div>'}
-}
-
-function autoSync(){
-  appState.gradColor1 = document.getElementById("gradColor1").value;
-  appState.gradColor2 = document.getElementById("gradColor2").value;
-
-  appState.i18n.ku.heroTitle = document.getElementById("heroTitle_ku").value;
-  appState.i18n.ku.heroSubtitle = document.getElementById("heroSubtitle_ku").value;
-  appState.i18n.ar.heroTitle = document.getElementById("heroTitle_ar").value;
-  appState.i18n.ar.heroSubtitle = document.getElementById("heroSubtitle_ar").value;
-  appState.i18n.en.heroTitle = document.getElementById("heroTitle_en").value;
-  appState.i18n.en.heroSubtitle = document.getElementById("heroSubtitle_en").value;
-
-  appState.i18n.ku.tripTitle = document.getElementById("tripTitle_ku").value;
-  appState.i18n.ku.tripLocation = document.getElementById("tripLocation_ku").value;
-  appState.i18n.ku.tripPrice = document.getElementById("tripPrice_ku").value;
-  appState.i18n.ku.tripTime = document.getElementById("tripTime_ku").value;
-  appState.i18n.ku.tripDesc = document.getElementById("tripDesc_ku").value;
-
-  appState.i18n.ar.tripTitle = document.getElementById("tripTitle_ar").value;
-  appState.i18n.ar.tripLocation = document.getElementById("tripLocation_ar").value;
-  appState.i18n.ar.tripPrice = document.getElementById("tripPrice_ar").value;
-  appState.i18n.ar.tripTime = document.getElementById("tripTime_ar").value;
-  appState.i18n.ar.tripDesc = document.getElementById("tripDesc_ar").value;
-
-  appState.i18n.en.tripTitle = document.getElementById("tripTitle_en").value;
-  appState.i18n.en.tripLocation = document.getElementById("tripLocation_en").value;
-  appState.i18n.en.tripPrice = document.getElementById("tripPrice_en").value;
-  appState.i18n.en.tripTime = document.getElementById("tripTime_en").value;
-  appState.i18n.en.tripDesc = document.getElementById("tripDesc_en").value;
-
-  appState.bookingOpen = document.getElementById("bookingOpen").checked;
-  appState.tripTargetDate = document.getElementById("tripTargetDate").value;
-  appState.weatherTemp = document.getElementById("weatherTemp").value;
-  appState.weatherCondition = document.getElementById("weatherCondition").value;
-
-  appState.otpRequired = document.getElementById("otpRequiredSwitch").checked;
-  appState.capacity = Number(document.getElementById("capacityInput").value || 40);
-  appState.booked = Number(document.getElementById("bookedInput").value || 0);
-
-  appState.couponCode = document.getElementById("couponCodeInput").value.trim();
-  appState.couponDiscount = Number(document.getElementById("couponDiscountInput").value || 10);
-
-  appState.fibAccount = document.getElementById("fibAccount").value;
-  appState.waMapsUrl = document.getElementById("waMapsUrl").value;
-
-  document.getElementById("dashTotalCap").textContent = appState.capacity;
-  document.getElementById("dashBooked").textContent = appState.booked;
-  document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
-  document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
-}
-
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("KURDIA_BUILDER_STATE");
-    if(raw){
-      const parsed = JSON.parse(raw);
-      appState = Object.assign({}, appState, parsed);
-      if(!appState.i18n) appState.i18n = DEFAULT_DATA.i18n;
-      if(!Array.isArray(appState.stats)) appState.stats = DEFAULT_DATA.stats;
-      if(!Array.isArray(appState.itinerary)) appState.itinerary = DEFAULT_DATA.itinerary;
-      if(!Array.isArray(appState.safety)) appState.safety = DEFAULT_DATA.safety;
-    }
-  }catch(e){}
-
-  document.getElementById("gradColor1").value = appState.gradColor1 || "#9d1c32";
-  document.getElementById("gradColor2").value = appState.gradColor2 || "#c92b49";
-
-  const i18 = appState.i18n || {};
-  document.getElementById("heroTitle_ku").value = i18.ku?.heroTitle || "";
-  document.getElementById("heroSubtitle_ku").value = i18.ku?.heroSubtitle || "";
-  document.getElementById("heroTitle_ar").value = i18.ar?.heroTitle || "";
-  document.getElementById("heroSubtitle_ar").value = i18.ar?.heroSubtitle || "";
-  document.getElementById("heroTitle_en").value = i18.en?.heroTitle || "";
-  document.getElementById("heroSubtitle_en").value = i18.en?.heroSubtitle || "";
-
-  document.getElementById("tripTitle_ku").value = i18.ku?.tripTitle || "";
-  document.getElementById("tripLocation_ku").value = i18.ku?.tripLocation || "";
-  document.getElementById("tripPrice_ku").value = i18.ku?.tripPrice || "";
-  document.getElementById("tripTime_ku").value = i18.ku?.tripTime || "";
-  document.getElementById("tripDesc_ku").value = i18.ku?.tripDesc || "";
-
-  document.getElementById("tripTitle_ar").value = i18.ar?.tripTitle || "";
-  document.getElementById("tripLocation_ar").value = i18.ar?.tripLocation || "";
-  document.getElementById("tripPrice_ar").value = i18.ar?.tripPrice || "";
-  document.getElementById("tripTime_ar").value = i18.ar?.tripTime || "";
-  document.getElementById("tripDesc_ar").value = i18.ar?.tripDesc || "";
-
-  document.getElementById("tripTitle_en").value = i18.en?.tripTitle || "";
-  document.getElementById("tripLocation_en").value = i18.en?.tripLocation || "";
-  document.getElementById("tripPrice_en").value = i18.en?.tripPrice || "";
-  document.getElementById("tripTime_en").value = i18.en?.tripTime || "";
-  document.getElementById("tripDesc_en").value = i18.en?.tripDesc || "";
-
-  document.getElementById("bookingOpen").checked = appState.bookingOpen !== false;
-  document.getElementById("tripTargetDate").value = appState.tripTargetDate || "2026-10-02T05:00";
-  document.getElementById("weatherTemp").value = appState.weatherTemp || "18°C";
-  document.getElementById("weatherCondition").value = appState.weatherCondition || "ساماڵ ☀️";
-
-  document.getElementById("otpRequiredSwitch").checked = appState.otpRequired !== false;
-  document.getElementById("capacityInput").value = appState.capacity || 40;
-  document.getElementById("bookedInput").value = appState.booked || 29;
-
-  document.getElementById("couponCodeInput").value = appState.couponCode || "KURDIA10";
-  document.getElementById("couponDiscountInput").value = appState.couponDiscount || 10;
-
-  document.getElementById("fibAccount").value = appState.fibAccount || "07503130360";
-  document.getElementById("waMapsUrl").value = appState.waMapsUrl || "";
-
-  if(appState.heroImageUrl){
-    const h = document.getElementById("heroDropPreview");
-    h.style.backgroundImage = `url('${appState.heroImageUrl}')`;
-    h.classList.add("active");
-  }
-  if(appState.tripImageUrl){
-    const t = document.getElementById("tripDropPreview");
-    t.style.backgroundImage = `url('${appState.tripImageUrl}')`;
-    t.classList.add("active");
-  }
-
-  document.getElementById("dashTotalCap").textContent = appState.capacity;
-  document.getElementById("dashBooked").textContent = appState.booked;
-  document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
-  document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
-
-  renderServices();
-  renderReviews();
-  renderGallery();
-  renderStatsList();
-  renderItinerary();
-  renderSafetyList();
-}
-
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 3200);
-}
-
-function toggleSidebar(){
-  document.getElementById("sidebar").classList.toggle("open");
-  document.getElementById("backdrop").classList.toggle("active");
-}
-
-function switchTab(tabId){
-  document.querySelectorAll(".page-tab").forEach(tab => tab.classList.remove("active"));
-  const target = document.getElementById("tab-" + tabId);
-  if(target) target.classList.add("active");
-
-  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
-  if(event?.currentTarget?.classList) event.currentTarget.classList.add("active");
-  if(window.innerWidth <= 850) toggleSidebar();
-
-  if(tabId === 'stories_tab'){
-    fetchAdminStories();
-  }
-  if(tabId === 'weather_manager'){
-    setTimeout(()=>{initAdminWeatherMap();loadWeatherManager();},60);
-  }
-  if(tabId === 'private_requests'){
-    loadPrivateRequests();
-  }
-  if(tabId === 'diagnostics_tab'){
-    runDiagnostics();
-  }
-}
-
-// ACHIEVEMENTS ADMIN
-function renderStatsList(){
-  const c = document.getElementById("statsList"); if(!c) return;
-  c.innerHTML = (appState.stats||[]).map((st, i) => `
-    <div class="item-row">
-      <div><b>${st.num}</b> — <span class="text-xs text-gray-400">${st.label}</span></div>
-      <button class="btn btn-danger" onclick="appState.stats.splice(${i},1);renderStatsList();autoSync();">سڕینەوە</button>
-    </div>
-  `).join("");
-}
-function addStatItem(){
-  const num = document.getElementById("newStatNum").value.trim();
-  const label = document.getElementById("newStatLabel").value.trim();
-  if(!num || !label) return;
-  if(!appState.stats) appState.stats = [];
-  appState.stats.push({ num, label });
-  document.getElementById("newStatNum").value = "";
-  document.getElementById("newStatLabel").value = "";
-  renderStatsList(); autoSync();
-}
-
-// ITINERARY ADMIN
-function renderItinerary(){
-  const c = document.getElementById("itineraryList"); if(!c) return;
-  c.innerHTML = (appState.itinerary||[]).map((it, i) => `
-    <div class="item-row">
-      <div><b>${it.title}</b><div class="small-note text-xs text-gray-400">${it.text}</div></div>
-      <button class="btn btn-danger" onclick="appState.itinerary.splice(${i},1);renderItinerary();autoSync();">سڕینەوە</button>
-    </div>
-  `).join("");
-}
-function addItineraryItem(){
-  const t = document.getElementById("newItineraryTitle").value.trim();
-  const d = document.getElementById("newItineraryText").value.trim();
-  if(!t) return;
-  if(!appState.itinerary) appState.itinerary = [];
-  appState.itinerary.push({ title: t, text: d });
-  document.getElementById("newItineraryTitle").value = "";
-  document.getElementById("newItineraryText").value = "";
-  renderItinerary(); autoSync();
-}
-
-// SAFETY ADMIN
-function renderSafetyList(){
-  const c = document.getElementById("safetyAdminList"); if(!c) return;
-  c.innerHTML = (appState.safety||[]).map((sf, i) => `
-    <div class="item-row">
-      <div><b>${sf.title}</b><div class="text-xs text-gray-400">${sf.desc}</div></div>
-      <button class="btn btn-danger" onclick="appState.safety.splice(${i},1);renderSafetyList();autoSync();">سڕینەوە</button>
-    </div>
-  `).join("");
-}
-function addSafetyItem(){
-  const title = document.getElementById("newSafetyTitle").value.trim();
-  const desc = document.getElementById("newSafetyDesc").value.trim();
-  if(!title || !desc) return;
-  if(!appState.safety) appState.safety = [];
-  appState.safety.push({ title, desc });
-  document.getElementById("newSafetyTitle").value = "";
-  document.getElementById("newSafetyDesc").value = "";
-  renderSafetyList(); autoSync();
-}
-
-function renderServices(){
-  const c = document.getElementById("servicesList"); if(!c) return;
-  c.innerHTML = (appState.services||[]).map((s,i)=>`<div class="item-row"><span>${s.name||s}</span><button class="btn btn-danger" onclick="appState.services.splice(${i},1);renderServices();autoSync();">سڕینەوە</button></div>`).join("");
-}
-function addServiceItem(){
-  const val = document.getElementById("newServiceName").value.trim();
-  if(!val) return;
-  appState.services.push({name:val, icon:"check"});
-  document.getElementById("newServiceName").value="";
-  renderServices(); autoSync();
-}
-
-function renderReviews(){
-  const c = document.getElementById("reviewsList"); if(!c) return;
-  c.innerHTML = (appState.reviews||[]).map((r,i)=>`<div class="item-row"><div><b>${r.name} (${r.city})</b><div class="small-note text-xs text-gray-400">${r.text}</div></div><button class="btn btn-danger" onclick="appState.reviews.splice(${i},1);renderReviews();autoSync();">سڕینەوە</button></div>`).join("");
-}
-function addReviewItem(){
-  const n = document.getElementById("newReviewName").value.trim(), c = document.getElementById("newReviewCity").value.trim(), t = document.getElementById("newReviewText").value.trim();
-  if(!n || !t) return;
-  appState.reviews.push({name:n, city:c, text:t});
-  document.getElementById("newReviewName").value=""; document.getElementById("newReviewCity").value=""; document.getElementById("newReviewText").value="";
-  renderReviews(); autoSync();
-}
-
-function renderGallery(){
-  const c = document.getElementById("galleryContainer"); if(!c) return;
-  c.innerHTML = (appState.gallery||[]).map((img,i)=>`<div class="gallery-thumb" style="background-image:url('${img.url||img}')"><button class="gallery-delete" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync();">✕</button></div>`).join("");
-}
-
-async function sendBroadcastReminder(){
-  const msg = document.getElementById("broadcastMessage").value.trim();
-  const rawPhones = document.getElementById("broadcastPhones").value.trim();
-  if(!msg || !rawPhones) return toast("تکایە دەقی نامە و ژمارەکان دیاری بکە");
-  const phones = rawPhones.split(/[\n,،]+/).map(p => p.trim()).filter(Boolean);
-  toast(`⏳ دەنێردرێت بۆ ${phones.length} کەس...`);
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/send-broadcast`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ message: msg, phones })
-    });
-    const d = await res.json();
-    if(res.ok && d.ok) toast(`✅ بە سەرکەوتوویی بۆ ${d.sent} کەس نێردرا`);
-    else toast("❌ کێشەیەک ڕوویدا: " + (d.error || ""));
-  }catch(e){ toast("کێشە لە پەیوەندی بە سێرڤەر"); }
-}
-
-async function saveWhatsAppToCloud(){
-  autoSync(); toast("⏳ لە سێرڤەر سەیڤ دەکرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/wa-settings`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ mapsUrl:appState.waMapsUrl })
-    });
-    if(res.ok) toast("✅ لە Cloud پاشەکەوت کرا");
-    else toast("❌ کێشە لە سەیڤکردن");
-  }catch(e){ toast("کێشە لە پەیوەندی"); }
-}
-
-
-async function saveStudioToCloud(){
- try{
-  autoSync();
-  const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms`);
-  const current=await currentRes.json();
-  const data=current.data||{};
-  data.home={...(data.home||{}),hero:{...(data.home?.hero||{}),title:appState.i18n?.ku?.heroTitle||"",subtitle:appState.i18n?.ku?.heroSubtitle||"",imageUrl:appState.heroImageUrl||""}};
-  data.trips=Array.isArray(data.trips)?data.trips:[];
-  let trip=data.trips[0]||{id:"trip-main"};
-  trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
-  data.trips=[trip,...data.trips.slice(1)];
-  data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
-  const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  const d=await r.json();
-  if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
-  return true;
- }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
-}
-
-async function publishLive(){
-  autoSync();
-  await saveStudioToCloud();
-  await saveWhatsAppToCloud();
-  toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!");
-}
-function openLiveSite(){ window.open("index.html", "_blank"); }
-function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
-
-function exportBackup(){
-  autoSync();
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(appState, null, 2)], {type:"application/json"}));
-  a.download = `kurdia-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
-}
-function importBackup(e){
-  const file = e.target.files?.[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try{
-      appState = JSON.parse(ev.target.result);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-      loadState(); autoSync(); toast("✅ گەڕێنرایەوە");
-    }catch(err){ toast("❌ فایلی نادروست"); }
-  };
-  reader.readAsText(file);
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  if(sessionStorage.getItem("admin_auth") === "true"){
-    document.getElementById("adminAuthModal").style.display = "none";
-  }
-  loadState();
-  if(window.lucide) lucide.createIcons();
-});
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ku" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>KURDIA ADVENTURE — دەستەی کۆنترۆڵ</title>
-
-<!-- FONTS & ICONS -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-
-<!-- CROPPER.JS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
-
-<style>
+/* ===== KURDIA V5 VISUAL SYSTEM — merged into original Admin ===== */
 :root{
-  --primary:#9d1c32;
-  --primary2:#c92b49;
-  --bg:#070a10;
-  --surface:#0e141e;
-  --surface2:#131c29;
-  --border:rgba(255,255,255,.08);
-  --text:#ffffff;
-  --muted:#94a3b8;
-  --sidebar-w:280px;
+  --k5-bg:#06080d;--k5-panel:#0c1119;--k5-panel2:#111824;
+  --k5-line:rgba(255,255,255,.08);--k5-text:#f7f8fa;--k5-muted:#929dad;
+  --k5-red:#a91d37;--k5-red2:#d53350;--k5-green:#32c985;
 }
-*{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html, body{
-  width:100%; height:100%; overflow:hidden;
-  background:
-    radial-gradient(circle at 10% 5%, rgba(157,28,50,.18), transparent 28%),
-    radial-gradient(circle at 90% 35%, rgba(30,64,175,.1), transparent 28%),
-    radial-gradient(circle at 50% 85%, rgba(157,28,50,.12), transparent 30%),
-    var(--bg);
-  color:var(--text);
-  font-family:"Vazirmatn", sans-serif;
-}
-.app-container{ display:flex; width:100%; height:100%; position:relative; }
-#adminAuthModal{
-  position:fixed; inset:0; background:rgba(7,10,16,0.95); backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  z-index:999999; display:flex; align-items:center; justify-content:center; padding:20px;
-}
-.auth-box{
-  background:linear-gradient(145deg, rgba(19,28,41,.9), rgba(8,12,19,.95));
-  backdrop-filter:blur(25px);
-  border:1px solid var(--border); border-radius:24px;
-  width:100%; max-width:380px; padding:32px 24px; text-align:center;
-  box-shadow:0 30px 70px rgba(0,0,0,0.85);
+body{
+  background:radial-gradient(circle at 20% 0,rgba(169,29,55,.12),transparent 28%),#06080d!important;
 }
 .sidebar{
-  width:var(--sidebar-w); background:rgba(10,15,23,.85); backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px); border-left:1px solid var(--border);
-  display:flex; flex-direction:column; flex-shrink:0; z-index:100;
-  transition:transform .3s cubic-bezier(0.4, 0, 0.2, 1); height:100%;
+  background:rgba(8,11,17,.94)!important;
+  backdrop-filter:blur(20px)!important;
+  border-left:1px solid rgba(255,255,255,.08)!important;
 }
-.sidebar-header{
-  padding:18px 20px; border-bottom:1px solid var(--border);
-  display:flex; align-items:center; justify-content:space-between;
-}
-.brand{ display:flex; align-items:center; gap:10px; }
-.brand-icon{
-  width:38px; height:38px; border-radius:12px;
-  background:linear-gradient(135deg, var(--primary), var(--primary2));
-  display:flex; align-items:center; justify-content:center; color:#fff;
-  box-shadow:0 8px 20px rgba(157,28,50,.35);
-}
-.brand-text h2{ font-size:15px; font-weight:900; line-height:1; }
-.brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.18em; font-weight:800; }
-.nav-list{ list-style:none; padding:12px 10px; display:flex; flex-direction:column; gap:4px; flex:1; overflow-y:auto; }
-.nav-btn{
-  width:100%; border:0; background:transparent; color:#cbd5e1;
-  text-align:right; padding:11px 14px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:700;
-  display:flex; align-items:center; gap:12px; font-family:inherit; transition:.2s;
-}
-.nav-btn:hover{ background:rgba(255,255,255,.05); color:#fff; }
-.nav-btn.active{
-  background:linear-gradient(135deg, rgba(157,28,50,.35), rgba(201,43,73,.2));
-  color:#fff; border:1px solid rgba(201,43,73,.35);
-}
-.sidebar-footer{ padding:14px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
-.sidebar-backdrop{
-  position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(8px);
-  z-index:90; opacity:0; pointer-events:none; transition:.25s ease;
-}
-.sidebar-backdrop.active{ opacity:1; pointer-events:auto; }
-.workspace{ flex:1; display:flex; flex-direction:column; width:100%; height:100%; overflow:hidden; }
 .topbar{
-  height:64px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.8);
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-  display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0;
+  background:rgba(6,8,13,.82)!important;
+  backdrop-filter:blur(18px)!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
 }
-.topbar-right{ display:flex; align-items:center; gap:12px; }
-.menu-toggle{
-  display:none; background:rgba(255,255,255,.05); border:1px solid var(--border);
-  color:#fff; width:38px; height:38px; border-radius:10px; align-items:center; justify-content:center;
-  cursor:pointer;
+.content-body{max-width:1400px!important;margin:auto!important}
+.card,.p-5.rounded-2xl{
+  background:rgba(12,17,25,.9)!important;
+  border-color:rgba(255,255,255,.08)!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
 }
-.content-body{ flex:1; overflow-y:auto; padding:20px; -webkit-overflow-scrolling:touch; }
-.card{
-  background:linear-gradient(145deg, rgba(19,28,41,.75), rgba(8,12,19,.85));
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-  border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:18px;
-  box-shadow:0 20px 50px rgba(0,0,0,.25);
+.btn-primary{
+  background:linear-gradient(135deg,#d53350,#8d142c)!important;
 }
-.card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-.card-title{ font-size:15px; font-weight:800; display:flex; align-items:center; gap:8px; }
-.field{ margin-bottom:14px; }
-.field label{ display:block; font-size:11px; font-weight:800; margin-bottom:6px; color:#cbd5e1; }
-input, textarea, select{
-  width:100%; border:1px solid var(--border); border-radius:12px;
-  background:rgba(255,255,255,.04); color:#fff; padding:12px 14px; outline:none; font:inherit; font-size:13px;
-  transition:.2s;
+.k5-nav-sep{
+  margin:12px 5px 4px!important;color:#626c7b!important;font-size:9px!important;
+  font-weight:800!important;letter-spacing:1px!important;list-style:none!important;
 }
-input:focus, textarea:focus, select:focus{ border-color:var(--primary2); box-shadow:0 0 0 3px rgba(157,28,50,.2); }
-textarea{ min-height:85px; resize:vertical; }
-.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
-.grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-.btn{
-  border:0; border-radius:12px; padding:11px 18px; color:#fff;
-  font-weight:800; cursor:pointer; background:var(--primary); transition:.2s; font-family:inherit;
-  display:inline-flex; align-items:center; gap:8px; font-size:13px; justify-content:center; text-align:center;
-}
-.btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
-.btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow:0 8px 24px rgba(157,28,50,.3); }
-.btn-success{ background:linear-gradient(135deg, #10b981, #059669); }
-.btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--border); }
-.btn-danger{ background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); }
-.uploader-dropzone{
-  border:2px dashed rgba(255,255,255,.14); border-radius:16px; padding:20px; text-align:center;
-  cursor:pointer; background:rgba(255,255,255,.02); position:relative; overflow:hidden; transition:.2s;
-}
-.uploader-dropzone:hover{ border-color:var(--primary2); background:rgba(157,28,50,.05); }
-.dropzone-preview{
-  width:100%; height:150px; border-radius:12px; background-size:cover; background-position:center;
-  display:none; margin-top:10px; border:1px solid var(--border);
-}
-.dropzone-preview.active{ display:block; }
-.item-row{
-  display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
-  background:rgba(19,28,41,.6); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
-}
-.gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:10px; margin-top:10px; }
-.gallery-thumb{ height:90px; border-radius:12px; background-size:cover; background-position:center; position:relative; overflow:hidden; border:1px solid var(--border); }
-.gallery-delete{
-  position:absolute; top:4px; left:4px; width:22px; height:22px; border-radius:6px;
-  background:rgba(0,0,0,.75); color:#ef4444; border:0; display:flex; align-items:center; justify-content:center;
-}
-.page-tab{ display:none; }
-.page-tab.active{ display:block; animation:fadeIn .2s ease; }
-@keyframes fadeIn{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:translateY(0); } }
-.toast{
-  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
-  padding:14px 22px; border-radius:14px; background:#111827; border:1px solid var(--border);
-  box-shadow:0 20px 50px rgba(0,0,0,.8); opacity:0; transition:.3s; z-index:99999;
-  font-weight:800; font-size:12px; white-space:nowrap;
-}
-.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-#cropModalWrapper{
-  position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:99999;
-  display:none; align-items:center; justify-content:center; padding:16px;
-}
-.crop-container-card{
-  background:var(--surface); border:1px solid var(--border); border-radius:20px;
-  width:100%; max-width:540px; padding:18px; display:flex; flex-direction:column; gap:12px;
-}
-.crop-img-holder{ width:100%; height:320px; background:#000; border-radius:12px; overflow:hidden; }
-.lang-box-tab{ border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:14px; background:rgba(255,255,255,.02); }
-@media(max-width:850px){
-  .sidebar{ position:fixed; top:0; right:0; bottom:0; transform:translateX(100%); box-shadow:-12px 0 35px rgba(0,0,0,.8); }
-  .sidebar.open{ transform:translateX(0); }
-  .menu-toggle{ display:flex; }
-  .grid-2, .grid-3, .grid-4{ grid-template-columns:1fr; }
-}
+.k5-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:10px;color:#cbd3de}
+.k5-status{display:inline-flex;align-items:center;gap:6px}.k5-dot{width:8px;height:8px;border-radius:50%;background:#32c985;box-shadow:0 0 12px rgba(50,201,133,.6)}.k5-dot.warn{background:#f0b44b}.k5-dot.err{background:#d53350}
+.k5-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.k5-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.k5-mini{padding:13px;border-radius:17px;background:#0a0f16;border:1px solid rgba(255,255,255,.08)}.k5-mini b{display:block;font-size:18px}.k5-mini small{color:#929dad;font-size:10px}
+.k5-table{width:100%;border-collapse:separate;border-spacing:0 7px}.k5-table th{font-size:10px;color:#8f99a8;text-align:right;padding:4px 8px}.k5-table td{background:#0a0f16;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);padding:10px 8px;font-size:11px}.k5-table td:first-child{border-right:1px solid rgba(255,255,255,.08);border-radius:0 12px 12px 0}.k5-table td:last-child{border-left:1px solid rgba(255,255,255,.08);border-radius:12px 0 0 12px}
+.k5-publish{position:relative;overflow:hidden}.k5-publish:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 0,rgba(211,47,78,.16),transparent 45%);pointer-events:none}
+.k5-preview{min-height:260px;background:#05070b;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:18px}.k5-preview .pv-hero{padding:20px;border-radius:18px;background:linear-gradient(135deg,rgba(169,29,55,.22),rgba(255,255,255,.03));margin-bottom:12px}.k5-preview .pv-title{font-size:25px;font-weight:900}.k5-preview .pv-card{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;margin-top:9px}
+.k5-log{max-height:390px;overflow:auto;display:grid;gap:7px}.k5-filter{max-width:260px}.k5-actions{display:flex;gap:7px;flex-wrap:wrap}.k5-section-note{font-size:11px;color:#929dad;line-height:1.8}.k5-progress{height:8px;background:#080d14;border:1px solid rgba(255,255,255,.08);border-radius:99px;overflow:hidden}.k5-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#8d142c,#d53350);border-radius:99px}.k5-lock{font-size:10px;color:#ff8ba0}.k5-danger{border-color:rgba(211,47,78,.28)!important;background:rgba(211,47,78,.06)!important}
+@media(max-width:850px){.k5-grid3,.k5-grid2{grid-template-columns:1fr}.k5-table{display:block;overflow:auto}.k5-table th,.k5-table td{white-space:nowrap}.k5-filter{max-width:none;width:100%}}
 
-/* ===== KURDIA v5 ADMIN ADDITIONS ===== */
-.admin-map{height:300px;border-radius:18px;overflow:hidden;border:1px solid var(--border)}
-.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.status-chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
-@media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
 </style>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 <body>
 
@@ -1658,6 +281,18 @@ textarea{ min-height:85px; resize:vertical; }
       <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="credit-card"></i> دارایی و FIB</button></li>
       <li><button class="nav-btn" onclick="switchTab('sheets_tab')"><i data-lucide="file-spreadsheet"></i> پەیوەندی بە Sheets</button></li>
       <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
+
+      <li class="k5-nav-sep">CONTROL CENTER V5</li>
+      <li><button class="nav-btn" onclick="switchTab('k5_analytics')"><i data-lucide="bar-chart-3"></i> ئامار و چاودێری</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users"></i> کۆمەڵگا</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_coupons')"><i data-lucide="ticket"></i> Coupons & Offers</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_finance')"><i data-lucide="wallet"></i> Finance Center</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_communications')"><i data-lucide="messages-square"></i> پەیوەندییەکان</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_activity')"><i data-lucide="history"></i> Activity Log</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_diagnostics')"><i data-lucide="stethoscope"></i> Diagnostics</button></li>
+      <li><button class="nav-btn" onclick="switchTab('k5_settings')"><i data-lucide="settings"></i> Settings</button></li>
+
     </ul>
 
     <div class="sidebar-footer">
@@ -2068,6 +703,17 @@ textarea{ min-height:85px; resize:vertical; }
           </div>
         </div>
       </section>
+
+
+<section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
+<section id="tab-k5_publish" class="page-tab"><div class="card k5-publish"><h2>🚀 Publish Center</h2><p class="k5-section-note">هیچ گۆڕانکارییەک پێش Preview بڵاوناکرێتەوە. Draft و Preview لێرە کۆنترۆڵ دەکرێن.</p><div class="k5-actions"><button class="btn ghost" onclick="k5Preview()">Preview</button><button class="btn ghost" onclick="k5SaveDraft()">Save Draft</button><button class="btn red" onclick="publishLive()">Publish</button><button class="btn danger" onclick="k5UnpublishNotice()">Unpublish</button></div></div><div class="k5-grid2"><div class="card"><h3>Draft</h3><div id="k5DraftInfo" class="k5-section-note">دوایین draft: ـ</div></div><div class="card"><h3>Live</h3><div id="k5LiveInfo" class="k5-section-note">دوایین publish: ـ</div></div></div><div class="card"><h3>Preview</h3><div id="k5Preview" class="k5-preview"><div class="muted">Preview لێرە دەردەکەوێت.</div></div></div></section>
+<section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
+<section id="tab-k5_coupons" class="page-tab"><div class="card"><h2>🎟️ Coupons & Offers</h2><p class="k5-section-note">کۆدی داشکاندن بە شێوەیەکی ڕوون بەڕێوەبەرە.</p><div class="formgrid"><div class="field"><label>کۆد</label><input id="k5CouponCode" class="input" placeholder="KURDIA10"></div><div class="field"><label>داشکاندن %</label><input id="k5CouponPercent" class="input" type="number" min="0" max="100" value="10"></div><div class="field"><label>تا بەروار</label><input id="k5CouponExpiry" class="input" type="date"></div><div class="field"><label>ژمارەی بەکارهێنان</label><input id="k5CouponLimit" class="input" type="number" min="1" value="100"></div></div><div class="k5-actions" style="margin-top:10px"><button class="btn red" onclick="k5AddCoupon()">زیادکردن</button></div></div><div class="card"><div id="k5CouponList" class="list"></div></div></section>
+<section id="tab-k5_finance" class="page-tab"><div class="hero"><div class="eyebrow">FINANCE</div><h1>پارە و FIB</h1><p class="muted">زانیاری پارەدان و receipt ـەکان بۆ چاودێرییە، نەک بۆ گۆڕینی داتای بانکی لێرە.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Paid</small><b id="k5Paid">—</b></div><div class="k5-mini"><small>Pending</small><b id="k5Pending">—</b></div><div class="k5-mini"><small>Receipts</small><b id="k5Receipts">—</b></div></div><div class="card"><h3>FIB Configuration</h3><div class="formgrid"><div class="field"><label>ناوی هەژمار</label><input id="k5FibName" class="input"></div><div class="field"><label>ژمارە/ID ـی هەژمار</label><input id="k5FibAccount" class="input"></div></div><div class="k5-lock" style="margin-top:8px">زانیاری هەژماری بانکی تەنها لە Worker/CMS ـی پارێزراو هەڵبگرە.</div></div></section>
+<section id="tab-k5_communications" class="page-tab"><div class="card"><h2>💬 Communications</h2><div class="k5-grid2"><div class="k5-mini"><b>WhatsApp</b><span id="k5WaStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>Telegram</b><span id="k5TgStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>AI</b><span id="k5AiStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div><div class="k5-mini"><b>Google Sheets</b><span id="k5SheetStatus" class="k5-status"><i class="k5-dot warn"></i> چاوەڕوان</span></div></div></div><div class="card"><h3>WhatsApp Templates</h3><table class="k5-table"><thead><tr><th>Template</th><th>بەکارهێنان</th><th>دۆخ</th></tr></thead><tbody><tr><td>kurdia_notification</td><td>OTP</td><td>Active</td></tr><tr><td>trip_confirmation</td><td>پشتڕاستکردنەوەی گەشت</td><td>Active</td></tr><tr><td>trip_rejected</td><td>ڕەتکردنەوە</td><td>Active</td></tr><tr><td>trip_notification</td><td>ئاگاداری گەشت</td><td>Active</td></tr></tbody></table></div></section>
+<section id="tab-k5_activity" class="page-tab"><div class="card"><div class="toolbar"><h2 style="margin:0;flex:1">🕒 Activity Log</h2><button class="btn ghost" onclick="k5ClearLogs()">پاککردنەوە</button></div><div id="k5Activity" class="k5-log"></div></div></section>
+<section id="tab-k5_diagnostics" class="page-tab"><div class="hero"><div class="eyebrow">SYSTEM</div><h1>Diagnostics</h1><p class="muted">پشکنینی Worker و integration ـە سەرەکییەکان.</p></div><div class="toolbar"><button class="btn red" onclick="k5Diagnostics()">Run Diagnostics</button><span id="k5DiagTime" class="k5-badge">هێشتا پشکنین نەکراوە</span></div><div id="k5Diagnostics" class="list"></div></section>
+<section id="tab-k5_settings" class="page-tab"><div class="card"><h2>⚙️ Settings</h2><div class="formgrid"><div class="field"><label>ناوی براند</label><input id="k5Brand" class="input" value="KURDIA ADVENTURE"></div><div class="field"><label>زمانی سەرەکی</label><select id="k5Lang" class="select"><option value="ku">کوردی</option><option value="ar">عەرەبی</option><option value="en">English</option></select></div><div class="field"><label>Theme</label><select id="k5Theme" class="select"><option>Dark Cinematic</option></select></div><div class="field"><label>Maintenance Mode</label><label class="switch"><input id="k5Maintenance" type="checkbox"> چالاککردن</label></div></div><button class="btn red" style="margin-top:10px" onclick="k5SaveSettings()">پاشەکەوتی Settings</button></div><div class="card k5-danger"><h3>Danger Zone</h3><p class="k5-section-note">Reset ـی local CMS تەنها داتای ناوخۆیی ئەم Admin ـە دەسڕێتەوە.</p><button class="btn danger" onclick="resetData()">Reset Local CMS</button></div></section>
 
     </div>
   </main>
@@ -2839,6 +1485,99 @@ window.addEventListener("DOMContentLoaded", () => {
   loadState();
   if(window.lucide) lucide.createIcons();
 });
+
+/* ===== KURDIA V5 MERGED CONTROL CENTER ===== */
+(function(){
+  const K5={activityKey:'kurdia_admin_activity',couponKey:'kurdia_admin_coupons',draftKey:'kurdia_admin_draft',settingsKey:'kurdia_admin_settings'};
+  function esc(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));}
+  function klog(action,detail){
+    let a=[];try{a=JSON.parse(localStorage.getItem(K5.activityKey)||'[]')}catch{}
+    a.unshift({at:new Date().toISOString(),action,detail});localStorage.setItem(K5.activityKey,JSON.stringify(a.slice(0,100)));k5RenderLogs();
+  }
+  function k5RenderLogs(){
+    const box=document.getElementById('k5Activity');if(!box)return;
+    let a=[];try{a=JSON.parse(localStorage.getItem(K5.activityKey)||'[]')}catch{}
+    box.innerHTML=a.length?a.map(x=>`<div class="item-row"><div><b>${esc(x.action)}</b><div class="text-xs text-gray-400">${esc(x.detail||'')}</div></div><small>${new Date(x.at).toLocaleString('ku-IQ')}</small></div>`).join(''):'<div class="text-gray-400 text-sm">هیچ activity ـی نییە.</div>';
+  }
+  window.k5Preview=function(){
+    const d=window.appState||{};
+    const hero=d.i18n?.ku?.heroTitle||'KURDIA ADVENTURE';
+    const text=d.i18n?.ku?.heroSubtitle||'گەشت، سروشت و ئەزموونی جیاواز.';
+    const title=d.i18n?.ku?.tripTitle||'گەشتی ئەم هەفتەیە';
+    const loc=d.i18n?.ku?.tripLocation||'شوێنی گەشت';
+    const price=d.i18n?.ku?.tripPrice||'';
+    const box=document.getElementById('k5Preview');
+    if(!box)return;
+    box.innerHTML=`<div class="pv-hero"><div class="eyebrow">KURDIA ADVENTURE</div><div class="pv-title">${esc(hero)}</div><p class="muted">${esc(text)}</p></div><div class="pv-card"><b>${esc(title)}</b><div class="k5-section-note">${esc(loc)} ${price?' · '+esc(price):''}</div></div>`;
+    klog('Preview','پێشبینینی Home دروست کرا');
+  };
+  window.k5SaveDraft=function(){
+    try{autoSync();localStorage.setItem(K5.draftKey,JSON.stringify(appState||{}));const el=document.getElementById('k5DraftInfo');if(el)el.textContent='Draft پاشەکەوت کرا: '+new Date().toLocaleString('ku-IQ');klog('Draft','Draft پاشەکەوت کرا');toast('Draft پاشەکەوت کرا ✓')}catch(e){toast('Draft هەڵەی هەیە')}}
+  window.k5UnpublishNotice=function(){toast('Unpublish بۆ Worker route ـی تایبەت پێویستە؛ داتای Live نەگۆڕدرا.');klog('Unpublish','داواکاری Unpublish تۆمار کرا');};
+  window.k5AddCoupon=function(){
+    const code=document.getElementById('k5CouponCode')?.value.trim();if(!code)return toast('کۆد بنووسە');
+    const c={code,percent:Number(document.getElementById('k5CouponPercent')?.value)||0,expiry:document.getElementById('k5CouponExpiry')?.value||'',limit:Number(document.getElementById('k5CouponLimit')?.value)||1};
+    let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{};a.push(c);localStorage.setItem(K5.couponKey,JSON.stringify(a));document.getElementById('k5CouponCode').value='';k5RenderCoupons();klog('Coupon','کۆدی '+c.code+' زیادکرا');
+  };
+  function k5RenderCoupons(){
+    const box=document.getElementById('k5CouponList');if(!box)return;let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{}
+    box.innerHTML=a.length?a.map((x,i)=>`<div class="item-row"><div><b>${esc(x.code)}</b><div class="text-xs text-gray-400">${x.percent}% · ${esc(x.expiry||'بێ سنوور')} · ${x.limit} بەکارهێنان</div></div><button class="btn btn-danger" onclick="k5DeleteCoupon(${i})">سڕینەوە</button></div>`).join(''):'<div class="text-gray-400 text-sm">هیچ Coupon ـێک نییە.</div>';
+  }
+  window.k5DeleteCoupon=function(i){let a=[];try{a=JSON.parse(localStorage.getItem(K5.couponKey)||'[]')}catch{};a.splice(i,1);localStorage.setItem(K5.couponKey,JSON.stringify(a));k5RenderCoupons();klog('Coupon','کۆد سڕایەوە')};
+  window.k5FilterCommunity=function(){
+    const q=(document.getElementById('k5CommunitySearch')?.value||'').toLowerCase();
+    const list=(appState?.stories||[]).filter(x=>String(x.name||x.title||'').toLowerCase().includes(q));
+    const box=document.getElementById('k5CommunityList');if(!box)return;
+    box.innerHTML=list.map(x=>`<div class="item-row"><div><b>${esc(x.name||x.title||'Story')}</b><div class="text-xs text-gray-400">${esc(x.status||'local')}</div></div></div>`).join('')||'<div class="text-gray-400 text-sm">هیچ ئەنجامێک نییە.</div>';
+  };
+  window.k5ClearLogs=function(){localStorage.removeItem(K5.activityKey);k5RenderLogs();};
+  window.k5SaveSettings=function(){
+    const s={brand:document.getElementById('k5Brand')?.value||'KURDIA ADVENTURE',lang:document.getElementById('k5Lang')?.value||'ku',theme:document.getElementById('k5Theme')?.value||'Dark Cinematic',maintenance:!!document.getElementById('k5Maintenance')?.checked};
+    localStorage.setItem(K5.settingsKey,JSON.stringify(s));klog('Settings','Settings پاشەکەوت کرا');toast('Settings پاشەکەوت کرا ✓');
+  };
+  window.k5Diagnostics=async function(){
+    const box=document.getElementById('k5Diagnostics');if(!box)return;box.innerHTML='<div class="item-row">پشکنین دەکرێت...</div>';
+    const checks=[];
+    try{
+      const r=await adminFetch(`${WORKER_URL}/api/admin/diagnostics`,{headers:{'x-admin-key':ADMIN_SECRET_PIN}});
+      const x=await r.json().catch(()=>({}));
+      if(Array.isArray(x.checks))x.checks.forEach(c=>checks.push(c));else checks.push({name:'Worker Diagnostics',status:r.ok?'online':'error',detail:r.status});
+    }catch(e){checks.push({name:'Worker Diagnostics',status:'error',detail:'پەیوەندی نییە'});}
+    box.innerHTML=checks.map(c=>`<div class="item-row"><span class="k5-status"><i class="k5-dot ${c.status==='online'?'':'err'}"></i></span><div style="flex:1"><b>${esc(c.name||'Service')}</b><div class="text-xs text-gray-400">${esc(c.detail||c.status||'')}</div></div><span class="k5-badge">${esc(c.status||'')}</span></div>`).join('');
+    const tm=document.getElementById('k5DiagTime');if(tm)tm.textContent='دوایین پشکنین: '+new Date().toLocaleTimeString('ku-IQ');klog('Diagnostics','پشکنینی سیستم ئەنجامدرا');
+  };
+  window.k5LoadOps=async function(){
+    try{
+      const h={headers:{'x-admin-key':ADMIN_SECRET_PIN}};
+      const [b,p]=await Promise.all([adminFetch(`${WORKER_URL}/api/admin/registrations`,h),adminFetch(`${WORKER_URL}/api/admin/private-requests`,h)]);
+      const bj=await b.json().catch(()=>({})),pj=await p.json().catch(()=>({}));
+      const bs=bj.registrations||[],ps=pj.requests||[];
+      const bc=document.getElementById('k5BookCount');if(bc)bc.textContent=bs.length;
+      const pc=document.getElementById('k5PrivateCount');if(pc)pc.textContent=ps.length;
+      const sc=document.getElementById('k5StoryPending');if(sc)sc.textContent=(appState?.stories||[]).filter(x=>x.status==='pending'||!x.status).length;
+      const cap=Number(appState?.capacity)||0,book=Number(appState?.booked)||0,pct=cap?Math.min(100,Math.round(book/cap*100)):0;
+      const bar=document.getElementById('k5CapacityBar');if(bar)bar.style.width=pct+'%';
+      const txt=document.getElementById('k5CapacityText');if(txt)txt.textContent=`${book} / ${cap||'—'} بەشداربوو · ${pct}% پڕبوون`;
+      const paid=bs.filter(x=>['paid','approved','confirmed'].includes(String(x.status||'').toLowerCase())).length;
+      if(document.getElementById('k5Paid'))document.getElementById('k5Paid').textContent=paid;
+      if(document.getElementById('k5Pending'))document.getElementById('k5Pending').textContent=Math.max(0,bs.length-paid);
+      if(document.getElementById('k5Receipts'))document.getElementById('k5Receipts').textContent=bs.filter(x=>x.receipt||x.receiptUrl).length;
+    }catch(e){}
+  };
+  const oldSwitch=window.switchTab;
+  window.switchTab=function(id){
+    oldSwitch(id);
+    if(id==='k5_analytics')k5LoadOps();
+    if(id==='k5_publish')k5Preview();
+    if(id==='k5_community')k5FilterCommunity();
+    if(id==='k5_coupons')k5RenderCoupons();
+    if(id==='k5_activity')k5RenderLogs();
+  };
+  const oldPublish=window.publishLive;
+  window.publishLive=async function(){await oldPublish();klog('Publish','CMS بڵاوکرایەوە');const el=document.getElementById('k5LiveInfo');if(el)el.textContent='دوایین Publish: '+new Date().toLocaleString('ku-IQ');};
+  k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
+})();
+
 </script>
 </body>
 </html>
