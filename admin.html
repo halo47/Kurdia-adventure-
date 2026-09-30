@@ -184,28 +184,11 @@ textarea{ min-height:85px; resize:vertical; }
 .status-chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
 @media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
 
-/* MOBILE FIX — keep the exact same visual design, remove desktop overflow */
-@media (max-width:850px){
-  html,body{overflow:hidden;width:100%;max-width:100%;}
-  .app-container{width:100%;min-width:0;overflow:hidden;}
-  .workspace{width:100%;min-width:0;max-width:100%;}
-  .content-body{width:100%;min-width:0;padding:12px;overflow-x:hidden;}
-  .topbar{width:100%;min-width:0;padding:0 12px;}
-  .topbar-right{min-width:0;}
-  #topbarTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;}
-  .card{width:100%;max-width:100%;padding:16px;border-radius:18px;}
-  .grid-2,.grid-3,.grid-4{width:100%;grid-template-columns:1fr;gap:10px;}
-  .item-row{width:100%;min-width:0;flex-wrap:wrap;gap:8px;}
-  .btn{max-width:100%;}
-  .sidebar{width:min(320px,88vw);}
-  .sidebar.open{transform:translateX(0);}
-}
-@media (min-width:851px){
-  .workspace{min-width:0;}
-}
+/* ===== PUBLIC CMS EXTENSIONS ===== */
+.public-cms-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.03);margin-bottom:8px}.public-cms-item input,.public-cms-item textarea{width:100%;background:#0a1019;color:#fff;border:1px solid var(--border);border-radius:10px;padding:9px}.public-cms-item textarea{min-height:65px}.public-cms-actions{display:flex;gap:6px;flex-wrap:wrap}.public-cms-thumb{width:64px;height:48px;border-radius:10px;background-size:cover;background-position:center}
 </style>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 <body>
@@ -256,6 +239,17 @@ textarea{ min-height:85px; resize:vertical; }
       <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="credit-card"></i> دارایی و FIB</button></li>
       <li><button class="nav-btn" onclick="switchTab('sheets_tab')"><i data-lucide="file-spreadsheet"></i> پەیوەندی بە Sheets</button></li>
       <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="hard-drive"></i> Backup & Restore</button></li>
+      <li><button class="nav-btn" onclick="switchTab('public_destinations')"><i data-lucide="map-pinned"></i> شوێنەکان</button></li>
+      <li><button class="nav-btn" onclick="switchTab('public_safety')"><i data-lucide="shield-check"></i> سەلامەتی گەشت</button></li>
+      <li><button class="nav-btn" onclick="switchTab('public_prep')"><i data-lucide="backpack"></i> ئامادەکاری گەشت</button></li>
+      <li><button class="nav-btn" onclick="switchTab('public_reviews')"><i data-lucide="star"></i> هەڵسەنگاندن</button></li>
+      <li><button class="nav-btn" onclick="switchTab('public_about')"><i data-lucide="info"></i> دەربارەی تیمەکە</button></li>
+      <li><button class="nav-btn" onclick="switchTab('public_contact')"><i data-lucide="phone"></i> پەیوەندی</button></li>
+      <li><button class="nav-btn" onclick="switchTab('public_social')"><i data-lucide="share-2"></i> سۆشیال میدیا</button></li>
+      <li><button class="nav-btn" onclick="switchTab('analytics')"><i data-lucide="bar-chart-3"></i> ئامار</button></li>
+      <li><button class="nav-btn" onclick="switchTab('publish')"><i data-lucide="rocket"></i> Publish</button></li>
+      <li><button class="nav-btn" onclick="switchTab('activity')"><i data-lucide="history"></i> Activity Log</button></li>
+      <li><button class="nav-btn" onclick="switchTab('settings')"><i data-lucide="settings"></i> Settings</button></li>
     </ul>
 
     <div class="sidebar-footer">
@@ -655,6 +649,72 @@ textarea{ min-height:85px; resize:vertical; }
  </div>
 </section>
 
+
+      <!-- PUBLIC DESTINATIONS -->
+      <section class="page-tab" id="tab-public_destinations">
+        <div class="card"><div class="card-title"><i data-lucide="map-pinned"></i> بەڕێوەبردنی شوێنەکان</div>
+          <div class="grid-2"><div class="field"><label>ناوی شوێن</label><input id="destName"></div><div class="field"><label>جۆر</label><input id="destType" placeholder="دریاچە / ئاوشار / سروشت"></div></div>
+          <div class="field"><label>وێنە URL</label><input id="destImg" dir="ltr"></div><div class="field"><label>پێناسە</label><textarea id="destDesc"></textarea></div>
+          <button class="btn btn-primary w-full mb-3" onclick="addPublicDestination()">+ زیادکردنی شوێن</button><div id="publicDestinationsList"></div>
+        </div>
+      </section>
+
+      <!-- PUBLIC SAFETY -->
+      <section class="page-tab" id="tab-public_safety">
+        <div class="card"><div class="card-title"><i data-lucide="shield-check"></i> سەلامەتی گەشت — ناوەڕۆکی هەمیشەیی</div>
+          <p class="small-note">ئەم بەشە بۆ زانیاری گشتیی سەلامەتییە، نەک تەنها بۆ گەشتی هەفتە.</p>
+          <div class="grid-2"><div class="field"><label>ناونیشان</label><input id="pubSafetyTitle"></div><div class="field"><label>سەرچاوە</label><input id="pubSafetySource" placeholder="CDC / WHO / NWS ..."></div></div>
+          <div class="field"><label>ڕوونکردنەوە</label><textarea id="pubSafetyDesc"></textarea></div><div class="field"><label>لینکی سەرچاوە</label><input id="pubSafetyUrl" dir="ltr"></div>
+          <button class="btn btn-primary w-full mb-3" onclick="addPublicSafety()">+ زیادکردنی بابەت</button><div id="publicSafetyList"></div>
+        </div>
+      </section>
+
+      <!-- PUBLIC PREP -->
+      <section class="page-tab" id="tab-public_prep">
+        <div class="card"><div class="card-title"><i data-lucide="backpack"></i> ئامادەکاری گەشت</div>
+          <p class="small-note">ئەم بەشە تەنها بۆ خەڵکە تا بزانێت بۆ جۆری گەشت چی پێویستە؛ بەشی گەشتی هەفتە نییە.</p>
+          <div class="grid-2"><div class="field"><label>ناوی سیستەم</label><input id="prepName" placeholder="Camping"></div><div class="field"><label>ناونیشان</label><input id="prepTitle" placeholder="کەمپینگ"></div></div>
+          <div class="grid-2"><div class="field"><label>ئایکۆن</label><input id="prepIcon" placeholder="🎒"></div><div class="field"><label>پێداویستییەکان</label><textarea id="prepItems" placeholder="خێمە، ئاو، چرای سەر..." ></textarea></div></div>
+          <button class="btn btn-primary w-full mb-3" onclick="addPublicPrep()">+ زیادکردنی جۆر</button><div id="publicPrepList"></div>
+        </div>
+      </section>
+
+      <!-- PUBLIC REVIEWS -->
+      <section class="page-tab" id="tab-public_reviews"><div class="card"><div class="card-title"><i data-lucide="star"></i> بیروڕا و هەڵسەنگاندن — دەستکاری و ڕەفض</div>
+        <div class="grid-2"><div class="field"><label>ناو</label><input id="pubReviewName"></div><div class="field"><label>شار</label><input id="pubReviewCity"></div></div><div class="field"><label>دەق</label><textarea id="pubReviewText"></textarea></div><button class="btn btn-primary w-full mb-3" onclick="addPublicReview()">+ زیادکردن</button><div id="publicReviewsList"></div>
+      </div></section>
+
+      <!-- ABOUT -->
+      <section class="page-tab" id="tab-public_about"><div class="card"><div class="card-title"><i data-lucide="info"></i> دەربارەی تیمەکە</div>
+        <div class="field"><label>ناونیشان</label><input id="aboutTitle"></div><div class="field"><label>دەق</label><textarea id="aboutText"></textarea></div><div class="field"><label>وێنە URL</label><input id="aboutImage" dir="ltr"></div>
+        <div class="grid-2"><div class="field"><label>ئاماری ١</label><input id="aboutStat1"></div><div class="field"><label>ئاماری ٢</label><input id="aboutStat2"></div><div class="field"><label>ئاماری ٣</label><input id="aboutStat3"></div></div>
+        <button class="btn btn-primary w-full" onclick="savePublicAbout()">💾 پاشەکەوتکردنی دەربارەی تیم</button>
+      </div></section>
+
+      <!-- CONTACT -->
+      <section class="page-tab" id="tab-public_contact"><div class="card"><div class="card-title"><i data-lucide="phone"></i> پەیوەندی</div>
+        <div class="grid-2"><div class="field"><label>WhatsApp</label><input id="contactWhatsApp" dir="ltr"></div><div class="field"><label>تەلەفۆن</label><input id="contactPhone" dir="ltr"></div><div class="field"><label>شوێن</label><input id="contactCity"></div><div class="field"><label>Email</label><input id="contactEmail" dir="ltr"></div></div><div class="field"><label>Google Maps</label><input id="contactMap" dir="ltr"></div>
+        <button class="btn btn-primary w-full" onclick="savePublicContact()">💾 پاشەکەوتکردنی پەیوەندی</button>
+      </div></section>
+
+      <!-- SOCIAL -->
+      <section class="page-tab" id="tab-public_social"><div class="card"><div class="card-title"><i data-lucide="share-2"></i> سۆشیال میدیا</div>
+        <div class="grid-2"><div class="field"><label>Instagram</label><input id="socialInstagram" dir="ltr"></div><div class="field"><label>TikTok</label><input id="socialTiktok" dir="ltr"></div><div class="field"><label>YouTube</label><input id="socialYoutube" dir="ltr"></div><div class="field"><label>Facebook</label><input id="socialFacebook" dir="ltr"></div><div class="field"><label>Telegram</label><input id="socialTelegram" dir="ltr"></div></div>
+        <button class="btn btn-primary w-full" onclick="savePublicSocial()">💾 پاشەکەوتکردنی سۆشیال میدیا</button>
+      </div></section>
+
+      <!-- ANALYTICS -->
+      <section class="page-tab" id="tab-analytics"><div class="hero"><div class="eyebrow">CONTROL CENTER</div><h1>ئامار</h1><p class="muted">ئاماری ناوخۆیی و دۆخی ناونووسین.</p></div><div class="grid-2"><div class="card"><h3>بەشداربووان</h3><b id="k5AnalBooked" style="font-size:30px">0</b></div><div class="card"><h3>شوێنی ماوە</h3><b id="k5AnalAvailable" style="font-size:30px">0</b></div></div></section>
+
+      <!-- PUBLISH -->
+      <section class="page-tab" id="tab-publish"><div class="card"><div class="card-title"><i data-lucide="rocket"></i> Publish</div><p class="small-note">هەموو ناوەڕۆکی Admin ـەکە هەڵبگرە و بۆ Cloud CMS بنێرە.</p><button class="btn btn-success w-full" onclick="publishLive()">🚀 Publish بۆ ویبسایت</button></div></section>
+
+      <!-- ACTIVITY -->
+      <section class="page-tab" id="tab-activity"><div class="card"><div class="toolbar"><h2 style="margin:0;flex:1">🕒 Activity Log</h2><button class="btn ghost" onclick="k5ClearLogs()">پاککردنەوە</button></div><div id="k5Activity" class="list"></div></div></section>
+
+      <!-- SETTINGS -->
+      <section class="page-tab" id="tab-settings"><div class="card"><div class="card-title"><i data-lucide="settings"></i> Settings</div><div class="grid-2"><div class="field"><label>ناوی براند</label><input id="k5Brand" value="KURDIA ADVENTURE"></div><div class="field"><label>زمانی سەرەکی</label><select id="k5Lang"><option value="ku">کوردی</option><option value="ar">عەرەبی</option><option value="en">English</option></select></div></div><button class="btn btn-primary w-full" onclick="k5SaveSettings()">پاشەکەوت</button></div></section>
+
       <!-- BACKUP -->
       <section class="page-tab" id="tab-backup">
         <div class="card">
@@ -774,7 +834,23 @@ let appState = {
     { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
   ],
 
-  gallery: []
+  gallery: [],
+
+  destinations: [
+    {name:"دەریاچەی دووکان", type:"دریاچە", img:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=80", description:"شوێنێکی جوان بۆ سروشت و ئارامگرتن."},
+    {name:"ئاوشاری گۆیژە", type:"ئاوشار", img:"https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=700&q=80", description:"ئاوی روان و دیمەنی سروشتی."},
+    {name:"هەڵگورد", type:"شاخ", img:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80", description:"بۆ ئەوانەی حەزیان لە سەرکێشییە."}
+  ],
+  prep: [
+    {name:"Camping", title:"کەمپینگ", icon:"🎒", items:["خێمە","کیسەی خەوتن","چرای سەر","ئاو","کەرەستەی یارمەتیی یەکەم"]},
+    {name:"Nature", title:"سروشت", icon:"🌿", items:["جل و پێڵاوی گونجاو","ئاو","کریم خۆر","نەخشە/GPS","Power Bank"]},
+    {name:"Waterfall", title:"ئاوشار", icon:"💧", items:["پێڵاوی دژ بە ئاو","جل گۆڕین","ئاو","کریم خۆر","First Aid"]},
+    {name:"Road Trip", title:"Road Trip", icon:"🚙", items:["سووتەمەنی","چارەسەری پەنچر","شارژەر","نەخشە","ئاو"]},
+    {name:"Family", title:"خێزان", icon:"👨‍👩‍👧‍👦", items:["خواردن","ئاو","کەرەستەی منداڵ","First Aid","پلانێکی ئارام"]}
+  ],
+  about: {title:"گەشت، سروشت، هاوڕێیەتی.", text:"ئێمە باوەڕمان وایە گەشت تەنها گەیشتن بە شوێنێک نییە؛ ئەزموونێکە کە لەگەڵ خەڵک و سروشت دروست دەبێت.", imageUrl:"https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=1000&q=85", stats:[{num:"20K+",label:"بەشداربوو"},{num:"200+",label:"گەشت"},{num:"4.9",label:"هەڵسەنگاندن"}]},
+  contact: {whatsapp:"+9647503130360", phone:"+9647503130360", city:"هەولێر — کوردستان", email:"", mapUrl:""},
+  social: {instagram:"", tiktok:"", youtube:"", facebook:"", telegram:""}
 };
 
 let cachedRegistrations = [];
@@ -1144,6 +1220,7 @@ function autoSync(){
 }
 
 function loadState(){
+  ensurePublicCMS();
   try{
     const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("KURDIA_BUILDER_STATE");
     if(raw){
@@ -1222,6 +1299,9 @@ function loadState(){
   renderStatsList();
   renderItinerary();
   renderSafetyList();
+  ensurePublicCMS();
+  renderPublicCMS();
+  renderK5Activity();
 }
 
 function toast(msg){
@@ -1242,8 +1322,8 @@ function switchTab(tabId){
   if(target) target.classList.add("active");
 
   document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
-  if(window.event?.currentTarget?.classList) window.event.currentTarget.classList.add("active");
-  if(window.innerWidth <= 850 && document.getElementById("sidebar")?.classList.contains("open")) toggleSidebar();
+  if(event?.currentTarget?.classList) event.currentTarget.classList.add("active");
+  if(window.innerWidth <= 850) toggleSidebar();
 
   if(tabId === 'stories_tab'){
     fetchAdminStories();
@@ -1256,6 +1336,9 @@ function switchTab(tabId){
   }
   if(tabId === 'diagnostics_tab'){
     runDiagnostics();
+  }
+  if(['public_destinations','public_safety','public_prep','public_reviews','public_about','public_contact','public_social','analytics','activity'].includes(tabId)){
+    ensurePublicCMS(); renderPublicCMS(); renderK5Activity();
   }
 }
 
@@ -1395,6 +1478,14 @@ async function saveStudioToCloud(){
   trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
   data.trips=[trip,...data.trips.slice(1)];
   data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
+  data.destinations=appState.destinations||[];
+  data.safety=appState.safety||[];
+  data.prep=appState.prep||[];
+  data.gallery=appState.gallery||[];
+  data.reviews=appState.reviews||[];
+  data.about=appState.about||{};
+  data.contact=appState.contact||{};
+  data.social=appState.social||{};
   const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
   const d=await r.json();
   if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
@@ -1430,15 +1521,52 @@ function importBackup(e){
   reader.readAsText(file);
 }
 
+
+/* ===== PUBLIC CMS MANAGEMENT ===== */
+function ensurePublicCMS(){
+  if(!Array.isArray(appState.destinations)) appState.destinations=[];
+  if(!Array.isArray(appState.prep)) appState.prep=[];
+  if(!appState.about) appState.about={title:'گەشت، سروشت، هاوڕێیەتی.',text:'',imageUrl:'',stats:[]};
+  if(!appState.contact) appState.contact={whatsapp:'+9647503130360',phone:'+9647503130360',city:'هەولێر — کوردستان',email:'',mapUrl:''};
+  if(!appState.social) appState.social={instagram:'',tiktok:'',youtube:'',facebook:'',telegram:''};
+}
+function publicEsc(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]));}
+function renderPublicCMS(){
+  ensurePublicCMS();
+  const d=document.getElementById('publicDestinationsList'); if(d)d.innerHTML=appState.destinations.map((x,i)=>`<div class="public-cms-item"><div style="display:flex;gap:10px;align-items:center"><div class="public-cms-thumb" style="background-image:url('${publicEsc(x.img)}')"></div><div><b>${publicEsc(x.name)}</b><small class="text-xs text-gray-400">${publicEsc(x.type||'')}</small><div class="text-xs text-gray-400">${publicEsc(x.description||'')}</div></div></div><div class="public-cms-actions"><button class="btn btn-danger" onclick="editDestination(${i})">دەستکاری</button><button class="btn btn-danger" onclick="appState.destinations.splice(${i},1);renderPublicCMS();autoSync();">سڕینەوە</button></div></div>`).join('');
+  const sf=document.getElementById('publicSafetyList'); if(sf)sf.innerHTML=(appState.safety||[]).map((x,i)=>`<div class="public-cms-item"><div><b>${publicEsc(x.title)}</b><div class="text-xs text-gray-400">${publicEsc(x.desc)}</div><small>${publicEsc(x.source||'')}</small></div><div class="public-cms-actions"><button class="btn btn-danger" onclick="editPublicSafety(${i})">دەستکاری</button><button class="btn btn-danger" onclick="appState.safety.splice(${i},1);renderPublicCMS();autoSync();">سڕینەوە</button></div></div>`).join('');
+  const pr=document.getElementById('publicPrepList'); if(pr)pr.innerHTML=appState.prep.map((x,i)=>`<div class="public-cms-item"><div><b>${publicEsc(x.icon||'')} ${publicEsc(x.title||x.name)}</b><div class="text-xs text-gray-400">${publicEsc((x.items||[]).join(' • '))}</div></div><div class="public-cms-actions"><button class="btn btn-danger" onclick="editPublicPrep(${i})">دەستکاری</button><button class="btn btn-danger" onclick="appState.prep.splice(${i},1);renderPublicCMS();autoSync();">سڕینەوە</button></div></div>`).join('');
+  const rv=document.getElementById('publicReviewsList'); if(rv)rv.innerHTML=(appState.reviews||[]).map((x,i)=>`<div class="public-cms-item"><div><b>${publicEsc(x.name)} — ${publicEsc(x.city||'')}</b><div class="text-xs text-gray-400">${publicEsc(x.text)}</div></div><div class="public-cms-actions"><button class="btn btn-danger" onclick="editPublicReview(${i})">دەستکاری</button><button class="btn btn-danger" onclick="appState.reviews.splice(${i},1);renderPublicCMS();autoSync();">ڕەفز/سڕینەوە</button></div></div>`).join('');
+  const ids={aboutTitle:appState.about.title,aboutText:appState.about.text,aboutImage:appState.about.imageUrl,aboutStat1:JSON.stringify(appState.about.stats?.[0]||{}),aboutStat2:JSON.stringify(appState.about.stats?.[1]||{}),aboutStat3:JSON.stringify(appState.about.stats?.[2]||{}),contactWhatsApp:appState.contact.whatsapp,contactPhone:appState.contact.phone,contactCity:appState.contact.city,contactEmail:appState.contact.email,contactMap:appState.contact.mapUrl,socialInstagram:appState.social.instagram,socialTiktok:appState.social.tiktok,socialYoutube:appState.social.youtube,socialFacebook:appState.social.facebook,socialTelegram:appState.social.telegram};
+  Object.entries(ids).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=(id.startsWith('aboutStat')?formatStat(v):v||'')});
+  const ab=document.getElementById('k5AnalBooked');if(ab)ab.textContent=appState.booked||0;const av=document.getElementById('k5AnalAvailable');if(av)av.textContent=Math.max(0,(appState.capacity||0)-(appState.booked||0));
+  if(window.lucide)lucide.createIcons();
+}
+function formatStat(v){try{const x=JSON.parse(v);return x.num?`${x.num} | ${x.label||''}`:''}catch{return v||''}}
+function addPublicDestination(){const n=$('destName')?.value.trim(),t=$('destType')?.value.trim(),img=$('destImg')?.value.trim(),d=$('destDesc')?.value.trim();if(!n)return toast('ناوی شوێن پێویستە');ensurePublicCMS();appState.destinations.push({name:n,type:t,img,description:d});['destName','destType','destImg','destDesc'].forEach(id=>$(id).value='');renderPublicCMS();autoSync();}
+function editDestination(i){const x=appState.destinations[i];const n=prompt('ناوی شوێن',x.name);if(n===null)return;const t=prompt('جۆر',x.type||'');if(t===null)return;const d=prompt('پێناسە',x.description||'');if(d===null)return;const img=prompt('وێنە URL',x.img||'');if(img===null)return;appState.destinations[i]={...x,name:n,type:t,description:d,img};renderPublicCMS();autoSync();}
+function addPublicSafety(){const title=$('pubSafetyTitle')?.value.trim(),desc=$('pubSafetyDesc')?.value.trim(),source=$('pubSafetySource')?.value.trim(),url=$('pubSafetyUrl')?.value.trim();if(!title||!desc)return toast('ناونیشان و ڕوونکردنەوە پێویستە');appState.safety.push({title,desc,source,url});['pubSafetyTitle','pubSafetyDesc','pubSafetySource','pubSafetyUrl'].forEach(id=>$(id).value='');renderPublicCMS();autoSync();}
+function editPublicSafety(i){const x=appState.safety[i];const title=prompt('ناونیشان',x.title);if(title===null)return;const desc=prompt('ڕوونکردنەوە',x.desc);if(desc===null)return;const source=prompt('سەرچاوە',x.source||'');if(source===null)return;const url=prompt('لینکی سەرچاوە',x.url||'');if(url===null)return;appState.safety[i]={...x,title,desc,source,url};renderPublicCMS();autoSync();}
+function addPublicPrep(){const name=$('prepName')?.value.trim(),title=$('prepTitle')?.value.trim(),icon=$('prepIcon')?.value.trim()||'🎒',raw=$('prepItems')?.value||'';if(!title)return toast('ناونیشان پێویستە');appState.prep.push({name:name||title,title,icon,items:raw.split(/[,،\n]+/).map(x=>x.trim()).filter(Boolean)});['prepName','prepTitle','prepIcon','prepItems'].forEach(id=>$(id).value='');renderPublicCMS();autoSync();}
+function editPublicPrep(i){const x=appState.prep[i];const title=prompt('ناونیشان',x.title||x.name);if(title===null)return;const items=prompt('پێداویستییەکان بە کۆما جیا بکەوە',(x.items||[]).join('، '));if(items===null)return;const icon=prompt('ئایکۆن',x.icon||'🎒');if(icon===null)return;appState.prep[i]={...x,title,icon,items:items.split(/[,،]+/).map(y=>y.trim()).filter(Boolean)};renderPublicCMS();autoSync();}
+function addPublicReview(){const name=$('pubReviewName')?.value.trim(),city=$('pubReviewCity')?.value.trim(),text=$('pubReviewText')?.value.trim();if(!name||!text)return toast('ناو و دەق پێویستە');appState.reviews.push({name,city,text});['pubReviewName','pubReviewCity','pubReviewText'].forEach(id=>$(id).value='');renderPublicCMS();autoSync();}
+function editPublicReview(i){const x=appState.reviews[i];const name=prompt('ناو',x.name);if(name===null)return;const city=prompt('شار',x.city||'');if(city===null)return;const text=prompt('دەقی بیروڕا',x.text);if(text===null)return;appState.reviews[i]={...x,name,city,text};renderPublicCMS();autoSync();}
+function savePublicAbout(){ensurePublicCMS();appState.about.title=$('aboutTitle').value;appState.about.text=$('aboutText').value;appState.about.imageUrl=$('aboutImage').value;appState.about.stats=[1,2,3].map((n,i)=>{const v=$('aboutStat'+n).value.split('|');return {num:(v[0]||'').trim(),label:(v[1]||'').trim()}}).filter(x=>x.num);autoSync();toast('✅ دەربارەی تیم پاشەکەوت کرا');}
+function savePublicContact(){ensurePublicCMS();appState.contact={whatsapp:$('contactWhatsApp').value,phone:$('contactPhone').value,city:$('contactCity').value,email:$('contactEmail').value,mapUrl:$('contactMap').value};autoSync();toast('✅ پەیوەندی پاشەکەوت کرا');}
+function savePublicSocial(){ensurePublicCMS();appState.social={instagram:$('socialInstagram').value,tiktok:$('socialTiktok').value,youtube:$('socialYoutube').value,facebook:$('socialFacebook').value,telegram:$('socialTelegram').value};autoSync();toast('✅ سۆشیال میدیا پاشەکەوت کرا');}
+function k5ClearLogs(){localStorage.removeItem('kurdia_admin_activity');renderK5Activity();}
+function k5Log(action,detail){let a=[];try{a=JSON.parse(localStorage.getItem('kurdia_admin_activity')||'[]')}catch{};a.unshift({at:new Date().toISOString(),action,detail});localStorage.setItem('kurdia_admin_activity',JSON.stringify(a.slice(0,100)));renderK5Activity();}
+function renderK5Activity(){const c=$('k5Activity');if(!c)return;let a=[];try{a=JSON.parse(localStorage.getItem('kurdia_admin_activity')||'[]')}catch{};c.innerHTML=a.length?a.map(x=>`<div class="item-row"><div><b>${publicEsc(x.action)}</b><div class="text-xs text-gray-400">${publicEsc(x.detail||'')}</div></div><small>${new Date(x.at).toLocaleString('ku-IQ')}</small></div>`).join(''):'<div class="text-gray-400">هیچ activity ـی نییە.</div>';}
+function k5SaveSettings(){localStorage.setItem('kurdia_admin_settings',JSON.stringify({brand:$('k5Brand')?.value||'KURDIA ADVENTURE',lang:$('k5Lang')?.value||'ku'}));k5Log('Settings','گۆڕانکاری settings');toast('✅ Settings پاشەکەوت کرا');}
+
 window.addEventListener("DOMContentLoaded", () => {
-  const pin=document.getElementById("adminPinInput");
-  if(pin) pin.addEventListener("keydown", e=>{ if(e.key==="Enter") checkAdminAuth(); });
   if(sessionStorage.getItem("admin_auth") === "true"){
     document.getElementById("adminAuthModal").style.display = "none";
   }
   loadState();
   if(window.lucide) lucide.createIcons();
 });
+document.getElementById("adminPinInput")?.addEventListener("keydown",e=>{if(e.key==="Enter")checkAdminAuth();});
 </script>
 </body>
 </html>
