@@ -2,8 +2,9 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070a10"><link rel="manifest" href="/manifest.json"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز">
+<meta name="theme-color" content="#070a10"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز">
 <title>KURDIA ADVENTURE</title>
+<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
@@ -268,6 +269,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 
 <style id="kurdia-friendly-ai-chat">
 .ai-chat-sheet{padding:0!important;overflow:hidden;display:flex;flex-direction:column;height:min(760px,88vh);max-height:88vh}.ai-chat-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.025)}.ai-chat-avatar{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#e33958,#94162f);display:grid;place-items:center;color:#fff;box-shadow:0 10px 25px rgba(169,29,55,.25)}.ai-chat-avatar svg{width:23px}.ai-messages{flex:1;overflow:auto;padding:18px 16px 10px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}.ai-msg{max-width:88%;padding:11px 13px;border-radius:18px;font-size:12px;line-height:1.9;white-space:pre-wrap}.ai-msg.bot{align-self:flex-start;background:#121923;border:1px solid var(--line);border-bottom-right-radius:6px}.ai-msg.user{align-self:flex-end;background:linear-gradient(145deg,#d92f4d,#9d1731);color:#fff;border-bottom-left-radius:6px}.ai-msg.loading{opacity:.7}.ai-quick{display:flex;gap:7px;overflow-x:auto;padding:7px 14px 10px;scrollbar-width:none}.ai-quick::-webkit-scrollbar{display:none}.ai-quick button{white-space:nowrap;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#dfe3e9;border-radius:999px;padding:8px 11px;font-size:10px}.ai-chat-form{display:flex;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(5,7,11,.96)}.ai-chat-form .input{flex:1;min-width:0}.ai-chat-form .btn{width:48px;padding:0;display:grid;place-items:center}.ai-chat-form .btn svg{width:18px}.ai-chat-sheet .close{position:absolute;z-index:4;top:12px;left:12px;width:38px;height:38px}.ai-chat-head{padding-left:62px}
+</style>
+
+<style id="kurdia-notification-additive-style">
+#kaNotifyFab{position:fixed;left:14px;bottom:calc(var(--nav,82px) + 16px);z-index:90;width:48px;height:48px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(12,16,24,.92);color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.28);display:grid;place-items:center;backdrop-filter:blur(16px)}
+#kaNotifyFab span{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:#d32f4e;box-shadow:0 0 0 3px #070a10}
+.ka-notify-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.62);backdrop-filter:blur(8px);display:none;align-items:flex-end;padding:14px}.ka-notify-overlay.show{display:flex}
+.ka-notify-sheet{width:min(520px,100%);margin:auto auto 0;background:#0d131d;border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.ka-notify-sheet h3{margin:0 0 7px;font-size:20px}.ka-notify-sheet p{margin:0 0 16px;color:#aab4c2;line-height:1.9;font-size:12px}.ka-notify-actions{display:grid;gap:9px}.ka-notify-actions button{border:0;border-radius:15px;padding:13px 14px;font-weight:800}.ka-notify-primary{background:#a91d37;color:#fff}.ka-notify-secondary{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1)!important}.ka-notify-close{margin-top:9px;width:100%;background:transparent;color:#8f9aaa;border:0!important}
 </style>
 </head>
 <body>
@@ -1137,33 +1146,68 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 
-<!-- KURDIA ADDITIVE PUSH/PWA — no existing UI removed or redesigned -->
-<style id="kurdia-additive-push-css">
-#kaPushPrompt{position:fixed;z-index:99990;left:12px;right:12px;bottom:calc(88px + env(safe-area-inset-bottom));max-width:560px;margin:auto;display:none;background:rgba(11,16,24,.96);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.11);border-radius:22px;padding:15px;box-shadow:0 24px 70px rgba(0,0,0,.55)}
-#kaPushPrompt.show{display:block;animation:kaPushIn .28s ease}@keyframes kaPushIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.ka-push-head{display:flex;gap:11px;align-items:center}.ka-push-icon{width:42px;height:42px;border-radius:14px;background:rgba(169,29,55,.18);display:grid;place-items:center;font-size:20px}.ka-push-copy{flex:1}.ka-push-copy b{display:block;font-size:13px}.ka-push-copy small{display:block;color:#9da7b7;font-size:10px;margin-top:3px;line-height:1.7}.ka-push-actions{display:flex;gap:7px;margin-top:12px}.ka-push-actions button{flex:1;border-radius:13px;padding:10px 12px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.05);color:#fff;font-weight:800;font-size:11px}.ka-push-actions .primary{background:linear-gradient(135deg,#d32f4e,#a91d37);border-color:transparent}.ka-push-close{background:none!important;border:0!important;color:#8d97a6!important;flex:0 0 auto!important;width:auto!important;padding:5px!important}
-</style>
-<div id="kaPushPrompt" aria-live="polite">
-  <div class="ka-push-head"><div class="ka-push-icon">🔔</div><div class="ka-push-copy"><b>KURDIA ADVENTURE</b><small>ئێستا دەتوانیت ئاگادارییە نوێکانی گەشت و هەواڵەکان وەربگریت.</small></div><button class="ka-push-close" type="button" onclick="kaPushDismiss()">✕</button></div>
-  <div class="ka-push-actions"><button id="kaInstallBtn" class="primary" type="button" onclick="kaInstall()">📱 دامەزراندن</button><button id="kaNotifyBtn" class="primary" type="button" onclick="kaEnableNotifications()">🔔 چالاککردنی ئاگاداری</button></div>
+<!-- KURDIA PUSH / INSTALL — ADDITIVE ONLY -->
+<button id="kaNotifyFab" type="button" aria-label="ئاگادارییەکان" onclick="window.kaOpenNotify()"><span></span><i data-lucide="bell"></i></button>
+<div id="kaNotifyOverlay" class="ka-notify-overlay" aria-hidden="true">
+  <div class="ka-notify-sheet" role="dialog" aria-modal="true">
+    <h3>🔔 KURDIA ADVENTURE</h3>
+    <p id="kaNotifyText">ئاگادارییە گرنگەکانی گەشت، گەشتی نوێ و نوێکارییەکان بەدەست بهێنە. هەروەها دەتوانیت KURDIA وەک ئەپ لەسەر مۆبایلەکەت دابمەزرێنیت.</p>
+    <div class="ka-notify-actions">
+      <button id="kaEnablePush" class="ka-notify-primary" type="button" onclick="window.kaEnablePush()">🔔 چالاککردنی ئاگاداری</button>
+      <button id="kaInstallApp" class="ka-notify-secondary" type="button" onclick="window.kaInstallApp()">📱 دامەزراندنی KURDIA</button>
+    </div>
+    <button class="ka-notify-close" type="button" onclick="window.kaCloseNotify()">لە ئێستادا نا</button>
+  </div>
 </div>
-<script id="kurdia-additive-push-js">
-(()=>{
- const WORKER=window.KURDIA_WORKER_URL||'https://kurdia.alwandssalh.workers.dev';
- const VAPID='BMCcZVZLBBZlyVzr0NCsaVTekgvDD5b3ckgDJR7-ysq91sD_Jxu6Lu0rHDRL7s2ZB4iWGmfDGPxNNH9cejP5teo';
- let deferredInstall=null;
- const promptEl=()=>document.getElementById('kaPushPrompt');
- function standalone(){return window.matchMedia?.('(display-mode: standalone)').matches||window.navigator.standalone===true}
- function b64uToBytes(s){const p='='.repeat((4-s.length%4)%4),b=atob((s||'').replace(/-/g,'+').replace(/_/g,'/')+p);return Uint8Array.from(b,c=>c.charCodeAt(0))}
- async function register(){if(!('serviceWorker' in navigator))throw Error('Service Worker بەردەست نییە');return navigator.serviceWorker.register('/sw.js',{scope:'/'});}
- async function subscribe(){if(!('Notification' in window))throw Error('Notification بەردەست نییە');const reg=await register();const permission=Notification.permission==='granted'? 'granted':await Notification.requestPermission();if(permission!=='granted')throw Error('ڕێگەپێدان بۆ ئاگاداری نەدرا');let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64uToBytes(VAPID)});const r=await fetch(WORKER+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),source:'website',url:location.pathname})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw Error(d.error||'Push subscription سەرکەوتوو نەبوو');localStorage.setItem('kurdia_push_enabled','1');return true}
- window.kaEnableNotifications=async()=>{const b=document.getElementById('kaNotifyBtn');if(b)b.disabled=true;try{await subscribe();if(b)b.textContent='✓ ئاگاداری چالاکە';setTimeout(kaPushMaybeShow,600);if(window.toast)toast('ئاگادارییەکان چالاک کران ✓');}catch(e){if(window.toast)toast(e.message||'چالاککردنی ئاگاداری سەرکەوتوو نەبوو');}finally{if(b)b.disabled=false}}
- window.kaInstall=async()=>{if(!deferredInstall){if(standalone())return;if(window.toast)toast('لە مێنیوی براوزەرەکە Install App هەڵبژێرە');return}deferredInstall.prompt();const r=await deferredInstall.userChoice;deferredInstall=null;if(r?.outcome==='accepted'){localStorage.setItem('kurdia_install_done','1');kaPushMaybeShow()}}
- window.kaPushDismiss=()=>{localStorage.setItem('kurdia_push_prompt_dismissed','1');promptEl()?.classList.remove('show')}
- function kaPushMaybeShow(){const p=promptEl();if(!p||standalone())return;const installNeeded=!localStorage.getItem('kurdia_install_done')&&!standalone();const notifyNeeded='Notification' in window&&Notification.permission!=='granted'&&!localStorage.getItem('kurdia_push_enabled');if(installNeeded||notifyNeeded){p.classList.add('show');const ib=document.getElementById('kaInstallBtn');if(ib)ib.style.display=installNeeded?'block':'none';const nb=document.getElementById('kaNotifyBtn');if(nb)nb.style.display=notifyNeeded?'block':'none'}}
- window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;localStorage.removeItem('kurdia_install_done');kaPushMaybeShow()});
- window.addEventListener('appinstalled',()=>{localStorage.setItem('kurdia_install_done','1');deferredInstall=null;kaPushMaybeShow()});
- window.addEventListener('load',()=>{setTimeout(async()=>{try{await register()}catch(_){}kaPushMaybeShow()},1400)});
+
+
+<script id="kurdia-notifications-additive-js">
+(function(){
+  const W='https://kurdia.alwandssalh.workers.dev';
+  let deferredInstallPrompt=null;
+  const $=id=>document.getElementById(id);
+  const b64ToBytes=b64=>{const pad='='.repeat((4-b64.length%4)%4),s=(b64+pad).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(s),o=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)o[i]=raw.charCodeAt(i);return o};
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;localStorage.setItem('kurdia_pwa_installable','1');});
+  window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;localStorage.setItem('kurdia_pwa_installed','1');});
+  function open(){const x=$('kaNotifyOverlay');if(x){x.classList.add('show');x.setAttribute('aria-hidden','false')}}
+  function close(){const x=$('kaNotifyOverlay');if(x){x.classList.remove('show');x.setAttribute('aria-hidden','true')}}
+  window.kaOpenNotify=open; window.kaCloseNotify=close;
+  async function getPublicKey(){const r=await fetch(W+'/api/push/public-key',{cache:'no-store'});const j=await r.json();if(!j.ok||!j.publicKey)throw Error('VAPID public key is not configured');return j.publicKey}
+  async function registerSW(){if(!('serviceWorker' in navigator))throw Error('Service Worker بەردەست نییە');return navigator.serviceWorker.register('/sw.js',{scope:'/'});}
+  window.kaEnablePush=async function(){
+    const btn=$('kaEnablePush'); if(btn)btn.disabled=true;
+    try{
+      if(!('Notification' in window))throw Error('Notification بەردەست نییە لەم وێبگەڕەدا');
+      const reg=await registerSW();
+      let permission=Notification.permission;
+      if(permission==='default') permission=await Notification.requestPermission();
+      if(permission!=='granted')throw Error('ڕێگە بە ئاگادارییەکان نەدرا');
+      const key=await getPublicKey();
+      let sub=await reg.pushManager.getSubscription();
+      if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(key)});
+      const r=await fetch(W+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),source:'website',url:location.pathname+location.search})});
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok||!j.ok)throw Error(j.error||'Subscription سەرکەوتوو نەبوو');
+      localStorage.setItem('kurdia_push_enabled','1');
+      const t=$('kaNotifyText');if(t)t.textContent='🔔 ئاگادارییەکان چالاک کران. هەر کات گەشتێکی نوێ یان زانیارییەکی گرنگ هەبێت، ئاگادارت دەکەینەوە.';
+      if(btn)btn.textContent='✓ ئاگادارییەکان چالاکن';
+      setTimeout(close,900);
+    }catch(e){const t=$('kaNotifyText');if(t)t.textContent='⚠️ '+(e?.message||'نەتوانرا ئاگادارییەکان چالاک بکرێن.')}
+    finally{if(btn)btn.disabled=false}
+  };
+  window.kaInstallApp=async function(){
+    try{
+      if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;return;}
+      const t=$('kaNotifyText');if(t)t.textContent='لە Chrome ـی Android: لە مینیوی ⋮ ـەوە “Install app” یان “Add to Home screen” هەڵبژێرە.';
+    }catch(e){}
+  };
+  function maybePrompt(){
+    if(localStorage.getItem('kurdia_pwa_installed')==='1' || localStorage.getItem('kurdia_notify_prompt_seen')==='1')return;
+    localStorage.setItem('kurdia_notify_prompt_seen','1');
+    setTimeout(open,1100);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(window.lucide)lucide.createIcons();maybePrompt()});else{if(window.lucide)lucide.createIcons();maybePrompt()}
+  window.addEventListener('load',()=>{registerSW().catch(()=>{});});
 })();
 </script>
 
