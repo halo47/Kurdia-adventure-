@@ -1194,10 +1194,18 @@ document.addEventListener('click',function(e){
     const permission=await Notification.requestPermission();
     if(permission!=='granted') throw new Error('ڕێگەپێدان بۆ ئاگادارییەکان نەدرا.');
     const existing=await reg.pushManager.getSubscription();
-    const sub=existing || await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(keyData.publicKey)});
-    const save=await fetch(WORKER+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),source:'website',url:location.pathname})});
+    let sub;
+    try{
+      sub=existing || await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(keyData.publicKey)});
+    }catch(e){throw new Error('Push Subscribe: '+(e?.message||String(e)));}
+    const b64u=(buffer)=>buffer?btoa(String.fromCharCode(...new Uint8Array(buffer))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''):'';
+    const subscription={endpoint:String(sub.endpoint||''),expirationTime:sub.expirationTime??null,keys:{p256dh:b64u(sub.getKey('p256dh')),auth:b64u(sub.getKey('auth'))}};
+    if(!subscription.endpoint || !subscription.keys.p256dh || !subscription.keys.auth) throw new Error('Push subscription keys نەدۆزرایەوە.');
+    let save;
+    try{save=await fetch(WORKER+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription,source:'website',url:location.pathname})});}
+    catch(e){throw new Error('Push Server: '+(e?.message||String(e)));}
     const data=await save.json().catch(()=>({}));
-    if(!save.ok || !data.ok) throw new Error(data.error||'Push subscription سەرکەوتوو نەبوو.');
+    if(!save.ok || !data.ok) throw new Error(data.error||('Push Server HTTP '+save.status));
     localStorage.setItem('kurdia_push_enabled','1');
     return true;
   }
