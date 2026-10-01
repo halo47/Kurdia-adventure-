@@ -726,74 +726,104 @@ function renderPage(id){
     }
   }catch(e){}
 }
-function weatherIcon(code){if(code===0)return'☀️';if([1,2].includes(code))return'🌤️';if(code===3)return'☁️';if([45,48].includes(code))return'🌫️';if([51,53,55,56,57].includes(code))return'🌦️';if([61,63,65,66,67,80,81,82].includes(code))return'🌧️';if([71,73,75,77,85,86].includes(code))return'🌨️';if([95,96,99].includes(code))return'⛈️';return'🌤️'}
-function weatherText(code){if(code===0)return'ڕوون';if([1,2].includes(code))return'هەوری کەم';if(code===3)return'هەوری';if([45,48].includes(code))return'تەم';if([51,53,55,56,57].includes(code))return'بارانی سووک';if([61,63,65,80,81,82].includes(code))return'باران';if([71,73,75,77,85,86].includes(code))return'بەفر';if([95,96,99].includes(code))return'تۆفان';return'کەشوهەوا'}
-function applyUIText(){
- const u=data.uiText||{},n=data.navigation||{},p=data.privateTrip||{};
- const set=(sel,val)=>{const el=document.querySelector(sel);if(el&&val!=null)el.textContent=val};
- set('.navitem[data-page="home"]','');set('.navitem[data-page="weather"]','');set('.navitem[data-page="booking"]','');set('.navitem[data-page="private"]','');
- const nav=[['home',n.home||'سەرەکی','home'],['weather',n.weather||'کەشوهەوا','cloud-sun'],['booking',n.booking||'بەشداری','ticket'],['private',n.private||'تایبەت','crown']];
- nav.forEach(([page,label,icon])=>{const el=document.querySelector(`.navitem[data-page="${page}"]`);if(el)el.innerHTML=`<i data-lucide="${icon}" class="ico"></i>${esc(label)}`});
- const more=document.querySelector('.navitem[data-page="more"] span');if(more)more.textContent=n.more||'زیاتر';
- set('#private .eyebrow',p.title||u.privateEyebrow||'گەشتی تایبەت');set('#private h2',p.title||'گەشتی تایبەت');set('#private p.muted',p.description||'گەشتەکەت خۆت دیاری بکە، ئێمە بۆت ڕێکی دەخەین.');
- const dl=document.querySelector('#privateDate')?.previousElementSibling;if(dl&&p.dateLabel)dl.textContent='📅 '+p.dateLabel+' *';
- const dest=document.querySelector('#private input[name="destination"]');if(dest&&p.destinationLabel)dest.placeholder=p.destinationLabel+'...';
- const types=p.types||[];document.querySelectorAll('#private .type-btn').forEach((el,i)=>{const t=types[i];if(!t)return;const inp=el.querySelector('input');const val=t.value||inp?.value||'';if(inp)inp.value=val;el.innerHTML='';if(t.icon){const ic=document.createElement('i');ic.setAttribute('data-lucide',t.icon);el.appendChild(ic)}el.appendChild(document.createTextNode(' '+(t.label||val)))});
- set('#safety .eyebrow',u.safetyEyebrow);set('#safety h2',u.safetyTitle);set('#safety .muted',u.safetyText);
- set('#prep .eyebrow',u.prepEyebrow);set('#prep h2',u.prepTitle);
- const rTitle=document.querySelector('#reviews h2');if(rTitle)rTitle.textContent=u.reviewTitle||rTitle.textContent;
- const gTitle=document.querySelector('#gallery h2');if(gTitle)gTitle.textContent=u.galleryTitle||gTitle.textContent;
- document.querySelectorAll('.ka-menu-item').forEach(a=>{const page=a.dataset.kaPage;const map={home:n.home,destinations:'شوێنەکان',booking:n.booking,private:n.private,weather:n.weather,safety:u.safetyTitle,prep:u.prepTitle,gallery:u.galleryTitle,reviews:u.reviewTitle,stories:'ستۆری',about:'دەربارەی تیمەکە',contact:'پەیوەندی'};const t=a.querySelector('.ka-menu-text');if(t&&map[page])t.textContent=map[page]});
- const fs=document.querySelector('.ka-footer-sub');if(fs&&data.footer?.description)fs.innerHTML='ADVENTURE<br>'+esc(data.footer.description);
- if(window.lucide)lucide.createIcons();
+function weatherIcon(code,current){
+ const rain=Number(current?.rain??0),showers=Number(current?.showers??0),precip=Number(current?.precipitation??0);
+ const pp=Number(current?.precipitation_probability??0);
+ if(rain>0||showers>0||precip>0||pp>=60)return'🌧️';
+ if([95,96,99].includes(Number(code)))return'⛈️';
+ if([71,73,75,77,85,86].includes(Number(code)))return'🌨️';
+ if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(Number(code)))return'🌧️';
+ if([45,48].includes(Number(code)))return'🌫️';
+ if(Number(code)===0)return'☀️';
+ if([1,2].includes(Number(code)))return'🌤️';
+ if(Number(code)===3)return'☁️';
+ return'🌤️';
 }
-function renderWeather(){if(!$('hourly')||!$('days'))return;if(!$('hourly').children.length){$('hourly').innerHTML='<div class="muted">شوێنێک بگەڕێ یان لە نەخشە دیاری بکە.</div>';$('days').innerHTML='<div class="muted">پێشبینی لێرە پیشان دەدرێت.</div>'}}
-let weatherMap,weatherMarker,privateMap,privateMarker;
-function createMap(id,lat,lng,onPick){
- const el=$(id); if(!el||typeof L==='undefined') return null;
- const map=L.map(el,{zoomControl:true}).setView([lat,lng],8);
- L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
- map.on('click',e=>onPick(e.latlng,map));
- return map;
+function weatherText(code,current){
+ const rain=Number(current?.rain??0),showers=Number(current?.showers??0),precip=Number(current?.precipitation??0);
+ const pp=Number(current?.precipitation_probability??0);
+ if(rain>=5||showers>=5||precip>=5)return'بارانی زۆر';
+ if(rain>0||showers>0||precip>0)return'بارانی';
+ if(pp>=70)return'ئەگەری زۆری باران';
+ if(pp>=40)return'ئەگەری باران';
+ if([95,96,99].includes(Number(code)))return'تۆفان';
+ if([71,73,75,77,85,86].includes(Number(code)))return'بەفر';
+ if([51,53,55,56,57].includes(Number(code)))return'بارانی سووک';
+ if([61,63,65,66,67,80,81,82].includes(Number(code)))return'باران';
+ if([45,48].includes(Number(code)))return'تەم';
+ if(Number(code)===0)return'ڕوون';
+ if([1,2].includes(Number(code)))return'هەوری کەم';
+ if(Number(code)===3)return'هەوری';
+ return'کەشوهەوا';
 }
-function setMapMarker(map,marker,lat,lng){if(marker)marker.setLatLng([lat,lng]);else marker=L.marker([lat,lng]).addTo(map);map.setView([lat,lng],12);return marker}
+function weatherCurrentFromHourly(d){
+ const h=d?.hourly||{},times=h.time||[];
+ if(!times.length)return d?.current||{};
+ const now=Date.now();
+ let best=0,bestDiff=Infinity;
+ for(let i=0;i<times.length;i++){
+   const t=Date.parse(times[i]);
+   if(!Number.isNaN(t)){const diff=Math.abs(t-now);if(diff<bestDiff){bestDiff=diff;best=i}}
+ }
+ const c={...(d?.current||{})};
+ const vars=['temperature_2m','relative_humidity_2m','apparent_temperature','precipitation','rain','showers','precipitation_probability','weather_code','wind_speed_10m','wind_direction_10m','wind_gusts_10m','visibility','cloud_cover','lightning_density'];
+ vars.forEach(k=>{if(h[k]?.[best]!=null)c[k]=h[k][best]});
+ if(h.time?.[best])c.time=h.time[best];
+ return c;
+}
+function applyWeather(d,label){
+ const c=weatherCurrentFromHourly(d),daily=d?.daily||{},hourly=d?.hourly||{};
+ $('wLocation').textContent=label||d?.location||'شوێنی دیاریکراو';
+ $('wTemp').textContent=`${Math.round(c.temperature_2m??0)}°C`;
+ $('wCond').textContent=weatherText(c.weather_code,c);$('wFeels').textContent=`${Math.round(c.apparent_temperature??0)}°`;
+ $('wHum').textContent=`${Math.round(c.relative_humidity_2m??0)}%`;
+ $('wWind').textContent=`${Math.round(c.wind_speed_10m??0)} km/h`;
+ const rainProb=Number(c.precipitation_probability??daily.precipitation_probability_max?.[0]??0);
+ $('wRain').textContent=`${Math.round(rainProb)}%`;
+ $('wUV').textContent=String(Math.round(daily.uv_index_max?.[0]??0));
+ const vis=c.visibility!=null?`${Math.round(Number(c.visibility)/1000)} km`:'—';
+ const stats=document.querySelectorAll('.weatherMeta .stat b');
+ if(stats[5])stats[5].textContent=vis;
+ if(stats[6])stats[6].textContent=(daily.sunrise?.[0]||'').slice(11,16)||'—';
+ if(stats[7])stats[7].textContent=(daily.sunset?.[0]||'').slice(11,16)||'—';
+ const times=hourly.time||[],temps=hourly.temperature_2m||[],probs=hourly.precipitation_probability||[],codes=hourly.weather_code||[],rains=hourly.rain||[],showers=hourly.showers||[],precips=hourly.precipitation||[];
+ $('hourly').innerHTML=times.slice(0,24).map((t,i)=>{
+   const hc={rain:rains[i],showers:showers[i],precipitation:precips[i],precipitation_probability:probs[i]};
+   return `<div class="hour"><small>${t.slice(11,16)}</small><b>${weatherIcon(codes[i],hc)}</b><strong>${Math.round(temps[i]??0)}°</strong><small>${probs[i]??0}%</small></div>`;
+ }).join('');
+ const ds=daily.time||[];
+ $('days').innerHTML=ds.map((day,i)=>`<div class="dayrow"><b>${day}</b><span>${weatherIcon(daily.weather_code?.[i],{precipitation_probability:daily.precipitation_probability_max?.[i]})}</span><b>${Math.round(daily.temperature_2m_max?.[i]??0)}°</b><span class="muted">${Math.round(daily.temperature_2m_min?.[i]??0)}°</span><span class="muted">${daily.precipitation_probability_max?.[i]??0}%</span></div>`).join('');
+ $('wUpdated').textContent=new Date().toLocaleTimeString('ku-IQ',{hour:'2-digit',minute:'2-digit'});
+ $('wSource').textContent=d?.model||d?.source||'Open-Meteo · ECMWF IFS HRES 9km';
+}
 async function fetchWeatherByCoords(lat,lng,label='شوێنی دیاریکراو'){
  $('wLocation').textContent='⏳ کەشوهەوا بۆ شوێنی دیاریکراو...';
  try{
    const url=`${WORKER}/api/weather/search?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&q=${encodeURIComponent(label)}`;
-   let r=await fetch(url),x=await r.json().catch(()=>null);
-   if(!r.ok||!x?.ok||!x?.weather) throw new Error('worker');
+   const r=await fetch(url),x=await r.json().catch(()=>null);
+   if(!r.ok||!x?.ok||!x?.weather)throw new Error('worker');
    applyWeather(x.weather,label);
- }catch(e){
-   try{
-     const u=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,wind_speed_10m,wind_direction_10m,weather_code,visibility&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset,wind_speed_10m_max,weather_code&timezone=auto&forecast_days=7`;
-     const d=await fetch(u).then(r=>r.json());
-     if(!d.current)throw new Error('weather');
-     applyWeather(d,label);
-   }catch(err){$('wLocation').textContent='کێشە لە هێنانی کەشوهەوا؛ تکایە دووبارە هەوڵ بدەوە.';toast('کەشوهەوا بەردەست نییە') }
+   return;
+ }catch(e){}
+ try{
+   const u=`https://api.open-meteo.com/v1/ecmwf?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,visibility,cloud_cover,lightning_density&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,visibility,cloud_cover,lightning_density&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,sunrise,sunset,weather_code&timezone=auto&forecast_days=7`;
+   const r=await fetch(u),d=await r.json();
+   if(!r.ok||!d?.hourly)throw new Error('weather');
+   d.source='Open-Meteo · ECMWF IFS HRES 9km';d.model='ECMWF IFS HRES 9km';
+   applyWeather(d,label);
+ }catch(err){
+   $('wLocation').textContent='کێشە لە هێنانی کەشوهەوا؛ تکایە دووبارە هەوڵ بدەوە.';
+   toast('کەشوهەوا بەردەست نییە');
  }
-}
-function applyWeather(d,label){
- const c=d.current||{},daily=d.daily||{},hourly=d.hourly||{};
- $('wLocation').textContent=label||'شوێنی دیاریکراو';
- $('wTemp').textContent=`${Math.round(c.temperature_2m??0)}°C`;
- $('wCond').textContent=weatherText(c.weather_code);$('wFeels').textContent=`${Math.round(c.apparent_temperature??0)}°`;
- $('wHum').textContent=`${Math.round(c.relative_humidity_2m??0)}%`;
- $('wWind').textContent=`${Math.round(c.wind_speed_10m??0)} km/h`;
- $('wRain').textContent=`${Math.round(daily.precipitation_probability_max?.[0]??0)}%`;
- $('wUV').textContent=String(Math.round(daily.uv_index_max?.[0]??0));
- const vis=c.visibility!=null?`${Math.round(c.visibility/1000)} km`:'—';
- const stats=document.querySelectorAll('.weatherMeta .stat b'); if(stats[5])stats[5].textContent=vis;if(stats[6])stats[6].textContent=(daily.sunrise?.[0]||'').slice(11,16)||'—';if(stats[7])stats[7].textContent=(daily.sunset?.[0]||'').slice(11,16)||'—';
- const times=hourly.time||[],temps=hourly.temperature_2m||[],probs=hourly.precipitation_probability||[],codes=hourly.weather_code||[];
- $('hourly').innerHTML=times.slice(0,24).map((t,i)=>`<div class="hour"><small>${t.slice(11,16)}</small><b>${weatherIcon(codes[i])}</b><strong>${Math.round(temps[i]??0)}°</strong><small>${probs[i]??0}%</small></div>`).join('');
- const ds=daily.time||[];$('days').innerHTML=ds.map((day,i)=>`<div class="dayrow"><b>${day}</b><span>${weatherIcon(daily.weather_code?.[i])}</span><b>${Math.round(daily.temperature_2m_max?.[i]??0)}°</b><span class="muted">${Math.round(daily.temperature_2m_min?.[i]??0)}°</span><span class="muted">${daily.precipitation_probability_max?.[i]??0}%</span></div>`).join('');
- $('wUpdated').textContent=new Date().toLocaleTimeString('ku-IQ',{hour:'2-digit',minute:'2-digit'});$('wSource').textContent='Open-Meteo';
 }
 async function searchWeather(){
  const q=$('weatherInput').value.trim()||'هەولێر';$('wLocation').textContent='⏳ گەڕان...';
  try{
-   const r=await fetch(`${WORKER}/api/weather/search?q=${encodeURIComponent(q)}`);const x=await r.json();
-   if(x?.ok&&x.weather){if(x.weather.latitude&&weatherMap){weatherMarker=setMapMarker(weatherMap,weatherMarker,x.weather.latitude,x.weather.longitude);}$('wLocation').textContent=x.weather.location||q;applyWeather(x.weather,x.weather.location||q);return}
+   const r=await fetch(`${WORKER}/api/weather/search?q=${encodeURIComponent(q)}`),x=await r.json();
+   if(x?.ok&&x.weather){
+     if(x.weather.latitude&&weatherMap)weatherMarker=setMapMarker(weatherMap,weatherMarker,x.weather.latitude,x.weather.longitude);
+     applyWeather(x.weather,x.weather.location||q);return;
+   }
  }catch(e){}
  try{
    const g=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=en&format=json`).then(r=>r.json());
