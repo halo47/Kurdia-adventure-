@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>KURDIA ADVENTURE — KURDIA CONTROL CENTER</title>
+<link rel="manifest" href="/admin-manifest.json">
 
 <!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -344,6 +345,7 @@ body{
 <li><button class="nav-btn" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> Stories Moderation</button></li>
 <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users-round"></i> Community Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> WhatsApp Center</button></li>
+<li><button class="nav-btn" onclick="switchTab('push_notifications')"><i data-lucide="bell-ring"></i> Push Notifications <span id="kaPushNavBadge" class="cc-badge">0</span></button></li>
 <li class="cc-nav-label">SYSTEM</li>
 <li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button></li>
@@ -1053,6 +1055,31 @@ body{
     </div>
   </main>
 </div>
+
+
+<!-- KURDIA PUSH NOTIFICATIONS — ADDITIVE ONLY -->
+<section class="page-tab" id="tab-push_notifications">
+ <div class="hero"><div class="eyebrow">KURDIA NOTIFICATIONS</div><h1>🔔 Push Notifications</h1><p class="muted">ئاگادارییەکان بۆ بەکارهێنەرانی ویبسایت بنێرە و ئەم Admin ـەش بۆ وەرگرتنی ئاگادارییەکان تۆمار بکە.</p></div>
+ <div class="k5-grid3" style="margin-bottom:12px">
+  <div class="k5-mini"><small>Users / Devices</small><b id="kaPushCount">—</b></div>
+  <div class="k5-mini"><small>دۆخی Admin</small><b id="kaAdminPushStatus">چاوەڕوان</b></div>
+  <div class="k5-mini"><small>دوایین نوێکردنەوە</small><b id="kaPushUpdated">—</b></div>
+ </div>
+ <div class="card" style="margin-bottom:12px">
+  <div class="toolbar"><div style="flex:1"><h3 style="margin:0 0 5px">🔔 ئاگادارییەکانی Admin</h3><p class="k5-section-note">ئەم ئامێرە تۆمار بکە بۆ ئەوەی Push Notification ـەکان لەسەر Admin ـیش وەربگریت.</p></div><button class="btn red" type="button" onclick="kaAdminSubscribe()">🔔 چالاککردن</button></div>
+  <div id="kaAdminPushResult" class="easy-action-result"></div>
+ </div>
+ <div class="card">
+  <h3>📨 ناردنی Push بۆ بەکارهێنەران</h3>
+  <div class="formgrid" style="margin-top:10px">
+   <div class="field"><label>سەردێڕ</label><input id="kaPushTitle" class="input" value="KURDIA ADVENTURE" maxlength="120"></div>
+   <div class="field"><label>شوێنی کردنەوە</label><input id="kaPushUrl" class="input" dir="ltr" value="/"></div>
+   <div class="field full"><label>دەقی ئاگاداری</label><textarea id="kaPushBody" class="input" rows="4" maxlength="1000" placeholder="مثلاً: گەشتێکی نوێ زیادکرا..." ></textarea></div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn red" type="button" onclick="kaSendPush()">📨 ناردنی ئاگاداری بۆ هەموو Devices</button><button class="btn ghost" type="button" onclick="kaRefreshPushStats()">↻ نوێکردنەوە</button></div>
+  <div id="kaPushSendResult" class="easy-action-result" style="margin-top:10px"></div>
+ </div>
+</section>
 
 <!-- CROPPING MODAL -->
 <div id="cropModalWrapper">
@@ -2386,39 +2413,17 @@ window.quickWorkerTest=async function(){
 })();
 </script>
 
-<!-- KURDIA ADDITIVE ADMIN PUSH/NOTIFICATION CENTER — no existing UI removed or redesigned -->
-<style id="kurdia-additive-admin-push-css">
-#kaAdminBell{position:relative;width:40px;height:40px;border-radius:11px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;margin-left:7px}
-#kaAdminBadge{position:absolute;top:-4px;left:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:#d53350;color:#fff;font:800 9px/17px Vazirmatn,sans-serif;display:none;text-align:center}
-#kaAdminOverlay{position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,.66);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:12px}
-#kaAdminOverlay.show{display:flex}.ka-admin-sheet{width:min(680px,100%);max-height:88vh;overflow:auto;background:#0b1018;border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:18px;box-shadow:0 30px 90px rgba(0,0,0,.7)}
-.ka-admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.ka-admin-head h3{margin:0;font-size:16px}.ka-admin-close{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;border-radius:10px;width:36px;height:36px}
-.ka-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ka-admin-field{display:grid;gap:6px}.ka-admin-field.full{grid-column:1/-1}.ka-admin-field label{font-size:10px;color:#9da7b7;font-weight:800}.ka-admin-field input,.ka-admin-field textarea{width:100%;box-sizing:border-box;background:#070b11;color:#fff;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:11px;font:inherit;outline:none}.ka-admin-field textarea{min-height:100px;resize:vertical}.ka-admin-send{width:100%;border:0;border-radius:13px;padding:12px;background:linear-gradient(135deg,#d53350,#8d142c);color:#fff;font-weight:900;cursor:pointer}.ka-admin-info{margin-top:9px;color:#7f8998;font-size:10px;line-height:1.8}.ka-admin-result{margin-top:9px;font-size:11px;min-height:18px}.ka-admin-list{display:grid;gap:7px;margin-top:12px}.ka-admin-item{padding:10px 12px;background:#070b11;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-size:10px}.ka-admin-item b{display:block;font-size:11px;margin-bottom:3px}.ka-admin-item small{color:#7f8998}.ka-admin-tabs{display:flex;gap:7px;margin-bottom:12px}.ka-admin-tabs button{border:1px solid rgba(255,255,255,.08);background:#070b11;color:#aeb7c5;border-radius:10px;padding:8px 11px;font-size:10px;font-weight:800}.ka-admin-tabs button.active{background:#a91d37;color:#fff}
-@media(max-width:600px){.ka-admin-grid{grid-template-columns:1fr}.ka-admin-field.full{grid-column:auto}}
-</style>
-<div id="kaAdminOverlay" onclick="if(event.target===this)kaAdminClose()"><div class="ka-admin-sheet" dir="rtl">
- <div class="ka-admin-head"><h3>🔔 ئاگادارییەکان و Push</h3><button class="ka-admin-close" type="button" onclick="kaAdminClose()">✕</button></div>
- <div class="ka-admin-tabs"><button id="kaTabSend" class="active" type="button" onclick="kaAdminTab('send')">ناردنی Push</button><button id="kaTabAlerts" type="button" onclick="kaAdminTab('alerts')">ئاگادارییەکانی Admin</button></div>
- <section id="kaAdminSendPane"><div class="ka-admin-grid"><div class="ka-admin-field"><label>سەردێڕ</label><input id="kaPushTitle" value="KURDIA ADVENTURE"></div><div class="ka-admin-field"><label>شوێنی کردنەوە</label><input id="kaPushUrl" value="/" dir="ltr"></div><div class="ka-admin-field full"><label>دەقی ئاگاداری</label><textarea id="kaPushBody" placeholder="بۆ نموونە: گەشتی نوێمان بڵاوکردەوە..." ></textarea></div><div class="ka-admin-field full"><button class="ka-admin-send" id="kaPushSendBtn" type="button" onclick="kaSendPush()">📨 ناردنی Push بۆ بەکارهێنەران</button></div></div><div id="kaPushResult" class="ka-admin-result"></div><div id="kaPushStats" class="ka-admin-info">ژمارەی بەشداربووانی Push: ...</div></section>
- <section id="kaAdminAlertsPane" style="display:none"><div class="ka-admin-info">ئەم بەشە داواکارییە نوێکانی Booking و Private Trip چاودێری دەکات کاتێک Admin کراوەیە.</div><div id="kaAdminAlerts" class="ka-admin-list"><div class="ka-admin-item">چاوەڕوانی داتا...</div></div></section>
- </div></div>
-<script id="kurdia-additive-admin-push-js">
-(()=>{
- const WORKER=window.KURDIA_WORKER_URL||'https://kurdia.alwandssalh.workers.dev';
- let lastBookingCount=null,lastPrivateCount=null,pollTimer=null;
+<script id="kurdia-admin-push-additive-js">
+(function(){
+ const W='https://kurdia.alwandssalh.workers.dev';
  const $=id=>document.getElementById(id);
- function key(){return sessionStorage.getItem('kurdia_admin_api_key')||sessionStorage.getItem('kurdia_admin_key')||''}
- function headers(){return {'Content-Type':'application/json','X-Admin-Key':String(key()).trim()}}
- window.kaAdminOpen=()=>{$('kaAdminOverlay')?.classList.add('show');kaLoadPushStats();kaAdminTab('send');kaPollAlerts(true)};
- window.kaAdminClose=()=>{$('kaAdminOverlay')?.classList.remove('show')};
- window.kaAdminTab=t=>{const send=t==='send';$('kaAdminSendPane').style.display=send?'block':'none';$('kaAdminAlertsPane').style.display=send?'none':'block';$('kaTabSend').classList.toggle('active',send);$('kaTabAlerts').classList.toggle('active',!send);if(!send)kaPollAlerts(true)};
- window.kaSendPush=async()=>{const btn=$('kaPushSendBtn'),res=$('kaPushResult');const title=String($('kaPushTitle').value||'KURDIA ADVENTURE').trim(),body=String($('kaPushBody').value||'').trim(),url=String($('kaPushUrl').value||'/').trim()||'/';if(!body){res.textContent='❌ دەقی ئاگاداری بنووسە';return}if(!key()){res.textContent='❌ Admin Key نەدۆزرایەوە';return}if(!confirm('ئەم Push ـە بۆ هەموو بەکارهێنەرانی subscribe کراو دەنێردرێت. دڵنیایت؟'))return;btn.disabled=true;res.textContent='⏳ دەنێردرێت...';try{const r=await fetch(WORKER+'/api/admin/push/send',{method:'POST',headers:headers(),body:JSON.stringify({title,body,url})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw Error(d.error||`HTTP ${r.status}`);res.textContent=`✅ نێردرا: ${d.sent||0} · سەرنەکەوتوو: ${d.failed||0} · سڕاوە: ${d.removed||0}`;$('kaPushBody').value='';kaLoadPushStats()}catch(e){res.textContent='❌ '+(e.message||'ناردن سەرکەوتوو نەبوو')}finally{btn.disabled=false}};
- async function kaLoadPushStats(){try{const r=await fetch(WORKER+'/api/admin/push/stats',{headers:{'X-Admin-Key':String(key()).trim()}});const d=await r.json().catch(()=>({}));$('kaPushStats').textContent=d.ok?`ژمارەی بەشداربووانی Push: ${d.count}`:'نەتوانرا ژمارەکە بخوێندرێتەوە'}catch(_){$('kaPushStats').textContent='Push backend هێشتا چالاک نییە'}}
- async function kaPollAlerts(initial=false){try{const [b,p]=await Promise.all([fetch(WORKER+'/api/admin/bookings',{headers:{'X-Admin-Key':String(key()).trim()}}),fetch(WORKER+'/api/admin/private-requests',{headers:{'X-Admin-Key':String(key()).trim()}})]);const bj=await b.json().catch(()=>({})),pj=await p.json().catch(()=>({}));const bookings=Array.isArray(bj.items)?bj.items:Array.isArray(bj.registrations)?bj.registrations:[];const priv=Array.isArray(pj.items)?pj.items:[];const pendingB=bookings.filter(x=>['pending','چاوەڕوان','waiting'].includes(String(x.status||'').toLowerCase())).length;const pendingP=priv.filter(x=>['pending','چاوەڕوان','waiting'].includes(String(x.status||'').toLowerCase())).length;const total=pendingB+pendingP;if(lastBookingCount!==null&&!initial&&(pendingB>lastBookingCount||pendingP>(lastPrivateCount||0))){if('Notification'in window&&Notification.permission==='granted')new Notification('KURDIA ADVENTURE',{body:`داواکاریی نوێ هەیە — Booking: ${pendingB} · Private: ${pendingP}`,icon:'/icons/icon-192.png'});$('kaAdminBell')?.classList.add('ka-new');}lastBookingCount=pendingB;lastPrivateCount=pendingP;$('kaAdminBadge').style.display=total?'block':'none';$('kaAdminBadge').textContent=String(total);const box=$('kaAdminAlerts');if(box)box.innerHTML=total?`<div class="ka-admin-item"><b>👥 Booking</b><small>${pendingB} داواکاریی چاوەڕوان</small></div><div class="ka-admin-item"><b>🧭 Private Trip</b><small>${pendingP} داواکاریی چاوەڕوان</small></div>`:'<div class="ka-admin-item"><b>✓ هیچ داواکارییەکی چاوەڕوان نییە</b><small>سیستەم لە کاردایە.</small></div>'}catch(_){}}
- function startPoll(){clearInterval(pollTimer);pollTimer=setInterval(()=>kaPollAlerts(false),30000);kaPollAlerts(true)}
- window.addEventListener('load',startPoll);
- const attach=()=>{const host=document.querySelector('.topbar-right');if(!host||$('kaAdminBell'))return;const b=document.createElement('button');b.id='kaAdminBell';b.type='button';b.title='ئاگادارییەکان';b.innerHTML='🔔<span id="kaAdminBadge">0</span>';b.onclick=kaAdminOpen;host.prepend(b)};
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',attach);else attach();
+ const b64ToBytes=b64=>{const pad='='.repeat((4-b64.length%4)%4),s=(b64+pad).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(s),o=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)o[i]=raw.charCodeAt(i);return o};
+ async function publicKey(){const r=await fetch(W+'/api/push/public-key',{cache:'no-store'});const j=await r.json();if(!j.ok||!j.publicKey)throw Error('VAPID public key لە Worker دانەنراوە');return j.publicKey}
+ async function sw(){if(!('serviceWorker' in navigator))throw Error('Service Worker بەردەست نییە');return navigator.serviceWorker.register('/sw.js',{scope:'/'});}
+ window.kaRefreshPushStats=async function(){try{const r=await adminFetch(W+'/api/admin/push/stats');const j=await r.json();if(!r.ok||!j.ok)throw Error(j.error||'Stats error');if($('kaPushCount'))$('kaPushCount').textContent=j.count??0;if($('kaPushUpdated'))$('kaPushUpdated').textContent=new Date().toLocaleTimeString('ku-IQ');if($('kaPushNavBadge'))$('kaPushNavBadge').textContent=j.count??0}catch(e){if($('kaPushSendResult'))$('kaPushSendResult').textContent='⚠️ '+e.message}};
+ window.kaAdminSubscribe=async function(){const out=$('kaAdminPushResult');try{if(!('Notification' in window))throw Error('Notification بەردەست نییە');const reg=await sw();let p=Notification.permission;if(p==='default')p=await Notification.requestPermission();if(p!=='granted')throw Error('ڕێگە بە Notification نەدرا');const key=await publicKey();let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(key)});const r=await adminFetch(W+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),source:'admin',url:location.pathname})});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw Error(j.error||'Subscription سەرکەوتوو نەبوو');if($('kaAdminPushStatus'))$('kaAdminPushStatus').textContent='چالاک ✓';if(out)out.textContent='✓ ئەم Admin ـە بۆ Push تۆمار کرا.';kaRefreshPushStats()}catch(e){if(out)out.textContent='⚠️ '+e.message}};
+ window.kaSendPush=async function(){const out=$('kaPushSendResult');const title=String($('kaPushTitle')?.value||'KURDIA ADVENTURE').trim();const body=String($('kaPushBody')?.value||'').trim();const url=String($('kaPushUrl')?.value||'/').trim()||'/';if(!body){if(out)out.textContent='⚠️ دەقی ئاگاداری بنووسە';return}const btn=event?.currentTarget;if(btn)btn.disabled=true;try{const r=await adminFetch(W+'/api/admin/push/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,body,url})});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw Error(j.error||`HTTP ${r.status}`);if(out)out.textContent=`✓ نێردرا: ${j.sent||0} | سەرکەوتوو نەبوو: ${j.failed||0} | سڕایەوە: ${j.removed||0}`;kaRefreshPushStats()}catch(e){if(out)out.textContent='⚠️ '+e.message}finally{if(btn)btn.disabled=false}};
+ window.addEventListener('load',()=>{sw().catch(()=>{});setTimeout(kaRefreshPushStats,900)});
 })();
 </script>
 
