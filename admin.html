@@ -814,17 +814,6 @@ body{
   <p class="muted">هەموو پەیوەندییەکانی Worker ـت لە یەک شوێنەوە ببینە، بە یەک کلیک تاقی بکەرەوە، و هەڵەکە بە HTTP، کاتی وەڵام و JSON بە ڕوونی ببینە.</p>
  </div>
 
- <div class="api-quick-tests" style="margin-bottom:12px">
-  <div class="api-quick-head"><div><b>⚡ تاقیکردنەوەی خێرا</b><small>تەنها شتێک هەڵبژێرە و دۆخەکە لە خوارەوە دەبینیت.</small></div><span id="quickTestStatus" class="api-live-badge">ئامادەیە</span></div>
-  <div class="api-quick-grid">
-   <div class="api-quick-card"><div class="qicon">📱</div><div class="qbody"><b>WhatsApp OTP</b><small>کۆدی OTP بنێرە بۆ ژمارەی تاقیکردنەوە.</small><input id="quickOtpPhone" class="input" dir="ltr" inputmode="tel" placeholder="0750xxxxxxx"><button class="btn red" onclick="quickSendOtp()">📨 ناردنی OTP</button></div></div>
-   <div class="api-quick-card"><div class="qicon">🔐</div><div class="qbody"><b>پشتڕاستکردنەوەی OTP</b><small>ئەو کۆدەی لە WhatsApp ـەوە هات داخل بکە.</small><input id="quickOtpCode" class="input" dir="ltr" inputmode="numeric" maxlength="4" placeholder="1234"><button class="btn ghost" onclick="quickVerifyOtp()">✅ پشتڕاستکردنەوە</button></div></div>
-   <div class="api-quick-card"><div class="qicon">🔎</div><div class="qbody"><b>Worker</b><small>پەیوەندی و وەڵامی Worker تاقی دەکاتەوە.</small><button class="btn ghost" onclick="apiCheckOnly()">🔌 تاقیکردنەوەی Worker</button></div></div>
-   <div class="api-quick-card"><div class="qicon">🌐</div><div class="qbody"><b>هەموو GET ـەکان</b><small>هەموو API ـە خوێندنەوەکان بە یەک کلیک.</small><button class="btn ghost" onclick="runSafeApiSuite()">⚡ تاقیکردنەوەی هەموو GET</button></div></div>
-  </div>
-  <div id="quickTestResult" class="api-quick-result">هێشتا هیچ تاقیکردنەوەیەک نەکراوە.</div>
- </div>
-
  <div class="k5-grid4" style="margin-bottom:12px">
   <div class="k5-mini"><small>کۆی تاقیکردنەوەکان</small><b id="apiTotalCount">0</b></div>
   <div class="k5-mini"><small>سەرکەوتوو</small><b id="apiPassCount">0</b></div>
@@ -853,6 +842,89 @@ body{
      <select id="apiPreset" class="input" onchange="apiPresetChanged()"></select>
     </div>
     <div class="field"><label>گەڕان لە API ـەکان</label><input id="apiSearch" class="input" placeholder="مثلاً weather, reviews, stories..." autocomplete="off"></div>
+   </div>
+
+   <div class="easy-test-panel" style="margin:10px 0 14px;border:1px solid var(--line);border-radius:18px;padding:14px;background:linear-gradient(135deg,rgba(199,43,73,.11),rgba(255,255,255,.02))">
+    <div style="font-weight:900;font-size:17px;margin-bottom:4px">⚡ تاقیکردنەوەی خێرا</div>
+    <div class="ss-help" style="margin-bottom:12px">هەر بەشێک وەک WhatsApp OTP ـە: زانیارییەکە بنووسە، دوگمەکە دابگرە، ئەنجامەکە لە خوارەوەی هەمان بەش دەردەکەوێت.</div>
+
+    <div class="easy-action-grid">
+      <div class="easy-action-card">
+        <div class="easy-action-title">📱 WhatsApp OTP</div>
+        <div class="easy-action-help">کۆدی OTP بۆ ژمارەی تاقیکردنەوە دەنێرێت.</div>
+        <input id="easyOtpPhone" class="input" dir="ltr" inputmode="tel" placeholder="0750xxxxxxx">
+        <button class="btn red easy-action-btn" type="button" onclick="easySendOtp()">📨 ناردنی OTP</button>
+        <div id="easyOtpResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">🔐 پشتڕاستکردنەوەی OTP</div>
+        <div class="easy-action-help">ژمارە و کۆدی ٤ ژمارە بنووسە و پشتڕاستی بکەرەوە.</div>
+        <input id="easyVerifyPhone" class="input" dir="ltr" inputmode="tel" placeholder="0750xxxxxxx">
+        <input id="easyVerifyCode" class="input" dir="ltr" inputmode="numeric" maxlength="4" placeholder="کۆدی ٤ ژمارە">
+        <button class="btn red easy-action-btn" type="button" onclick="easyVerifyOtp()">✅ پشتڕاستکردنەوە</button>
+        <div id="easyVerifyResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">✅ پشتڕاستکردنەوەی گەشت</div>
+        <div class="easy-action-help">نامەی trip_confirmation بۆ بەشداربوو دەنێرێت.</div>
+        <input id="easyConfirmPhone" class="input" dir="ltr" inputmode="tel" placeholder="0750xxxxxxx">
+        <input id="easyConfirmId" class="input" dir="ltr" placeholder="Booking ID">
+        <button class="btn red easy-action-btn" type="button" onclick="easyBookingConfirm()">📨 ناردنی پشتڕاستکردنەوە</button>
+        <div id="easyConfirmResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">❌ ڕەفزکردنی گەشت</div>
+        <div class="easy-action-help">نامەی trip_rejected بۆ بەشداربوو دەنێرێت.</div>
+        <input id="easyRejectPhone" class="input" dir="ltr" inputmode="tel" placeholder="0750xxxxxxx">
+        <input id="easyRejectId" class="input" dir="ltr" placeholder="Booking ID">
+        <input id="easyRejectReason" class="input" placeholder="هۆکاری ڕەفزکردن">
+        <button class="btn red easy-action-btn" type="button" onclick="easyBookingReject()">📨 ناردنی ڕەفزکردن</button>
+        <div id="easyRejectResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">📢 پەیامی بەکۆمەڵ</div>
+        <div class="easy-action-help">نامە بۆ لیستی ژمارەکان دەنێرێت.</div>
+        <input id="easyBroadcastPhones" class="input" dir="ltr" placeholder="0750..., 0751..., 0752...">
+        <textarea id="easyBroadcastMessage" class="input" rows="3" placeholder="دەقی نامەکە..."></textarea>
+        <button class="btn red easy-action-btn" type="button" onclick="easyBroadcast()">📨 ناردنی پەیامی بەکۆمەڵ</button>
+        <div id="easyBroadcastResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">🚌 ئاگاداری گەشت</div>
+        <div class="easy-action-help">trip_notification بۆ بەشداربووان دەنێرێت.</div>
+        <input id="easyTripPhones" class="input" dir="ltr" placeholder="0750..., 0751...">
+        <textarea id="easyTripMessage" class="input" rows="3" placeholder="دەقی ئاگاداریی گەشت..."></textarea>
+        <button class="btn red easy-action-btn" type="button" onclick="easyTripNotification()">📨 ناردنی ئاگاداری</button>
+        <div id="easyTripResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">🔎 Worker</div>
+        <div class="easy-action-help">پەیوەندی و دۆخی Worker تاقی دەکاتەوە.</div>
+        <button class="btn red easy-action-btn" type="button" onclick="easyWorker()">🔧 تاقیکردنەوەی Worker</button>
+        <div id="easyWorkerResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">🌐 هەموو GET API</div>
+        <div class="easy-action-help">هەموو API ـە خوێندنەوەکان بە یەک کلیک تاقی دەکاتەوە.</div>
+        <button class="btn red easy-action-btn" type="button" onclick="easyAllGet()">⚡ تاقیکردنەوەی هەموو GET</button>
+        <div id="easyGetResult" class="easy-action-result"></div>
+      </div>
+
+      <div class="easy-action-card">
+        <div class="easy-action-title">🤖 AI</div>
+        <div class="easy-action-help">AI API بە نامەیەکی تاقیکردنەوە تاقی دەکاتەوە.</div>
+        <textarea id="easyAiMessage" class="input" rows="2" placeholder="سڵاو، ئەمە تاقیکردنەوەی AI ـە.">سڵاو، ئەمە تاقیکردنەوەی AI ـە.</textarea>
+        <button class="btn red easy-action-btn" type="button" onclick="easyAi()">🤖 تاقیکردنەوەی AI</button>
+        <div id="easyAiResult" class="easy-action-result"></div>
+      </div>
+    </div>
    </div>
 
    <div class="api-request-preview">
@@ -891,7 +963,7 @@ body{
  <div class="api-lab-grid" style="margin-top:12px">
   <div class="api-lab-card">
    <div class="card-title">📨 تاقیکردنەوەی نامەکان</div>
-   <p class="ss-help">ئەم API ـانە دەتوانن نامەی ڕاستەقینە بنێرن. تەنها کاتێک کار دەکەن کە پشتڕاستی بکەیتەوە.</p>
+   <p class="ss-help">هەر نامەیەک لە بەشی «تاقیکردنەوەی خێرا» بە فۆڕمی تایبەتی خۆی تاقی بکەرەوە؛ ئەنجامی سەرکەوتن یان هەڵە لە خوارەوەی هەمان بەش دەردەکەوێت.</p>
    <div class="field"><label>ژمارەی WhatsApp ـی تاقیکردنەوە</label><input id="testPhone" class="input" dir="ltr" placeholder="0750xxxxxxx"></div>
    <label class="ss-check"><input type="checkbox" id="testSendConfirm"> من دەزانم ئەمە نامەی ڕاستەقینە دەنێرێت.</label>
   </div>
@@ -1917,14 +1989,24 @@ window.addEventListener("DOMContentLoaded",()=>{
 });
 </script>
 <input id="ssMobileImageInput" type="file" accept="image/*" capture="environment" style="display:none"><div id="ssImageUploadStatus" style="display:none"></div>
+<style id="kurdia-v12-easy-actions-css">
+.easy-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.easy-action-card{border:1px solid var(--line);border-radius:16px;background:#080e17;padding:13px;box-shadow:0 10px 28px rgba(0,0,0,.16)}
+.easy-action-title{font-weight:900;font-size:15px;color:#fff;margin-bottom:4px}
+.easy-action-help{font-size:11px;line-height:1.65;color:#8995a6;min-height:35px;margin-bottom:9px}
+.easy-action-card .input{margin-bottom:7px}
+.easy-action-btn{width:100%;min-height:44px;margin-top:2px}
+.easy-action-result{display:none;margin-top:9px;border-radius:12px;padding:10px;font-size:11px;line-height:1.7;white-space:pre-wrap;word-break:break-word;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.easy-action-result.ok{display:block;color:#65e6a1;background:rgba(50,212,134,.08);border-color:rgba(50,212,134,.30)}
+.easy-action-result.err{display:block;color:#ff8aa0;background:rgba(255,75,105,.08);border-color:rgba(255,75,105,.30)}
+@media(max-width:720px){.easy-action-grid{grid-template-columns:1fr}.easy-action-help{min-height:0}.easy-action-card{padding:12px}.easy-action-title{font-size:14px}}
+</style>
 <style id="kurdia-v12-api-center-css">
 .api-center-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.85fr);gap:12px}
 .api-runner-main{min-width:0}.api-section-head,.api-result-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.api-live-badge{font-size:11px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:#94a3b8}.api-live-badge.online{color:#53e59a;border-color:rgba(83,229,154,.25)}.api-live-badge.error{color:#ff6f8a;border-color:rgba(255,111,138,.25)}
 .api-category-tabs{display:flex;gap:7px;overflow:auto;padding:12px 0 8px}.api-cat{white-space:nowrap;border:1px solid var(--line);background:#0b111b;color:#aeb8c7;border-radius:12px;padding:9px 12px;font:inherit;font-size:11px;cursor:pointer}.api-cat.active{background:linear-gradient(135deg,#8d142c,#c72c4a);color:#fff;border-color:transparent}
 .api-control-grid,.api-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.api-detail-grid .full{grid-column:1/-1}.api-request-preview{display:grid;grid-template-columns:110px 1fr auto;gap:8px;align-items:stretch;margin:10px 0}.api-method-box,.api-url-box{border:1px solid var(--line);background:#080e17;border-radius:14px;padding:9px 11px;display:flex;flex-direction:column;justify-content:center}.api-method-box span,.api-url-box span{font-size:9px;color:#6f7b8d}.api-method-box b{font-size:14px}.api-url-box code{font-size:12px;color:#d8dee9;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left}.api-main-run{min-width:135px}.api-details{border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.015);margin-top:8px}.api-details summary{cursor:pointer;padding:12px;font-size:12px;font-weight:800}.api-details[open] summary{border-bottom:1px solid var(--line)}.api-details .api-detail-grid{padding:12px}.api-action-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.api-result-head{margin-bottom:7px;font-size:11px}.api-result-head span{color:#718096}.api-lab-response{min-height:190px;max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:15px;padding:14px;white-space:pre-wrap;word-break:break-word;font:12px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;direction:ltr;text-align:left;background:#060a10}.api-lab-response.api-ok{border-color:rgba(60,220,140,.28);box-shadow:inset 3px 0 0 #32d486}.api-lab-response.api-err{border-color:rgba(255,75,105,.3);box-shadow:inset 3px 0 0 #ff4b69}.api-empty{color:#748093}.api-endpoint-list{display:grid;gap:7px;max-height:590px;overflow:auto}.api-endpoint-item{width:100%;text-align:right;border:1px solid var(--line);background:#080e17;border-radius:12px;padding:9px 10px;cursor:pointer;color:#dbe2ec}.api-endpoint-item:hover{border-color:rgba(199,43,73,.5);transform:translateY(-1px)}.api-endpoint-item .top{display:flex;justify-content:space-between;align-items:center;gap:7px}.api-endpoint-item small{display:block;color:#738094;direction:ltr;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:4px}.api-method-pill{font-size:9px;padding:3px 6px;border-radius:6px;background:#151d29;color:#9facbd;font-weight:900}.api-history{display:grid;gap:7px;max-height:250px;overflow:auto}.api-history-item{border:1px solid var(--line);border-radius:10px;padding:8px;font:10px/1.6 ui-monospace,monospace;direction:ltr;text-align:left;background:#080e17}.api-history-item.ok{border-right:3px solid #32d486}.api-history-item.err{border-right:3px solid #ff4b69}.api-suite-row{display:flex;align-items:center;gap:8px;padding:8px;border-bottom:1px solid var(--line);font-size:11px}.api-suite-row:last-child{border-bottom:0}.api-suite-row .grow{flex:1}.api-suite-dot{width:8px;height:8px;border-radius:50%;background:#64748b}.api-suite-dot.ok{background:#32d486}.api-suite-dot.err{background:#ff4b69}.k5-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.api-search-hide{display:none!important}
-.api-quick-tests{border:1px solid rgba(199,43,73,.22);border-radius:18px;background:linear-gradient(145deg,rgba(141,20,44,.12),rgba(255,255,255,.02));padding:14px}.api-quick-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.api-quick-head b{font-size:15px}.api-quick-head small{display:block;color:#8491a4;font-size:10px;margin-top:4px}.api-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.api-quick-card{display:flex;gap:10px;border:1px solid var(--line);background:#080e17;border-radius:15px;padding:12px}.api-quick-card .qicon{font-size:23px;line-height:1}.api-quick-card .qbody{flex:1;min-width:0}.api-quick-card b{display:block;font-size:13px}.api-quick-card small{display:block;color:#7f8b9d;font-size:10px;line-height:1.7;margin:4px 0 8px}.api-quick-card .input{margin-bottom:7px}.api-quick-card .btn{width:100%}.api-quick-result{margin-top:10px;padding:12px;border-radius:13px;background:#060a10;border:1px solid var(--line);font-size:11px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.api-quick-result.ok{border-color:rgba(50,212,134,.35);box-shadow:inset 3px 0 #32d486}.api-quick-result.err{border-color:rgba(255,75,105,.35);box-shadow:inset 3px 0 #ff4b69}
-
-@media(max-width:900px){.api-center-grid{grid-template-columns:1fr}.api-control-grid,.api-detail-grid{grid-template-columns:1fr}.api-request-preview{grid-template-columns:82px 1fr}.api-main-run{grid-column:1/-1;width:100%}.k5-grid4{grid-template-columns:repeat(2,1fr)}.api-quick-grid{grid-template-columns:1fr}.api-quick-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:900px){.api-center-grid{grid-template-columns:1fr}.api-control-grid,.api-detail-grid{grid-template-columns:1fr}.api-request-preview{grid-template-columns:82px 1fr}.api-main-run{grid-column:1/-1;width:100%}.k5-grid4{grid-template-columns:repeat(2,1fr)}}
 </style>
 <script id="kurdia-v11-api-lab-js">
 (function(){
@@ -1972,46 +2054,101 @@ window.addEventListener("DOMContentLoaded",()=>{
    const path=$('apiPath').value.trim(),method=$('apiMethod').value;let body={};
    try{body=JSON.parse($('apiBody').value||'{}')}catch(e){show({error:'JSON نادروستە',detail:e.message},false,'❌ JSON Error');return}
    const isMsg=['/api/otp/send','/api/admin/verify-booking','/api/admin/reject-booking','/api/admin/send-broadcast','/api/admin/send-trip-notification'].some(x=>path.startsWith(x));
-   if(isMsg&&!$('testSendConfirm')?.checked){show({error:'پێش ناردنی نامەی ڕاستەقینە، checkbox ـی پشتڕاستکردنەوە چالاک بکە.'},false,'⚠️ Confirmation required');return}
+   if(isMsg && !path.startsWith('/api/otp/send') && !$('testSendConfirm')?.checked){show({error:'پێش ناردنی ئەم نامەیە، پشتڕاستکردنەوە چالاک بکە.'},false,'⚠️ پشتڕاستکردنەوە پێویستە');return}
    const phone=$('testPhone')?.value.trim();if(isMsg&&phone){if(body.phone)body.phone=phone;if(Array.isArray(body.phones))body.phones=[phone]}
    const started=performance.now();show('⏳ چاوەڕوان بە... ',true,`${method} ${path}`);
    try{const opt={method,headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()}};if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);const r=await adminFetch(WORKER_URL+path,opt);const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;show(data,r.ok,meta);history(meta,r.ok);saveHistory(meta,r.ok,ms,path);}catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);saveHistory(meta,false,ms,path);}
  };
- function getAdminKeySafe(){try{return sessionStorage.getItem('kurdia_admin_key')||sessionStorage.getItem('adminKey')||'2026'}catch{return '2026'}}
- function quickResult(ok,title,detail){const box=$('quickTestResult'),badge=$('quickTestStatus');if(!box)return;box.className='api-quick-result '+(ok?'ok':'err');box.textContent=(ok?'🟢 ':'🔴 ')+title+'\n'+detail;if(badge){badge.className='api-live-badge '+(ok?'online':'error');badge.textContent=ok?'سەرکەوتوو ✓':'هەڵە ✕';}}
- window.quickSendOtp=async function(){
-   const phone=($('quickOtpPhone')?.value||'').trim();
-   if(!phone){quickResult(false,'ژمارە نەدراوە','تکایە سەرەتا ژمارەی WhatsApp بنووسە.');return;}
-   quickResult(true,'⏳ OTP دەنێردرێت...','تکایە چاوەڕوان بە.');
-   const started=performance.now();
+ function easySetResult(id, ok, title, data, ms){
+   const el=$(id); if(!el)return;
+   el.className='easy-action-result '+(ok?'ok':'err'); el.style.display='block';
+   let detail='';
+   if(typeof data==='string') detail=data; else if(data) detail=data.error||data.message||data.reason||JSON.stringify(data,null,2);
+   el.textContent=(ok?'✅ ':'❌ ')+title+(detail?'\n'+detail:'')+(ms!=null?'\n⏱️ '+ms+'ms':'');
+ }
+ function easyPhones(id){return String($(id)?.value||'').split(/[,\n\s]+/).map(x=>x.trim()).filter(Boolean)}
+ async function easyPost(path,body,resultId,successTitle){
+   const started=performance.now(); easySetResult(resultId,true,'⏳ تاقیکردنەوە دەکرێت...');
    try{
-     const r=await adminFetch(WORKER_URL+'/api/otp/send',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()},body:JSON.stringify({phone})});
-     const raw=await r.text();let d;try{d=JSON.parse(raw)}catch{d={raw}}
-     const ms=Math.round(performance.now()-started);
-     if(r.ok&&d.ok){quickResult(true,'WhatsApp OTP نێردرا ✓',`HTTP ${r.status} · ${ms}ms\nژمارە: ${d.phone||phone}\nئێستا کۆدی 4 ژمارەکە لە WhatsApp ـەکەت بخوێنەوە و لە خانەی OTP دایبنێ.`);}
-     else{quickResult(false,'WhatsApp OTP نەنێردرا ✕',`HTTP ${r.status} · ${ms}ms\nهۆکاری هەڵە: ${d.error||'وەڵامی نادیار لە Worker'}`);}
-     const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · POST /api/otp/send`;history(meta,r.ok);saveHistory(meta,r.ok,ms,'/api/otp/send');loadHistory();
-   }catch(e){const ms=Math.round(performance.now()-started);quickResult(false,'پەیوەندی بە Worker نەکرا ✕',`NETWORK ERROR · ${ms}ms\n${e.message||e}`);}
+     const r=await adminFetch(WORKER_URL+path,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()},body:JSON.stringify(body)});
+     const raw=await r.text(); let data; try{data=JSON.parse(raw)}catch{data=raw}
+     const ms=Math.round(performance.now()-started); const ok=r.ok && data?.ok!==false;
+     const title=ok?successTitle:`هەڵە — HTTP ${r.status}`;
+     easySetResult(resultId,ok,title,data,ms); saveHistory(`${ok?'🟢':'🔴'} HTTP ${r.status} · ${ms}ms · POST ${path}`,ok,ms,path);
+     return {ok,data,r,ms};
+   }catch(e){const ms=Math.round(performance.now()-started);easySetResult(resultId,false,'پەیوەندی بە Worker نەکرا',e.message,ms);saveHistory(`🔴 NETWORK · ${ms}ms · POST ${path}`,false,ms,path);return {ok:false,error:e,ms};}
+ }
+ window.easySendOtp=async function(){
+   const phone=String($('easyOtpPhone')?.value||'').trim(); if(!phone){easySetResult('easyOtpResult',false,'ژمارەی WhatsApp بنووسە');return;}
+   $('easyVerifyPhone').value=phone; $('testPhone').value=phone; await easyPost('/api/otp/send',{phone},'easyOtpResult','OTP نێردرا بۆ WhatsApp ✓');
  };
- window.quickVerifyOtp=async function(){
-   const phone=($('quickOtpPhone')?.value||'').trim(),code=($('quickOtpCode')?.value||'').trim();
-   if(!phone||!code){quickResult(false,'داتا تەواو نییە','ژمارە و کۆدی OTP هەردووکیان پڕ بکەرەوە.');return;}
-   quickResult(true,'⏳ OTP پشتڕاست دەکرێتەوە...','تکایە چاوەڕوان بە.');
-   const started=performance.now();
-   try{
-     const r=await adminFetch(WORKER_URL+'/api/otp/verify',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()},body:JSON.stringify({phone,code})});
-     const raw=await r.text();let d;try{d=JSON.parse(raw)}catch{d={raw}}
-     const ms=Math.round(performance.now()-started);
-     if(r.ok&&d.ok){quickResult(true,'OTP پشتڕاست کرایەوە ✓',`HTTP ${r.status} · ${ms}ms\nژمارەکە بە سەرکەوتوویی پشتڕاست کرایەوە.`);}
-     else{quickResult(false,'OTP پشتڕاست نەکرایەوە ✕',`HTTP ${r.status} · ${ms}ms\nهۆکاری هەڵە: ${d.error||'کۆدەکە هەڵەیە یان بەسەرچووە'}`);}
-     const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · POST /api/otp/verify`;history(meta,r.ok);saveHistory(meta,r.ok,ms,'/api/otp/verify');loadHistory();
-   }catch(e){const ms=Math.round(performance.now()-started);quickResult(false,'پەیوەندی بە Worker نەکرا ✕',`NETWORK ERROR · ${ms}ms\n${e.message||e}`);}
+ window.easyVerifyOtp=async function(){
+   const phone=String($('easyVerifyPhone')?.value||'').trim(),code=String($('easyVerifyCode')?.value||'').trim();
+   if(!phone||!code){easySetResult('easyVerifyResult',false,'ژمارە و کۆدی OTP پڕ بکەرەوە');return;}
+   await easyPost('/api/otp/verify',{phone,code},'easyVerifyResult','OTP بە سەرکەوتوویی پشتڕاستکرایەوە ✓');
  };
+ window.easyBookingConfirm=async function(){
+   const phone=String($('easyConfirmPhone')?.value||'').trim(),id=String($('easyConfirmId')?.value||'').trim();
+   if(!phone||!id){easySetResult('easyConfirmResult',false,'ژمارە و Booking ID پڕ بکەرەوە');return;}
+   await easyPost('/api/admin/verify-booking',{phone,id},'easyConfirmResult','نامەی پشتڕاستکردنەوە نێردرا ✓');
+ };
+ window.easyBookingReject=async function(){
+   const phone=String($('easyRejectPhone')?.value||'').trim(),id=String($('easyRejectId')?.value||'').trim(),reason=String($('easyRejectReason')?.value||'').trim();
+   if(!phone||!id){easySetResult('easyRejectResult',false,'ژمارە و Booking ID پڕ بکەرەوە');return;}
+   await easyPost('/api/admin/reject-booking',{phone,id,reason:reason||'پسوولەکە ناڕوونە یان بڕی پارەکە تەواو نییە'},'easyRejectResult','نامەی ڕەفزکردن نێردرا ✓');
+ };
+ window.easyBroadcast=async function(){
+   const phones=easyPhones('easyBroadcastPhones'),message=String($('easyBroadcastMessage')?.value||'').trim();
+   if(!phones.length||!message){easySetResult('easyBroadcastResult',false,'ژمارە و دەقی نامە پڕ بکەرەوە');return;}
+   if(!confirm('ئەمە نامەی ڕاستەقینە بۆ WhatsApp دەنێرێت. دڵنیایت؟'))return;
+   await easyPost('/api/admin/send-broadcast',{phones,message},'easyBroadcastResult','پەیامی بەکۆمەڵ نێردرا ✓');
+ };
+ window.easyTripNotification=async function(){
+   const phones=easyPhones('easyTripPhones'),message=String($('easyTripMessage')?.value||'').trim();
+   if(!phones.length||!message){easySetResult('easyTripResult',false,'ژمارە و دەقی ئاگاداری پڕ بکەرەوە');return;}
+   if(!confirm('ئەمە ئاگاداریی ڕاستەقینەی گەشت دەنێرێت. دڵنیایت؟'))return;
+   await easyPost('/api/admin/send-trip-notification',{phones,message},'easyTripResult','ئاگاداریی گەشت نێردرا ✓');
+ };
+ window.easyWorker=async function(){
+   const started=performance.now();easySetResult('easyWorkerResult',true,'⏳ Worker تاقیدەکرێتەوە...');
+   try{const r=await adminFetch(WORKER_URL+'/',{method:'GET'});const raw=await r.text();let data;try{data=JSON.parse(raw)}catch{data=raw}const ms=Math.round(performance.now()-started);easySetResult('easyWorkerResult',r.ok,'Worker '+(r.ok?'لە کاردایە ✓':`هەڵە — HTTP ${r.status}`),data,ms);saveHistory(`${r.ok?'🟢':'🔴'} ${r.status} · ${ms}ms · /`,r.ok,ms,'/');}catch(e){const ms=Math.round(performance.now()-started);easySetResult('easyWorkerResult',false,'پەیوەندی بە Worker نەکرا',e.message,ms);}
+ };
+ window.easyAllGet=async function(){
+   const el=$('easyGetResult'); if(!el)return;el.className='easy-action-result ok';el.style.display='block';el.textContent='⏳ هەموو GET ـەکان تاقی دەکرێنەوە...';
+   const safe=Object.entries(defs).filter(([k,x])=>x.safe);let lines=[];let pass=0,fail=0;
+   for(const [k,x] of safe){const st=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const ms=Math.round(performance.now()-st);if(r.ok)pass++;else fail++;lines.push(`${r.ok?'🟢':'🔴'} ${r.status} · ${ms}ms · ${x.p}`);saveHistory(`${r.ok?'🟢':'🔴'} ${r.status} · ${ms}ms · ${x.p}`,r.ok,ms,x.p);}catch(e){fail++;const ms=Math.round(performance.now()-st);lines.push(`🔴 NETWORK · ${ms}ms · ${x.p}`);}}
+   el.className='easy-action-result '+(fail?'err':'ok');el.textContent=`${fail?'❌':'✅'} سەرکەوتوو: ${pass} · هەڵە: ${fail}\n\n`+lines.join('\n');
+ };
+ window.easyAi=async function(){const message=String($('easyAiMessage')?.value||'').trim();if(!message){easySetResult('easyAiResult',false,'نامەی AI بنووسە');return;}await easyPost('/api/ai',{message},'easyAiResult','AI وەڵامی دا ✓');};
 
+ function getAdminKeySafe(){try{return sessionStorage.getItem('kurdia_admin_key')||sessionStorage.getItem('adminKey')||'2026'}catch{return '2026'}}
+ window.quickWhatsAppOtp=async function(){
+   const phone=String($('quickTestPhone')?.value||$('testPhone')?.value||'').trim();
+   const out=$('quickTestResult');
+   if(!phone){if(out){out.style.display='block';out.style.background='rgba(255,75,105,.10)';out.style.border='1px solid rgba(255,75,105,.35)';out.textContent='❌ ژمارەی WhatsApp بنووسە.';} return;}
+   if($('testPhone')) $('testPhone').value=phone;
+   const x=defs.otpSend; const started=performance.now();
+   if(out){out.style.display='block';out.style.background='rgba(255,255,255,.04)';out.style.border='1px solid var(--line)';out.textContent='⏳ OTP دەنێردرێت...';}
+   try{
+     const opt={method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()},body:JSON.stringify({phone})};
+     const r=await adminFetch(WORKER_URL+x.p,opt); const raw=await r.text(); let data; try{data=JSON.parse(raw)}catch{data=raw}
+     const ms=Math.round(performance.now()-started); const ok=r.ok && data?.ok!==false;
+     const reason=data?.error||data?.message||(!r.ok?`HTTP ${r.status}`:'OTP بە سەرکەوتوویی نێردرا');
+     const meta=`${ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · POST ${x.p}`;
+     show(data,ok,meta); history(meta,ok); saveHistory(meta,ok,ms,x.p);
+     if(out){out.style.background=ok?'rgba(50,212,134,.10)':'rgba(255,75,105,.10)';out.style.border='1px solid '+(ok?'rgba(50,212,134,.35)':'rgba(255,75,105,.35)');out.textContent=(ok?'✅ OTP نێردرا. ':'❌ OTP نەگەیشت. ')+reason+'\n\n'+meta;}
+   }catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · POST ${x.p}`;show({error:e.message},false,meta);history(meta,false);saveHistory(meta,false,ms,x.p);if(out){out.style.display='block';out.style.background='rgba(255,75,105,.10)';out.style.border='1px solid rgba(255,75,105,.35)';out.textContent='❌ پەیوەندی بە Worker نەکرا.\n'+e.message;}}
+ };
+ window.quickWorkerTest=async function(){
+   const old=$('apiPreset')?.value; if($('apiPreset')){$('apiPreset').value='diagnostics';apiPresetChanged();} await runApiTest(); if(old&&$('apiPreset')){$('apiPreset').value=old;apiPresetChanged();}
+ };
+ window.quickAiTest=async function(){
+   if($('apiPreset')){$('apiPreset').value='ai';apiPresetChanged();} await runApiTest();
+ };
  window.apiCheckOnly=async function(){const old=$('apiPreset').value;activeCat='all';search='';renderCats();renderPresets();$('apiPreset').value='diagnostics';apiPresetChanged();await runApiTest();$('apiPreset').value=old;apiPresetChanged();};
  window.runSafeApiSuite=async function(){
    const safe=Object.entries(defs).filter(([k,x])=>x.safe);const box=$('apiResult');if(!box)return;box.className='api-lab-response api-empty';box.textContent='⚡ تاقیکردنەوەی هەموو API ـەکانی GET دەستی پێکرد...\n\n';
-   let lines=[];for(const [k,x] of safe){const started=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const hint=r.status===401?' ← Admin API Key پێویستە':r.status===403?' ← دەسەڵات/OTP پێویستە':r.status>=500?' ← هەڵەی Worker/Server':'';const line=`${r.ok?'🟢':'🔴'} ${x.m.padEnd(6)} ${r.status} · ${String(ms).padStart(4)}ms · ${x.p}${hint}`;lines.push(line);saveHistory(line,r.ok,ms,x.p);if(r.ok)history(line,true);else history(line,false);}catch(e){const ms=Math.round(performance.now()-started);const line=`🔴 GET    NETWORK · ${ms}ms · ${x.p}`;lines.push(line);saveHistory(line,false,ms,x.p);history(line,false);}box.textContent='⚡ ئەنجامی تاقیکردنەوەی هەموو GET ـەکان:\n\n'+lines.join('\n');}
+   let lines=[];for(const [k,x] of safe){const started=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const line=`${r.ok?'🟢':'🔴'} ${x.m.padEnd(6)} ${r.status} · ${String(ms).padStart(4)}ms · ${x.p}`;lines.push(line);saveHistory(line,r.ok,ms,x.p);if(r.ok)history(line,true);else history(line,false);}catch(e){const ms=Math.round(performance.now()-started);const line=`🔴 GET    NETWORK · ${ms}ms · ${x.p}`;lines.push(line);saveHistory(line,false,ms,x.p);history(line,false);}box.textContent='⚡ ئەنجامی تاقیکردنەوەی هەموو GET ـەکان:\n\n'+lines.join('\n');}
    loadHistory();
  };
  document.addEventListener('DOMContentLoaded',()=>{
