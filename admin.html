@@ -294,13 +294,9 @@ body{
 @media(max-width:1050px){.cc-kpis{grid-template-columns:repeat(2,1fr)}.cc-main-grid{grid-template-columns:1fr}}@media(max-width:850px){.cc-title{font-size:22px}.cc-hero{padding:18px}.cc-kpi b{font-size:21px}.cc-quick{grid-template-columns:1fr}}@media(max-width:520px){.cc-kpis{gap:8px}.cc-kpi{padding:13px}.cc-kpi b{font-size:20px}.cc-card{padding:13px}.cc-trip-head{display:block}}
 </style>
 
-<!-- KURDIA ADMIN PUSH ADDITIVE LAYER -->
-<link rel="manifest" href="/admin-manifest.json">
-<style id="kurdia-admin-push-style">
-#kurdiaPushPanel{position:fixed;inset:auto 14px 18px 14px;z-index:99991;max-width:720px;margin:auto;display:none;background:rgba(9,13,20,.98);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:18px;box-shadow:0 24px 80px rgba(0,0,0,.5);backdrop-filter:blur(22px)}
-#kurdiaPushPanel.open{display:block}
-#kurdiaPushPanel h3{margin:0 0 6px;font-size:16px}.kp-sub{font-size:11px;color:#9da7b7;line-height:1.8}.kp-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.kp-grid textarea{grid-column:1/-1;min-height:100px;resize:vertical}.kp-grid input,.kp-grid textarea{width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);color:#fff;border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:11px;outline:none}.kp-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.kp-actions button{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.05);color:#fff;font-weight:800}.kp-actions .primary{background:#a91d37;border-color:#a91d37}.kp-status{font-size:11px;color:#aeb7c5;margin-top:10px;white-space:pre-wrap}.kp-fab{position:fixed;right:14px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:99990;border:1px solid rgba(255,255,255,.12);background:#a91d37;color:#fff;border-radius:999px;padding:12px 15px;font-weight:900;box-shadow:0 12px 35px rgba(0,0,0,.35)}
-@media(max-width:600px){.kp-grid{grid-template-columns:1fr}}
+<style id="kurdia-admin-test-notifications-css">
+.kat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.kat-card{background:#0a0f16;border:1px solid rgba(255,255,255,.08);border-radius:17px;padding:14px}.kat-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.kat-title{font-weight:900;font-size:14px}.kat-muted{color:#929dad;font-size:11px;line-height:1.8}.kat-status{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.08);background:#070b11;border-radius:999px;padding:6px 9px;font-size:10px}.kat-dot{width:8px;height:8px;border-radius:50%;background:#929dad}.kat-dot.ok{background:#32c985;box-shadow:0 0 10px rgba(50,201,133,.45)}.kat-dot.err{background:#d53350}.kat-dot.warn{background:#f0b44b}.kat-actions{display:flex;gap:8px;flex-wrap:wrap}.kat-field{display:flex;flex-direction:column;gap:6px;margin-top:10px}.kat-field label{font-size:10px;color:#929dad;font-weight:800}.kat-field input,.kat-field textarea{width:100%;box-sizing:border-box;background:#070b11;border:1px solid rgba(255,255,255,.09);border-radius:12px;color:#f7f8fa;padding:10px;font-size:12px;outline:none}.kat-field textarea{min-height:90px;resize:vertical}.kat-result{white-space:pre-wrap;word-break:break-word;margin-top:10px;background:#070b11;border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:11px;color:#cbd3de;font-size:10px;line-height:1.8;min-height:42px}.kat-error{border-color:rgba(211,51,80,.3)!important;color:#ffb2bf}.kat-log{max-height:340px;overflow:auto;display:grid;gap:7px}.kat-log-item{background:#070b11;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:9px;font-size:10px}.kat-log-item b{display:block;margin-bottom:3px}.kat-empty{color:#6f7886;text-align:center;padding:18px;font-size:11px}
+@media(max-width:850px){.kat-grid{grid-template-columns:1fr}}
 </style>
 
 </head>
@@ -355,6 +351,8 @@ body{
 <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users-round"></i> Community Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> WhatsApp Center</button></li>
 <li class="cc-nav-label">SYSTEM</li>
+<li><button class="nav-btn" onclick="switchTab('kurdia_notifications')"><i data-lucide="bell-ring"></i> ئاگادارییەکان (Push)</button></li>
+<li><button class="nav-btn" onclick="switchTab('kurdia_test_center')"><i data-lucide="bug"></i> ناوەندی تاقیکردنەوە</button></li>
 <li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button></li>
 <li><button class="nav-btn" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button></li>
@@ -2396,44 +2394,89 @@ window.quickWorkerTest=async function(){
 })();
 </script>
 
-<!-- KURDIA ADMIN PUSH — additive only -->
-<button class="kp-fab" id="kurdiaPushFab">🔔 Push</button>
-<section id="kurdiaPushPanel" aria-label="Push Notification">
-  <h3>🔔 ئاگادارییەکانی KURDIA</h3>
-  <div class="kp-sub">لە ئەم بەشەوە ئاگاداری بۆ ئەو بەکارهێنەرانە دەنێریت کە Push ـیان چالاک کردووە.</div>
-  <div class="kp-grid">
-    <input id="kurdiaPushTitle" maxlength="120" placeholder="سەردێڕ — KURDIA ADVENTURE">
-    <input id="kurdiaPushUrl" maxlength="500" placeholder="شوێنی کردنەوە، وەک /#trips">
-    <textarea id="kurdiaPushBody" maxlength="1000" placeholder="دەقی ئاگادارییەکە..." required></textarea>
+
+<!-- KURDIA ADMIN — NOTIFICATIONS + TEST CENTER (ADDITIVE ONLY) -->
+<section class="page-tab" id="tab-kurdia_notifications">
+  <div class="hero" style="margin-bottom:12px">
+    <div class="eyebrow">KURDIA NOTIFICATIONS</div>
+    <h2 style="margin:4px 0 7px">🔔 ئاگادارییەکانی KURDIA</h2>
+    <p class="text-xs text-gray-400" style="line-height:1.9">لەم بەشەوە Push بۆ بەکارهێنەرانی چالاک دەنێریت. هەموو ئەنجام و هەڵەکان لە خوارەوە بە وردی پیشان دەدرێن.</p>
   </div>
-  <div class="kp-actions">
-    <button class="primary" id="kurdiaPushSend">ناردنی Push</button>
-    <button id="kurdiaPushStats">ژمارەی بەشداربووان</button>
-    <button id="kurdiaPushClose">داخستن</button>
+  <div class="kat-grid">
+    <div class="kat-card">
+      <div class="kat-head"><div class="kat-title">ناردنی Push</div><span class="kat-status"><i class="kat-dot" id="katPushDot"></i><span id="katPushCount">پشکنین...</span></span></div>
+      <div class="kat-muted">سەردێڕ، دەق و شوێنی کردنەوەی ئاگادارییەکە بنووسە.</div>
+      <div class="kat-field"><label>سەردێڕ</label><input id="katPushTitle" maxlength="120" value="KURDIA ADVENTURE"></div>
+      <div class="kat-field"><label>شوێنی کردنەوە</label><input id="katPushUrl" maxlength="500" value="/"></div>
+      <div class="kat-field"><label>دەقی ئاگاداری</label><textarea id="katPushBody" maxlength="1000" placeholder="دەقی ئاگادارییەکە..." required></textarea></div>
+      <div class="kat-actions" style="margin-top:10px"><button class="btn btn-primary" id="katPushSend"><i data-lucide="send"></i> ناردنی Push</button><button class="btn btn-secondary" id="katPushStats"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button></div>
+      <div class="kat-result" id="katPushResult">ئامادەیە.</div>
+    </div>
+    <div class="kat-card">
+      <div class="kat-head"><div class="kat-title">دۆخی Push</div><span class="kat-status"><i class="kat-dot" id="katSubDot"></i><span id="katSubState">پشکنین...</span></span></div>
+      <div class="kat-muted">ئەم بەشە تەنها دۆخی subscription ـی ئەم ئامێرە و Worker public key ـە پشکنین دەکات.</div>
+      <div class="kat-result" id="katPushEnvironment">پشکنین نەکراوە.</div>
+    </div>
   </div>
-  <div class="kp-status" id="kurdiaPushStatus"></div>
 </section>
-<script id="kurdia-admin-push-additive-js">
+
+<section class="page-tab" id="tab-kurdia_test_center">
+  <div class="hero" style="margin-bottom:12px">
+    <div class="eyebrow">KURDIA SYSTEM TEST CENTER</div>
+    <h2 style="margin:4px 0 7px">🧪 ناوەندی تاقیکردنەوە و هەڵەکان</h2>
+    <p class="text-xs text-gray-400" style="line-height:1.9">هەموو پشکنینەکانی ئەم بەشە تاقیکردنەوەن؛ هیچ داتای CMS یان ناوەڕۆکی ماڵپەڕ ناگۆڕێت. هەڵەکانی JavaScript، Worker و Push لێرە کۆدەکرێنەوە.</p>
+  </div>
+  <div class="kat-grid">
+    <div class="kat-card">
+      <div class="kat-head"><div class="kat-title">پشکنینی سیستەم</div><span class="kat-status"><i class="kat-dot" id="katTestOverallDot"></i><span id="katTestOverall">ئامادە</span></span></div>
+      <div class="kat-actions"><button class="btn btn-primary" id="katRunTests"><i data-lucide="play"></i> دەستپێکردنی هەموو پشکنینەکان</button><button class="btn btn-secondary" id="katClearErrors"><i data-lucide="trash-2"></i> پاککردنەوەی تۆمار</button></div>
+      <div class="kat-result" id="katTestResult">هیچ پشکنینێک هێشتا نەکراوە.</div>
+    </div>
+    <div class="kat-card">
+      <div class="kat-head"><div class="kat-title">هەڵەکانی JavaScript</div><span class="kat-status"><i class="kat-dot" id="katJsDot"></i><span id="katJsCount">0</span></span></div>
+      <div class="kat-muted">هەڵەی runtime و unhandled promise لە کاتی کارکردنی Admin لێرە تۆمار دەکرێت.</div>
+      <div class="kat-log" id="katJsErrors"><div class="kat-empty">هیچ هەڵەیەک تۆمار نەکراوە.</div></div>
+    </div>
+  </div>
+  <div class="kat-card" style="margin-top:12px">
+    <div class="kat-head"><div class="kat-title">ئەنجامی پشکنینەکان</div><span class="kat-status"><i class="kat-dot" id="katWorkerDot"></i><span id="katWorkerState">چاوەڕوان</span></span></div>
+    <div class="kat-log" id="katTestLog"><div class="kat-empty">پشکنینەکان لێرە دەردەکەون.</div></div>
+  </div>
+</section>
+
+
+<script id="kurdia-admin-test-notifications-js">
 (function(){
   'use strict';
-  const WORKER='https://kurdia.alwandssalh.workers.dev';
+  const W='https://kurdia.alwandssalh.workers.dev';
   const $=id=>document.getElementById(id);
-  const panel=$('kurdiaPushPanel'), status=$('kurdiaPushStatus');
-  function key(){try{return typeof getAdminKeySafe==='function'?getAdminKeySafe():(typeof getAdminKey==='function'?getAdminKey():'');}catch(e){return '';}}
-  function headers(){return {'Content-Type':'application/json','X-Admin-Key':String(key()||'').trim()};}
-  async function call(path,opt={}){const h=Object.assign({},opt.headers||{},headers());return fetch(WORKER+path,Object.assign({},opt,{headers:h}));}
-  function open(){panel?.classList.add('open');loadStats();}
-  function close(){panel?.classList.remove('open');}
-  async function loadStats(){try{const r=await call('/api/admin/push/stats',{method:'GET'});const d=await r.json();status.textContent=r.ok&&d.ok?`بەشداربووان: ${d.count}\nدوایین نوێکردنەوە: ${d.updatedAt||'—'}`:`❌ ${d.error||'هەڵە'}`;}catch(e){status.textContent='❌ پەیوەندی بە Worker نەکرا';}}
-  async function send(){
-    const title=String($('kurdiaPushTitle')?.value||'KURDIA ADVENTURE').trim();
-    const body=String($('kurdiaPushBody')?.value||'').trim();
-    const url=String($('kurdiaPushUrl')?.value||'/').trim()||'/';
-    if(!body){status.textContent='❌ دەقی ئاگاداری بنووسە';return;}
-    status.textContent='⏳ خەریکە دەنێردرێت...';
-    try{const r=await call('/api/admin/push/send',{method:'POST',body:JSON.stringify({title,body,url})});const d=await r.json();status.textContent=r.ok&&d.ok?`✅ نێردرا: ${d.sent}\n❌ سەرکەوتوو نەبوو: ${d.failed}\n🗑️ سڕایەوە: ${d.removed}`:`⚠️ نێردرا: ${d.sent||0} · هەڵە: ${d.failed||0}\n${d.error||''}`;}catch(e){status.textContent='❌ '+(e.message||'هەڵە');}
-  }
-  $('kurdiaPushFab')?.addEventListener('click',open);$('kurdiaPushClose')?.addEventListener('click',close);$('kurdiaPushStats')?.addEventListener('click',loadStats);$('kurdiaPushSend')?.addEventListener('click',send);
+  const errors=[];
+  function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+  function adminKey(){try{return typeof getAdminKeySafe==='function'?String(getAdminKeySafe()||''):'';}catch{return '';}}
+  function hdr(){return {'Content-Type':'application/json','X-Admin-Key':adminKey()};}
+  function addJsError(type,msg,source){errors.unshift({type,msg:String(msg||''),source:String(source||''),time:new Date().toLocaleTimeString('ku-IQ')});if(errors.length>50)errors.length=50;renderErrors();}
+  window.addEventListener('error',e=>addJsError('JS Error',e.message||'Unknown error',e.filename?`${e.filename}:${e.lineno||''}`:''));
+  window.addEventListener('unhandledrejection',e=>addJsError('Promise Error',e.reason?.message||String(e.reason||'Unknown rejection'),'unhandledrejection'));
+  function renderErrors(){const box=$('katJsErrors'),count=$('katJsCount'),dot=$('katJsDot');if(count)count.textContent=String(errors.length);if(dot)dot.className='kat-dot '+(errors.length?'err':'ok');if(!box)return;box.innerHTML=errors.length?errors.map(x=>`<div class="kat-log-item kat-error"><b>${esc(x.type)} · ${esc(x.time)}</b><div>${esc(x.msg)}</div><small>${esc(x.source)}</small></div>`).join(''):'<div class="kat-empty">هیچ هەڵەیەک تۆمار نەکراوە.</div>';}
+  function logTest(name,status,detail){const box=$('katTestLog');if(!box)return;if(box.querySelector('.kat-empty'))box.innerHTML='';const cls=status==='OK'?'ok':status==='WARN'?'warn':'err';box.insertAdjacentHTML('beforeend',`<div class="kat-log-item"><b><span class="kat-status"><i class="kat-dot ${cls}"></i>${esc(status)}</span> ${esc(name)}</b><div>${esc(detail)}</div></div>`);}
+  async function stats(){const r=await fetch(W+'/api/admin/push/stats',{headers:hdr(),cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw Error(d.error||`Worker Stats HTTP ${r.status}`);return d;}
+  async function publicKey(){const r=await fetch(W+'/api/push/public-key',{cache:'no-store'});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok||!d.publicKey)throw Error(d.error||`Public Key HTTP ${r.status}`);return d.publicKey;}
+  async function workerHealth(){const r=await fetch(W+'/api/health',{cache:'no-store'});const t=await r.text();return {ok:r.ok,status:r.status,text:t.slice(0,300)};}
+  async function pushLocal(){if(!('Notification' in window)||!('serviceWorker' in navigator)||!('PushManager' in window))throw Error('ئەم بەرەوسەرە Push API پشتیوانی ناکات');const reg=await navigator.serviceWorker.getRegistration();if(!reg)throw Error('Service Worker تۆمار نەکراوە');const sub=await reg.pushManager.getSubscription();return {permission:Notification.permission,subscribed:!!sub,endpoint:sub?.endpoint||''};}
+  async function refreshStats(){try{const d=await stats();$('katPushCount').textContent=`بەشداربووان: ${d.count}`;$('katPushDot').className='kat-dot '+(d.count?'ok':'warn');}catch(e){$('katPushCount').textContent='هەڵە';$('katPushDot').className='kat-dot err';throw e;}}
+  async function refreshEnv(){const out=$('katPushEnvironment');try{const [pk,loc]=await Promise.all([publicKey(),pushLocal()]);$('katSubState').textContent=loc.subscribed?'چالاکە':'چالاک نییە';$('katSubDot').className='kat-dot '+(loc.subscribed?'ok':'warn');out.className='kat-result';out.textContent=`Worker Public Key: OK\nNotification: ${loc.permission}\nSubscription: ${loc.subscribed?'OK':'نییە'}\nEndpoint: ${loc.endpoint?loc.endpoint.slice(0,90)+'…':'—'}\nVAPID Public Key: ${pk.slice(0,24)}…`;return true;}catch(e){$('katSubState').textContent='هەڵە';$('katSubDot').className='kat-dot err';out.className='kat-result kat-error';out.textContent='❌ '+(e.message||e);return false;}}
+  async function runTests(){const overall=$('katTestOverall'),od=$('katTestOverallDot'),res=$('katTestResult'),wd=$('katWorkerDot'),ws=$('katWorkerState');if(overall)overall.textContent='پشکنین...';if(od)od.className='kat-dot warn';if(res)res.textContent='خەریکە هەموو پشکنینەکان ئەنجام دەدرێن...';if($('katTestLog'))$('katTestLog').innerHTML='';let fail=0;
+    try{const h=await workerHealth();logTest('Worker Health',h.ok?'OK':'WARN',`HTTP ${h.status}${h.text?' · '+h.text:''}`);if(!h.ok)fail++;}catch(e){fail++;logTest('Worker Health','ERROR',e.message||String(e));}
+    try{const pk=await publicKey();logTest('VAPID Public Key','OK',`Public key وەرگیرا · ${pk.slice(0,24)}…`);}catch(e){fail++;logTest('VAPID Public Key','ERROR',e.message||String(e));}
+    try{const d=await stats();logTest('Push Subscribers','OK',`بەشداربووان: ${d.count}`);}catch(e){fail++;logTest('Push Subscribers','ERROR',e.message||String(e));}
+    try{const l=await pushLocal();logTest('Local Push','OK',`permission=${l.permission} · subscribed=${l.subscribed}`);}catch(e){fail++;logTest('Local Push','ERROR',e.message||String(e));}
+    try{await refreshEnv();}catch{}
+    if(ws){ws.textContent=fail?'هەڵە هەیە':'کار دەکات';}if(wd)wd.className='kat-dot '+(fail?'err':'ok');if(overall)overall.textContent=fail?`هەڵە: ${fail}`:'هەموو پشکنینەکان سەرکەوتوو';if(od)od.className='kat-dot '+(fail?'err':'ok');if(res){res.className='kat-result '+(fail?'kat-error':'');res.textContent=fail?`❌ ${fail} پشکنین سەرکەوتوو نەبوو. وردەکاری لە خوارەوەیە.`:'✅ هەموو پشکنینە سەرەتاییەکان سەرکەوتوون.';}}
+  async function sendPush(){const title=String($('katPushTitle')?.value||'KURDIA ADVENTURE').trim(),body=String($('katPushBody')?.value||'').trim(),url=String($('katPushUrl')?.value||'/').trim()||'/';const out=$('katPushResult');if(!body){out.className='kat-result kat-error';out.textContent='❌ دەقی ئاگاداری بنووسە';return;}out.className='kat-result';out.textContent='⏳ خەریکە دەنێردرێت...';try{const r=await fetch(W+'/api/admin/push/send',{method:'POST',headers:hdr(),body:JSON.stringify({title,body,url})});const d=await r.json().catch(()=>({}));const lines=[`HTTP ${r.status}`,`نێردرا: ${d.sent||0}`,`هەڵە: ${d.failed||0}`,`سڕایەوە: ${d.removed||0}`];if(Array.isArray(d.errors)&&d.errors.length)lines.push('','وردەکاری هەڵەکان:',...d.errors.map((x,i)=>`${i+1}) status=${x.status||'—'} · ${x.error||'Unknown error'}\n${x.endpoint||''}`));out.className='kat-result '+(d.failed?'kat-error':'');out.textContent=(d.ok?'✅ ':'⚠️ ')+lines.join('\n');await refreshStats().catch(()=>{});}catch(e){out.className='kat-result kat-error';out.textContent='❌ '+(e.message||String(e));}}
+  function clearErrors(){errors.length=0;renderErrors();if($('katTestLog'))$('katTestLog').innerHTML='<div class="kat-empty">تۆمار پاککرایەوە.</div>';}
+  document.addEventListener('DOMContentLoaded',()=>{renderErrors();$('katRunTests')?.addEventListener('click',runTests);$('katClearErrors')?.addEventListener('click',clearErrors);$('katPushSend')?.addEventListener('click',sendPush);$('katPushStats')?.addEventListener('click',()=>{refreshStats().catch(e=>{$('katPushResult').textContent='❌ '+(e.message||e)});refreshEnv();});if(window.lucide)lucide.createIcons();});
+  window.kurdiaAdminRunTests=runTests;
+  window.kurdiaAdminSendPush=sendPush;
 })();
 </script>
 
