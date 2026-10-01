@@ -1434,9 +1434,24 @@ function getAdminKey(){
     return sessionStorage.getItem("kurdia_admin_api_key") || sessionStorage.getItem("kurdia_admin_key") || ADMIN_SECRET_PIN || "2026";
   }catch{return ADMIN_SECRET_PIN || "2026";}
 }
+function normalizeAdminHeaderValue(value){
+  const v=String(value ?? '').trim();
+  // HTTP header values used by fetch() must be ByteString-compatible.
+  // The Admin API key is expected to be an ASCII secret; never pass Kurdish/Arabic
+  // text (or other Unicode) into Headers because the browser throws before fetch().
+  if(v && !/^[\x00-\x7F]*$/.test(v)){
+    throw new Error('کلیلی Admin API نابێت پیتی کوردی/عەرەبی یان Unicode ـی تێدا بێت. کلیلی دروستی ASCII لە Admin API Key بنووسە.');
+  }
+  return v;
+}
 async function adminFetch(url,opts={}){
  const headers=new Headers(opts.headers||{});
- if(!headers.has("X-Admin-Key")) headers.set("X-Admin-Key",getAdminKey());
+ if(!headers.has("X-Admin-Key")){
+   const key=normalizeAdminHeaderValue(getAdminKey());
+   if(key) headers.set("X-Admin-Key",key);
+ } else {
+   headers.set("X-Admin-Key",normalizeAdminHeaderValue(headers.get("X-Admin-Key")));
+ }
  return fetch(url,{...opts,headers});
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
@@ -2111,7 +2126,18 @@ window.addEventListener("DOMContentLoaded",()=>{
    if(isMsg && !path.startsWith('/api/otp/send') && !$('testSendConfirm')?.checked){show({error:'پێش ناردنی ئەم نامەیە، پشتڕاستکردنەوە چالاک بکە.'},false,'⚠️ پشتڕاستکردنەوە پێویستە');return}
    const phone=$('testPhone')?.value.trim();if(isMsg&&phone){if(body.phone)body.phone=phone;if(Array.isArray(body.phones))body.phones=[phone]}
    const started=performance.now();show('⏳ چاوەڕوان بە... ',true,`${method} ${path}`);
-   try{const opt={method,headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()}};if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);const r=await adminFetch(WORKER_URL+path,opt);const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;show(data,r.ok,meta);history(meta,r.ok);saveHistory(meta,r.ok,ms,path);}catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);saveHistory(meta,false,ms,path);}
+   try{
+     const key=getAdminKeySafe();
+     const hdr={'Content-Type':'application/json'};
+     if(key) hdr['X-Admin-Key']=key;
+     const opt={method,headers:hdr};
+     if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);
+     const r=await adminFetch(WORKER_URL+path,opt);
+     const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}
+     const ms=Math.round(performance.now()-started);
+     const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;
+     show(data,r.ok,meta);history(meta,r.ok);saveHistory(meta,r.ok,ms,path);
+   }catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);saveHistory(meta,false,ms,path);}
  };
  function easySetResult(id, ok, title, data, ms){
    const el=$(id); if(!el)return;
@@ -2177,7 +2203,14 @@ window.addEventListener("DOMContentLoaded",()=>{
 
  function getAdminKeySafe(){
   try {
-    return sessionStorage.getItem('kurdia_admin_api_key') || sessionStorage.getItem('kurdia_admin_key') || sessionStorage.getItem('adminKey') || '';
+    const raw=sessionStorage.getItem('kurdia_admin_api_key') || sessionStorage.getItem('kurdia_admin_key') || sessionStorage.getItem('adminKey') || '';
+    const key=String(raw).trim();
+    if(key && !/^[\x00-\x7F]*$/.test(key)){
+      // Remove an invalid Unicode key so old/bad session data cannot break every request.
+      try{sessionStorage.removeItem('kurdia_admin_api_key');sessionStorage.removeItem('kurdia_admin_key');sessionStorage.removeItem('adminKey');}catch{}
+      return '';
+    }
+    return key;
   } catch { return ''; }
 }
  window.saveEasyAdminKey=function(){
