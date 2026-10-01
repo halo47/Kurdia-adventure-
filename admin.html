@@ -808,27 +808,86 @@ body{
 
 <!-- API LAB / TEST CENTER -->
 <section class="page-tab" id="tab-api_lab">
- <div class="hero"><div class="eyebrow">KURDIA TEST CENTER</div><h1>تاقیکردنەوەی هەموو پەیوەندییەکان</h1><p class="muted">لە یەک شوێنەوە API، WhatsApp، OTP، Cloud CMS، Media، Weather، Review، Story، Private Trip و AI تاقی بکەرەوە. هەر هەڵەیەک لە HTTP، Worker یان JSON بە وردی پیشان دەدرێت.</p></div>
- <div class="api-lab-card">
-  <div class="card-title">🧪 API Test Runner</div>
-  <div class="api-row">
-   <select id="apiPreset" class="input" onchange="apiPresetChanged()">
-    <option value="diagnostics">Diagnostics — Worker</option><option value="cms">CMS — GET</option><option value="publicConfig">Site Config — GET</option><option value="weather">Weather — Search</option><option value="media">Media — Upload Image</option><option value="otpSend">OTP — Send WhatsApp</option><option value="otpVerify">OTP — Verify</option><option value="privateTrip">Private Trip — Create</option><option value="reviewPost">Review — Create</option><option value="storyPost">Story — Create</option><option value="bookingConfirm">WhatsApp — Confirmation</option><option value="bookingReject">WhatsApp — Rejection</option><option value="broadcast">WhatsApp — Broadcast</option><option value="tripNotification">WhatsApp — Trip Notification</option><option value="ai">AI — API</option>
-   </select>
-   <input id="apiPath" class="input" dir="ltr" value="/api/admin/diagnostics">
-   <button class="btn red" onclick="runApiTest()">تاقیکردنەوە</button>
-  </div>
-  <div class="grid-2" style="margin-top:10px">
-   <div class="field"><label>Method</label><select id="apiMethod" class="input"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select></div>
-   <div class="field"><label>بۆشایی/تێبینی</label><input id="apiLabel" class="input" placeholder="ناوی تاقیکردنەوە"></div>
-  </div>
-  <div class="field"><label>JSON Body — بۆ POST/PUT/PATCH</label><textarea id="apiBody" class="input" style="min-height:180px;font-family:monospace" dir="ltr">{}</textarea></div>
-  <div class="k5-actions"><button class="btn ghost" onclick="apiCheckOnly()">تاقیکردنەوەی پەیوەندی</button><button class="btn ghost" onclick="apiClearResult()">پاککردنەوە</button></div>
-  <div id="apiResult" class="api-lab-response">هێشتا هیچ تاقیکردنەوەیەک نەکراوە.</div>
+ <div class="hero">
+  <div class="eyebrow">KURDIA API CONTROL CENTER</div>
+  <h1>🧪 ناوەندی تاقیکردنەوەی API</h1>
+  <p class="muted">هەموو پەیوەندییەکانی Worker ـت لە یەک شوێنەوە ببینە، بە یەک کلیک تاقی بکەرەوە، و هەڵەکە بە HTTP، کاتی وەڵام و JSON بە ڕوونی ببینە.</p>
  </div>
+
+ <div class="k5-grid4" style="margin-bottom:12px">
+  <div class="k5-mini"><small>کۆی تاقیکردنەوەکان</small><b id="apiTotalCount">0</b></div>
+  <div class="k5-mini"><small>سەرکەوتوو</small><b id="apiPassCount">0</b></div>
+  <div class="k5-mini"><small>هەڵە</small><b id="apiFailCount">0</b></div>
+  <div class="k5-mini"><small>دوایین وەڵام</small><b id="apiLastMs">—</b></div>
+ </div>
+
+ <div class="api-center-grid">
+  <div class="api-lab-card api-runner-main">
+   <div class="api-section-head">
+    <div><div class="card-title">🚀 تاقیکردنەوەی API</div><div class="ss-help">یەک API هەڵبژێرە؛ Method، URL و Body بە خۆکار پڕ دەکرێن.</div></div>
+    <span id="apiLiveBadge" class="api-live-badge">● Worker چاوەڕوانە</span>
+   </div>
+
+   <div class="api-category-tabs" id="apiCategoryTabs">
+    <button class="api-cat active" data-cat="all" type="button">هەموو</button>
+    <button class="api-cat" data-cat="read" type="button">👁️ خوێندنەوە</button>
+    <button class="api-cat" data-cat="admin" type="button">🔐 Admin</button>
+    <button class="api-cat" data-cat="public" type="button">🌐 Public</button>
+    <button class="api-cat" data-cat="message" type="button">📨 نامە</button>
+    <button class="api-cat" data-cat="write" type="button">✏️ نووسین</button>
+   </div>
+
+   <div class="api-control-grid">
+    <div class="field"><label>API ـی تاقیکردنەوە</label>
+     <select id="apiPreset" class="input" onchange="apiPresetChanged()"></select>
+    </div>
+    <div class="field"><label>گەڕان لە API ـەکان</label><input id="apiSearch" class="input" placeholder="مثلاً weather, reviews, stories..." autocomplete="off"></div>
+   </div>
+
+   <div class="api-request-preview">
+    <div class="api-method-box"><span>METHOD</span><b id="apiMethodBadge">GET</b></div>
+    <div class="api-url-box"><span>ENDPOINT</span><code id="apiEndpointPreview">/api/admin/diagnostics</code></div>
+    <button class="btn red api-main-run" onclick="runApiTest()">▶ تاقیکردنەوە</button>
+   </div>
+
+   <details class="api-details" open>
+    <summary>⚙️ وردەکارییەکانی داواکاری</summary>
+    <div class="api-detail-grid">
+     <div class="field"><label>Method</label><select id="apiMethod" class="input"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select></div>
+     <div class="field"><label>ناوی تاقیکردنەوە</label><input id="apiLabel" class="input" placeholder="ناوی تاقیکردنەوە"></div>
+     <div class="field full"><label>Endpoint</label><input id="apiPath" class="input" dir="ltr" value="/api/admin/diagnostics"></div>
+     <div class="field full"><label>JSON Body — تەنها بۆ POST / PUT / PATCH / DELETE</label><textarea id="apiBody" class="input" style="min-height:170px;font-family:monospace" dir="ltr">{}</textarea></div>
+    </div>
+   </details>
+
+   <div class="api-action-row">
+    <button class="btn ghost" onclick="apiCheckOnly()">🔌 تاقیکردنەوەی Worker</button>
+    <button class="btn ghost" onclick="runSafeApiSuite()">⚡ تاقیکردنەوەی هەموو GET ـەکان</button>
+    <button class="btn ghost" onclick="apiClearResult()">🧹 پاککردنەوە</button>
+   </div>
+
+   <div class="api-result-head"><b>📥 وەڵامی API</b><span id="apiResultMeta">هێشتا تاقیکردنەوە نەکراوە</span></div>
+   <div id="apiResult" class="api-lab-response api-empty">هێشتا هیچ تاقیکردنەوەیەک نەکراوە.</div>
+  </div>
+
+  <div class="api-lab-card">
+   <div class="card-title">📊 لیستی API ـەکان</div>
+   <div class="ss-help" style="margin-bottom:10px">هەر API ـێک کلیک لەسەر بکە بۆ هەڵبژاردن.</div>
+   <div id="apiEndpointList" class="api-endpoint-list"></div>
+  </div>
+ </div>
+
  <div class="api-lab-grid" style="margin-top:12px">
-  <div class="api-lab-card"><div class="card-title">📨 تاقیکردنەوەی نامەکان</div><p class="ss-help">ئەم بەشانە نامەی ڕاستەقینە دەنێرن. ژمارەی خۆت بنووسە بۆ تاقیکردنەوە.</p><div class="field"><label>ژمارەی WhatsApp ـی تاقیکردنەوە</label><input id="testPhone" class="input" dir="ltr" placeholder="0750xxxxxxx"></div><label class="ss-check"><input type="checkbox" id="testSendConfirm"> من دەزانم ئەمە نامەی ڕاستەقینە دەنێرێت.</label></div>
-  <div class="api-lab-card"><div class="card-title">📋 مێژووی تاقیکردنەوە</div><div id="apiHistory" class="api-history"><div class="ss-help">هیچ تاقیکردنەوەیەک نییە.</div></div></div>
+  <div class="api-lab-card">
+   <div class="card-title">📨 تاقیکردنەوەی نامەکان</div>
+   <p class="ss-help">ئەم API ـانە دەتوانن نامەی ڕاستەقینە بنێرن. تەنها کاتێک کار دەکەن کە پشتڕاستی بکەیتەوە.</p>
+   <div class="field"><label>ژمارەی WhatsApp ـی تاقیکردنەوە</label><input id="testPhone" class="input" dir="ltr" placeholder="0750xxxxxxx"></div>
+   <label class="ss-check"><input type="checkbox" id="testSendConfirm"> من دەزانم ئەمە نامەی ڕاستەقینە دەنێرێت.</label>
+  </div>
+  <div class="api-lab-card">
+   <div class="api-section-head"><div class="card-title">📋 مێژووی تاقیکردنەوە</div><button class="btn ghost" onclick="clearApiHistory()">پاککردنەوە</button></div>
+   <div id="apiHistory" class="api-history"><div class="ss-help">هیچ تاقیکردنەوەیەک نییە.</div></div>
+  </div>
  </div>
 </section>
 
@@ -1847,24 +1906,55 @@ window.addEventListener("DOMContentLoaded",()=>{
 });
 </script>
 <input id="ssMobileImageInput" type="file" accept="image/*" capture="environment" style="display:none"><div id="ssImageUploadStatus" style="display:none"></div>
+<style id="kurdia-v12-api-center-css">
+.api-center-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.85fr);gap:12px}
+.api-runner-main{min-width:0}.api-section-head,.api-result-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.api-live-badge{font-size:11px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:#94a3b8}.api-live-badge.online{color:#53e59a;border-color:rgba(83,229,154,.25)}.api-live-badge.error{color:#ff6f8a;border-color:rgba(255,111,138,.25)}
+.api-category-tabs{display:flex;gap:7px;overflow:auto;padding:12px 0 8px}.api-cat{white-space:nowrap;border:1px solid var(--line);background:#0b111b;color:#aeb8c7;border-radius:12px;padding:9px 12px;font:inherit;font-size:11px;cursor:pointer}.api-cat.active{background:linear-gradient(135deg,#8d142c,#c72c4a);color:#fff;border-color:transparent}
+.api-control-grid,.api-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.api-detail-grid .full{grid-column:1/-1}.api-request-preview{display:grid;grid-template-columns:110px 1fr auto;gap:8px;align-items:stretch;margin:10px 0}.api-method-box,.api-url-box{border:1px solid var(--line);background:#080e17;border-radius:14px;padding:9px 11px;display:flex;flex-direction:column;justify-content:center}.api-method-box span,.api-url-box span{font-size:9px;color:#6f7b8d}.api-method-box b{font-size:14px}.api-url-box code{font-size:12px;color:#d8dee9;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left}.api-main-run{min-width:135px}.api-details{border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.015);margin-top:8px}.api-details summary{cursor:pointer;padding:12px;font-size:12px;font-weight:800}.api-details[open] summary{border-bottom:1px solid var(--line)}.api-details .api-detail-grid{padding:12px}.api-action-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.api-result-head{margin-bottom:7px;font-size:11px}.api-result-head span{color:#718096}.api-lab-response{min-height:190px;max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:15px;padding:14px;white-space:pre-wrap;word-break:break-word;font:12px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;direction:ltr;text-align:left;background:#060a10}.api-lab-response.api-ok{border-color:rgba(60,220,140,.28);box-shadow:inset 3px 0 0 #32d486}.api-lab-response.api-err{border-color:rgba(255,75,105,.3);box-shadow:inset 3px 0 0 #ff4b69}.api-empty{color:#748093}.api-endpoint-list{display:grid;gap:7px;max-height:590px;overflow:auto}.api-endpoint-item{width:100%;text-align:right;border:1px solid var(--line);background:#080e17;border-radius:12px;padding:9px 10px;cursor:pointer;color:#dbe2ec}.api-endpoint-item:hover{border-color:rgba(199,43,73,.5);transform:translateY(-1px)}.api-endpoint-item .top{display:flex;justify-content:space-between;align-items:center;gap:7px}.api-endpoint-item small{display:block;color:#738094;direction:ltr;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:4px}.api-method-pill{font-size:9px;padding:3px 6px;border-radius:6px;background:#151d29;color:#9facbd;font-weight:900}.api-history{display:grid;gap:7px;max-height:250px;overflow:auto}.api-history-item{border:1px solid var(--line);border-radius:10px;padding:8px;font:10px/1.6 ui-monospace,monospace;direction:ltr;text-align:left;background:#080e17}.api-history-item.ok{border-right:3px solid #32d486}.api-history-item.err{border-right:3px solid #ff4b69}.api-suite-row{display:flex;align-items:center;gap:8px;padding:8px;border-bottom:1px solid var(--line);font-size:11px}.api-suite-row:last-child{border-bottom:0}.api-suite-row .grow{flex:1}.api-suite-dot{width:8px;height:8px;border-radius:50%;background:#64748b}.api-suite-dot.ok{background:#32d486}.api-suite-dot.err{background:#ff4b69}.k5-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.api-search-hide{display:none!important}
+@media(max-width:900px){.api-center-grid{grid-template-columns:1fr}.api-control-grid,.api-detail-grid{grid-template-columns:1fr}.api-request-preview{grid-template-columns:82px 1fr}.api-main-run{grid-column:1/-1;width:100%}.k5-grid4{grid-template-columns:repeat(2,1fr)}}
+</style>
 <script id="kurdia-v11-api-lab-js">
 (function(){
  const $=id=>document.getElementById(id);
- const presets={
-  diagnostics:{m:'GET',p:'/api/admin/diagnostics',b:{}},cms:{m:'GET',p:'/api/admin/cms',b:{}},publicConfig:{m:'GET',p:'/api/site/config',b:{}},
-  weather:{m:'GET',p:'/api/weather/search?lat=36.19&lon=44.01&q=Erbil',b:{}},
-  media:{m:'POST',p:'/api/admin/media',b:{name:'test.jpg',contentType:'image/jpeg',base64:''}},
-  otpSend:{m:'POST',p:'/api/otp/send',b:{phone:'07500000000'}},otpVerify:{m:'POST',p:'/api/otp/verify',b:{phone:'07500000000',code:'0000'}},
-  privateTrip:{m:'POST',p:'/api/private-trip',b:{name:'Test User',phone:'07500000000',destination:'Test',date:'2026-10-10',people:1,tripType:'Other',transportation:'',accommodation:'',guide:'',budget:'',specialRequests:'',lat:'',lng:''}},
-  reviewPost:{m:'POST',p:'/api/reviews',b:{name:'Test User',city:'Sulaymaniyah',rating:5,comment:'Test review'}},
-  storyPost:{m:'POST',p:'/api/stories',b:{name:'Test User',title:'Test Story',text:'Test story from Admin',mediaUrl:''}},
-  bookingConfirm:{m:'POST',p:'/api/admin/verify-booking',b:{phone:'07500000000',id:'TEST-BOOKING'}},bookingReject:{m:'POST',p:'/api/admin/reject-booking',b:{phone:'07500000000',id:'TEST-BOOKING',reason:'Test rejection'}},
-  broadcast:{m:'POST',p:'/api/admin/send-broadcast',b:{message:'KURDIA TEST MESSAGE',phones:['07500000000']}},tripNotification:{m:'POST',p:'/api/admin/send-trip-notification',b:{message:'KURDIA TEST NOTIFICATION',phones:['07500000000']}},ai:{m:'POST',p:'/api/ai',b:{message:'سڵاو، ئەمە تاقیکردنەوەی Admin ـە.'}}
+ const defs={
+  diagnostics:{m:'GET',p:'/api/admin/diagnostics',b:{},cat:'admin',safe:true,name:'Diagnostics — Worker'},
+  cms:{m:'GET',p:'/api/admin/cms',b:{},cat:'admin',safe:true,name:'CMS — GET'},
+  publicConfig:{m:'GET',p:'/api/site/config',b:{},cat:'public',safe:true,name:'Site Config — GET'},
+  trips:{m:'GET',p:'/api/trips',b:{},cat:'public',safe:true,name:'Trips — Public'},
+  destinations:{m:'GET',p:'/api/destinations',b:{},cat:'public',safe:true,name:'Destinations — Public'},
+  safety:{m:'GET',p:'/api/safety',b:{},cat:'public',safe:true,name:'Safety — Public'},
+  preparation:{m:'GET',p:'/api/preparation',b:{},cat:'public',safe:true,name:'Preparation — Public'},
+  reviews:{m:'GET',p:'/api/reviews',b:{},cat:'public',safe:true,name:'Reviews — Public'},
+  stories:{m:'GET',p:'/api/stories',b:{},cat:'public',safe:true,name:'Stories — Public'},
+  privateRequests:{m:'GET',p:'/api/admin/private-requests',b:{},cat:'admin',safe:true,name:'Private Requests — Admin'},
+  registrations:{m:'GET',p:'/api/admin/registrations',b:{},cat:'admin',safe:true,name:'Registrations — Admin'},
+  weather:{m:'GET',p:'/api/weather/search?lat=36.19&lon=44.01&q=Erbil',b:{},cat:'public',safe:true,name:'Weather — Search'},
+  media:{m:'POST',p:'/api/admin/media',b:{name:'test.jpg',contentType:'image/jpeg',base64:''},cat:'write',safe:false,name:'Media — Upload Image'},
+  otpSend:{m:'POST',p:'/api/otp/send',b:{phone:'07500000000'},cat:'message',safe:false,name:'OTP — Send WhatsApp'},
+  otpVerify:{m:'POST',p:'/api/otp/verify',b:{phone:'07500000000',code:'0000'},cat:'write',safe:false,name:'OTP — Verify'},
+  privateTrip:{m:'POST',p:'/api/private-trip',b:{name:'Test User',phone:'07500000000',destination:'Test',date:'2026-10-10',people:1,tripType:'Other',transportation:'',accommodation:'',guide:'',budget:'',specialRequests:'',lat:'',lng:''},cat:'write',safe:false,name:'Private Trip — Create'},
+  reviewPost:{m:'POST',p:'/api/reviews',b:{name:'Test User',city:'Sulaymaniyah',rating:5,comment:'Test review'},cat:'write',safe:false,name:'Review — Create'},
+  storyPost:{m:'POST',p:'/api/stories',b:{name:'Test User',title:'Test Story',text:'Test story from Admin',mediaUrl:''},cat:'write',safe:false,name:'Story — Create'},
+  bookingConfirm:{m:'POST',p:'/api/admin/verify-booking',b:{phone:'07500000000',id:'TEST-BOOKING'},cat:'message',safe:false,name:'WhatsApp — Confirmation'},
+  bookingReject:{m:'POST',p:'/api/admin/reject-booking',b:{phone:'07500000000',id:'TEST-BOOKING',reason:'Test rejection'},cat:'message',safe:false,name:'WhatsApp — Rejection'},
+  broadcast:{m:'POST',p:'/api/admin/send-broadcast',b:{message:'KURDIA TEST MESSAGE',phones:['07500000000']},cat:'message',safe:false,name:'WhatsApp — Broadcast'},
+  tripNotification:{m:'POST',p:'/api/admin/send-trip-notification',b:{message:'KURDIA TEST NOTIFICATION',phones:['07500000000']},cat:'message',safe:false,name:'WhatsApp — Trip Notification'},
+  ai:{m:'POST',p:'/api/ai',b:{message:'سڵاو، ئەمە تاقیکردنەوەی Admin ـە.'},cat:'write',safe:false,name:'AI — API'}
  };
- window.apiPresetChanged=function(){const x=presets[$('apiPreset').value];if(!x)return;$('apiMethod').value=x.m;$('apiPath').value=x.p;$('apiBody').value=JSON.stringify(x.b,null,2);if($('apiLabel'))$('apiLabel').value=$('apiPreset').selectedOptions[0]?.textContent||''};
- function show(data,ok,meta){const box=$('apiResult');if(!box)return;box.className='api-lab-response '+(ok?'api-ok':'api-err');box.textContent=meta+'\n\n'+(typeof data==='string'?data:JSON.stringify(data,null,2));}
- function history(meta,ok){const box=$('apiHistory');if(!box)return;const el=document.createElement('div');el.className='api-history-item '+(ok?'ok':'err');el.textContent=meta;box.prepend(el);while(box.children.length>20)box.lastChild.remove();}
- window.apiClearResult=()=>{show('هێشتا هیچ تاقیکردنەوەیەک نەکراوە.',true,'');};
+ let activeCat='all', search='';
+ function filtered(){return Object.entries(defs).filter(([k,x])=>(activeCat==='all'||x.cat===activeCat)&&(!search||((x.name+' '+x.p).toLowerCase().includes(search.toLowerCase()))));}
+ function renderPresets(){const sel=$('apiPreset');if(!sel)return;const list=filtered();sel.innerHTML=list.map(([k,x])=>`<option value="${k}">${x.name} · ${x.m}</option>`).join('')||'<option value="">هیچ API ـێک نەدۆزرایەوە</option>';apiPresetChanged();renderEndpointList();}
+ function renderEndpointList(){const box=$('apiEndpointList');if(!box)return;box.innerHTML=filtered().map(([k,x])=>`<button type="button" class="api-endpoint-item" onclick="selectApi('${k}')"><div class="top"><b>${x.name}</b><span class="api-method-pill">${x.m}</span></div><small>${x.p}</small></button>`).join('')||'<div class="ss-help">هیچ API ـێک نەدۆزرایەوە.</div>';}
+ window.selectApi=function(k){const sel=$('apiPreset');if(!sel)return;activeCat='all';search='';$('apiSearch').value='';renderCats();sel.value=k;apiPresetChanged();$('apiPath').scrollIntoView({behavior:'smooth',block:'center'});};
+ function renderCats(){document.querySelectorAll('.api-cat').forEach(b=>b.classList.toggle('active',b.dataset.cat===activeCat));}
+ window.apiPresetChanged=function(){const x=defs[$('apiPreset')?.value];if(!x)return;if($('apiMethod'))$('apiMethod').value=x.m;if($('apiPath'))$('apiPath').value=x.p;if($('apiBody'))$('apiBody').value=JSON.stringify(x.b,null,2);if($('apiLabel'))$('apiLabel').value=x.name;if($('apiMethodBadge'))$('apiMethodBadge').textContent=x.m;if($('apiEndpointPreview'))$('apiEndpointPreview').textContent=x.p;};
+ function show(data,ok,meta){const box=$('apiResult');if(!box)return;box.className='api-lab-response '+(ok?'api-ok':'api-err');box.textContent=meta+'\n\n'+(typeof data==='string'?data:JSON.stringify(data,null,2));if($('apiResultMeta'))$('apiResultMeta').textContent=meta;const badge=$('apiLiveBadge');if(badge){badge.className='api-live-badge '+(ok?'online':'error');badge.textContent=ok?'● Worker وەڵامی دروست دا':'● Worker / API هەڵەی هەیە';}}
+ function history(meta,ok){const box=$('apiHistory');if(!box)return;const el=document.createElement('div');el.className='api-history-item '+(ok?'ok':'err');el.textContent=meta;box.prepend(el);while(box.children.length>30)box.lastChild.remove();updateStats();}
+ function updateStats(){let a=JSON.parse(localStorage.getItem('kurdia_api_test_history')||'[]');$('apiTotalCount').textContent=a.length;$('apiPassCount').textContent=a.filter(x=>x.ok).length;$('apiFailCount').textContent=a.filter(x=>!x.ok).length;$('apiLastMs').textContent=a[0]?.ms!=null?a[0].ms+'ms':'—';}
+ function saveHistory(meta,ok,ms,path){let a=JSON.parse(localStorage.getItem('kurdia_api_test_history')||'[]');a.unshift({meta,ok,ms,path,at:new Date().toISOString()});localStorage.setItem('kurdia_api_test_history',JSON.stringify(a.slice(0,100)));}
+ function loadHistory(){const box=$('apiHistory');if(!box)return;let a=JSON.parse(localStorage.getItem('kurdia_api_test_history')||'[]');box.innerHTML=a.length?a.slice(0,30).map(x=>`<div class="api-history-item ${x.ok?'ok':'err'}">${new Date(x.at).toLocaleString('ku-IQ')} · ${x.ok?'✅':'❌'} ${x.ms??'—'}ms · ${x.path}</div>`).join(''):'<div class="ss-help">هیچ تاقیکردنەوەیەک نییە.</div>';updateStats();}
+ window.clearApiHistory=function(){localStorage.removeItem('kurdia_api_test_history');loadHistory();};
+ window.apiClearResult=()=>{const box=$('apiResult');if(box){box.className='api-lab-response api-empty';box.textContent='هێشتا هیچ تاقیکردنەوەیەک نەکراوە.';}if($('apiResultMeta'))$('apiResultMeta').textContent='هێشتا تاقیکردنەوە نەکراوە';};
  window.runApiTest=async function(){
    const path=$('apiPath').value.trim(),method=$('apiMethod').value;let body={};
    try{body=JSON.parse($('apiBody').value||'{}')}catch(e){show({error:'JSON نادروستە',detail:e.message},false,'❌ JSON Error');return}
@@ -1872,10 +1962,22 @@ window.addEventListener("DOMContentLoaded",()=>{
    if(isMsg&&!$('testSendConfirm')?.checked){show({error:'پێش ناردنی نامەی ڕاستەقینە، checkbox ـی پشتڕاستکردنەوە چالاک بکە.'},false,'⚠️ Confirmation required');return}
    const phone=$('testPhone')?.value.trim();if(isMsg&&phone){if(body.phone)body.phone=phone;if(Array.isArray(body.phones))body.phones=[phone]}
    const started=performance.now();show('⏳ چاوەڕوان بە... ',true,`${method} ${path}`);
-   try{const opt={method,headers:{'Content-Type':'application/json'}};if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);const r=await adminFetch(WORKER_URL+path,opt);const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;show(data,r.ok,meta);history(meta,r.ok);}catch(e){const meta=`❌ NETWORK ERROR · ${Math.round(performance.now()-started)}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);}
+   try{const opt={method,headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()}};if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);const r=await adminFetch(WORKER_URL+path,opt);const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;show(data,r.ok,meta);history(meta,r.ok);saveHistory(meta,r.ok,ms,path);}catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);saveHistory(meta,false,ms,path);}
  };
- window.apiCheckOnly=async function(){const old=$('apiPreset').value;$('apiPreset').value='diagnostics';apiPresetChanged();await runApiTest();$('apiPreset').value=old;};
- document.addEventListener('DOMContentLoaded',apiPresetChanged);
+ function getAdminKeySafe(){try{return sessionStorage.getItem('kurdia_admin_key')||sessionStorage.getItem('adminKey')||'2026'}catch{return '2026'}}
+ window.apiCheckOnly=async function(){const old=$('apiPreset').value;activeCat='all';search='';renderCats();renderPresets();$('apiPreset').value='diagnostics';apiPresetChanged();await runApiTest();$('apiPreset').value=old;apiPresetChanged();};
+ window.runSafeApiSuite=async function(){
+   const safe=Object.entries(defs).filter(([k,x])=>x.safe);const box=$('apiResult');if(!box)return;box.className='api-lab-response api-empty';box.textContent='⚡ تاقیکردنەوەی هەموو API ـەکانی GET دەستی پێکرد...\n\n';
+   let lines=[];for(const [k,x] of safe){const started=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const line=`${r.ok?'🟢':'🔴'} ${x.m.padEnd(6)} ${r.status} · ${String(ms).padStart(4)}ms · ${x.p}`;lines.push(line);saveHistory(line,r.ok,ms,x.p);if(r.ok)history(line,true);else history(line,false);}catch(e){const ms=Math.round(performance.now()-started);const line=`🔴 GET    NETWORK · ${ms}ms · ${x.p}`;lines.push(line);saveHistory(line,false,ms,x.p);history(line,false);}box.textContent='⚡ ئەنجامی تاقیکردنەوەی هەموو GET ـەکان:\n\n'+lines.join('\n');}
+   loadHistory();
+ };
+ document.addEventListener('DOMContentLoaded',()=>{
+   document.querySelectorAll('.api-cat').forEach(b=>b.addEventListener('click',()=>{activeCat=b.dataset.cat;renderCats();renderPresets();}));
+   $('apiSearch')?.addEventListener('input',e=>{search=e.target.value;renderPresets();});
+   renderCats();renderPresets();loadHistory();
+   $('apiMethod')?.addEventListener('change',()=>{$('apiMethodBadge').textContent=$('apiMethod').value;});
+   $('apiPath')?.addEventListener('input',()=>{$('apiEndpointPreview').textContent=$('apiPath').value;});
+ });
 })();
 </script>
 <script id="kurdia-site-studio-js">
