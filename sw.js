@@ -1,7 +1,112 @@
-const CACHE='kurdia-adventure-v1';
-const CORE=['/','/index.html','/manifest.json'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE).catch(()=>{})));self.skipWaiting();});
-self.addEventListener('activate',e=>{e.waitUntil(self.clients.claim());});
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{if(r&&r.ok){const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy)).catch(()=>{});}return r;}).catch(()=>caches.match(e.request).then(r=>r||caches.match('/'))));});
-self.addEventListener('push',e=>{let data={};try{data=e.data?e.data.json():{};}catch(_){data={body:e.data?e.data.text():''};}const title=data.title||'KURDIA ADVENTURE';const options={body:data.body||'ئاگادارییەکی نوێ لە KURDIA ADVENTURE',icon:'/icons/icon-192.png',badge:'/icons/icon-192.png',data:{url:data.url||'/'},tag:'kurdia-adventure'};e.waitUntil(self.registration.showNotification(title,options));});
-self.addEventListener('notificationclick',e=>{e.notification.close();const target=e.notification.data?.url||'/';e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const c of list){if('focus' in c){c.focus();try{c.navigate(new URL(target,self.location.origin).href);}catch(_){}}return;}if(clients.openWindow)return clients.openWindow(new URL(target,self.location.origin).href);}));});
+const CACHE = 'kurdia-adventure-v2';
+const CORE = ['/', '/index.html', '/manifest.json'];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE)
+      .then(cache => cache.addAll(CORE).catch(() => {}))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys
+          .filter(key => key !== CACHE)
+          .map(key => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
+  // Never cache the service worker itself.
+  const url = new URL(event.request.url);
+  if (url.pathname === '/sw.js') {
+    event.respondWith(fetch(event.request, { cache: 'no-store' }));
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        if (response && response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE).then(cache => {
+            cache.put(event.request, copy).catch(() => {});
+          }).catch(() => {});
+        }
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request).then(response =>
+          response || caches.match('/')
+        )
+      )
+  );
+});
+
+self.addEventListener('push', event => {
+  let data = {};
+
+  try {
+    if (event.data) {
+      data = event.data.json();
+    }
+  } catch (_) {
+    try {
+      data = { body: event.data ? event.data.text() : '' };
+    } catch (__) {
+      data = {};
+    }
+  }
+
+  const title = String(data.title || 'KURDIA ADVENTURE');
+  const options = {
+    body: String(data.body || 'ئاگادارییەکی نوێ لە KURDIA ADVENTURE'),
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    tag: 'kurdia-adventure',
+    renotify: true,
+    requireInteraction: false,
+    data: {
+      url: String(data.url || '/')
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  const target = event.notification?.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    }).then(clientList => {
+      const absoluteUrl = new URL(target, self.location.origin).href;
+
+      for (const client of clientList) {
+        if ('navigate' in client) {
+          client.navigate(absoluteUrl).catch(() => {});
+        }
+        if ('focus' in client) {
+          return client.focus();
+        }
+      }
+
+      if (clients.openWindow) {
+        return clients.openWindow(absoluteUrl);
+      }
+    })
+  );
+});
