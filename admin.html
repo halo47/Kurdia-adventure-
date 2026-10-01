@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>KURDIA ADVENTURE — KURDIA CONTROL CENTER</title>
-<link rel="manifest" href="/admin-manifest.json">
 
 <!-- FONTS & ICONS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -294,6 +293,16 @@ body{
 .cc-main-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:12px}.cc-card{background:#090e15;border:1px solid var(--cc-line);border-radius:20px;padding:16px}.cc-card h3{font-size:14px;margin:0 0 12px}.cc-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px}.cc-trip-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.cc-trip-title{font-size:18px;font-weight:900}.cc-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.cc-meta span{font-size:10px;color:#aab4c2;padding:5px 8px;border:1px solid var(--cc-line);border-radius:999px;background:rgba(255,255,255,.025)}.cc-progress{height:9px;border-radius:99px;background:#060a10;border:1px solid var(--cc-line);overflow:hidden;margin-top:14px}.cc-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8d142c,#d53350);border-radius:99px}.cc-quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cc-quick button{min-height:64px!important;justify-content:flex-start!important;text-align:right!important}.cc-activity{display:grid;gap:7px;max-height:290px;overflow:auto}.cc-activity-item{padding:10px;border:1px solid var(--cc-line);border-radius:14px;background:#070b11}.cc-activity-item b{display:block;font-size:11px}.cc-activity-item small{display:block;color:#6f7b8b;font-size:9px;margin-top:3px}.cc-nav-label{padding:12px 12px 5px;color:#5f6a79;font-size:9px;font-weight:900;letter-spacing:1.5px}.sidebar .nav-btn .cc-badge{margin-right:auto;font-size:8px;padding:3px 6px;border-radius:999px;background:rgba(255,255,255,.05);color:#7f8a99}.cc-top-title{display:flex;align-items:center;gap:10px}.cc-top-title b{display:block;font-size:12px}.cc-top-title small{display:block;color:#687486;font-size:9px}
 @media(max-width:1050px){.cc-kpis{grid-template-columns:repeat(2,1fr)}.cc-main-grid{grid-template-columns:1fr}}@media(max-width:850px){.cc-title{font-size:22px}.cc-hero{padding:18px}.cc-kpi b{font-size:21px}.cc-quick{grid-template-columns:1fr}}@media(max-width:520px){.cc-kpis{gap:8px}.cc-kpi{padding:13px}.cc-kpi b{font-size:20px}.cc-card{padding:13px}.cc-trip-head{display:block}}
 </style>
+
+<!-- KURDIA ADMIN PUSH ADDITIVE LAYER -->
+<link rel="manifest" href="/admin-manifest.json">
+<style id="kurdia-admin-push-style">
+#kurdiaPushPanel{position:fixed;inset:auto 14px 18px 14px;z-index:99991;max-width:720px;margin:auto;display:none;background:rgba(9,13,20,.98);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:18px;box-shadow:0 24px 80px rgba(0,0,0,.5);backdrop-filter:blur(22px)}
+#kurdiaPushPanel.open{display:block}
+#kurdiaPushPanel h3{margin:0 0 6px;font-size:16px}.kp-sub{font-size:11px;color:#9da7b7;line-height:1.8}.kp-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.kp-grid textarea{grid-column:1/-1;min-height:100px;resize:vertical}.kp-grid input,.kp-grid textarea{width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);color:#fff;border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:11px;outline:none}.kp-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.kp-actions button{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.05);color:#fff;font-weight:800}.kp-actions .primary{background:#a91d37;border-color:#a91d37}.kp-status{font-size:11px;color:#aeb7c5;margin-top:10px;white-space:pre-wrap}.kp-fab{position:fixed;right:14px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:99990;border:1px solid rgba(255,255,255,.12);background:#a91d37;color:#fff;border-radius:999px;padding:12px 15px;font-weight:900;box-shadow:0 12px 35px rgba(0,0,0,.35)}
+@media(max-width:600px){.kp-grid{grid-template-columns:1fr}}
+</style>
+
 </head>
 <body>
 
@@ -345,7 +354,6 @@ body{
 <li><button class="nav-btn" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> Stories Moderation</button></li>
 <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users-round"></i> Community Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> WhatsApp Center</button></li>
-<li><button class="nav-btn" onclick="switchTab('push_notifications')"><i data-lucide="bell-ring"></i> Push Notifications <span id="kaPushNavBadge" class="cc-badge">0</span></button></li>
 <li class="cc-nav-label">SYSTEM</li>
 <li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button></li>
@@ -1055,31 +1063,6 @@ body{
     </div>
   </main>
 </div>
-
-
-<!-- KURDIA PUSH NOTIFICATIONS — ADDITIVE ONLY -->
-<section class="page-tab" id="tab-push_notifications">
- <div class="hero"><div class="eyebrow">KURDIA NOTIFICATIONS</div><h1>🔔 Push Notifications</h1><p class="muted">ئاگادارییەکان بۆ بەکارهێنەرانی ویبسایت بنێرە و ئەم Admin ـەش بۆ وەرگرتنی ئاگادارییەکان تۆمار بکە.</p></div>
- <div class="k5-grid3" style="margin-bottom:12px">
-  <div class="k5-mini"><small>Users / Devices</small><b id="kaPushCount">—</b></div>
-  <div class="k5-mini"><small>دۆخی Admin</small><b id="kaAdminPushStatus">چاوەڕوان</b></div>
-  <div class="k5-mini"><small>دوایین نوێکردنەوە</small><b id="kaPushUpdated">—</b></div>
- </div>
- <div class="card" style="margin-bottom:12px">
-  <div class="toolbar"><div style="flex:1"><h3 style="margin:0 0 5px">🔔 ئاگادارییەکانی Admin</h3><p class="k5-section-note">ئەم ئامێرە تۆمار بکە بۆ ئەوەی Push Notification ـەکان لەسەر Admin ـیش وەربگریت.</p></div><button class="btn red" type="button" onclick="kaAdminSubscribe()">🔔 چالاککردن</button></div>
-  <div id="kaAdminPushResult" class="easy-action-result"></div>
- </div>
- <div class="card">
-  <h3>📨 ناردنی Push بۆ بەکارهێنەران</h3>
-  <div class="formgrid" style="margin-top:10px">
-   <div class="field"><label>سەردێڕ</label><input id="kaPushTitle" class="input" value="KURDIA ADVENTURE" maxlength="120"></div>
-   <div class="field"><label>شوێنی کردنەوە</label><input id="kaPushUrl" class="input" dir="ltr" value="/"></div>
-   <div class="field full"><label>دەقی ئاگاداری</label><textarea id="kaPushBody" class="input" rows="4" maxlength="1000" placeholder="مثلاً: گەشتێکی نوێ زیادکرا..." ></textarea></div>
-  </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn red" type="button" onclick="kaSendPush()">📨 ناردنی ئاگاداری بۆ هەموو Devices</button><button class="btn ghost" type="button" onclick="kaRefreshPushStats()">↻ نوێکردنەوە</button></div>
-  <div id="kaPushSendResult" class="easy-action-result" style="margin-top:10px"></div>
- </div>
-</section>
 
 <!-- CROPPING MODAL -->
 <div id="cropModalWrapper">
@@ -2413,17 +2396,44 @@ window.quickWorkerTest=async function(){
 })();
 </script>
 
+<!-- KURDIA ADMIN PUSH — additive only -->
+<button class="kp-fab" id="kurdiaPushFab">🔔 Push</button>
+<section id="kurdiaPushPanel" aria-label="Push Notification">
+  <h3>🔔 ئاگادارییەکانی KURDIA</h3>
+  <div class="kp-sub">لە ئەم بەشەوە ئاگاداری بۆ ئەو بەکارهێنەرانە دەنێریت کە Push ـیان چالاک کردووە.</div>
+  <div class="kp-grid">
+    <input id="kurdiaPushTitle" maxlength="120" placeholder="سەردێڕ — KURDIA ADVENTURE">
+    <input id="kurdiaPushUrl" maxlength="500" placeholder="شوێنی کردنەوە، وەک /#trips">
+    <textarea id="kurdiaPushBody" maxlength="1000" placeholder="دەقی ئاگادارییەکە..." required></textarea>
+  </div>
+  <div class="kp-actions">
+    <button class="primary" id="kurdiaPushSend">ناردنی Push</button>
+    <button id="kurdiaPushStats">ژمارەی بەشداربووان</button>
+    <button id="kurdiaPushClose">داخستن</button>
+  </div>
+  <div class="kp-status" id="kurdiaPushStatus"></div>
+</section>
 <script id="kurdia-admin-push-additive-js">
 (function(){
- const W='https://kurdia.alwandssalh.workers.dev';
- const $=id=>document.getElementById(id);
- const b64ToBytes=b64=>{const pad='='.repeat((4-b64.length%4)%4),s=(b64+pad).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(s),o=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)o[i]=raw.charCodeAt(i);return o};
- async function publicKey(){const r=await fetch(W+'/api/push/public-key',{cache:'no-store'});const j=await r.json();if(!j.ok||!j.publicKey)throw Error('VAPID public key لە Worker دانەنراوە');return j.publicKey}
- async function sw(){if(!('serviceWorker' in navigator))throw Error('Service Worker بەردەست نییە');return navigator.serviceWorker.register('/sw.js',{scope:'/'});}
- window.kaRefreshPushStats=async function(){try{const r=await adminFetch(W+'/api/admin/push/stats');const j=await r.json();if(!r.ok||!j.ok)throw Error(j.error||'Stats error');if($('kaPushCount'))$('kaPushCount').textContent=j.count??0;if($('kaPushUpdated'))$('kaPushUpdated').textContent=new Date().toLocaleTimeString('ku-IQ');if($('kaPushNavBadge'))$('kaPushNavBadge').textContent=j.count??0}catch(e){if($('kaPushSendResult'))$('kaPushSendResult').textContent='⚠️ '+e.message}};
- window.kaAdminSubscribe=async function(){const out=$('kaAdminPushResult');try{if(!('Notification' in window))throw Error('Notification بەردەست نییە');const reg=await sw();let p=Notification.permission;if(p==='default')p=await Notification.requestPermission();if(p!=='granted')throw Error('ڕێگە بە Notification نەدرا');const key=await publicKey();let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(key)});const r=await adminFetch(W+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),source:'admin',url:location.pathname})});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw Error(j.error||'Subscription سەرکەوتوو نەبوو');if($('kaAdminPushStatus'))$('kaAdminPushStatus').textContent='چالاک ✓';if(out)out.textContent='✓ ئەم Admin ـە بۆ Push تۆمار کرا.';kaRefreshPushStats()}catch(e){if(out)out.textContent='⚠️ '+e.message}};
- window.kaSendPush=async function(){const out=$('kaPushSendResult');const title=String($('kaPushTitle')?.value||'KURDIA ADVENTURE').trim();const body=String($('kaPushBody')?.value||'').trim();const url=String($('kaPushUrl')?.value||'/').trim()||'/';if(!body){if(out)out.textContent='⚠️ دەقی ئاگاداری بنووسە';return}const btn=event?.currentTarget;if(btn)btn.disabled=true;try{const r=await adminFetch(W+'/api/admin/push/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,body,url})});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw Error(j.error||`HTTP ${r.status}`);if(out)out.textContent=`✓ نێردرا: ${j.sent||0} | سەرکەوتوو نەبوو: ${j.failed||0} | سڕایەوە: ${j.removed||0}`;kaRefreshPushStats()}catch(e){if(out)out.textContent='⚠️ '+e.message}finally{if(btn)btn.disabled=false}};
- window.addEventListener('load',()=>{sw().catch(()=>{});setTimeout(kaRefreshPushStats,900)});
+  'use strict';
+  const WORKER='https://kurdia.alwandssalh.workers.dev';
+  const $=id=>document.getElementById(id);
+  const panel=$('kurdiaPushPanel'), status=$('kurdiaPushStatus');
+  function key(){try{return typeof getAdminKeySafe==='function'?getAdminKeySafe():(typeof getAdminKey==='function'?getAdminKey():'');}catch(e){return '';}}
+  function headers(){return {'Content-Type':'application/json','X-Admin-Key':String(key()||'').trim()};}
+  async function call(path,opt={}){const h=Object.assign({},opt.headers||{},headers());return fetch(WORKER+path,Object.assign({},opt,{headers:h}));}
+  function open(){panel?.classList.add('open');loadStats();}
+  function close(){panel?.classList.remove('open');}
+  async function loadStats(){try{const r=await call('/api/admin/push/stats',{method:'GET'});const d=await r.json();status.textContent=r.ok&&d.ok?`بەشداربووان: ${d.count}\nدوایین نوێکردنەوە: ${d.updatedAt||'—'}`:`❌ ${d.error||'هەڵە'}`;}catch(e){status.textContent='❌ پەیوەندی بە Worker نەکرا';}}
+  async function send(){
+    const title=String($('kurdiaPushTitle')?.value||'KURDIA ADVENTURE').trim();
+    const body=String($('kurdiaPushBody')?.value||'').trim();
+    const url=String($('kurdiaPushUrl')?.value||'/').trim()||'/';
+    if(!body){status.textContent='❌ دەقی ئاگاداری بنووسە';return;}
+    status.textContent='⏳ خەریکە دەنێردرێت...';
+    try{const r=await call('/api/admin/push/send',{method:'POST',body:JSON.stringify({title,body,url})});const d=await r.json();status.textContent=r.ok&&d.ok?`✅ نێردرا: ${d.sent}\n❌ سەرکەوتوو نەبوو: ${d.failed}\n🗑️ سڕایەوە: ${d.removed}`:`⚠️ نێردرا: ${d.sent||0} · هەڵە: ${d.failed||0}\n${d.error||''}`;}catch(e){status.textContent='❌ '+(e.message||'هەڵە');}
+  }
+  $('kurdiaPushFab')?.addEventListener('click',open);$('kurdiaPushClose')?.addEventListener('click',close);$('kurdiaPushStats')?.addEventListener('click',loadStats);$('kurdiaPushSend')?.addEventListener('click',send);
 })();
 </script>
 
