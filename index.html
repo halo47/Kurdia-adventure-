@@ -2,7 +2,8 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070a10"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز">
+<meta name="theme-color" content="#a91d37">
+<link rel="manifest" href="/manifest.json"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز">
 <title>KURDIA ADVENTURE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1135,5 +1136,10 @@ document.addEventListener('click',function(e){
     e.preventDefault(); e.stopPropagation(); window.kaOpenMoreMenu();
   }
 },true);
+</script>
+<script id="kurdia-pwa-register">
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
 </script>
 </body></html>
