@@ -4,7 +4,6 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#070a10"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز">
 <title>KURDIA ADVENTURE</title>
-<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
@@ -271,13 +270,23 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .ai-chat-sheet{padding:0!important;overflow:hidden;display:flex;flex-direction:column;height:min(760px,88vh);max-height:88vh}.ai-chat-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.025)}.ai-chat-avatar{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#e33958,#94162f);display:grid;place-items:center;color:#fff;box-shadow:0 10px 25px rgba(169,29,55,.25)}.ai-chat-avatar svg{width:23px}.ai-messages{flex:1;overflow:auto;padding:18px 16px 10px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}.ai-msg{max-width:88%;padding:11px 13px;border-radius:18px;font-size:12px;line-height:1.9;white-space:pre-wrap}.ai-msg.bot{align-self:flex-start;background:#121923;border:1px solid var(--line);border-bottom-right-radius:6px}.ai-msg.user{align-self:flex-end;background:linear-gradient(145deg,#d92f4d,#9d1731);color:#fff;border-bottom-left-radius:6px}.ai-msg.loading{opacity:.7}.ai-quick{display:flex;gap:7px;overflow-x:auto;padding:7px 14px 10px;scrollbar-width:none}.ai-quick::-webkit-scrollbar{display:none}.ai-quick button{white-space:nowrap;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#dfe3e9;border-radius:999px;padding:8px 11px;font-size:10px}.ai-chat-form{display:flex;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(5,7,11,.96)}.ai-chat-form .input{flex:1;min-width:0}.ai-chat-form .btn{width:48px;padding:0;display:grid;place-items:center}.ai-chat-form .btn svg{width:18px}.ai-chat-sheet .close{position:absolute;z-index:4;top:12px;left:12px;width:38px;height:38px}.ai-chat-head{padding-left:62px}
 </style>
 
-<style id="kurdia-notification-additive-style">
-#kaNotifyFab{position:fixed;left:14px;bottom:calc(var(--nav,82px) + 16px);z-index:90;width:48px;height:48px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(12,16,24,.92);color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.28);display:grid;place-items:center;backdrop-filter:blur(16px)}
-#kaNotifyFab span{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:#d32f4e;box-shadow:0 0 0 3px #070a10}
-.ka-notify-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.62);backdrop-filter:blur(8px);display:none;align-items:flex-end;padding:14px}.ka-notify-overlay.show{display:flex}
-.ka-notify-sheet{width:min(520px,100%);margin:auto auto 0;background:#0d131d;border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-.ka-notify-sheet h3{margin:0 0 7px;font-size:20px}.ka-notify-sheet p{margin:0 0 16px;color:#aab4c2;line-height:1.9;font-size:12px}.ka-notify-actions{display:grid;gap:9px}.ka-notify-actions button{border:0;border-radius:15px;padding:13px 14px;font-weight:800}.ka-notify-primary{background:#a91d37;color:#fff}.ka-notify-secondary{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1)!important}.ka-notify-close{margin-top:9px;width:100%;background:transparent;color:#8f9aaa;border:0!important}
+<!-- KURDIA PWA / PUSH ADDITIVE LAYER — does not replace existing UI -->
+<style id="kurdia-pwa-additive-style">
+#kurdiaPwaPrompt{position:fixed;left:14px;right:14px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:99990;display:none;background:rgba(10,13,20,.96);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:16px;box-shadow:0 20px 70px rgba(0,0,0,.45);backdrop-filter:blur(20px)}
+#kurdiaPwaPrompt .kp-row{display:flex;gap:12px;align-items:flex-start}
+#kurdiaPwaPrompt .kp-icon{width:48px;height:48px;border-radius:15px;background:#a91d37;display:grid;place-items:center;font-weight:900;flex:none}
+#kurdiaPwaPrompt .kp-title{font-weight:900;font-size:14px;margin-bottom:4px}
+#kurdiaPwaPrompt .kp-text{font-size:11px;line-height:1.9;color:#aeb7c5}
+#kurdiaPwaPrompt .kp-actions{display:flex;gap:8px;margin-top:12px}
+#kurdiaPwaPrompt button{border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:10px 13px;background:rgba(255,255,255,.05);color:#fff;font-weight:800;font-size:11px}
+#kurdiaPwaPrompt .kp-main{background:#a91d37;border-color:#a91d37}
+#kurdiaPushState{display:none}
 </style>
+<link rel="manifest" href="/manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 </head>
 <body>
 <div class="app">
@@ -1146,68 +1155,78 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 
-<!-- KURDIA PUSH / INSTALL — ADDITIVE ONLY -->
-<button id="kaNotifyFab" type="button" aria-label="ئاگادارییەکان" onclick="window.kaOpenNotify()"><span></span><i data-lucide="bell"></i></button>
-<div id="kaNotifyOverlay" class="ka-notify-overlay" aria-hidden="true">
-  <div class="ka-notify-sheet" role="dialog" aria-modal="true">
-    <h3>🔔 KURDIA ADVENTURE</h3>
-    <p id="kaNotifyText">ئاگادارییە گرنگەکانی گەشت، گەشتی نوێ و نوێکارییەکان بەدەست بهێنە. هەروەها دەتوانیت KURDIA وەک ئەپ لەسەر مۆبایلەکەت دابمەزرێنیت.</p>
-    <div class="ka-notify-actions">
-      <button id="kaEnablePush" class="ka-notify-primary" type="button" onclick="window.kaEnablePush()">🔔 چالاککردنی ئاگاداری</button>
-      <button id="kaInstallApp" class="ka-notify-secondary" type="button" onclick="window.kaInstallApp()">📱 دامەزراندنی KURDIA</button>
+<!-- KURDIA PWA / PUSH — additive only -->
+<div id="kurdiaPwaPrompt" aria-live="polite">
+  <div class="kp-row">
+    <div class="kp-icon">KA</div>
+    <div style="min-width:0;flex:1">
+      <div class="kp-title">KURDIA ADVENTURE</div>
+      <div class="kp-text">بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێکان و گەشتەکان لەدەست مەدە.</div>
     </div>
-    <button class="ka-notify-close" type="button" onclick="window.kaCloseNotify()">لە ئێستادا نا</button>
+    <button type="button" onclick="KurdiaPWA.closePrompt()" aria-label="داخستن">×</button>
+  </div>
+  <div class="kp-actions">
+    <button type="button" class="kp-main" id="kurdiaInstallBtn">دابمەزرێنە</button>
+    <button type="button" id="kurdiaNotifyBtn">ئاگادارییەکان چالاک بکە</button>
   </div>
 </div>
-
-
-<script id="kurdia-notifications-additive-js">
+<script id="kurdia-pwa-additive-js">
 (function(){
-  const W='https://kurdia.alwandssalh.workers.dev';
-  let deferredInstallPrompt=null;
+  'use strict';
+  const WORKER='https://kurdia.alwandssalh.workers.dev';
+  let deferredInstall=null;
   const $=id=>document.getElementById(id);
-  const b64ToBytes=b64=>{const pad='='.repeat((4-b64.length%4)%4),s=(b64+pad).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(s),o=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)o[i]=raw.charCodeAt(i);return o};
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;localStorage.setItem('kurdia_pwa_installable','1');});
-  window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;localStorage.setItem('kurdia_pwa_installed','1');});
-  function open(){const x=$('kaNotifyOverlay');if(x){x.classList.add('show');x.setAttribute('aria-hidden','false')}}
-  function close(){const x=$('kaNotifyOverlay');if(x){x.classList.remove('show');x.setAttribute('aria-hidden','true')}}
-  window.kaOpenNotify=open; window.kaCloseNotify=close;
-  async function getPublicKey(){const r=await fetch(W+'/api/push/public-key',{cache:'no-store'});const j=await r.json();if(!j.ok||!j.publicKey)throw Error('VAPID public key is not configured');return j.publicKey}
-  async function registerSW(){if(!('serviceWorker' in navigator))throw Error('Service Worker بەردەست نییە');return navigator.serviceWorker.register('/sw.js',{scope:'/'});}
-  window.kaEnablePush=async function(){
-    const btn=$('kaEnablePush'); if(btn)btn.disabled=true;
-    try{
-      if(!('Notification' in window))throw Error('Notification بەردەست نییە لەم وێبگەڕەدا');
-      const reg=await registerSW();
-      let permission=Notification.permission;
-      if(permission==='default') permission=await Notification.requestPermission();
-      if(permission!=='granted')throw Error('ڕێگە بە ئاگادارییەکان نەدرا');
-      const key=await getPublicKey();
-      let sub=await reg.pushManager.getSubscription();
-      if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(key)});
-      const r=await fetch(W+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),source:'website',url:location.pathname+location.search})});
-      const j=await r.json().catch(()=>({}));
-      if(!r.ok||!j.ok)throw Error(j.error||'Subscription سەرکەوتوو نەبوو');
-      localStorage.setItem('kurdia_push_enabled','1');
-      const t=$('kaNotifyText');if(t)t.textContent='🔔 ئاگادارییەکان چالاک کران. هەر کات گەشتێکی نوێ یان زانیارییەکی گرنگ هەبێت، ئاگادارت دەکەینەوە.';
-      if(btn)btn.textContent='✓ ئاگادارییەکان چالاکن';
-      setTimeout(close,900);
-    }catch(e){const t=$('kaNotifyText');if(t)t.textContent='⚠️ '+(e?.message||'نەتوانرا ئاگادارییەکان چالاک بکرێن.')}
-    finally{if(btn)btn.disabled=false}
-  };
-  window.kaInstallApp=async function(){
-    try{
-      if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;return;}
-      const t=$('kaNotifyText');if(t)t.textContent='لە Chrome ـی Android: لە مینیوی ⋮ ـەوە “Install app” یان “Add to Home screen” هەڵبژێرە.';
-    }catch(e){}
-  };
-  function maybePrompt(){
-    if(localStorage.getItem('kurdia_pwa_installed')==='1' || localStorage.getItem('kurdia_notify_prompt_seen')==='1')return;
-    localStorage.setItem('kurdia_notify_prompt_seen','1');
-    setTimeout(open,1100);
+  const promptBox=()=>$('kurdiaPwaPrompt');
+  function isStandalone(){return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone===true;}
+  function show(){if(!isStandalone() && !localStorage.getItem('kurdia_pwa_prompt_dismissed')){const p=promptBox();if(p)p.style.display='block';}}
+  function hide(){const p=promptBox();if(p)p.style.display='none';}
+  async function registerSW(){
+    if(!('serviceWorker' in navigator)) return null;
+    try{return await navigator.serviceWorker.register('/sw.js',{scope:'/'});}catch(e){console.warn('KURDIA SW:',e);return null;}
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(window.lucide)lucide.createIcons();maybePrompt()});else{if(window.lucide)lucide.createIcons();maybePrompt()}
-  window.addEventListener('load',()=>{registerSW().catch(()=>{});});
+  async function subscribePush(){
+    if(!('Notification' in window) || !('PushManager' in window)) throw new Error('ئەم وێبگەڕە Push Notification پشتگیری ناکات.');
+    const reg=await registerSW();
+    if(!reg) throw new Error('Service Worker بەردەست نییە.');
+    const keyRes=await fetch(WORKER+'/api/push/public-key',{cache:'no-store'});
+    const keyData=await keyRes.json();
+    if(!keyRes.ok || !keyData.publicKey) throw new Error('VAPID Public Key لە Worker بەردەست نییە.');
+    const permission=await Notification.requestPermission();
+    if(permission!=='granted') throw new Error('ڕێگەپێدان بۆ ئاگادارییەکان نەدرا.');
+    const existing=await reg.pushManager.getSubscription();
+    const sub=existing || await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(keyData.publicKey)});
+    const save=await fetch(WORKER+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription:sub.toJSON(),source:'website',url:location.pathname})});
+    const data=await save.json().catch(()=>({}));
+    if(!save.ok || !data.ok) throw new Error(data.error||'Push subscription سەرکەوتوو نەبوو.');
+    localStorage.setItem('kurdia_push_enabled','1');
+    return true;
+  }
+  function urlBase64ToUint8Array(base64){
+    const padding='='.repeat((4-base64.length%4)%4);
+    const raw=atob((base64+padding).replace(/-/g,'+').replace(/_/g,'/'));
+    return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+  }
+  window.KurdiaPWA={
+    closePrompt:function(){localStorage.setItem('kurdia_pwa_prompt_dismissed','1');hide();},
+    enableNotifications:async function(){
+      try{await subscribePush(); alert('✅ ئاگادارییەکانی KURDIA چالاک کران.'); hide();}
+      catch(e){alert('❌ '+(e.message||'نەتوانرا ئاگادارییەکان چالاک بکرێن.'));}
+    }
+  };
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;show();});
+  window.addEventListener('appinstalled',()=>{deferredInstall=null;localStorage.setItem('kurdia_pwa_installed','1');hide();});
+  document.addEventListener('DOMContentLoaded',async()=>{
+    const reg=await registerSW();
+    const install=$('kurdiaInstallBtn'), notify=$('kurdiaNotifyBtn');
+    if(install)install.addEventListener('click',async()=>{
+      if(deferredInstall){deferredInstall.prompt();const r=await deferredInstall.userChoice;deferredInstall=null;if(r?.outcome==='accepted')hide();return;}
+      if(isStandalone()){alert('ئەم ئەپە پێشتر دامەزراوە.');return;}
+      alert('ئەگەر دوگمەی Install لە وێبگەڕەکەت دەرکەوت، لە menu ـی وێبگەڕەکە «Add to Home screen / Install app» هەڵبژێرە.');
+    });
+    if(notify)notify.addEventListener('click',()=>window.KurdiaPWA.enableNotifications());
+    if(Notification.permission==='granted' && !localStorage.getItem('kurdia_push_enabled') && reg){try{await subscribePush();}catch(e){}}
+    if(!isStandalone() && !localStorage.getItem('kurdia_pwa_prompt_dismissed')) setTimeout(show,1800);
+  });
 })();
 </script>
 
