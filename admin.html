@@ -1446,11 +1446,15 @@ function normalizeAdminHeaderValue(value){
 }
 async function adminFetch(url,opts={}){
  const headers=new Headers(opts.headers||{});
- if(!headers.has("X-Admin-Key")){
+ // Some Admin actions pass X-Admin-Key as an empty string when the key is
+ // stored in sessionStorage. An empty header prevents the fallback key from
+ // being injected and causes Worker HTTP 401. Treat empty as missing.
+ const existing=String(headers.get("X-Admin-Key") ?? "").trim();
+ if(!existing){
    const key=normalizeAdminHeaderValue(getAdminKey());
    if(key) headers.set("X-Admin-Key",key);
  } else {
-   headers.set("X-Admin-Key",normalizeAdminHeaderValue(headers.get("X-Admin-Key")));
+   headers.set("X-Admin-Key",normalizeAdminHeaderValue(existing));
  }
  return fetch(url,{...opts,headers});
 }
