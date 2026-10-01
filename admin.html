@@ -291,9 +291,9 @@ body{
   <div class="auth-box">
     <div class="brand-icon mx-auto mb-4"><i data-lucide="lock"></i></div>
     <h2 class="text-lg font-black mb-1">تەختەی کۆنترۆڵی KURDIA</h2>
-    <p class="text-xs text-gray-400 mb-6">تکایە PIN بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
+    <p class="text-xs text-gray-400 mb-6">تکایە Admin API Key ـەکەت بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
     <div class="field text-right mb-4">
-      <input type="password" id="adminPinInput" placeholder="PIN بنووسە..." style="text-align:center;letter-spacing:4px;font-size:16px;">
+      <input type="password" id="adminPinInput" placeholder="ADMIN_API_KEY بنووسە..." style="text-align:center;letter-spacing:4px;font-size:16px;">
     </div>
     <button class="btn btn-primary w-full" onclick="checkAdminAuth()" type="button"><i data-lucide="check"></i> چوونەژوورەوە</button>
   </div>
@@ -821,7 +821,7 @@ body{
   <div class="k5-mini"><small>دوایین وەڵام</small><b id="apiLastMs">—</b></div>
  </div>
 
- <div class="api-center-grid">
+ <div class="card" style="margin-bottom:12px;border-color:rgba(199,43,73,.28)"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><b>🔐 Admin API Key</b><div class="text-xs text-gray-400" style="margin-top:4px">کلیلی Cloudflare ـەکەت بۆ API ـەکانی Admin بەکاردهێنرێت.</div></div><button type="button" class="btn btn-secondary" onclick="changeAdminApiKey()">گۆڕینی Key</button></div></div><div class="api-center-grid">
   <div class="api-lab-card api-runner-main">
    <div class="api-section-head">
     <div><div class="card-title">🚀 تاقیکردنەوەی API</div><div class="ss-help">یەک API هەڵبژێرە؛ Method، URL و Body بە خۆکار پڕ دەکرێن.</div></div>
@@ -847,6 +847,17 @@ body{
    <div class="easy-test-panel" style="margin:10px 0 14px;border:1px solid var(--line);border-radius:18px;padding:14px;background:linear-gradient(135deg,rgba(199,43,73,.11),rgba(255,255,255,.02))">
     <div style="font-weight:900;font-size:17px;margin-bottom:4px">⚡ تاقیکردنەوەی خێرا</div>
     <div class="ss-help" style="margin-bottom:12px">هەر بەشێک وەک WhatsApp OTP ـە: زانیارییەکە بنووسە، دوگمەکە دابگرە، ئەنجامەکە لە خوارەوەی هەمان بەش دەردەکەوێت.</div>
+
+    <div class="easy-action-card" style="margin-bottom:11px">
+      <div class="easy-action-title">🔐 کلیلێکی Admin API</div>
+      <div class="easy-action-help">تەنها یەک جار کلیلی <b>ADMIN_API_KEY</b> ـی Cloudflare بنووسە؛ لە session ـی ئەم مۆبایلەدا هەڵدەگیرێت و بۆ تاقیکردنەوەکانی Admin بەکاردهێنرێت.</div>
+      <input id="easyAdminApiKey" class="input" type="password" dir="ltr" autocomplete="off" placeholder="ADMIN_API_KEY">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn red easy-action-btn" style="flex:1" type="button" onclick="saveEasyAdminKey()">💾 پاشەکەوتکردنی کلیل</button>
+        <button class="btn easy-action-btn" style="flex:1" type="button" onclick="clearEasyAdminKey()">🗑️ سڕینەوە</button>
+      </div>
+      <div id="easyAdminKeyResult" class="easy-action-result"></div>
+    </div>
 
     <div class="easy-action-grid">
       <div class="easy-action-card">
@@ -1061,7 +1072,7 @@ body{
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
 const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
-const ADMIN_SECRET_PIN = "2026";
+const ADMIN_SECRET_PIN = "";
 
 let appState = {
   gradColor1: "#9d1c32",
@@ -1149,17 +1160,17 @@ function checkAdminAuth(ev){
   if(ev) ev.preventDefault();
   const input = document.getElementById("adminPinInput");
   const modal = document.getElementById("adminAuthModal");
-  const pin = String(input?.value || "").trim();
-  const ok = pin === ADMIN_SECRET_PIN || pin === "2026";
-  if(ok){
-    sessionStorage.setItem("admin_auth","true");
-    sessionStorage.setItem("kurdia_admin_key",pin || ADMIN_SECRET_PIN);
-    if(modal) modal.style.display="none";
-    toast("بەخێربێیت بۆ دەستەی کۆنترۆڵ ✓");
-  }else{
-    if(input){ input.focus(); input.select(); }
-    toast("❌ PIN هەڵەیە");
+  const key = String(input?.value || "").trim();
+  if(!key){
+    if(input) input.focus();
+    toast("❌ تکایە Admin API Key بنووسە");
+    return;
   }
+  sessionStorage.setItem("admin_auth","true");
+  sessionStorage.setItem("kurdia_admin_api_key",key);
+  sessionStorage.setItem("kurdia_admin_key",key);
+  if(modal) modal.style.display="none";
+  toast("کلیلی Admin API هەڵگیرا ✓");
 }
 
 // CROPPER
@@ -1412,10 +1423,14 @@ function exportRegistrationsToCSV(){
 
 
 // ===== KURDIA v5 ADMIN ADDITIONS =====
-function getAdminKey(){return sessionStorage.getItem("kurdia_admin_key") || ADMIN_SECRET_PIN || "2026";}
+function getAdminKey(){
+  try{
+    return sessionStorage.getItem("kurdia_admin_api_key") || sessionStorage.getItem("kurdia_admin_key") || ADMIN_SECRET_PIN || "2026";
+  }catch{return ADMIN_SECRET_PIN || "2026";}
+}
 async function adminFetch(url,opts={}){
  const headers=new Headers(opts.headers||{});
- headers.set("X-Admin-Key",getAdminKey());
+ if(!headers.has("X-Admin-Key")) headers.set("X-Admin-Key",getAdminKey());
  return fetch(url,{...opts,headers});
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
@@ -1939,7 +1954,7 @@ function resetData(){
     const box=document.getElementById('k5Diagnostics');if(!box)return;box.innerHTML='<div class="item-row">پشکنین دەکرێت...</div>';
     const checks=[];
     try{
-      const r=await adminFetch(`${WORKER_URL}/api/admin/diagnostics`,{headers:{'x-admin-key':ADMIN_SECRET_PIN}});
+      const r=await adminFetch(`${WORKER_URL}/api/admin/diagnostics`,{headers:{'x-admin-key':getAdminKeySafe()}});
       const x=await r.json().catch(()=>({}));
       if(Array.isArray(x.checks))x.checks.forEach(c=>checks.push(c));else checks.push({name:'Worker Diagnostics',status:r.ok?'online':'error',detail:r.status});
     }catch(e){checks.push({name:'Worker Diagnostics',status:'error',detail:'پەیوەندی نییە'});}
@@ -1948,7 +1963,7 @@ function resetData(){
   };
   window.k5LoadOps=async function(){
     try{
-      const h={headers:{'x-admin-key':ADMIN_SECRET_PIN}};
+      const h={headers:{'x-admin-key':getAdminKeySafe()}};
       const [b,p]=await Promise.all([adminFetch(`${WORKER_URL}/api/admin/registrations`,h),adminFetch(`${WORKER_URL}/api/admin/private-requests`,h)]);
       const bj=await b.json().catch(()=>({})),pj=await p.json().catch(()=>({}));
       const bs=bj.registrations||[],ps=pj.requests||[];
@@ -1985,7 +2000,14 @@ window.addEventListener("DOMContentLoaded",()=>{
   const pin=document.getElementById("adminPinInput");
   const modal=document.getElementById("adminAuthModal");
   if(pin) pin.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();checkAdminAuth(e);}});
-  if(sessionStorage.getItem("admin_auth")==="true" && modal) modal.style.display="none";
+  const savedKey=sessionStorage.getItem("kurdia_admin_api_key") || "";
+  if(savedKey && savedKey !== "2026" && modal) modal.style.display="none";
+  else {
+    sessionStorage.removeItem("admin_auth");
+    sessionStorage.removeItem("kurdia_admin_key");
+    if(modal) modal.style.display="flex";
+    if(pin) setTimeout(()=>pin.focus(),100);
+  }
 });
 </script>
 <input id="ssMobileImageInput" type="file" accept="image/*" capture="environment" style="display:none"><div id="ssImageUploadStatus" style="display:none"></div>
@@ -2034,7 +2056,7 @@ window.addEventListener("DOMContentLoaded",()=>{
   bookingReject:{m:'POST',p:'/api/admin/reject-booking',b:{phone:'07500000000',id:'TEST-BOOKING',reason:'Test rejection'},cat:'message',safe:false,name:'WhatsApp — Rejection'},
   broadcast:{m:'POST',p:'/api/admin/send-broadcast',b:{message:'KURDIA TEST MESSAGE',phones:['07500000000']},cat:'message',safe:false,name:'WhatsApp — Broadcast'},
   tripNotification:{m:'POST',p:'/api/admin/send-trip-notification',b:{message:'KURDIA TEST NOTIFICATION',phones:['07500000000']},cat:'message',safe:false,name:'WhatsApp — Trip Notification'},
-  ai:{m:'POST',p:'/api/ai',b:{message:'سڵاو، ئەمە تاقیکردنەوەی Admin ـە.'},cat:'write',safe:false,name:'AI — API'}
+  ai:{m:'POST',p:'/api/ai',b:{prompt:'سڵاو، ئەمە تاقیکردنەوەی Admin ـە.'},cat:'write',safe:false,name:'AI — API'}
  };
  let activeCat='all', search='';
  function filtered(){return Object.entries(defs).filter(([k,x])=>(activeCat==='all'||x.cat===activeCat)&&(!search||((x.name+' '+x.p).toLowerCase().includes(search.toLowerCase()))));}
@@ -2119,9 +2141,25 @@ window.addEventListener("DOMContentLoaded",()=>{
    for(const [k,x] of safe){const st=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const ms=Math.round(performance.now()-st);if(r.ok)pass++;else fail++;lines.push(`${r.ok?'🟢':'🔴'} ${r.status} · ${ms}ms · ${x.p}`);saveHistory(`${r.ok?'🟢':'🔴'} ${r.status} · ${ms}ms · ${x.p}`,r.ok,ms,x.p);}catch(e){fail++;const ms=Math.round(performance.now()-st);lines.push(`🔴 NETWORK · ${ms}ms · ${x.p}`);}}
    el.className='easy-action-result '+(fail?'err':'ok');el.textContent=`${fail?'❌':'✅'} سەرکەوتوو: ${pass} · هەڵە: ${fail}\n\n`+lines.join('\n');
  };
- window.easyAi=async function(){const message=String($('easyAiMessage')?.value||'').trim();if(!message){easySetResult('easyAiResult',false,'نامەی AI بنووسە');return;}await easyPost('/api/ai',{message},'easyAiResult','AI وەڵامی دا ✓');};
+ window.easyAi=async function(){const prompt=String($('easyAiMessage')?.value||'').trim();if(!prompt){easySetResult('easyAiResult',false,'پرسیاری AI بنووسە');return;}await easyPost('/api/ai',{prompt},'easyAiResult','AI وەڵامی دا ✓');};
 
- function getAdminKeySafe(){try{return sessionStorage.getItem('kurdia_admin_key')||sessionStorage.getItem('adminKey')||'2026'}catch{return '2026'}}
+ function getAdminKeySafe(){
+  try {
+    return sessionStorage.getItem('kurdia_admin_api_key') || sessionStorage.getItem('kurdia_admin_key') || sessionStorage.getItem('adminKey') || '';
+  } catch { return ''; }
+}
+ window.saveEasyAdminKey=function(){
+   const key=String($('easyAdminApiKey')?.value||'').trim();
+   if(!key){easySetResult('easyAdminKeyResult',false,'کلیلی Admin API بنووسە');return;}
+   sessionStorage.setItem('kurdia_admin_api_key',key);
+   sessionStorage.setItem('kurdia_admin_key',key);
+   easySetResult('easyAdminKeyResult',true,'کلیلی Admin API پاشەکەوت کرا ✓','ئێستا تاقیکردنەوەکانی Admin بەو کلیلە دەچن.');
+   if($('easyAdminApiKey')) $('easyAdminApiKey').value='';
+ };
+ window.clearEasyAdminKey=function(){
+   sessionStorage.removeItem('kurdia_admin_api_key');
+   easySetResult('easyAdminKeyResult',true,'کلیلی Admin API سڕایەوە ✓');
+ };
  window.quickWhatsAppOtp=async function(){
    const phone=String($('quickTestPhone')?.value||$('testPhone')?.value||'').trim();
    const out=$('quickTestResult');
@@ -2139,7 +2177,15 @@ window.addEventListener("DOMContentLoaded",()=>{
      if(out){out.style.background=ok?'rgba(50,212,134,.10)':'rgba(255,75,105,.10)';out.style.border='1px solid '+(ok?'rgba(50,212,134,.35)':'rgba(255,75,105,.35)');out.textContent=(ok?'✅ OTP نێردرا. ':'❌ OTP نەگەیشت. ')+reason+'\n\n'+meta;}
    }catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · POST ${x.p}`;show({error:e.message},false,meta);history(meta,false);saveHistory(meta,false,ms,x.p);if(out){out.style.display='block';out.style.background='rgba(255,75,105,.10)';out.style.border='1px solid rgba(255,75,105,.35)';out.textContent='❌ پەیوەندی بە Worker نەکرا.\n'+e.message;}}
  };
- window.quickWorkerTest=async function(){
+ window.changeAdminApiKey=function(){
+  const key=prompt("Admin API Key ـەکەت بنووسە:");
+  if(!key || !String(key).trim()) return;
+  sessionStorage.setItem('kurdia_admin_api_key',String(key).trim());
+  sessionStorage.setItem('kurdia_admin_key',String(key).trim());
+  sessionStorage.setItem('admin_auth','true');
+  toast('Admin API Key نوێکرایەوە ✓');
+};
+window.quickWorkerTest=async function(){
    const old=$('apiPreset')?.value; if($('apiPreset')){$('apiPreset').value='diagnostics';apiPresetChanged();} await runApiTest(); if(old&&$('apiPreset')){$('apiPreset').value=old;apiPresetChanged();}
  };
  window.quickAiTest=async function(){
@@ -2155,6 +2201,7 @@ window.addEventListener("DOMContentLoaded",()=>{
    document.querySelectorAll('.api-cat').forEach(b=>b.addEventListener('click',()=>{activeCat=b.dataset.cat;renderCats();renderPresets();}));
    $('apiSearch')?.addEventListener('input',e=>{search=e.target.value;renderPresets();});
    renderCats();renderPresets();loadHistory();
+   try{ if(sessionStorage.getItem('kurdia_admin_api_key') && $('easyAdminApiKey')) $('easyAdminApiKey').placeholder='ADMIN_API_KEY پاشەکەوت کرا ✓'; }catch{}
    $('apiMethod')?.addEventListener('change',()=>{$('apiMethodBadge').textContent=$('apiMethod').value;});
    $('apiPath')?.addEventListener('input',()=>{$('apiEndpointPreview').textContent=$('apiPath').value;});
  });
