@@ -814,6 +814,17 @@ body{
   <p class="muted">هەموو پەیوەندییەکانی Worker ـت لە یەک شوێنەوە ببینە، بە یەک کلیک تاقی بکەرەوە، و هەڵەکە بە HTTP، کاتی وەڵام و JSON بە ڕوونی ببینە.</p>
  </div>
 
+ <div class="api-quick-tests" style="margin-bottom:12px">
+  <div class="api-quick-head"><div><b>⚡ تاقیکردنەوەی خێرا</b><small>تەنها شتێک هەڵبژێرە و دۆخەکە لە خوارەوە دەبینیت.</small></div><span id="quickTestStatus" class="api-live-badge">ئامادەیە</span></div>
+  <div class="api-quick-grid">
+   <div class="api-quick-card"><div class="qicon">📱</div><div class="qbody"><b>WhatsApp OTP</b><small>کۆدی OTP بنێرە بۆ ژمارەی تاقیکردنەوە.</small><input id="quickOtpPhone" class="input" dir="ltr" inputmode="tel" placeholder="0750xxxxxxx"><button class="btn red" onclick="quickSendOtp()">📨 ناردنی OTP</button></div></div>
+   <div class="api-quick-card"><div class="qicon">🔐</div><div class="qbody"><b>پشتڕاستکردنەوەی OTP</b><small>ئەو کۆدەی لە WhatsApp ـەوە هات داخل بکە.</small><input id="quickOtpCode" class="input" dir="ltr" inputmode="numeric" maxlength="4" placeholder="1234"><button class="btn ghost" onclick="quickVerifyOtp()">✅ پشتڕاستکردنەوە</button></div></div>
+   <div class="api-quick-card"><div class="qicon">🔎</div><div class="qbody"><b>Worker</b><small>پەیوەندی و وەڵامی Worker تاقی دەکاتەوە.</small><button class="btn ghost" onclick="apiCheckOnly()">🔌 تاقیکردنەوەی Worker</button></div></div>
+   <div class="api-quick-card"><div class="qicon">🌐</div><div class="qbody"><b>هەموو GET ـەکان</b><small>هەموو API ـە خوێندنەوەکان بە یەک کلیک.</small><button class="btn ghost" onclick="runSafeApiSuite()">⚡ تاقیکردنەوەی هەموو GET</button></div></div>
+  </div>
+  <div id="quickTestResult" class="api-quick-result">هێشتا هیچ تاقیکردنەوەیەک نەکراوە.</div>
+ </div>
+
  <div class="k5-grid4" style="margin-bottom:12px">
   <div class="k5-mini"><small>کۆی تاقیکردنەوەکان</small><b id="apiTotalCount">0</b></div>
   <div class="k5-mini"><small>سەرکەوتوو</small><b id="apiPassCount">0</b></div>
@@ -1911,7 +1922,9 @@ window.addEventListener("DOMContentLoaded",()=>{
 .api-runner-main{min-width:0}.api-section-head,.api-result-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.api-live-badge{font-size:11px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:#94a3b8}.api-live-badge.online{color:#53e59a;border-color:rgba(83,229,154,.25)}.api-live-badge.error{color:#ff6f8a;border-color:rgba(255,111,138,.25)}
 .api-category-tabs{display:flex;gap:7px;overflow:auto;padding:12px 0 8px}.api-cat{white-space:nowrap;border:1px solid var(--line);background:#0b111b;color:#aeb8c7;border-radius:12px;padding:9px 12px;font:inherit;font-size:11px;cursor:pointer}.api-cat.active{background:linear-gradient(135deg,#8d142c,#c72c4a);color:#fff;border-color:transparent}
 .api-control-grid,.api-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.api-detail-grid .full{grid-column:1/-1}.api-request-preview{display:grid;grid-template-columns:110px 1fr auto;gap:8px;align-items:stretch;margin:10px 0}.api-method-box,.api-url-box{border:1px solid var(--line);background:#080e17;border-radius:14px;padding:9px 11px;display:flex;flex-direction:column;justify-content:center}.api-method-box span,.api-url-box span{font-size:9px;color:#6f7b8d}.api-method-box b{font-size:14px}.api-url-box code{font-size:12px;color:#d8dee9;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left}.api-main-run{min-width:135px}.api-details{border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.015);margin-top:8px}.api-details summary{cursor:pointer;padding:12px;font-size:12px;font-weight:800}.api-details[open] summary{border-bottom:1px solid var(--line)}.api-details .api-detail-grid{padding:12px}.api-action-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.api-result-head{margin-bottom:7px;font-size:11px}.api-result-head span{color:#718096}.api-lab-response{min-height:190px;max-height:430px;overflow:auto;border:1px solid var(--line);border-radius:15px;padding:14px;white-space:pre-wrap;word-break:break-word;font:12px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;direction:ltr;text-align:left;background:#060a10}.api-lab-response.api-ok{border-color:rgba(60,220,140,.28);box-shadow:inset 3px 0 0 #32d486}.api-lab-response.api-err{border-color:rgba(255,75,105,.3);box-shadow:inset 3px 0 0 #ff4b69}.api-empty{color:#748093}.api-endpoint-list{display:grid;gap:7px;max-height:590px;overflow:auto}.api-endpoint-item{width:100%;text-align:right;border:1px solid var(--line);background:#080e17;border-radius:12px;padding:9px 10px;cursor:pointer;color:#dbe2ec}.api-endpoint-item:hover{border-color:rgba(199,43,73,.5);transform:translateY(-1px)}.api-endpoint-item .top{display:flex;justify-content:space-between;align-items:center;gap:7px}.api-endpoint-item small{display:block;color:#738094;direction:ltr;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:4px}.api-method-pill{font-size:9px;padding:3px 6px;border-radius:6px;background:#151d29;color:#9facbd;font-weight:900}.api-history{display:grid;gap:7px;max-height:250px;overflow:auto}.api-history-item{border:1px solid var(--line);border-radius:10px;padding:8px;font:10px/1.6 ui-monospace,monospace;direction:ltr;text-align:left;background:#080e17}.api-history-item.ok{border-right:3px solid #32d486}.api-history-item.err{border-right:3px solid #ff4b69}.api-suite-row{display:flex;align-items:center;gap:8px;padding:8px;border-bottom:1px solid var(--line);font-size:11px}.api-suite-row:last-child{border-bottom:0}.api-suite-row .grow{flex:1}.api-suite-dot{width:8px;height:8px;border-radius:50%;background:#64748b}.api-suite-dot.ok{background:#32d486}.api-suite-dot.err{background:#ff4b69}.k5-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.api-search-hide{display:none!important}
-@media(max-width:900px){.api-center-grid{grid-template-columns:1fr}.api-control-grid,.api-detail-grid{grid-template-columns:1fr}.api-request-preview{grid-template-columns:82px 1fr}.api-main-run{grid-column:1/-1;width:100%}.k5-grid4{grid-template-columns:repeat(2,1fr)}}
+.api-quick-tests{border:1px solid rgba(199,43,73,.22);border-radius:18px;background:linear-gradient(145deg,rgba(141,20,44,.12),rgba(255,255,255,.02));padding:14px}.api-quick-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.api-quick-head b{font-size:15px}.api-quick-head small{display:block;color:#8491a4;font-size:10px;margin-top:4px}.api-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.api-quick-card{display:flex;gap:10px;border:1px solid var(--line);background:#080e17;border-radius:15px;padding:12px}.api-quick-card .qicon{font-size:23px;line-height:1}.api-quick-card .qbody{flex:1;min-width:0}.api-quick-card b{display:block;font-size:13px}.api-quick-card small{display:block;color:#7f8b9d;font-size:10px;line-height:1.7;margin:4px 0 8px}.api-quick-card .input{margin-bottom:7px}.api-quick-card .btn{width:100%}.api-quick-result{margin-top:10px;padding:12px;border-radius:13px;background:#060a10;border:1px solid var(--line);font-size:11px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.api-quick-result.ok{border-color:rgba(50,212,134,.35);box-shadow:inset 3px 0 #32d486}.api-quick-result.err{border-color:rgba(255,75,105,.35);box-shadow:inset 3px 0 #ff4b69}
+
+@media(max-width:900px){.api-center-grid{grid-template-columns:1fr}.api-control-grid,.api-detail-grid{grid-template-columns:1fr}.api-request-preview{grid-template-columns:82px 1fr}.api-main-run{grid-column:1/-1;width:100%}.k5-grid4{grid-template-columns:repeat(2,1fr)}.api-quick-grid{grid-template-columns:1fr}.api-quick-head{align-items:flex-start;flex-direction:column}}
 </style>
 <script id="kurdia-v11-api-lab-js">
 (function(){
@@ -1965,10 +1978,40 @@ window.addEventListener("DOMContentLoaded",()=>{
    try{const opt={method,headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()}};if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);const r=await adminFetch(WORKER_URL+path,opt);const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;show(data,r.ok,meta);history(meta,r.ok);saveHistory(meta,r.ok,ms,path);}catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);saveHistory(meta,false,ms,path);}
  };
  function getAdminKeySafe(){try{return sessionStorage.getItem('kurdia_admin_key')||sessionStorage.getItem('adminKey')||'2026'}catch{return '2026'}}
+ function quickResult(ok,title,detail){const box=$('quickTestResult'),badge=$('quickTestStatus');if(!box)return;box.className='api-quick-result '+(ok?'ok':'err');box.textContent=(ok?'🟢 ':'🔴 ')+title+'\n'+detail;if(badge){badge.className='api-live-badge '+(ok?'online':'error');badge.textContent=ok?'سەرکەوتوو ✓':'هەڵە ✕';}}
+ window.quickSendOtp=async function(){
+   const phone=($('quickOtpPhone')?.value||'').trim();
+   if(!phone){quickResult(false,'ژمارە نەدراوە','تکایە سەرەتا ژمارەی WhatsApp بنووسە.');return;}
+   quickResult(true,'⏳ OTP دەنێردرێت...','تکایە چاوەڕوان بە.');
+   const started=performance.now();
+   try{
+     const r=await adminFetch(WORKER_URL+'/api/otp/send',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()},body:JSON.stringify({phone})});
+     const raw=await r.text();let d;try{d=JSON.parse(raw)}catch{d={raw}}
+     const ms=Math.round(performance.now()-started);
+     if(r.ok&&d.ok){quickResult(true,'WhatsApp OTP نێردرا ✓',`HTTP ${r.status} · ${ms}ms\nژمارە: ${d.phone||phone}\nئێستا کۆدی 4 ژمارەکە لە WhatsApp ـەکەت بخوێنەوە و لە خانەی OTP دایبنێ.`);}
+     else{quickResult(false,'WhatsApp OTP نەنێردرا ✕',`HTTP ${r.status} · ${ms}ms\nهۆکاری هەڵە: ${d.error||'وەڵامی نادیار لە Worker'}`);}
+     const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · POST /api/otp/send`;history(meta,r.ok);saveHistory(meta,r.ok,ms,'/api/otp/send');loadHistory();
+   }catch(e){const ms=Math.round(performance.now()-started);quickResult(false,'پەیوەندی بە Worker نەکرا ✕',`NETWORK ERROR · ${ms}ms\n${e.message||e}`);}
+ };
+ window.quickVerifyOtp=async function(){
+   const phone=($('quickOtpPhone')?.value||'').trim(),code=($('quickOtpCode')?.value||'').trim();
+   if(!phone||!code){quickResult(false,'داتا تەواو نییە','ژمارە و کۆدی OTP هەردووکیان پڕ بکەرەوە.');return;}
+   quickResult(true,'⏳ OTP پشتڕاست دەکرێتەوە...','تکایە چاوەڕوان بە.');
+   const started=performance.now();
+   try{
+     const r=await adminFetch(WORKER_URL+'/api/otp/verify',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':getAdminKeySafe()},body:JSON.stringify({phone,code})});
+     const raw=await r.text();let d;try{d=JSON.parse(raw)}catch{d={raw}}
+     const ms=Math.round(performance.now()-started);
+     if(r.ok&&d.ok){quickResult(true,'OTP پشتڕاست کرایەوە ✓',`HTTP ${r.status} · ${ms}ms\nژمارەکە بە سەرکەوتوویی پشتڕاست کرایەوە.`);}
+     else{quickResult(false,'OTP پشتڕاست نەکرایەوە ✕',`HTTP ${r.status} · ${ms}ms\nهۆکاری هەڵە: ${d.error||'کۆدەکە هەڵەیە یان بەسەرچووە'}`);}
+     const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · POST /api/otp/verify`;history(meta,r.ok);saveHistory(meta,r.ok,ms,'/api/otp/verify');loadHistory();
+   }catch(e){const ms=Math.round(performance.now()-started);quickResult(false,'پەیوەندی بە Worker نەکرا ✕',`NETWORK ERROR · ${ms}ms\n${e.message||e}`);}
+ };
+
  window.apiCheckOnly=async function(){const old=$('apiPreset').value;activeCat='all';search='';renderCats();renderPresets();$('apiPreset').value='diagnostics';apiPresetChanged();await runApiTest();$('apiPreset').value=old;apiPresetChanged();};
  window.runSafeApiSuite=async function(){
    const safe=Object.entries(defs).filter(([k,x])=>x.safe);const box=$('apiResult');if(!box)return;box.className='api-lab-response api-empty';box.textContent='⚡ تاقیکردنەوەی هەموو API ـەکانی GET دەستی پێکرد...\n\n';
-   let lines=[];for(const [k,x] of safe){const started=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const line=`${r.ok?'🟢':'🔴'} ${x.m.padEnd(6)} ${r.status} · ${String(ms).padStart(4)}ms · ${x.p}`;lines.push(line);saveHistory(line,r.ok,ms,x.p);if(r.ok)history(line,true);else history(line,false);}catch(e){const ms=Math.round(performance.now()-started);const line=`🔴 GET    NETWORK · ${ms}ms · ${x.p}`;lines.push(line);saveHistory(line,false,ms,x.p);history(line,false);}box.textContent='⚡ ئەنجامی تاقیکردنەوەی هەموو GET ـەکان:\n\n'+lines.join('\n');}
+   let lines=[];for(const [k,x] of safe){const started=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const hint=r.status===401?' ← Admin API Key پێویستە':r.status===403?' ← دەسەڵات/OTP پێویستە':r.status>=500?' ← هەڵەی Worker/Server':'';const line=`${r.ok?'🟢':'🔴'} ${x.m.padEnd(6)} ${r.status} · ${String(ms).padStart(4)}ms · ${x.p}${hint}`;lines.push(line);saveHistory(line,r.ok,ms,x.p);if(r.ok)history(line,true);else history(line,false);}catch(e){const ms=Math.round(performance.now()-started);const line=`🔴 GET    NETWORK · ${ms}ms · ${x.p}`;lines.push(line);saveHistory(line,false,ms,x.p);history(line,false);}box.textContent='⚡ ئەنجامی تاقیکردنەوەی هەموو GET ـەکان:\n\n'+lines.join('\n');}
    loadHistory();
  };
  document.addEventListener('DOMContentLoaded',()=>{
