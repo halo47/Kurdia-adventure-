@@ -2399,7 +2399,10 @@ window.quickWorkerTest=async function(){
         <b style="display:block">ئاگادارییەکانی مۆبایل / سیستەم</b>
         <small id="adminPushState" style="color:#929dad">بۆ وەرگرتنی ئاگاداری لە کاتی دەرەوەی ئەدمین، Push چالاک بکە.</small>
       </div>
-      <button class="btn btn-primary" type="button" id="adminEnablePushBtn" onclick="adminEnablePush()"><i data-lucide="bell-ring"></i> چالاککردنی ئاگاداری</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn btn-secondary" type="button" id="adminEnablePushBtn" onclick="adminEnablePush()"><i data-lucide="bell-ring"></i> چالاککردنی ئاگاداری</button>
+        <button class="btn btn-primary" type="button" onclick="adminSendTestNotification()"><i data-lucide="send"></i> ناردنی ئاگاداریی تاقیکردنەوە</button>
+      </div>
     </div>
   </div>
   <div class="kat-actions" style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
@@ -2468,6 +2471,25 @@ window.quickWorkerTest=async function(){
     catch(e){if(out)out.textContent='❌ '+(e.message||e);if(btn)btn.disabled=false;}
     if(window.lucide)lucide.createIcons();
   };
+  window.adminSendTestNotification=async function(){
+    const out=document.getElementById('adminPushState');
+    const btn=document.querySelector('[onclick="adminSendTestNotification()"]');
+    try{
+      if(out)out.textContent='⏳ پشکنین دەکرێت...';
+      const reg=await registerSW();
+      let sub=await reg.pushManager.getSubscription();
+      if(!sub || !('Notification' in window) || Notification.permission!=='granted'){
+        await adminPushSubscription();
+      }
+      if(btn)btn.disabled=true;
+      const r=await window.adminFetch(W+'/api/admin/push/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'KURDIA ADVENTURE',body:'ئەمە ئاگادارییەکی تاقیکردنەوەی سیستەمی KURDIA ـە.',url:'/#admin_notifications'})});
+      const d=await r.json().catch(()=>({}));
+      if(!r.ok||!d.ok||!d.sent) throw new Error(d.error||`Push: ${d.sent||0} نێردرا · ${d.failed||0} سەرنەکەوتوو`);
+      if(out)out.textContent='✅ ئاگاداریی تاقیکردنەوە نێردرا. مۆبایلەکەت دەبێت ئێستا Notification پیشان بدات.';
+      setTimeout(()=>adminLoadNotifications(),1200);
+    }catch(e){if(out)out.textContent='❌ '+(e.message||e);}
+    finally{if(btn)btn.disabled=false;if(window.lucide)lucide.createIcons();}
+  };
   window.adminLoadNotifications=async function(){
     const list=document.getElementById('adminNotifList'), summary=document.getElementById('adminNotifSummary');
     if(!list)return;
@@ -2477,7 +2499,7 @@ window.quickWorkerTest=async function(){
       summary.textContent=`${all.length} ڕووداو · ${unread} ئاگادارییەکی نەخوێندراوە`;
       const badge=document.getElementById('adminNotifBadge');
       if(badge){badge.textContent=unread>99?'99+':String(unread);badge.style.display=unread?'inline-block':'none';}
-      list.innerHTML=all.length?all.map(n=>`<div class="admin-notif ${n.read?'':'unread'}" data-id="${esc(n.id)}" onclick="adminMarkNotificationRead('${esc(n.id)}')"><b>${esc(n.title||n.type||'System Event')}</b><div style="margin-top:5px;color:#c7ccd6">${esc(n.path||'')}</div><small>${esc(time(n.createdAt))}</small></div>`).join(''):'<div class="text-xs text-gray-400" style="padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:16px">هیچ ئاگادارییەکی تۆمارکراو نییە.</div>';
+      list.innerHTML=all.length?all.map(n=>`<div class="admin-notif ${n.read?'':'unread'}" data-id="${esc(n.id)}" onclick="adminMarkNotificationRead('${esc(n.id)}')"><b>${esc(n.title||n.type||'System Event')}</b><div style="margin-top:5px;color:#c7ccd6">${esc(n.path||'')}</div><small>${esc(time(n.createdAt))}</small></div>`).join(''):'<div class="text-xs text-gray-400" style="padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:16px">هیچ ئاگادارییەکی تۆمارکراو نییە.<br><button class="btn btn-primary" style="margin-top:12px" onclick="adminSendTestNotification()">🔔 تاقیکردنەوەی ئاگاداری</button></div>';
     }catch(e){if(summary)summary.textContent='❌ '+(e.message||e);}
   };
   window.adminMarkNotificationRead=async function(id){try{await window.adminFetch(W+'/api/admin/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids:[id]})});await adminLoadNotifications();}catch(e){}};
