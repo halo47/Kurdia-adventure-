@@ -10,6 +10,30 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <!-- زیادکردنی Lucide بۆ ئایکۆنە مۆدێرنەکان -->
 <script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  // KURDIA ADVENTURE — OneSignal Web Push (additive only)
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    try {
+      const workerOrigin = window.KURDIA_WORKER_URL || 'https://kurdia.alwandssalh.workers.dev';
+      const cfgRes = await fetch(workerOrigin + '/api/push/onesignal-config', {cache:'no-store'});
+      const cfg = await cfgRes.json().catch(() => ({}));
+      if (!cfgRes.ok || !cfg.ok || !cfg.appId) return;
+      await OneSignal.init({
+        appId: cfg.appId,
+        serviceWorkerPath: '/OneSignalSDKWorker.js',
+        serviceWorkerParam: { scope: '/' }
+      });
+      // Ask once on visits where the browser has not already decided.
+      try {
+        if (OneSignal.Notifications && Notification.permission === 'default') {
+          await OneSignal.Notifications.requestPermission();
+        }
+      } catch (_) {}
+    } catch (_) {}
+  });
+</script>
 <style>
 :root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
