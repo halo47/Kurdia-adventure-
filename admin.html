@@ -183,14 +183,6 @@ textarea{ min-height:85px; resize:vertical; }
 .status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .status-chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
 @media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
-
-/* KURDIA CMS FINAL — mobile scroll fixes */
-#tab-site_studio .ss-tabs{overflow-x:auto;overflow-y:hidden;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-#tab-site_studio .ss-tab{flex:0 0 auto}
-#tab-site_studio .ss-panel{max-height:none}
-#tab-site_studio .ss-list{max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:2px}
-#tab-admin_notifications #adminNotifList{max-height:58vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:3px}
-#tab-live_registrations #registrationsContainer{max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:3px}
 </style>
 
 
@@ -336,10 +328,6 @@ body{
 <li><button class="nav-btn active" onclick="switchTab('dashboard')"><i data-lucide="layout-dashboard"></i> داشبۆرد <span class="cc-badge">LIVE</span></button></li>
 <li class="cc-nav-label">WEBSITE</li>
 <li><button class="nav-btn" onclick="switchTab('site_studio')"><i data-lucide="panels-top-left"></i> Website Builder</button></li>
-<li><button class="nav-btn" onclick="openSiteSection('destinations')"><i data-lucide="map"></i> شوێنەکان</button></li>
-<li><button class="nav-btn" onclick="openSiteSection('footer')"><i data-lucide="contact"></i> About / Contact / Social</button></li>
-<li><button class="nav-btn" onclick="openSiteSection('seo')"><i data-lucide="search-check"></i> SEO / Settings</button></li>
-
 <li><button class="nav-btn" onclick="switchTab('design')"><i data-lucide="palette"></i> Hero و Brand</button></li>
 <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> Trips — ٣ زمان</button></li>
 <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="images"></i> Media Library</button></li>
@@ -369,7 +357,7 @@ body{
 </ul>
 
     <div class="sidebar-footer">
-      <button class="btn btn-primary" onclick="kurdiaSaveAllCloud()"><i data-lucide="cloud-upload"></i> پاشەکەوتکردنی گۆڕانکاری</button>
+      <button class="btn btn-primary" onclick="kurdiaSaveAllCloud()"><i data-lucide="cloud-upload"></i> پاشەکەوتکردن لە Cloud</button>
       <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> ماڵپەڕ بکەرەوە</button>
     </div>
   </aside>
@@ -381,7 +369,7 @@ body{
         <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
         <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">داشبۆردی سەرەکی</h1>
       </div>
-      <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="publishLive()">
+      <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="kurdiaSaveAllCloud()">
         <i data-lucide="save"></i> Publish
       </button>
     </header>
@@ -458,7 +446,7 @@ body{
 
         <div class="ss-savebar">
           <span class="ss-dirty" id="ssDirty">دۆخ: <b>پاک</b></span>
-          <div class="ss-actions"><button class="btn btn-secondary" type="button" onclick="ssResetDraft()">Reset</button><button class="btn btn-primary" type="button" onclick="ssSaveCloud()"><i data-lucide="cloud-upload"></i> هەموو گۆڕانکارییەکان Save + Publish</button></div>
+          <div class="ss-actions"><button class="btn btn-secondary" type="button" onclick="ssResetDraft()">Reset</button><button class="btn btn-primary" type="button" onclick="ssSaveCloud()"><i data-lucide="cloud-upload"></i> هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت بکە</button></div>
         </div>
       </section>
 
@@ -654,6 +642,10 @@ body{
               <button class="btn btn-secondary text-xs" onclick="fetchLiveRegistrations()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
               <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
             </div>
+          </div>
+          <div class="mb-4 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3">
+            <div class="flex items-center gap-2 font-bold text-sm text-white"><i data-lucide="shield-check"></i> پشتڕاستکردنەوە و ڕەتکردنەوەی Booking</div>
+            <div class="text-xs text-gray-400 mt-1">لە هەر داواکارییەکدا دوگمەکانی <b class="text-emerald-400">پەسەندکردن (WhatsApp)</b> و <b class="text-red-400">ڕەتکردنەوە</b> لە خوارەوە دەمێنن و کاردەکەن.</div>
           </div>
           <div id="registrationsContainer" class="flex flex-col gap-3"></div>
         </div>
@@ -1024,6 +1016,7 @@ body{
 
 
 <section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
+
 <section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
 <section id="tab-k5_coupons" class="page-tab">
  <div class="hero">
@@ -1427,9 +1420,9 @@ function renderRegistrations(list){
           <span>🆔 ${reg.id}</span>
         </div>
       </div>
-      <div class="flex gap-2">
-        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check"></i> پەسەندکردن (WhatsApp)</button>
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
+      <div class="flex flex-wrap gap-2 shrink-0">
+        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check-circle-2"></i> پەسەندکردن (WhatsApp)</button>
+        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x-circle"></i> ڕەتکردنەوە</button>
       </div>
     </div>
   `).join("");
@@ -1964,51 +1957,20 @@ async function saveStudioToCloud(){
  }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
 }
 
-
-window.openSiteSection = function(section){
+async function kurdiaSaveAllCloud(){
+  autoSync();
+  let ok=true;
   try{
-    const old = window.switchTab;
-    old('site_studio');
-    const btn = document.querySelector(`.ss-tab[data-ss="${section}"]`);
-    if(btn) btn.click();
-    const studio = window.kurdiaSiteStudio;
-    if(studio && !studio.current) studio.load();
-  }catch(e){
-    if(typeof toast === 'function') toast('❌ نەتوانرا بەشی وێبسایت بکرێتەوە');
-  }
-};
-
-window.kurdiaSaveAllCloud = async function(){
-  try{
-    const studio = window.kurdiaSiteStudio;
-    if(studio){
-      if(!studio.current) await studio.load();
-      if(typeof studio.save === 'function'){
-        const ok = await studio.save();
-        if(ok){
-          if(typeof saveWhatsAppToCloud === 'function'){
-            try{ await saveWhatsAppToCloud(); }catch(_){}
-          }
-          if(typeof toast === 'function') toast('✅ هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت کران');
-          return true;
-        }
-      }
-    }
-    const ok = await saveStudioToCloud();
-    if(ok && typeof saveWhatsAppToCloud === 'function'){
-      try{ await saveWhatsAppToCloud(); }catch(_){}
-    }
-    if(typeof toast === 'function') toast(ok ? '✅ گۆڕانکارییەکان پاشەکەوت کران' : '❌ Cloud Save سەرکەوتوو نەبوو');
-    return ok;
-  }catch(e){
-    if(typeof toast === 'function') toast('❌ Cloud Save: '+(e.message||e));
-    return false;
-  }
-};
-
-async function publishLive(){
-  return await window.kurdiaSaveAllCloud();
+    if(window.kurdiaSiteStudio?.save) ok = (await window.kurdiaSiteStudio.save()) !== false;
+    else ok = (await saveStudioToCloud()) !== false;
+  }catch(e){ ok=false; }
+  try{ await saveWhatsAppToCloud(); }catch(e){}
+  if(ok) toast("✅ هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت کران");
+  return ok;
 }
+// Legacy compatibility: old integrations can still call publishLive without restoring Publish Center.
+async function publishLive(){ return kurdiaSaveAllCloud(); }
+window.kurdiaSaveAllCloud = kurdiaSaveAllCloud;
 function openLiveSite(){ window.open("index.html", "_blank"); }
 function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
 
@@ -2212,13 +2174,10 @@ function resetData(){
   window.switchTab=function(id){
     oldSwitch(id);
     if(id==='k5_analytics')k5LoadOps();
-    if(id==='k5_publish')k5Preview();
     if(id==='k5_community')k5FilterCommunity();
     if(id==='k5_coupons')k5RenderCoupons();
     if(id==='k5_activity')k5RenderLogs();
   };
-  const oldPublish=window.publishLive;
-  window.publishLive=async function(){await oldPublish();klog('Publish','CMS بڵاوکرایەوە');const el=document.getElementById('k5LiveInfo');if(el)el.textContent='دوایین Publish: '+new Date().toLocaleString('ku-IQ');};
   try{if(!Array.isArray(appState.coupons)||!appState.coupons.length){const old=JSON.parse(localStorage.getItem(K5.couponKey)||'[]');if(Array.isArray(old)&&old.length){appState.coupons=old.map(x=>({id:'cp_'+Math.random().toString(36).slice(2),code:String(x.code||'').toUpperCase(),type:'percent',value:Number(x.percent||0),startsAt:'',expiresAt:x.expiry?String(x.expiry)+'T23:59':'',maxUses:Number(x.limit||0),usedCount:Number(x.usedCount||0),active:true}));localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));}}}catch(e){}
   k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
 })();
@@ -2547,7 +2506,7 @@ window.quickWorkerTest=async function(){
     input?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file||!ssImageTarget)return;try{const url=await ssUploadImageFile(file);if(ssImageTarget==='gallery.__new__'){S.current.gallery.push({url,title:'KURDIA ADVENTURE'});}else{S.setPath(ssImageTarget,url);}S.mark();S.render();toast('✅ وێنەکە لە Cloud هەڵگیرا');}catch(err){toast('❌ '+(err.message||'Upload هەڵەیە'));}finally{ssImageTarget='';}});
   });
   window.ssUploadNewGallery=async function(){ssImageTarget='gallery.__new__';document.getElementById('ssMobileImageInput')?.click()};
-  window.ssLoadCloud=()=>S.load();window.ssSaveCloud=()=>S.save();window.ssPreview=()=>S.preview();window.ssResetDraft=()=>{if(confirm('Draft ـی ئەم Site Studio ـە بسڕمەوە؟')){localStorage.removeItem(S.key);S.load()}};
+  window.kurdiaSiteStudio=S;window.ssLoadCloud=()=>S.load();window.ssSaveCloud=()=>S.save();window.ssPreview=()=>S.preview();window.ssResetDraft=()=>{if(confirm('Draft ـی ئەم Site Studio ـە بسڕمەوە؟')){localStorage.removeItem(S.key);S.load()}};
   window.ssEditTrip=i=>S.editTrip(i);window.ssDeleteTrip=i=>{if(confirm('سڕینەوە؟')){S.current.trips.splice(i,1);S.renderTrips();S.mark()}};window.ssAddTrip=()=>{S.current.trips.push({id:'trip-'+Date.now(),title:'گەشتی نوێ',location:'',price:'',time:'',date:'',description:'',heroImageUrl:'',capacity:0,booked:0,published:true,status:'draft'});S.renderTrips();S.mark()};
   window.ssEditDestination=i=>S.editDestination(i);window.ssDeleteDestination=i=>{if(confirm('سڕینەوە؟')){S.current.destinations.splice(i,1);S.renderDest();S.mark()}};window.ssAddDestination=()=>{S.current.destinations.push({id:'dest-'+Date.now(),name:'شوێنی نوێ',type:'',description:'',img:''});S.renderDest();S.mark()};
   window.ssEditSafety=i=>S.editSafety(i);window.ssDeleteSafety=i=>{if(confirm('سڕینەوە؟')){S.current.safety.splice(i,1);S.renderSafety();S.mark()}};window.ssAddSafety=()=>{S.current.safety.push({id:'safe-'+Date.now(),icon:'🛡️',title:'بابەتی نوێ',desc:'',imageUrl:''});S.renderSafety();S.mark()};
