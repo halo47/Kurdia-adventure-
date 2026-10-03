@@ -293,7 +293,6 @@ body{
 .cc-main-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:12px}.cc-card{background:#090e15;border:1px solid var(--cc-line);border-radius:20px;padding:16px}.cc-card h3{font-size:14px;margin:0 0 12px}.cc-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px}.cc-trip-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.cc-trip-title{font-size:18px;font-weight:900}.cc-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.cc-meta span{font-size:10px;color:#aab4c2;padding:5px 8px;border:1px solid var(--cc-line);border-radius:999px;background:rgba(255,255,255,.025)}.cc-progress{height:9px;border-radius:99px;background:#060a10;border:1px solid var(--cc-line);overflow:hidden;margin-top:14px}.cc-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8d142c,#d53350);border-radius:99px}.cc-quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cc-quick button{min-height:64px!important;justify-content:flex-start!important;text-align:right!important}.cc-activity{display:grid;gap:7px;max-height:290px;overflow:auto}.cc-activity-item{padding:10px;border:1px solid var(--cc-line);border-radius:14px;background:#070b11}.cc-activity-item b{display:block;font-size:11px}.cc-activity-item small{display:block;color:#6f7b8b;font-size:9px;margin-top:3px}.cc-nav-label{padding:12px 12px 5px;color:#5f6a79;font-size:9px;font-weight:900;letter-spacing:1.5px}.sidebar .nav-btn .cc-badge{margin-right:auto;font-size:8px;padding:3px 6px;border-radius:999px;background:rgba(255,255,255,.05);color:#7f8a99}.cc-top-title{display:flex;align-items:center;gap:10px}.cc-top-title b{display:block;font-size:12px}.cc-top-title small{display:block;color:#687486;font-size:9px}
 @media(max-width:1050px){.cc-kpis{grid-template-columns:repeat(2,1fr)}.cc-main-grid{grid-template-columns:1fr}}@media(max-width:850px){.cc-title{font-size:22px}.cc-hero{padding:18px}.cc-kpi b{font-size:21px}.cc-quick{grid-template-columns:1fr}}@media(max-width:520px){.cc-kpis{gap:8px}.cc-kpi{padding:13px}.cc-kpi b{font-size:20px}.cc-card{padding:13px}.cc-trip-head{display:block}}
 </style>
-<!-- FIX 2026-10-03: root /sw.js is native KURDIA Admin push only; OneSignal worker is isolated under /onesignal/. -->
 </head>
 <body>
 
@@ -646,7 +645,7 @@ body{
               <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
             </div>
           </div>
-          <div id="registrationsContainer" class="flex flex-col gap-3"></div>
+          <div id="registrationsContainer" class="flex flex-col gap-3" style="max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px 4px 12px 2px;"></div>
         </div>
       </section>
 
@@ -1104,6 +1103,11 @@ body{
 </section>
 
 <style id="kurdia-admin-notification-center-style">
+#adminNotifList{max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 6px 10px 2px;scrollbar-width:thin}
+#adminNotifList::-webkit-scrollbar{width:7px}
+#adminNotifList::-webkit-scrollbar-thumb{background:rgba(201,43,73,.55);border-radius:99px}
+#adminNotifList::-webkit-scrollbar-track{background:rgba(255,255,255,.04);border-radius:99px}
+
 #adminNotifList .admin-notif{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#121720;margin-bottom:9px;cursor:pointer;transition:.18s}
 #adminNotifList .admin-notif:hover{transform:translateY(-1px);border-color:rgba(201,43,73,.35)}
 #adminNotifList .admin-notif.unread{border-color:rgba(169,29,55,.55);background:rgba(169,29,55,.10)}
@@ -1402,7 +1406,7 @@ function renderRegistrations(list){
   if(!c) return;
 
   if(!list.length){
-    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە یان داتا نەدۆزرایەوە.</div>`;
+    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە یان داتا نەدۆزرایەوە.<br><button class="btn btn-secondary text-xs mt-3" onclick="fetchLiveRegistrations()">🔄 نوێکردنەوە</button></div>`;
     return;
   }
 
@@ -1807,6 +1811,12 @@ function switchTab(tabId){
   if(tabId === 'private_requests'){
     loadPrivateRequests();
   }
+  if(tabId === 'live_registrations'){
+    fetchLiveRegistrations();
+  }
+  if(tabId === 'admin_notifications'){
+    window.adminLoadNotifications && adminLoadNotifications();
+  }
   if(tabId === 'diagnostics_tab'){
     runDiagnostics();
   }
@@ -2016,6 +2026,7 @@ window.addEventListener("DOMContentLoaded", () => {
   loadState();
   if(window.lucide) lucide.createIcons();
   setTimeout(()=>ccRefreshDashboard(),120);
+  setTimeout(()=>{ if(typeof fetchLiveRegistrations === 'function') fetchLiveRegistrations(); },900);
 });
 
 
