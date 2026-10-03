@@ -288,6 +288,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <!-- KURDIA ADVENTURE — OneSignal Web Push v16 -->
+<!-- FIX 2026-10-03: OneSignal uses isolated /onesignal/ worker; root /sw.js is native KURDIA push only. -->
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -295,6 +296,8 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
     await OneSignal.init({
       appId: "5610b681-d8d1-4641-8ea9-49ee792ed647",
       safari_web_id: "web.onesignal.auto.251f0eae-dd1c-4527-b78a-dfbe622fe6a9",
+      serviceWorkerPath: "/onesignal/OneSignalSDKWorker.js",
+      serviceWorkerParam: { scope: "/onesignal/" }
     });
     window.KurdiaOneSignal = OneSignal;
     window.KurdiaOneSignalPrompt = async function() {
