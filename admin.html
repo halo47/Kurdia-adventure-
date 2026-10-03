@@ -183,6 +183,14 @@ textarea{ min-height:85px; resize:vertical; }
 .status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .status-chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
 @media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
+
+/* KURDIA CMS FINAL — mobile scroll fixes */
+#tab-site_studio .ss-tabs{overflow-x:auto;overflow-y:hidden;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+#tab-site_studio .ss-tab{flex:0 0 auto}
+#tab-site_studio .ss-panel{max-height:none}
+#tab-site_studio .ss-list{max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:2px}
+#tab-admin_notifications #adminNotifList{max-height:58vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:3px}
+#tab-live_registrations #registrationsContainer{max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:3px}
 </style>
 
 
@@ -328,6 +336,10 @@ body{
 <li><button class="nav-btn active" onclick="switchTab('dashboard')"><i data-lucide="layout-dashboard"></i> داشبۆرد <span class="cc-badge">LIVE</span></button></li>
 <li class="cc-nav-label">WEBSITE</li>
 <li><button class="nav-btn" onclick="switchTab('site_studio')"><i data-lucide="panels-top-left"></i> Website Builder</button></li>
+<li><button class="nav-btn" onclick="openSiteSection('destinations')"><i data-lucide="map"></i> شوێنەکان</button></li>
+<li><button class="nav-btn" onclick="openSiteSection('footer')"><i data-lucide="contact"></i> About / Contact / Social</button></li>
+<li><button class="nav-btn" onclick="openSiteSection('seo')"><i data-lucide="search-check"></i> SEO / Settings</button></li>
+
 <li><button class="nav-btn" onclick="switchTab('design')"><i data-lucide="palette"></i> Hero و Brand</button></li>
 <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> Trips — ٣ زمان</button></li>
 <li><button class="nav-btn" onclick="switchTab('gallery')"><i data-lucide="images"></i> Media Library</button></li>
@@ -345,7 +357,6 @@ body{
 <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users-round"></i> Community Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> WhatsApp Center</button></li>
 <li class="cc-nav-label">SYSTEM</li>
-<li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button></li>
 <li><button class="nav-btn" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button></li>
 <li><button class="nav-btn" onclick="switchTab('k5_diagnostics')"><i data-lucide="shield-alert"></i> System Diagnostics</button></li>
@@ -358,7 +369,7 @@ body{
 </ul>
 
     <div class="sidebar-footer">
-      <button class="btn btn-primary" onclick="publishLive()"><i data-lucide="send"></i> بڵاوکردنەوەی فەرمی (Publish)</button>
+      <button class="btn btn-primary" onclick="kurdiaSaveAllCloud()"><i data-lucide="cloud-upload"></i> پاشەکەوتکردنی گۆڕانکاری</button>
       <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> ماڵپەڕ بکەرەوە</button>
     </div>
   </aside>
@@ -471,7 +482,6 @@ body{
 <button class="btn btn-secondary" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> Booking CRM</button>
 <button class="btn btn-secondary" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> Story Moderation</button>
 <button class="btn btn-secondary" onclick="switchTab('gallery')"><i data-lucide="images"></i> Media Library</button>
-<button class="btn btn-secondary" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button>
 <button class="btn btn-secondary" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button>
 <button class="btn btn-secondary" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button>
 <button class="btn btn-secondary" onclick="exportBackup()"><i data-lucide="download"></i> Backup</button>
@@ -645,7 +655,7 @@ body{
               <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
             </div>
           </div>
-          <div id="registrationsContainer" class="flex flex-col gap-3" style="max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px 4px 12px 2px;"></div>
+          <div id="registrationsContainer" class="flex flex-col gap-3"></div>
         </div>
       </section>
 
@@ -1014,7 +1024,6 @@ body{
 
 
 <section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
-<section id="tab-k5_publish" class="page-tab"><div class="card k5-publish"><h2>🚀 Publish Center</h2><p class="k5-section-note">هیچ گۆڕانکارییەک پێش Preview بڵاوناکرێتەوە. Draft و Preview لێرە کۆنترۆڵ دەکرێن.</p><div class="k5-actions"><button class="btn ghost" onclick="k5Preview()">Preview</button><button class="btn ghost" onclick="k5SaveDraft()">Save Draft</button><button class="btn red" onclick="publishLive()">Publish</button><button class="btn danger" onclick="k5UnpublishNotice()">Unpublish</button></div></div><div class="k5-grid2"><div class="card"><h3>Draft</h3><div id="k5DraftInfo" class="k5-section-note">دوایین draft: ـ</div></div><div class="card"><h3>Live</h3><div id="k5LiveInfo" class="k5-section-note">دوایین publish: ـ</div></div></div><div class="card"><h3>Preview</h3><div id="k5Preview" class="k5-preview"><div class="muted">Preview لێرە دەردەکەوێت.</div></div></div></section>
 <section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
 <section id="tab-k5_coupons" class="page-tab">
  <div class="hero">
@@ -1103,11 +1112,6 @@ body{
 </section>
 
 <style id="kurdia-admin-notification-center-style">
-#adminNotifList{max-height:62vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 6px 10px 2px;scrollbar-width:thin}
-#adminNotifList::-webkit-scrollbar{width:7px}
-#adminNotifList::-webkit-scrollbar-thumb{background:rgba(201,43,73,.55);border-radius:99px}
-#adminNotifList::-webkit-scrollbar-track{background:rgba(255,255,255,.04);border-radius:99px}
-
 #adminNotifList .admin-notif{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#121720;margin-bottom:9px;cursor:pointer;transition:.18s}
 #adminNotifList .admin-notif:hover{transform:translateY(-1px);border-color:rgba(201,43,73,.35)}
 #adminNotifList .admin-notif.unread{border-color:rgba(169,29,55,.55);background:rgba(169,29,55,.10)}
@@ -1406,7 +1410,7 @@ function renderRegistrations(list){
   if(!c) return;
 
   if(!list.length){
-    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە یان داتا نەدۆزرایەوە.<br><button class="btn btn-secondary text-xs mt-3" onclick="fetchLiveRegistrations()">🔄 نوێکردنەوە</button></div>`;
+    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە یان داتا نەدۆزرایەوە.</div>`;
     return;
   }
 
@@ -1811,12 +1815,6 @@ function switchTab(tabId){
   if(tabId === 'private_requests'){
     loadPrivateRequests();
   }
-  if(tabId === 'live_registrations'){
-    fetchLiveRegistrations();
-  }
-  if(tabId === 'admin_notifications'){
-    window.adminLoadNotifications && adminLoadNotifications();
-  }
   if(tabId === 'diagnostics_tab'){
     runDiagnostics();
   }
@@ -1966,11 +1964,50 @@ async function saveStudioToCloud(){
  }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
 }
 
+
+window.openSiteSection = function(section){
+  try{
+    const old = window.switchTab;
+    old('site_studio');
+    const btn = document.querySelector(`.ss-tab[data-ss="${section}"]`);
+    if(btn) btn.click();
+    const studio = window.kurdiaSiteStudio;
+    if(studio && !studio.current) studio.load();
+  }catch(e){
+    if(typeof toast === 'function') toast('❌ نەتوانرا بەشی وێبسایت بکرێتەوە');
+  }
+};
+
+window.kurdiaSaveAllCloud = async function(){
+  try{
+    const studio = window.kurdiaSiteStudio;
+    if(studio){
+      if(!studio.current) await studio.load();
+      if(typeof studio.save === 'function'){
+        const ok = await studio.save();
+        if(ok){
+          if(typeof saveWhatsAppToCloud === 'function'){
+            try{ await saveWhatsAppToCloud(); }catch(_){}
+          }
+          if(typeof toast === 'function') toast('✅ هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت کران');
+          return true;
+        }
+      }
+    }
+    const ok = await saveStudioToCloud();
+    if(ok && typeof saveWhatsAppToCloud === 'function'){
+      try{ await saveWhatsAppToCloud(); }catch(_){}
+    }
+    if(typeof toast === 'function') toast(ok ? '✅ گۆڕانکارییەکان پاشەکەوت کران' : '❌ Cloud Save سەرکەوتوو نەبوو');
+    return ok;
+  }catch(e){
+    if(typeof toast === 'function') toast('❌ Cloud Save: '+(e.message||e));
+    return false;
+  }
+};
+
 async function publishLive(){
-  autoSync();
-  await saveStudioToCloud();
-  await saveWhatsAppToCloud();
-  toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!");
+  return await window.kurdiaSaveAllCloud();
 }
 function openLiveSite(){ window.open("index.html", "_blank"); }
 function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
@@ -2026,7 +2063,6 @@ window.addEventListener("DOMContentLoaded", () => {
   loadState();
   if(window.lucide) lucide.createIcons();
   setTimeout(()=>ccRefreshDashboard(),120);
-  setTimeout(()=>{ if(typeof fetchLiveRegistrations === 'function') fetchLiveRegistrations(); },900);
 });
 
 
