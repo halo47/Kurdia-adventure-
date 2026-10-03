@@ -293,6 +293,15 @@ body{
 .cc-main-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:12px}.cc-card{background:#090e15;border:1px solid var(--cc-line);border-radius:20px;padding:16px}.cc-card h3{font-size:14px;margin:0 0 12px}.cc-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px}.cc-trip-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.cc-trip-title{font-size:18px;font-weight:900}.cc-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.cc-meta span{font-size:10px;color:#aab4c2;padding:5px 8px;border:1px solid var(--cc-line);border-radius:999px;background:rgba(255,255,255,.025)}.cc-progress{height:9px;border-radius:99px;background:#060a10;border:1px solid var(--cc-line);overflow:hidden;margin-top:14px}.cc-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8d142c,#d53350);border-radius:99px}.cc-quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cc-quick button{min-height:64px!important;justify-content:flex-start!important;text-align:right!important}.cc-activity{display:grid;gap:7px;max-height:290px;overflow:auto}.cc-activity-item{padding:10px;border:1px solid var(--cc-line);border-radius:14px;background:#070b11}.cc-activity-item b{display:block;font-size:11px}.cc-activity-item small{display:block;color:#6f7b8b;font-size:9px;margin-top:3px}.cc-nav-label{padding:12px 12px 5px;color:#5f6a79;font-size:9px;font-weight:900;letter-spacing:1.5px}.sidebar .nav-btn .cc-badge{margin-right:auto;font-size:8px;padding:3px 6px;border-radius:999px;background:rgba(255,255,255,.05);color:#7f8a99}.cc-top-title{display:flex;align-items:center;gap:10px}.cc-top-title b{display:block;font-size:12px}.cc-top-title small{display:block;color:#687486;font-size:9px}
 @media(max-width:1050px){.cc-kpis{grid-template-columns:repeat(2,1fr)}.cc-main-grid{grid-template-columns:1fr}}@media(max-width:850px){.cc-title{font-size:22px}.cc-hero{padding:18px}.cc-kpi b{font-size:21px}.cc-quick{grid-template-columns:1fr}}@media(max-width:520px){.cc-kpis{gap:8px}.cc-kpi{padding:13px}.cc-kpi b{font-size:20px}.cc-card{padding:13px}.cc-trip-head{display:block}}
 </style>
+
+<style id="kurdia-admin-live-notifications-v13-3">
+.kurdia-live-alert{position:fixed;right:16px;bottom:18px;z-index:99999;width:min(380px,calc(100vw - 32px));padding:14px 15px;border:1px solid rgba(169,29,55,.45);border-radius:18px;background:rgba(10,13,20,.96);box-shadow:0 18px 55px rgba(0,0,0,.55),0 0 35px rgba(169,29,55,.16);backdrop-filter:blur(18px);display:none;cursor:pointer}
+.kurdia-live-alert.show{display:block;animation:kurdiaAlertIn .28s ease}
+.kurdia-live-alert b{display:block;font-size:13px;margin-bottom:5px}.kurdia-live-alert small{display:block;color:#aab4c2;line-height:1.7;font-size:10px}
+@keyframes kurdiaAlertIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+</style>
+<div id="kurdiaLiveAdminAlert" class="kurdia-live-alert" onclick="window.kurdiaOpenNotifications&&kurdiaOpenNotifications()"><b id="kurdiaLiveAdminAlertTitle">ئاگادارییەکی نوێ</b><small id="kurdiaLiveAdminAlertBody"></small></div>
+
 </head>
 <body>
 
@@ -365,7 +374,7 @@ body{
 
   <main class="workspace">
     <header class="topbar">
-<div class="cc-top-title"><div class="brand-icon" style="width:32px;height:32px;border-radius:10px"><i data-lucide="mountain"></i></div><div><b>KURDIA CONTROL CENTER</b><small>CMS · CRM · OPERATIONS</small></div></div>
+<div class="cc-top-title"><div class="brand-icon" style="width:32px;height:32px;border-radius:10px"><i data-lucide="mountain"></i></div><div><b>KURDIA CONTROL CENTER</b><small>CMS · CRM · OPERATIONS · v13.3.0</small></div></div>
       <div class="topbar-right">
         <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
         <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">داشبۆردی سەرەکی</h1>
@@ -2446,13 +2455,16 @@ window.quickWorkerTest=async function(){
     const message=String(document.getElementById('adminPushMessage')?.value||'').trim();
     const url=String(document.getElementById('adminPushUrl')?.value||'/').trim()||'/';
     if(!message){if(result)result.textContent='❌ دەقی ئاگاداری بنووسە.';return;}
-    if(!confirm('دڵنیایت دەتەوێت ئەم ئاگادارییە بۆ هەموو بەکارهێنەرانی OneSignal بنێریت؟'))return;
+    if(!confirm('دڵنیایت دەتەوێت ئەم ئاگادارییە بۆ بەکارهێنەرانی OneSignal بنێریت؟'))return;
     try{
-      if(btn)btn.disabled=true; if(result)result.textContent='⏳ ئاگادارییەکە دەنێردرێت...';
-      const r=await window.adminFetch(W+'/api/admin/onesignal/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,message,body:message,url})});
+      if(btn)btn.disabled=true; if(result)result.textContent='⏳ پەیوەندی بە OneSignal دەکرێت...';
+      const r=await window.adminFetch(W+'/api/admin/onesignal/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,body:message,url})});
       const d=await r.json().catch(()=>({}));
-      if(!r.ok||!d.ok||!d.sent) throw new Error(d.error||d.response?.errors?.[0]||('HTTP '+r.status));
-      if(result)result.textContent='✅ ئاگاداری نێردرا بۆ OneSignal. ID: '+String(d.id||'—');
+      if(!r.ok||!d.ok||!d.sent){
+        const errors=Array.isArray(d?.response?.errors)?d.response.errors.join(' · '):'';
+        throw new Error(errors||d?.error||(`HTTP ${r.status}`));
+      }
+      if(result)result.innerHTML='✅ نێردرا بۆ OneSignal. <span style="opacity:.7">ID: '+esc(d.id||'—')+'</span>';
       document.getElementById('adminPushMessage').value='';
       setTimeout(()=>adminLoadNotifications(),500);
     }catch(e){if(result)result.textContent='❌ '+(e.message||e);}
@@ -2504,18 +2516,13 @@ window.quickWorkerTest=async function(){
     const out=document.getElementById('adminPushState');
     const btn=document.querySelector('[onclick="adminSendTestNotification()"]');
     try{
-      if(out)out.textContent='⏳ پشکنین دەکرێت...';
-      const reg=await registerSW();
-      let sub=await reg.pushManager.getSubscription();
-      if(!sub || !('Notification' in window) || Notification.permission!=='granted'){
-        await adminPushSubscription();
-      }
-      if(btn)btn.disabled=true;
-      const r=await window.adminFetch(W+'/api/admin/push/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'KURDIA ADVENTURE',body:'ئەمە ئاگادارییەکی تاقیکردنەوەی سیستەمی KURDIA ـە.',url:'/#admin_notifications'})});
+      if(btn)btn.disabled=true;if(out)out.textContent='⏳ تاقیکردنەوە دەکرێت...';
+      const r=await window.adminFetch(W+'/api/admin/notifications/test',{method:'POST',headers:{'Content-Type':'application/json'}});
       const d=await r.json().catch(()=>({}));
-      if(!r.ok||!d.ok||!d.sent) throw new Error(d.error||`Push: ${d.sent||0} نێردرا · ${d.failed||0} سەرنەکەوتوو`);
-      if(out)out.textContent='✅ ئاگاداریی تاقیکردنەوە نێردرا. مۆبایلەکەت دەبێت ئێستا Notification پیشان بدات.';
-      setTimeout(()=>adminLoadNotifications(),1200);
+      if(!r.ok||!d.ok)throw new Error(d.error||`HTTP ${r.status}`);
+      const p=d.push||{};
+      if(out)out.textContent=`✅ تاقیکردنەوە تۆمارکرا · Push بۆ Admin: ${p.sent||0} نێردرا`;
+      setTimeout(()=>adminLoadNotifications(),300);
     }catch(e){if(out)out.textContent='❌ '+(e.message||e);}
     finally{if(btn)btn.disabled=false;if(window.lucide)lucide.createIcons();}
   };
@@ -2544,84 +2551,39 @@ window.quickWorkerTest=async function(){
   };
   window.adminMarkNotificationRead=async function(id){try{await window.adminFetch(W+'/api/admin/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids:[id]})});await adminLoadNotifications();}catch(e){}};
   window.adminMarkAllNotificationsRead=async function(){try{await window.adminFetch(W+'/api/admin/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({all:true})});await adminLoadNotifications();}catch(e){}};
+  let lastAdminNotificationIds=[];
+  let adminWatcherReady=false;
+  function showLiveAlert(n){
+    const box=document.getElementById('kurdiaLiveAdminAlert'),t=document.getElementById('kurdiaLiveAdminAlertTitle'),b=document.getElementById('kurdiaLiveAdminAlertBody');
+    if(!box)return;
+    if(t)t.textContent=String(n.title||n.type||'ئاگادارییەکی نوێ');
+    if(b)b.textContent=String(n.body||n.path||'');
+    box.classList.remove('show');void box.offsetWidth;box.classList.add('show');
+    clearTimeout(window.__kurdiaAlertTimer);window.__kurdiaAlertTimer=setTimeout(()=>box.classList.remove('show'),6500);
+    try{const C=window.AudioContext||window.webkitAudioContext;if(C){const c=new C(),o=c.createOscillator(),g=c.createGain();o.frequency.value=880;g.gain.value=.035;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.16);}}catch(_){}
+  }
+  window.kurdiaOpenNotifications=function(){
+    const btn=[...document.querySelectorAll('.nav-btn')].find(x=>String(x.getAttribute('onclick')||'').includes("switchTab('admin_notifications')"));
+    if(btn)btn.click(); else switchTab('admin_notifications');
+    document.getElementById('kurdiaLiveAdminAlert')?.classList.remove('show');
+  };
+  async function adminLiveWatch(){
+    try{
+      const d=await get();
+      const all=Array.isArray(d.notifications)?d.notifications:[];
+      const ids=all.map(x=>String(x.id||'')).filter(Boolean);
+      if(!adminWatcherReady){lastAdminNotificationIds=ids;adminWatcherReady=true;return;}
+      const fresh=all.filter(n=>{const id=String(n.id||'');return id&&!lastAdminNotificationIds.includes(id);});
+      lastAdminNotificationIds=ids;
+      if(fresh.length)showLiveAlert(fresh[0]);
+    }catch(_){}
+  }
   document.addEventListener('DOMContentLoaded',()=>{
-    setTimeout(()=>{adminLoadNotifications();refreshPushState();if(window.lucide)lucide.createIcons();},700);
-    setInterval(()=>{if(document.visibilityState==='visible')adminLoadNotifications();},5000);
+    setTimeout(async()=>{await adminLoadNotifications();await adminLiveWatch();refreshPushState();if(window.lucide)lucide.createIcons();},700);
+    setInterval(()=>{adminLiveWatch();if(document.visibilityState==='visible'&&document.getElementById('tab-admin_notifications')?.classList.contains('active'))adminLoadNotifications();},5000);
   });
 })();
 </script>
-<script>
-// سیستەمی نۆتیفیکەیشنی وێب و ئاگادارییەکان
-let lastNotificationCount = -1;
 
-document.addEventListener("DOMContentLoaded", () => {
-  // وەرگرتنی مۆڵەت بۆ نۆتیفیکەیشنی سەر شاشەی کۆمپیوتەر/مۆبایل
-  if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-    Notification.requestPermission();
-  }
-  loadAdminNotifications();
-  setInterval(loadAdminNotifications, 15000); // هەموو 15 چرکە جارێک داتا تازە دەکاتەوە
-});
-
-async function loadAdminNotifications() {
-  try {
-    const res = await fetch(`${WORKER_URL}/api/admin/notifications`, {
-      headers: { "X-Admin-Key": ADMIN_SECRET_PIN || "alwandking" }
-    });
-    const data = await res.json();
-
-    if (data.ok) {
-      const items = data.items || [];
-      
-      // ئاگادارکردنەوەی لایڤ (دەنگ و وێب نۆتیفیکەیشن) ئەگەر شتێکی نوێ هەبوو
-      if (lastNotificationCount !== -1 && items.length > lastNotificationCount) {
-        const newestItem = items[0];
-        const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-        audio.play().catch(e => console.log("دەنگ ڕێگری لێکرا"));
-
-        if ("Notification" in window && Notification.permission === "granted") {
-          new Notification(newestItem.title || "KURDIA ADVENTURE", {
-            body: newestItem.message || "ئاگادارییەکی نوێ لە سیستەمەکەدا هەیە",
-            requireInteraction: true
-          });
-        }
-      }
-      lastNotificationCount = items.length;
-
-      // سڕینەوەی +99 و دانانی ژمارەی ڕاستەقینە لە مینیوی داشبۆرد
-      const badges = document.querySelectorAll('span, div, .notification-badge');
-      badges.forEach(el => {
-        const text = el.textContent.trim();
-        if (text === '+99' || text === '99+' || text === '99') {
-          el.textContent = items.length > 0 ? items.length : '0';
-          el.style.display = items.length > 0 ? 'inline-block' : 'none';
-        }
-      });
-
-      // پڕکردنەوەی ناو تابی ئاگادارییەکان
-      // تێبینی: دڵنیابە دیڤێک هەیە بە ئایدی notificationsContainer لەناو HTMLەکەتدا
-      const container = document.getElementById('notificationsContainer') || document.querySelector('#tab-notifications .content-area') || document.querySelector('[id*="notification"]');
-      if (container) {
-        if (items.length === 0) {
-          container.innerHTML = '<div class="text-xs text-gray-400 text-center py-6">هیچ ئاگادارییەکی نوێ نییە.</div>';
-        } else {
-          container.innerHTML = items.map(n => `
-            <div class="p-3 mb-2 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-between" style="border-left: 3px solid #e11d48;">
-              <div>
-                <div class="font-bold text-sm text-white">${n.title}</div>
-                <div class="text-xs text-gray-400 mt-1">${n.message}</div>
-                <div class="text-[10px] text-gray-500 mt-1">${new Date(n.createdAt).toLocaleString('ku-IQ')}</div>
-              </div>
-            </div>
-          `).join('');
-        }
-      }
-    }
-  } catch (e) {
-    console.error("Error fetching notifications:", e);
-  }
-}
-</script>
-  
 </body>
 </html>
