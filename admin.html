@@ -2405,6 +2405,16 @@ window.quickWorkerTest=async function(){
       </div>
     </div>
   </div>
+  <div class="k5-mini" style="margin-bottom:12px;border-color:rgba(169,29,55,.22);background:rgba(169,29,55,.045)">
+    <div style="font-weight:900;margin-bottom:8px">📢 ناردنی ئاگاداری بۆ هەموو بەکارهێنەرانی OneSignal</div>
+    <div style="display:grid;gap:8px">
+      <input id="adminPushTitle" class="input" value="KURDIA ADVENTURE" placeholder="ناونیشانی ئاگاداری">
+      <textarea id="adminPushMessage" class="input" rows="3" placeholder="دەقی ئاگاداری بنووسە..."></textarea>
+      <input id="adminPushUrl" class="input" value="/" placeholder="لینک دوای کلیک (ئارەزوومەندانە)">
+      <button class="btn btn-primary" type="button" onclick="adminSendOneSignal()"><i data-lucide="send"></i> ناردنی ئاگاداری بۆ هەمووان</button>
+      <div id="adminOneSignalResult" class="text-xs text-gray-400"></div>
+    </div>
+  </div>
   <div class="kat-actions" style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
     <button class="btn btn-secondary" onclick="adminLoadNotifications()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
     <button class="btn btn-secondary" onclick="adminMarkAllNotificationsRead()"><i data-lucide="check-check"></i> هەمووی خوێندراوە</button>
@@ -2429,6 +2439,25 @@ window.quickWorkerTest=async function(){
     if(!r.ok||!d.ok) throw new Error(d.error||('HTTP '+r.status));
     return d;
   }
+  window.adminSendOneSignal=async function(){
+    const result=document.getElementById('adminOneSignalResult');
+    const btn=document.querySelector('[onclick="adminSendOneSignal()"]');
+    const title=String(document.getElementById('adminPushTitle')?.value||'KURDIA ADVENTURE').trim();
+    const message=String(document.getElementById('adminPushMessage')?.value||'').trim();
+    const url=String(document.getElementById('adminPushUrl')?.value||'/').trim()||'/';
+    if(!message){if(result)result.textContent='❌ دەقی ئاگاداری بنووسە.';return;}
+    if(!confirm('دڵنیایت دەتەوێت ئەم ئاگادارییە بۆ هەموو بەکارهێنەرانی OneSignal بنێریت؟'))return;
+    try{
+      if(btn)btn.disabled=true; if(result)result.textContent='⏳ ئاگادارییەکە دەنێردرێت...';
+      const r=await window.adminFetch(W+'/api/admin/onesignal/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,message,body:message,url})});
+      const d=await r.json().catch(()=>({}));
+      if(!r.ok||!d.ok||!d.sent) throw new Error(d.error||d.response?.errors?.[0]||('HTTP '+r.status));
+      if(result)result.textContent='✅ ئاگاداری نێردرا بۆ OneSignal. ID: '+String(d.id||'—');
+      document.getElementById('adminPushMessage').value='';
+      setTimeout(()=>adminLoadNotifications(),500);
+    }catch(e){if(result)result.textContent='❌ '+(e.message||e);}
+    finally{if(btn)btn.disabled=false;if(window.lucide)lucide.createIcons();}
+  };
   async function publicKey(){
     const r=await fetch(W+'/api/push/public-key',{cache:'no-store'});
     const d=await r.json().catch(()=>({}));
@@ -2495,12 +2524,23 @@ window.quickWorkerTest=async function(){
     if(!list)return;
     try{
       const d=await get();
-      const unread=Number(d.unread||0), all=d.notifications||[];
-      summary.textContent=`${all.length} ڕووداو · ${unread} ئاگادارییەکی نەخوێندراوە`;
+      const unread=Number(d.unread||0), all=Array.isArray(d.notifications)?d.notifications:[];
+      if(d.kvConfigured===false){
+        summary.innerHTML='⚠️ <b>KURDIA_KV لە Worker ـدا Bind نەکراوە.</b> ئاگادارییەکان لە نێوان request ـەکاندا دەپەڕن و پاش refresh بەتاڵ دەبن.';
+      }else{
+        summary.textContent=`${all.length} ڕووداو · ${unread} ئاگادارییەکی نەخوێندراوە`;
+      }
       const badge=document.getElementById('adminNotifBadge');
       if(badge){badge.textContent=unread>99?'99+':String(unread);badge.style.display=unread?'inline-block':'none';}
-      list.innerHTML=all.length?all.map(n=>`<div class="admin-notif ${n.read?'':'unread'}" data-id="${esc(n.id)}" onclick="adminMarkNotificationRead('${esc(n.id)}')"><b>${esc(n.title||n.type||'System Event')}</b><div style="margin-top:5px;color:#c7ccd6">${esc(n.path||'')}</div><small>${esc(time(n.createdAt))}</small></div>`).join(''):'<div class="text-xs text-gray-400" style="padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:16px">هیچ ئاگادارییەکی تۆمارکراو نییە.<br><button class="btn btn-primary" style="margin-top:12px" onclick="adminSendTestNotification()">🔔 تاقیکردنەوەی ئاگاداری</button></div>';
-    }catch(e){if(summary)summary.textContent='❌ '+(e.message||e);}
+      if(!all.length){
+        list.innerHTML='<div class="text-xs text-gray-400" style="padding:24px;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:16px">هیچ ئاگادارییەکی تۆمارکراو نییە.<br><span style="display:block;margin-top:8px">ئەگەر ڕووداو هەیە و هێشتا بەتاڵە، Worker/KV پشکنە.</span></div>';
+        return;
+      }
+      list.innerHTML=all.map(n=>`<div class="admin-notif ${n.read?'':'unread'}" data-id="${esc(n.id)}" onclick="adminMarkNotificationRead('${esc(n.id)}')"><b>${esc(n.title||n.type||'System Event')}</b><div style="margin-top:5px;color:#c7ccd6">${esc(n.body||'')}${n.path?`<span style="display:block;opacity:.65">${esc(n.path)}</span>`:''}</div><small>${esc(time(n.createdAt))}${n.provider?` · ${esc(n.provider)}`:''}</small></div>`).join('');
+    }catch(e){
+      if(summary)summary.textContent='❌ '+(e.message||e);
+      list.innerHTML='<div class="text-xs" style="padding:20px;color:#ff9a9a;border:1px solid rgba(255,90,90,.2);border-radius:16px">❌ نەتوانرا ئاگادارییەکان باربکرێن.<br><small style="color:#9aa3b2">'+esc(e.message||e)+'</small></div>';
+    }
   };
   window.adminMarkNotificationRead=async function(id){try{await window.adminFetch(W+'/api/admin/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids:[id]})});await adminLoadNotifications();}catch(e){}};
   window.adminMarkAllNotificationsRead=async function(){try{await window.adminFetch(W+'/api/admin/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({all:true})});await adminLoadNotifications();}catch(e){}};
