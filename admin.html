@@ -2550,6 +2550,78 @@ window.quickWorkerTest=async function(){
   });
 })();
 </script>
+<script>
+// سیستەمی نۆتیفیکەیشنی وێب و ئاگادارییەکان
+let lastNotificationCount = -1;
 
+document.addEventListener("DOMContentLoaded", () => {
+  // وەرگرتنی مۆڵەت بۆ نۆتیفیکەیشنی سەر شاشەی کۆمپیوتەر/مۆبایل
+  if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+    Notification.requestPermission();
+  }
+  loadAdminNotifications();
+  setInterval(loadAdminNotifications, 15000); // هەموو 15 چرکە جارێک داتا تازە دەکاتەوە
+});
+
+async function loadAdminNotifications() {
+  try {
+    const res = await fetch(`${WORKER_URL}/api/admin/notifications`, {
+      headers: { "X-Admin-Key": ADMIN_SECRET_PIN || "alwandking" }
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      const items = data.items || [];
+      
+      // ئاگادارکردنەوەی لایڤ (دەنگ و وێب نۆتیفیکەیشن) ئەگەر شتێکی نوێ هەبوو
+      if (lastNotificationCount !== -1 && items.length > lastNotificationCount) {
+        const newestItem = items[0];
+        const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        audio.play().catch(e => console.log("دەنگ ڕێگری لێکرا"));
+
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification(newestItem.title || "KURDIA ADVENTURE", {
+            body: newestItem.message || "ئاگادارییەکی نوێ لە سیستەمەکەدا هەیە",
+            requireInteraction: true
+          });
+        }
+      }
+      lastNotificationCount = items.length;
+
+      // سڕینەوەی +99 و دانانی ژمارەی ڕاستەقینە لە مینیوی داشبۆرد
+      const badges = document.querySelectorAll('span, div, .notification-badge');
+      badges.forEach(el => {
+        const text = el.textContent.trim();
+        if (text === '+99' || text === '99+' || text === '99') {
+          el.textContent = items.length > 0 ? items.length : '0';
+          el.style.display = items.length > 0 ? 'inline-block' : 'none';
+        }
+      });
+
+      // پڕکردنەوەی ناو تابی ئاگادارییەکان
+      // تێبینی: دڵنیابە دیڤێک هەیە بە ئایدی notificationsContainer لەناو HTMLەکەتدا
+      const container = document.getElementById('notificationsContainer') || document.querySelector('#tab-notifications .content-area') || document.querySelector('[id*="notification"]');
+      if (container) {
+        if (items.length === 0) {
+          container.innerHTML = '<div class="text-xs text-gray-400 text-center py-6">هیچ ئاگادارییەکی نوێ نییە.</div>';
+        } else {
+          container.innerHTML = items.map(n => `
+            <div class="p-3 mb-2 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-between" style="border-left: 3px solid #e11d48;">
+              <div>
+                <div class="font-bold text-sm text-white">${n.title}</div>
+                <div class="text-xs text-gray-400 mt-1">${n.message}</div>
+                <div class="text-[10px] text-gray-500 mt-1">${new Date(n.createdAt).toLocaleString('ku-IQ')}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+  } catch (e) {
+    console.error("Error fetching notifications:", e);
+  }
+}
+</script>
+  
 </body>
 </html>
