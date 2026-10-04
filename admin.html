@@ -1,5 +1,2169 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
+  <!-- ============================================================
+ KURDIA ADVENTURE — ADMIN DESIGN 3
+ FULL UI REORGANIZATION
+ UI ONLY — EXISTING LOGIC PRESERVED
+ ============================================================ -->
+
+<style id="KURDIA_ADMIN_FINAL_UI">
+
+:root{
+  --ka-bg:#05080d;
+  --ka-bg2:#070d14;
+  --ka-sidebar:#071019;
+  --ka-card:#0b141e;
+  --ka-card2:#0e1924;
+  --ka-line:rgba(255,255,255,.075);
+  --ka-line2:rgba(255,255,255,.12);
+  --ka-text:#f5f7fa;
+  --ka-muted:#8996a7;
+  --ka-red:#dc1947;
+  --ka-red2:#a90e35;
+  --ka-green:#18c978;
+  --ka-blue:#347dff;
+  --ka-yellow:#f2ad00;
+  --ka-purple:#7958ff;
+  --ka-radius:16px;
+}
+
+
+/* ============================================================
+   GLOBAL
+============================================================ */
+
+html,
+body{
+  background:
+    radial-gradient(
+      circle at 15% -10%,
+      rgba(220,25,71,.12),
+      transparent 30%
+    ),
+    var(--ka-bg) !important;
+
+  color:var(--ka-text) !important;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font-family:inherit;
+}
+
+*{
+  scrollbar-width:thin;
+  scrollbar-color:#303b48 transparent;
+}
+
+
+/* ============================================================
+   MAIN APP
+============================================================ */
+
+.app-container{
+  min-height:100vh;
+  background:var(--ka-bg);
+}
+
+.workspace{
+  min-width:0;
+  background:transparent;
+}
+
+.content-body{
+  padding:14px !important;
+  max-width:1500px !important;
+  margin:0 auto !important;
+}
+
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+
+.sidebar{
+  width:245px !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      #071019 0%,
+      #050a10 100%
+    ) !important;
+
+  border-right:
+    1px solid var(--ka-line) !important;
+
+  box-shadow:
+    15px 0 50px rgba(0,0,0,.18);
+
+  overflow-y:auto !important;
+}
+
+.sidebar-header{
+  padding:13px 12px !important;
+
+  border-bottom:
+    1px solid var(--ka-line) !important;
+}
+
+.brand-icon{
+  background:
+    linear-gradient(
+      145deg,
+      #ef2451,
+      #9d1033
+    ) !important;
+
+  box-shadow:
+    0 10px 30px
+    rgba(220,25,71,.25);
+}
+
+.brand-text h2{
+  font-weight:1000 !important;
+}
+
+.brand-text span{
+  color:#ef2a52 !important;
+  letter-spacing:1.3px;
+}
+
+
+/* ============================================================
+   SIDEBAR SEARCH
+============================================================ */
+
+.nav-list{
+  padding:
+    8px 8px 12px !important;
+}
+
+.nav-list .nav-btn{
+  min-height:37px;
+
+  margin:
+    2px 0 !important;
+
+  border-radius:
+    10px !important;
+
+  color:
+    #b9c4d0 !important;
+
+  font-size:
+    10px !important;
+
+  font-weight:
+    800 !important;
+
+  transition:
+    .18s ease !important;
+}
+
+.nav-list .nav-btn:hover{
+  background:
+    rgba(255,255,255,.045) !important;
+
+  color:#fff !important;
+
+  transform:
+    translateX(2px);
+}
+
+.nav-list .nav-btn.active{
+  background:
+    linear-gradient(
+      90deg,
+      #d91846,
+      #9d1034
+    ) !important;
+
+  color:#fff !important;
+
+  box-shadow:
+    0 8px 25px
+    rgba(215,25,69,.2);
+}
+
+.nav-list .nav-btn svg{
+  width:16px;
+  height:16px;
+}
+
+.cc-nav-label{
+  padding:
+    13px 9px 5px !important;
+
+  color:
+    #596675 !important;
+
+  font-size:
+    8px !important;
+
+  font-weight:
+    1000 !important;
+
+  letter-spacing:
+    1.5px !important;
+}
+
+
+/* ============================================================
+   SIDEBAR FOOTER
+============================================================ */
+
+.sidebar-footer{
+  padding:
+    10px !important;
+
+  border-top:
+    1px solid var(--ka-line) !important;
+
+  background:
+    rgba(5,9,14,.92);
+}
+
+.sidebar-footer .btn{
+  width:100%;
+  min-height:38px;
+  border-radius:10px;
+  margin-top:6px;
+  font-size:10px;
+}
+
+
+/* ============================================================
+   TOPBAR
+============================================================ */
+
+.topbar{
+  height:55px !important;
+
+  margin:
+    8px 10px 0 !important;
+
+  padding:
+    0 12px !important;
+
+  border:
+    1px solid var(--ka-line) !important;
+
+  border-radius:
+    14px !important;
+
+  background:
+    rgba(7,13,20,.86) !important;
+
+  backdrop-filter:
+    blur(20px) !important;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.16);
+}
+
+.cc-top-title b{
+  font-size:11px;
+}
+
+.cc-top-title small{
+  color:#778597;
+  font-size:8px;
+}
+
+.topbar-right h1{
+  font-size:13px !important;
+}
+
+
+/* ============================================================
+   PAGE SYSTEM
+============================================================ */
+
+.page-tab{
+  width:100% !important;
+  max-width:1450px !important;
+
+  margin:
+    0 auto !important;
+
+  padding:
+    8px !important;
+}
+
+.page-tab.active{
+  animation:
+    kaPageIn .22s ease;
+}
+
+@keyframes kaPageIn{
+  from{
+    opacity:0;
+    transform:translateY(5px);
+  }
+
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+
+/* ============================================================
+   PAGE HERO
+============================================================ */
+
+.page-tab > .hero{
+  border-radius:
+    18px !important;
+
+  border:
+    1px solid var(--ka-line) !important;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(13,22,33,.98),
+      rgba(7,12,19,.98)
+    ) !important;
+
+  box-shadow:
+    0 15px 40px
+    rgba(0,0,0,.16) !important;
+
+  margin-bottom:
+    10px !important;
+}
+
+.page-tab > .hero h1,
+.page-tab > .hero h2{
+  font-weight:1000;
+}
+
+.eyebrow{
+  color:
+    #ef2852 !important;
+
+  font-weight:
+    900 !important;
+
+  letter-spacing:
+    1.4px;
+}
+
+
+/* ============================================================
+   CARDS — ALL SECTIONS
+============================================================ */
+
+.card,
+.ss-card,
+.panel,
+.api-lab-card,
+.k5-mini{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(12,20,30,.96),
+      rgba(7,12,19,.96)
+    ) !important;
+
+  border:
+    1px solid var(--ka-line) !important;
+
+  border-radius:
+    var(--ka-radius) !important;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.14) !important;
+}
+
+.card{
+  padding:
+    17px !important;
+
+  margin-bottom:
+    10px !important;
+}
+
+.card-header{
+  min-height:42px;
+
+  margin-bottom:
+    10px !important;
+
+  padding-bottom:
+    9px;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.05);
+}
+
+.card-title{
+  font-size:
+    12px !important;
+
+  font-weight:
+    950 !important;
+}
+
+
+/* ============================================================
+   FORMS
+============================================================ */
+
+.field{
+  margin-bottom:
+    10px !important;
+}
+
+.field label{
+  color:
+    #9da9b7 !important;
+
+  font-size:
+    9px !important;
+
+  font-weight:
+    850 !important;
+
+  margin-bottom:
+    5px !important;
+}
+
+input,
+textarea,
+select,
+.input,
+.select{
+  min-height:
+    39px !important;
+
+  border:
+    1px solid
+    rgba(255,255,255,.075) !important;
+
+  border-radius:
+    10px !important;
+
+  background:
+    #071019 !important;
+
+  color:
+    #fff !important;
+
+  font-size:
+    10px !important;
+}
+
+textarea{
+  min-height:
+    85px !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:
+    rgba(220,25,71,.7) !important;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(220,25,71,.08) !important;
+}
+
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+
+.btn{
+  min-height:
+    34px;
+
+  border-radius:
+    9px !important;
+
+  font-size:
+    9px !important;
+
+  font-weight:
+    900 !important;
+
+  transition:
+    .17s ease;
+}
+
+.btn:hover{
+  transform:
+    translateY(-1px);
+}
+
+.btn-primary,
+.btn-red{
+  background:
+    linear-gradient(
+      135deg,
+      #e31b49,
+      #a70e35
+    ) !important;
+
+  border-color:
+    #e31b49 !important;
+}
+
+.btn-success{
+  background:
+    linear-gradient(
+      135deg,
+      #13c978,
+      #07834d
+    ) !important;
+}
+
+.btn-danger{
+  background:
+    rgba(220,25,71,.12) !important;
+
+  border:
+    1px solid
+    rgba(220,25,71,.3) !important;
+
+  color:
+    #ff5578 !important;
+}
+
+.btn-secondary,
+.btn.ghost{
+  background:
+    rgba(255,255,255,.045) !important;
+
+  border:
+    1px solid var(--ka-line) !important;
+
+  color:
+    #cbd5df !important;
+}
+
+
+/* ============================================================
+   GRID SYSTEM — ALL PAGES
+============================================================ */
+
+.grid-2,
+.formgrid{
+  gap:
+    9px !important;
+}
+
+.grid-3{
+  gap:
+    9px !important;
+}
+
+.grid-4{
+  gap:
+    8px !important;
+}
+
+
+/* ============================================================
+   WEBSITE BUILDER
+============================================================ */
+
+#tab-site_studio{
+  max-width:
+    1450px !important;
+}
+
+#tab-site_studio .ss-toolbar{
+  padding:
+    10px;
+
+  border:
+    1px solid var(--ka-line);
+
+  border-radius:
+    14px;
+
+  background:
+    #08111a;
+
+  margin-bottom:
+    9px;
+}
+
+#tab-site_studio .ss-tabs{
+
+  display:
+    flex;
+
+  gap:
+    6px;
+
+  padding:
+    7px;
+
+  overflow-x:
+    auto;
+
+  background:
+    #070f18;
+
+  border:
+    1px solid var(--ka-line);
+
+  border-radius:
+    13px;
+
+  scrollbar-width:
+    none;
+}
+
+#tab-site_studio .ss-tab{
+
+  flex:
+    0 0 auto;
+
+  min-height:
+    34px;
+
+  padding:
+    0 12px;
+
+  border:
+    1px solid transparent;
+
+  border-radius:
+    9px;
+
+  background:
+    transparent;
+
+  color:
+    #8d9aaa;
+
+  font-size:
+    9px;
+
+  font-weight:
+    850;
+
+  cursor:
+    pointer;
+}
+
+#tab-site_studio .ss-tab:hover{
+  color:#fff;
+  background:
+    rgba(255,255,255,.04);
+}
+
+#tab-site_studio .ss-tab.active{
+
+  color:
+    #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d71945,
+      #941033
+    );
+
+  box-shadow:
+    0 6px 20px
+    rgba(215,25,69,.18);
+}
+
+#tab-site_studio .ss-panel{
+  margin-top:
+    9px;
+}
+
+#tab-site_studio .ss-grid{
+  gap:
+    9px !important;
+}
+
+
+/* ============================================================
+   TRIPS
+============================================================ */
+
+#tab-trip .card,
+#tab-private_requests .card{
+
+  position:
+    relative;
+
+  overflow:
+    hidden;
+}
+
+#tab-trip .item-row,
+#tab-private_requests .item-row{
+
+  min-height:
+    58px;
+
+  border-radius:
+    12px;
+
+  background:
+    rgba(255,255,255,.025);
+
+  border:
+    1px solid var(--ka-line);
+
+  transition:
+    .17s ease;
+}
+
+#tab-trip .item-row:hover,
+#tab-private_requests .item-row:hover{
+
+  background:
+    rgba(255,255,255,.045);
+
+  border-color:
+    rgba(220,25,71,.25);
+}
+
+
+/* ============================================================
+   DESTINATIONS / GALLERY
+============================================================ */
+
+#tab-site_studio .ss-list,
+#tab-gallery .gallery-grid,
+#tab-gallery .grid{
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(160px,1fr)
+    );
+
+  gap:
+    9px;
+}
+
+.gallery-grid{
+  margin-top:
+    8px !important;
+}
+
+.gallery-thumb{
+  height:
+    115px !important;
+
+  border-radius:
+    11px !important;
+}
+
+
+/* ============================================================
+   WEATHER
+============================================================ */
+
+#tab-weather_manager{
+
+  max-width:
+    1250px !important;
+}
+
+#tab-weather_manager .admin-map{
+
+  height:
+    310px;
+
+  border-radius:
+    16px;
+
+  border:
+    1px solid var(--ka-line);
+}
+
+
+/* ============================================================
+   SAFETY
+============================================================ */
+
+#tab-safety_tab{
+
+  max-width:
+    1150px !important;
+}
+
+#tab-safety_tab .item-row{
+
+  padding:
+    13px;
+
+  margin-bottom:
+    7px;
+
+  border-radius:
+    12px;
+}
+
+
+/* ============================================================
+   PREPARATION
+============================================================ */
+
+#tab-itinerary_tab{
+
+  max-width:
+    1200px !important;
+}
+
+#tab-itinerary_tab .item-row{
+
+  border-radius:
+    12px;
+
+  background:
+    #09131d;
+
+  border:
+    1px solid var(--ka-line);
+}
+
+
+/* ============================================================
+   REVIEWS
+============================================================ */
+
+#tab-reviews{
+
+  max-width:
+    1200px !important;
+}
+
+#tab-reviews .item-row{
+
+  border-radius:
+    13px;
+
+  background:
+    rgba(255,255,255,.025);
+}
+
+
+/* ============================================================
+   BOOKINGS / CRM
+============================================================ */
+
+#tab-live_registrations{
+
+  max-width:
+    1400px !important;
+}
+
+#tab-live_registrations
+#registrationsContainer{
+
+  display:
+    grid;
+
+  gap:
+    8px;
+}
+
+#tab-live_registrations
+#registrationsContainer > div{
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(14,25,36,.95),
+      rgba(7,13,20,.95)
+    ) !important;
+
+  border:
+    1px solid var(--ka-line) !important;
+
+  border-radius:
+    14px !important;
+
+  padding:
+    13px !important;
+}
+
+
+/* VERIFY */
+
+#tab-live_registrations
+button[onclick*="directVerify"]{
+
+  background:
+    linear-gradient(
+      135deg,
+      #13c978,
+      #087b49
+    ) !important;
+
+  color:#fff !important;
+
+  border:
+    0 !important;
+
+  box-shadow:
+    0 6px 18px
+    rgba(19,201,120,.13);
+}
+
+
+/* REJECT */
+
+#tab-live_registrations
+button[onclick*="directReject"]{
+
+  background:
+    linear-gradient(
+      135deg,
+      #e21a4b,
+      #9d1034
+    ) !important;
+
+  color:#fff !important;
+
+  border:
+    0 !important;
+}
+
+
+/* ============================================================
+   OTP / BOOKING
+============================================================ */
+
+#tab-booking{
+
+  max-width:
+    1200px !important;
+}
+
+
+/* ============================================================
+   FINANCE
+============================================================ */
+
+#tab-finance,
+#tab-k5_finance{
+
+  max-width:
+    1250px !important;
+}
+
+.k5-grid3,
+.k5-grid2{
+
+  gap:
+    9px !important;
+}
+
+.k5-mini{
+
+  padding:
+    13px !important;
+
+  border-radius:
+    13px !important;
+}
+
+
+/* ============================================================
+   STORIES
+============================================================ */
+
+#tab-stories_tab{
+
+  max-width:
+    1250px !important;
+}
+
+#adminStoriesContainer{
+
+  display:
+    grid !important;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(260px,1fr)
+    ) !important;
+
+  gap:
+    9px !important;
+}
+
+#adminStoriesContainer > div{
+
+  margin:
+    0 !important;
+
+  min-height:
+    105px;
+
+  padding:
+    12px !important;
+
+  border-radius:
+    14px !important;
+
+  background:
+    rgba(255,255,255,.025) !important;
+
+  border:
+    1px solid var(--ka-line) !important;
+}
+
+
+/* ============================================================
+   COMMUNITY
+============================================================ */
+
+#tab-k5_community{
+
+  max-width:
+    1250px !important;
+}
+
+
+/* ============================================================
+   WHATSAPP
+============================================================ */
+
+#tab-broadcast,
+#tab-whatsapp,
+#tab-k5_communications{
+
+  max-width:
+    1200px !important;
+}
+
+#tab-broadcast .card,
+#tab-whatsapp .card,
+#tab-k5_communications .card{
+
+  border-left:
+    2px solid
+    rgba(37,211,102,.35) !important;
+}
+
+
+/* ============================================================
+   MEDIA
+============================================================ */
+
+#tab-gallery{
+
+  max-width:
+    1250px !important;
+}
+
+#tab-gallery .gallery-thumb{
+
+  transition:
+    .18s ease;
+}
+
+#tab-gallery .gallery-thumb:hover{
+
+  transform:
+    translateY(-2px);
+
+  border-color:
+    rgba(220,25,71,.45);
+}
+
+
+/* ============================================================
+   API LAB
+============================================================ */
+
+#tab-api_lab{
+
+  max-width:
+    1300px !important;
+}
+
+.api-lab-grid{
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1.15fr .85fr;
+
+  gap:
+    10px;
+}
+
+.api-lab-card{
+
+  border-radius:
+    15px !important;
+
+  background:
+    #08111a !important;
+}
+
+
+/* ============================================================
+   DIAGNOSTICS
+============================================================ */
+
+#tab-diagnostics_tab,
+#tab-k5_diagnostics{
+
+  max-width:
+    1250px !important;
+}
+
+
+/* ============================================================
+   ACTIVITY
+============================================================ */
+
+#tab-k5_activity{
+
+  max-width:
+    1100px !important;
+}
+
+.k5-log{
+
+  max-height:
+    520px !important;
+
+  overflow:
+    auto;
+
+  display:
+    grid;
+
+  gap:
+    7px;
+}
+
+
+/* ============================================================
+   ANALYTICS
+============================================================ */
+
+#tab-k5_analytics{
+
+  max-width:
+    1250px !important;
+}
+
+#tab-k5_analytics .k5-grid3{
+
+  margin-bottom:
+    10px;
+}
+
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+
+#tab-k5_settings{
+
+  max-width:
+    1000px !important;
+}
+
+#tab-k5_settings .card{
+
+  margin-bottom:
+    10px;
+}
+
+
+/* ============================================================
+   NOTIFICATIONS
+============================================================ */
+
+#tab-admin_notifications{
+
+  max-width:
+    1050px !important;
+}
+
+#tab-admin_notifications .admin-notif{
+
+  padding:
+    13px !important;
+
+  border-radius:
+    13px !important;
+
+  background:
+    #0a131d !important;
+
+  border:
+    1px solid var(--ka-line) !important;
+
+  margin-bottom:
+    7px;
+}
+
+
+/* ============================================================
+   BACKUP
+============================================================ */
+
+#tab-backup{
+
+  max-width:
+    1000px !important;
+}
+
+
+/* ============================================================
+   COUPONS
+============================================================ */
+
+#tab-k5_coupons,
+#tab-coupon{
+
+  max-width:
+    1100px !important;
+}
+
+
+/* ============================================================
+   ACHIEVEMENTS
+============================================================ */
+
+#tab-achievements{
+
+  max-width:
+    1100px !important;
+}
+
+
+/* ============================================================
+   SERVICES
+============================================================ */
+
+#tab-services{
+
+  max-width:
+    1100px !important;
+}
+
+
+/* ============================================================
+   SHEETS
+============================================================ */
+
+#tab-sheets_tab{
+
+  max-width:
+    1100px !important;
+}
+
+
+/* ============================================================
+   TABLES
+============================================================ */
+
+table{
+
+  border-collapse:
+    separate !important;
+
+  border-spacing:
+    0 5px !important;
+}
+
+table th{
+
+  color:
+    #7f8d9e !important;
+
+  font-size:
+    9px !important;
+
+  font-weight:
+    900 !important;
+}
+
+table td{
+
+  font-size:
+    10px !important;
+
+  border:
+    0 !important;
+}
+
+table tbody tr{
+
+  background:
+    rgba(255,255,255,.02);
+}
+
+
+/* ============================================================
+   TOGGLE / SWITCH
+============================================================ */
+
+.switch{
+
+  border-radius:
+    999px !important;
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media(max-width:850px){
+
+  .sidebar{
+
+    width:
+      285px !important;
+
+    right:
+      0 !important;
+
+    left:
+      auto !important;
+
+    transform:
+      translateX(105%) !important;
+
+    transition:
+      transform .25s ease !important;
+
+    z-index:
+      5000 !important;
+  }
+
+  .sidebar.open{
+
+    transform:
+      translateX(0) !important;
+  }
+
+  .workspace{
+
+    width:
+      100% !important;
+
+    margin:
+      0 !important;
+  }
+
+  .topbar{
+
+    margin:
+      6px !important;
+
+    height:
+      48px !important;
+
+    border-radius:
+      13px !important;
+  }
+
+  .cc-top-title{
+
+    display:
+      none !important;
+  }
+
+  .topbar-right{
+
+    flex:
+      1;
+  }
+
+  .topbar-right h1{
+
+    font-size:
+      12px !important;
+  }
+
+  .content-body{
+
+    padding:
+      6px !important;
+
+    padding-bottom:
+      78px !important;
+  }
+
+  .page-tab{
+
+    padding:
+      4px !important;
+  }
+
+  .page-tab > .hero{
+
+    border-radius:
+      14px !important;
+  }
+
+  .card{
+
+    padding:
+      13px !important;
+
+    border-radius:
+      14px !important;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .formgrid{
+
+    grid-template-columns:
+      1fr !important;
+  }
+
+  #tab-site_studio .ss-tabs{
+
+    margin:
+      0 -2px;
+
+  }
+
+  #tab-site_studio .ss-tab{
+
+    min-height:
+      35px;
+
+    padding:
+      0 11px;
+
+  }
+
+  #adminStoriesContainer{
+
+    grid-template-columns:
+      1fr 1fr !important;
+  }
+
+  .api-lab-grid{
+
+    grid-template-columns:
+      1fr !important;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+============================================================ */
+
+@media(max-width:520px){
+
+  .sidebar{
+
+    width:
+      88vw !important;
+
+    max-width:
+      315px;
+  }
+
+  .page-tab > .hero h1,
+  .page-tab > .hero h2{
+
+    font-size:
+      21px !important;
+  }
+
+  #adminStoriesContainer{
+
+    grid-template-columns:
+      1fr !important;
+  }
+
+  .btn{
+
+    min-height:
+      38px;
+
+  }
+
+  .page-tab input,
+  .page-tab select{
+
+    min-height:
+      42px !important;
+  }
+
+}
+
+
+/* ============================================================
+   REMOVE PUBLISH CENTER ONLY
+============================================================ */
+
+#tab-k5_publish{
+
+  display:
+    none !important;
+}
+
+.nav-list button[onclick*="k5_publish"],
+.nav-list li:has(button[onclick*="k5_publish"]){
+
+  display:
+    none !important;
+}
+
+
+/* ============================================================
+   SAVE BUTTON — NEVER CALL IT PUBLISH
+============================================================ */
+
+.sidebar-footer .btn-primary{
+
+  background:
+    linear-gradient(
+      135deg,
+      #e21a4b,
+      #a70e35
+    ) !important;
+}
+
+</style>
+
+
+<script id="KURDIA_ADMIN_FINAL_UI_RUNTIME">
+
+(function(){
+
+  "use strict";
+
+
+  /* ==========================================================
+     THIS SCRIPT ONLY REORGANIZES THE VISUAL NAVIGATION.
+     IT DOES NOT TOUCH:
+       - Worker
+       - Notifications
+       - OneSignal
+       - Web Push
+       - CMS
+       - WhatsApp
+       - Booking
+       - Verify
+       - Reject
+       - Stories API
+  ========================================================== */
+
+
+  function buildNavigation(){
+
+    const list=
+      document.querySelector(
+        ".nav-list"
+      );
+
+    if(!list) return;
+
+
+    /*
+      ALL REAL TABS THAT EXIST IN THE CURRENT ADMIN.
+      switchTab() remains the original function.
+    */
+
+    list.innerHTML=`
+
+      <li class="cc-nav-label">
+        CONTROL CENTER
+      </li>
+
+      <li>
+        <button
+          class="nav-btn active"
+          onclick="switchTab('dashboard')">
+          <i data-lucide="layout-dashboard"></i>
+          داشبۆرد
+          <span class="cc-badge">LIVE</span>
+        </button>
+      </li>
+
+
+      <li class="cc-nav-label">
+        WEBSITE
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('site_studio')">
+          <i data-lucide="panels-top-left"></i>
+          Website Builder
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('design')">
+          <i data-lucide="palette"></i>
+          Hero و Brand
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('trip')">
+          <i data-lucide="compass"></i>
+          Trips — ٣ زمان
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('gallery')">
+          <i data-lucide="images"></i>
+          Media Library
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('weather_manager')">
+          <i data-lucide="cloud-sun"></i>
+          Weather
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('safety_tab')">
+          <i data-lucide="shield-check"></i>
+          Safety
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('itinerary_tab')">
+          <i data-lucide="list-checks"></i>
+          Preparation / Itinerary
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('reviews')">
+          <i data-lucide="message-circle"></i>
+          Reviews
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('private_requests')">
+          <i data-lucide="route"></i>
+          Private Trips
+        </button>
+      </li>
+
+
+      <li class="cc-nav-label">
+        BOOKINGS & CRM
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('live_registrations')">
+          <i data-lucide="users"></i>
+          Customers / Bookings
+          <span class="cc-badge">24</span>
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('booking')">
+          <i data-lucide="shield-check"></i>
+          OTP / Booking
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('finance')">
+          <i data-lucide="wallet-cards"></i>
+          Payment / Finance
+        </button>
+      </li>
+
+
+      <li class="cc-nav-label">
+        COMMUNITY
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('stories_tab')">
+          <i data-lucide="sparkles"></i>
+          Stories Moderation
+          <span
+            class="cc-badge"
+            style="
+              background:#d71945;
+              color:#fff;
+            "
+          >12</span>
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('k5_community')">
+          <i data-lucide="users-round"></i>
+          Community Center
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('broadcast')">
+          <i data-lucide="send"></i>
+          WhatsApp Center
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('whatsapp')">
+          <i data-lucide="message-circle"></i>
+          WhatsApp Tools
+        </button>
+      </li>
+
+
+      <li class="cc-nav-label">
+        TOOLS
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('achievements')">
+          <i data-lucide="trophy"></i>
+          Achievements
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('services')">
+          <i data-lucide="layers-3"></i>
+          Services
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('coupon')">
+          <i data-lucide="ticket-percent"></i>
+          Coupons
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('sheets_tab')">
+          <i data-lucide="table-2"></i>
+          Google Sheets
+        </button>
+      </li>
+
+
+      <li class="cc-nav-label">
+        SYSTEM
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('k5_analytics')">
+          <i data-lucide="chart-no-axes-combined"></i>
+          Analytics
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('k5_settings')">
+          <i data-lucide="settings-2"></i>
+          Settings / Languages
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('admin_notifications')">
+          <i data-lucide="bell-ring"></i>
+          ئاگادارییەکان
+          <span
+            id="adminNotifBadge"
+            style="
+              display:none;
+              margin-inline-start:auto;
+              background:#a91d37;
+              color:#fff;
+              border-radius:999px;
+              padding:2px 7px;
+              font-size:9px;
+              font-weight:900
+            "
+          ></span>
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('api_lab')">
+          <i data-lucide="flask-conical"></i>
+          API Lab
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('diagnostics_tab')">
+          <i data-lucide="activity"></i>
+          Diagnostics
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('k5_diagnostics')">
+          <i data-lucide="shield-alert"></i>
+          System Diagnostics
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('k5_activity')">
+          <i data-lucide="history"></i>
+          Activity Log
+        </button>
+      </li>
+
+      <li>
+        <button class="nav-btn"
+          onclick="switchTab('backup')">
+          <i data-lucide="database-backup"></i>
+          Backup / Restore
+        </button>
+      </li>
+
+    `;
+
+
+    if(window.lucide){
+
+      lucide.createIcons();
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     MOBILE MENU
+  ========================================================== */
+
+  function mobileNav(){
+
+    if(
+      document.getElementById(
+        "kaMobileAdminNav"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    const nav=
+      document.createElement(
+        "nav"
+      );
+
+    nav.id=
+      "kaMobileAdminNav";
+
+
+    nav.innerHTML=`
+
+      <button
+        class="ka-mobile-item active"
+        onclick="switchTab('dashboard')">
+
+        <i data-lucide="home"></i>
+
+        <span>داشبۆرد</span>
+
+      </button>
+
+
+      <button
+        class="ka-mobile-item"
+        onclick="switchTab('site_studio')">
+
+        <i data-lucide="panels-top-left"></i>
+
+        <span>ویبسایت</span>
+
+      </button>
+
+
+      <button
+        class="ka-mobile-center"
+        onclick="switchTab('live_registrations')">
+
+        <i data-lucide="users"></i>
+
+      </button>
+
+
+      <button
+        class="ka-mobile-item"
+        onclick="switchTab('gallery')">
+
+        <i data-lucide="images"></i>
+
+        <span>میدیا</span>
+
+      </button>
+
+
+      <button
+        class="ka-mobile-item"
+        onclick="toggleSidebar()">
+
+        <i data-lucide="menu"></i>
+
+        <span>هەموو</span>
+
+      </button>
+
+    `;
+
+
+    document.body.appendChild(nav);
+
+
+    if(window.lucide){
+
+      lucide.createIcons();
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     MOBILE NAV CSS
+  ========================================================== */
+
+  const mobileCSS=
+  document.createElement(
+    "style"
+  );
+
+
+  mobileCSS.textContent=`
+
+    #kaMobileAdminNav{
+
+      display:none;
+
+    }
+
+    @media(max-width:850px){
+
+      #kaMobileAdminNav{
+
+        position:fixed;
+
+        display:grid;
+
+        grid-template-columns:
+          repeat(5,1fr);
+
+        left:7px;
+
+        right:7px;
+
+        bottom:7px;
+
+        height:59px;
+
+        padding:0 3px;
+
+        border:
+          1px solid
+          rgba(255,255,255,.09);
+
+        border-radius:18px;
+
+        background:
+          rgba(7,11,17,.96);
+
+        backdrop-filter:
+          blur(22px);
+
+        z-index:9998;
+
+        box-shadow:
+          0 -12px 40px
+          rgba(0,0,0,.5);
+
+      }
+
+      .ka-mobile-item{
+
+        border:0;
+
+        background:
+          transparent;
+
+        color:#758292;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        gap:3px;
+
+        font-size:7px;
+
+        font-weight:900;
+
+      }
+
+      .ka-mobile-item svg{
+
+        width:18px;
+
+        height:18px;
+
+      }
+
+      .ka-mobile-center{
+
+        width:44px;
+
+        height:44px;
+
+        margin:auto;
+
+        transform:
+          translateY(-12px);
+
+        border:
+          4px solid
+          #070b11;
+
+        border-radius:50%;
+
+        background:
+          linear-gradient(
+            145deg,
+            #ef2250,
+            #9d1034
+          );
+
+        color:#fff;
+
+        display:grid;
+
+        place-items:center;
+
+        box-shadow:
+          0 8px 30px
+          rgba(223,23,71,.4);
+
+      }
+
+    }
+
+  `;
+
+
+  document.head.appendChild(
+    mobileCSS
+  );
+
+
+  /* ==========================================================
+     INITIALIZE
+  ========================================================== */
+
+  function init(){
+
+    buildNavigation();
+
+    mobileNav();
+
+    if(window.lucide){
+
+      lucide.createIcons();
+
+    }
+
+  }
+
+
+  if(
+    document.readyState ===
+    "loading"
+  ){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      init,
+      {once:true}
+    );
+
+  }else{
+
+    init();
+
+  }
+
+
+})();
+
+</script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
