@@ -670,7 +670,10 @@ window.setLanguage=function(lang){
 
 async function loadRemote(){
   try{
-    const r=await fetch(WORKER+'/api/site/config',{cache:'no-store'});
+    const r=await fetch(WORKER+'/api/site/config?cb='+Date.now(),{
+      cache:'no-store',
+      headers:{'Cache-Control':'no-cache'}
+    });
     if(!r.ok) throw new Error('CMS HTTP '+r.status);
     const x=await r.json();
     const config=x.config||x.data||x;
@@ -991,6 +994,7 @@ async function submitStory(e){e.preventDefault();const media=$('stMediaBase64')?
 function startCountdown(){clearInterval(countdownTimer);const target=new Date((data.trip?.date||'2026-10-03')+'T05:00:00').getTime();const t=()=>{let d=target-Date.now();if(d<0)d=0;const a=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);if($('cdDays'))$('cdDays').textContent=String(a).padStart(2,'0');if($('cdHours'))$('cdHours').textContent=String(h).padStart(2,'0');if($('cdMins'))$('cdMins').textContent=String(m).padStart(2,'0');if($('cdSecs'))$('cdSecs').textContent=String(s).padStart(2,'0')};t();countdownTimer=setInterval(t,1000)}
 
 loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_language')||'ku');render();route();startCountdown();fetchStories()});
+window.addEventListener('pageshow',()=>{loadRemote().then(()=>{render();route();}).catch(()=>{})});
 </script>
 <script id="kurdia-icon-fallback">
 (function(){
