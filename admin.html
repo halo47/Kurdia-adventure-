@@ -1545,7 +1545,13 @@ button[onclick*="directReject"]{
 }
 </style>
 
-</head>
+<style id="KURDIA-BOOKING-STATUS-FIX">
+.ka-booking-final{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:7px 12px;border-radius:9px;font-size:9px;font-weight:950;border:1px solid transparent}
+.ka-booking-final svg{width:16px;height:16px}
+.ka-booking-final.approved{color:#35e29a;background:rgba(24,201,120,.10);border-color:rgba(24,201,120,.22)}
+.ka-booking-final.rejected{color:#ff6b87;background:rgba(223,23,72,.10);border-color:rgba(223,23,72,.22)}
+@media(max-width:850px){.ka-booking-final{flex:1 1 145px;min-height:40px;font-size:9px}}
+</style></head>
 <body>
 
 <div id="adminAuthModal">
@@ -2671,7 +2677,15 @@ function renderRegistrations(list){
       <div>
         <div class="flex items-center gap-2">
           <span class="font-extrabold text-sm text-white">${reg.name}</span>
-          <span class="text-xs px-2 py-0.5 rounded-full ${reg.status?.includes('پەسەند') ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${reg.status || 'چاوەڕوان'}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full ${
+            (reg.status === 'approved' || reg.status?.includes('پەسەند')) ? 'bg-emerald-500/20 text-emerald-400' :
+            (reg.status === 'rejected' || reg.status?.includes('ڕەت')) ? 'bg-rose-500/20 text-rose-400' :
+            'bg-amber-500/20 text-amber-400'
+          }">${
+            reg.status === 'approved' ? 'پەسەندکراو' :
+            reg.status === 'rejected' ? 'ڕەتکراوە' :
+            (reg.status || 'چاوەڕوان')
+          }</span>
         </div>
         <div class="text-xs text-gray-400 mt-1 flex flex-wrap gap-x-3">
           <span>📱 ${reg.phone}</span>
@@ -2680,8 +2694,16 @@ function renderRegistrations(list){
         </div>
       </div>
       <div class="flex gap-2">
-        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check"></i> پەسەندکردن (WhatsApp)</button>
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
+        ${
+          reg.status === 'approved' || reg.status?.includes('پەسەند')
+            ? '<span class="ka-booking-final approved"><i data-lucide="check-circle-2"></i> پەسەندکراو</span>'
+            : reg.status === 'rejected' || reg.status?.includes('ڕەت')
+              ? '<span class="ka-booking-final rejected"><i data-lucide="x-circle"></i> ڕەتکراوە</span>'
+              : `
+                <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check"></i> پەسەندکردن (WhatsApp)</button>
+                <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
+              `
+        }
       </div>
     </div>
   `).join("");
@@ -2777,8 +2799,8 @@ async function directVerify(id, phone){
     });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("✅ نامەی پەسەندکردن نێردرا");
-      fetchLiveRegistrations();
+      toast("✅ پەسەندکرا و دۆخەکە نوێ کرایەوە");
+      await fetchLiveRegistrations();
     } else {
       toast("❌ هەڵە: " + (d.error || ""));
     }
@@ -2797,8 +2819,8 @@ async function directReject(id, phone){
     });
     const d = await res.json();
     if(res.ok && d.ok){
-      toast("❌ نامەی ڕەتکردنەوە نێردرا");
-      fetchLiveRegistrations();
+      toast("❌ ڕەتکرایەوە و دۆخەکە نوێ کرایەوە");
+      await fetchLiveRegistrations();
     } else {
       toast("❌ هەڵە: " + (d.error || ""));
     }
@@ -3723,7 +3745,56 @@ window.quickWorkerTest=async function(){
       root?.querySelectorAll('[data-private-type]').forEach(el=>{el.oninput=()=>{const i=Number(el.dataset.privateType),k=el.dataset.privateK;this.current.privateTrip.types[i][k]=el.value;this.mark()}});
     },
     setPath(path,val){const parts=path.split('.');let o=this.current;for(let i=0;i<parts.length-1;i++){if(!o[parts[i]]||typeof o[parts[i]]!=='object')o[parts[i]]={};o=o[parts[i]]}o[parts.at(-1)]=val},
-    async save(){try{this.collectI18nFromDOM();const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(this.current)});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw Error(j.error||'CMS save');this.current=this.normalize(j.data||this.current);localStorage.setItem(this.key,JSON.stringify(this.current));this.dirty=false;document.getElementById('ssDirty').innerHTML='دۆخ: <b style="color:#32c985">پاشەکەوتکرا ✓</b>';document.getElementById('ssCloudStatus').textContent='Cloud: published ✓';toast('✅ هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت کران');return true}catch(e){localStorage.setItem(this.key,JSON.stringify(this.current));toast('⚠️ Draft لەسەر ئەم ئامێرە پاشەکەوت کرا؛ Cloud هەڵەی هەیە');return false}},
+    async save(){
+      try{
+        this.collectI18nFromDOM();
+
+        // Keep the exact Site Studio document and write it to the same CMS key
+        // consumed by the public website.
+        const payload=JSON.parse(JSON.stringify(this.current));
+        const r=await adminFetch(`${WORKER_URL}/api/admin/cms?source=site-studio`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Cache-Control':'no-cache'},
+          body:JSON.stringify(payload),
+          cache:'no-store'
+        });
+        const j=await r.json().catch(()=>({}));
+        if(!r.ok||!j.ok) throw Error(j.error||('CMS save HTTP '+r.status));
+
+        this.current=this.normalize(j.data||payload);
+        localStorage.setItem(this.key,JSON.stringify(this.current));
+        this.dirty=false;
+
+        // Verify through the PUBLIC endpoint — this catches a broken
+        // Admin↔Website connection instead of pretending Local Storage is enough.
+        const vr=await fetch(`${WORKER_URL}/api/site/config?verify=${Date.now()}`,{
+          cache:'no-store',
+          headers:{'Cache-Control':'no-cache'}
+        });
+        const vj=await vr.json().catch(()=>({}));
+        if(!vr.ok||!vj.ok) throw Error('Public CMS verification failed: HTTP '+vr.status);
+
+        const publicCfg=vj.config||{};
+        const expectedHero=this.current.i18n?.ku?.heroTitle||this.current.home?.hero?.title||'';
+        const publicHero=publicCfg.i18n?.ku?.heroTitle||publicCfg.home?.hero?.title||'';
+        if(expectedHero && publicHero && expectedHero!==publicHero){
+          throw Error('Cloud save کرا بەڵام Public Site هێشتا CMS ـی نوێ وەرنەگرتووە.');
+        }
+
+        const dirty=document.getElementById('ssDirty');
+        if(dirty) dirty.innerHTML='دۆخ: <b style="color:#32c985">پاشەکەوتکرا ✓</b>';
+        const status=document.getElementById('ssCloudStatus');
+        if(status) status.textContent='Cloud ↔ Website: Connected ✓';
+        toast('✅ گۆڕانکارییەکان لە Cloud پاشەکەوت و لە Website پشتڕاستکرانەوە');
+        return true;
+      }catch(e){
+        localStorage.setItem(this.key,JSON.stringify(this.current||{}));
+        const status=document.getElementById('ssCloudStatus');
+        if(status) status.textContent='Cloud ↔ Website: Connection error';
+        toast('❌ پەیوەندی Admin ↔ Website هەڵەی هەیە: '+(e.message||e));
+        return false;
+      }
+    },
     collectI18nFromDOM(){document.querySelectorAll('#ssHeroForm [data-ss-key]').forEach(el=>this.setPath(el.dataset.ssKey,el.value));document.querySelectorAll('#ssPrivateForm [data-ss-key]').forEach(el=>this.setPath(el.dataset.ssKey,el.value))},
     editTrip(i){const t=this.current.trips[i];const title=prompt('ناوی گەشت',t.title||'');if(title===null)return;t.title=title;t.location=prompt('شوێن',t.location||'')??t.location;t.price=prompt('نرخ',t.price||'')??t.price;t.date=prompt('بەروار YYYY-MM-DD',t.date||'')??t.date;t.time=prompt('کات',t.time||'')??t.time;t.description=prompt('وەسف',t.description||t.desc||'')??(t.description||'');t.heroImageUrl=prompt('URLی وێنە',t.heroImageUrl||'')??t.heroImageUrl;t.capacity=Number(prompt('Capacity',t.capacity||0)??t.capacity);t.booked=Number(prompt('Booked',t.booked||0)??t.booked);this.renderTrips();this.mark()},
     editDestination(i){const d=this.current.destinations[i];d.name=prompt('ناوی شوێن',d.name||'')??d.name;d.type=prompt('جۆر',d.type||'')??d.type;d.description=prompt('وەسفی شوێن',d.description||d.desc||'')??(d.description||'');d.img=prompt('URLی وێنە',d.img||'')??d.img;this.renderDest();this.mark()},
@@ -3799,12 +3870,13 @@ window.quickWorkerTest=async function(){
     try{
       if(typeof window.ssSaveCloud==="function"){
         const r = await window.ssSaveCloud();
+        if(!r) return false;
         try{
           if(typeof window.saveWhatsAppToCloud==="function"){
             await window.saveWhatsAppToCloud();
           }
         }catch(_){}
-        return r;
+        return true;
       }
 
       if(typeof window.saveStudioToCloud==="function"){
