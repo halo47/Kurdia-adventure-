@@ -1,2169 +1,5 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
-  <!-- ============================================================
- KURDIA ADVENTURE — ADMIN DESIGN 3
- FULL UI REORGANIZATION
- UI ONLY — EXISTING LOGIC PRESERVED
- ============================================================ -->
-
-<style id="KURDIA_ADMIN_FINAL_UI">
-
-:root{
-  --ka-bg:#05080d;
-  --ka-bg2:#070d14;
-  --ka-sidebar:#071019;
-  --ka-card:#0b141e;
-  --ka-card2:#0e1924;
-  --ka-line:rgba(255,255,255,.075);
-  --ka-line2:rgba(255,255,255,.12);
-  --ka-text:#f5f7fa;
-  --ka-muted:#8996a7;
-  --ka-red:#dc1947;
-  --ka-red2:#a90e35;
-  --ka-green:#18c978;
-  --ka-blue:#347dff;
-  --ka-yellow:#f2ad00;
-  --ka-purple:#7958ff;
-  --ka-radius:16px;
-}
-
-
-/* ============================================================
-   GLOBAL
-============================================================ */
-
-html,
-body{
-  background:
-    radial-gradient(
-      circle at 15% -10%,
-      rgba(220,25,71,.12),
-      transparent 30%
-    ),
-    var(--ka-bg) !important;
-
-  color:var(--ka-text) !important;
-}
-
-body{
-  overflow-x:hidden;
-}
-
-button,
-input,
-select,
-textarea{
-  font-family:inherit;
-}
-
-*{
-  scrollbar-width:thin;
-  scrollbar-color:#303b48 transparent;
-}
-
-
-/* ============================================================
-   MAIN APP
-============================================================ */
-
-.app-container{
-  min-height:100vh;
-  background:var(--ka-bg);
-}
-
-.workspace{
-  min-width:0;
-  background:transparent;
-}
-
-.content-body{
-  padding:14px !important;
-  max-width:1500px !important;
-  margin:0 auto !important;
-}
-
-
-/* ============================================================
-   SIDEBAR
-============================================================ */
-
-.sidebar{
-  width:245px !important;
-
-  background:
-    linear-gradient(
-      180deg,
-      #071019 0%,
-      #050a10 100%
-    ) !important;
-
-  border-right:
-    1px solid var(--ka-line) !important;
-
-  box-shadow:
-    15px 0 50px rgba(0,0,0,.18);
-
-  overflow-y:auto !important;
-}
-
-.sidebar-header{
-  padding:13px 12px !important;
-
-  border-bottom:
-    1px solid var(--ka-line) !important;
-}
-
-.brand-icon{
-  background:
-    linear-gradient(
-      145deg,
-      #ef2451,
-      #9d1033
-    ) !important;
-
-  box-shadow:
-    0 10px 30px
-    rgba(220,25,71,.25);
-}
-
-.brand-text h2{
-  font-weight:1000 !important;
-}
-
-.brand-text span{
-  color:#ef2a52 !important;
-  letter-spacing:1.3px;
-}
-
-
-/* ============================================================
-   SIDEBAR SEARCH
-============================================================ */
-
-.nav-list{
-  padding:
-    8px 8px 12px !important;
-}
-
-.nav-list .nav-btn{
-  min-height:37px;
-
-  margin:
-    2px 0 !important;
-
-  border-radius:
-    10px !important;
-
-  color:
-    #b9c4d0 !important;
-
-  font-size:
-    10px !important;
-
-  font-weight:
-    800 !important;
-
-  transition:
-    .18s ease !important;
-}
-
-.nav-list .nav-btn:hover{
-  background:
-    rgba(255,255,255,.045) !important;
-
-  color:#fff !important;
-
-  transform:
-    translateX(2px);
-}
-
-.nav-list .nav-btn.active{
-  background:
-    linear-gradient(
-      90deg,
-      #d91846,
-      #9d1034
-    ) !important;
-
-  color:#fff !important;
-
-  box-shadow:
-    0 8px 25px
-    rgba(215,25,69,.2);
-}
-
-.nav-list .nav-btn svg{
-  width:16px;
-  height:16px;
-}
-
-.cc-nav-label{
-  padding:
-    13px 9px 5px !important;
-
-  color:
-    #596675 !important;
-
-  font-size:
-    8px !important;
-
-  font-weight:
-    1000 !important;
-
-  letter-spacing:
-    1.5px !important;
-}
-
-
-/* ============================================================
-   SIDEBAR FOOTER
-============================================================ */
-
-.sidebar-footer{
-  padding:
-    10px !important;
-
-  border-top:
-    1px solid var(--ka-line) !important;
-
-  background:
-    rgba(5,9,14,.92);
-}
-
-.sidebar-footer .btn{
-  width:100%;
-  min-height:38px;
-  border-radius:10px;
-  margin-top:6px;
-  font-size:10px;
-}
-
-
-/* ============================================================
-   TOPBAR
-============================================================ */
-
-.topbar{
-  height:55px !important;
-
-  margin:
-    8px 10px 0 !important;
-
-  padding:
-    0 12px !important;
-
-  border:
-    1px solid var(--ka-line) !important;
-
-  border-radius:
-    14px !important;
-
-  background:
-    rgba(7,13,20,.86) !important;
-
-  backdrop-filter:
-    blur(20px) !important;
-
-  box-shadow:
-    0 10px 35px
-    rgba(0,0,0,.16);
-}
-
-.cc-top-title b{
-  font-size:11px;
-}
-
-.cc-top-title small{
-  color:#778597;
-  font-size:8px;
-}
-
-.topbar-right h1{
-  font-size:13px !important;
-}
-
-
-/* ============================================================
-   PAGE SYSTEM
-============================================================ */
-
-.page-tab{
-  width:100% !important;
-  max-width:1450px !important;
-
-  margin:
-    0 auto !important;
-
-  padding:
-    8px !important;
-}
-
-.page-tab.active{
-  animation:
-    kaPageIn .22s ease;
-}
-
-@keyframes kaPageIn{
-  from{
-    opacity:0;
-    transform:translateY(5px);
-  }
-
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-
-/* ============================================================
-   PAGE HERO
-============================================================ */
-
-.page-tab > .hero{
-  border-radius:
-    18px !important;
-
-  border:
-    1px solid var(--ka-line) !important;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(13,22,33,.98),
-      rgba(7,12,19,.98)
-    ) !important;
-
-  box-shadow:
-    0 15px 40px
-    rgba(0,0,0,.16) !important;
-
-  margin-bottom:
-    10px !important;
-}
-
-.page-tab > .hero h1,
-.page-tab > .hero h2{
-  font-weight:1000;
-}
-
-.eyebrow{
-  color:
-    #ef2852 !important;
-
-  font-weight:
-    900 !important;
-
-  letter-spacing:
-    1.4px;
-}
-
-
-/* ============================================================
-   CARDS — ALL SECTIONS
-============================================================ */
-
-.card,
-.ss-card,
-.panel,
-.api-lab-card,
-.k5-mini{
-  background:
-    linear-gradient(
-      145deg,
-      rgba(12,20,30,.96),
-      rgba(7,12,19,.96)
-    ) !important;
-
-  border:
-    1px solid var(--ka-line) !important;
-
-  border-radius:
-    var(--ka-radius) !important;
-
-  box-shadow:
-    0 10px 35px
-    rgba(0,0,0,.14) !important;
-}
-
-.card{
-  padding:
-    17px !important;
-
-  margin-bottom:
-    10px !important;
-}
-
-.card-header{
-  min-height:42px;
-
-  margin-bottom:
-    10px !important;
-
-  padding-bottom:
-    9px;
-
-  border-bottom:
-    1px solid rgba(255,255,255,.05);
-}
-
-.card-title{
-  font-size:
-    12px !important;
-
-  font-weight:
-    950 !important;
-}
-
-
-/* ============================================================
-   FORMS
-============================================================ */
-
-.field{
-  margin-bottom:
-    10px !important;
-}
-
-.field label{
-  color:
-    #9da9b7 !important;
-
-  font-size:
-    9px !important;
-
-  font-weight:
-    850 !important;
-
-  margin-bottom:
-    5px !important;
-}
-
-input,
-textarea,
-select,
-.input,
-.select{
-  min-height:
-    39px !important;
-
-  border:
-    1px solid
-    rgba(255,255,255,.075) !important;
-
-  border-radius:
-    10px !important;
-
-  background:
-    #071019 !important;
-
-  color:
-    #fff !important;
-
-  font-size:
-    10px !important;
-}
-
-textarea{
-  min-height:
-    85px !important;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:
-    rgba(220,25,71,.7) !important;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(220,25,71,.08) !important;
-}
-
-
-/* ============================================================
-   BUTTONS
-============================================================ */
-
-.btn{
-  min-height:
-    34px;
-
-  border-radius:
-    9px !important;
-
-  font-size:
-    9px !important;
-
-  font-weight:
-    900 !important;
-
-  transition:
-    .17s ease;
-}
-
-.btn:hover{
-  transform:
-    translateY(-1px);
-}
-
-.btn-primary,
-.btn-red{
-  background:
-    linear-gradient(
-      135deg,
-      #e31b49,
-      #a70e35
-    ) !important;
-
-  border-color:
-    #e31b49 !important;
-}
-
-.btn-success{
-  background:
-    linear-gradient(
-      135deg,
-      #13c978,
-      #07834d
-    ) !important;
-}
-
-.btn-danger{
-  background:
-    rgba(220,25,71,.12) !important;
-
-  border:
-    1px solid
-    rgba(220,25,71,.3) !important;
-
-  color:
-    #ff5578 !important;
-}
-
-.btn-secondary,
-.btn.ghost{
-  background:
-    rgba(255,255,255,.045) !important;
-
-  border:
-    1px solid var(--ka-line) !important;
-
-  color:
-    #cbd5df !important;
-}
-
-
-/* ============================================================
-   GRID SYSTEM — ALL PAGES
-============================================================ */
-
-.grid-2,
-.formgrid{
-  gap:
-    9px !important;
-}
-
-.grid-3{
-  gap:
-    9px !important;
-}
-
-.grid-4{
-  gap:
-    8px !important;
-}
-
-
-/* ============================================================
-   WEBSITE BUILDER
-============================================================ */
-
-#tab-site_studio{
-  max-width:
-    1450px !important;
-}
-
-#tab-site_studio .ss-toolbar{
-  padding:
-    10px;
-
-  border:
-    1px solid var(--ka-line);
-
-  border-radius:
-    14px;
-
-  background:
-    #08111a;
-
-  margin-bottom:
-    9px;
-}
-
-#tab-site_studio .ss-tabs{
-
-  display:
-    flex;
-
-  gap:
-    6px;
-
-  padding:
-    7px;
-
-  overflow-x:
-    auto;
-
-  background:
-    #070f18;
-
-  border:
-    1px solid var(--ka-line);
-
-  border-radius:
-    13px;
-
-  scrollbar-width:
-    none;
-}
-
-#tab-site_studio .ss-tab{
-
-  flex:
-    0 0 auto;
-
-  min-height:
-    34px;
-
-  padding:
-    0 12px;
-
-  border:
-    1px solid transparent;
-
-  border-radius:
-    9px;
-
-  background:
-    transparent;
-
-  color:
-    #8d9aaa;
-
-  font-size:
-    9px;
-
-  font-weight:
-    850;
-
-  cursor:
-    pointer;
-}
-
-#tab-site_studio .ss-tab:hover{
-  color:#fff;
-  background:
-    rgba(255,255,255,.04);
-}
-
-#tab-site_studio .ss-tab.active{
-
-  color:
-    #fff;
-
-  background:
-    linear-gradient(
-      135deg,
-      #d71945,
-      #941033
-    );
-
-  box-shadow:
-    0 6px 20px
-    rgba(215,25,69,.18);
-}
-
-#tab-site_studio .ss-panel{
-  margin-top:
-    9px;
-}
-
-#tab-site_studio .ss-grid{
-  gap:
-    9px !important;
-}
-
-
-/* ============================================================
-   TRIPS
-============================================================ */
-
-#tab-trip .card,
-#tab-private_requests .card{
-
-  position:
-    relative;
-
-  overflow:
-    hidden;
-}
-
-#tab-trip .item-row,
-#tab-private_requests .item-row{
-
-  min-height:
-    58px;
-
-  border-radius:
-    12px;
-
-  background:
-    rgba(255,255,255,.025);
-
-  border:
-    1px solid var(--ka-line);
-
-  transition:
-    .17s ease;
-}
-
-#tab-trip .item-row:hover,
-#tab-private_requests .item-row:hover{
-
-  background:
-    rgba(255,255,255,.045);
-
-  border-color:
-    rgba(220,25,71,.25);
-}
-
-
-/* ============================================================
-   DESTINATIONS / GALLERY
-============================================================ */
-
-#tab-site_studio .ss-list,
-#tab-gallery .gallery-grid,
-#tab-gallery .grid{
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(160px,1fr)
-    );
-
-  gap:
-    9px;
-}
-
-.gallery-grid{
-  margin-top:
-    8px !important;
-}
-
-.gallery-thumb{
-  height:
-    115px !important;
-
-  border-radius:
-    11px !important;
-}
-
-
-/* ============================================================
-   WEATHER
-============================================================ */
-
-#tab-weather_manager{
-
-  max-width:
-    1250px !important;
-}
-
-#tab-weather_manager .admin-map{
-
-  height:
-    310px;
-
-  border-radius:
-    16px;
-
-  border:
-    1px solid var(--ka-line);
-}
-
-
-/* ============================================================
-   SAFETY
-============================================================ */
-
-#tab-safety_tab{
-
-  max-width:
-    1150px !important;
-}
-
-#tab-safety_tab .item-row{
-
-  padding:
-    13px;
-
-  margin-bottom:
-    7px;
-
-  border-radius:
-    12px;
-}
-
-
-/* ============================================================
-   PREPARATION
-============================================================ */
-
-#tab-itinerary_tab{
-
-  max-width:
-    1200px !important;
-}
-
-#tab-itinerary_tab .item-row{
-
-  border-radius:
-    12px;
-
-  background:
-    #09131d;
-
-  border:
-    1px solid var(--ka-line);
-}
-
-
-/* ============================================================
-   REVIEWS
-============================================================ */
-
-#tab-reviews{
-
-  max-width:
-    1200px !important;
-}
-
-#tab-reviews .item-row{
-
-  border-radius:
-    13px;
-
-  background:
-    rgba(255,255,255,.025);
-}
-
-
-/* ============================================================
-   BOOKINGS / CRM
-============================================================ */
-
-#tab-live_registrations{
-
-  max-width:
-    1400px !important;
-}
-
-#tab-live_registrations
-#registrationsContainer{
-
-  display:
-    grid;
-
-  gap:
-    8px;
-}
-
-#tab-live_registrations
-#registrationsContainer > div{
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(14,25,36,.95),
-      rgba(7,13,20,.95)
-    ) !important;
-
-  border:
-    1px solid var(--ka-line) !important;
-
-  border-radius:
-    14px !important;
-
-  padding:
-    13px !important;
-}
-
-
-/* VERIFY */
-
-#tab-live_registrations
-button[onclick*="directVerify"]{
-
-  background:
-    linear-gradient(
-      135deg,
-      #13c978,
-      #087b49
-    ) !important;
-
-  color:#fff !important;
-
-  border:
-    0 !important;
-
-  box-shadow:
-    0 6px 18px
-    rgba(19,201,120,.13);
-}
-
-
-/* REJECT */
-
-#tab-live_registrations
-button[onclick*="directReject"]{
-
-  background:
-    linear-gradient(
-      135deg,
-      #e21a4b,
-      #9d1034
-    ) !important;
-
-  color:#fff !important;
-
-  border:
-    0 !important;
-}
-
-
-/* ============================================================
-   OTP / BOOKING
-============================================================ */
-
-#tab-booking{
-
-  max-width:
-    1200px !important;
-}
-
-
-/* ============================================================
-   FINANCE
-============================================================ */
-
-#tab-finance,
-#tab-k5_finance{
-
-  max-width:
-    1250px !important;
-}
-
-.k5-grid3,
-.k5-grid2{
-
-  gap:
-    9px !important;
-}
-
-.k5-mini{
-
-  padding:
-    13px !important;
-
-  border-radius:
-    13px !important;
-}
-
-
-/* ============================================================
-   STORIES
-============================================================ */
-
-#tab-stories_tab{
-
-  max-width:
-    1250px !important;
-}
-
-#adminStoriesContainer{
-
-  display:
-    grid !important;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(260px,1fr)
-    ) !important;
-
-  gap:
-    9px !important;
-}
-
-#adminStoriesContainer > div{
-
-  margin:
-    0 !important;
-
-  min-height:
-    105px;
-
-  padding:
-    12px !important;
-
-  border-radius:
-    14px !important;
-
-  background:
-    rgba(255,255,255,.025) !important;
-
-  border:
-    1px solid var(--ka-line) !important;
-}
-
-
-/* ============================================================
-   COMMUNITY
-============================================================ */
-
-#tab-k5_community{
-
-  max-width:
-    1250px !important;
-}
-
-
-/* ============================================================
-   WHATSAPP
-============================================================ */
-
-#tab-broadcast,
-#tab-whatsapp,
-#tab-k5_communications{
-
-  max-width:
-    1200px !important;
-}
-
-#tab-broadcast .card,
-#tab-whatsapp .card,
-#tab-k5_communications .card{
-
-  border-left:
-    2px solid
-    rgba(37,211,102,.35) !important;
-}
-
-
-/* ============================================================
-   MEDIA
-============================================================ */
-
-#tab-gallery{
-
-  max-width:
-    1250px !important;
-}
-
-#tab-gallery .gallery-thumb{
-
-  transition:
-    .18s ease;
-}
-
-#tab-gallery .gallery-thumb:hover{
-
-  transform:
-    translateY(-2px);
-
-  border-color:
-    rgba(220,25,71,.45);
-}
-
-
-/* ============================================================
-   API LAB
-============================================================ */
-
-#tab-api_lab{
-
-  max-width:
-    1300px !important;
-}
-
-.api-lab-grid{
-
-  display:
-    grid;
-
-  grid-template-columns:
-    1.15fr .85fr;
-
-  gap:
-    10px;
-}
-
-.api-lab-card{
-
-  border-radius:
-    15px !important;
-
-  background:
-    #08111a !important;
-}
-
-
-/* ============================================================
-   DIAGNOSTICS
-============================================================ */
-
-#tab-diagnostics_tab,
-#tab-k5_diagnostics{
-
-  max-width:
-    1250px !important;
-}
-
-
-/* ============================================================
-   ACTIVITY
-============================================================ */
-
-#tab-k5_activity{
-
-  max-width:
-    1100px !important;
-}
-
-.k5-log{
-
-  max-height:
-    520px !important;
-
-  overflow:
-    auto;
-
-  display:
-    grid;
-
-  gap:
-    7px;
-}
-
-
-/* ============================================================
-   ANALYTICS
-============================================================ */
-
-#tab-k5_analytics{
-
-  max-width:
-    1250px !important;
-}
-
-#tab-k5_analytics .k5-grid3{
-
-  margin-bottom:
-    10px;
-}
-
-
-/* ============================================================
-   SETTINGS
-============================================================ */
-
-#tab-k5_settings{
-
-  max-width:
-    1000px !important;
-}
-
-#tab-k5_settings .card{
-
-  margin-bottom:
-    10px;
-}
-
-
-/* ============================================================
-   NOTIFICATIONS
-============================================================ */
-
-#tab-admin_notifications{
-
-  max-width:
-    1050px !important;
-}
-
-#tab-admin_notifications .admin-notif{
-
-  padding:
-    13px !important;
-
-  border-radius:
-    13px !important;
-
-  background:
-    #0a131d !important;
-
-  border:
-    1px solid var(--ka-line) !important;
-
-  margin-bottom:
-    7px;
-}
-
-
-/* ============================================================
-   BACKUP
-============================================================ */
-
-#tab-backup{
-
-  max-width:
-    1000px !important;
-}
-
-
-/* ============================================================
-   COUPONS
-============================================================ */
-
-#tab-k5_coupons,
-#tab-coupon{
-
-  max-width:
-    1100px !important;
-}
-
-
-/* ============================================================
-   ACHIEVEMENTS
-============================================================ */
-
-#tab-achievements{
-
-  max-width:
-    1100px !important;
-}
-
-
-/* ============================================================
-   SERVICES
-============================================================ */
-
-#tab-services{
-
-  max-width:
-    1100px !important;
-}
-
-
-/* ============================================================
-   SHEETS
-============================================================ */
-
-#tab-sheets_tab{
-
-  max-width:
-    1100px !important;
-}
-
-
-/* ============================================================
-   TABLES
-============================================================ */
-
-table{
-
-  border-collapse:
-    separate !important;
-
-  border-spacing:
-    0 5px !important;
-}
-
-table th{
-
-  color:
-    #7f8d9e !important;
-
-  font-size:
-    9px !important;
-
-  font-weight:
-    900 !important;
-}
-
-table td{
-
-  font-size:
-    10px !important;
-
-  border:
-    0 !important;
-}
-
-table tbody tr{
-
-  background:
-    rgba(255,255,255,.02);
-}
-
-
-/* ============================================================
-   TOGGLE / SWITCH
-============================================================ */
-
-.switch{
-
-  border-radius:
-    999px !important;
-}
-
-
-/* ============================================================
-   MOBILE
-============================================================ */
-
-@media(max-width:850px){
-
-  .sidebar{
-
-    width:
-      285px !important;
-
-    right:
-      0 !important;
-
-    left:
-      auto !important;
-
-    transform:
-      translateX(105%) !important;
-
-    transition:
-      transform .25s ease !important;
-
-    z-index:
-      5000 !important;
-  }
-
-  .sidebar.open{
-
-    transform:
-      translateX(0) !important;
-  }
-
-  .workspace{
-
-    width:
-      100% !important;
-
-    margin:
-      0 !important;
-  }
-
-  .topbar{
-
-    margin:
-      6px !important;
-
-    height:
-      48px !important;
-
-    border-radius:
-      13px !important;
-  }
-
-  .cc-top-title{
-
-    display:
-      none !important;
-  }
-
-  .topbar-right{
-
-    flex:
-      1;
-  }
-
-  .topbar-right h1{
-
-    font-size:
-      12px !important;
-  }
-
-  .content-body{
-
-    padding:
-      6px !important;
-
-    padding-bottom:
-      78px !important;
-  }
-
-  .page-tab{
-
-    padding:
-      4px !important;
-  }
-
-  .page-tab > .hero{
-
-    border-radius:
-      14px !important;
-  }
-
-  .card{
-
-    padding:
-      13px !important;
-
-    border-radius:
-      14px !important;
-  }
-
-  .grid-2,
-  .grid-3,
-  .grid-4,
-  .formgrid{
-
-    grid-template-columns:
-      1fr !important;
-  }
-
-  #tab-site_studio .ss-tabs{
-
-    margin:
-      0 -2px;
-
-  }
-
-  #tab-site_studio .ss-tab{
-
-    min-height:
-      35px;
-
-    padding:
-      0 11px;
-
-  }
-
-  #adminStoriesContainer{
-
-    grid-template-columns:
-      1fr 1fr !important;
-  }
-
-  .api-lab-grid{
-
-    grid-template-columns:
-      1fr !important;
-  }
-
-}
-
-
-/* ============================================================
-   SMALL MOBILE
-============================================================ */
-
-@media(max-width:520px){
-
-  .sidebar{
-
-    width:
-      88vw !important;
-
-    max-width:
-      315px;
-  }
-
-  .page-tab > .hero h1,
-  .page-tab > .hero h2{
-
-    font-size:
-      21px !important;
-  }
-
-  #adminStoriesContainer{
-
-    grid-template-columns:
-      1fr !important;
-  }
-
-  .btn{
-
-    min-height:
-      38px;
-
-  }
-
-  .page-tab input,
-  .page-tab select{
-
-    min-height:
-      42px !important;
-  }
-
-}
-
-
-/* ============================================================
-   REMOVE PUBLISH CENTER ONLY
-============================================================ */
-
-#tab-k5_publish{
-
-  display:
-    none !important;
-}
-
-.nav-list button[onclick*="k5_publish"],
-.nav-list li:has(button[onclick*="k5_publish"]){
-
-  display:
-    none !important;
-}
-
-
-/* ============================================================
-   SAVE BUTTON — NEVER CALL IT PUBLISH
-============================================================ */
-
-.sidebar-footer .btn-primary{
-
-  background:
-    linear-gradient(
-      135deg,
-      #e21a4b,
-      #a70e35
-    ) !important;
-}
-
-</style>
-
-
-<script id="KURDIA_ADMIN_FINAL_UI_RUNTIME">
-
-(function(){
-
-  "use strict";
-
-
-  /* ==========================================================
-     THIS SCRIPT ONLY REORGANIZES THE VISUAL NAVIGATION.
-     IT DOES NOT TOUCH:
-       - Worker
-       - Notifications
-       - OneSignal
-       - Web Push
-       - CMS
-       - WhatsApp
-       - Booking
-       - Verify
-       - Reject
-       - Stories API
-  ========================================================== */
-
-
-  function buildNavigation(){
-
-    const list=
-      document.querySelector(
-        ".nav-list"
-      );
-
-    if(!list) return;
-
-
-    /*
-      ALL REAL TABS THAT EXIST IN THE CURRENT ADMIN.
-      switchTab() remains the original function.
-    */
-
-    list.innerHTML=`
-
-      <li class="cc-nav-label">
-        CONTROL CENTER
-      </li>
-
-      <li>
-        <button
-          class="nav-btn active"
-          onclick="switchTab('dashboard')">
-          <i data-lucide="layout-dashboard"></i>
-          داشبۆرد
-          <span class="cc-badge">LIVE</span>
-        </button>
-      </li>
-
-
-      <li class="cc-nav-label">
-        WEBSITE
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('site_studio')">
-          <i data-lucide="panels-top-left"></i>
-          Website Builder
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('design')">
-          <i data-lucide="palette"></i>
-          Hero و Brand
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('trip')">
-          <i data-lucide="compass"></i>
-          Trips — ٣ زمان
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('gallery')">
-          <i data-lucide="images"></i>
-          Media Library
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('weather_manager')">
-          <i data-lucide="cloud-sun"></i>
-          Weather
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('safety_tab')">
-          <i data-lucide="shield-check"></i>
-          Safety
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('itinerary_tab')">
-          <i data-lucide="list-checks"></i>
-          Preparation / Itinerary
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('reviews')">
-          <i data-lucide="message-circle"></i>
-          Reviews
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('private_requests')">
-          <i data-lucide="route"></i>
-          Private Trips
-        </button>
-      </li>
-
-
-      <li class="cc-nav-label">
-        BOOKINGS & CRM
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('live_registrations')">
-          <i data-lucide="users"></i>
-          Customers / Bookings
-          <span class="cc-badge">24</span>
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('booking')">
-          <i data-lucide="shield-check"></i>
-          OTP / Booking
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('finance')">
-          <i data-lucide="wallet-cards"></i>
-          Payment / Finance
-        </button>
-      </li>
-
-
-      <li class="cc-nav-label">
-        COMMUNITY
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('stories_tab')">
-          <i data-lucide="sparkles"></i>
-          Stories Moderation
-          <span
-            class="cc-badge"
-            style="
-              background:#d71945;
-              color:#fff;
-            "
-          >12</span>
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('k5_community')">
-          <i data-lucide="users-round"></i>
-          Community Center
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('broadcast')">
-          <i data-lucide="send"></i>
-          WhatsApp Center
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('whatsapp')">
-          <i data-lucide="message-circle"></i>
-          WhatsApp Tools
-        </button>
-      </li>
-
-
-      <li class="cc-nav-label">
-        TOOLS
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('achievements')">
-          <i data-lucide="trophy"></i>
-          Achievements
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('services')">
-          <i data-lucide="layers-3"></i>
-          Services
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('coupon')">
-          <i data-lucide="ticket-percent"></i>
-          Coupons
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('sheets_tab')">
-          <i data-lucide="table-2"></i>
-          Google Sheets
-        </button>
-      </li>
-
-
-      <li class="cc-nav-label">
-        SYSTEM
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('k5_analytics')">
-          <i data-lucide="chart-no-axes-combined"></i>
-          Analytics
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('k5_settings')">
-          <i data-lucide="settings-2"></i>
-          Settings / Languages
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('admin_notifications')">
-          <i data-lucide="bell-ring"></i>
-          ئاگادارییەکان
-          <span
-            id="adminNotifBadge"
-            style="
-              display:none;
-              margin-inline-start:auto;
-              background:#a91d37;
-              color:#fff;
-              border-radius:999px;
-              padding:2px 7px;
-              font-size:9px;
-              font-weight:900
-            "
-          ></span>
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('api_lab')">
-          <i data-lucide="flask-conical"></i>
-          API Lab
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('diagnostics_tab')">
-          <i data-lucide="activity"></i>
-          Diagnostics
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('k5_diagnostics')">
-          <i data-lucide="shield-alert"></i>
-          System Diagnostics
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('k5_activity')">
-          <i data-lucide="history"></i>
-          Activity Log
-        </button>
-      </li>
-
-      <li>
-        <button class="nav-btn"
-          onclick="switchTab('backup')">
-          <i data-lucide="database-backup"></i>
-          Backup / Restore
-        </button>
-      </li>
-
-    `;
-
-
-    if(window.lucide){
-
-      lucide.createIcons();
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     MOBILE MENU
-  ========================================================== */
-
-  function mobileNav(){
-
-    if(
-      document.getElementById(
-        "kaMobileAdminNav"
-      )
-    ){
-
-      return;
-
-    }
-
-
-    const nav=
-      document.createElement(
-        "nav"
-      );
-
-    nav.id=
-      "kaMobileAdminNav";
-
-
-    nav.innerHTML=`
-
-      <button
-        class="ka-mobile-item active"
-        onclick="switchTab('dashboard')">
-
-        <i data-lucide="home"></i>
-
-        <span>داشبۆرد</span>
-
-      </button>
-
-
-      <button
-        class="ka-mobile-item"
-        onclick="switchTab('site_studio')">
-
-        <i data-lucide="panels-top-left"></i>
-
-        <span>ویبسایت</span>
-
-      </button>
-
-
-      <button
-        class="ka-mobile-center"
-        onclick="switchTab('live_registrations')">
-
-        <i data-lucide="users"></i>
-
-      </button>
-
-
-      <button
-        class="ka-mobile-item"
-        onclick="switchTab('gallery')">
-
-        <i data-lucide="images"></i>
-
-        <span>میدیا</span>
-
-      </button>
-
-
-      <button
-        class="ka-mobile-item"
-        onclick="toggleSidebar()">
-
-        <i data-lucide="menu"></i>
-
-        <span>هەموو</span>
-
-      </button>
-
-    `;
-
-
-    document.body.appendChild(nav);
-
-
-    if(window.lucide){
-
-      lucide.createIcons();
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     MOBILE NAV CSS
-  ========================================================== */
-
-  const mobileCSS=
-  document.createElement(
-    "style"
-  );
-
-
-  mobileCSS.textContent=`
-
-    #kaMobileAdminNav{
-
-      display:none;
-
-    }
-
-    @media(max-width:850px){
-
-      #kaMobileAdminNav{
-
-        position:fixed;
-
-        display:grid;
-
-        grid-template-columns:
-          repeat(5,1fr);
-
-        left:7px;
-
-        right:7px;
-
-        bottom:7px;
-
-        height:59px;
-
-        padding:0 3px;
-
-        border:
-          1px solid
-          rgba(255,255,255,.09);
-
-        border-radius:18px;
-
-        background:
-          rgba(7,11,17,.96);
-
-        backdrop-filter:
-          blur(22px);
-
-        z-index:9998;
-
-        box-shadow:
-          0 -12px 40px
-          rgba(0,0,0,.5);
-
-      }
-
-      .ka-mobile-item{
-
-        border:0;
-
-        background:
-          transparent;
-
-        color:#758292;
-
-        display:flex;
-
-        flex-direction:column;
-
-        align-items:center;
-
-        justify-content:center;
-
-        gap:3px;
-
-        font-size:7px;
-
-        font-weight:900;
-
-      }
-
-      .ka-mobile-item svg{
-
-        width:18px;
-
-        height:18px;
-
-      }
-
-      .ka-mobile-center{
-
-        width:44px;
-
-        height:44px;
-
-        margin:auto;
-
-        transform:
-          translateY(-12px);
-
-        border:
-          4px solid
-          #070b11;
-
-        border-radius:50%;
-
-        background:
-          linear-gradient(
-            145deg,
-            #ef2250,
-            #9d1034
-          );
-
-        color:#fff;
-
-        display:grid;
-
-        place-items:center;
-
-        box-shadow:
-          0 8px 30px
-          rgba(223,23,71,.4);
-
-      }
-
-    }
-
-  `;
-
-
-  document.head.appendChild(
-    mobileCSS
-  );
-
-
-  /* ==========================================================
-     INITIALIZE
-  ========================================================== */
-
-  function init(){
-
-    buildNavigation();
-
-    mobileNav();
-
-    if(window.lucide){
-
-      lucide.createIcons();
-
-    }
-
-  }
-
-
-  if(
-    document.readyState ===
-    "loading"
-  ){
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      init,
-      {once:true}
-    );
-
-  }else{
-
-    init();
-
-  }
-
-
-})();
-
-</script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -2458,13 +294,1257 @@ body{
 @media(max-width:1050px){.cc-kpis{grid-template-columns:repeat(2,1fr)}.cc-main-grid{grid-template-columns:1fr}}@media(max-width:850px){.cc-title{font-size:22px}.cc-hero{padding:18px}.cc-kpi b{font-size:21px}.cc-quick{grid-template-columns:1fr}}@media(max-width:520px){.cc-kpis{gap:8px}.cc-kpi{padding:13px}.cc-kpi b{font-size:20px}.cc-card{padding:13px}.cc-trip-head{display:block}}
 </style>
 
-<style id="kurdia-design3-dashboard">
-:root{--d3-red:#e51e4b;--d3-red2:#a81235;--d3-blue:#2563eb;--d3-green:#10b981;--d3-gold:#e8a317}
-.d3-dashboard{max-width:1500px;margin:0 auto;padding-bottom:30px}.d3-hero{height:205px;border:1px solid rgba(255,255,255,.09);border-radius:22px;overflow:hidden;position:relative;margin-bottom:14px;background:#0a1119;box-shadow:0 25px 70px rgba(0,0,0,.32)}.d3-hero-bg{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,8,14,.88),rgba(3,8,14,.28)),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1800&q=82') center/cover}.d3-hero-content{position:relative;padding:30px 34px;z-index:2}.d3-eyebrow{font-size:11px;font-weight:900;letter-spacing:.16em;color:#ff4c72}.d3-hero h2{font-size:36px;line-height:1;margin:10px 0 9px;font-weight:900}.d3-hero p{font-size:14px;color:#d3dae4;max-width:620px}.d3-hero-actions{display:flex;gap:10px;margin-top:18px}.d3-hero-meta{position:absolute;right:28px;top:28px;z-index:3;display:flex;align-items:center;gap:12px;color:#e2e8f0}.d3-hero-meta strong{font-size:27px}.d3-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.d3-kpi{min-height:105px;border-radius:17px;border:1px solid rgba(255,255,255,.09);padding:16px;position:relative;overflow:hidden;background:#0b131d}.d3-kpi:after{content:'';position:absolute;left:0;right:0;bottom:-35px;height:75px;background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.14),transparent 65%)}.d3-kpi i{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;float:right;margin-left:11px}.d3-kpi small,.d3-kpi b,.d3-kpi em{display:block}.d3-kpi small{font-size:11px;color:#cbd5e1;font-weight:800}.d3-kpi b{font-size:29px;line-height:1.1;margin-top:5px}.d3-kpi em{font-size:10px;font-style:normal;color:#22c55e;font-weight:900}.d3-kpi.pink i{background:#8f1239;color:#ff6689}.d3-kpi.blue i{background:#153b8f;color:#60a5fa}.d3-kpi.gold i{background:#694b0b;color:#fbbf24}.d3-kpi.green i{background:#075e48;color:#34d399}.d3-main-grid{display:grid;grid-template-columns:1.15fr .85fr .85fr;gap:12px;margin-bottom:12px}.d3-left-stack{display:grid;gap:12px}.d3-panel{background:linear-gradient(145deg,rgba(12,20,30,.94),rgba(5,10,16,.96));border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:15px;box-shadow:0 18px 45px rgba(0,0,0,.2);min-width:0}.d3-panel-head{display:flex;align-items:center;gap:10px;margin-bottom:13px}.d3-panel-head h3{font-size:15px;font-weight:900;flex:1}.d3-panel-head small{color:#8fa0b5}.d3-count{min-width:29px;height:25px;border-radius:999px;background:#b6123c;display:grid;place-items:center;font-size:11px;font-weight:900}.d3-link,.d3-select{border:1px solid rgba(255,255,255,.1);background:#111c29;color:#dbe4ef;border-radius:9px;padding:6px 9px;font:inherit;font-size:10px}.d3-request-list{display:grid;gap:7px}.d3-request{display:flex;align-items:center;gap:10px;padding:9px;border:1px solid rgba(255,255,255,.06);border-radius:12px;background:rgba(255,255,255,.018)}.d3-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#334155,#111827);font-size:10px;font-weight:900}.d3-request-info{flex:1}.d3-request-info b{display:block;font-size:11px}.d3-request-info small{display:block;color:#8492a5;font-size:9px;margin-top:2px}.d3-status{font-size:9px;padding:6px 8px;border-radius:8px;font-weight:900}.d3-status.pending{color:#fbbf24;background:#4b3509}.d3-status.ok{color:#34d399;background:#073d31}.d3-status.reject{color:#fb7185;background:#4a0d1d}.d3-more{background:none;border:0;color:#8795a8;font-size:18px}.d3-chart{height:160px;position:relative;padding-top:8px}.d3-chart svg{width:100%;height:125px;display:block}.d3-chart-value{position:absolute;right:40%;top:12px;background:#b6123c;padding:5px 9px;border-radius:8px;font-size:10px;font-weight:900}.d3-days{display:flex;justify-content:space-between;color:#718096;font-size:8px;direction:ltr}.d3-weather-main{display:flex;align-items:center;justify-content:space-between;padding:8px 2px 15px}.d3-weather-main small{display:block;color:#9aa7b8}.d3-weather-main strong{display:block;font-size:39px;margin-top:3px}.d3-sun{font-size:45px}.d3-weather-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.d3-weather-stats span{padding:9px 4px;text-align:center;border-top:1px solid rgba(255,255,255,.06)}.d3-weather-stats b,.d3-weather-stats small{display:block}.d3-weather-stats b{font-size:11px}.d3-weather-stats small{font-size:8px;color:#718096;margin-top:2px}.d3-weather-week{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}.d3-weather-week span{font-size:8px;color:#94a3b8;text-align:center;padding:7px;background:#0a131e;border-radius:9px}.d3-weather-week b{color:#fff;font-size:11px}.d3-mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.d3-mini-stats>div{padding:11px;border-radius:11px;background:#0b1520;border:1px solid rgba(255,255,255,.06)}.d3-mini-stats i{font-style:normal;color:#d72a51}.d3-mini-stats b{display:block;font-size:19px;margin-top:5px}.d3-mini-stats small{display:block;color:#8b99aa;font-size:9px}.d3-mini-stats em{font-style:normal;color:#22c55e;font-size:8px}.d3-bottom-grid{display:grid;grid-template-columns:1.35fr .8fr .95fr;gap:12px}.d3-builder{grid-row:span 2}.d3-builder-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.d3-builder-grid button{min-height:86px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:#0b141e;color:#fff;text-align:right;padding:9px;font-family:inherit;cursor:pointer;transition:.2s}.d3-builder-grid button:hover{border-color:#b6123c;transform:translateY(-1px)}.d3-builder-grid span{display:block;font-size:22px}.d3-builder-grid b{display:block;font-size:10px;margin-top:4px}.d3-builder-grid small{color:#7f8da0;font-size:8px}.d3-media-tabs{display:flex;gap:5px;margin-bottom:8px}.d3-media-tabs span{font-size:9px;color:#8b98aa;padding:5px 9px;border-radius:7px}.d3-media-tabs .active{background:#f2f5f8;color:#0b1118}.d3-media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.d3-media-grid>div{height:62px;border-radius:8px;background:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=400&q=75') center/cover}.d3-media-grid>div:nth-child(2){background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=75')}.d3-media-grid>div:nth-child(3){background-image:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=400&q=75')}.d3-media-grid>div:nth-child(4){background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=75')}.d3-media-grid>div:nth-child(5){background-image:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=75')}.d3-media-grid .d3-upload{background:#0c1620;border:1px dashed rgba(255,255,255,.14);display:grid;place-items:center;align-content:center;color:#8795a8}.d3-upload b{font-size:20px}.d3-upload small{font-size:8px}.d3-story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.d3-story-grid article{min-width:0}.d3-story-grid article>div{height:85px;border-radius:9px;background:url('https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=500&q=75') center/cover}.d3-story-grid article:nth-child(2)>div{background-image:url('https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=500&q=75')}.d3-story-grid article:nth-child(3)>div{background-image:url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=500&q=75')}.d3-story-grid b{font-size:8px;display:block;margin:5px 0}.d3-story-grid button{width:100%;border:0;border-radius:7px;background:#08a76f;color:#fff;font:800 8px Vazirmatn;padding:5px;margin-bottom:4px;cursor:pointer}.d3-story-grid button.reject{background:#c81742}.d3-wa-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.d3-wa-grid button{border:1px solid rgba(255,255,255,.08);border-radius:11px;background:#0b151f;color:#fff;padding:10px;cursor:pointer}.d3-wa-grid small{display:block;font-size:8px;color:#a0adbc;margin-top:4px}.d3-settings{grid-column:2/4}.d3-lang{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:7px}.d3-lang span{font-size:9px;padding:8px;background:#0b151f;border-radius:9px;text-align:center}.d3-setting-row{display:flex;align-items:center;gap:8px;padding:8px;border-top:1px solid rgba(255,255,255,.05);font-size:9px;color:#b9c4d0}.d3-setting-row b{margin-right:auto;color:#22c55e;font-size:8px}.d3-setting-row span{margin-right:auto;color:#69788b}.d3-setting-row i{width:24px;height:14px;border-radius:99px;background:#10b981;display:block;position:relative}.d3-setting-row i:after{content:'';position:absolute;width:10px;height:10px;top:2px;right:2px;background:white;border-radius:50%}
-@media(max-width:1100px){.d3-main-grid{grid-template-columns:1fr 1fr}.d3-analytics{grid-column:1/3}.d3-bottom-grid{grid-template-columns:1fr 1fr}.d3-builder{grid-row:auto}.d3-settings{grid-column:auto}}
-@media(max-width:850px){.content-body{padding:12px}.d3-hero{height:220px}.d3-hero-content{padding:24px 20px}.d3-hero h2{font-size:28px}.d3-hero-meta{display:none}.d3-kpis{grid-template-columns:1fr 1fr}.d3-main-grid,.d3-bottom-grid{grid-template-columns:1fr}.d3-analytics,.d3-settings{grid-column:auto}.d3-builder-grid{grid-template-columns:repeat(2,1fr)}.d3-panel{padding:12px}.d3-request{gap:7px}.d3-status{display:none}}
-@media(max-width:520px){.d3-hero{height:205px}.d3-hero-actions .btn{font-size:10px;padding:9px 10px}.d3-kpi{min-height:95px;padding:11px}.d3-kpi b{font-size:23px}.d3-kpi i{width:32px;height:32px}.d3-builder-grid{grid-template-columns:1fr 1fr}.d3-request-info small{font-size:8px}}
+<style id="KURDIA-DESIGN3-FULL-UI">
+:root{
+  --ka3-bg:#05080d;
+  --ka3-panel:#08111a;
+  --ka3-panel2:#0b1621;
+  --ka3-line:rgba(255,255,255,.075);
+  --ka3-line2:rgba(255,255,255,.12);
+  --ka3-text:#f4f7fb;
+  --ka3-muted:#8c98a8;
+  --ka3-red:#df1748;
+  --ka3-red2:#9e1034;
+  --ka3-green:#18c978;
+  --ka3-blue:#3b82f6;
+  --ka3-yellow:#f0a900;
+  --ka3-purple:#7858ff;
+  --ka3-radius:16px;
+}
+
+html,body{
+  background:
+    radial-gradient(circle at 75% -15%,rgba(223,23,72,.12),transparent 28%),
+    #05080d !important;
+  color:var(--ka3-text) !important;
+}
+
+body{
+  overflow-x:hidden !important;
+}
+
+.sidebar{
+  width:248px !important;
+  background:
+    linear-gradient(180deg,#071019 0%,#050a10 100%) !important;
+  border-right:1px solid var(--ka3-line) !important;
+  box-shadow:12px 0 50px rgba(0,0,0,.16);
+}
+
+.sidebar-header{
+  padding:12px !important;
+  border-bottom:1px solid var(--ka3-line) !important;
+}
+
+.brand-icon{
+  background:linear-gradient(145deg,#ef2350,#9d1033) !important;
+  box-shadow:0 10px 30px rgba(223,23,72,.28) !important;
+}
+
+.brand-text h2{
+  font-weight:1000 !important;
+  letter-spacing:.3px;
+}
+
+.brand-text span{
+  color:#ee2a52 !important;
+  letter-spacing:1.2px !important;
+}
+
+.nav-list{
+  padding:8px !important;
+}
+
+.cc-nav-label{
+  padding:12px 9px 5px !important;
+  color:#5d6a79 !important;
+  font-size:8px !important;
+  font-weight:1000 !important;
+  letter-spacing:1.4px !important;
+}
+
+.nav-list .nav-btn{
+  min-height:37px !important;
+  margin:2px 0 !important;
+  padding:0 10px !important;
+  border-radius:10px !important;
+  font-size:10px !important;
+  font-weight:850 !important;
+  color:#b9c4d0 !important;
+  transition:all .18s ease !important;
+}
+
+.nav-list .nav-btn:hover{
+  color:#fff !important;
+  background:rgba(255,255,255,.045) !important;
+  transform:translateX(2px);
+}
+
+.nav-list .nav-btn.active{
+  color:#fff !important;
+  background:linear-gradient(90deg,#d91846,#9d1034) !important;
+  box-shadow:0 8px 24px rgba(215,25,69,.20) !important;
+}
+
+.sidebar-footer{
+  padding:10px !important;
+  border-top:1px solid var(--ka3-line) !important;
+  background:rgba(4,8,13,.9) !important;
+}
+
+.sidebar-footer .btn{
+  width:100%;
+  min-height:39px;
+  border-radius:11px !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+}
+
+.topbar{
+  height:54px !important;
+  margin:7px 9px 0 !important;
+  padding:0 10px !important;
+  border:1px solid var(--ka3-line) !important;
+  border-radius:14px !important;
+  background:rgba(7,13,20,.88) !important;
+  backdrop-filter:blur(20px);
+  box-shadow:0 10px 35px rgba(0,0,0,.16);
+}
+
+.topbar .btn-success{
+  background:linear-gradient(135deg,#18c978,#087b49) !important;
+  border-color:transparent !important;
+}
+
+.content-body{
+  padding:10px !important;
+  max-width:1540px !important;
+  margin:0 auto !important;
+}
+
+.page-tab{
+  max-width:1450px !important;
+  margin:0 auto !important;
+  padding:6px !important;
+}
+
+.page-tab.active{
+  animation:ka3PageIn .20s ease;
+}
+
+@keyframes ka3PageIn{
+  from{opacity:0;transform:translateY(4px)}
+  to{opacity:1;transform:none}
+}
+
+.card,
+.ss-card,
+.api-lab-card,
+.k5-mini{
+  background:
+    linear-gradient(145deg,rgba(12,21,31,.97),rgba(7,12,19,.97)) !important;
+  border:1px solid var(--ka3-line) !important;
+  border-radius:var(--ka3-radius) !important;
+  box-shadow:0 10px 32px rgba(0,0,0,.13) !important;
+}
+
+.card{
+  padding:16px !important;
+  margin-bottom:10px !important;
+}
+
+.card-header{
+  min-height:42px;
+  margin-bottom:10px !important;
+  padding-bottom:9px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.card-title{
+  font-size:12px !important;
+  font-weight:950 !important;
+}
+
+.field{
+  margin-bottom:10px !important;
+}
+
+.field label{
+  color:#9da9b8 !important;
+  font-size:9px !important;
+  font-weight:850 !important;
+  margin-bottom:5px !important;
+}
+
+input,textarea,select,
+.ss-field input,.ss-field textarea,.ss-field select{
+  min-height:39px !important;
+  border:1px solid rgba(255,255,255,.075) !important;
+  border-radius:10px !important;
+  background:#071019 !important;
+  color:#fff !important;
+  font-size:10px !important;
+  outline:none !important;
+}
+
+textarea,.ss-field textarea{
+  min-height:82px !important;
+}
+
+input:focus,textarea:focus,select:focus,
+.ss-field input:focus,.ss-field textarea:focus,.ss-field select:focus{
+  border-color:rgba(223,23,72,.65) !important;
+  box-shadow:0 0 0 3px rgba(223,23,72,.08) !important;
+}
+
+.btn{
+  min-height:34px;
+  border-radius:9px !important;
+  font-size:9px !important;
+  font-weight:900 !important;
+  transition:transform .16s ease,box-shadow .16s ease,opacity .16s ease !important;
+}
+
+.btn:hover{transform:translateY(-1px)}
+
+.btn-primary,
+.btn-red{
+  background:linear-gradient(135deg,#e31a49,#a70e35) !important;
+  border-color:transparent !important;
+}
+
+.btn-success{
+  background:linear-gradient(135deg,#15c978,#087b49) !important;
+  border-color:transparent !important;
+}
+
+.btn-danger{
+  background:rgba(220,25,71,.12) !important;
+  border:1px solid rgba(220,25,71,.32) !important;
+  color:#ff6b87 !important;
+}
+
+.grid-2,.grid-3,.grid-4,.formgrid{
+  gap:9px !important;
+}
+
+/* =========================================================
+   SITE STUDIO — MAIN WEBSITE MAP
+========================================================= */
+
+#tab-site_studio{
+  max-width:1450px !important;
+}
+
+#tab-site_studio > .hero{
+  position:relative;
+  overflow:hidden;
+  min-height:150px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:24px !important;
+  border-radius:18px !important;
+  background:
+    radial-gradient(circle at 85% 25%,rgba(223,23,72,.22),transparent 30%),
+    linear-gradient(145deg,#0d1a27,#070d14) !important;
+}
+
+#tab-site_studio > .hero:after{
+  content:"KURDIA";
+  position:absolute;
+  left:24px;
+  bottom:-22px;
+  font-size:90px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-5px;
+  color:rgba(255,255,255,.025);
+  pointer-events:none;
+}
+
+#kaWebsiteMap{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+  margin:0 0 10px;
+}
+
+.ka-site-tile{
+  position:relative;
+  min-height:105px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:15px;
+  background:
+    linear-gradient(180deg,rgba(10,20,30,.08),rgba(4,8,13,.96)),
+    linear-gradient(135deg,#101d2b,#09111a);
+  cursor:pointer;
+  text-align:right;
+  color:#fff;
+  transition:.18s ease;
+}
+
+.ka-site-tile:hover{
+  transform:translateY(-2px);
+  border-color:rgba(223,23,72,.4);
+  box-shadow:0 12px 28px rgba(0,0,0,.2);
+}
+
+.ka-site-tile:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 85% 10%,rgba(223,23,72,.25),transparent 35%);
+  pointer-events:none;
+}
+
+.ka-site-tile .ka-tile-icon{
+  position:absolute;
+  top:11px;
+  right:11px;
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.065);
+  color:#e7edf4;
+}
+
+.ka-site-tile .ka-tile-icon svg{
+  width:16px;
+  height:16px;
+}
+
+.ka-site-tile b{
+  position:relative;
+  z-index:1;
+  font-size:11px;
+  font-weight:950;
+}
+
+.ka-site-tile span{
+  position:relative;
+  z-index:1;
+  margin-top:3px;
+  color:#8795a5;
+  font-size:8px;
+}
+
+.ka-site-tile .ka-arrow{
+  position:absolute;
+  left:10px;
+  bottom:10px;
+  color:#687688;
+}
+
+.ka-site-tile.important{
+  background:
+    linear-gradient(180deg,rgba(223,23,72,.12),rgba(5,9,14,.98)),
+    linear-gradient(135deg,#1a1721,#090f17);
+}
+
+.ka-site-tile.accent{
+  border-color:rgba(223,23,72,.25);
+}
+
+/* Compact secondary Studio tabs */
+#ssTabs{
+  display:flex !important;
+  gap:6px !important;
+  padding:6px !important;
+  margin-bottom:9px !important;
+  overflow-x:auto !important;
+  scrollbar-width:none !important;
+  background:#071019 !important;
+  border:1px solid var(--ka3-line) !important;
+  border-radius:13px !important;
+}
+
+#ssTabs::-webkit-scrollbar{display:none}
+
+#ssTabs .ss-tab{
+  flex:0 0 auto !important;
+  min-height:33px !important;
+  padding:0 11px !important;
+  border:1px solid transparent !important;
+  border-radius:9px !important;
+  background:transparent !important;
+  color:#8996a7 !important;
+  font-size:9px !important;
+  font-weight:850 !important;
+}
+
+#ssTabs .ss-tab.active{
+  color:#fff !important;
+  background:linear-gradient(135deg,#d71945,#991033) !important;
+}
+
+#tab-site_studio .ss-panel{
+  margin-top:0 !important;
+}
+
+#tab-site_studio .ss-card{
+  padding:14px !important;
+}
+
+#tab-site_studio .ss-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:9px !important;
+}
+
+#tab-site_studio .ss-list{
+  gap:8px !important;
+}
+
+#tab-site_studio .ss-item{
+  min-height:58px;
+  padding:11px !important;
+  border-radius:12px !important;
+  background:#071019 !important;
+}
+
+#tab-site_studio .ss-savebar{
+  position:sticky;
+  bottom:8px;
+  z-index:30;
+  margin-top:10px;
+  border-radius:15px !important;
+  background:rgba(5,9,14,.94) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  backdrop-filter:blur(18px);
+}
+
+#tab-site_studio .ss-savebar .btn-primary{
+  background:linear-gradient(135deg,#e31a49,#a70e35) !important;
+}
+
+/* =========================================================
+   BOOKING VERIFICATION / REJECTION
+========================================================= */
+
+.ka-booking-actions-guide{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin:-2px 0 11px;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:13px;
+  background:linear-gradient(145deg,rgba(12,23,33,.92),rgba(7,13,20,.92));
+}
+
+.ka-guide-icon{
+  flex:0 0 38px;
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:rgba(24,201,120,.10);
+  color:#20d384;
+}
+
+.ka-guide-icon svg{width:19px;height:19px}
+
+.ka-guide-copy{
+  min-width:0;
+  flex:1;
+}
+
+.ka-guide-copy b{
+  display:block;
+  font-size:10px;
+  font-weight:950;
+}
+
+.ka-guide-copy span{
+  display:block;
+  margin-top:3px;
+  color:#7f8c9b;
+  font-size:8px;
+  line-height:1.7;
+}
+
+.ka-guide-badges{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.ka-guide-ok,.ka-guide-no{
+  padding:5px 7px;
+  border-radius:7px;
+  font-size:7px;
+  font-weight:900;
+}
+
+.ka-guide-ok{
+  background:rgba(24,201,120,.10);
+  color:#35da91;
+  border:1px solid rgba(24,201,120,.18);
+}
+
+.ka-guide-no{
+  background:rgba(223,23,72,.10);
+  color:#ff6581;
+  border:1px solid rgba(223,23,72,.18);
+}
+
+#registrationsContainer > div{
+  border-radius:13px !important;
+  border:1px solid var(--ka3-line) !important;
+  background:linear-gradient(145deg,rgba(13,23,34,.95),rgba(7,12,19,.95)) !important;
+}
+
+/* Keep the actual existing Verify / Reject controls obvious. */
+button[onclick*="directVerify"]{
+  background:linear-gradient(135deg,#15c978,#087b49) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+}
+
+button[onclick*="directReject"]{
+  background:linear-gradient(135deg,#e21a4b,#9d1034) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+}
+
+/* =========================================================
+   STORIES
+========================================================= */
+
+#adminStoriesContainer{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr)) !important;
+  gap:9px !important;
+}
+
+#adminStoriesContainer > div{
+  margin:0 !important;
+  border-radius:14px !important;
+  border:1px solid var(--ka3-line) !important;
+}
+
+/* =========================================================
+   MEDIA / GALLERY
+========================================================= */
+
+#tab-gallery .gallery-grid,
+#tab-gallery .grid{
+  gap:9px !important;
+}
+
+#tab-gallery .gallery-thumb{
+  border-radius:12px !important;
+}
+
+/* =========================================================
+   ALL OTHER MODULES
+========================================================= */
+
+#tab-design,
+#tab-trip,
+#tab-weather_manager,
+#tab-safety_tab,
+#tab-itinerary_tab,
+#tab-reviews,
+#tab-private_requests,
+#tab-booking,
+#tab-finance,
+#tab-broadcast,
+#tab-whatsapp,
+#tab-k5_community,
+#tab-api_lab,
+#tab-diagnostics_tab,
+#tab-k5_diagnostics,
+#tab-k5_activity,
+#tab-k5_analytics,
+#tab-k5_settings,
+#tab-admin_notifications,
+#tab-backup,
+#tab-k5_coupons,
+#tab-coupon,
+#tab-achievements,
+#tab-services,
+#tab-sheets_tab{
+  scroll-margin-top:10px;
+}
+
+/* No Publish Center anywhere in the visible UI. */
+#tab-k5_publish{
+  display:none !important;
+}
+
+@media(max-width:850px){
+
+  .sidebar{
+    width:290px !important;
+    right:0 !important;
+    left:auto !important;
+    transform:translateX(105%) !important;
+    transition:transform .25s ease !important;
+    z-index:5000 !important;
+  }
+
+  .sidebar.open{
+    transform:translateX(0) !important;
+  }
+
+  .workspace{
+    width:100% !important;
+    margin:0 !important;
+  }
+
+  .topbar{
+    margin:5px 6px 0 !important;
+    height:49px !important;
+    border-radius:13px !important;
+  }
+
+  .topbar .btn-success{
+    padding:7px 9px !important;
+    font-size:8px !important;
+  }
+
+  .cc-top-title{
+    display:none !important;
+  }
+
+  .content-body{
+    padding:5px !important;
+    padding-bottom:82px !important;
+  }
+
+  .page-tab{
+    padding:3px !important;
+  }
+
+  .card{
+    padding:12px !important;
+    border-radius:14px !important;
+  }
+
+  #tab-site_studio > .hero{
+    min-height:135px;
+    padding:18px !important;
+    border-radius:15px !important;
+  }
+
+  #tab-site_studio > .hero h2{
+    font-size:20px !important;
+  }
+
+  #tab-site_studio > .hero p{
+    font-size:9px !important;
+    line-height:1.9 !important;
+  }
+
+  #kaWebsiteMap{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:7px;
+  }
+
+  .ka-site-tile{
+    min-height:92px;
+    padding:10px;
+    border-radius:13px;
+  }
+
+  .ka-site-tile b{
+    font-size:9px;
+  }
+
+  .ka-site-tile span{
+    font-size:7px;
+  }
+
+  #tab-site_studio .ss-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  #tab-site_studio .ss-field.full{
+    grid-column:auto !important;
+  }
+
+  #tab-site_studio .ss-card{
+    padding:11px !important;
+    border-radius:13px !important;
+  }
+
+  #ssTabs{
+    padding:5px !important;
+  }
+
+  #ssTabs .ss-tab{
+    min-height:34px !important;
+    font-size:8px !important;
+  }
+
+  .ka-booking-actions-guide{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .ka-guide-copy{
+    flex:1 1 calc(100% - 52px);
+  }
+
+  .ka-guide-badges{
+    width:100%;
+    justify-content:flex-start;
+    padding-right:49px;
+  }
+
+  #adminStoriesContainer{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  .page-tab input,
+  .page-tab textarea,
+  .page-tab select{
+    font-size:10px !important;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .sidebar{
+    width:88vw !important;
+    max-width:320px !important;
+  }
+
+  #kaWebsiteMap{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .ka-site-tile{
+    min-height:88px;
+  }
+
+  .ka-site-tile .ka-tile-icon{
+    width:28px;
+    height:28px;
+  }
+
+  #adminStoriesContainer{
+    grid-template-columns:1fr !important;
+  }
+
+  .ka-booking-actions-guide{
+    padding:10px;
+  }
+
+  .ka-guide-badges{
+    padding-right:0;
+  }
+
+}
+
+/* =========================================================
+   MOBILE BOTTOM NAV
+========================================================= */
+
+#kaMobileBottomNav{
+  display:none;
+}
+
+@media(max-width:850px){
+
+  #kaMobileBottomNav{
+    position:fixed;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    left:7px;
+    right:7px;
+    bottom:7px;
+    height:59px;
+    z-index:9998;
+    padding:0 3px;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:18px;
+    background:rgba(6,10,16,.96);
+    backdrop-filter:blur(22px);
+    box-shadow:0 -12px 40px rgba(0,0,0,.5);
+  }
+
+  .ka3-mobile-item{
+    border:0;
+    background:transparent;
+    color:#748191;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    font-size:7px;
+    font-weight:900;
+  }
+
+  .ka3-mobile-item svg{
+    width:18px;
+    height:18px;
+  }
+
+  .ka3-mobile-center{
+    width:44px;
+    height:44px;
+    margin:auto;
+    transform:translateY(-12px);
+    border:4px solid #070b11;
+    border-radius:50%;
+    background:linear-gradient(145deg,#ef2250,#9d1034);
+    color:#fff;
+    display:grid;
+    place-items:center;
+    box-shadow:0 8px 30px rgba(223,23,71,.42);
+  }
+}
 </style>
+
+
+<style id="KURDIA-DESIGN3-MOBILE-FINAL">
+/* =========================================================
+   MOBILE-FIRST FIX
+   The desktop layout stays intact; this layer only changes
+   sizing/flow at phone widths.
+========================================================= */
+@media (max-width: 850px){
+
+  html,body{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow-x:hidden !important;
+  }
+
+  body{
+    position:relative !important;
+  }
+
+  .workspace,
+  .content-body,
+  .page-tab,
+  .page-tab.active{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  .workspace{
+    overflow:hidden !important;
+  }
+
+  .content-body{
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    padding:6px !important;
+    padding-bottom:82px !important;
+  }
+
+  .page-tab{
+    overflow:visible !important;
+    padding:2px !important;
+  }
+
+  .page-tab.active{
+    display:block !important;
+  }
+
+  /* Every normal grid becomes one clean mobile column. */
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .formgrid,
+  .ss-grid,
+  .k5-grid2,
+  .k5-grid3,
+  .k5-grid4,
+  .stats-grid,
+  .dashboard-grid,
+  .analytics-grid,
+  .cards-grid,
+  .form-grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    width:100% !important;
+    min-width:0 !important;
+    gap:8px !important;
+  }
+
+  /* Two small tiles may share a row where it is safe. */
+  .stat-grid,
+  .quick-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+
+  .card,
+  .ss-card,
+  .api-lab-card,
+  .k5-mini,
+  .k5-panel,
+  .panel,
+  .section-card{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    padding:11px !important;
+    border-radius:13px !important;
+  }
+
+  .card-header,
+  .ss-card-header,
+  .panel-header,
+  .section-header{
+    flex-wrap:wrap !important;
+    gap:7px !important;
+    min-width:0 !important;
+  }
+
+  .card-header > *,
+  .ss-card-header > *,
+  .panel-header > *{
+    min-width:0 !important;
+  }
+
+  /* Buttons never force the page wider. */
+  .btn,
+  button{
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    white-space:normal !important;
+  }
+
+  .toolbar,
+  .actions,
+  .action-row,
+  .card-actions,
+  .ss-actions{
+    width:100% !important;
+    min-width:0 !important;
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:6px !important;
+  }
+
+  .toolbar .btn,
+  .actions .btn,
+  .action-row .btn,
+  .card-actions .btn,
+  .ss-actions .btn{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+  }
+
+  input,
+  textarea,
+  select,
+  .ss-field input,
+  .ss-field textarea,
+  .ss-field select{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  textarea{
+    resize:vertical !important;
+  }
+
+  /* Header: compact, never overflowing. */
+  .topbar{
+    width:calc(100% - 10px) !important;
+    max-width:none !important;
+    min-width:0 !important;
+    margin:5px !important;
+    padding:0 7px !important;
+    gap:6px !important;
+    overflow:hidden !important;
+  }
+
+  .topbar-left,
+  .topbar-right{
+    min-width:0 !important;
+    gap:5px !important;
+  }
+
+  .topbar-left{
+    flex:1 1 auto !important;
+  }
+
+  .topbar-right{
+    flex:0 1 auto !important;
+  }
+
+  .topbar .search,
+  .topbar .search-box,
+  .topbar input{
+    min-width:0 !important;
+    width:auto !important;
+    flex:1 1 auto !important;
+  }
+
+  /* Studio tabs: horizontal scroll, not page overflow. */
+  #ssTabs{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  #ssTabs .ss-tab{
+    flex:0 0 auto !important;
+    white-space:nowrap !important;
+  }
+
+  #kaWebsiteMap{
+    width:100% !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    min-width:0 !important;
+  }
+
+  .ka-site-tile{
+    width:100% !important;
+    min-width:0 !important;
+    min-height:86px !important;
+    overflow:hidden !important;
+  }
+
+  /* Tables: scroll inside the card instead of breaking the page. */
+  .table-wrap,
+  .k5-table-wrap,
+  .table-responsive,
+  .overflow-x-auto{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  table,
+  .k5-table{
+    width:max-content !important;
+    min-width:620px !important;
+    max-width:none !important;
+  }
+
+  /* Long registration / booking rows stack instead of squeezing. */
+  #registrationsContainer > div{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  #registrationsContainer .flex,
+  #registrationsContainer .row{
+    flex-wrap:wrap !important;
+    min-width:0 !important;
+  }
+
+  #registrationsContainer .grow{
+    min-width:0 !important;
+    width:100% !important;
+  }
+
+  #registrationsContainer button{
+    flex:1 1 145px !important;
+  }
+
+  .ka-booking-actions-guide{
+    width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Stories/media grids become comfortable phone cards. */
+  #adminStoriesContainer,
+  .gallery-grid,
+  .media-grid,
+  .stories-grid{
+    width:100% !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:7px !important;
+  }
+
+  /* Images must never dictate layout width. */
+  img,
+  video,
+  iframe,
+  canvas{
+    max-width:100% !important;
+    height:auto !important;
+  }
+
+  .thumb,
+  .media-thumb,
+  .gallery-thumb{
+    max-width:100% !important;
+  }
+
+  /* Modals fit inside the phone. */
+  #cropModalWrapper,
+  .modal,
+  .modal-backdrop{
+    padding:8px !important;
+  }
+
+  .crop-container-card,
+  .modal-content,
+  .modal-card{
+    width:100% !important;
+    max-width:100% !important;
+    max-height:calc(100vh - 16px) !important;
+    overflow:auto !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Hide desktop-only text that consumes precious width. */
+  .desktop-only{
+    display:none !important;
+  }
+
+  /* Keep floating controls inside viewport. */
+  .toast{
+    left:8px !important;
+    right:8px !important;
+    width:auto !important;
+    max-width:none !important;
+    white-space:normal !important;
+    text-align:center !important;
+    transform:translateY(80px) !important;
+  }
+
+  .toast.show{
+    transform:translateY(0) !important;
+  }
+
+  /* Save bar becomes full width and sits above mobile nav. */
+  #tab-site_studio .ss-savebar{
+    bottom:68px !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  #tab-site_studio .ss-savebar .btn{
+    width:100% !important;
+  }
+}
+
+@media (max-width:520px){
+
+  .content-body{
+    padding:4px !important;
+    padding-bottom:78px !important;
+  }
+
+  .card,
+  .ss-card,
+  .k5-mini,
+  .panel,
+  .section-card{
+    padding:9px !important;
+    border-radius:12px !important;
+  }
+
+  .card-title{
+    font-size:11px !important;
+  }
+
+  .field label{
+    font-size:8px !important;
+  }
+
+  input,
+  textarea,
+  select,
+  .ss-field input,
+  .ss-field textarea,
+  .ss-field select{
+    min-height:38px !important;
+    font-size:10px !important;
+    padding:9px 10px !important;
+  }
+
+  .btn{
+    min-height:34px !important;
+    padding:8px 9px !important;
+    font-size:8px !important;
+  }
+
+  #kaWebsiteMap{
+    grid-template-columns:1fr 1fr !important;
+    gap:6px !important;
+  }
+
+  .ka-site-tile{
+    min-height:82px !important;
+    padding:9px !important;
+  }
+
+  .ka-site-tile b{
+    font-size:8px !important;
+  }
+
+  .ka-site-tile span{
+    font-size:6.5px !important;
+  }
+
+  #adminStoriesContainer,
+  .gallery-grid,
+  .media-grid,
+  .stories-grid{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .formgrid,
+  .ss-grid,
+  .k5-grid2,
+  .k5-grid3,
+  .k5-grid4{
+    grid-template-columns:1fr !important;
+  }
+
+  .stat-grid,
+  .quick-grid{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  .topbar{
+    height:48px !important;
+  }
+
+  .topbar .btn{
+    padding:6px 7px !important;
+  }
+
+  #kaMobileBottomNav{
+    left:5px !important;
+    right:5px !important;
+    bottom:5px !important;
+    height:56px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -2529,7 +1609,7 @@ body{
 </ul>
 
     <div class="sidebar-footer">
-      <button class="btn btn-primary" onclick="kurdiaSaveAllCloud()"><i data-lucide="cloud-upload"></i> پاشەکەوتکردن لە Cloud</button>
+      <button class="btn btn-primary" onclick="kurdiaSaveAllCloud()"><i data-lucide="cloud-upload"></i> پاشەکەوتکردنی گۆڕانکاری</button>
       <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> ماڵپەڕ بکەرەوە</button>
     </div>
   </aside>
@@ -2542,7 +1622,7 @@ body{
         <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">داشبۆردی سەرەکی</h1>
       </div>
       <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="kurdiaSaveAllCloud()">
-        <i data-lucide="save"></i> پاشەکەوتکردن
+        <i data-lucide="cloud-upload"></i> پاشەکەوتکردنی گۆڕانکاری
       </button>
     </header>
 
@@ -2618,80 +1698,36 @@ body{
 
         <div class="ss-savebar">
           <span class="ss-dirty" id="ssDirty">دۆخ: <b>پاک</b></span>
-          <div class="ss-actions"><button class="btn btn-secondary" type="button" onclick="ssResetDraft()">Reset</button><button class="btn btn-primary" type="button" onclick="ssSaveCloud()"><i data-lucide="cloud-upload"></i> هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت بکە</button></div>
+          <div class="ss-actions"><button class="btn btn-secondary" type="button" onclick="ssResetDraft()">Reset</button><button class="btn btn-primary" type="button" onclick="ssSaveCloud()"><i data-lucide="cloud-upload"></i> هەموو گۆڕانکارییەکان پاشەکەوت بکە</button></div>
         </div>
       </section>
 
-      <!-- DASHBOARD / DESIGN 3 -->
+      <!-- DASHBOARD -->
       <section class="page-tab active" id="tab-dashboard">
-        <div class="d3-dashboard">
-          <section class="d3-hero">
-            <div class="d3-hero-bg"></div>
-            <div class="d3-hero-content">
-              <div class="d3-eyebrow">KURDIA ADVENTURE · ADMIN PANEL</div>
-              <h2>بەخێربێیت</h2>
-              <p>بۆ بەڕێوەبردنی گەشت، ویبسایت، booking و کۆمەڵگای KURDIA.</p>
-              <div class="d3-hero-actions">
-                <button class="btn btn-primary" onclick="openLiveSite()"><i data-lucide="external-link"></i> بینینی سایت</button>
-                <button class="btn btn-secondary" onclick="switchTab('site_studio')"><i data-lucide="panels-top-left"></i> دەستکاری ویبسایت</button>
-              </div>
-            </div>
-            <div class="d3-hero-meta"><span id="d3Date">2026/10/04</span><strong id="d3Clock">--:--</strong><span>☀️</span></div>
-          </section>
-
-          <div class="d3-kpis">
-            <div class="d3-kpi pink"><i data-lucide="users-round"></i><small>داواکاری نوێ</small><b id="ccBookingsToday">—</b><em>↑ 12%</em></div>
-            <div class="d3-kpi blue"><i data-lucide="mountain"></i><small>پەسەندکراو</small><b id="ccConfirmed">—</b><em>↑ 5%</em></div>
-            <div class="d3-kpi gold"><i data-lucide="eye"></i><small>چاوەڕوانی</small><b id="ccPending">—</b><em>↑ 2%</em></div>
-            <div class="d3-kpi green"><i data-lucide="globe-2"></i><small>بینینی سایت</small><b id="d3Views">4,892</b><em>↑ 18%</em></div>
-          </div>
-
-          <div class="d3-main-grid">
-            <div class="d3-left-stack">
-              <section class="d3-panel d3-requests">
-                <div class="d3-panel-head"><h3>داواکارییە نوێکان</h3><span class="d3-count" id="d3RequestCount">24</span><button class="d3-link" onclick="switchTab('live_registrations')">بینینی هەموو</button></div>
-                <div class="d3-request-list">
-                  <div class="d3-request"><div class="d3-avatar">AR</div><div class="d3-request-info"><b>Ahmad Rashid</b><small>#1247 · ٤ کەس · 2026/10/12</small></div><span class="d3-status pending">لە چاوەڕوانی</span><button class="d3-more">⋮</button></div>
-                  <div class="d3-request"><div class="d3-avatar">SM</div><div class="d3-request-info"><b>Sara Mohammed</b><small>#1246 · ٢ کەس · 2026/10/18</small></div><span class="d3-status ok">پەسەندکراو</span><button class="d3-more">⋮</button></div>
-                  <div class="d3-request"><div class="d3-avatar">DH</div><div class="d3-request-info"><b>Dilan Hama</b><small>#1245 · ٣ کەس · 2026/10/15</small></div><span class="d3-status pending">لە چاوەڕوانی</span><button class="d3-more">⋮</button></div>
-                  <div class="d3-request"><div class="d3-avatar">KA</div><div class="d3-request-info"><b>Karzan Ali</b><small>#1244 · ٥ کەس · 2026/10/20</small></div><span class="d3-status reject">ڕەتکراوە</span><button class="d3-more">⋮</button></div>
-                </div>
-              </section>
-
-              <section class="d3-panel">
-                <div class="d3-panel-head"><h3>بینینی سایت</h3><span class="d3-select">٧ ڕۆژ⌄</span></div>
-                <div class="d3-chart"><div class="d3-chart-value">1,480</div><svg viewBox="0 0 600 180" preserveAspectRatio="none"><defs><linearGradient id="d3fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e51e4b" stop-opacity=".38"/><stop offset="1" stop-color="#e51e4b" stop-opacity="0"/></linearGradient></defs><path d="M0 145 C65 125 90 132 145 105 S230 130 285 90 S370 110 425 70 S510 92 600 42 L600 180 L0 180 Z" fill="url(#d3fill)"/><path d="M0 145 C65 125 90 132 145 105 S230 130 285 90 S370 110 425 70 S510 92 600 42" fill="none" stroke="#f02050" stroke-width="4"/></svg><div class="d3-days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div>
-              </section>
-            </div>
-
-            <section class="d3-panel d3-weather">
-              <div class="d3-panel-head"><h3>کەش و هەوا</h3><span>⌁</span></div>
-              <div class="d3-weather-main"><div><small>Erbil, Kurdistan</small><strong>28°C</strong></div><span class="d3-sun">☀️</span></div>
-              <div class="d3-weather-stats"><span><b>12°</b><small>کەمترین</small></span><span><b>34°</b><small>زۆرترین</small></span><span><b>0%</b><small>باران</small></span><span><b>8 km/h</b><small>با</small></span></div>
-              <div class="d3-weather-week"><span>هەینی<br><b>28°</b></span><span>شەممە<br><b>26°</b></span><span>یەکشەممە<br><b>25°</b></span><span>دووشەممە<br><b>24°</b></span></div>
-            </section>
-
-            <section class="d3-panel d3-analytics">
-              <div class="d3-panel-head"><h3>Analytics</h3><span class="d3-select">٧ ڕۆژ⌄</span></div>
-              <div class="d3-mini-stats"><div><i>◉</i><b>4,892</b><small>بینینی سایت</small><em>↑18%</em></div><div><i>♟</i><b id="ccPrivate">—</b><small>Private Requests</small><em>↑12%</em></div><div><i>♧</i><b id="ccStories">—</b><small>Stories</small><em>↑5%</em></div><div><i>◉</i><b id="ccReviews">—</b><small>Reviews</small><em>↑2%</em></div></div>
-            </section>
-          </div>
-
-          <div class="d3-bottom-grid">
-            <section class="d3-panel d3-builder"><div class="d3-panel-head"><div><h3>Website Builder</h3><small>دەستکاری ڕاستەوخۆی ویبسایت</small></div><button class="btn btn-primary" onclick="switchTab('site_studio')">بینینی سایت</button></div><div class="d3-builder-grid">
-              <button onclick="switchTab('site_studio')"><span>🏔️</span><b>Hero Section</b><small>بەشی سەرەکی</small></button><button onclick="switchTab('site_studio')"><span>🧭</span><b>Navigation</b><small>ناڤیگەیشن</small></button><button onclick="switchTab('site_studio')"><span>🗓️</span><b>Weekly Trips</b><small>گەشتی هەفتە</small></button><button onclick="switchTab('site_studio')"><span>📍</span><b>Destinations</b><small>شوێنەکان</small></button><button onclick="switchTab('weather_manager')"><span>☀️</span><b>Weather</b><small>کەش و هەوا</small></button><button onclick="switchTab('safety_tab')"><span>🛡️</span><b>Safety</b><small>سەلامەتی</small></button><button onclick="switchTab('itinerary_tab')"><span>🎒</span><b>Preparation</b><small>ئامادەکاری</small></button><button onclick="switchTab('reviews')"><span>💬</span><b>Reviews</b><small>ڕای خەڵک</small></button><button onclick="switchTab('gallery')"><span>🖼️</span><b>Gallery</b><small>وێنەخانە</small></button><button onclick="switchTab('private_requests')"><span>🧳</span><b>Private Trips</b><small>گەشتی تایبەت</small></button><button onclick="switchTab('services')"><span>👤</span><b>About / Contact</b><small>دەربارە و پەیوەندی</small></button><button onclick="switchTab('k5_settings')"><span>⚙️</span><b>SEO / Settings</b><small>ڕێکخستن</small></button>
-            </div></section>
-
-            <section class="d3-panel d3-media"><div class="d3-panel-head"><h3>Media Library</h3><span class="d3-count">248</span></div><div class="d3-media-tabs"><span class="active">هەموو</span><span>وێنە</span><span>ڤیدیۆ</span></div><div class="d3-media-grid"><div></div><div></div><div></div><div></div><div></div><div class="d3-upload"><b>＋</b><small>بارکردنی فایل</small></div></div></section>
-
-            <section class="d3-panel d3-stories"><div class="d3-panel-head"><h3>Stories Moderation</h3><span class="d3-count" id="d3StoryCount">12</span></div><div class="d3-story-grid"><article><div></div><b>Hero Hawar</b><button onclick="switchTab('stories_tab')">پەسەندکردن</button><button class="reject" onclick="switchTab('stories_tab')">ڕەتکردنەوە</button></article><article><div></div><b>Ava Salam</b><button onclick="switchTab('stories_tab')">پەسەندکردن</button><button class="reject" onclick="switchTab('stories_tab')">ڕەتکردنەوە</button></article><article><div></div><b>Rojan Ali</b><button onclick="switchTab('stories_tab')">پەسەندکردن</button><button class="reject" onclick="switchTab('stories_tab')">ڕەتکردنەوە</button></article></div></section>
-
-            <section class="d3-panel d3-wa"><div class="d3-panel-head"><h3>WhatsApp Center</h3><span>●</span></div><div class="d3-wa-grid"><button onclick="switchTab('whatsapp')">➤<small>ناردنی ئاگاداری</small></button><button onclick="switchTab('broadcast')">☷<small>Template</small></button><button onclick="switchTab('whatsapp')">◉<small>مۆبایل</small></button><button onclick="switchTab('k5_activity')">▥<small>ڕاپۆرت</small></button></div></section>
-
-            <section class="d3-panel d3-settings"><div class="d3-panel-head"><h3>Settings / Languages</h3><button onclick="switchTab('k5_settings')">هەموو</button></div><div class="d3-lang"><span>🇹🇯 کوردی</span><span>🇮🇶 عەرەبی</span><span>🇬🇧 English</span></div><div class="d3-setting-row"><i></i> دۆخی سایت <b>چالاک</b><span>›</span></div><div class="d3-setting-row"><i></i> نۆتیفکەیشن <b>چالاک</b><span>›</span></div><div class="d3-setting-row"><i></i> SEO <b>چالاک</b><span>›</span></div><div class="d3-setting-row">Domain & Links <span>›</span></div><div class="d3-setting-row">Backup / Restore <span>›</span></div></section>
-          </div>
-        </div>
-      </section>
+<div class="cc-hero"><div class="cc-eyebrow">KURDIA ADVENTURE · CONTROL CENTER</div><div class="cc-title">ناوەندی کۆنترۆڵی KURDIA</div><div class="cc-sub">کۆنترۆڵی ناوەڕۆک، گەشتەکان، booking، community و سیستەم لە یەک شوێن. Public Website تەنها لە CMS data ـەوە نوێ دەکرێتەوە.</div><div class="cc-statusbar"><span class="cc-status"><i id="ccWorkerDot" class="cc-dot"></i> Worker <b id="ccWorkerText">پشکنین...</b></span><span class="cc-status"><i id="ccCmsDot" class="cc-dot"></i> CMS <b id="ccCmsText">پشکنین...</b></span><span class="cc-status"><i class="cc-dot"></i> Website <b>Live</b></span><span class="cc-status"><i class="cc-dot"></i> API Schema <b>پارێزراو</b></span></div></div>
+<div class="cc-kpis">
+<div class="cc-kpi"><i data-lucide="calendar-check-2"></i><small>Bookings Today</small><b id="ccBookingsToday">—</b><span>ناونووسینی ئەمڕۆ</span></div>
+<div class="cc-kpi"><i data-lucide="clock-3"></i><small>Pending</small><b id="ccPending">—</b><span>چاوەڕوانی</span></div>
+<div class="cc-kpi"><i data-lucide="user-check"></i><small>Confirmed</small><b id="ccConfirmed">—</b><span>پەسەندکراو</span></div>
+<div class="cc-kpi"><i data-lucide="route"></i><small>Private Requests</small><b id="ccPrivate">—</b><span>داواکاریی تایبەت</span></div>
+<div class="cc-kpi"><i data-lucide="sparkles"></i><small>Pending Stories</small><b id="ccStories">—</b><span>ستۆریی چاوەڕوان</span></div>
+<div class="cc-kpi"><i data-lucide="message-circle"></i><small>Reviews</small><b id="ccReviews">—</b><span>بیروڕا</span></div>
+<div class="cc-kpi"><i data-lucide="armchair"></i><small>Capacity</small><b id="ccCapacity">—</b><span>کۆی کورسی</span></div>
+<div class="cc-kpi"><i data-lucide="circle-check-big"></i><small>Available</small><b id="ccAvailable">—</b><span>بەردەست</span></div>
+</div>
+<div class="cc-main-grid"><div>
+<div class="cc-card"><div class="cc-section-title"><h3>گەشتی ئێستا</h3><button class="btn btn-secondary" onclick="ccRefreshDashboard()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button></div><div class="cc-trip-head"><div><div class="cc-trip-title" id="ccTripTitle">—</div><div class="cc-meta"><span id="ccTripLocation">📍 —</span><span id="ccTripDate">📅 —</span><span id="ccTripPrice">💰 —</span><span id="ccTripStatus">—</span></div></div><button class="btn btn-primary" onclick="switchTab('trip')"><i data-lucide="pencil"></i> دەستکاری</button></div><div class="cc-progress"><i id="ccCapacityBar"></i></div><div class="cc-sub" id="ccCapacityText" style="margin-top:7px">—</div></div>
+<div class="cc-card" style="margin-top:12px"><div class="cc-section-title"><h3>کرداری خێراکان</h3></div><div class="cc-quick">
+<button class="btn btn-secondary" onclick="switchTab('site_studio')"><i data-lucide="panels-top-left"></i> Website Builder</button>
+<button class="btn btn-secondary" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> Booking CRM</button>
+<button class="btn btn-secondary" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> Story Moderation</button>
+<button class="btn btn-secondary" onclick="switchTab('gallery')"><i data-lucide="images"></i> Media Library</button>
+<button class="btn btn-secondary" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button>
+<button class="btn btn-secondary" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button>
+<button class="btn btn-secondary" onclick="exportBackup()"><i data-lucide="download"></i> Backup</button>
+</div></div></div>
+<div class="cc-card"><div class="cc-section-title"><h3>دوایین Activity</h3><button class="btn btn-secondary" onclick="switchTab('k5_activity')">هەمووی</button></div><div id="ccActivity" class="cc-activity"><div class="cc-activity-item"><b>Control Center</b><small>داتا چاوەڕوانە...</small></div></div></div></div>
+</section>
 
       <!-- STORIES MANAGEMENT (RETAINS STORIES & DELETION) -->
       <section class="page-tab" id="tab-stories_tab">
@@ -2859,11 +1895,19 @@ body{
               <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
             </div>
           </div>
-          <div class="mb-4 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3">
-            <div class="flex items-center gap-2 font-bold text-sm text-white"><i data-lucide="shield-check"></i> پشتڕاستکردنەوە و ڕەتکردنەوەی Booking</div>
-            <div class="text-xs text-gray-400 mt-1">لە هەر داواکارییەکدا دوگمەکانی <b class="text-emerald-400">پەسەندکردن (WhatsApp)</b> و <b class="text-red-400">ڕەتکردنەوە</b> لە خوارەوە دەمێنن و کاردەکەن.</div>
-          </div>
-          <div id="registrationsContainer" class="flex flex-col gap-3"></div>
+          
+<div class="ka-booking-actions-guide">
+  <div class="ka-guide-icon"><i data-lucide="shield-check"></i></div>
+  <div class="ka-guide-copy">
+    <b>پشتڕاستکردنەوە و ڕەتکردنەوەی Booking</b>
+    <span>لە هەر داواکارییەکدا دەتوانیت پەسەندی بکەیت یان ڕەتیکەیتەوە؛ WhatsApp ـی پەسەندکردن و ڕەتکردنەوە بە Logic ـی ئێستا کار دەکەن.</span>
+  </div>
+  <div class="ka-guide-badges">
+    <span class="ka-guide-ok">✓ پەسەندکردن</span>
+    <span class="ka-guide-no">× ڕەتکردنەوە</span>
+  </div>
+</div>
+<div id="registrationsContainer" class="flex flex-col gap-3"></div>
         </div>
       </section>
 
@@ -3232,7 +2276,6 @@ body{
 
 
 <section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
-
 <section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
 <section id="tab-k5_coupons" class="page-tab">
  <div class="hero">
@@ -3636,9 +2679,9 @@ function renderRegistrations(list){
           <span>🆔 ${reg.id}</span>
         </div>
       </div>
-      <div class="flex flex-wrap gap-2 shrink-0">
-        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check-circle-2"></i> پەسەندکردن (WhatsApp)</button>
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x-circle"></i> ڕەتکردنەوە</button>
+      <div class="flex gap-2">
+        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check"></i> پەسەندکردن (WhatsApp)</button>
+        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
       </div>
     </div>
   `).join("");
@@ -4173,20 +3216,12 @@ async function saveStudioToCloud(){
  }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
 }
 
-async function kurdiaSaveAllCloud(){
+async function publishLive(){
   autoSync();
-  let ok=true;
-  try{
-    if(window.kurdiaSiteStudio?.save) ok = (await window.kurdiaSiteStudio.save()) !== false;
-    else ok = (await saveStudioToCloud()) !== false;
-  }catch(e){ ok=false; }
-  try{ await saveWhatsAppToCloud(); }catch(e){}
-  if(ok) toast("✅ هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت کران");
-  return ok;
+  await saveStudioToCloud();
+  await saveWhatsAppToCloud();
+  toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!");
 }
-// Legacy compatibility: old integrations can still call publishLive without restoring Publish Center.
-async function publishLive(){ return kurdiaSaveAllCloud(); }
-window.kurdiaSaveAllCloud = kurdiaSaveAllCloud;
 function openLiveSite(){ window.open("index.html", "_blank"); }
 function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
 
@@ -4390,10 +3425,13 @@ function resetData(){
   window.switchTab=function(id){
     oldSwitch(id);
     if(id==='k5_analytics')k5LoadOps();
+    if(id==='k5_publish')k5Preview();
     if(id==='k5_community')k5FilterCommunity();
     if(id==='k5_coupons')k5RenderCoupons();
     if(id==='k5_activity')k5RenderLogs();
   };
+  const oldPublish=window.publishLive;
+  window.publishLive=async function(){await oldPublish();klog('Publish','CMS بڵاوکرایەوە');const el=document.getElementById('k5LiveInfo');if(el)el.textContent='دوایین Publish: '+new Date().toLocaleString('ku-IQ');};
   try{if(!Array.isArray(appState.coupons)||!appState.coupons.length){const old=JSON.parse(localStorage.getItem(K5.couponKey)||'[]');if(Array.isArray(old)&&old.length){appState.coupons=old.map(x=>({id:'cp_'+Math.random().toString(36).slice(2),code:String(x.code||'').toUpperCase(),type:'percent',value:Number(x.percent||0),startsAt:'',expiresAt:x.expiry?String(x.expiry)+'T23:59':'',maxUses:Number(x.limit||0),usedCount:Number(x.usedCount||0),active:true}));localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));}}}catch(e){}
   k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
 })();
@@ -4722,7 +3760,7 @@ window.quickWorkerTest=async function(){
     input?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file||!ssImageTarget)return;try{const url=await ssUploadImageFile(file);if(ssImageTarget==='gallery.__new__'){S.current.gallery.push({url,title:'KURDIA ADVENTURE'});}else{S.setPath(ssImageTarget,url);}S.mark();S.render();toast('✅ وێنەکە لە Cloud هەڵگیرا');}catch(err){toast('❌ '+(err.message||'Upload هەڵەیە'));}finally{ssImageTarget='';}});
   });
   window.ssUploadNewGallery=async function(){ssImageTarget='gallery.__new__';document.getElementById('ssMobileImageInput')?.click()};
-  window.kurdiaSiteStudio=S;window.ssLoadCloud=()=>S.load();window.ssSaveCloud=()=>S.save();window.ssPreview=()=>S.preview();window.ssResetDraft=()=>{if(confirm('Draft ـی ئەم Site Studio ـە بسڕمەوە؟')){localStorage.removeItem(S.key);S.load()}};
+  window.ssLoadCloud=()=>S.load();window.ssSaveCloud=()=>S.save();window.ssPreview=()=>S.preview();window.ssResetDraft=()=>{if(confirm('Draft ـی ئەم Site Studio ـە بسڕمەوە؟')){localStorage.removeItem(S.key);S.load()}};
   window.ssEditTrip=i=>S.editTrip(i);window.ssDeleteTrip=i=>{if(confirm('سڕینەوە؟')){S.current.trips.splice(i,1);S.renderTrips();S.mark()}};window.ssAddTrip=()=>{S.current.trips.push({id:'trip-'+Date.now(),title:'گەشتی نوێ',location:'',price:'',time:'',date:'',description:'',heroImageUrl:'',capacity:0,booked:0,published:true,status:'draft'});S.renderTrips();S.mark()};
   window.ssEditDestination=i=>S.editDestination(i);window.ssDeleteDestination=i=>{if(confirm('سڕینەوە؟')){S.current.destinations.splice(i,1);S.renderDest();S.mark()}};window.ssAddDestination=()=>{S.current.destinations.push({id:'dest-'+Date.now(),name:'شوێنی نوێ',type:'',description:'',img:''});S.renderDest();S.mark()};
   window.ssEditSafety=i=>S.editSafety(i);window.ssDeleteSafety=i=>{if(confirm('سڕینەوە؟')){S.current.safety.splice(i,1);S.renderSafety();S.mark()}};window.ssAddSafety=()=>{S.current.safety.push({id:'safe-'+Date.now(),icon:'🛡️',title:'بابەتی نوێ',desc:'',imageUrl:''});S.renderSafety();S.mark()};
@@ -4736,6 +3774,246 @@ window.quickWorkerTest=async function(){
     if(window.lucide)lucide.createIcons();
   });
   window.kurdiaSiteStudio=S;
+})();
+</script>
+
+
+<script id="KURDIA-DESIGN3-FINAL-RUNTIME">
+(function(){
+  "use strict";
+
+  function safeIcons(){
+    try{
+      if(window.lucide && typeof window.lucide.createIcons==="function"){
+        window.lucide.createIcons();
+      }
+    }catch(e){}
+  }
+
+  /* --------------------------------------------------------
+     Unified cloud save.
+     Uses the existing Site Studio save first, then the
+     existing legacy CMS save as fallback. No logic removed.
+  -------------------------------------------------------- */
+  window.kurdiaSaveAllCloud = async function(){
+    try{
+      if(typeof window.ssSaveCloud==="function"){
+        const r = await window.ssSaveCloud();
+        try{
+          if(typeof window.saveWhatsAppToCloud==="function"){
+            await window.saveWhatsAppToCloud();
+          }
+        }catch(_){}
+        return r;
+      }
+
+      if(typeof window.saveStudioToCloud==="function"){
+        const r = await window.saveStudioToCloud();
+        try{
+          if(typeof window.saveWhatsAppToCloud==="function"){
+            await window.saveWhatsAppToCloud();
+          }
+        }catch(_){}
+        return r;
+      }
+
+      if(typeof window.autoSync==="function"){
+        window.autoSync();
+      }
+
+      return true;
+    }catch(e){
+      try{
+        if(typeof window.toast==="function"){
+          window.toast("❌ پاشەکەوتکردنی گۆڕانکاری سەرکەوتوو نەبوو");
+        }
+      }catch(_){}
+      return false;
+    }
+  };
+
+  /* --------------------------------------------------------
+     Main website map inside Website Builder.
+     These buttons only route to existing tabs/functions.
+  -------------------------------------------------------- */
+  function createWebsiteMap(){
+    const studio=document.getElementById("tab-site_studio");
+    const tabs=document.getElementById("ssTabs");
+    if(!studio || !tabs || document.getElementById("kaWebsiteMap")) return;
+
+    const map=document.createElement("div");
+    map.id="kaWebsiteMap";
+
+    const items=[
+      ["global","globe-2","سەرەکی","Navigation / Global",""],
+      ["hero","mountain","Hero","بەشی سەرەکی","important"],
+      ["trip","calendar-days","گەشتی ئەم هەفتەیە","Weekly Trip","accent"],
+      ["destinations","map","شوێنەکان","Destinations",""],
+      ["weather","cloud-sun","کەشوهەوا","Weather",""],
+      ["safety","shield-check","سەلامەتی","Safety",""],
+      ["prep","list-checks","ئامادەکاری","Preparation",""],
+      ["booking","calendar-check","بەشداری گەشت","Booking / Registration","accent"],
+      ["private","route","گەشتی تایبەت","Private Trip",""],
+      ["stories","sparkles","ستۆری","Community Stories",""],
+      ["gallery","images","گەلەری","Gallery",""],
+      ["reviews","message-circle","بیروڕا","Reviews",""],
+      ["footer","contact","دەربارە و پەیوەندی","About / Contact / Social",""],
+      ["seo","search-check","SEO / Settings","ڕێکخستن",""]
+    ];
+
+    items.forEach(function(item){
+      const [id,icon,title,sub,extra]=item;
+      const b=document.createElement("button");
+      b.type="button";
+      b.className="ka-site-tile "+(extra||"");
+      b.innerHTML=
+        '<span class="ka-tile-icon"><i data-lucide="'+icon+'"></i></span>'+
+        '<b>'+title+'</b>'+
+        '<span>'+sub+'</span>'+
+        '<span class="ka-arrow">↗</span>';
+
+      b.addEventListener("click",function(){
+        if(["global","hero","trip","destinations","weather","safety","prep","private","reviews","gallery","footer","seo"].includes(id)){
+          const tab=tabs.querySelector('.ss-tab[data-ss="'+id+'"]');
+          if(tab) tab.click();
+        }else if(id==="booking"){
+          if(typeof window.switchTab==="function") window.switchTab("booking");
+        }else if(id==="stories"){
+          if(typeof window.switchTab==="function") window.switchTab("stories_tab");
+        }
+        setTimeout(safeIcons,30);
+      });
+
+      map.appendChild(b);
+    });
+
+    tabs.parentNode.insertBefore(map,tabs);
+    safeIcons();
+  }
+
+  /* --------------------------------------------------------
+     Add image accents to the map when the existing appState
+     already has images. This is visual only.
+  -------------------------------------------------------- */
+  function decorateWebsiteMap(){
+    try{
+      const hero=window.appState?.heroImageUrl || "";
+      const trip=window.appState?.tripImageUrl || "";
+      const cards=document.querySelectorAll("#kaWebsiteMap .ka-site-tile");
+
+      cards.forEach(function(card){
+        const label=(card.innerText||"").trim();
+
+        if(hero && (label.includes("Hero") || label.includes("سەرەکی"))){
+          card.style.backgroundImage=
+            'linear-gradient(180deg,rgba(5,9,14,.05),rgba(5,9,14,.96)),url("'+hero.replace(/"/g,'&quot;')+'")';
+          card.style.backgroundSize="cover";
+          card.style.backgroundPosition="center";
+        }
+
+        if(trip && label.includes("گەشتی ئەم هەفتەیە")){
+          card.style.backgroundImage=
+            'linear-gradient(180deg,rgba(5,9,14,.05),rgba(5,9,14,.96)),url("'+trip.replace(/"/g,'&quot;')+'")';
+          card.style.backgroundSize="cover";
+          card.style.backgroundPosition="center";
+        }
+      });
+    }catch(_){}
+  }
+
+  /* --------------------------------------------------------
+     Mobile bottom navigation.
+  -------------------------------------------------------- */
+  function createMobileNav(){
+    if(document.getElementById("kaMobileBottomNav")) return;
+
+    const nav=document.createElement("nav");
+    nav.id="kaMobileBottomNav";
+    nav.innerHTML=
+      '<button class="ka3-mobile-item" type="button" data-ka3-tab="dashboard">'+
+        '<i data-lucide="home"></i><span>داشبۆرد</span>'+
+      '</button>'+
+      '<button class="ka3-mobile-item" type="button" data-ka3-tab="site_studio">'+
+        '<i data-lucide="panels-top-left"></i><span>ویبسایت</span>'+
+      '</button>'+
+      '<button class="ka3-mobile-center" type="button" data-ka3-tab="live_registrations">'+
+        '<i data-lucide="users"></i>'+
+      '</button>'+
+      '<button class="ka3-mobile-item" type="button" data-ka3-tab="gallery">'+
+        '<i data-lucide="images"></i><span>میدیا</span>'+
+      '</button>'+
+      '<button class="ka3-mobile-item" type="button" data-ka3-menu="1">'+
+        '<i data-lucide="menu"></i><span>هەموو</span>'+
+      '</button>';
+
+    document.body.appendChild(nav);
+
+    nav.querySelectorAll("[data-ka3-tab]").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        const id=btn.getAttribute("data-ka3-tab");
+        if(typeof window.switchTab==="function") window.switchTab(id);
+        nav.querySelectorAll("[data-ka3-tab]").forEach(x=>x.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+
+    const menu=nav.querySelector("[data-ka3-menu]");
+    if(menu){
+      menu.addEventListener("click",function(){
+        if(typeof window.toggleSidebar==="function"){
+          window.toggleSidebar();
+        }else{
+          const sb=document.getElementById("sidebar");
+          if(sb) sb.classList.toggle("open");
+        }
+      });
+    }
+
+    safeIcons();
+  }
+
+  /* --------------------------------------------------------
+     Keep Publish Center hidden even if old code attempts to
+     re-render navigation.
+  -------------------------------------------------------- */
+  function hidePublishUI(){
+    document.querySelectorAll(
+      '[onclick*="switchTab(\'k5_publish\')"],'+
+      '[onclick*="switchTab(&quot;k5_publish&quot;)"]'
+    ).forEach(function(el){
+      el.style.display="none";
+    });
+
+    const p=document.getElementById("tab-k5_publish");
+    if(p) p.style.display="none";
+  }
+
+  function init(){
+    createWebsiteMap();
+    createMobileNav();
+    hidePublishUI();
+    safeIcons();
+
+    setTimeout(function(){
+      decorateWebsiteMap();
+      hidePublishUI();
+      safeIcons();
+    },700);
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",init,{once:true});
+  }else{
+    init();
+  }
+
+  /* Dynamic CMS/booking/story rendering must not remove our UI. */
+  try{
+    const observer=new MutationObserver(function(){
+      hidePublishUI();
+    });
+    observer.observe(document.body,{childList:true,subtree:true});
+  }catch(_){}
 })();
 </script>
 
