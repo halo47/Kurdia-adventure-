@@ -969,6 +969,62 @@ body{
 
    <div class="api-result-head"><b>📥 وەڵامی API</b><span id="apiResultMeta">هێشتا تاقیکردنەوە نەکراوە</span></div>
    <div id="apiResult" class="api-lab-response api-empty">هێشتا هیچ تاقیکردنەوەیەک نەکراوە.</div>
+
+<div class="api-full-diagnostic" id="apiFullDiagnostic">
+  <div class="api-full-diagnostic-head">
+    <div>
+      <div class="api-full-diagnostic-title">🧪 Error Inspector — هەڵەی تەواو</div>
+      <div class="api-full-diagnostic-sub">هەر تاقیکردنەوەیەک بکەیت، ئەم بەشە وردەکاریی داواکاری و وەڵامی Worker پیشان دەدات.</div>
+    </div>
+    <span id="apiDiagBadge" class="api-diag-badge">هێشتا تاقیکردنەوە نییە</span>
+  </div>
+
+  <div class="api-diag-actions">
+    <button class="btn btn-primary" type="button" onclick="apiRunFullDiagnostic()">🔍 تاقیکردنەوەی ئێستا + هەڵەی تەواو</button>
+    <button class="btn btn-secondary" type="button" onclick="apiTestWorkerFull()">🌐 Worker بە تەواوی تاقی بکەرەوە</button>
+    <button class="btn btn-secondary" type="button" onclick="apiClearFullDiagnostic()">🧹 پاککردنەوە</button>
+  </div>
+
+  <div class="api-diag-grid">
+    <div class="api-diag-stat"><small>HTTP</small><b id="apiDiagStatus">—</b></div>
+    <div class="api-diag-stat"><small>کات</small><b id="apiDiagMs">—</b></div>
+    <div class="api-diag-stat"><small>Method</small><b id="apiDiagMethod">—</b></div>
+    <div class="api-diag-stat"><small>Online</small><b id="apiDiagOnline">—</b></div>
+  </div>
+
+  <div class="api-diag-section">
+    <h4>🔗 Request URL</h4>
+    <pre id="apiDiagUrl" class="api-diag-pre">—</pre>
+  </div>
+  <div class="api-diag-section">
+    <h4>📤 Request Headers — Secret ـەکان شاراوەن</h4>
+    <pre id="apiDiagReqHeaders" class="api-diag-pre">—</pre>
+  </div>
+  <div class="api-diag-section">
+    <h4>📦 Request Body</h4>
+    <pre id="apiDiagReqBody" class="api-diag-pre">—</pre>
+  </div>
+  <div class="api-diag-section">
+    <h4>📥 Response Headers</h4>
+    <pre id="apiDiagResHeaders" class="api-diag-pre">—</pre>
+  </div>
+  <div class="api-diag-section">
+    <h4>📄 Response Body — تەواوی وەڵام</h4>
+    <pre id="apiDiagResBody" class="api-diag-pre">—</pre>
+  </div>
+  <div class="api-diag-section">
+    <h4>💥 Exception / Error</h4>
+    <pre id="apiDiagException" class="api-diag-pre">—</pre>
+  </div>
+  <div class="api-diag-section">
+    <h4>🧭 Browser Context</h4>
+    <pre id="apiDiagContext" class="api-diag-pre">—</pre>
+  </div>
+  <div class="api-diag-note">
+    تێبینی: Browser ناتوانێت هەموو وردەکارییەکانی network لە کاتی CORS/connection failure بدات؛ بەڵام ئەو زانیارییەی بە browser ـەکە گەیشتووە، بە تەواوی لێرە پیشان دەدرێت.
+  </div>
+</div>
+
   </div>
 
   <div class="api-lab-card">
@@ -1174,7 +1230,102 @@ body{
       if(out)out.textContent=`✅ نێردرا — ${d.recipients ?? d.id ?? 'OneSignal'}`;
     }catch(e){if(out)out.textContent='❌ '+(e.message||e);}
   };
-  document.addEventListener('DOMContentLoaded',()=>{
+ 
+ function apiMaskHeaders(obj){
+   const out={};
+   Object.entries(obj||{}).forEach(([k,v])=>{
+     const lk=String(k).toLowerCase();
+     out[k]=(lk==='x-admin-key'||lk==='authorization') ? '*** MASKED ***' : String(v);
+   });
+   return out;
+ }
+ function apiPretty(value){
+   if(value===undefined||value===null||value==='') return '—';
+   if(typeof value==='string') return value;
+   try{return JSON.stringify(value,null,2)}catch{return String(value)}
+ }
+ function apiDiagSet(id,value){const el=$(id);if(el)el.textContent=apiPretty(value);}
+ function apiDiagHeaders(headers){
+   const out={}; try{headers?.forEach((v,k)=>out[k]=v)}catch(_){}
+   return apiMaskHeaders(out);
+ }
+ function apiRecordFullDiagnostic(d){
+   const ok=!!d.ok;
+   const badge=$('apiDiagBadge');
+   if(badge){badge.className='api-diag-badge '+(ok?'ok':'err');badge.textContent=ok?'✅ TEST PASS':'❌ TEST ERROR';}
+   apiDiagSet('apiDiagStatus', d.status ? `${d.status} ${d.statusText||''}`.trim() : (d.errorType||'NETWORK ERROR'));
+   apiDiagSet('apiDiagMs', d.ms!=null ? `${d.ms} ms` : '—');
+   apiDiagSet('apiDiagMethod', d.method||'—');
+   apiDiagSet('apiDiagOnline', navigator.onLine ? 'YES' : 'NO');
+   apiDiagSet('apiDiagUrl',d.url||'—');
+   apiDiagSet('apiDiagReqHeaders',apiMaskHeaders(d.requestHeaders||{}));
+   apiDiagSet('apiDiagReqBody',d.requestBody);
+   apiDiagSet('apiDiagResHeaders',d.responseHeaders||{});
+   apiDiagSet('apiDiagResBody',d.responseBody);
+   apiDiagSet('apiDiagException',{
+     name:d.errorName||null,
+     message:d.errorMessage||null,
+     stack:d.errorStack||null,
+     cause:d.errorCause||null,
+     type:d.errorType||null
+   });
+   apiDiagSet('apiDiagContext',{
+     page:location.href,
+     origin:location.origin,
+     userAgent:navigator.userAgent,
+     online:navigator.onLine,
+     time:new Date().toISOString()
+   });
+ }
+ function apiClearFullDiagnostic(){
+   ['apiDiagStatus','apiDiagMs','apiDiagMethod','apiDiagOnline','apiDiagUrl','apiDiagReqHeaders','apiDiagReqBody','apiDiagResHeaders','apiDiagResBody','apiDiagException','apiDiagContext'].forEach(id=>apiDiagSet(id,'—'));
+   const b=$('apiDiagBadge');if(b){b.className='api-diag-badge';b.textContent='هێشتا تاقیکردنەوە نییە';}
+ }
+ async function apiExecuteFull(path,method,body){
+   const url=WORKER_URL+path;
+   const started=performance.now();
+   const requestHeaders={'Content-Type':'application/json'};
+   const key=getAdminKeySafe(); if(key) requestHeaders['X-Admin-Key']=key;
+   const requestBody=!['GET','HEAD'].includes(method)?body:null;
+   const base={ok:false,url,method,requestHeaders,requestBody,ms:0};
+   try{
+     const opt={method,headers:requestHeaders,cache:'no-store'};
+     if(requestBody!==null) opt.body=JSON.stringify(requestBody);
+     const r=await adminFetch(url,opt);
+     const raw=await r.text();
+     const ms=Math.round(performance.now()-started);
+     let parsed=raw; try{parsed=raw?JSON.parse(raw):''}catch(_){}
+     const result={...base,ok:r.ok,status:r.status,statusText:r.statusText,responseHeaders:apiDiagHeaders(r.headers),responseBody:parsed,ms};
+     apiRecordFullDiagnostic(result);
+     return result;
+   }catch(e){
+     const ms=Math.round(performance.now()-started);
+     const result={...base,ok:false,errorType:'FETCH/NETWORK',errorName:e?.name||'Error',errorMessage:e?.message||String(e),errorStack:e?.stack||'',errorCause:e?.cause?String(e.cause):null,ms};
+     apiRecordFullDiagnostic(result);
+     return result;
+   }
+ }
+ window.apiRunFullDiagnostic=async function(){
+   const path=String($('apiPath')?.value||'').trim()||'/api/admin/diagnostics';
+   const method=String($('apiMethod')?.value||'GET').toUpperCase();
+   let body={};
+   try{body=JSON.parse($('apiBody')?.value||'{}')}catch(e){
+     apiRecordFullDiagnostic({ok:false,url:WORKER_URL+path,method,requestHeaders:{},requestBody:$('apiBody')?.value,errorType:'JSON PARSE',errorName:e.name,errorMessage:e.message,errorStack:e.stack,ms:0});
+     return;
+   }
+   const result=await apiExecuteFull(path,method,body);
+   const meta=result.ok?`✅ HTTP ${result.status} · ${result.ms}ms · ${method} ${path}`:`❌ ${result.status||result.errorType} · ${result.ms}ms · ${method} ${path}`;
+   show(result.responseBody||result.errorMessage||'—',result.ok,meta);
+   history(meta,result.ok);saveHistory(meta,result.ok,result.ms,path);
+ };
+ window.apiTestWorkerFull=async function(){
+   const result=await apiExecuteFull('/', 'GET', null);
+   const meta=result.ok?`✅ Worker HTTP ${result.status} · ${result.ms}ms`:`❌ Worker ${result.status||result.errorType} · ${result.ms}ms`;
+   show(result.responseBody||result.errorMessage||'—',result.ok,meta);
+   history(meta,result.ok);saveHistory(meta,result.ok,result.ms,'/');
+ };
+
+ document.addEventListener('DOMContentLoaded',()=>{
     setTimeout(()=>{adminLoadNotifications();if(window.lucide)lucide.createIcons();if(localStorage.getItem('kurdia_admin_native_push')==='1')nativeStatus('● نۆتیفکەیشنی مۆبایل چالاکە.',true);},700);
     setInterval(()=>{if(document.visibilityState==='visible')adminLoadNotifications()},5000);
   });
@@ -2328,6 +2479,23 @@ window.addEventListener("DOMContentLoaded",()=>{
 .easy-action-result.err{display:block;color:#ff8aa0;background:rgba(255,75,105,.08);border-color:rgba(255,75,105,.30)}
 @media(max-width:720px){.easy-action-grid{grid-template-columns:1fr}.easy-action-help{min-height:0}.easy-action-card{padding:12px}.easy-action-title{font-size:14px}}
 </style>
+
+<style id="kurdia-api-full-error-inspector-css">
+.api-full-diagnostic{margin-top:12px;border:1px solid rgba(255,75,105,.22);border-radius:18px;background:linear-gradient(145deg,rgba(12,17,25,.96),rgba(5,8,13,.98));overflow:hidden}
+.api-full-diagnostic-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.api-full-diagnostic-title{font-weight:900;font-size:13px}.api-full-diagnostic-sub{font-size:10px;color:#7f8a9a;margin-top:3px}
+.api-diag-badge{padding:5px 9px;border-radius:999px;font-size:10px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:#aab4c2}
+.api-diag-badge.ok{color:#65e6a1;border-color:rgba(50,212,134,.3)}.api-diag-badge.err{color:#ff8aa0;border-color:rgba(255,75,105,.3)}
+.api-diag-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px 14px}
+.api-diag-stat{padding:10px;border:1px solid var(--line);background:#080e17;border-radius:12px;min-width:0}
+.api-diag-stat small{display:block;color:#748093;font-size:9px;margin-bottom:4px}.api-diag-stat b{display:block;font-size:11px;word-break:break-word}
+.api-diag-section{border-top:1px solid var(--line);padding:12px 14px}.api-diag-section h4{font-size:11px;margin-bottom:7px}
+.api-diag-pre{margin:0;background:#03060a;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px;min-height:45px;max-height:260px;overflow:auto;white-space:pre-wrap;word-break:break-word;direction:ltr;text-align:left;font:11px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;color:#d7dee9}
+.api-diag-actions{display:flex;gap:7px;flex-wrap:wrap;padding:12px 14px;border-top:1px solid var(--line)}
+.api-diag-note{font-size:10px;color:#7f8a9a;line-height:1.7;padding:0 14px 12px}
+@media(max-width:800px){.api-diag-grid{grid-template-columns:1fr 1fr}.api-diag-stat{min-width:0}}
+</style>
+
 <style id="kurdia-v12-api-center-css">
 .api-center-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.85fr);gap:12px}
 .api-runner-main{min-width:0}.api-section-head,.api-result-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.api-live-badge{font-size:11px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:#94a3b8}.api-live-badge.online{color:#53e59a;border-color:rgba(83,229,154,.25)}.api-live-badge.error{color:#ff6f8a;border-color:rgba(255,111,138,.25)}
@@ -2379,23 +2547,20 @@ window.addEventListener("DOMContentLoaded",()=>{
  window.apiClearResult=()=>{const box=$('apiResult');if(box){box.className='api-lab-response api-empty';box.textContent='هێشتا هیچ تاقیکردنەوەیەک نەکراوە.';}if($('apiResultMeta'))$('apiResultMeta').textContent='هێشتا تاقیکردنەوە نەکراوە';};
  window.runApiTest=async function(){
    const path=$('apiPath').value.trim(),method=$('apiMethod').value;let body={};
-   try{body=JSON.parse($('apiBody').value||'{}')}catch(e){show({error:'JSON نادروستە',detail:e.message},false,'❌ JSON Error');return}
+   try{body=JSON.parse($('apiBody').value||'{}')}catch(e){
+     apiRecordFullDiagnostic({ok:false,url:WORKER_URL+path,method,requestHeaders:{},requestBody:$('apiBody').value,errorType:'JSON PARSE',errorName:e.name,errorMessage:e.message,errorStack:e.stack,ms:0});
+     show({error:'JSON نادروستە',detail:e.message},false,'❌ JSON Error');return;
+   }
    const isMsg=['/api/otp/send','/api/admin/verify-booking','/api/admin/reject-booking','/api/admin/send-broadcast','/api/admin/send-trip-notification'].some(x=>path.startsWith(x));
-   if(isMsg && !path.startsWith('/api/otp/send') && !$('testSendConfirm')?.checked){show({error:'پێش ناردنی ئەم نامەیە، پشتڕاستکردنەوە چالاک بکە.'},false,'⚠️ پشتڕاستکردنەوە پێویستە');return}
+   if(isMsg && !path.startsWith('/api/otp/send') && !$('testSendConfirm')?.checked){
+     apiRecordFullDiagnostic({ok:false,url:WORKER_URL+path,method,requestHeaders:{},requestBody:body,errorType:'TEST BLOCKED',errorName:'ConfirmationRequired',errorMessage:'پێش ناردنی ئەم نامەیە، پشتڕاستکردنەوە چالاک بکە.',ms:0});
+     show({error:'پێش ناردنی ئەم نامەیە، پشتڕاستکردنەوە چالاک بکە.'},false,'⚠️ پشتڕاستکردنەوە پێویستە');return;
+   }
    const phone=$('testPhone')?.value.trim();if(isMsg&&phone){if(body.phone)body.phone=phone;if(Array.isArray(body.phones))body.phones=[phone]}
-   const started=performance.now();show('⏳ چاوەڕوان بە... ',true,`${method} ${path}`);
-   try{
-     const key=getAdminKeySafe();
-     const hdr={'Content-Type':'application/json'};
-     if(key) hdr['X-Admin-Key']=key;
-     const opt={method,headers:hdr};
-     if(!['GET','HEAD'].includes(method))opt.body=JSON.stringify(body);
-     const r=await adminFetch(WORKER_URL+path,opt);
-     const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}
-     const ms=Math.round(performance.now()-started);
-     const meta=`${r.ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · ${method} ${path}`;
-     show(data,r.ok,meta);history(meta,r.ok);saveHistory(meta,r.ok,ms,path);
-   }catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · ${method} ${path}`;show({error:e.message,detail:'Worker/Internet پەیوەندی نەکرا'},false,meta);history(meta,false);saveHistory(meta,false,ms,path);}
+   const result=await apiExecuteFull(path,method,body);
+   const meta=`${result.ok?'✅':'❌'} ${result.status||result.errorType||'ERROR'} · ${result.ms}ms · ${method} ${path}`;
+   show(result.responseBody||result.errorMessage||'—',result.ok,meta);
+   history(meta,result.ok);saveHistory(meta,result.ok,result.ms,path);
  };
  function easySetResult(id, ok, title, data, ms){
    const el=$(id); if(!el)return;
@@ -2517,7 +2682,7 @@ window.quickWorkerTest=async function(){
  window.apiCheckOnly=async function(){const old=$('apiPreset').value;activeCat='all';search='';renderCats();renderPresets();$('apiPreset').value='diagnostics';apiPresetChanged();await runApiTest();$('apiPreset').value=old;apiPresetChanged();};
  window.runSafeApiSuite=async function(){
    const safe=Object.entries(defs).filter(([k,x])=>x.safe);const box=$('apiResult');if(!box)return;box.className='api-lab-response api-empty';box.textContent='⚡ تاقیکردنەوەی هەموو API ـەکانی GET دەستی پێکرد...\n\n';
-   let lines=[];for(const [k,x] of safe){const started=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const line=`${r.ok?'🟢':'🔴'} ${x.m.padEnd(6)} ${r.status} · ${String(ms).padStart(4)}ms · ${x.p}`;lines.push(line);saveHistory(line,r.ok,ms,x.p);if(r.ok)history(line,true);else history(line,false);}catch(e){const ms=Math.round(performance.now()-started);const line=`🔴 GET    NETWORK · ${ms}ms · ${x.p}`;lines.push(line);saveHistory(line,false,ms,x.p);history(line,false);}box.textContent='⚡ ئەنجامی تاقیکردنەوەی هەموو GET ـەکان:\n\n'+lines.join('\n');}
+   let lines=[];for(const [k,x] of safe){const started=performance.now();try{const r=await adminFetch(WORKER_URL+x.p,{method:'GET',headers:{'X-Admin-Key':getAdminKeySafe()}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}const ms=Math.round(performance.now()-started);const line=`${r.ok?'🟢':'🔴'} ${x.m.padEnd(6)} ${r.status} · ${String(ms).padStart(4)}ms · ${x.p}`;lines.push(line);saveHistory(line,r.ok,ms,x.p);if(r.ok)history(line,true);else history(line,false);}catch(e){const ms=Math.round(performance.now()-started);apiRecordFullDiagnostic({ok:false,url:WORKER_URL+x.p,method:'GET',requestHeaders:{},requestBody:null,errorType:'FETCH/NETWORK',errorName:e?.name||'Error',errorMessage:e?.message||String(e),errorStack:e?.stack||'',ms});const line=`🔴 GET    NETWORK · ${ms}ms · ${x.p}`;lines.push(line);saveHistory(line,false,ms,x.p);history(line,false);}box.textContent='⚡ ئەنجامی تاقیکردنەوەی هەموو GET ـەکان:\n\n'+lines.join('\n');}
    loadHistory();
  };
  document.addEventListener('DOMContentLoaded',()=>{
