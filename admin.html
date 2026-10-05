@@ -982,6 +982,7 @@ body{
   <div class="api-diag-actions">
     <button class="btn btn-primary" type="button" data-api-action="full">🔍 تاقیکردنەوەی ئێستا + هەڵەی تەواو</button>
     <button class="btn btn-secondary" type="button" data-api-action="worker">🌐 Worker بە تەواوی تاقی بکەرەوە</button>
+    <button class="btn btn-secondary" type="button" data-api-action="runtime-errors">💥 Runtime Errors</button>
     <button class="btn btn-secondary" type="button" data-api-action="clear">🧹 پاککردنەوە</button>
   </div>
 
@@ -1319,6 +1320,42 @@ body{
    show(result.responseBody||result.errorMessage||'—',result.ok,meta);
    history(meta,result.ok);saveHistory(meta,result.ok,result.ms,path);
  };
+
+ window.apiTestWorkerRuntimeErrors=async function(){
+   try{toast('⏳ Worker Runtime Errors دەخوێندرێنەوە...');}catch(_){}
+   const started=performance.now();
+   const path='/api/admin/diagnostics/errors';
+   try{
+     const key=getAdminKeySafe();
+     const headers={'Cache-Control':'no-cache'};
+     if(key) headers['X-Admin-Key']=key;
+     const r=await adminFetch(WORKER_URL+path,{method:'GET',headers,cache:'no-store'});
+     const raw=await r.text();
+     let data; try{data=raw?JSON.parse(raw):''}catch{data=raw}
+     const ms=Math.round(performance.now()-started);
+     const ok=r.ok && data?.ok!==false;
+     apiRecordFullDiagnostic({
+       ok,
+       url:WORKER_URL+path,
+       method:'GET',
+       requestHeaders:headers,
+       requestBody:null,
+       status:r.status,
+       statusText:r.statusText,
+       responseHeaders:apiDiagHeaders(r.headers),
+       responseBody:data,
+       ms
+     });
+     const meta=`${ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · GET ${path}`;
+     show(data,ok,meta); history(meta,ok); saveHistory(meta,ok,ms,path);
+   }catch(e){
+     const ms=Math.round(performance.now()-started);
+     apiRecordFullDiagnostic({ok:false,url:WORKER_URL+path,method:'GET',requestHeaders:{},requestBody:null,errorType:'FETCH/NETWORK',errorName:e?.name||'Error',errorMessage:e?.message||String(e),errorStack:e?.stack||'',ms});
+     const meta=`❌ ${e?.name||'NETWORK'} · ${ms}ms · GET ${path}`;
+     show({error:e?.message||String(e)},false,meta); history(meta,false); saveHistory(meta,false,ms,path);
+   }
+ };
+
  window.apiTestWorkerFull=async function(){
    try{toast('⏳ Worker Test دەستی پێکرد...');}catch(_){}
    const result=await apiExecuteFull('/', 'GET', null);
@@ -1334,6 +1371,7 @@ body{
    try{
      if(action==='full') return window.apiRunFullDiagnostic();
      if(action==='worker') return window.apiTestWorkerFull();
+     if(action==='runtime-errors') return window.apiTestWorkerRuntimeErrors();
      if(action==='clear') return window.apiClearFullDiagnostic();
    }catch(e){
      try{
