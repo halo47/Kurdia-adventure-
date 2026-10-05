@@ -1575,9 +1575,6 @@ function normalizeAdminHeaderValue(value){
 }
 async function adminFetch(url,opts={}){
  const headers=new Headers(opts.headers||{});
- // Some Admin actions pass X-Admin-Key as an empty string when the key is
- // stored in sessionStorage. An empty header prevents the fallback key from
- // being injected and causes Worker HTTP 401. Treat empty as missing.
  const existing=String(headers.get("X-Admin-Key") ?? "").trim();
  if(!existing){
    const key=normalizeAdminHeaderValue(getAdminKey());
@@ -1585,7 +1582,20 @@ async function adminFetch(url,opts={}){
  } else {
    headers.set("X-Admin-Key",normalizeAdminHeaderValue(existing));
  }
- return fetch(url,{...opts,headers});
+ let res=await fetch(url,{...opts,headers});
+ if(res.status===401){
+   const entered=window.prompt("Admin API Key ـەکەت بنووسە:");
+   const key=String(entered||"").trim();
+   if(key){
+     normalizeAdminHeaderValue(key);
+     sessionStorage.setItem("kurdia_admin_api_key",key);
+     sessionStorage.setItem("kurdia_admin_key",key);
+     const retryHeaders=new Headers(opts.headers||{});
+     retryHeaders.set("X-Admin-Key",key);
+     res=await fetch(url,{...opts,headers:retryHeaders});
+   }
+ }
+ return res;
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
 function initAdminWeatherMap(){
@@ -1948,10 +1958,13 @@ async function saveStudioToCloud(){
   data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
   data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
   const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  const d=await r.json();
-  if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok||!d.ok) throw new Error(d.error||`HTTP ${r.status}`);
+  toast("✅ گۆڕانکارییەکان لە Cloud پاشەکەوت کران");
   return true;
- }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
+ }catch(e){
+  toast("❌ Cloud Save: "+(e?.message||"هەڵەی نەناسراو"));
+  return false;
 }
 
 async function publishLive(){ return kurdiaSaveAllCloud(); }
