@@ -2154,35 +2154,70 @@ async function saveWhatsAppToCloud(){
 
 
 async function saveStudioToCloud(){
- try{
-  autoSync();
+async function saveStudioToCloud(){
+  try{
+    autoSync();
+    toast("⏳ لە ناو Cloud پاشەکەوت دەکرێت...");
 
-  const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
-    cache:"no-store",
-    headers:{"Cache-Control":"no-cache"}
-  });
-  const currentText=await currentRes.text();
-  let current={};
-  try{current=currentText?JSON.parse(currentText):{};}catch(_){}
+    const currentRes = await adminFetch(
+      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
+      { cache: "no-store", headers: { "Cache-Control": "no-cache" } }
+    );
 
-  if(!currentRes.ok){
-    throw new Error(`CMS GET HTTP ${currentRes.status}: ${String(current?.error||currentText||"Unknown error").slice(0,300)}`);
-  }
-  if(current.ok===false){
-    throw new Error(String(current.error||"CMS GET rejected").slice(0,300));
-  }
+    const current = await currentRes.json().catch(() => ({}));
+    const data = current.data || {};
 
-  const data=current.data||current.config||{};
+    data.home = {
+      ...(data.home || {}),
+      hero: {
+        ...(data.home?.hero || {}),
+        title: appState.i18n?.ku?.heroTitle || "",
+        subtitle: appState.i18n?.ku?.heroSubtitle || "",
+        imageUrl: appState.heroImageUrl || ""
+      }
+    };
 
-  data.home={
-    ...(data.home||{}),
-    hero:{
-      ...(data.home?.hero||{}),
-      title:appState.i18n?.ku?.heroTitle||"",
-      subtitle:appState.i18n?.ku?.heroSubtitle||"",
-      imageUrl:appState.heroImageUrl||""
+    data.trips = Array.isArray(data.trips) ? data.trips : [];
+    let trip = data.trips[0] || { id: "trip-main" };
+
+    trip = {
+      ...trip,
+      title: appState.i18n?.ku?.tripTitle || trip.title || "",
+      location: appState.i18n?.ku?.tripLocation || trip.location || "",
+      price: appState.i18n?.ku?.tripPrice || trip.price || "",
+      time: appState.i18n?.ku?.tripTime || trip.time || "",
+      description: appState.i18n?.ku?.tripDesc || trip.description || "",
+      heroImageUrl: appState.tripImageUrl || trip.heroImageUrl || "",
+      capacity: Number(appState.capacity || trip.capacity || 40),
+      booked: Number(appState.booked || trip.booked || 0),
+      published: true,
+      status: "active"
+    };
+
+    data.trips = [trip, ...data.trips.slice(1)];
+    data.i18n = appState.i18n;
+
+    const saveRes = await adminFetch(
+      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }
+    );
+
+    const saved = await saveRes.json().catch(() => ({}));
+    if(!saveRes.ok || !saved.ok){
+      throw new Error(saved.error || "سێرڤەر داواکارییەکەی ڕەتکردەوە");
     }
-  };
+
+    toast("✅ بە سەرکەوتوویی پاشەکەوت کرا و گەیشتە ماڵپەڕ");
+    return true;
+  } catch(err){
+    toast("❌ کێشە لە پاشەکەوتکردن: " + (err.message || ""));
+    return false;
+  }
+}
 
   data.trips=Array.isArray(data.trips)?data.trips:[];
   let trip=data.trips[0]||{id:"trip-main"};
