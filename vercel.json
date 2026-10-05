@@ -1,14 +1,22 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "admin.kurdiaadventure.com"
         }
       ],
+      "source": "/(.*)",
       "destination": "/admin.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/((?!admin\\.html|admin).*)*",
+      "destination": "/index.html"
     }
   ]
 }
