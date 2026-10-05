@@ -980,9 +980,9 @@ body{
   </div>
 
   <div class="api-diag-actions">
-    <button class="btn btn-primary" type="button" onclick="apiRunFullDiagnostic()">🔍 تاقیکردنەوەی ئێستا + هەڵەی تەواو</button>
-    <button class="btn btn-secondary" type="button" onclick="apiTestWorkerFull()">🌐 Worker بە تەواوی تاقی بکەرەوە</button>
-    <button class="btn btn-secondary" type="button" onclick="apiClearFullDiagnostic()">🧹 پاککردنەوە</button>
+    <button class="btn btn-primary" type="button" data-api-action="full">🔍 تاقیکردنەوەی ئێستا + هەڵەی تەواو</button>
+    <button class="btn btn-secondary" type="button" data-api-action="worker">🌐 Worker بە تەواوی تاقی بکەرەوە</button>
+    <button class="btn btn-secondary" type="button" data-api-action="clear">🧹 پاککردنەوە</button>
   </div>
 
   <div class="api-diag-grid">
@@ -1306,6 +1306,7 @@ body{
    }
  }
  window.apiRunFullDiagnostic=async function(){
+   try{toast('⏳ API Test دەستی پێکرد...');}catch(_){}
    const path=String($('apiPath')?.value||'').trim()||'/api/admin/diagnostics';
    const method=String($('apiMethod')?.value||'GET').toUpperCase();
    let body={};
@@ -1319,11 +1320,47 @@ body{
    history(meta,result.ok);saveHistory(meta,result.ok,result.ms,path);
  };
  window.apiTestWorkerFull=async function(){
+   try{toast('⏳ Worker Test دەستی پێکرد...');}catch(_){}
    const result=await apiExecuteFull('/', 'GET', null);
    const meta=result.ok?`✅ Worker HTTP ${result.status} · ${result.ms}ms`:`❌ Worker ${result.status||result.errorType} · ${result.ms}ms`;
    show(result.responseBody||result.errorMessage||'—',result.ok,meta);
    history(meta,result.ok);saveHistory(meta,result.ok,result.ms,'/');
  };
+
+
+ // V2 click hardening: use delegated capture + direct listeners so the
+ // inspector buttons work even when another UI layer/listener intercepts clicks.
+ function apiInspectorClick(action){
+   try{
+     if(action==='full') return window.apiRunFullDiagnostic();
+     if(action==='worker') return window.apiTestWorkerFull();
+     if(action==='clear') return window.apiClearFullDiagnostic();
+   }catch(e){
+     try{
+       apiRecordFullDiagnostic({
+         ok:false,
+         url:WORKER_URL,
+         method:'—',
+         requestHeaders:{},
+         requestBody:null,
+         errorType:'INSPECTOR CLICK ERROR',
+         errorName:e?.name||'Error',
+         errorMessage:e?.message||String(e),
+         errorStack:e?.stack||'',
+         ms:0
+       });
+     }catch(_){}
+     try{toast('❌ Test Inspector: '+(e?.message||String(e)));}catch(_){}
+   }
+ }
+ document.addEventListener('click',function(e){
+   const btn=e.target?.closest?.('[data-api-action]');
+   if(!btn)return;
+   e.preventDefault();
+   e.stopPropagation();
+   e.stopImmediatePropagation();
+   apiInspectorClick(btn.getAttribute('data-api-action'));
+ },true);
 
  document.addEventListener('DOMContentLoaded',()=>{
     setTimeout(()=>{adminLoadNotifications();if(window.lucide)lucide.createIcons();if(localStorage.getItem('kurdia_admin_native_push')==='1')nativeStatus('● نۆتیفکەیشنی مۆبایل چالاکە.',true);},700);
