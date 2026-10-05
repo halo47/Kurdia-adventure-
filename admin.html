@@ -345,6 +345,7 @@ body{
 <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users-round"></i> Community Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> WhatsApp Center</button></li>
 <li class="cc-nav-label">SYSTEM</li>
+<li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button></li>
 <li><button class="nav-btn" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button></li>
 <li><button class="nav-btn" onclick="switchTab('k5_diagnostics')"><i data-lucide="shield-alert"></i> System Diagnostics</button></li>
@@ -357,7 +358,7 @@ body{
 </ul>
 
     <div class="sidebar-footer">
-      <button class="btn btn-primary" onclick="kurdiaSaveAllCloud()"><i data-lucide="cloud-upload"></i> پاشەکەوتکردن لە Cloud</button>
+      <button class="btn btn-primary" onclick="publishLive()"><i data-lucide="send"></i> بڵاوکردنەوەی فەرمی (Publish)</button>
       <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> ماڵپەڕ بکەرەوە</button>
     </div>
   </aside>
@@ -369,8 +370,8 @@ body{
         <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
         <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">داشبۆردی سەرەکی</h1>
       </div>
-      <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="kurdiaSaveAllCloud()">
-        <i data-lucide="save"></i> Save
+      <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="publishLive()">
+        <i data-lucide="save"></i> Publish
       </button>
     </header>
 
@@ -1013,7 +1014,7 @@ body{
 
 
 <section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
-
+<section id="tab-k5_publish" class="page-tab"><div class="card k5-publish"><h2>🚀 Publish Center</h2><p class="k5-section-note">هیچ گۆڕانکارییەک پێش Preview بڵاوناکرێتەوە. Draft و Preview لێرە کۆنترۆڵ دەکرێن.</p><div class="k5-actions"><button class="btn ghost" onclick="k5Preview()">Preview</button><button class="btn ghost" onclick="k5SaveDraft()">Save Draft</button><button class="btn red" onclick="publishLive()">Publish</button><button class="btn danger" onclick="k5UnpublishNotice()">Unpublish</button></div></div><div class="k5-grid2"><div class="card"><h3>Draft</h3><div id="k5DraftInfo" class="k5-section-note">دوایین draft: ـ</div></div><div class="card"><h3>Live</h3><div id="k5LiveInfo" class="k5-section-note">دوایین publish: ـ</div></div></div><div class="card"><h3>Preview</h3><div id="k5Preview" class="k5-preview"><div class="muted">Preview لێرە دەردەکەوێت.</div></div></div></section>
 <section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
 <section id="tab-k5_coupons" class="page-tab">
  <div class="hero">
@@ -1292,37 +1293,20 @@ let appState = {
 let cachedRegistrations = [];
 
 function checkAdminAuth(ev){
-  try{
-    if(ev) ev.preventDefault();
-    const input = document.getElementById("adminPinInput");
-    const modal = document.getElementById("adminAuthModal");
-    const key = String(input?.value || "").trim();
-
-    if(!key){
-      if(input) {
-        input.focus();
-        input.select?.();
-      }
-      toast("❌ تکایە Admin API Key بنووسە");
-      return false;
-    }
-
-    sessionStorage.setItem("admin_auth","true");
-    sessionStorage.setItem("kurdia_admin_api_key",key);
-    sessionStorage.setItem("kurdia_admin_key",key);
-
-    if(modal){
-      modal.style.display="none";
-      modal.setAttribute("aria-hidden","true");
-    }
-
-    toast("کلیلی Admin API هەڵگیرا ✓");
-    return false;
-  }catch(err){
-    console.error("Admin login error:",err);
-    toast("❌ هەڵەی چوونەژوورەوە");
-    return false;
+  if(ev) ev.preventDefault();
+  const input = document.getElementById("adminPinInput");
+  const modal = document.getElementById("adminAuthModal");
+  const key = String(input?.value || "").trim();
+  if(!key){
+    if(input) input.focus();
+    toast("❌ تکایە Admin API Key بنووسە");
+    return;
   }
+  sessionStorage.setItem("admin_auth","true");
+  sessionStorage.setItem("kurdia_admin_api_key",key);
+  sessionStorage.setItem("kurdia_admin_key",key);
+  if(modal) modal.style.display="none";
+  toast("کلیلی Admin API هەڵگیرا ✓");
 }
 
 // CROPPER
@@ -1592,17 +1576,36 @@ function normalizeAdminHeaderValue(value){
 }
 async function adminFetch(url,opts={}){
  const headers=new Headers(opts.headers||{});
- // Some Admin actions pass X-Admin-Key as an empty string when the key is
- // stored in sessionStorage. An empty header prevents the fallback key from
- // being injected and causes Worker HTTP 401. Treat empty as missing.
  const existing=String(headers.get("X-Admin-Key") ?? "").trim();
+
  if(!existing){
    const key=normalizeAdminHeaderValue(getAdminKey());
    if(key) headers.set("X-Admin-Key",key);
- } else {
+ }else{
    headers.set("X-Admin-Key",normalizeAdminHeaderValue(existing));
  }
- return fetch(url,{...opts,headers});
+
+ let res;
+ try{
+   res=await fetch(url,{...opts,headers,cache:opts.cache||"no-store"});
+ }catch(err){
+   throw new Error("Failed to fetch — Worker پەیوەندی نییە");
+ }
+
+ // If the current session key is wrong/expired, ask once for the key.
+ if(res.status===401){
+   const entered=window.prompt("Admin API Key ـەکەت بنووسە:");
+   const key=String(entered||"").trim();
+   if(key){
+     normalizeAdminHeaderValue(key);
+     sessionStorage.setItem("kurdia_admin_api_key",key);
+     sessionStorage.setItem("kurdia_admin_key",key);
+     const retryHeaders=new Headers(opts.headers||{});
+     retryHeaders.set("X-Admin-Key",key);
+     res=await fetch(url,{...opts,headers:retryHeaders,cache:opts.cache||"no-store"});
+   }
+ }
+ return res;
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
 function initAdminWeatherMap(){
@@ -1952,26 +1955,136 @@ async function saveWhatsAppToCloud(){
 
 
 async function saveStudioToCloud(){
- try{
-  autoSync();
-  const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms`);
-  const current=await currentRes.json();
-  const data=current.data||{};
-  data.home={...(data.home||{}),hero:{...(data.home?.hero||{}),title:appState.i18n?.ku?.heroTitle||"",subtitle:appState.i18n?.ku?.heroSubtitle||"",imageUrl:appState.heroImageUrl||""}};
-  data.trips=Array.isArray(data.trips)?data.trips:[];
-  let trip=data.trips[0]||{id:"trip-main"};
-  trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
-  data.trips=[trip,...data.trips.slice(1)];
-  data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
-  data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
-  const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  const d=await r.json();
-  if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
-  return true;
- }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
+  const fail = (e) => {
+    const msg = String(e?.message || e || "Cloud save failed");
+    toast("❌ Cloud Save: " + msg.slice(0,180));
+    return false;
+  };
+
+  try{
+    autoSync();
+    toast("⏳ Cloud Save دەکرێت...");
+
+    // Read the current cloud document first, without browser/cache interference.
+    const currentRes = await adminFetch(
+      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
+      {cache:"no-store",headers:{"Cache-Control":"no-cache"}}
+    );
+
+    const currentText = await currentRes.text();
+    let current = {};
+    try{ current = currentText ? JSON.parse(currentText) : {}; }catch(_){}
+
+    if(!currentRes.ok){
+      throw new Error(`GET /api/admin/cms → HTTP ${currentRes.status}: ${String(current?.error || currentText || "Unknown error").slice(0,220)}`);
+    }
+    if(current.ok !== true){
+      throw new Error(String(current.error || "GET CMS response is not ok").slice(0,220));
+    }
+
+    const data = current.data || {};
+
+    data.home = {
+      ...(data.home||{}),
+      hero:{
+        ...(data.home?.hero||{}),
+        title:appState.i18n?.ku?.heroTitle||"",
+        subtitle:appState.i18n?.ku?.heroSubtitle||"",
+        imageUrl:appState.heroImageUrl||""
+      }
+    };
+
+    data.trips = Array.isArray(data.trips) ? data.trips : [];
+    let trip = data.trips[0] || {id:"trip-main"};
+
+    trip = {
+      ...trip,
+      title:appState.i18n?.ku?.tripTitle||trip.title||"",
+      location:appState.i18n?.ku?.tripLocation||trip.location||"",
+      price:appState.i18n?.ku?.tripPrice||trip.price||"",
+      time:appState.i18n?.ku?.tripTime||trip.time||"",
+      description:appState.i18n?.ku?.tripDesc||trip.description||"",
+      heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",
+      capacity:Number(appState.capacity||trip.capacity||40),
+      booked:Number(appState.booked||trip.booked||0),
+      published:true,
+      status:"active"
+    };
+
+    data.trips=[trip,...data.trips.slice(1)];
+    data.weather={
+      ...(data.weather||{}),
+      sourceLabel:"Open-Meteo",
+      defaultLocation:data.weather?.defaultLocation||"Erbil"
+    };
+    data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
+
+    const saveRes = await adminFetch(
+      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
+      {
+        method:"POST",
+        cache:"no-store",
+        headers:{
+          "Content-Type":"application/json",
+          "Cache-Control":"no-cache"
+        },
+        body:JSON.stringify(data)
+      }
+    );
+
+    const saveText = await saveRes.text();
+    let saved = {};
+    try{ saved = saveText ? JSON.parse(saveText) : {}; }catch(_){}
+
+    if(!saveRes.ok){
+      throw new Error(`POST /api/admin/cms → HTTP ${saveRes.status}: ${String(saved?.error || saveText || "Unknown error").slice(0,260)}`);
+    }
+    if(saved.ok !== true){
+      throw new Error(String(saved.error || "Worker rejected CMS save").slice(0,260));
+    }
+
+    // Final public-read verification: the website must be able to read the saved CMS.
+    const verifyRes = await fetch(
+      `${WORKER_URL}/api/site/config?cb=${Date.now()}`,
+      {cache:"no-store",headers:{"Cache-Control":"no-cache"}}
+    );
+    const verifyText = await verifyRes.text();
+    let verify = {};
+    try{ verify = verifyText ? JSON.parse(verifyText) : {}; }catch(_){}
+
+    if(!verifyRes.ok){
+      throw new Error(`VERIFY /api/site/config → HTTP ${verifyRes.status}`);
+    }
+
+    toast("✅ Cloud Save سەرکەوتووە — Website Sync ✓");
+    return true;
+
+  }catch(e){
+    return fail(e);
+  }
 }
 
-async function publishLive(){ return kurdiaSaveAllCloud(); }
+async function publishLive(){
+  autoSync();
+  await saveStudioToCloud();
+  await saveWhatsAppToCloud();
+  toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!");
+}
+async function testAdminCMSConnection(){
+  try{
+    toast("⏳ CMS پشکنین دەکرێت...");
+    const r=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{cache:"no-store"});
+    const t=await r.text();
+    let d={}; try{d=t?JSON.parse(t):{};}catch(_){}
+    if(!r.ok) throw new Error(`HTTP ${r.status}: ${String(d.error||t||"Unknown").slice(0,220)}`);
+    toast(d.ok ? "✅ Admin CMS Connected" : "⚠️ CMS response ok نییە");
+    return d;
+  }catch(e){
+    toast("❌ CMS Test: "+String(e?.message||e).slice(0,180));
+    return null;
+  }
+}
+
 function openLiveSite(){ window.open("index.html", "_blank"); }
 function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
 
@@ -2186,15 +2299,6 @@ function resetData(){
   k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
 })();
 
-
-// Android/Chrome fallback: guarantee the login button reaches the auth handler.
-document.addEventListener("click", function(e){
-  const btn = e.target.closest?.('#adminAuthModal button[onclick*="checkAdminAuth"]');
-  if(!btn) return;
-  e.preventDefault();
-  e.stopPropagation();
-  checkAdminAuth(e);
-}, true);
 
 // V9: robust Android/Chrome auth wiring
 window.addEventListener("DOMContentLoaded",()=>{
@@ -2482,7 +2586,7 @@ window.quickWorkerTest=async function(){
       root?.querySelectorAll('[data-private-type]').forEach(el=>{el.oninput=()=>{const i=Number(el.dataset.privateType),k=el.dataset.privateK;this.current.privateTrip.types[i][k]=el.value;this.mark()}});
     },
     setPath(path,val){const parts=path.split('.');let o=this.current;for(let i=0;i<parts.length-1;i++){if(!o[parts[i]]||typeof o[parts[i]]!=='object')o[parts[i]]={};o=o[parts[i]]}o[parts.at(-1)]=val},
-    async save(){try{this.collectI18nFromDOM();const r=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json','Cache-Control':'no-cache'},body:JSON.stringify(this.current)});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw Error(j.error||`CMS save HTTP ${r.status}`);this.current=this.normalize(j.data||this.current);localStorage.setItem(this.key,JSON.stringify(this.current));this.dirty=false;document.getElementById('ssDirty').innerHTML='دۆخ: <b style="color:#32c985">پاشەکەوتکرا ✓</b>';document.getElementById('ssCloudStatus').textContent='Cloud: published ✓';toast('✅ هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت کران');return true}catch(e){const msg=e?.message||String(e);if(document.getElementById('ssCloudStatus'))document.getElementById('ssCloudStatus').textContent='Cloud: هەڵە — '+msg;toast('❌ Cloud Save هەڵەیە: '+msg);return false}},
+    async save(){try{this.collectI18nFromDOM();const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(this.current)});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw Error(j.error||'CMS save');this.current=this.normalize(j.data||this.current);localStorage.setItem(this.key,JSON.stringify(this.current));this.dirty=false;document.getElementById('ssDirty').innerHTML='دۆخ: <b style="color:#32c985">پاشەکەوتکرا ✓</b>';document.getElementById('ssCloudStatus').textContent='Cloud: published ✓';toast('✅ هەموو گۆڕانکارییەکان لە Cloud پاشەکەوت کران');return true}catch(e){localStorage.setItem(this.key,JSON.stringify(this.current));toast('⚠️ Draft لەسەر ئەم ئامێرە پاشەکەوت کرا؛ Cloud هەڵەی هەیە');return false}},
     collectI18nFromDOM(){document.querySelectorAll('#ssHeroForm [data-ss-key]').forEach(el=>this.setPath(el.dataset.ssKey,el.value));document.querySelectorAll('#ssPrivateForm [data-ss-key]').forEach(el=>this.setPath(el.dataset.ssKey,el.value))},
     editTrip(i){const t=this.current.trips[i];const title=prompt('ناوی گەشت',t.title||'');if(title===null)return;t.title=title;t.location=prompt('شوێن',t.location||'')??t.location;t.price=prompt('نرخ',t.price||'')??t.price;t.date=prompt('بەروار YYYY-MM-DD',t.date||'')??t.date;t.time=prompt('کات',t.time||'')??t.time;t.description=prompt('وەسف',t.description||t.desc||'')??(t.description||'');t.heroImageUrl=prompt('URLی وێنە',t.heroImageUrl||'')??t.heroImageUrl;t.capacity=Number(prompt('Capacity',t.capacity||0)??t.capacity);t.booked=Number(prompt('Booked',t.booked||0)??t.booked);this.renderTrips();this.mark()},
     editDestination(i){const d=this.current.destinations[i];d.name=prompt('ناوی شوێن',d.name||'')??d.name;d.type=prompt('جۆر',d.type||'')??d.type;d.description=prompt('وەسفی شوێن',d.description||d.desc||'')??(d.description||'');d.img=prompt('URLی وێنە',d.img||'')??d.img;this.renderDest();this.mark()},
@@ -2536,47 +2640,5 @@ window.quickWorkerTest=async function(){
 })();
 </script>
 
-
-<script id="kurdia-admin-final-action-fix">
-(function(){
-  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  async function verifyCloud(){
-    const r=await fetch(WORKER_URL+'/api/site/config?cb='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
-    const j=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error('Public CMS HTTP '+r.status);
-    return j;
-  }
-  window.kurdiaSaveAllCloud=async function(){
-    const btns=[...document.querySelectorAll('button[onclick*="kurdiaSaveAllCloud"],button[onclick*="publishLive"]')];
-    btns.forEach(b=>{b.disabled=true;b.dataset.oldText=b.innerHTML;b.innerHTML='⏳ پاشەکەوت دەکرێت...'});
-    try{
-      let ok=false;
-      if(typeof window.ssSaveCloud==='function') ok=await window.ssSaveCloud();
-      if(!ok && typeof window.saveStudioToCloud==='function') ok=await window.saveStudioToCloud();
-      if(!ok) throw new Error('CMS Save سەرکەوتوو نەبوو');
-      await sleep(150);
-      await verifyCloud();
-      const st=document.getElementById('ssCloudStatus'); if(st) st.textContent='Cloud: connected ✓';
-      toast('✅ سەیڤ تەواو بوو — Website داتای نوێ وەردەگرێت');
-      return true;
-    }catch(e){
-      const msg=e?.message||String(e);
-      toast('❌ Save نەکرا: '+msg);
-      const st=document.getElementById('ssCloudStatus'); if(st) st.textContent='Cloud: هەڵە — '+msg;
-      return false;
-    }finally{
-      btns.forEach(b=>{b.disabled=false;if(b.dataset.oldText)b.innerHTML=b.dataset.oldText});
-      if(window.lucide) lucide.createIcons();
-    }
-  };
-  window.publishLive=window.kurdiaSaveAllCloud;
-  window.openLiveSite=function(){window.open('https://kurdiaadventure.com/?cb='+Date.now(),'_blank');};
-  // Ensure the Publish Center is gone even if an older cached DOM/script is present.
-  document.addEventListener('DOMContentLoaded',()=>{
-    document.querySelectorAll('[onclick*="switchTab(\'k5_publish\')"]').forEach(el=>el.closest('li')?.remove());
-    document.getElementById('tab-k5_publish')?.remove();
-  });
-})();
-</script>
 </body>
 </html>
