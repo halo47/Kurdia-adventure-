@@ -1292,20 +1292,37 @@ let appState = {
 let cachedRegistrations = [];
 
 function checkAdminAuth(ev){
-  if(ev) ev.preventDefault();
-  const input = document.getElementById("adminPinInput");
-  const modal = document.getElementById("adminAuthModal");
-  const key = String(input?.value || "").trim();
-  if(!key){
-    if(input) input.focus();
-    toast("❌ تکایە Admin API Key بنووسە");
-    return;
+  try{
+    if(ev) ev.preventDefault();
+    const input = document.getElementById("adminPinInput");
+    const modal = document.getElementById("adminAuthModal");
+    const key = String(input?.value || "").trim();
+
+    if(!key){
+      if(input) {
+        input.focus();
+        input.select?.();
+      }
+      toast("❌ تکایە Admin API Key بنووسە");
+      return false;
+    }
+
+    sessionStorage.setItem("admin_auth","true");
+    sessionStorage.setItem("kurdia_admin_api_key",key);
+    sessionStorage.setItem("kurdia_admin_key",key);
+
+    if(modal){
+      modal.style.display="none";
+      modal.setAttribute("aria-hidden","true");
+    }
+
+    toast("کلیلی Admin API هەڵگیرا ✓");
+    return false;
+  }catch(err){
+    console.error("Admin login error:",err);
+    toast("❌ هەڵەی چوونەژوورەوە");
+    return false;
   }
-  sessionStorage.setItem("admin_auth","true");
-  sessionStorage.setItem("kurdia_admin_api_key",key);
-  sessionStorage.setItem("kurdia_admin_key",key);
-  if(modal) modal.style.display="none";
-  toast("کلیلی Admin API هەڵگیرا ✓");
 }
 
 // CROPPER
@@ -1575,6 +1592,9 @@ function normalizeAdminHeaderValue(value){
 }
 async function adminFetch(url,opts={}){
  const headers=new Headers(opts.headers||{});
+ // Some Admin actions pass X-Admin-Key as an empty string when the key is
+ // stored in sessionStorage. An empty header prevents the fallback key from
+ // being injected and causes Worker HTTP 401. Treat empty as missing.
  const existing=String(headers.get("X-Admin-Key") ?? "").trim();
  if(!existing){
    const key=normalizeAdminHeaderValue(getAdminKey());
@@ -1582,20 +1602,7 @@ async function adminFetch(url,opts={}){
  } else {
    headers.set("X-Admin-Key",normalizeAdminHeaderValue(existing));
  }
- let res=await fetch(url,{...opts,headers});
- if(res.status===401){
-   const entered=window.prompt("Admin API Key ـەکەت بنووسە:");
-   const key=String(entered||"").trim();
-   if(key){
-     normalizeAdminHeaderValue(key);
-     sessionStorage.setItem("kurdia_admin_api_key",key);
-     sessionStorage.setItem("kurdia_admin_key",key);
-     const retryHeaders=new Headers(opts.headers||{});
-     retryHeaders.set("X-Admin-Key",key);
-     res=await fetch(url,{...opts,headers:retryHeaders});
-   }
- }
- return res;
+ return fetch(url,{...opts,headers});
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
 function initAdminWeatherMap(){
@@ -1958,13 +1965,10 @@ async function saveStudioToCloud(){
   data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
   data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
   const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  const d=await r.json().catch(()=>({}));
-  if(!r.ok||!d.ok) throw new Error(d.error||`HTTP ${r.status}`);
-  toast("✅ گۆڕانکارییەکان لە Cloud پاشەکەوت کران");
+  const d=await r.json();
+  if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
   return true;
- }catch(e){
-  toast("❌ Cloud Save: "+(e?.message||"هەڵەی نەناسراو"));
-  return false;
+ }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
 }
 
 async function publishLive(){ return kurdiaSaveAllCloud(); }
@@ -2182,6 +2186,15 @@ function resetData(){
   k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
 })();
 
+
+// Android/Chrome fallback: guarantee the login button reaches the auth handler.
+document.addEventListener("click", function(e){
+  const btn = e.target.closest?.('#adminAuthModal button[onclick*="checkAdminAuth"]');
+  if(!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  checkAdminAuth(e);
+}, true);
 
 // V9: robust Android/Chrome auth wiring
 window.addEventListener("DOMContentLoaded",()=>{
