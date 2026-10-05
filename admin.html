@@ -1396,7 +1396,7 @@ body{
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
 const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
-const ADMIN_SECRET_PIN = ""; // Secret stays in Cloudflare; never hard-code it in the public HTML.
+const ADMIN_SECRET_PIN = "2026";
 
 let appState = {
   gradColor1: "#9d1c32",
@@ -1758,7 +1758,7 @@ function getAdminKey(){
       || ADMIN_SECRET_PIN
       || "";
   }catch{
-    return ADMIN_SECRET_PIN || "";
+    return ADMIN_SECRET_PIN || "2026";
   }
 }
 function normalizeAdminHeaderValue(value){
