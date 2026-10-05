@@ -1,22 +1,18 @@
 {
-  "rewrites": [
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "routes": [
     {
+      "src": "^/$",
       "has": [
         {
           "type": "host",
           "value": "admin.kurdiaadventure.com"
         }
       ],
-      "source": "/(.*)",
-      "destination": "/admin.html"
+      "dest": "/admin.html"
     },
     {
-      "source": "/admin",
-      "destination": "/admin.html"
-    },
-    {
-      "source": "/((?!admin\\.html|admin).*)*",
-      "destination": "/index.html"
+      "handle": "filesystem"
     }
   ]
 }
