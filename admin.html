@@ -982,7 +982,6 @@ body{
   <div class="api-diag-actions">
     <button class="btn btn-primary" type="button" data-api-action="full">🔍 تاقیکردنەوەی ئێستا + هەڵەی تەواو</button>
     <button class="btn btn-secondary" type="button" data-api-action="worker">🌐 Worker بە تەواوی تاقی بکەرەوە</button>
-    <button class="btn btn-secondary" type="button" data-api-action="runtime-errors">💥 Runtime Errors</button>
     <button class="btn btn-secondary" type="button" data-api-action="clear">🧹 پاککردنەوە</button>
   </div>
 
@@ -1320,42 +1319,6 @@ body{
    show(result.responseBody||result.errorMessage||'—',result.ok,meta);
    history(meta,result.ok);saveHistory(meta,result.ok,result.ms,path);
  };
-
- window.apiTestWorkerRuntimeErrors=async function(){
-   try{toast('⏳ Worker Runtime Errors دەخوێندرێنەوە...');}catch(_){}
-   const started=performance.now();
-   const path='/api/admin/diagnostics/errors';
-   try{
-     const key=getAdminKeySafe();
-     const headers={'Cache-Control':'no-cache'};
-     if(key) headers['X-Admin-Key']=key;
-     const r=await adminFetch(WORKER_URL+path,{method:'GET',headers,cache:'no-store'});
-     const raw=await r.text();
-     let data; try{data=raw?JSON.parse(raw):''}catch{data=raw}
-     const ms=Math.round(performance.now()-started);
-     const ok=r.ok && data?.ok!==false;
-     apiRecordFullDiagnostic({
-       ok,
-       url:WORKER_URL+path,
-       method:'GET',
-       requestHeaders:headers,
-       requestBody:null,
-       status:r.status,
-       statusText:r.statusText,
-       responseHeaders:apiDiagHeaders(r.headers),
-       responseBody:data,
-       ms
-     });
-     const meta=`${ok?'✅':'❌'} HTTP ${r.status} · ${ms}ms · GET ${path}`;
-     show(data,ok,meta); history(meta,ok); saveHistory(meta,ok,ms,path);
-   }catch(e){
-     const ms=Math.round(performance.now()-started);
-     apiRecordFullDiagnostic({ok:false,url:WORKER_URL+path,method:'GET',requestHeaders:{},requestBody:null,errorType:'FETCH/NETWORK',errorName:e?.name||'Error',errorMessage:e?.message||String(e),errorStack:e?.stack||'',ms});
-     const meta=`❌ ${e?.name||'NETWORK'} · ${ms}ms · GET ${path}`;
-     show({error:e?.message||String(e)},false,meta); history(meta,false); saveHistory(meta,false,ms,path);
-   }
- };
-
  window.apiTestWorkerFull=async function(){
    try{toast('⏳ Worker Test دەستی پێکرد...');}catch(_){}
    const result=await apiExecuteFull('/', 'GET', null);
@@ -1371,7 +1334,6 @@ body{
    try{
      if(action==='full') return window.apiRunFullDiagnostic();
      if(action==='worker') return window.apiTestWorkerFull();
-     if(action==='runtime-errors') return window.apiTestWorkerRuntimeErrors();
      if(action==='clear') return window.apiClearFullDiagnostic();
    }catch(e){
      try{
@@ -1434,7 +1396,7 @@ body{
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
 const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
-const ADMIN_SECRET_PIN = "";
+const ADMIN_SECRET_PIN = ""; // Secret stays in Cloudflare; never hard-code it in the public HTML.
 
 let appState = {
   gradColor1: "#9d1c32",
@@ -1531,6 +1493,8 @@ function checkAdminAuth(ev){
   sessionStorage.setItem("admin_auth","true");
   sessionStorage.setItem("kurdia_admin_api_key",key);
   sessionStorage.setItem("kurdia_admin_key",key);
+  localStorage.setItem("kurdia_admin_api_key",key);
+  localStorage.setItem("kurdia_admin_key",key);
   if(modal) modal.style.display="none";
   toast("کلیلی Admin API هەڵگیرا ✓");
 }
@@ -1787,8 +1751,15 @@ function exportRegistrationsToCSV(){
 // ===== KURDIA v5 ADMIN ADDITIONS =====
 function getAdminKey(){
   try{
-    return sessionStorage.getItem("kurdia_admin_api_key") || sessionStorage.getItem("kurdia_admin_key") || ADMIN_SECRET_PIN || "2026";
-  }catch{return ADMIN_SECRET_PIN || "2026";}
+    return localStorage.getItem("kurdia_admin_api_key")
+      || localStorage.getItem("kurdia_admin_key")
+      || sessionStorage.getItem("kurdia_admin_api_key")
+      || sessionStorage.getItem("kurdia_admin_key")
+      || ADMIN_SECRET_PIN
+      || "";
+  }catch{
+    return ADMIN_SECRET_PIN || "";
+  }
 }
 function normalizeAdminHeaderValue(value){
   const v=String(value ?? '').trim();
@@ -1826,6 +1797,8 @@ async function adminFetch(url,opts={}){
      normalizeAdminHeaderValue(key);
      sessionStorage.setItem("kurdia_admin_api_key",key);
      sessionStorage.setItem("kurdia_admin_key",key);
+     localStorage.setItem("kurdia_admin_api_key",key);
+     localStorage.setItem("kurdia_admin_key",key);
      const retryHeaders=new Headers(opts.headers||{});
      retryHeaders.set("X-Admin-Key",key);
      res=await fetch(url,{...opts,headers:retryHeaders,cache:opts.cache||"no-store"});
@@ -2181,113 +2154,109 @@ async function saveWhatsAppToCloud(){
 
 
 async function saveStudioToCloud(){
-  const fail = (e) => {
-    const msg = String(e?.message || e || "Cloud save failed");
-    toast("❌ Cloud Save: " + msg.slice(0,180));
-    return false;
+ try{
+  autoSync();
+
+  const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
+    cache:"no-store",
+    headers:{"Cache-Control":"no-cache"}
+  });
+  const currentText=await currentRes.text();
+  let current={};
+  try{current=currentText?JSON.parse(currentText):{};}catch(_){}
+
+  if(!currentRes.ok){
+    throw new Error(`CMS GET HTTP ${currentRes.status}: ${String(current?.error||currentText||"Unknown error").slice(0,300)}`);
+  }
+  if(current.ok===false){
+    throw new Error(String(current.error||"CMS GET rejected").slice(0,300));
+  }
+
+  const data=current.data||current.config||{};
+
+  data.home={
+    ...(data.home||{}),
+    hero:{
+      ...(data.home?.hero||{}),
+      title:appState.i18n?.ku?.heroTitle||"",
+      subtitle:appState.i18n?.ku?.heroSubtitle||"",
+      imageUrl:appState.heroImageUrl||""
+    }
   };
 
-  try{
-    autoSync();
-    toast("⏳ Cloud Save دەکرێت...");
+  data.trips=Array.isArray(data.trips)?data.trips:[];
+  let trip=data.trips[0]||{id:"trip-main"};
 
-    // Read the current cloud document first, without browser/cache interference.
-    const currentRes = await adminFetch(
-      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
-      {cache:"no-store",headers:{"Cache-Control":"no-cache"}}
-    );
+  // Keep the Admin's Kurdish trip fields and the public trips[0] record in sync.
+  trip={
+    ...trip,
+    id:trip.id||"trip-main",
+    title:appState.i18n?.ku?.tripTitle||trip.title||"",
+    location:appState.i18n?.ku?.tripLocation||trip.location||"",
+    price:appState.i18n?.ku?.tripPrice||trip.price||"",
+    time:appState.i18n?.ku?.tripTime||trip.time||"",
+    description:appState.i18n?.ku?.tripDesc||trip.description||"",
+    heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",
+    capacity:Number(appState.capacity||trip.capacity||40),
+    booked:Number(appState.booked||trip.booked||0),
+    published:true,
+    status:"active"
+  };
 
-    const currentText = await currentRes.text();
-    let current = {};
-    try{ current = currentText ? JSON.parse(currentText) : {}; }catch(_){}
+  data.trips=[trip,...data.trips.slice(1)];
+  data.weather={
+    ...(data.weather||{}),
+    sourceLabel:"Open-Meteo",
+    defaultLocation:data.weather?.defaultLocation||"Erbil"
+  };
+  data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
 
-    if(!currentRes.ok){
-      throw new Error(`GET /api/admin/cms → HTTP ${currentRes.status}: ${String(current?.error || currentText || "Unknown error").slice(0,220)}`);
-    }
-    if(current.ok !== true){
-      throw new Error(String(current.error || "GET CMS response is not ok").slice(0,220));
-    }
+  const r=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
+    method:"POST",
+    cache:"no-store",
+    headers:{
+      "Content-Type":"application/json",
+      "Cache-Control":"no-cache"
+    },
+    body:JSON.stringify(data)
+  });
 
-    const data = current.data || {};
+  const raw=await r.text();
+  let d={};
+  try{d=raw?JSON.parse(raw):{};}catch(_){}
 
-    data.home = {
-      ...(data.home||{}),
-      hero:{
-        ...(data.home?.hero||{}),
-        title:appState.i18n?.ku?.heroTitle||"",
-        subtitle:appState.i18n?.ku?.heroSubtitle||"",
-        imageUrl:appState.heroImageUrl||""
-      }
-    };
-
-    data.trips = Array.isArray(data.trips) ? data.trips : [];
-    let trip = data.trips[0] || {id:"trip-main"};
-
-    trip = {
-      ...trip,
-      title:appState.i18n?.ku?.tripTitle||trip.title||"",
-      location:appState.i18n?.ku?.tripLocation||trip.location||"",
-      price:appState.i18n?.ku?.tripPrice||trip.price||"",
-      time:appState.i18n?.ku?.tripTime||trip.time||"",
-      description:appState.i18n?.ku?.tripDesc||trip.description||"",
-      heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",
-      capacity:Number(appState.capacity||trip.capacity||40),
-      booked:Number(appState.booked||trip.booked||0),
-      published:true,
-      status:"active"
-    };
-
-    data.trips=[trip,...data.trips.slice(1)];
-    data.weather={
-      ...(data.weather||{}),
-      sourceLabel:"Open-Meteo",
-      defaultLocation:data.weather?.defaultLocation||"Erbil"
-    };
-    data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
-
-    const saveRes = await adminFetch(
-      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
-      {
-        method:"POST",
-        cache:"no-store",
-        headers:{
-          "Content-Type":"application/json",
-          "Cache-Control":"no-cache"
-        },
-        body:JSON.stringify(data)
-      }
-    );
-
-    const saveText = await saveRes.text();
-    let saved = {};
-    try{ saved = saveText ? JSON.parse(saveText) : {}; }catch(_){}
-
-    if(!saveRes.ok){
-      throw new Error(`POST /api/admin/cms → HTTP ${saveRes.status}: ${String(saved?.error || saveText || "Unknown error").slice(0,260)}`);
-    }
-    if(saved.ok !== true){
-      throw new Error(String(saved.error || "Worker rejected CMS save").slice(0,260));
-    }
-
-    // Final public-read verification: the website must be able to read the saved CMS.
-    const verifyRes = await fetch(
-      `${WORKER_URL}/api/site/config?cb=${Date.now()}`,
-      {cache:"no-store",headers:{"Cache-Control":"no-cache"}}
-    );
-    const verifyText = await verifyRes.text();
-    let verify = {};
-    try{ verify = verifyText ? JSON.parse(verifyText) : {}; }catch(_){}
-
-    if(!verifyRes.ok){
-      throw new Error(`VERIFY /api/site/config → HTTP ${verifyRes.status}`);
-    }
-
-    toast("✅ Cloud Save سەرکەوتووە — Website Sync ✓");
-    return true;
-
-  }catch(e){
-    return fail(e);
+  if(!r.ok){
+    throw new Error(`CMS POST HTTP ${r.status}: ${String(d?.error||raw||"Unknown error").slice(0,350)}`);
   }
+  if(d.ok!==true){
+    throw new Error(String(d.error||"Worker rejected CMS save").slice(0,350));
+  }
+
+  // Verify the exact public response consumed by index.html.
+  const verify=await fetch(`${WORKER_URL}/api/site/config?cb=${Date.now()}`,{
+    cache:"no-store",
+    headers:{"Cache-Control":"no-cache"}
+  });
+  const verifyRaw=await verify.text();
+  let vd={};
+  try{vd=verifyRaw?JSON.parse(verifyRaw):{};}catch(_){}
+
+  if(!verify.ok){
+    throw new Error(`Public CMS verify HTTP ${verify.status}: ${String(vd?.error||verifyRaw||"Unknown error").slice(0,300)}`);
+  }
+
+  const publicConfig=vd.config||vd.data||vd;
+  if(!publicConfig || typeof publicConfig!=="object"){
+    throw new Error("Public CMS verify returned no config/data");
+  }
+
+  toast("✅ Cloud Save سەرکەوتووە — Admin ↔ Website ✓");
+  return true;
+
+ }catch(e){
+  toast("❌ CMS Save: "+String(e?.message||e||"Unknown error").slice(0,220));
+  return false;
+ }
 }
 
 async function publishLive(){
