@@ -300,7 +300,7 @@ body{
   <div class="auth-box">
     <div class="brand-icon mx-auto mb-4"><i data-lucide="lock"></i></div>
     <h2 class="text-lg font-black mb-1">تەختەی کۆنترۆڵی KURDIA</h2>
-    <p class="text-xs text-gray-400 mb-6">تکایە Admin API Key ـەکەت بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
+    <p class="text-xs text-gray-400 mb-6">تکایە Admin Access ـەکەت بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
     <div class="field text-right mb-4">
       <input type="password" id="adminPinInput" placeholder="ADMIN_API_KEY بنووسە..." style="text-align:center;letter-spacing:4px;font-size:16px;">
     </div>
@@ -828,7 +828,7 @@ body{
   <div class="k5-mini"><small>دوایین وەڵام</small><b id="apiLastMs">—</b></div>
  </div>
 
- <div class="card" style="margin-bottom:12px;border-color:rgba(199,43,73,.28)"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><b>🔐 Admin API Key</b><div class="text-xs text-gray-400" style="margin-top:4px">کلیلی Cloudflare ـەکەت بۆ API ـەکانی Admin بەکاردهێنرێت.</div></div><button type="button" class="btn btn-secondary" onclick="changeAdminApiKey()">گۆڕینی Key</button></div></div><div class="api-center-grid">
+ <div class="api-center-grid">
   <div class="api-lab-card api-runner-main">
    <div class="api-section-head">
     <div><div class="card-title">🚀 تاقیکردنەوەی API</div><div class="ss-help">یەک API هەڵبژێرە؛ Method، URL و Body بە خۆکار پڕ دەکرێن.</div></div>
@@ -1208,7 +1208,7 @@ body{
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
 const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
-const ADMIN_SECRET_PIN = "alwandking";
+const ADMIN_SECRET_PIN = "";
 
 let appState = {
   gradColor1: "#9d1c32",
@@ -1294,21 +1294,10 @@ let cachedRegistrations = [];
 
 function checkAdminAuth(ev){
   if(ev) ev.preventDefault();
-  const input = document.getElementById("adminPinInput");
-  const modal = document.getElementById("adminAuthModal");
-  const key = String(input?.value || "").trim();
-  if(!key){
-    if(input) input.focus();
-    toast("❌ تکایە Admin API Key بنووسە");
-    return;
-  }
+  const modal=document.getElementById("adminAuthModal");
   sessionStorage.setItem("admin_auth","true");
-  sessionStorage.setItem("kurdia_admin_api_key",key);
-  sessionStorage.setItem("kurdia_admin_key",key);
-  localStorage.setItem("kurdia_admin_api_key",key);
-  localStorage.setItem("kurdia_admin_key",key);
   if(modal) modal.style.display="none";
-  toast("کلیلی Admin API هەڵگیرا ✓");
+  toast("✅ چوونەژوورەوە سەرکەوتووە");
 }
 
 // CROPPER
@@ -1561,40 +1550,8 @@ function exportRegistrationsToCSV(){
 
 
 // ===== KURDIA v5 ADMIN ADDITIONS =====
-function getAdminKey(){
-  try{
-    return localStorage.getItem("kurdia_admin_api_key")
-      || localStorage.getItem("kurdia_admin_key")
-      || sessionStorage.getItem("kurdia_admin_api_key")
-      || sessionStorage.getItem("kurdia_admin_key")
-      || ADMIN_SECRET_PIN
-      || "";
-  }catch{
-    return ADMIN_SECRET_PIN || "";
-  }
-}
-function normalizeAdminHeaderValue(value){
-  const v=String(value ?? '').trim();
-  // HTTP header values used by fetch() must be ByteString-compatible.
-  // The Admin API key is expected to be an ASCII secret; never pass Kurdish/Arabic
-  // text (or other Unicode) into Headers because the browser throws before fetch().
-  if(v && !/^[\x00-\x7F]*$/.test(v)){
-    throw new Error('کلیلی Admin API نابێت پیتی کوردی/عەرەبی یان Unicode ـی تێدا بێت. کلیلی دروستی ASCII لە Admin API Key بنووسە.');
-  }
-  return v;
-}
 async function adminFetch(url,opts={}){
  const headers=new Headers(opts.headers||{});
- // Some Admin actions pass X-Admin-Key as an empty string when the key is
- // stored in sessionStorage. An empty header prevents the fallback key from
- // being injected and causes Worker HTTP 401. Treat empty as missing.
- const existing=String(headers.get("X-Admin-Key") ?? "").trim();
- if(!existing){
-   const key=normalizeAdminHeaderValue(getAdminKey() || ADMIN_SECRET_PIN);
-   if(key) headers.set("X-Admin-Key",key);
- } else {
-   headers.set("X-Admin-Key",normalizeAdminHeaderValue(existing));
- }
  return fetch(url,{...opts,headers});
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
@@ -2386,12 +2343,12 @@ window.addEventListener("DOMContentLoaded",()=>{
    }catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · POST ${x.p}`;show({error:e.message},false,meta);history(meta,false);saveHistory(meta,false,ms,x.p);if(out){out.style.display='block';out.style.background='rgba(255,75,105,.10)';out.style.border='1px solid rgba(255,75,105,.35)';out.textContent='❌ پەیوەندی بە Worker نەکرا.\n'+e.message;}}
  };
  window.changeAdminApiKey=function(){
-  const key=prompt("Admin API Key ـەکەت بنووسە:");
+  const key=prompt("Admin Access ـەکەت بنووسە:");
   if(!key || !String(key).trim()) return;
   sessionStorage.setItem('kurdia_admin_api_key',String(key).trim());
   sessionStorage.setItem('kurdia_admin_key',String(key).trim());
   sessionStorage.setItem('admin_auth','true');
-  toast('Admin API Key نوێکرایەوە ✓');
+  toast('Admin Access نوێکرایەوە ✓');
 };
 window.quickWorkerTest=async function(){
    const old=$('apiPreset')?.value; if($('apiPreset')){$('apiPreset').value='diagnostics';apiPresetChanged();} await runApiTest(); if(old&&$('apiPreset')){$('apiPreset').value=old;apiPresetChanged();}
