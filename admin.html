@@ -1742,11 +1742,35 @@ function loadState(){
   renderSafetyList();
 }
 
-function toast(msg){
+function toast(msg,ms=3200){
   const t = document.getElementById("toast");
+  if(!t) return;
   t.textContent = msg;
   t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 3200);
+  clearTimeout(window.__kurdiaToastTimer);
+  window.__kurdiaToastTimer=setTimeout(()=> t.classList.remove("show"), ms);
+}
+
+function showAdminError(title, detail, extra="") {
+  let box=document.getElementById("kurdiaAdminErrorBox");
+  if(!box){
+    box=document.createElement("div");
+    box.id="kurdiaAdminErrorBox";
+    box.style.cssText="position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:18px;direction:rtl";
+    document.body.appendChild(box);
+  }
+  const esc=s=>String(s??"").replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+  box.innerHTML=`<div style="width:min(620px,100%);max-height:82vh;overflow:auto;background:#101014;border:1px solid rgba(255,70,95,.45);border-radius:18px;padding:18px;color:#fff;box-shadow:0 25px 80px rgba(0,0,0,.55)">
+    <div style="font-size:18px;font-weight:800;margin-bottom:8px">❌ ${esc(title)}</div>
+    <div style="font-size:13px;color:#ffb7c0;margin-bottom:12px;line-height:1.8">${esc(detail)}</div>
+    ${extra?`<pre style="white-space:pre-wrap;word-break:break-word;background:#09090c;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:12px;font-size:11px;color:#ddd;direction:ltr;text-align:left">${esc(extra)}</pre>`:""}
+    <button type="button" onclick="document.getElementById('kurdiaAdminErrorBox')?.remove()" style="margin-top:12px;width:100%;padding:11px;border:0;border-radius:10px;background:#c72b49;color:#fff;font-weight:800">باشە</button>
+  </div>`;
+}
+
+function formatAdminError(e){
+  if(e?.message) return e.message;
+  return String(e||"هەڵەی نەناسراو");
 }
 
 function toggleSidebar(){
@@ -1902,30 +1926,57 @@ async function saveWhatsAppToCloud(){
 
 
 async function saveStudioToCloud(){
- try{
   autoSync();
-  const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms`);
-  const current=await currentRes.json();
-  const data=current.data||{};
-  data.home={...(data.home||{}),hero:{...(data.home?.hero||{}),title:appState.i18n?.ku?.heroTitle||"",subtitle:appState.i18n?.ku?.heroSubtitle||"",imageUrl:appState.heroImageUrl||""}};
-  data.trips=Array.isArray(data.trips)?data.trips:[];
-  let trip=data.trips[0]||{id:"trip-main"};
-  trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
-  data.trips=[trip,...data.trips.slice(1)];
-  data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
-  data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
-  const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  const d=await r.json();
-  if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
-  return true;
- }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
+  const endpoint=`${WORKER_URL}/api/admin/cms`;
+  try{
+    toast("⏳ CMS دەچێتە Cloud...");
+    const currentRes=await adminFetch(`${endpoint}?cb=${Date.now()}`,{cache:"no-store"});
+    const currentText=await currentRes.text();
+    let current={};
+    try{current=JSON.parse(currentText||"{}");}catch{}
+    if(!currentRes.ok){
+      throw new Error(`CMS GET HTTP ${currentRes.status}: ${current.error||currentText||"وەڵامێکی بەتاڵ"}`);
+    }
+    const data=current.data||{};
+    data.home={...(data.home||{}),hero:{...(data.home?.hero||{}),title:appState.i18n?.ku?.heroTitle||"",subtitle:appState.i18n?.ku?.heroSubtitle||"",imageUrl:appState.heroImageUrl||""}};
+    data.trips=Array.isArray(data.trips)?data.trips:[];
+    let trip=data.trips[0]||{id:"trip-main"};
+    trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
+    data.trips=[trip,...data.trips.slice(1)];
+    data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
+    data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
+
+    const r=await adminFetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+    const text=await r.text();
+    let d={};
+    try{d=JSON.parse(text||"{}");}catch{}
+    if(!r.ok||!d.ok){
+      throw new Error(`CMS POST HTTP ${r.status}: ${d.error||text||"وەڵامێکی بەتاڵ"}`);
+    }
+    return {ok:true};
+  }catch(e){
+    const msg=formatAdminError(e);
+    toast("❌ CMS Save هەڵەیە — وردەکاری لەسەر شاشە",9000);
+    showAdminError("CMS Save سەرکەوتوو نەبوو",msg,`Endpoint: ${endpoint}\nکات: ${new Date().toISOString()}`);
+    return {ok:false,error:msg};
+  }
 }
 
 async function publishLive(){
   autoSync();
-  await saveStudioToCloud();
-  await saveWhatsAppToCloud();
-  toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!");
+  toast("⏳ Publish دەستپێکرد...");
+  const cms=await saveStudioToCloud();
+  if(!cms.ok){
+    return;
+  }
+  try{
+    await saveWhatsAppToCloud();
+    toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!",6000);
+  }catch(e){
+    const msg=formatAdminError(e);
+    toast("❌ Publish لە WhatsApp بەربەست بوو",9000);
+    showAdminError("Publish تەواو نەبوو",msg,`قۆناغ: WhatsApp Cloud Save\nکات: ${new Date().toISOString()}`);
+  }
 }
 function openLiveSite(){ window.open("index.html", "_blank"); }
 function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
