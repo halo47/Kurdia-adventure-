@@ -470,6 +470,7 @@ body{
 <button class="btn btn-secondary" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> Booking CRM</button>
 <button class="btn btn-secondary" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> Story Moderation</button>
 <button class="btn btn-secondary" onclick="switchTab('gallery')"><i data-lucide="images"></i> Media Library</button>
+<button class="btn btn-secondary" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button>
 <button class="btn btn-secondary" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button>
 <button class="btn btn-secondary" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button>
 <button class="btn btn-secondary" onclick="exportBackup()"><i data-lucide="download"></i> Backup</button>
@@ -1549,8 +1550,10 @@ function exportRegistrationsToCSV(){
 
 // ===== KURDIA v5 ADMIN ADDITIONS =====
 async function adminFetch(url,opts={}){
- const headers=new Headers(opts.headers||{});
- return fetch(url,{...opts,headers});
+  const headers=new Headers(opts.headers||{});
+  headers.delete("X-Admin-Key");
+  headers.delete("Authorization");
+  return fetch(url,{...opts,headers});
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
 function initAdminWeatherMap(){
@@ -1599,8 +1602,63 @@ async function loadPrivateRequests(){
 async function updatePrivateRequest(id,status){const r=await adminFetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status})});toast(r.ok?"✅ نوێکرایەوە":"❌ هەڵە");loadPrivateRequests();}
 async function deletePrivateRequest(id){if(!confirm("دڵنیایت؟"))return;const r=await adminFetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`,{method:"DELETE"});toast(r.ok?"🗑️ سڕایەوە":"❌ هەڵە");loadPrivateRequests();}
 async function runDiagnostics(){
- const c=document.getElementById("diagnosticsContainer");c.innerHTML='<div class="text-xs text-gray-400">⏳ پشکنین...</div>';
- try{const r=await adminFetch(`${WORKER_URL}/api/admin/diagnostics`);const d=await r.json();c.innerHTML=(d.checks||[]).map(x=>`<div class="status-chip"><div class="font-black text-sm">${x.status==="online"?"🟢":x.status==="warning"?"🟡":"🔴"} ${x.name}</div><div class="text-[10px] text-gray-400 mt-1">${x.detail||""}</div></div>`).join("");}catch(e){c.innerHTML='<div class="status-chip text-red-300">Worker وەڵام نادات.</div>'}
+  const box=document.getElementById("diagnosticsContainer");
+  if(!box) return;
+
+  box.innerHTML='<div class="status-chip">⏳ پشکنین دەکرێت...</div>';
+
+  const url=`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`;
+  const started=performance.now();
+
+  const esc=(v)=>{
+    const d=document.createElement("div");
+    d.textContent=String(v ?? "");
+    return d.innerHTML;
+  };
+
+  try{
+    const r=await adminFetch(url,{cache:"no-store",headers:{"Cache-Control":"no-cache"}});
+    const raw=await r.text();
+    let d={};
+    try{d=raw?JSON.parse(raw):{};}catch(_){}
+
+    const ms=Math.round(performance.now()-started);
+
+    if(!r.ok){
+      box.innerHTML=`
+        <div class="status-chip" style="border-color:#ef4444">
+          <b>🔴 Worker Diagnostics — HTTP ${r.status}</b>
+          <div style="margin-top:8px;font-size:11px">URL: ${esc(url)}</div>
+          <pre style="white-space:pre-wrap;direction:ltr;text-align:left;margin-top:8px;font-size:11px;color:#fca5a5">${esc(raw||d.error||"No response body")}</pre>
+          <div style="margin-top:8px;font-size:10px;color:#999">⏱ ${ms}ms</div>
+        </div>`;
+      return;
+    }
+
+    const checks=Array.isArray(d.checks)?d.checks:[];
+    box.innerHTML=`
+      <div class="status-chip">
+        <b>Worker: ${esc(d.worker||WORKER_URL)}</b>
+        <div style="font-size:10px;color:#999;margin-top:5px">HTTP ${r.status} · ${ms}ms · ${esc(d.checkedAt||"")}</div>
+      </div>
+      ${checks.map(x=>`
+        <div class="status-chip" style="border-color:${x.status==="online"?"rgba(16,185,129,.3)":x.status==="warning"?"rgba(245,158,11,.35)":"rgba(239,68,68,.55)"}">
+          <b>${x.status==="online"?"🟢":x.status==="warning"?"🟡":"🔴"} ${esc(x.name||"Unknown")}</b>
+          <div style="font-size:11px;margin-top:5px">${esc(x.detail||"")}</div>
+          ${x.stack?`<pre style="white-space:pre-wrap;direction:ltr;text-align:left;margin-top:8px;font-size:10px;color:#fca5a5">${esc(x.stack)}</pre>`:""}
+        </div>`).join("")}
+      ${!checks.length?`<div class="status-chip"><pre style="white-space:pre-wrap;direction:ltr;text-align:left">${esc(raw)}</pre></div>`:""}
+    `;
+  }catch(err){
+    const ms=Math.round(performance.now()-started);
+    box.innerHTML=`
+      <div class="status-chip" style="border-color:#ef4444">
+        <b>🔴 Browser / Network Error</b>
+        <div style="margin-top:8px;color:#fca5a5">${esc(err?.message||String(err))}</div>
+        <div style="font-size:10px;color:#999;margin-top:6px">URL: ${esc(url)} · ${ms}ms</div>
+        <pre style="white-space:pre-wrap;direction:ltr;text-align:left;margin-top:8px;font-size:10px;color:#fca5a5">${esc(err?.stack||"")}</pre>
+      </div>`;
+  }
 }
 
 function autoSync(){
@@ -1900,30 +1958,110 @@ async function saveWhatsAppToCloud(){
 
 
 async function saveStudioToCloud(){
- try{
-  autoSync();
-  const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms`);
-  const current=await currentRes.json();
-  const data=current.data||{};
-  data.home={...(data.home||{}),hero:{...(data.home?.hero||{}),title:appState.i18n?.ku?.heroTitle||"",subtitle:appState.i18n?.ku?.heroSubtitle||"",imageUrl:appState.heroImageUrl||""}};
-  data.trips=Array.isArray(data.trips)?data.trips:[];
-  let trip=data.trips[0]||{id:"trip-main"};
-  trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
-  data.trips=[trip,...data.trips.slice(1)];
-  data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
-  data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
-  const r=await adminFetch(`${WORKER_URL}/api/admin/cms`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-  const d=await r.json();
-  if(!r.ok||!d.ok) throw new Error(d.error||"Cloud save failed");
-  return true;
- }catch(e){toast("⚠️ Local save کرا، بەڵام Cloud Sync سەرکەوتوو نەبوو");return false;}
+  try{
+    autoSync();
+
+    const get=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
+      cache:"no-store",headers:{"Cache-Control":"no-cache"}
+    });
+    const getRaw=await get.text();
+    let current={};
+    try{current=getRaw?JSON.parse(getRaw):{};}catch(_){}
+
+    if(!get.ok){
+      throw new Error(`CMS GET HTTP ${get.status}: ${current.error||getRaw||"No response"}`);
+    }
+
+    const data=current.data||current.config||{};
+    data.home={...(data.home||{}),hero:{
+      ...(data.home?.hero||{}),
+      title:appState.i18n?.ku?.heroTitle||"",
+      subtitle:appState.i18n?.ku?.heroSubtitle||"",
+      imageUrl:appState.heroImageUrl||""
+    }};
+
+    data.trips=Array.isArray(data.trips)?data.trips:[];
+    const oldTrip=data.trips[0]||{id:"trip-main"};
+    const trip={
+      ...oldTrip,
+      id:oldTrip.id||"trip-main",
+      title:appState.i18n?.ku?.tripTitle||oldTrip.title||"",
+      location:appState.i18n?.ku?.tripLocation||oldTrip.location||"",
+      price:appState.i18n?.ku?.tripPrice||oldTrip.price||"",
+      time:appState.i18n?.ku?.tripTime||oldTrip.time||"",
+      description:appState.i18n?.ku?.tripDesc||oldTrip.description||"",
+      heroImageUrl:appState.tripImageUrl||oldTrip.heroImageUrl||"",
+      capacity:Number(appState.capacity||oldTrip.capacity||40),
+      booked:Number(appState.booked||oldTrip.booked||0),
+      published:true,
+      status:"active"
+    };
+    data.trips=[trip,...data.trips.slice(1)];
+    data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
+    data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
+
+    const r=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
+      method:"POST",cache:"no-store",
+      headers:{"Content-Type":"application/json","Cache-Control":"no-cache"},
+      body:JSON.stringify(data)
+    });
+    const raw=await r.text();
+    let d={};
+    try{d=raw?JSON.parse(raw):{};}catch(_){}
+
+    if(!r.ok) throw new Error(`CMS POST HTTP ${r.status}: ${d.error||raw||"No response"}`);
+    if(d.ok!==true) throw new Error(`CMS POST rejected: ${d.error||"Worker returned ok=false"}`);
+
+    return {ok:true,data:d};
+  }catch(err){
+    console.error("KURDIA CMS SAVE ERROR",err);
+    toast("❌ CMS Save: "+String(err?.message||err).slice(0,320));
+    return {ok:false,error:String(err?.message||err)};
+  }
 }
 
 async function publishLive(){
-  autoSync();
-  await saveStudioToCloud();
-  await saveWhatsAppToCloud();
-  toast("🚀 گۆڕانکارییەکان هەڵگیران و Publish کران!");
+  const started=performance.now();
+  try{
+    toast("⏳ Publish دەکرێت...");
+
+    const saved=await saveStudioToCloud();
+    if(!saved?.ok){
+      toast("❌ Publish ڕاوەستا: CMS Save سەرکەوتوو نەبوو");
+      return false;
+    }
+
+    try{ await saveWhatsAppToCloud(); }catch(e){
+      console.warn("WhatsApp cloud save skipped:",e);
+    }
+
+    const v=await fetch(`${WORKER_URL}/api/site/config?cb=${Date.now()}`,{
+      cache:"no-store",headers:{"Cache-Control":"no-cache"}
+    });
+    const raw=await v.text();
+    let d={};
+    try{d=raw?JSON.parse(raw):{};}catch(_){}
+
+    if(!v.ok){
+      toast(`❌ Publish Verify HTTP ${v.status}: ${d.error||raw||"No response"}`.slice(0,360));
+      return false;
+    }
+
+    const cfg=d.config||d.data||d;
+    if(!cfg||typeof cfg!=="object"){
+      toast("❌ Publish Verify: /api/site/config وەڵامی دروستی نەدا");
+      return false;
+    }
+
+    const ms=Math.round(performance.now()-started);
+    toast(`✅ Publish سەرکەوتووە — ${ms}ms`);
+    if(typeof klog==="function") klog("Publish","CMS + public config verification OK");
+    return true;
+  }catch(err){
+    console.error("KURDIA PUBLISH ERROR",err);
+    toast("❌ Publish Error: "+String(err?.message||err).slice(0,340));
+    return false;
+  }
 }
 function openLiveSite(){ window.open("index.html", "_blank"); }
 function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
@@ -2133,6 +2271,8 @@ function resetData(){
     if(id==='k5_coupons')k5RenderCoupons();
     if(id==='k5_activity')k5RenderLogs();
   };
+  const oldPublish=window.publishLive;
+  window.publishLive=async function(){await oldPublish();klog('Publish','CMS بڵاوکرایەوە');const el=document.getElementById('k5LiveInfo');if(el)el.textContent='دوایین Publish: '+new Date().toLocaleString('ku-IQ');};
   try{if(!Array.isArray(appState.coupons)||!appState.coupons.length){const old=JSON.parse(localStorage.getItem(K5.couponKey)||'[]');if(Array.isArray(old)&&old.length){appState.coupons=old.map(x=>({id:'cp_'+Math.random().toString(36).slice(2),code:String(x.code||'').toUpperCase(),type:'percent',value:Number(x.percent||0),startsAt:'',expiresAt:x.expiry?String(x.expiry)+'T23:59':'',maxUses:Number(x.limit||0),usedCount:Number(x.usedCount||0),active:true}));localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));}}}catch(e){}
   k5RenderLogs();k5RenderCoupons();setTimeout(k5LoadOps,700);
 })();
