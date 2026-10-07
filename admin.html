@@ -170,6 +170,112 @@ textarea{ min-height:85px; resize:vertical; }
 .status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .status-chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
 @media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
+
+/* =========================================================
+   KURDIA ADMIN V2 — MOBILE-FIRST PREMIUM UI
+   Keeps existing functionality; visual/layout layer only.
+   Storage model: KV (no R2 dependency).
+   ========================================================= */
+:root{
+  --k-bg:#05070b;
+  --k-panel:rgba(13,18,28,.82);
+  --k-panel2:rgba(18,25,38,.88);
+  --k-line:rgba(255,255,255,.075);
+  --k-red:#b61f43;
+  --k-red2:#ef315f;
+  --k-glow:rgba(239,49,95,.25);
+  --k-green:#20d69a;
+  --k-blue:#2fc8ff;
+  --k-radius:20px;
+}
+html,body{background:#05070b;}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:
+ radial-gradient(600px 300px at 92% -5%,rgba(183,31,67,.20),transparent 70%),
+ radial-gradient(500px 320px at 0% 45%,rgba(31,78,121,.13),transparent 70%);
+}
+.sidebar{background:rgba(6,10,17,.96);border-left:1px solid var(--k-line);}
+.sidebar-header{padding:18px 16px;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent);}
+.brand-icon{background:linear-gradient(135deg,#8d1736,#ed315e);box-shadow:0 10px 30px rgba(190,24,68,.32);}
+.nav-list{padding:10px 10px 18px;gap:5px;}
+.nav-btn{min-height:46px;border-radius:15px;color:#b9c4d4;font-size:13px;border:1px solid transparent;}
+.nav-btn i{width:18px;height:18px;}
+.nav-btn.active{background:linear-gradient(135deg,rgba(182,31,67,.42),rgba(239,49,95,.12));border-color:rgba(239,49,95,.35);box-shadow:0 10px 28px rgba(181,26,66,.14);}
+.workspace{min-width:0;background:transparent;}
+.topbar{height:72px;padding:0 18px;background:rgba(5,8,13,.78);border-bottom:1px solid var(--k-line);}
+.topbar .brand-icon{display:none;}
+.topbar-right{order:-1;}
+.topbar h1{font-size:16px!important;}
+.content-body{padding:18px 18px 30px;}
+.card{background:linear-gradient(145deg,rgba(18,25,38,.88),rgba(8,12,19,.94));border-color:var(--k-line);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.28);}
+.card-title{font-size:14px;}
+.btn{border-radius:14px;min-height:42px;}
+.btn-primary{background:linear-gradient(135deg,#a9183b,#ef315f);box-shadow:0 10px 30px rgba(239,49,95,.22);}
+.btn-secondary{background:rgba(255,255,255,.045);}
+input,textarea,select{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.085);border-radius:14px;min-height:44px;}
+.item-row{border-radius:16px;background:rgba(255,255,255,.028);}
+.gallery-thumb{border-radius:16px;}
+.status-chip{border-radius:16px;background:rgba(255,255,255,.03);}
+/* Dashboard polish */
+#tab-dashboard>.card:first-child{overflow:hidden;position:relative;}
+#tab-dashboard>.card:first-child:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(182,31,67,.20),transparent 55%);pointer-events:none;}
+/* Mobile shell */
+.k-mobile-bottom{display:none;}
+.k-mobile-fab{display:none;}
+@media(max-width:850px){
+  html,body{overflow:hidden;}
+  .app-container{display:block;}
+  .workspace{height:100dvh;width:100%;}
+  .sidebar{width:min(88vw,360px);z-index:1000;transform:translateX(105%);border-left:1px solid rgba(255,255,255,.10);box-shadow:-25px 0 70px rgba(0,0,0,.65);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-backdrop{z-index:950;}
+  .sidebar-footer{padding:12px 12px calc(12px + env(safe-area-inset-bottom));}
+  .topbar{height:64px;padding:0 12px;gap:8px;position:relative;z-index:20;}
+  .topbar>div:first-child{min-width:0;display:flex!important;gap:9px!important;}
+  .topbar>div:first-child:before{content:"KA";width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8d1736,#ed315e);font-size:11px;font-weight:900;box-shadow:0 8px 22px rgba(239,49,95,.20);}
+  .topbar>div:first-child b{font-size:11px;white-space:nowrap;}
+  .topbar>div:first-child small{font-size:8px!important;}
+  .topbar-right{display:flex;align-items:center;gap:6px;order:initial;}
+  .topbar-right h1{display:none;}
+  .menu-toggle{display:flex;width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.045);border-color:var(--k-line);}
+  .topbar>.btn-success{min-width:42px;width:42px;height:38px;padding:0!important;border-radius:12px;}
+  .topbar>.btn-success{font-size:0!important;}
+  .topbar>.btn-success svg{margin:0;}
+  .content-body{height:calc(100dvh - 64px);padding:12px 12px 94px;overflow-y:auto;overscroll-behavior:contain;}
+  .page-tab.active{animation:kSlide .24s ease;}
+  @keyframes kSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{padding:15px;border-radius:19px;margin-bottom:12px;}
+  .card-header{margin-bottom:12px;}
+  .card-title{font-size:13px;}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr!important;gap:10px;}
+  .grid-4{grid-template-columns:1fr 1fr!important;}
+  .field{margin-bottom:11px;}
+  .field label{font-size:10px;}
+  .btn{font-size:12px;padding:10px 13px;min-height:42px;}
+  .item-row{padding:11px;border-radius:15px;}
+  .uploader-dropzone{padding:18px 12px;border-radius:17px;}
+  .gallery-grid{grid-template-columns:repeat(3,1fr)!important;gap:7px;}
+  .gallery-thumb{height:105px;}
+  .admin-map{height:260px;border-radius:18px;}
+  .status-grid{grid-template-columns:1fr 1fr!important;gap:8px;}
+  .status-chip{padding:10px;}
+  /* make existing wide tables/lists scroll safely */
+  .content-body table,.content-body .overflow-x-auto{max-width:100%;overflow-x:auto;display:block;}
+  /* Mobile bottom navigation */
+  .k-mobile-bottom{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));height:64px;padding:6px;border:1px solid rgba(255,255,255,.09);border-radius:21px;background:rgba(7,11,18,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 20px 60px rgba(0,0,0,.55);z-index:9000;}
+  .k-mobile-bottom button{border:0;background:transparent;color:#8290a5;font:700 9px Vazirmatn,sans-serif;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+  .k-mobile-bottom button svg{width:18px;height:18px;}
+  .k-mobile-bottom button.active{color:#fff;background:linear-gradient(145deg,rgba(182,31,67,.42),rgba(239,49,95,.13));box-shadow:inset 0 0 0 1px rgba(239,49,95,.25);}
+  .k-mobile-bottom .center-action{position:relative;overflow:visible;}
+  .k-mobile-bottom .center-action:before{content:"";position:absolute;width:50px;height:50px;border-radius:17px;top:-19px;background:linear-gradient(135deg,#a9183b,#ef315f);box-shadow:0 10px 28px rgba(239,49,95,.38),0 0 0 5px rgba(7,11,18,.92);}
+  .k-mobile-bottom .center-action svg{position:relative;color:#fff;z-index:1;width:21px;height:21px;}
+  .k-mobile-bottom .center-action span{position:relative;z-index:1;margin-top:28px;color:#9aa7b9;}
+  .k-mobile-fab{display:none;}
+  .toast{bottom:86px;max-width:calc(100vw - 30px);white-space:normal;text-align:center;font-size:11px;padding:11px 15px;}
+}
+@media(min-width:851px){
+  .content-body{max-width:1500px;margin:0 auto;width:100%;}
+}
+
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
@@ -576,9 +682,25 @@ textarea{ min-height:85px; resize:vertical; }
       <!-- COUPONS -->
       <section class="page-tab" id="tab-k5_coupons">
         <div class="card">
-          <div class="card-title mb-2"><i data-lucide="ticket-percent"></i> کۆدەکانی داشکاندن</div>
-          <div class="field"><label>کۆدی داشکاندن</label><input id="couponCodeInput" placeholder="KURDIA10" oninput="autoSync()"></div>
-          <div class="field"><label>ڕێژەی داشکاندن (%)</label><input id="couponDiscountInput" type="number" placeholder="10" oninput="autoSync()"></div>
+          <div class="card-title mb-1"><i data-lucide="ticket-percent"></i> کۆدەکانی داشکاندن</div>
+          <div class="text-xs text-gray-400 mb-4">چەندین کۆبن دروست بکە، هەر یەکەیان داشکاندن و ماوەی بەکارهێنانی جیاوازی هەبێت.</div>
+
+          <div class="grid-2" style="gap:10px">
+            <div class="field"><label>کۆدی کۆبن</label><input id="couponNewCode" placeholder="KURDIA10"></div>
+            <div class="field"><label>جۆری داشکاندن</label><select id="couponNewType"><option value="percent">لە سەد (%)</option><option value="fixed">بڕی دیاریکراو (IQD)</option></select></div>
+            <div class="field"><label>بڕی داشکاندن</label><input id="couponNewValue" type="number" min="0" step="0.01" placeholder="10"></div>
+            <div class="field"><label>ژمارەی جارەکانی بەکارهێنان</label><input id="couponNewUsageLimit" type="number" min="0" placeholder="0 = بێ سنوور"></div>
+            <div class="field"><label>لە بەروار</label><input id="couponNewStart" type="datetime-local"></div>
+            <div class="field"><label>تا بەروار</label><input id="couponNewEnd" type="datetime-local"></div>
+            <div class="field" style="grid-column:1/-1"><label>تێبینی / ناوی کۆبن</label><input id="couponNewNote" placeholder="کۆبنی پاییز — 20% بۆ گەشتی نوێ"></div>
+          </div>
+
+          <button class="btn btn-primary w-full mt-2" onclick="addCoupon()"><i data-lucide="plus"></i> زیادکردنی کۆبنی نوێ</button>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-title"><i data-lucide="layers"></i> هەموو کۆبنەکان</div>
+          <div id="couponsList" class="space-y-2"></div>
         </div>
       </section>
     </div>
@@ -624,6 +746,9 @@ let appState = {
   booked: 29,
   couponCode: "KURDIA10",
   couponDiscount: 10,
+  coupons: [
+    { id: "coupon-default", code: "KURDIA10", type: "percent", value: 10, startAt: "", endAt: "", usageLimit: 0, used: 0, active: true, note: "کۆبنی سەرەکی KURDIA" }
+  ],
   fibAccount: "07503130360",
   waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
   
@@ -771,6 +896,7 @@ async function fetchLiveRegistrations(){
     const res = await adminFetch(`${WORKER_URL}/api/admin/registrations`);
     const data = await res.json();
     if(data.ok && Array.isArray(data.registrations)){
+      // Keep the full server result in cache for backup/export, but hide rejected records from the active UI.
       cachedRegistrations = data.registrations;
       renderRegistrations(cachedRegistrations);
       toast(`✅ ${cachedRegistrations.length} داواکاری بارکرا`);
@@ -784,14 +910,33 @@ async function fetchLiveRegistrations(){
   }
 }
 
+function isRejectedBooking(reg){
+  const s = String(reg?.status || "").toLowerCase().trim();
+  return s.includes("ڕەت") || s.includes("رەت") || s.includes("rejected") || s.includes("reject") || s.includes("denied") || s.includes("cancelled") || s.includes("canceled");
+}
+
+function isAcceptedBooking(reg){
+  const s = String(reg?.status || "").toLowerCase().trim();
+  return s.includes("پەسەند") || s.includes("approve") || s.includes("approved") || s.includes("accepted") || s.includes("confirmed") || s.includes("وەرگیرا");
+}
+
 function renderRegistrations(list){
   const c = document.getElementById("registrationsContainer");
   if(!c) return;
-  if(!list.length){
+
+  // Rejected bookings are intentionally hidden from the active Customers/Bookings list.
+  // Accepted bookings remain visible and are kept by the Worker as the saved booking record.
+  const visible = (Array.isArray(list) ? list : []).filter(reg => !isRejectedBooking(reg));
+
+  if(!visible.length){
     c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە.</div>`;
     return;
   }
-  c.innerHTML = list.map(reg => `
+
+  // Accepted bookings first, then pending bookings.
+  visible.sort((a,b) => Number(isAcceptedBooking(b)) - Number(isAcceptedBooking(a)));
+
+  c.innerHTML = visible.map(reg => `
     <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
       <div>
         <div class="flex items-center gap-2">
@@ -904,8 +1049,14 @@ async function directReject(id, phone){
       body:JSON.stringify({ id, phone, reason })
     });
     const d = await res.json();
-    if(res.ok && d.ok){ toast("❌ ڕەتکرایەوە"); fetchLiveRegistrations(); }
-    else toast("❌ هەڵە: " + (d.error || ""));
+    if(res.ok && d.ok){
+      // Remove rejected booking from the active Customers/Bookings view immediately.
+      cachedRegistrations = (cachedRegistrations || []).filter(reg => String(reg.id) !== String(id));
+      renderRegistrations(cachedRegistrations);
+      toast("❌ داواکارییەکە ڕەتکرایەوە و لە لیستی Customers/Bookings لابرا");
+      // Re-sync with the Worker so the UI stays consistent with the saved server state.
+      setTimeout(fetchLiveRegistrations, 250);
+    } else toast("❌ هەڵە: " + (d.error || ""));
   }catch(e){ toast("کێشە لە پەیوەندی"); }
 }
 
@@ -976,6 +1127,7 @@ function autoSync(){
 
   appState.couponCode = getVal("couponCodeInput", appState.couponCode || "KURDIA10").trim();
   appState.couponDiscount = Number(getVal("couponDiscountInput", appState.couponDiscount || 10) || 10);
+  if(!Array.isArray(appState.coupons)) appState.coupons=[];
   appState.fibAccount = getVal("fibAccount", appState.fibAccount);
 
   const dCap = document.getElementById("dashTotalCap"); if(dCap) dCap.textContent = appState.capacity;
@@ -1076,6 +1228,12 @@ async function saveStudioToCloud(){
       defaultLocation: data.weather?.defaultLocation || "Erbil"
     };
 
+    // Coupons: keep multiple coupon records in CMS/KV.
+    data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
+    if(!data.coupons.length && appState.couponCode){
+      data.coupons = [{ id:"coupon-legacy", code:String(appState.couponCode).trim().toUpperCase(), type:"percent", value:Number(appState.couponDiscount||0), startAt:"", endAt:"", usageLimit:0, used:0, active:true, note:"" }];
+    }
+
     const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
       method: "POST",
       cache: "no-store",
@@ -1099,6 +1257,66 @@ async function saveStudioToCloud(){
 async function publishLive(){
   await saveStudioToCloud();
 }
+
+function couponDateText(v){
+  if(!v) return "بێ سنوور";
+  const d=new Date(v);
+  if(Number.isNaN(d.getTime())) return v;
+  return d.toLocaleString("ku-IQ",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+}
+function couponIsCurrentlyValid(c){
+  if(!c || c.active===false) return false;
+  const now=Date.now();
+  if(c.startAt && Date.parse(c.startAt)>now) return false;
+  if(c.endAt && Date.parse(c.endAt)<now) return false;
+  if(Number(c.usageLimit)>0 && Number(c.used||0)>=Number(c.usageLimit)) return false;
+  return true;
+}
+function renderCoupons(){
+  const box=document.getElementById("couponsList"); if(!box) return;
+  const list=Array.isArray(appState.coupons)?appState.coupons:[];
+  if(!list.length){ box.innerHTML='<div class="text-xs text-gray-400 text-center py-6">هیچ کۆبنێک نییە.</div>'; return; }
+  box.innerHTML=list.map((c,i)=>{
+    const valid=couponIsCurrentlyValid(c);
+    const discount=c.type==='fixed'?`${Number(c.value||0).toLocaleString()} IQD`:`${Number(c.value||0)}%`;
+    return `<div class="p-3 rounded-2xl bg-white/[.035] border border-white/10">
+      <div class="flex items-start justify-between gap-2">
+        <div><div class="font-black text-sm">${c.code||'—'} <span class="text-[10px] px-2 py-1 rounded-full ${valid?'bg-emerald-500/15 text-emerald-300':'bg-red-500/15 text-red-300'}">${valid?'چالاک':'ناچالاک'}</span></div>
+        <div class="text-[10px] text-gray-400 mt-1">${c.note||'بێ تێبینی'} · داشکاندن: <b class="text-white">${discount}</b></div></div>
+        <button class="btn btn-danger text-xs" onclick="deleteCoupon(${i})"><i data-lucide="trash-2"></i></button>
+      </div>
+      <div class="grid-2 mt-2 text-[10px] text-gray-400">
+        <div>🗓️ دەستپێک: <b class="text-gray-200">${couponDateText(c.startAt)}</b></div>
+        <div>⏳ کۆتایی: <b class="text-gray-200">${couponDateText(c.endAt)}</b></div>
+        <div>🎟️ بەکارهاتوو: <b class="text-gray-200">${Number(c.used||0)}</b></div>
+        <div>🔢 سنوور: <b class="text-gray-200">${Number(c.usageLimit||0)>0?Number(c.usageLimit):'بێ سنوور'}</b></div>
+      </div>
+      <button class="btn btn-secondary w-full mt-2 text-xs" onclick="toggleCoupon(${i})">${c.active===false?'چالاککردن':'ناچالاککردن'}</button>
+    </div>`;
+  }).join('');
+  if(window.lucide) lucide.createIcons();
+}
+function addCoupon(){
+  const code=(document.getElementById('couponNewCode')?.value||'').trim().toUpperCase();
+  const type=document.getElementById('couponNewType')?.value||'percent';
+  const value=Number(document.getElementById('couponNewValue')?.value||0);
+  const startAt=document.getElementById('couponNewStart')?.value||'';
+  const endAt=document.getElementById('couponNewEnd')?.value||'';
+  const usageLimit=Number(document.getElementById('couponNewUsageLimit')?.value||0);
+  const note=(document.getElementById('couponNewNote')?.value||'').trim();
+  if(!code) return toast('کۆدی کۆبن بنووسە');
+  if(value<=0) return toast('بڕی داشکاندن دەبێت زیاتر لە 0 بێت');
+  if(type==='percent' && value>100) return toast('ڕێژەی داشکاندن نابێت لە 100% زیاتر بێت');
+  if(startAt && endAt && Date.parse(startAt)>=Date.parse(endAt)) return toast('بەرواری کۆتایی دەبێت دوای بەرواری دەستپێک بێت');
+  appState.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
+  if(appState.coupons.some(c=>String(c.code||'').toUpperCase()===code)) return toast('ئەم کۆبنە پێشتر هەیە');
+  appState.coupons.push({id:'coupon-'+Date.now(),code,type,value,startAt,endAt,usageLimit,used:0,active:true,note});
+  appState.couponCode=code; appState.couponDiscount=type==='percent'?value:appState.couponDiscount;
+  ['couponNewCode','couponNewValue','couponNewStart','couponNewEnd','couponNewUsageLimit','couponNewNote'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
+  renderCoupons(); autoSync(); toast('✅ کۆبن زیادکرا');
+}
+function deleteCoupon(i){ if(!confirm('دڵنیایت لە سڕینەوەی ئەم کۆبنە؟')) return; appState.coupons.splice(i,1); renderCoupons(); autoSync(); toast('🗑️ کۆبن سڕایەوە'); }
+function toggleCoupon(i){ const c=appState.coupons[i]; if(!c)return; c.active=c.active===false; renderCoupons(); autoSync(); toast(c.active?'✅ کۆبن چالاک کرا':'⏸️ کۆبن ناچالاک کرا'); }
 
 function loadState(){
   try{
@@ -1155,6 +1373,8 @@ function loadState(){
   setEl("couponCodeInput", appState.couponCode);
   setEl("couponDiscountInput", appState.couponDiscount);
   setEl("fibAccount", appState.fibAccount);
+  if(!Array.isArray(appState.coupons)) appState.coupons = appState.couponCode ? [{id:"coupon-legacy",code:String(appState.couponCode).toUpperCase(),type:"percent",value:Number(appState.couponDiscount||0),startAt:"",endAt:"",usageLimit:0,used:0,active:true,note:""}] : [];
+  renderCoupons();
 
   if(appState.heroImageUrl){
     const h = document.getElementById("heroDropPreview");
@@ -1191,12 +1411,23 @@ function switchTab(tabId){
 
   document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
   if(event?.currentTarget?.classList) event.currentTarget.classList.add("active");
-  if(window.innerWidth <= 850) toggleSidebar();
+
+  const mobileBtns = document.querySelectorAll(".k-mobile-bottom [data-k-tab]");
+  mobileBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.kTab === tabId));
+  const titleMap = {dashboard:"داشبۆردی سەرەکی",trip:"گەشتەکان",gallery:"گەلەری",live_registrations:"داواکارییەکان",stories_tab:"ستۆرییەکان",weather_manager:"کەشوهەوا",reviews:"هەڵسەنگاندنەکان",diagnostics_tab:"پشکنینی سیستەم"};
+  const title = document.getElementById("topbarTitle");
+  if(title) title.textContent = titleMap[tabId] || "KURDIA CONTROL CENTER";
+  if(window.innerWidth <= 850 && document.getElementById("sidebar")?.classList.contains("open")) toggleSidebar();
 
   if(tabId === 'stories_tab') fetchAdminStories();
   if(tabId === 'private_requests') loadPrivateRequests();
   if(tabId === 'diagnostics_tab') runDiagnostics();
+  setTimeout(()=>window.lucide?.createIcons(),0);
 }
+
+function openKurdiaQuickActions(){ const el=document.getElementById('kQuickActions'); if(el) el.style.display='flex'; lucide?.createIcons(); }
+function closeKurdiaQuickActions(){ const el=document.getElementById('kQuickActions'); if(el) el.style.display='none'; }
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeKurdiaQuickActions();});
 
 function renderReviews(){
   const c = document.getElementById("reviewsList"); if(!c) return;
@@ -1346,5 +1577,27 @@ window.addEventListener("DOMContentLoaded", () => {
   if(window.lucide) lucide.createIcons();
 });
 </script>
+
+<!-- KURDIA MOBILE NAVIGATION V2 -->
+<nav class="k-mobile-bottom" aria-label="KURDIA mobile navigation">
+  <button data-k-tab="dashboard" onclick="switchTab('dashboard')"><i data-lucide="home"></i><span>سەرەتا</span></button>
+  <button data-k-tab="trip" onclick="switchTab('trip')"><i data-lucide="mountain"></i><span>گەشتەکان</span></button>
+  <button class="center-action" onclick="openKurdiaQuickActions()"><i data-lucide="plus"></i><span>زیادکردن</span></button>
+  <button data-k-tab="live_registrations" onclick="switchTab('live_registrations')"><i data-lucide="calendar-days"></i><span>داواکاری</span></button>
+  <button data-k-tab="stories_tab" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i><span>زیاتر</span></button>
+</nav>
+
+<div id="kQuickActions" style="display:none;position:fixed;inset:0;z-index:12000;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);align-items:flex-end;justify-content:center;padding:12px;">
+  <div style="width:100%;max-width:520px;border:1px solid rgba(255,255,255,.1);border-radius:24px;background:rgba(9,14,23,.97);padding:14px;box-shadow:0 25px 80px rgba(0,0,0,.7);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><b style="font-size:14px">کردارە خێراکان</b><button class="btn btn-secondary" style="min-height:36px;padding:7px 10px" onclick="closeKurdiaQuickActions()">✕</button></div>
+    <div class="grid-2">
+      <button class="btn btn-primary" onclick="closeKurdiaQuickActions();switchTab('trip')"><i data-lucide="plus"></i> گەشتی نوێ</button>
+      <button class="btn btn-secondary" onclick="closeKurdiaQuickActions();switchTab('gallery')"><i data-lucide="upload"></i> Upload وێنە</button>
+      <button class="btn btn-secondary" onclick="closeKurdiaQuickActions();switchTab('stories_tab')"><i data-lucide="sparkles"></i> Stories</button>
+      <button class="btn btn-secondary" onclick="closeKurdiaQuickActions();switchTab('broadcast')"><i data-lucide="bell"></i> Notification</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
