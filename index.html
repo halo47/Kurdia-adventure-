@@ -459,7 +459,20 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
           </div>
           <input type="hidden" name="otp_verified" id="otpVerified" value="0">
           <select class="select" name="trip" id="bookingTrip"></select>
-          <input class="input" name="people" type="number" min="1" value="1" placeholder="ژمارەی کەس">
+          <input class="input" name="people" type="number" min="1" value="1" placeholder="ژمارەی کەس" onchange="handlePeopleCount(this.value)">
+          <div class="glass coupon-box" style="padding:14px;margin:4px 0 8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">
+              <b>🎟️ کۆدی داشکاندن</b><span class="muted" style="font-size:10px">ئەگەر کۆبن هەیە</span>
+            </div>
+            <div class="coupon-row">
+              <input class="input" id="couponInput" name="coupon" placeholder="نموونە: KURDIA10" autocomplete="off">
+              <button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button>
+            </div>
+            <div id="couponStatus" class="coupon-status"></div>
+            <input type="hidden" name="coupon_code" id="appliedCouponCode" value="">
+            <input type="hidden" name="coupon_discount" id="appliedCouponDiscount" value="0">
+          </div>
+          <div id="extraNamesContainer" class="extra-names"></div>
           <div class="receipt-box">
             <b>پسوڵەی پارەدان</b>
             <small>وێنەی پسوڵەکەت هەڵبژێرە بۆ ئەوەی لەگەڵ داواکارییەکەت بنێردرێت.</small>
@@ -1032,6 +1045,9 @@ async function submitBooking(e){
   try{
     const fd=new FormData(form);
     fd.set('otp_verified','1');
+    fd.set('coupon_code', window.appliedCouponCode || $('couponInput')?.value?.trim().toUpperCase() || '');
+    fd.set('coupon_discount', String(window.appliedCouponFixed || 0));
+    fd.set('coupon_discount_percent', String(appliedDiscountPercent || 0));
     const r=await fetch(WORKER+'/api/register',{method:'POST',body:fd});
     const x=await r.json().catch(()=>({}));
     if(x.ok){toast('داواکاری + پسوڵە نێردرا ✓');form.reset();$('otpBox').style.display='none';$('otpVerified').value='0';$('receiptPreview').textContent='هیچ وێنەیەک هەڵنەبژێردراوە'}
@@ -1109,6 +1125,9 @@ function applyCoupon(){
    $('couponStatus').innerHTML=`<span style="color:#49d18d">✓ داشکاندن چالاک کرا (${val}%)</span>`;
  }
  window.appliedCouponCode=c.code;
+ window.appliedCouponFixed=type==='fixed'?val:0;
+ if($('appliedCouponCode'))$('appliedCouponCode').value=c.code;
+ if($('appliedCouponDiscount'))$('appliedCouponDiscount').value=String(type==='fixed'?val:val);
  toast(type==='fixed'?`🎉 ${val.toLocaleString()} IQD داشکاندن چالاک کرا`:`🎉 ${val}% داشکاندن چالاک کرا`);
 }
 function previewStoryImage(e){const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/'))return toast('تەنها وێنە ڕێگەپێدراوە');if(f.size>5*1024*1024)return toast('قەبارەی وێنە نابێت لە 5MB زیاتر بێت');const r=new FileReader();r.onload=x=>{const im=new Image();im.onload=()=>{let w=im.width,h=im.height,m=900;if(w>h&&w>m){h=Math.round(h*m/w);w=m}else if(h>m){w=Math.round(w*m/h);h=m}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);const u=c.toDataURL('image/jpeg',.78);$('stMediaBase64').value=u;$('storyPreview').innerHTML=`<img src="${u}" style="width:100%;max-height:220px;object-fit:contain;border-radius:10px">`};im.src=x.target.result};r.readAsDataURL(f)}
