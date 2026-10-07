@@ -1622,58 +1622,124 @@ async function runDiagnostics(){
 }
 
 function autoSync(){
-  appState.gradColor1 = document.getElementById("gradColor1").value;
-  appState.gradColor2 = document.getElementById("gradColor2").value;
+  // Safe DOM helpers: هیچ element ـێکی نەبوو نابێتە هۆی crash
+  const setVal = (id, obj, prop) => {
+    const el = document.getElementById(id);
+    if (el && obj) obj[prop] = el.value;
+  };
 
-  appState.i18n.ku.heroTitle = document.getElementById("heroTitle_ku").value;
-  appState.i18n.ku.heroSubtitle = document.getElementById("heroSubtitle_ku").value;
-  appState.i18n.ar.heroTitle = document.getElementById("heroTitle_ar").value;
-  appState.i18n.ar.heroSubtitle = document.getElementById("heroSubtitle_ar").value;
-  appState.i18n.en.heroTitle = document.getElementById("heroTitle_en").value;
-  appState.i18n.en.heroSubtitle = document.getElementById("heroSubtitle_en").value;
+  const setChecked = (id, obj, prop) => {
+    const el = document.getElementById(id);
+    if (el && obj) obj[prop] = !!el.checked;
+  };
 
-  appState.i18n.ku.tripTitle = document.getElementById("tripTitle_ku").value;
-  appState.i18n.ku.tripLocation = document.getElementById("tripLocation_ku").value;
-  appState.i18n.ku.tripPrice = document.getElementById("tripPrice_ku").value;
-  appState.i18n.ku.tripTime = document.getElementById("tripTime_ku").value;
-  appState.i18n.ku.tripDesc = document.getElementById("tripDesc_ku").value;
+  if (!appState || typeof appState !== "object") appState = {};
+  if (!appState.i18n || typeof appState.i18n !== "object") appState.i18n = {};
+  if (!appState.i18n.ku) appState.i18n.ku = {};
+  if (!appState.i18n.ar) appState.i18n.ar = {};
+  if (!appState.i18n.en) appState.i18n.en = {};
 
-  appState.i18n.ar.tripTitle = document.getElementById("tripTitle_ar").value;
-  appState.i18n.ar.tripLocation = document.getElementById("tripLocation_ar").value;
-  appState.i18n.ar.tripPrice = document.getElementById("tripPrice_ar").value;
-  appState.i18n.ar.tripTime = document.getElementById("tripTime_ar").value;
-  appState.i18n.ar.tripDesc = document.getElementById("tripDesc_ar").value;
+  // Brand / Hero
+  setVal("gradColor1", appState, "gradColor1");
+  setVal("gradColor2", appState, "gradColor2");
 
-  appState.i18n.en.tripTitle = document.getElementById("tripTitle_en").value;
-  appState.i18n.en.tripLocation = document.getElementById("tripLocation_en").value;
-  appState.i18n.en.tripPrice = document.getElementById("tripPrice_en").value;
-  appState.i18n.en.tripTime = document.getElementById("tripTime_en").value;
-  appState.i18n.en.tripDesc = document.getElementById("tripDesc_en").value;
+  setVal("heroTitle_ku", appState.i18n.ku, "heroTitle");
+  setVal("heroSubtitle_ku", appState.i18n.ku, "heroSubtitle");
+  setVal("heroTitle_ar", appState.i18n.ar, "heroTitle");
+  setVal("heroSubtitle_ar", appState.i18n.ar, "heroSubtitle");
+  setVal("heroTitle_en", appState.i18n.en, "heroTitle");
+  setVal("heroSubtitle_en", appState.i18n.en, "heroSubtitle");
 
-  appState.bookingOpen = document.getElementById("bookingOpen").checked;
-  appState.tripTargetDate = document.getElementById("tripTargetDate").value;
-  appState.weatherTemp = document.getElementById("weatherTemp").value;
-  appState.weatherCondition = document.getElementById("weatherCondition").value;
+  // Trip — Kurdish
+  setVal("tripTitle_ku", appState.i18n.ku, "tripTitle");
+  setVal("tripLocation_ku", appState.i18n.ku, "tripLocation");
+  setVal("tripPrice_ku", appState.i18n.ku, "tripPrice");
+  setVal("tripTime_ku", appState.i18n.ku, "tripTime");
+  setVal("tripDesc_ku", appState.i18n.ku, "tripDesc");
 
-  appState.otpRequired = document.getElementById("otpRequiredSwitch").checked;
-  appState.capacity = Number(document.getElementById("capacityInput").value || 40);
-  appState.booked = Number(document.getElementById("bookedInput").value || 0);
+  // Trip — Arabic
+  setVal("tripTitle_ar", appState.i18n.ar, "tripTitle");
+  setVal("tripLocation_ar", appState.i18n.ar, "tripLocation");
+  setVal("tripPrice_ar", appState.i18n.ar, "tripPrice");
+  setVal("tripTime_ar", appState.i18n.ar, "tripTime");
+  setVal("tripDesc_ar", appState.i18n.ar, "tripDesc");
 
-  appState.couponCode = document.getElementById("couponCodeInput")?.value?.trim() || "KURDIA10";
-  appState.couponDiscount = Number(document.getElementById("couponDiscountInput")?.value || 10);
+  // Trip — English
+  setVal("tripTitle_en", appState.i18n.en, "tripTitle");
+  setVal("tripLocation_en", appState.i18n.en, "tripLocation");
+  setVal("tripPrice_en", appState.i18n.en, "tripPrice");
+  setVal("tripTime_en", appState.i18n.en, "tripTime");
+  setVal("tripDesc_en", appState.i18n.en, "tripDesc");
 
-  appState.fibAccount = document.getElementById("fibAccount").value;
-  appState.waMapsUrl = document.getElementById("waMapsUrl").value;
+  // Booking
+  setChecked("bookingOpen", appState, "bookingOpen");
+  setVal("tripTargetDate", appState, "tripTargetDate");
 
-  const dCap = document.getElementById("dashTotalCap"); if(dCap) dCap.textContent = appState.capacity;
-  const dBook = document.getElementById("dashBooked"); if(dBook) dBook.textContent = appState.booked;
-  const dAvail = document.getElementById("dashAvailable"); if(dAvail) dAvail.textContent = Math.max(0, appState.capacity - appState.booked);
-  const dStat = document.getElementById("dashStatus"); if(dStat) dStat.textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
+  // Weather
+  setVal("weatherTemp", appState, "weatherTemp");
+  setVal("weatherCondition", appState, "weatherCondition");
 
-  // Modern multi-coupon manager is stored in appState and therefore included in Cloud Publish.
-  if(!Array.isArray(appState.coupons)) appState.coupons=[];
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
+  // OTP
+  setChecked("otpRequiredSwitch", appState, "otpRequired");
+
+  // Capacity / booked
+  const capacityEl = document.getElementById("capacityInput");
+  appState.capacity = Number(
+    capacityEl?.value || appState.capacity || 40
+  );
+
+  const bookedEl = document.getElementById("bookedInput");
+  appState.booked = Number(
+    bookedEl?.value || appState.booked || 0
+  );
+
+  // Coupons — old fields are optional because the modern coupon manager
+  // may be used instead.
+  const cCode = document.getElementById("couponCodeInput");
+  appState.couponCode = cCode?.value
+    ? cCode.value.trim()
+    : (appState.couponCode || "KURDIA10");
+
+  const cDisc = document.getElementById("couponDiscountInput");
+  appState.couponDiscount = cDisc?.value
+    ? Number(cDisc.value || 10)
+    : Number(appState.couponDiscount || 10);
+
+  if (!Array.isArray(appState.coupons)) appState.coupons = [];
+
+  // Payment / WhatsApp
+  setVal("fibAccount", appState, "fibAccount");
+  setVal("waMapsUrl", appState, "waMapsUrl");
+
+  // Dashboard — every element is optional
+  const dCap = document.getElementById("dashTotalCap");
+  if (dCap) dCap.textContent = appState.capacity;
+
+  const dBook = document.getElementById("dashBooked");
+  if (dBook) dBook.textContent = appState.booked;
+
+  const dAvail = document.getElementById("dashAvailable");
+  if (dAvail) {
+    dAvail.textContent = Math.max(
+      0,
+      appState.capacity - appState.booked
+    );
+  }
+
+  const dStat = document.getElementById("dashStatus");
+  if (dStat) {
+    dStat.textContent = appState.bookingOpen
+      ? "کراوەیە"
+      : "داخراوە";
+  }
+
+  // Local persistence
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
+  } catch (err) {
+    console.warn("KURDIA autoSync localStorage warning:", err);
+  }
 }
 
 function loadState(){
