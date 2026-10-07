@@ -1659,16 +1659,16 @@ function autoSync(){
   appState.capacity = Number(document.getElementById("capacityInput").value || 40);
   appState.booked = Number(document.getElementById("bookedInput").value || 0);
 
-  appState.couponCode = document.getElementById("couponCodeInput").value.trim();
-  appState.couponDiscount = Number(document.getElementById("couponDiscountInput").value || 10);
+  appState.couponCode = document.getElementById("couponCodeInput")?.value?.trim() || "KURDIA10";
+  appState.couponDiscount = Number(document.getElementById("couponDiscountInput")?.value || 10);
 
   appState.fibAccount = document.getElementById("fibAccount").value;
   appState.waMapsUrl = document.getElementById("waMapsUrl").value;
 
-  document.getElementById("dashTotalCap").textContent = appState.capacity;
-  document.getElementById("dashBooked").textContent = appState.booked;
-  document.getElementById("dashAvailable").textContent = Math.max(0, appState.capacity - appState.booked);
-  document.getElementById("dashStatus").textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
+  const dCap = document.getElementById("dashTotalCap"); if(dCap) dCap.textContent = appState.capacity;
+  const dBook = document.getElementById("dashBooked"); if(dBook) dBook.textContent = appState.booked;
+  const dAvail = document.getElementById("dashAvailable"); if(dAvail) dAvail.textContent = Math.max(0, appState.capacity - appState.booked);
+  const dStat = document.getElementById("dashStatus"); if(dStat) dStat.textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
 
   // Modern multi-coupon manager is stored in appState and therefore included in Cloud Publish.
   if(!Array.isArray(appState.coupons)) appState.coupons=[];
