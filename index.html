@@ -642,6 +642,19 @@ function normalizeRemoteCMS(config){
   if(config.footer!==undefined) out.footer=config.footer;
   if(config.privateTrip!==undefined) out.privateTrip=config.privateTrip;
   if(config.uiText!==undefined) out.uiText=config.uiText;
+  if(config.brand!==undefined) out.brand=config.brand;
+  if(config.home!==undefined) out.home=config.home;
+  if(config.search!==undefined) out.search=config.search;
+  if(config.ai!==undefined) out.ai=config.ai;
+  if(config.translations!==undefined) out.translations=config.translations;
+  if(config.booking!==undefined) out.booking=config.booking;
+  if(config.finance!==undefined) out.finance=config.finance;
+  if(config.coupons!==undefined) out.coupons=config.coupons;
+  if(config.whatsapp!==undefined) out.whatsapp=config.whatsapp;
+  if(config.notifications!==undefined) out.notifications=config.notifications;
+  if(config.seo!==undefined) out.seo=config.seo;
+  if(config.system!==undefined) out.system=config.system;
+  if(config.navigation!==undefined) out.navigation=config.navigation;
   return out;
 }
 window.setLanguage=function(lang){
@@ -715,6 +728,11 @@ function normalizePublicData(){
   if(!data.navigation) data.navigation={home:'سەرەکی',weather:'کەشوهەوا',booking:'بەشداری',private:'تایبەت',more:'زیاتر'};
   if(!data.privateTrip) data.privateTrip={title:'گەشتی تایبەت',description:'گەشتەکەت خۆت دیاری بکە، ئێمە بۆت ڕێکی دەخەین.',dateLabel:'بەرواری گەشت',destinationLabel:'شوێنی دڵخوازتان',types:[{value:'Hiking',label:'شاخەوانی',icon:'mountain'},{value:'Camping',label:'کەمپینگ',icon:'tent'},{value:'Nature',label:'سروشت',icon:'leaf'},{value:'Road Trip',label:'گەشتی ڕێگا',icon:'car'},{value:'Family',label:'گەشتی خێزانی',icon:'users'},{value:'Other',label:'هی تر',icon:'more-horizontal'}]};
   if(!data.uiText) data.uiText={heroEyebrow:'سەلامەتی',tripEyebrow:'گەشتی ئەم هەفتەیە',destEyebrow:'شوێنەکان',destTitle:'شوێنەکان',safetyEyebrow:'سەلامەتی',safetyTitle:'سەلامەتی گەشت',safetyText:'زانیارییە هەمیشەییەکان بۆ گەشتێکی ئاگادارانە.',prepEyebrow:'ئامادەکاری',prepTitle:'ئامادەکاری گەشت',privateEyebrow:'گەشتی تایبەت',reviewTitle:'بیروڕا و هەڵسەنگاندن',galleryTitle:'گەلەری',footerTagline:'گەشت، سروشت و ژیانێکی جیاواز'};
+  if(!data.brand) data.brand={name:'KURDIA ADVENTURE',primary:'#a91d37',accent:'#d32f4e',background:'#05070b',heroOverlay:.72};
+  if(!data.search) data.search={enabled:true,destinations:true,trips:true,preparation:true,safety:true,stories:true,gallery:true};
+  if(!data.ai) data.ai={enabled:true,name:'یاریدەدەری KURDIA',welcome:'سڵاو هاوڕێ 🌿'};
+  if(!data.booking) data.booking={open:true,otpRequired:true};
+  if(!data.system) data.system={status:'online',maintenance:false,defaultLanguage:'ku'};
 }
 function safeImageUrl(value){
  const v=String(value||"").trim();
@@ -723,8 +741,39 @@ function safeImageUrl(value){
  if(v.startsWith("/media/")||v.startsWith("/api/media/")) return WORKER+v;
  return "";
 }
+function applyCMSPresentation(){
+  const brand=data.brand||{};
+  const root=document.documentElement;
+  if(brand.primary) root.style.setProperty('--red',brand.primary);
+  if(brand.accent) root.style.setProperty('--red2',brand.accent);
+  if(brand.background) root.style.setProperty('--bg',brand.background);
+  if(brand.name) document.title=brand.name;
+  if(brand.heroOverlay!=null) root.style.setProperty('--cms-hero-overlay',String(brand.heroOverlay));
+  const nav=data.navigation||{};
+  const navMap={home:'home',weather:'weather',booking:'booking',private:'private',more:'more'};
+  document.querySelectorAll('.bottom .navitem').forEach(el=>{
+    const key=el.dataset.page, cfg=nav[key];
+    if(cfg && typeof cfg==='object'){
+      el.style.display=cfg.enabled===false?'none':'';
+      const txt=[...el.childNodes].find(n=>n.nodeType===3);
+      if(txt && cfg.label) txt.nodeValue=cfg.label;
+      const span=el.querySelector('span'); if(span&&cfg.label) span.textContent=cfg.label;
+    }else if(typeof cfg==='string'){
+      const txt=[...el.childNodes].find(n=>n.nodeType===3); if(txt) txt.nodeValue=cfg;
+    }
+  });
+  const sectionMap={destinations:'destinations',safety:'safety',preparation:'prep',gallery:'gallery',reviews:'reviews',about:'about',contact:'contact'};
+  Object.entries(sectionMap).forEach(([key,id])=>{
+    const el=document.getElementById(id), cfg=data[key+'_settings']||data.home?.sections?.[key];
+    if(el && cfg && cfg.enabled===false) el.style.display='none';
+  });
+  const s=data.search||{}; const si=document.getElementById('siteSearch');
+  if(si && s.enabled===false) si.disabled=true;
+  const ai=document.querySelector('.ai'); if(ai&&data.ai?.enabled===false) ai.style.display='none';
+}
 function render(){
  normalizePublicData();
+ applyCMSPresentation();
  const heroUrl=safeImageUrl(data.heroImageUrl);
  document.documentElement.style.setProperty("--hero-image",heroUrl?`url("${heroUrl.replace(/"/g,'\\"')}")`:"url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85')");
  const feature=document.querySelector('.featureimg');
@@ -756,6 +805,7 @@ function renderPage(id){
     if(id==='weather'){
       renderWeather();
       setTimeout(()=>{try{initWeatherMap()}catch(e){}},80);
+      setTimeout(()=>{try{weatherMap?.invalidateSize(true)}catch(e){}},260);
     }
     if(id==='private'){
       setTimeout(()=>{try{initPrivateMap()}catch(e){}},80);
@@ -764,6 +814,21 @@ function renderPage(id){
       try{renderStoriesBar();renderStoryGrid()}catch(e){}
     }
   }catch(e){}
+}
+async function renderWeather(){
+  const w=data?.weather||{};
+  const loc=String(w.defaultLocation||'هەولێر');
+  if($('weatherInput') && !$('weatherInput').value) $('weatherInput').value=loc;
+  if(w.searchEnabled===false){
+    const sb=document.querySelector('.searchbar'); if(sb) sb.style.display='none';
+  }
+  const lat=Number(w.latitude), lng=Number(w.longitude);
+  if(Number.isFinite(lat)&&Number.isFinite(lng)){
+    if(weatherMap) weatherMarker=setMapMarker(weatherMap,weatherMarker,lat,lng);
+    fetchWeatherByCoords(lat,lng,loc);
+  }else{
+    fetchWeatherByCoords(36.19,44.01,loc);
+  }
 }
 function weatherIcon(code,current){
  const rain=Number(current?.rain??0),showers=Number(current?.showers??0),precip=Number(current?.precipitation??0);
@@ -833,7 +898,7 @@ function applyWeather(d,label){
  const ds=daily.time||[];
  $('days').innerHTML=ds.map((day,i)=>`<div class="dayrow"><b>${day}</b><span>${weatherIcon(daily.weather_code?.[i],{precipitation_probability:daily.precipitation_probability_max?.[i]})}</span><b>${Math.round(daily.temperature_2m_max?.[i]??0)}°</b><span class="muted">${Math.round(daily.temperature_2m_min?.[i]??0)}°</span><span class="muted">${daily.precipitation_probability_max?.[i]??0}%</span></div>`).join('');
  $('wUpdated').textContent=new Date().toLocaleTimeString('ku-IQ',{hour:'2-digit',minute:'2-digit'});
- $('wSource').textContent=d?.model||d?.source||'Open-Meteo · ECMWF IFS HRES 9km';
+ $('wSource').textContent=data?.weather?.sourceLabel||d?.model||d?.source||'Open-Meteo · ECMWF IFS HRES 9km';
 }
 async function fetchWeatherByCoords(lat,lng,label='شوێنی دیاریکراو'){
  $('wLocation').textContent='⏳ کەشوهەوا بۆ شوێنی دیاریکراو...';
@@ -856,6 +921,7 @@ async function fetchWeatherByCoords(lat,lng,label='شوێنی دیاریکراو
  }
 }
 async function searchWeather(){
+ if(data?.weather?.searchEnabled===false){toast('گەڕانی کەشوهەوا لەلایەن ئەدمین داخراوە');return;}
  const q=$('weatherInput').value.trim()||'هەولێر';$('wLocation').textContent='⏳ گەڕان...';
  try{
    const r=await fetch(`${WORKER}/api/weather/search?q=${encodeURIComponent(q)}`),x=await r.json();
@@ -871,40 +937,52 @@ async function searchWeather(){
    await fetchWeatherByCoords(place.latitude,place.longitude,`${place.name}${place.country?' · '+place.country:''}`);
  }catch(e){$('wLocation').textContent='شوێنەکە نەدۆزرایەوە';toast('شوێنەکە نەدۆزرایەوە')}
 }
-/* KURDIA ADDITIVE FIX — Weather/Leaflet map only */
+/* KURDIA CMS MAP FIX — additive/safe */
 let weatherMap = null, weatherMarker = null, privateMap = null, privateMarker = null;
 
-function createMap(containerId, lat, lng, onClick) {
-  if (!window.L) return null;
-  const el = document.getElementById(containerId);
-  if (!el) return null;
-  const map = L.map(el, { zoomControl: true }).setView([lat, lng], 9);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
+function createMap(containerId, lat, lng, onClick, zoom){
+  if(!window.L) return null;
+  const el=document.getElementById(containerId);
+  if(!el) return null;
+  if(el._leaflet_id) return null;
+  const map=L.map(el,{zoomControl:true,preferCanvas:true}).setView([Number(lat)||36.19,Number(lng)||44.01],Number(zoom)||9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,attribution:'© OpenStreetMap'
   }).addTo(map);
-  if (typeof onClick === 'function') map.on('click', e => onClick(e.latlng, map));
+  if(typeof onClick==='function') map.on('click',e=>onClick(e.latlng,map));
   return map;
 }
-
-function setMapMarker(map, marker, lat, lng) {
-  if (!map || !window.L) return marker;
-  if (marker) marker.setLatLng([lat, lng]);
-  else marker = L.marker([lat, lng]).addTo(map);
-  map.panTo([lat, lng]);
+function setMapMarker(map,marker,lat,lng){
+  if(!map||!window.L||!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng))) return marker;
+  const pos=[Number(lat),Number(lng)];
+  if(marker) marker.setLatLng(pos);
+  else marker=L.marker(pos).addTo(map);
+  map.setView(pos,map.getZoom(),{animate:false});
   return marker;
 }
-
+function cmsWeatherDefaults(){
+  const w=data?.weather||{};
+  return {
+    lat:Number(w.latitude??36.19)||36.19,
+    lng:Number(w.longitude??44.01)||44.01,
+    zoom:Number(w.defaultZoom??9)||9,
+    location:String(w.defaultLocation||'هەولێر')
+  };
+}
 function initWeatherMap(){
-  if (!weatherMap) {
-    weatherMap = createMap('weatherMap', 36.19, 44.01, async ({lat,lng}) => {
-      weatherMarker = setMapMarker(weatherMap, weatherMarker, lat, lng);
-      await fetchWeatherByCoords(lat, lng, `شوێنی ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
-    });
+  const el=document.getElementById('weatherMap');
+  if(!el||!window.L) return;
+  const cfg=cmsWeatherDefaults();
+  if(!weatherMap){
+    weatherMap=createMap('weatherMap',cfg.lat,cfg.lng,
+      data?.weather?.mapClickEnabled===false ? null : async({lat,lng})=>{
+        weatherMarker=setMapMarker(weatherMap,weatherMarker,lat,lng);
+        await fetchWeatherByCoords(lat,lng,`شوێنی ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+      },cfg.zoom);
+    if(weatherMap) weatherMarker=setMapMarker(weatherMap,weatherMarker,cfg.lat,cfg.lng);
   }
-  setTimeout(() => {
-    if (weatherMap) weatherMap.invalidateSize();
-  }, 150);
+  setTimeout(()=>{try{weatherMap?.invalidateSize(true);}catch(e){}},150);
+  setTimeout(()=>{try{weatherMap?.invalidateSize(true);}catch(e){}},450);
 }
 function initPrivateMap(){if(privateMap)return;privateMap=createMap('privateMap',36.19,44.01,async({lat,lng})=>{privateMarker=setMapMarker(privateMap,privateMarker,lat,lng);$('privateLat').value=lat.toFixed(6);$('privateLng').value=lng.toFixed(6);try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ku`).then(r=>r.json());const n=g?.display_name;if(n){const d=document.querySelector('input[name="destination"]');if(d&&!d.value)d.value=n;const h=document.getElementById('privatePlaceHint');if(h)h.textContent='شوێنی دیاریکراو: '+n}}catch(e){}})}
 function prep(i){const x=data.prep[i]||{};const name=x.name??x[0]??'Camping';const items=Array.isArray(x.items)?x.items:({Camping:['خێمە','کیسەی خەوتن','چرای سەر','ئاو','کەرەستەی پزیشکی'],Nature:['جل و پێڵاو','ئاو','کریم خۆر','نەخشە/GPS','Power Bank'],Waterfall:['پێڵاوی دژ بە ئاو','جل گۆڕین','ئاو','کریم خۆر','کیت یارمەتیدانی یەکەم'],'Road Trip':['شۆفێری','سووتەمەنی','چارەسەری پەنچر','شارژەر','نەخشە'],Family:['خواردن','ئاو','کەرەستەی منداڵ','First Aid','پلانێکی ئارام']}[name]||[]);$('prepChecklist').innerHTML=items.map(v=>`<label><input type="checkbox">${esc(v)}</label>`).join('')}
@@ -1293,4 +1371,16 @@ document.addEventListener('click',function(e){
 })();
 </script>
 
+
+<!-- KURDIA FULL CMS BRIDGE — additive only; preserves existing design -->
+<script id="kurdia-full-cms-bridge">
+(function(){
+  const WORKER='https://kurdia.alwandssalh.workers.dev';
+  async function refreshCMSBeforeFirstPaint(){
+    try{ await loadRemote(); render(); route(); }catch(e){}
+  }
+  window.KurdiaCMS={refresh:refreshCMSBeforeFirstPaint};
+  window.addEventListener('load',()=>setTimeout(refreshCMSBeforeFirstPaint,60),{once:true});
+})();
+</script>
 </body></html>
