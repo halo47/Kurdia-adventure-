@@ -1551,8 +1551,11 @@ function exportRegistrationsToCSV(){
 // ===== KURDIA v5 ADMIN ADDITIONS =====
 async function adminFetch(url,opts={}){
   const headers=new Headers(opts.headers||{});
-  headers.delete("X-Admin-Key");
-  headers.delete("Authorization");
+  const existing=String(headers.get("X-Admin-Key")||"").trim();
+  if(!existing){
+    const key=typeof getAdminKeySafe === "function" ? getAdminKeySafe() : String(sessionStorage.getItem("kurdia_admin_api_key")||"").trim();
+    if(key) headers.set("X-Admin-Key",key);
+  }
   return fetch(url,{...opts,headers});
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
@@ -1617,7 +1620,7 @@ async function runDiagnostics(){
   };
 
   try{
-    const r=await adminFetch(url,{cache:"no-store",headers:{"Cache-Control":"no-cache"}});
+    const r=await adminFetch(url,{cache:"no-store"});
     const raw=await r.text();
     let d={};
     try{d=raw?JSON.parse(raw):{};}catch(_){}
@@ -1962,7 +1965,7 @@ async function saveStudioToCloud(){
     autoSync();
 
     const get=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
-      cache:"no-store",headers:{"Cache-Control":"no-cache"}
+      cache:"no-store"
     });
     const getRaw=await get.text();
     let current={};
@@ -2002,7 +2005,7 @@ async function saveStudioToCloud(){
 
     const r=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
       method:"POST",cache:"no-store",
-      headers:{"Content-Type":"application/json","Cache-Control":"no-cache"},
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify(data)
     });
     const raw=await r.text();
@@ -2036,7 +2039,7 @@ async function publishLive(){
     }
 
     const v=await fetch(`${WORKER_URL}/api/site/config?cb=${Date.now()}`,{
-      cache:"no-store",headers:{"Cache-Control":"no-cache"}
+      cache:"no-store"
     });
     const raw=await v.text();
     let d={};
