@@ -296,18 +296,6 @@ body{
 </head>
 <body>
 
-<div id="adminAuthModal">
-  <div class="auth-box">
-    <div class="brand-icon mx-auto mb-4"><i data-lucide="lock"></i></div>
-    <h2 class="text-lg font-black mb-1">تەختەی کۆنترۆڵی KURDIA</h2>
-    <p class="text-xs text-gray-400 mb-6">تکایە Admin Access ـەکەت بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
-    <div class="field text-right mb-4">
-      <input type="password" id="adminPinInput" placeholder="ADMIN_API_KEY بنووسە..." style="text-align:center;letter-spacing:4px;font-size:16px;">
-    </div>
-    <button class="btn btn-primary w-full" onclick="checkAdminAuth()" type="button"><i data-lucide="check"></i> چوونەژوورەوە</button>
-  </div>
-</div>
-
 <div class="app-container">
   <div class="sidebar-backdrop" id="backdrop" onclick="toggleSidebar()"></div>
 
@@ -853,18 +841,6 @@ body{
    <div class="easy-test-panel" style="margin:10px 0 14px;border:1px solid var(--line);border-radius:18px;padding:14px;background:linear-gradient(135deg,rgba(199,43,73,.11),rgba(255,255,255,.02))">
     <div style="font-weight:900;font-size:17px;margin-bottom:4px">⚡ تاقیکردنەوەی خێرا</div>
     <div class="ss-help" style="margin-bottom:12px">هەر بەشێک وەک WhatsApp OTP ـە: زانیارییەکە بنووسە، دوگمەکە دابگرە، ئەنجامەکە لە خوارەوەی هەمان بەش دەردەکەوێت.</div>
-
-    <div class="easy-action-card" style="margin-bottom:11px">
-      <div class="easy-action-title">🔐 کلیلێکی Admin API</div>
-      <div class="easy-action-help">تەنها یەک جار کلیلی <b>ADMIN_API_KEY</b> ـی Cloudflare بنووسە؛ لە session ـی ئەم مۆبایلەدا هەڵدەگیرێت و بۆ تاقیکردنەوەکانی Admin بەکاردهێنرێت.</div>
-      <input id="easyAdminApiKey" class="input" type="password" dir="ltr" autocomplete="off" placeholder="ADMIN_API_KEY">
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn red easy-action-btn" style="flex:1" type="button" onclick="saveEasyAdminKey()">💾 پاشەکەوتکردنی کلیل</button>
-        <button class="btn easy-action-btn" style="flex:1" type="button" onclick="clearEasyAdminKey()">🗑️ سڕینەوە</button>
-      </div>
-      <div id="easyAdminKeyResult" class="easy-action-result"></div>
-    </div>
-
     <div class="easy-action-grid">
       <div class="easy-action-card">
         <div class="easy-action-title">📱 WhatsApp OTP</div>
@@ -1291,13 +1267,7 @@ let appState = {
 
 let cachedRegistrations = [];
 
-function checkAdminAuth(ev){
-  if(ev) ev.preventDefault();
-  const modal=document.getElementById("adminAuthModal");
-  sessionStorage.setItem("admin_auth","true");
-  if(modal) modal.style.display="none";
-  toast("✅ چوونەژوورەوە سەرکەوتووە");
-}
+function checkAdminAuth(ev){ sessionStorage.setItem("admin_auth","true"); }
 
 // CROPPER
 let cropperInstance = null;
@@ -1549,14 +1519,13 @@ function exportRegistrationsToCSV(){
 
 
 // ===== KURDIA v5 ADMIN ADDITIONS =====
-async function adminFetch(url,opts={}){
-  const headers=new Headers(opts.headers||{});
-  const existing=String(headers.get("X-Admin-Key")||"").trim();
-  if(!existing){
-    const key=typeof getAdminKeySafe === "function" ? getAdminKeySafe() : String(sessionStorage.getItem("kurdia_admin_api_key")||"").trim();
-    if(key) headers.set("X-Admin-Key",key);
-  }
-  return fetch(url,{...opts,headers});
+function getAdminKey(){
+  return "";
+}
+
+async function adminFetch(url, opts = {}) {
+  const headers = new Headers(opts.headers || {});
+  return await fetch(url, { ...opts, headers, cache: opts.cache || "no-store" });
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
 function initAdminWeatherMap(){
@@ -2003,11 +1972,17 @@ async function saveStudioToCloud(){
     data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
     data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
 
-    const r=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
-      method:"POST",cache:"no-store",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(data)
-    });
+    const saveRes = await fetch(
+      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }
+    );
+    const r = saveRes;
     const raw=await r.text();
     let d={};
     try{d=raw?JSON.parse(raw):{};}catch(_){}
@@ -2114,12 +2089,10 @@ async function ccRefreshDashboard(){
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  if(sessionStorage.getItem("admin_auth") === "true"){
-    document.getElementById("adminAuthModal").style.display = "none";
-  }
+  sessionStorage.setItem("admin_auth", "true");
   loadState();
   if(window.lucide) lucide.createIcons();
-  setTimeout(()=>ccRefreshDashboard(),120);
+  if (typeof ccRefreshDashboard === "function") ccRefreshDashboard();
 });
 
 
@@ -2281,20 +2254,6 @@ function resetData(){
 })();
 
 
-// V9: robust Android/Chrome auth wiring
-window.addEventListener("DOMContentLoaded",()=>{
-  const pin=document.getElementById("adminPinInput");
-  const modal=document.getElementById("adminAuthModal");
-  if(pin) pin.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();checkAdminAuth(e);}});
-  const savedKey=sessionStorage.getItem("kurdia_admin_api_key") || "";
-  if(savedKey && savedKey !== "2026" && modal) modal.style.display="none";
-  else {
-    sessionStorage.removeItem("admin_auth");
-    sessionStorage.removeItem("kurdia_admin_key");
-    if(modal) modal.style.display="flex";
-    if(pin) setTimeout(()=>pin.focus(),100);
-  }
-});
 </script>
 <input id="ssMobileImageInput" type="file" accept="image/*" capture="environment" style="display:none"><div id="ssImageUploadStatus" style="display:none"></div>
 <style id="kurdia-v12-easy-actions-css">
@@ -2440,18 +2399,7 @@ window.addEventListener("DOMContentLoaded",()=>{
  };
  window.easyAi=async function(){const prompt=String($('easyAiMessage')?.value||'').trim();if(!prompt){easySetResult('easyAiResult',false,'پرسیاری AI بنووسە');return;}await easyPost('/api/ai',{prompt},'easyAiResult','AI وەڵامی دا ✓');};
 
- function getAdminKeySafe(){
-  try {
-    const raw=sessionStorage.getItem('kurdia_admin_api_key') || sessionStorage.getItem('kurdia_admin_key') || sessionStorage.getItem('adminKey') || '';
-    const key=String(raw).trim();
-    if(key && !/^[\x00-\x7F]*$/.test(key)){
-      // Remove an invalid Unicode key so old/bad session data cannot break every request.
-      try{sessionStorage.removeItem('kurdia_admin_api_key');sessionStorage.removeItem('kurdia_admin_key');sessionStorage.removeItem('adminKey');}catch{}
-      return '';
-    }
-    return key;
-  } catch { return ''; }
-}
+ function getAdminKeySafe(){ return ""; }
  window.saveEasyAdminKey=function(){
    const key=String($('easyAdminApiKey')?.value||'').trim();
    if(!key){easySetResult('easyAdminKeyResult',false,'کلیلی Admin API بنووسە');return;}
