@@ -40,6 +40,18 @@ html, body{
   font-family:"Vazirmatn", sans-serif;
 }
 .app-container{ display:flex; width:100%; height:100%; position:relative; }
+#adminAuthModal{
+  position:fixed; inset:0; background:rgba(7,10,16,0.95); backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  z-index:999999; display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.auth-box{
+  background:linear-gradient(145deg, rgba(19,28,41,.9), rgba(8,12,19,.95));
+  backdrop-filter:blur(25px);
+  border:1px solid var(--border); border-radius:24px;
+  width:100%; max-width:380px; padding:32px 24px; text-align:center;
+  box-shadow:0 30px 70px rgba(0,0,0,0.85);
+}
 .sidebar{
   width:var(--sidebar-w); background:rgba(10,15,23,.85); backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px); border-left:1px solid var(--border);
@@ -284,6 +296,18 @@ body{
 </head>
 <body>
 
+<div id="adminAuthModal">
+  <div class="auth-box">
+    <div class="brand-icon mx-auto mb-4"><i data-lucide="lock"></i></div>
+    <h2 class="text-lg font-black mb-1">تەختەی کۆنترۆڵی KURDIA</h2>
+    <p class="text-xs text-gray-400 mb-6">تکایە Admin API Key ـەکەت بنووسە بۆ چوونەژوورەوەی ئەدمین</p>
+    <div class="field text-right mb-4">
+      <input type="password" id="adminPinInput" placeholder="ADMIN_API_KEY بنووسە..." style="text-align:center;letter-spacing:4px;font-size:16px;">
+    </div>
+    <button class="btn btn-primary w-full" onclick="checkAdminAuth()" type="button"><i data-lucide="check"></i> چوونەژوورەوە</button>
+  </div>
+</div>
+
 <div class="app-container">
   <div class="sidebar-backdrop" id="backdrop" onclick="toggleSidebar()"></div>
 
@@ -321,6 +345,7 @@ body{
 <li><button class="nav-btn" onclick="switchTab('k5_community')"><i data-lucide="users-round"></i> Community Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> WhatsApp Center</button></li>
 <li class="cc-nav-label">SYSTEM</li>
+<li><button class="nav-btn" onclick="switchTab('k5_publish')"><i data-lucide="rocket"></i> Publish Center</button></li>
 <li><button class="nav-btn" onclick="switchTab('api_lab')"><i data-lucide="flask-conical"></i> API Lab</button></li>
 <li><button class="nav-btn" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button></li>
 <li><button class="nav-btn" onclick="switchTab('k5_diagnostics')"><i data-lucide="shield-alert"></i> System Diagnostics</button></li>
@@ -803,7 +828,7 @@ body{
   <div class="k5-mini"><small>دوایین وەڵام</small><b id="apiLastMs">—</b></div>
  </div>
 
- <div class="api-center-grid">
+ <div class="card" style="margin-bottom:12px;border-color:rgba(199,43,73,.28)"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><b>🔐 Admin API Key</b><div class="text-xs text-gray-400" style="margin-top:4px">کلیلی Cloudflare ـەکەت بۆ API ـەکانی Admin بەکاردهێنرێت.</div></div><button type="button" class="btn btn-secondary" onclick="changeAdminApiKey()">گۆڕینی Key</button></div></div><div class="api-center-grid">
   <div class="api-lab-card api-runner-main">
    <div class="api-section-head">
     <div><div class="card-title">🚀 تاقیکردنەوەی API</div><div class="ss-help">یەک API هەڵبژێرە؛ Method، URL و Body بە خۆکار پڕ دەکرێن.</div></div>
@@ -829,6 +854,18 @@ body{
    <div class="easy-test-panel" style="margin:10px 0 14px;border:1px solid var(--line);border-radius:18px;padding:14px;background:linear-gradient(135deg,rgba(199,43,73,.11),rgba(255,255,255,.02))">
     <div style="font-weight:900;font-size:17px;margin-bottom:4px">⚡ تاقیکردنەوەی خێرا</div>
     <div class="ss-help" style="margin-bottom:12px">هەر بەشێک وەک WhatsApp OTP ـە: زانیارییەکە بنووسە، دوگمەکە دابگرە، ئەنجامەکە لە خوارەوەی هەمان بەش دەردەکەوێت.</div>
+
+    <div class="easy-action-card" style="margin-bottom:11px">
+      <div class="easy-action-title">🔐 کلیلێکی Admin API</div>
+      <div class="easy-action-help">تەنها یەک جار کلیلی <b>ADMIN_API_KEY</b> ـی Cloudflare بنووسە؛ لە session ـی ئەم مۆبایلەدا هەڵدەگیرێت و بۆ تاقیکردنەوەکانی Admin بەکاردهێنرێت.</div>
+      <input id="easyAdminApiKey" class="input" type="password" dir="ltr" autocomplete="off" placeholder="ADMIN_API_KEY">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn red easy-action-btn" style="flex:1" type="button" onclick="saveEasyAdminKey()">💾 پاشەکەوتکردنی کلیل</button>
+        <button class="btn easy-action-btn" style="flex:1" type="button" onclick="clearEasyAdminKey()">🗑️ سڕینەوە</button>
+      </div>
+      <div id="easyAdminKeyResult" class="easy-action-result"></div>
+    </div>
+
     <div class="easy-action-grid">
       <div class="easy-action-card">
         <div class="easy-action-title">📱 WhatsApp OTP</div>
@@ -977,7 +1014,7 @@ body{
 
 
 <section id="tab-k5_analytics" class="page-tab"><div class="hero"><div class="eyebrow">OPERATIONS</div><h1>چاودێری و ئامار</h1><p class="muted">وێنەیەکی خێرا لە بارودۆخی گەشتەکان، booking و کۆمەڵگا.</p></div><div class="k5-grid3"><div class="k5-mini"><small>Booking ـی ئەمڕۆ</small><b id="k5BookCount">—</b></div><div class="k5-mini"><small>Private Trip</small><b id="k5PrivateCount">—</b></div><div class="k5-mini"><small>Storiesی چاوەڕوان</small><b id="k5StoryPending">—</b></div></div><div class="card"><h3>دۆخی Trip ـی دیاریکراو</h3><div class="k5-progress"><span id="k5CapacityBar"></span></div><p id="k5CapacityText" class="k5-section-note">داتا چاوەڕوانە...</p></div></section>
-
+<section id="tab-k5_publish" class="page-tab"><div class="card k5-publish"><h2>🚀 Publish Center</h2><p class="k5-section-note">هیچ گۆڕانکارییەک پێش Preview بڵاوناکرێتەوە. Draft و Preview لێرە کۆنترۆڵ دەکرێن.</p><div class="k5-actions"><button class="btn ghost" onclick="k5Preview()">Preview</button><button class="btn ghost" onclick="k5SaveDraft()">Save Draft</button><button class="btn red" onclick="publishLive()">Publish</button><button class="btn danger" onclick="k5UnpublishNotice()">Unpublish</button></div></div><div class="k5-grid2"><div class="card"><h3>Draft</h3><div id="k5DraftInfo" class="k5-section-note">دوایین draft: ـ</div></div><div class="card"><h3>Live</h3><div id="k5LiveInfo" class="k5-section-note">دوایین publish: ـ</div></div></div><div class="card"><h3>Preview</h3><div id="k5Preview" class="k5-preview"><div class="muted">Preview لێرە دەردەکەوێت.</div></div></div></section>
 <section id="tab-k5_community" class="page-tab"><div class="hero"><div class="eyebrow">COMMUNITY</div><h1>کۆمەڵگا</h1><p class="muted">Stories و Reviews لە یەک شوێن.</p></div><div class="card"><div class="toolbar"><input id="k5CommunitySearch" class="input k5-filter" placeholder="گەڕان..." oninput="k5FilterCommunity()"><button class="btn ghost" onclick="loadStories()">نوێکردنەوە</button></div><div id="k5CommunityList" class="list"><div class="muted">داتا چاوەڕوانە...</div></div></div></section>
 <section id="tab-k5_coupons" class="page-tab">
  <div class="hero">
@@ -1255,7 +1292,22 @@ let appState = {
 
 let cachedRegistrations = [];
 
-function checkAdminAuth(ev){ sessionStorage.setItem("admin_auth","true"); }
+function checkAdminAuth(ev){
+  if(ev) ev.preventDefault();
+  const input = document.getElementById("adminPinInput");
+  const modal = document.getElementById("adminAuthModal");
+  const key = String(input?.value || "").trim();
+  if(!key){
+    if(input) input.focus();
+    toast("❌ تکایە Admin API Key بنووسە");
+    return;
+  }
+  sessionStorage.setItem("admin_auth","true");
+  sessionStorage.setItem("kurdia_admin_api_key",key);
+  sessionStorage.setItem("kurdia_admin_key",key);
+  if(modal) modal.style.display="none";
+  toast("کلیلی Admin API هەڵگیرا ✓");
+}
 
 // CROPPER
 let cropperInstance = null;
@@ -1508,12 +1560,33 @@ function exportRegistrationsToCSV(){
 
 // ===== KURDIA v5 ADMIN ADDITIONS =====
 function getAdminKey(){
-  return "";
+  try{
+    return sessionStorage.getItem("kurdia_admin_api_key") || sessionStorage.getItem("kurdia_admin_key") || ADMIN_SECRET_PIN || "2026";
+  }catch{return ADMIN_SECRET_PIN || "2026";}
 }
-
-async function adminFetch(url, opts = {}) {
-  const headers = new Headers(opts.headers || {});
-  return await fetch(url, { ...opts, headers, cache: opts.cache || "no-store" });
+function normalizeAdminHeaderValue(value){
+  const v=String(value ?? '').trim();
+  // HTTP header values used by fetch() must be ByteString-compatible.
+  // The Admin API key is expected to be an ASCII secret; never pass Kurdish/Arabic
+  // text (or other Unicode) into Headers because the browser throws before fetch().
+  if(v && !/^[\x00-\x7F]*$/.test(v)){
+    throw new Error('کلیلی Admin API نابێت پیتی کوردی/عەرەبی یان Unicode ـی تێدا بێت. کلیلی دروستی ASCII لە Admin API Key بنووسە.');
+  }
+  return v;
+}
+async function adminFetch(url,opts={}){
+ const headers=new Headers(opts.headers||{});
+ // Some Admin actions pass X-Admin-Key as an empty string when the key is
+ // stored in sessionStorage. An empty header prevents the fallback key from
+ // being injected and causes Worker HTTP 401. Treat empty as missing.
+ const existing=String(headers.get("X-Admin-Key") ?? "").trim();
+ if(!existing){
+   const key=normalizeAdminHeaderValue(getAdminKey());
+   if(key) headers.set("X-Admin-Key",key);
+ } else {
+   headers.set("X-Admin-Key",normalizeAdminHeaderValue(existing));
+ }
+ return fetch(url,{...opts,headers});
 }
 let adminWeatherMap=null, adminWeatherMarker=null;
 function initAdminWeatherMap(){
@@ -1562,184 +1635,81 @@ async function loadPrivateRequests(){
 async function updatePrivateRequest(id,status){const r=await adminFetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status})});toast(r.ok?"✅ نوێکرایەوە":"❌ هەڵە");loadPrivateRequests();}
 async function deletePrivateRequest(id){if(!confirm("دڵنیایت؟"))return;const r=await adminFetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`,{method:"DELETE"});toast(r.ok?"🗑️ سڕایەوە":"❌ هەڵە");loadPrivateRequests();}
 async function runDiagnostics(){
-  const box=document.getElementById("diagnosticsContainer");
-  if(!box) return;
-
-  box.innerHTML='<div class="status-chip">⏳ پشکنین دەکرێت...</div>';
-
-  const url=`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`;
-  const started=performance.now();
-
-  const esc=(v)=>{
-    const d=document.createElement("div");
-    d.textContent=String(v ?? "");
-    return d.innerHTML;
-  };
-
-  try{
-    const r=await adminFetch(url,{cache:"no-store"});
-    const raw=await r.text();
-    let d={};
-    try{d=raw?JSON.parse(raw):{};}catch(_){}
-
-    const ms=Math.round(performance.now()-started);
-
-    if(!r.ok){
-      box.innerHTML=`
-        <div class="status-chip" style="border-color:#ef4444">
-          <b>🔴 Worker Diagnostics — HTTP ${r.status}</b>
-          <div style="margin-top:8px;font-size:11px">URL: ${esc(url)}</div>
-          <pre style="white-space:pre-wrap;direction:ltr;text-align:left;margin-top:8px;font-size:11px;color:#fca5a5">${esc(raw||d.error||"No response body")}</pre>
-          <div style="margin-top:8px;font-size:10px;color:#999">⏱ ${ms}ms</div>
-        </div>`;
-      return;
-    }
-
-    const checks=Array.isArray(d.checks)?d.checks:[];
-    box.innerHTML=`
-      <div class="status-chip">
-        <b>Worker: ${esc(d.worker||WORKER_URL)}</b>
-        <div style="font-size:10px;color:#999;margin-top:5px">HTTP ${r.status} · ${ms}ms · ${esc(d.checkedAt||"")}</div>
-      </div>
-      ${checks.map(x=>`
-        <div class="status-chip" style="border-color:${x.status==="online"?"rgba(16,185,129,.3)":x.status==="warning"?"rgba(245,158,11,.35)":"rgba(239,68,68,.55)"}">
-          <b>${x.status==="online"?"🟢":x.status==="warning"?"🟡":"🔴"} ${esc(x.name||"Unknown")}</b>
-          <div style="font-size:11px;margin-top:5px">${esc(x.detail||"")}</div>
-          ${x.stack?`<pre style="white-space:pre-wrap;direction:ltr;text-align:left;margin-top:8px;font-size:10px;color:#fca5a5">${esc(x.stack)}</pre>`:""}
-        </div>`).join("")}
-      ${!checks.length?`<div class="status-chip"><pre style="white-space:pre-wrap;direction:ltr;text-align:left">${esc(raw)}</pre></div>`:""}
-    `;
-  }catch(err){
-    const ms=Math.round(performance.now()-started);
-    box.innerHTML=`
-      <div class="status-chip" style="border-color:#ef4444">
-        <b>🔴 Browser / Network Error</b>
-        <div style="margin-top:8px;color:#fca5a5">${esc(err?.message||String(err))}</div>
-        <div style="font-size:10px;color:#999;margin-top:6px">URL: ${esc(url)} · ${ms}ms</div>
-        <pre style="white-space:pre-wrap;direction:ltr;text-align:left;margin-top:8px;font-size:10px;color:#fca5a5">${esc(err?.stack||"")}</pre>
-      </div>`;
-  }
+ const c=document.getElementById("diagnosticsContainer");
+ if(!c)return;
+ c.innerHTML='<div class="text-xs text-gray-400">⏳ پشکنین...</div>';
+ const started=performance.now();
+ try{
+   const r=await fetch(`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`,{method:"GET",cache:"no-store"});
+   const raw=await r.text();
+   let d={}; try{d=raw?JSON.parse(raw):{};}catch(_){d={raw};}
+   if(!r.ok){
+     throw new Error(`HTTP ${r.status} ${r.statusText||""} — ${d.error||d.message||raw||"No response"}`);
+   }
+   const checks=Array.isArray(d.checks)?d.checks:[{name:"Worker Diagnostics",status:"online",detail:`HTTP ${r.status} · ${Math.round(performance.now()-started)}ms`}];
+   c.innerHTML=checks.map(x=>`<div class="status-chip"><div class="font-black text-sm">${x.status==="online"?"🟢":x.status==="warning"?"🟡":"🔴"} ${esc(x.name||"Worker")}</div><div class="text-[10px] text-gray-400 mt-1">${esc(x.detail||x.message||x.error||"")}</div></div>`).join("");
+ }catch(e){
+   c.innerHTML=`<div class="status-chip text-red-300"><div class="font-black text-sm">🔴 Worker Diagnostics</div><div class="text-[10px] mt-1" style="white-space:pre-wrap">${esc(e?.message||String(e))}</div></div>`;
+ }
 }
 
 function autoSync(){
-  // Safe DOM helpers: هیچ element ـێکی نەبوو نابێتە هۆی crash
-  const setVal = (id, obj, prop) => {
+  const getVal = (id, fallback = "") => {
     const el = document.getElementById(id);
-    if (el && obj) obj[prop] = el.value;
+    return el ? String(el.value ?? fallback) : String(fallback);
   };
+  appState.gradColor1 = getVal("gradColor1");
+  appState.gradColor2 = getVal("gradColor2");
 
-  const setChecked = (id, obj, prop) => {
-    const el = document.getElementById(id);
-    if (el && obj) obj[prop] = !!el.checked;
-  };
+  appState.i18n.ku.heroTitle = getVal("heroTitle_ku");
+  appState.i18n.ku.heroSubtitle = getVal("heroSubtitle_ku");
+  appState.i18n.ar.heroTitle = getVal("heroTitle_ar");
+  appState.i18n.ar.heroSubtitle = getVal("heroSubtitle_ar");
+  appState.i18n.en.heroTitle = getVal("heroTitle_en");
+  appState.i18n.en.heroSubtitle = getVal("heroSubtitle_en");
 
-  if (!appState || typeof appState !== "object") appState = {};
-  if (!appState.i18n || typeof appState.i18n !== "object") appState.i18n = {};
-  if (!appState.i18n.ku) appState.i18n.ku = {};
-  if (!appState.i18n.ar) appState.i18n.ar = {};
-  if (!appState.i18n.en) appState.i18n.en = {};
+  appState.i18n.ku.tripTitle = getVal("tripTitle_ku");
+  appState.i18n.ku.tripLocation = getVal("tripLocation_ku");
+  appState.i18n.ku.tripPrice = getVal("tripPrice_ku");
+  appState.i18n.ku.tripTime = getVal("tripTime_ku");
+  appState.i18n.ku.tripDesc = getVal("tripDesc_ku");
 
-  // Brand / Hero
-  setVal("gradColor1", appState, "gradColor1");
-  setVal("gradColor2", appState, "gradColor2");
+  appState.i18n.ar.tripTitle = getVal("tripTitle_ar");
+  appState.i18n.ar.tripLocation = getVal("tripLocation_ar");
+  appState.i18n.ar.tripPrice = getVal("tripPrice_ar");
+  appState.i18n.ar.tripTime = getVal("tripTime_ar");
+  appState.i18n.ar.tripDesc = getVal("tripDesc_ar");
 
-  setVal("heroTitle_ku", appState.i18n.ku, "heroTitle");
-  setVal("heroSubtitle_ku", appState.i18n.ku, "heroSubtitle");
-  setVal("heroTitle_ar", appState.i18n.ar, "heroTitle");
-  setVal("heroSubtitle_ar", appState.i18n.ar, "heroSubtitle");
-  setVal("heroTitle_en", appState.i18n.en, "heroTitle");
-  setVal("heroSubtitle_en", appState.i18n.en, "heroSubtitle");
+  appState.i18n.en.tripTitle = getVal("tripTitle_en");
+  appState.i18n.en.tripLocation = getVal("tripLocation_en");
+  appState.i18n.en.tripPrice = getVal("tripPrice_en");
+  appState.i18n.en.tripTime = getVal("tripTime_en");
+  appState.i18n.en.tripDesc = getVal("tripDesc_en");
 
-  // Trip — Kurdish
-  setVal("tripTitle_ku", appState.i18n.ku, "tripTitle");
-  setVal("tripLocation_ku", appState.i18n.ku, "tripLocation");
-  setVal("tripPrice_ku", appState.i18n.ku, "tripPrice");
-  setVal("tripTime_ku", appState.i18n.ku, "tripTime");
-  setVal("tripDesc_ku", appState.i18n.ku, "tripDesc");
+  appState.bookingOpen = document.getElementById("bookingOpen").checked;
+  appState.tripTargetDate = getVal("tripTargetDate");
+  appState.weatherTemp = getVal("weatherTemp");
+  appState.weatherCondition = getVal("weatherCondition");
 
-  // Trip — Arabic
-  setVal("tripTitle_ar", appState.i18n.ar, "tripTitle");
-  setVal("tripLocation_ar", appState.i18n.ar, "tripLocation");
-  setVal("tripPrice_ar", appState.i18n.ar, "tripPrice");
-  setVal("tripTime_ar", appState.i18n.ar, "tripTime");
-  setVal("tripDesc_ar", appState.i18n.ar, "tripDesc");
+  appState.otpRequired = document.getElementById("otpRequiredSwitch").checked;
+  appState.capacity = Number(getVal("capacityInput") || 40);
+  appState.booked = Number(getVal("bookedInput") || 0);
 
-  // Trip — English
-  setVal("tripTitle_en", appState.i18n.en, "tripTitle");
-  setVal("tripLocation_en", appState.i18n.en, "tripLocation");
-  setVal("tripPrice_en", appState.i18n.en, "tripPrice");
-  setVal("tripTime_en", appState.i18n.en, "tripTime");
-  setVal("tripDesc_en", appState.i18n.en, "tripDesc");
+  appState.couponCode = getVal("couponCodeInput", appState.couponCode || "KURDIA10").trim();
+  appState.couponDiscount = Number(getVal("couponDiscountInput", appState.couponDiscount || 10) || 10);
 
-  // Booking
-  setChecked("bookingOpen", appState, "bookingOpen");
-  setVal("tripTargetDate", appState, "tripTargetDate");
+  appState.fibAccount = getVal("fibAccount");
+  appState.waMapsUrl = getVal("waMapsUrl");
 
-  // Weather
-  setVal("weatherTemp", appState, "weatherTemp");
-  setVal("weatherCondition", appState, "weatherCondition");
+  { const e=document.getElementById("dashTotalCap"); if(e)e.textContent=appState.capacity; }
+  { const e=document.getElementById("dashBooked"); if(e)e.textContent=appState.booked; }
+  { const e=document.getElementById("dashAvailable"); if(e)e.textContent=Math.max(0, appState.capacity-appState.booked); }
+  { const e=document.getElementById("dashStatus"); if(e)e.textContent=appState.bookingOpen ? "کراوەیە" : "داخراوە"; }
 
-  // OTP
-  setChecked("otpRequiredSwitch", appState, "otpRequired");
-
-  // Capacity / booked
-  const capacityEl = document.getElementById("capacityInput");
-  appState.capacity = Number(
-    capacityEl?.value || appState.capacity || 40
-  );
-
-  const bookedEl = document.getElementById("bookedInput");
-  appState.booked = Number(
-    bookedEl?.value || appState.booked || 0
-  );
-
-  // Coupons — old fields are optional because the modern coupon manager
-  // may be used instead.
-  const cCode = document.getElementById("couponCodeInput");
-  appState.couponCode = cCode?.value
-    ? cCode.value.trim()
-    : (appState.couponCode || "KURDIA10");
-
-  const cDisc = document.getElementById("couponDiscountInput");
-  appState.couponDiscount = cDisc?.value
-    ? Number(cDisc.value || 10)
-    : Number(appState.couponDiscount || 10);
-
-  if (!Array.isArray(appState.coupons)) appState.coupons = [];
-
-  // Payment / WhatsApp
-  setVal("fibAccount", appState, "fibAccount");
-  setVal("waMapsUrl", appState, "waMapsUrl");
-
-  // Dashboard — every element is optional
-  const dCap = document.getElementById("dashTotalCap");
-  if (dCap) dCap.textContent = appState.capacity;
-
-  const dBook = document.getElementById("dashBooked");
-  if (dBook) dBook.textContent = appState.booked;
-
-  const dAvail = document.getElementById("dashAvailable");
-  if (dAvail) {
-    dAvail.textContent = Math.max(
-      0,
-      appState.capacity - appState.booked
-    );
-  }
-
-  const dStat = document.getElementById("dashStatus");
-  if (dStat) {
-    dStat.textContent = appState.bookingOpen
-      ? "کراوەیە"
-      : "داخراوە";
-  }
-
-  // Local persistence
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-    localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
-  } catch (err) {
-    console.warn("KURDIA autoSync localStorage warning:", err);
-  }
+  // Modern multi-coupon manager is stored in appState and therefore included in Cloud Publish.
+  if(!Array.isArray(appState.coupons)) appState.coupons=[];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  localStorage.setItem("KURDIA_BUILDER_STATE", JSON.stringify(appState));
 }
 
 function loadState(){
@@ -1970,95 +1940,62 @@ async function sendBroadcastReminder(){
 }
 
 async function saveWhatsAppToCloud(){
-  // This endpoint is not required for Publish; WhatsApp templates are managed in Meta.
+  // Compatibility only: /api/admin/wa-settings is not a Worker endpoint.
+  // WhatsApp configuration is managed by Cloudflare environment settings.
   return true;
 }
+
 
 async function saveStudioToCloud(){
   try{
     autoSync();
-
-    const get=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{
-      cache:"no-store"
-    });
-    const getRaw=await get.text();
+    const currentRes=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{cache:"no-store"});
+    const currentRaw=await currentRes.text();
     let current={};
-    try{current=getRaw?JSON.parse(getRaw):{};}catch(_){}
-
-    if(!get.ok){
-      throw new Error(`CMS GET HTTP ${get.status}: ${current.error||getRaw||"No response"}`);
+    try{current=currentRaw?JSON.parse(currentRaw):{};}catch(_){current={raw:currentRaw};}
+    if(!currentRes.ok){
+      throw new Error(`CMS GET HTTP ${currentRes.status}: ${current.error||current.message||currentRaw||"No response"}`);
     }
-
-    const data=current.data||current.config||{};
-    data.home={...(data.home||{}),hero:{
-      ...(data.home?.hero||{}),
-      title:appState.i18n?.ku?.heroTitle||"",
-      subtitle:appState.i18n?.ku?.heroSubtitle||"",
-      imageUrl:appState.heroImageUrl||""
-    }};
-
+    const data=current.data||{};
+    data.home={...(data.home||{}),hero:{...(data.home?.hero||{}),title:appState.i18n?.ku?.heroTitle||"",subtitle:appState.i18n?.ku?.heroSubtitle||"",imageUrl:appState.heroImageUrl||""}};
     data.trips=Array.isArray(data.trips)?data.trips:[];
-    const oldTrip=data.trips[0]||{id:"trip-main"};
-    const trip={
-      ...oldTrip,
-      id:oldTrip.id||"trip-main",
-      title:appState.i18n?.ku?.tripTitle||oldTrip.title||"",
-      location:appState.i18n?.ku?.tripLocation||oldTrip.location||"",
-      price:appState.i18n?.ku?.tripPrice||oldTrip.price||"",
-      time:appState.i18n?.ku?.tripTime||oldTrip.time||"",
-      description:appState.i18n?.ku?.tripDesc||oldTrip.description||"",
-      heroImageUrl:appState.tripImageUrl||oldTrip.heroImageUrl||"",
-      capacity:Number(appState.capacity||oldTrip.capacity||40),
-      booked:Number(appState.booked||oldTrip.booked||0),
-      published:true,
-      status:"active"
-    };
+    let trip=data.trips[0]||{id:"trip-main"};
+    trip={...trip,title:appState.i18n?.ku?.tripTitle||trip.title||"",location:appState.i18n?.ku?.tripLocation||trip.location||"",price:appState.i18n?.ku?.tripPrice||trip.price||"",time:appState.i18n?.ku?.tripTime||trip.time||"",description:appState.i18n?.ku?.tripDesc||trip.description||"",heroImageUrl:appState.tripImageUrl||trip.heroImageUrl||"",capacity:Number(appState.capacity||trip.capacity||40),booked:Number(appState.booked||trip.booked||0),published:true,status:"active"};
     data.trips=[trip,...data.trips.slice(1)];
     data.weather={...(data.weather||{}),sourceLabel:"Open-Meteo",defaultLocation:data.weather?.defaultLocation||"Erbil"};
     data.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
-
-    const saveRes = await fetch(
-      `${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      }
-    );
-    const r = saveRes;
+    const r=await adminFetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{method:"POST",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
     const raw=await r.text();
-    let d={};
-    try{d=raw?JSON.parse(raw):{};}catch(_){}
-
-    if(!r.ok) throw new Error(`CMS POST HTTP ${r.status}: ${d.error||raw||"No response"}`);
-    if(d.ok!==true) throw new Error(`CMS POST rejected: ${d.error||"Worker returned ok=false"}`);
-
-    return {ok:true,data:d};
-  }catch(err){
-    console.error("KURDIA CMS SAVE ERROR",err);
-    toast("❌ CMS Save: "+String(err?.message||err).slice(0,320));
-    return {ok:false,error:String(err?.message||err)};
+    let d={}; try{d=raw?JSON.parse(raw):{};}catch(_){d={raw};}
+    if(!r.ok||!d.ok){
+      throw new Error(`CMS POST HTTP ${r.status}: ${d.error||d.message||raw||"Cloud save failed"}`);
+    }
+    return true;
+  }catch(e){
+    toast("❌ Cloud Save: "+(e?.message||String(e)));
+    return false;
   }
 }
 
 async function publishLive(){
-  try {
+  try{
     autoSync();
     toast("⏳ گۆڕانکارییەکان دەنێردرێن بۆ سێرڤەر...");
-    const ok = await saveStudioToCloud();
-    if (ok?.ok || ok === true) {
-      toast("🚀 گۆڕانکارییەکان هەڵگیران و بە سەرکەوتوویی Publish کران!");
-      return true;
+    const ok=await saveStudioToCloud();
+    if(!ok){
+      toast("❌ Publish ڕاوەستا: CMS Save سەرکەوتوو نەبوو");
+      return false;
     }
-    toast("❌ پاشەکەوتکردن سەرکەوتوو نەبوو");
-    return false;
-  } catch (err) {
-    toast("❌ کێشە: " + (err?.message || "هەڵە"));
+    await saveWhatsAppToCloud();
+    toast("🚀 گۆڕانکارییەکان هەڵگیران و بە سەرکەوتوویی Publish کران!");
+    return true;
+  }catch(e){
+    toast("❌ Publish: "+(e?.message||String(e)));
     return false;
   }
 }
+function openLiveSite(){ window.open("index.html", "_blank"); }
+function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
 
 function exportBackup(){
   autoSync();
@@ -2105,10 +2042,12 @@ async function ccRefreshDashboard(){
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  sessionStorage.setItem("admin_auth", "true");
+  if(sessionStorage.getItem("admin_auth") === "true"){
+    document.getElementById("adminAuthModal").style.display = "none";
+  }
   loadState();
   if(window.lucide) lucide.createIcons();
-  if (typeof ccRefreshDashboard === "function") ccRefreshDashboard();
+  setTimeout(()=>ccRefreshDashboard(),120);
 });
 
 
@@ -2226,16 +2165,30 @@ function resetData(){
     localStorage.setItem(K5.settingsKey,JSON.stringify(s));klog('Settings','Settings پاشەکەوت کرا');toast('Settings پاشەکەوت کرا ✓');
   };
   window.k5Diagnostics=async function(){
-    const box=document.getElementById('k5Diagnostics');if(!box)return;box.innerHTML='<div class="item-row">پشکنین دەکرێت...</div>';
+    const box=document.getElementById('k5Diagnostics');
+    if(!box)return;
+    box.innerHTML='<div class="item-row">⏳ Worker Diagnostics پشکنین دەکرێت...</div>';
     const checks=[];
+    const started=performance.now();
     try{
-      const r=await adminFetch(`${WORKER_URL}/api/admin/diagnostics`,{headers:{'x-admin-key':getAdminKeySafe()}});
-      const x=await r.json().catch(()=>({}));
-      if(Array.isArray(x.checks))x.checks.forEach(c=>checks.push(c));else checks.push({name:'Worker Diagnostics',status:r.ok?'online':'error',detail:r.status});
-    }catch(e){checks.push({name:'Worker Diagnostics',status:'error',detail:'پەیوەندی نییە'});}
-    box.innerHTML=checks.map(c=>`<div class="item-row"><span class="k5-status"><i class="k5-dot ${c.status==='online'?'':'err'}"></i></span><div style="flex:1"><b>${esc(c.name||'Service')}</b><div class="text-xs text-gray-400">${esc(c.detail||c.status||'')}</div></div><span class="k5-badge">${esc(c.status||'')}</span></div>`).join('');
-    const tm=document.getElementById('k5DiagTime');if(tm)tm.textContent='دوایین پشکنین: '+new Date().toLocaleTimeString('ku-IQ');klog('Diagnostics','پشکنینی سیستم ئەنجامدرا');
-  };
+      const r=await fetch(`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`,{method:'GET',cache:'no-store'});
+      const raw=await r.text();
+      let x={};
+      try{x=raw?JSON.parse(raw):{};}catch(_){x={raw};}
+      if(!r.ok){
+        checks.push({name:'Worker Diagnostics',status:'error',detail:`HTTP ${r.status} ${r.statusText||''} — ${x.error||x.message||raw||'No response'} · ${Math.round(performance.now()-started)}ms`});
+      }else if(Array.isArray(x.checks)){
+        x.checks.forEach(c=>checks.push(c));
+      }else{
+        checks.push({name:'Worker Diagnostics',status:'online',detail:`HTTP ${r.status} · ${Math.round(performance.now()-started)}ms`});
+      }
+    }catch(e){
+      checks.push({name:'Worker Diagnostics',status:'error',detail:`NETWORK ERROR — ${e?.message||String(e)} · ${Math.round(performance.now()-started)}ms`});
+    }
+    box.innerHTML=checks.map(c=>`<div class="item-row"><span class="k5-status"><i class="k5-dot ${c.status==='online'?'':'err'}"></i></span><div style="flex:1"><b>${esc(c.name||'Service')}</b><div class="text-xs text-gray-400" style="white-space:pre-wrap">${esc(c.detail||c.status||'')}</div></div><span class="k5-badge">${esc(c.status||'')}</span></div>`).join('');
+    const tm=document.getElementById('k5DiagTime');if(tm)tm.textContent='دوایین پشکنین: '+new Date().toLocaleTimeString('ku-IQ');
+    klog('Diagnostics','پشکنینی سیستم ئەنجامدرا');
+  };;
   window.k5LoadOps=async function(){
     try{
       const h={headers:{'x-admin-key':getAdminKeySafe()}};
@@ -2270,6 +2223,20 @@ function resetData(){
 })();
 
 
+// V9: robust Android/Chrome auth wiring
+window.addEventListener("DOMContentLoaded",()=>{
+  const pin=document.getElementById("adminPinInput");
+  const modal=document.getElementById("adminAuthModal");
+  if(pin) pin.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();checkAdminAuth(e);}});
+  const savedKey=sessionStorage.getItem("kurdia_admin_api_key") || "";
+  if(savedKey && savedKey !== "2026" && modal) modal.style.display="none";
+  else {
+    sessionStorage.removeItem("admin_auth");
+    sessionStorage.removeItem("kurdia_admin_key");
+    if(modal) modal.style.display="flex";
+    if(pin) setTimeout(()=>pin.focus(),100);
+  }
+});
 </script>
 <input id="ssMobileImageInput" type="file" accept="image/*" capture="environment" style="display:none"><div id="ssImageUploadStatus" style="display:none"></div>
 <style id="kurdia-v12-easy-actions-css">
@@ -2415,7 +2382,18 @@ function resetData(){
  };
  window.easyAi=async function(){const prompt=String($('easyAiMessage')?.value||'').trim();if(!prompt){easySetResult('easyAiResult',false,'پرسیاری AI بنووسە');return;}await easyPost('/api/ai',{prompt},'easyAiResult','AI وەڵامی دا ✓');};
 
- function getAdminKeySafe(){ return ""; }
+ function getAdminKeySafe(){
+  try {
+    const raw=sessionStorage.getItem('kurdia_admin_api_key') || sessionStorage.getItem('kurdia_admin_key') || sessionStorage.getItem('adminKey') || '';
+    const key=String(raw).trim();
+    if(key && !/^[\x00-\x7F]*$/.test(key)){
+      // Remove an invalid Unicode key so old/bad session data cannot break every request.
+      try{sessionStorage.removeItem('kurdia_admin_api_key');sessionStorage.removeItem('kurdia_admin_key');sessionStorage.removeItem('adminKey');}catch{}
+      return '';
+    }
+    return key;
+  } catch { return ''; }
+}
  window.saveEasyAdminKey=function(){
    const key=String($('easyAdminApiKey')?.value||'').trim();
    if(!key){easySetResult('easyAdminKeyResult',false,'کلیلی Admin API بنووسە');return;}
@@ -2446,12 +2424,12 @@ function resetData(){
    }catch(e){const ms=Math.round(performance.now()-started);const meta=`❌ NETWORK ERROR · ${ms}ms · POST ${x.p}`;show({error:e.message},false,meta);history(meta,false);saveHistory(meta,false,ms,x.p);if(out){out.style.display='block';out.style.background='rgba(255,75,105,.10)';out.style.border='1px solid rgba(255,75,105,.35)';out.textContent='❌ پەیوەندی بە Worker نەکرا.\n'+e.message;}}
  };
  window.changeAdminApiKey=function(){
-  const key=prompt("Admin Access ـەکەت بنووسە:");
+  const key=prompt("Admin API Key ـەکەت بنووسە:");
   if(!key || !String(key).trim()) return;
   sessionStorage.setItem('kurdia_admin_api_key',String(key).trim());
   sessionStorage.setItem('kurdia_admin_key',String(key).trim());
   sessionStorage.setItem('admin_auth','true');
-  toast('Admin Access نوێکرایەوە ✓');
+  toast('Admin API Key نوێکرایەوە ✓');
 };
 window.quickWorkerTest=async function(){
    const old=$('apiPreset')?.value; if($('apiPreset')){$('apiPreset').value='diagnostics';apiPresetChanged();} await runApiTest(); if(old&&$('apiPreset')){$('apiPreset').value=old;apiPresetChanged();}
