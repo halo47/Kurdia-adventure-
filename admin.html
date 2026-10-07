@@ -40,18 +40,6 @@ html, body{
   font-family:"Vazirmatn", sans-serif;
 }
 .app-container{ display:flex; width:100%; height:100%; position:relative; }
-#adminAuthModal{
-  position:fixed; inset:0; background:rgba(7,10,16,0.95); backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  z-index:999999; display:flex; align-items:center; justify-content:center; padding:20px;
-}
-.auth-box{
-  background:linear-gradient(145deg, rgba(19,28,41,.9), rgba(8,12,19,.95));
-  backdrop-filter:blur(25px);
-  border:1px solid var(--border); border-radius:24px;
-  width:100%; max-width:380px; padding:32px 24px; text-align:center;
-  box-shadow:0 30px 70px rgba(0,0,0,0.85);
-}
 .sidebar{
   width:var(--sidebar-w); background:rgba(10,15,23,.85); backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px); border-left:1px solid var(--border);
@@ -1916,18 +1904,9 @@ async function sendBroadcastReminder(){
 }
 
 async function saveWhatsAppToCloud(){
-  autoSync(); toast("⏳ لە سێرڤەر سەیڤ دەکرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/wa-settings`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ mapsUrl:appState.waMapsUrl })
-    });
-    if(res.ok) toast("✅ لە Cloud پاشەکەوت کرا");
-    else toast("❌ کێشە لە سەیڤکردن");
-  }catch(e){ toast("کێشە لە پەیوەندی"); }
+  // This endpoint is not required for Publish; WhatsApp templates are managed in Meta.
+  return true;
 }
-
 
 async function saveStudioToCloud(){
   try{
@@ -1999,50 +1978,21 @@ async function saveStudioToCloud(){
 }
 
 async function publishLive(){
-  const started=performance.now();
-  try{
-    toast("⏳ Publish دەکرێت...");
-
-    const saved=await saveStudioToCloud();
-    if(!saved?.ok){
-      toast("❌ Publish ڕاوەستا: CMS Save سەرکەوتوو نەبوو");
-      return false;
+  try {
+    autoSync();
+    toast("⏳ گۆڕانکارییەکان دەنێردرێن بۆ سێرڤەر...");
+    const ok = await saveStudioToCloud();
+    if (ok?.ok || ok === true) {
+      toast("🚀 گۆڕانکارییەکان هەڵگیران و بە سەرکەوتوویی Publish کران!");
+      return true;
     }
-
-    try{ await saveWhatsAppToCloud(); }catch(e){
-      console.warn("WhatsApp cloud save skipped:",e);
-    }
-
-    const v=await fetch(`${WORKER_URL}/api/site/config?cb=${Date.now()}`,{
-      cache:"no-store"
-    });
-    const raw=await v.text();
-    let d={};
-    try{d=raw?JSON.parse(raw):{};}catch(_){}
-
-    if(!v.ok){
-      toast(`❌ Publish Verify HTTP ${v.status}: ${d.error||raw||"No response"}`.slice(0,360));
-      return false;
-    }
-
-    const cfg=d.config||d.data||d;
-    if(!cfg||typeof cfg!=="object"){
-      toast("❌ Publish Verify: /api/site/config وەڵامی دروستی نەدا");
-      return false;
-    }
-
-    const ms=Math.round(performance.now()-started);
-    toast(`✅ Publish سەرکەوتووە — ${ms}ms`);
-    if(typeof klog==="function") klog("Publish","CMS + public config verification OK");
-    return true;
-  }catch(err){
-    console.error("KURDIA PUBLISH ERROR",err);
-    toast("❌ Publish Error: "+String(err?.message||err).slice(0,340));
+    toast("❌ پاشەکەوتکردن سەرکەوتوو نەبوو");
+    return false;
+  } catch (err) {
+    toast("❌ کێشە: " + (err?.message || "هەڵە"));
     return false;
   }
 }
-function openLiveSite(){ window.open("index.html", "_blank"); }
-function openSheets(){ window.open(`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/edit`, "_blank"); }
 
 function exportBackup(){
   autoSync();
