@@ -871,7 +871,41 @@ async function searchWeather(){
    await fetchWeatherByCoords(place.latitude,place.longitude,`${place.name}${place.country?' · '+place.country:''}`);
  }catch(e){$('wLocation').textContent='شوێنەکە نەدۆزرایەوە';toast('شوێنەکە نەدۆزرایەوە')}
 }
-function initWeatherMap(){if(weatherMap)return;weatherMap=createMap('weatherMap',36.19,44.01,async({lat,lng})=>{weatherMarker=setMapMarker(weatherMap,weatherMarker,lat,lng);await fetchWeatherByCoords(lat,lng,`شوێنی ${lat.toFixed(4)}, ${lng.toFixed(4)}`)})}
+/* KURDIA ADDITIVE FIX — Weather/Leaflet map only */
+let weatherMap = null, weatherMarker = null, privateMap = null, privateMarker = null;
+
+function createMap(containerId, lat, lng, onClick) {
+  if (!window.L) return null;
+  const el = document.getElementById(containerId);
+  if (!el) return null;
+  const map = L.map(el, { zoomControl: true }).setView([lat, lng], 9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+  if (typeof onClick === 'function') map.on('click', e => onClick(e.latlng, map));
+  return map;
+}
+
+function setMapMarker(map, marker, lat, lng) {
+  if (!map || !window.L) return marker;
+  if (marker) marker.setLatLng([lat, lng]);
+  else marker = L.marker([lat, lng]).addTo(map);
+  map.panTo([lat, lng]);
+  return marker;
+}
+
+function initWeatherMap(){
+  if (!weatherMap) {
+    weatherMap = createMap('weatherMap', 36.19, 44.01, async ({lat,lng}) => {
+      weatherMarker = setMapMarker(weatherMap, weatherMarker, lat, lng);
+      await fetchWeatherByCoords(lat, lng, `شوێنی ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+    });
+  }
+  setTimeout(() => {
+    if (weatherMap) weatherMap.invalidateSize();
+  }, 150);
+}
 function initPrivateMap(){if(privateMap)return;privateMap=createMap('privateMap',36.19,44.01,async({lat,lng})=>{privateMarker=setMapMarker(privateMap,privateMarker,lat,lng);$('privateLat').value=lat.toFixed(6);$('privateLng').value=lng.toFixed(6);try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ku`).then(r=>r.json());const n=g?.display_name;if(n){const d=document.querySelector('input[name="destination"]');if(d&&!d.value)d.value=n;const h=document.getElementById('privatePlaceHint');if(h)h.textContent='شوێنی دیاریکراو: '+n}}catch(e){}})}
 function prep(i){const x=data.prep[i]||{};const name=x.name??x[0]??'Camping';const items=Array.isArray(x.items)?x.items:({Camping:['خێمە','کیسەی خەوتن','چرای سەر','ئاو','کەرەستەی پزیشکی'],Nature:['جل و پێڵاو','ئاو','کریم خۆر','نەخشە/GPS','Power Bank'],Waterfall:['پێڵاوی دژ بە ئاو','جل گۆڕین','ئاو','کریم خۆر','کیت یارمەتیدانی یەکەم'],'Road Trip':['شۆفێری','سووتەمەنی','چارەسەری پەنچر','شارژەر','نەخشە'],Family:['خواردن','ئاو','کەرەستەی منداڵ','First Aid','پلانێکی ئارام']}[name]||[]);$('prepChecklist').innerHTML=items.map(v=>`<label><input type="checkbox">${esc(v)}</label>`).join('')}
 function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value||'').toLowerCase();const all=[...data.destinations.map(x=>x.name),...data.safety.map(x=>x[1]),...data.prep.map(x=>x[0])];$('searchResults').innerHTML=all.filter(x=>x.toLowerCase().includes(q)).slice(0,8).map(x=>`<div class="article"><div class="articleIcon"><i data-lucide="search"></i></div><div><b>${esc(x)}</b><small>KURDIA ADVENTURE</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';if(window.lucide)lucide.createIcons();}
