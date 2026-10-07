@@ -474,6 +474,8 @@ input,textarea,select{background:rgba(255,255,255,.035);border-color:rgba(255,25
             <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
           </div>
 
+          <button class="btn btn-primary" style="width:100%;margin:0 0 14px" onclick="saveStudioToCloud()">💾 پاشەکەوتکردن و نوێکردنەوەی پلانی گەشت</button>
+
           <div class="grid-3 p-4 bg-white/[0.03] border border-white/10 rounded-2xl mb-4 backdrop-blur-md">
             <div class="field">
               <label>⏰ کاتژمێری پێچەوانە (Countdown)</label>
@@ -1182,11 +1184,41 @@ async function saveStudioToCloud(){
       price: tripPriceKu,
       time: tripTimeKu,
       description: tripDescKu,
+      desc: tripDescKu,
+      date: appState.tripTargetDate || trip.date || trip.targetDate || "",
+      targetDate: appState.tripTargetDate || trip.targetDate || trip.date || "",
       heroImageUrl: appState.tripImageUrl || trip.heroImageUrl || "",
       capacity: Number(appState.capacity || trip.capacity || 40),
       booked: Number(appState.booked || trip.booked || 0),
       published: true,
       status: "active"
+    };
+
+    // Keep the trip's own i18n in sync as well as the global CMS i18n.
+    // The public site can read either shape.
+    trip.i18n = {
+      ...(trip.i18n || {}),
+      ku: {
+        ...(trip.i18n?.ku || {}),
+        tripTitle: tripTitleKu, tripLocation: tripLocKu, tripPrice: tripPriceKu,
+        tripTime: tripTimeKu, tripDesc: tripDescKu
+      },
+      ar: {
+        ...(trip.i18n?.ar || {}),
+        tripTitle: appState.i18n?.ar?.tripTitle || "",
+        tripLocation: appState.i18n?.ar?.tripLocation || "",
+        tripPrice: appState.i18n?.ar?.tripPrice || "",
+        tripTime: appState.i18n?.ar?.tripTime || "",
+        tripDesc: appState.i18n?.ar?.tripDesc || ""
+      },
+      en: {
+        ...(trip.i18n?.en || {}),
+        tripTitle: appState.i18n?.en?.tripTitle || "",
+        tripLocation: appState.i18n?.en?.tripLocation || "",
+        tripPrice: appState.i18n?.en?.tripPrice || "",
+        tripTime: appState.i18n?.en?.tripTime || "",
+        tripDesc: appState.i18n?.en?.tripDesc || ""
+      }
     };
 
     data.trips = [trip, ...data.trips.slice(1)];
