@@ -1087,7 +1087,30 @@ function toast(t){const x=$('toast');x.textContent=t;x.classList.add('show');cle
 let activeStoriesList=[],currentStoryIdx=-1,storyTimer=null,appliedDiscountPercent=0,countdownTimer=null;
 function toggleMusic(){const a=$('bgAudio'),b=$('musicToggleBtn');if(!a)return;if(a.paused){a.play().then(()=>b?.classList.add('music-on')).catch(()=>toast('مۆسیقا لە مۆبایلەکەت ڕێگەی پێنەدراوە'))}else{a.pause();b?.classList.remove('music-on')}}
 function handlePeopleCount(v){const c=$('extraNamesContainer');if(!c)return;c.innerHTML='';for(let i=2;i<=Math.max(1,parseInt(v||1));i++){const x=document.createElement('input');x.className='input extra-person-name';x.placeholder=`ناوی بەشداربووی ${i}...`;x.required=true;c.appendChild(x)}}
-function applyCoupon(){const v=($('couponInput')?.value||'').trim().toUpperCase();const code=String(data.couponCode||'KURDIA10').toUpperCase();const pct=Number(data.couponDiscount||10);if(!v){toast('کۆدی داشکاندن بنووسە');return}if(v===code){appliedDiscountPercent=pct;$('couponStatus').innerHTML=`<span style="color:#49d18d">✓ داشکاندن چالاک کرا (${pct}%)</span>`;toast(`🎉 ${pct}% داشکاندن چالاک کرا`)}else{appliedDiscountPercent=0;$('couponStatus').textContent='کۆدی داشکاندن هەڵەیە';toast('کۆدی داشکاندن هەڵەیە')}}
+function applyCoupon(){
+ const v=($('couponInput')?.value||'').trim().toUpperCase();
+ if(!v){appliedDiscountPercent=0;toast('کۆدی داشکاندن بنووسە');return}
+ const coupons=Array.isArray(data.coupons)?data.coupons:[];
+ let c=coupons.find(x=>String(x.code||'').trim().toUpperCase()===v);
+ if(!c && String(data.couponCode||'').trim().toUpperCase()===v){c={code:v,type:'percent',value:Number(data.couponDiscount||10),startAt:'',endAt:'',usageLimit:0,used:0,active:true}}
+ if(!c || c.active===false){appliedDiscountPercent=0;$('couponStatus').textContent='کۆدی داشکاندن هەڵەیە یان ناچالاکە';toast('کۆدی داشکاندن هەڵەیە');return}
+ const now=Date.now();
+ if(c.startAt && Date.parse(c.startAt)>now){appliedDiscountPercent=0;$('couponStatus').textContent='ئەم کۆبنە هێشتا دەستی پێنەکردووە';toast('کاتی بەکارهێنانی کۆبن هێشتا نەهاتووە');return}
+ if(c.endAt && Date.parse(c.endAt)<now){appliedDiscountPercent=0;$('couponStatus').textContent='کاتی کۆبن بەسەرچووە';toast('کاتی ئەم کۆبنە بەسەرچووە');return}
+ if(Number(c.usageLimit)>0 && Number(c.used||0)>=Number(c.usageLimit)){appliedDiscountPercent=0;$('couponStatus').textContent='سنووری بەکارهێنانی کۆبن پڕبووە';toast('ئەم کۆبنە چیتر بەردەست نییە');return}
+ const type=c.type||'percent', val=Number(c.value||0);
+ if(type==='fixed'){
+   const price=Number(String(data?.trips?.[0]?.price||data?.trip?.price||0).replace(/[^0-9.]/g,''));
+   appliedDiscountPercent=price>0?Math.min(100,(val/price)*100):0;
+   window.appliedCouponFixed=val;
+   $('couponStatus').innerHTML=`<span style="color:#49d18d">✓ کۆبن چالاک کرا (${val.toLocaleString()} IQD داشکاندن)</span>`;
+ }else{
+   appliedDiscountPercent=Math.min(100,Math.max(0,val)); window.appliedCouponFixed=0;
+   $('couponStatus').innerHTML=`<span style="color:#49d18d">✓ داشکاندن چالاک کرا (${val}%)</span>`;
+ }
+ window.appliedCouponCode=c.code;
+ toast(type==='fixed'?`🎉 ${val.toLocaleString()} IQD داشکاندن چالاک کرا`:`🎉 ${val}% داشکاندن چالاک کرا`);
+}
 function previewStoryImage(e){const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/'))return toast('تەنها وێنە ڕێگەپێدراوە');if(f.size>5*1024*1024)return toast('قەبارەی وێنە نابێت لە 5MB زیاتر بێت');const r=new FileReader();r.onload=x=>{const im=new Image();im.onload=()=>{let w=im.width,h=im.height,m=900;if(w>h&&w>m){h=Math.round(h*m/w);w=m}else if(h>m){w=Math.round(w*m/h);h=m}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);const u=c.toDataURL('image/jpeg',.78);$('stMediaBase64').value=u;$('storyPreview').innerHTML=`<img src="${u}" style="width:100%;max-height:220px;object-fit:contain;border-radius:10px">`};im.src=x.target.result};r.readAsDataURL(f)}
 function openStoryUploadModal(){$('storyModal')?.classList.add('show')}function closeStoryModal(){$('storyModal')?.classList.remove('show')}
 async function fetchStories(refresh=false){try{const r=await fetch(WORKER+'/api/stories');const x=await r.json();if(x.ok&&Array.isArray(x.stories)){activeStoriesList=x.stories;renderStoriesBar();renderStoryGrid()}else if(refresh)toast('ستۆرییەکان نوێ نەکرانەوە')}catch(e){if(refresh)toast('نەتوانرا ستۆرییەکان نوێ بکرێنەوە')}}
