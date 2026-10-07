@@ -276,6 +276,11 @@ input,textarea,select{background:rgba(255,255,255,.035);border-color:rgba(255,25
   .content-body{max-width:1500px;margin:0 auto;width:100%;}
 }
 
+
+.booking-filter{padding:10px 6px;border:1px solid rgba(255,255,255,.10);border-radius:12px;background:rgba(255,255,255,.035);color:#9ca3af;font-size:11px;font-weight:800;transition:.2s;cursor:pointer}
+.booking-filter.active{background:rgba(169,29,55,.18);border-color:rgba(229,35,79,.55);color:#fff}
+.booking-filter span{margin-right:4px;opacity:.8}
+
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
@@ -533,6 +538,17 @@ input,textarea,select{background:rgba(255,255,255,.035);border-color:rgba(255,25
               <button class="btn btn-secondary text-xs" onclick="fetchLiveRegistrations()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
               <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
             </div>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            <button type="button" class="booking-filter active" data-booking-filter="pending" onclick="setBookingFilter('pending')">
+              ⏳ Pending <span id="countPending">0</span>
+            </button>
+            <button type="button" class="booking-filter" data-booking-filter="approved" onclick="setBookingFilter('approved')">
+              ✅ Approved <span id="countApproved">0</span>
+            </button>
+            <button type="button" class="booking-filter" data-booking-filter="rejected" onclick="setBookingFilter('rejected')">
+              ❌ Rejected <span id="countRejected">0</span>
+            </button>
           </div>
           <div id="registrationsContainer" class="flex flex-col gap-3"></div>
         </div>
@@ -922,41 +938,87 @@ function isAcceptedBooking(reg){
   return s.includes("پەسەند") || s.includes("approve") || s.includes("approved") || s.includes("accepted") || s.includes("confirmed") || s.includes("وەرگیرا");
 }
 
+let activeBookingFilter = "pending";
+
+function bookingStatus(reg){
+  const s = String(reg?.status || "pending").toLowerCase().trim();
+  if(s === "approved" || s.includes("approve") || s.includes("پەسەند") || s.includes("accepted") || s.includes("confirmed") || s.includes("وەرگیرا")) return "approved";
+  if(s === "rejected" || s.includes("reject") || s.includes("ڕەت") || s.includes("رەت") || s.includes("denied") || s.includes("cancelled") || s.includes("canceled")) return "rejected";
+  return "pending";
+}
+
+function setBookingFilter(filter){
+  activeBookingFilter = ["pending","approved","rejected"].includes(filter) ? filter : "pending";
+  document.querySelectorAll("[data-booking-filter]").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.bookingFilter === activeBookingFilter);
+  });
+  renderRegistrations(cachedRegistrations || []);
+}
+
+function updateBookingCounts(list){
+  const counts = {pending:0, approved:0, rejected:0};
+  (Array.isArray(list)?list:[]).forEach(reg => counts[bookingStatus(reg)]++);
+  const p=document.getElementById("countPending"), a=document.getElementById("countApproved"), r=document.getElementById("countRejected");
+  if(p) p.textContent=counts.pending;
+  if(a) a.textContent=counts.approved;
+  if(r) r.textContent=counts.rejected;
+}
+
 function renderRegistrations(list){
   const c = document.getElementById("registrationsContainer");
   if(!c) return;
 
-  // Rejected bookings are intentionally hidden from the active Customers/Bookings list.
-  // Accepted bookings remain visible and are kept by the Worker as the saved booking record.
-  const visible = (Array.isArray(list) ? list : []).filter(reg => !isRejectedBooking(reg));
+  const all = Array.isArray(list) ? list : [];
+  updateBookingCounts(all);
 
-  if(!visible.length){
-    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">هیچ داواکارییەکی تۆمارکراو نییە.</div>`;
+  const filtered = all.filter(reg => bookingStatus(reg) === activeBookingFilter);
+
+  if(!filtered.length){
+    const empty = activeBookingFilter === "pending" ? "هیچ داواکارییەکی چاوەڕوان نییە." :
+                  activeBookingFilter === "approved" ? "هیچ Booking ـێکی پەسەندکراو نییە." :
+                  "هیچ Booking ـێکی ڕەتکراو نییە.";
+    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-8">${empty}</div>`;
     return;
   }
 
-  // Accepted bookings first, then pending bookings.
-  visible.sort((a,b) => Number(isAcceptedBooking(b)) - Number(isAcceptedBooking(a)));
+  c.innerHTML = filtered.map(reg => {
+    const status = bookingStatus(reg);
+    const statusText = status === "approved" ? "✅ پەسەندکراو" : status === "rejected" ? "❌ ڕەتکراوە" : "⏳ چاوەڕوان";
+    const statusClass = status === "approved" ? "bg-emerald-500/20 text-emerald-400" :
+                        status === "rejected" ? "bg-rose-500/20 text-rose-400" :
+                        "bg-amber-500/20 text-amber-400";
 
-  c.innerHTML = visible.map(reg => `
-    <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="font-extrabold text-sm text-white">${reg.name}</span>
-          <span class="text-xs px-2 py-0.5 rounded-full ${reg.status?.includes('پەسەند') ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${reg.status || 'چاوەڕوان'}</span>
+    const actions = status === "pending" ? `
+      <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')">
+        <i data-lucide="check"></i> پەسەندکردن
+      </button>
+      <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')">
+        <i data-lucide="x"></i> ڕەتکردنەوە
+      </button>
+    ` : status === "approved" ? `
+      <span class="text-xs text-emerald-400 font-bold">Booking پەسەندکراوە</span>
+    ` : `
+      <span class="text-xs text-rose-400 font-bold">Booking ڕەتکراوە</span>
+    `;
+
+    return `
+      <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-sm text-white">${reg.name || "—"}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full ${statusClass}">${statusText}</span>
+          </div>
+          <div class="text-xs text-gray-400 mt-1 flex flex-wrap gap-x-3">
+            <span>📱 ${reg.phone || "—"}</span>
+            <span>👥 ${reg.people || 1} کەس</span>
+            <span>🆔 ${reg.id || "—"}</span>
+          </div>
         </div>
-        <div class="text-xs text-gray-400 mt-1 flex flex-wrap gap-x-3">
-          <span>📱 ${reg.phone}</span>
-          <span>👥 ${reg.people || 1} کەس</span>
-          <span>🆔 ${reg.id}</span>
-        </div>
+        <div class="flex gap-2">${actions}</div>
       </div>
-      <div class="flex gap-2">
-        <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone}')"><i data-lucide="check"></i> پەسەندکردن (WhatsApp)</button>
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
-      </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
+
   if(window.lucide) lucide.createIcons();
 }
 
@@ -1035,8 +1097,14 @@ async function directVerify(id, phone){
       body:JSON.stringify({ id, phone })
     });
     const d = await res.json();
-    if(res.ok && d.ok){ toast("✅ پەسەندکرا"); fetchLiveRegistrations(); }
-    else toast("❌ هەڵە: " + (d.error || ""));
+    if(res.ok && d.ok){
+      const idx = (cachedRegistrations || []).findIndex(reg => String(reg.id) === String(id));
+      if(idx >= 0) cachedRegistrations[idx] = {...cachedRegistrations[idx], ...(d.registration || {}), status:"approved"};
+      activeBookingFilter = "approved";
+      renderRegistrations(cachedRegistrations || []);
+      toast("✅ Booking پەسەندکرا و چووە بەشی Approved");
+      setTimeout(fetchLiveRegistrations, 250);
+    } else toast("❌ هەڵە: " + (d.error || ""));
   }catch(e){ toast("کێشە لە پەیوەندی"); }
 }
 
@@ -1053,10 +1121,11 @@ async function directReject(id, phone){
     const d = await res.json();
     if(res.ok && d.ok){
       // Remove rejected booking from the active Customers/Bookings view immediately.
-      cachedRegistrations = (cachedRegistrations || []).filter(reg => String(reg.id) !== String(id));
-      renderRegistrations(cachedRegistrations);
-      toast("❌ داواکارییەکە ڕەتکرایەوە و لە لیستی Customers/Bookings لابرا");
-      // Re-sync with the Worker so the UI stays consistent with the saved server state.
+      const idx = (cachedRegistrations || []).findIndex(reg => String(reg.id) === String(id));
+      if(idx >= 0) cachedRegistrations[idx] = {...cachedRegistrations[idx], status:"rejected", rejectionReason:reason};
+      activeBookingFilter = "rejected";
+      renderRegistrations(cachedRegistrations || []);
+      toast("❌ Booking ـەکە ڕەتکرایەوە و چووە بەشی Rejected");
       setTimeout(fetchLiveRegistrations, 250);
     } else toast("❌ هەڵە: " + (d.error || ""));
   }catch(e){ toast("کێشە لە پەیوەندی"); }
