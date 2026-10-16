@@ -13,7 +13,7 @@
 <style>
 :root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(circle at 70% -10%,rgba(169,29,55,.16),transparent 34%),var(--bg);color:var(--text);font-family:'Noto Sans Arabic',system-ui,sans-serif;overflow-x:hidden}
+body{margin:0;background:#000;color:var(--text);font-family:'Noto Sans Arabic',system-ui,sans-serif;overflow-x:hidden}
 button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
 .app{min-height:100vh;padding-bottom:calc(var(--nav) + 28px)}
 .page{display:none;min-height:100vh;animation:fade .28s ease}.page.active{display:block}
@@ -198,6 +198,95 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .private-wizard-actions{display:flex;gap:9px;margin-top:12px}
 .private-wizard-actions>*{flex:1;min-width:0}
 .private-wizard-actions .btn{min-height:48px}
+
+/* KURDIA cinematic entrance overlay */
+#kurdia-intro{position:fixed;inset:0;z-index:999999;display:grid;place-items:center;overflow:hidden;background:#05060a;color:#fff;isolation:isolate;transition:opacity .85s cubic-bezier(.7,0,.2,1),visibility .85s;}
+#kurdia-intro::before{content:"";position:absolute;inset:-15%;z-index:-2;background:radial-gradient(ellipse at 50% 70%,rgba(169,29,55,.24),transparent 38%),radial-gradient(ellipse at 50% 100%,rgba(33,57,76,.32),transparent 55%);animation:introAtmosphere 4s ease-in-out infinite alternate}
+#kurdia-intro::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.18),transparent 45%,#05060a 100%)}
+#kurdia-intro.intro-out{opacity:0;visibility:hidden;pointer-events:none}
+.intro-inner{width:min(92vw,650px);text-align:center;padding:24px;position:relative;animation:introRise 1s cubic-bezier(.2,.8,.2,1) both}
+.intro-kicker{font-size:10px;letter-spacing:.42em;color:#d6a4ad;margin-bottom:22px;opacity:0;animation:introText .7s ease .25s forwards}
+.intro-emblem{width:clamp(190px,42vw,290px);height:auto;overflow:visible;filter:drop-shadow(0 0 18px rgba(211,47,78,.22));display:block;margin:0 auto -3px}
+.intro-emblem .draw{fill:none;stroke:#d32f4e;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:900;stroke-dashoffset:900;animation:introDraw 1.9s cubic-bezier(.65,0,.35,1) .25s forwards}
+.intro-emblem .mountain-fill{fill:url(#introMountainFill);opacity:0;animation:introFill .8s ease 1.55s forwards}
+.intro-title{font-family:Arial,sans-serif;font-size:clamp(38px,10vw,64px);font-weight:900;letter-spacing:.22em;margin:3px 0 0  .22em;opacity:0;animation:introTitle .85s cubic-bezier(.2,.8,.2,1) 1.05s forwards;text-shadow:0 0 28px rgba(211,47,78,.18)}
+.intro-subtitle{font-size:11px;letter-spacing:.45em;color:#c4c7ce;margin-top:10px;opacity:0;animation:introText .8s ease 1.35s forwards}
+.intro-tagline{font-size:clamp(12px,3.2vw,15px);color:#e6e7eb;margin-top:30px;opacity:0;animation:introText .8s ease 1.65s forwards}
+.intro-loader{width:132px;height:2px;margin:25px auto 0;background:rgba(255,255,255,.12);overflow:hidden;border-radius:9px;opacity:0;animation:introText .4s ease 1.5s forwards}
+.intro-loader span{height:100%;width:100%;display:block;background:linear-gradient(90deg,transparent,#d32f4e,#f4c6ce,transparent);transform:translateX(110%);animation:introProgress 1.35s ease 1.65s forwards}
+.intro-skip{position:absolute;bottom:max(24px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);color:#d7d9df;border-radius:999px;padding:9px 17px;font-size:11px;letter-spacing:.04em;cursor:pointer;opacity:0;animation:introText .5s ease 1.8s forwards}
+.intro-skip:hover{border-color:#d32f4e;color:white}
+.intro-stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1px 1px at 18% 22%,#fff9 50%,transparent 100%),radial-gradient(1px 1px at 78% 17%,#e8b2bb99 50%,transparent 100%),radial-gradient(2px 2px at 84% 56%,#fff7 50%,transparent 100%),radial-gradient(1px 1px at 12% 68%,#fff8 50%,transparent 100%),radial-gradient(1px 1px at 64% 34%,#fff8 50%,transparent 100%);opacity:0;animation:introStars 2s ease .35s forwards}
+@keyframes introDraw{to{stroke-dashoffset:0}}@keyframes introFill{to{opacity:.18}}@keyframes introTitle{from{opacity:0;transform:translateY(14px);letter-spacing:.45em}to{opacity:1;transform:none;letter-spacing:.22em}}@keyframes introText{to{opacity:1}}@keyframes introRise{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}@keyframes introAtmosphere{from{transform:scale(1) translateY(0)}to{transform:scale(1.08) translateY(-1.5%)}}@keyframes introStars{to{opacity:.65}}@keyframes introProgress{to{transform:translateX(-110%)}}
+html.intro-lock,html.intro-lock body{overflow:hidden!important}
+@media(prefers-reduced-motion:reduce){#kurdia-intro *,#kurdia-intro::before{animation:none!important;transition:none!important}.intro-kicker,.intro-title,.intro-subtitle,.intro-tagline,.intro-loader,.intro-skip,.intro-stars{opacity:1!important}.intro-emblem .draw{stroke-dashoffset:0!important}.intro-emblem .mountain-fill{opacity:.18!important}}
+
+
+/* KURDIA V11 — pure black canvas, mobile hero containment, cinematic motion */
+html,body,.app,.page{background-color:#000}
+body{background:#000!important;max-width:100%;}
+.hero{width:100%;max-width:100%;min-width:0;isolation:isolate;}
+.hero:before{transform:scale(1.025);animation:heroMountainDrift 18s ease-in-out infinite alternate;will-change:transform;}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 78% 62%,rgba(169,29,55,.19),transparent 42%);animation:heroRedBreath 7s ease-in-out infinite alternate}
+.hero .container{z-index:1;width:100%;max-width:1100px;min-width:0;}
+.hero h1,.hero p{max-width:100%;overflow-wrap:anywhere;word-break:normal}
+.hero h1{animation:heroTextRise .85s cubic-bezier(.2,.8,.2,1) both;font-size:clamp(32px,10.5vw,82px);letter-spacing:-.035em;line-height:1.08}
+.hero p{animation:heroTextRise 1s .12s cubic-bezier(.2,.8,.2,1) both}
+.hero .actions{animation:heroTextRise 1s .22s cubic-bezier(.2,.8,.2,1) both}
+@keyframes heroMountainDrift{from{transform:scale(1.025) translate3d(0,0,0)}to{transform:scale(1.09) translate3d(1.2%,-.6%,0)}}
+@keyframes heroRedBreath{from{opacity:.45}to{opacity:1}}
+@keyframes heroTextRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){
+  .hero{min-height:clamp(570px,calc(100svh - 145px),760px);align-items:flex-end;overflow:hidden}
+  .hero:before{background-position:center 42%;}
+  .hero .container{padding:0 16px 34px;width:100%;}
+  .hero h1{font-size:clamp(31px,9.4vw,48px);line-height:1.13;letter-spacing:-.025em;margin:10px 0 15px;max-width:100%;}
+  .hero p{font-size:14px;line-height:1.9;margin-bottom:20px;max-width:100%;}
+  .hero .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;width:100%;}
+  .hero .actions .btn{min-width:0;width:100%;max-width:100%;padding:12px 8px;font-size:clamp(12px,3.6vw,15px);white-space:normal;overflow-wrap:anywhere;line-height:1.45;}
+}
+@media(prefers-reduced-motion:reduce){.hero:before,.hero:after,.hero h1,.hero p,.hero .actions{animation:none!important;transform:none!important;will-change:auto}}
+
+
+/* V12: true-black site canvas + restrained animated atmosphere, tuned for mobile first */
+html,body{background:#000!important;max-width:100%;overflow-x:clip}
+body{position:relative;isolation:isolate}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 85% 18%,rgba(169,29,55,.105),transparent 34%),radial-gradient(ellipse at 12% 68%,rgba(169,29,55,.075),transparent 32%),#000;background-size:120% 120%;animation:kurdiaBlackAtmosphere 18s ease-in-out infinite alternate}
+@keyframes kurdiaBlackAtmosphere{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+/* All content sections stay on black; cards alone keep a subtle surface */
+.page,.app,.section,main,section{background-color:transparent}
+.top{background:rgba(0,0,0,.86);border-bottom-color:rgba(255,255,255,.08)}
+.hero{min-height:clamp(560px,82svh,760px);align-items:flex-end}
+.hero:before{background-image:linear-gradient(180deg,rgba(0,0,0,.14) 0%,rgba(0,0,0,.26) 34%,rgba(0,0,0,.78) 74%,#000 100%),var(--hero-image,url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85'));background-position:center 45%;}
+.hero:after{background:radial-gradient(ellipse at 80% 68%,rgba(211,47,78,.16),transparent 42%),linear-gradient(180deg,transparent 40%,rgba(0,0,0,.35) 65%,#000 100%);animation:heroAtmosphere 9s ease-in-out infinite alternate}
+@keyframes heroAtmosphere{from{opacity:.55}to{opacity:1}}
+.section{padding-block:clamp(22px,4.5vw,42px)}
+.sectionhead{min-width:0;flex-wrap:wrap}
+.sectionhead h2{overflow-wrap:anywhere}
+.privateHero{background:linear-gradient(145deg,rgba(169,29,55,.14),rgba(10,10,12,.92) 58%,rgba(0,0,0,.98));box-shadow:inset 0 1px rgba(255,255,255,.035);position:relative;overflow:hidden}
+.privateHero:before{content:"";position:absolute;inset:-50% auto -50% -35%;width:40%;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.045),transparent);transform:rotate(18deg);animation:kurdiaCardSweep 8s ease-in-out infinite}
+@keyframes kurdiaCardSweep{0%,25%{left:-45%}75%,100%{left:125%}}
+/* Mobile: prevent hero heading and buttons from escaping the viewport */
+@media(max-width:600px){
+ .hero{min-height:clamp(540px,78svh,690px);align-items:flex-end;padding-top:14px}
+ .hero:before{background-position:center 42%;}
+ .hero .container{width:100%;padding:0 18px 28px;min-width:0}
+ .hero h1{font-size:clamp(32px,9.2vw,54px);line-height:1.12;letter-spacing:-.8px;max-width:100%;overflow-wrap:anywhere;text-wrap:balance}
+ .hero p{font-size:clamp(13px,3.7vw,15px);line-height:1.85;max-width:100%;overflow-wrap:anywhere}
+ .hero .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;width:100%}
+ .hero .actions .btn{width:100%;min-width:0;min-height:54px;padding:10px 7px;font-size:clamp(12px,3.5vw,15px);line-height:1.4;white-space:normal;overflow-wrap:anywhere;text-align:center}
+ .section{padding-block:23px}
+ .sectionhead{align-items:flex-start;gap:8px;margin-bottom:12px}
+ .sectionhead h2{font-size:clamp(19px,5.5vw,23px)}
+ .sectionhead p{font-size:12px;line-height:1.7}
+ .privateHero{padding:19px;border-radius:24px}
+ .privateHero h2{font-size:clamp(22px,6vw,30px);line-height:1.45;overflow-wrap:anywhere}
+ .privateHero p{font-size:14px;line-height:1.9}
+ .app{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 38px)}
+ .bottom{padding-bottom:env(safe-area-inset-bottom)}
+}
+@media(prefers-reduced-motion:reduce){body::before,.hero:after,.privateHero:before{animation:none!important}}
+
 </style>
 
 <style id="more-page-style">
@@ -335,8 +424,111 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
     };
   });
 </script>
+
+<style id="kurdia-cinematic-motion">
+:root{--kurdia-motion-red:#e5234f;--kurdia-motion-glow:rgba(229,35,79,.32)}
+/* Cinematic hero layers */
+.hero{isolation:isolate;perspective:1000px}
+.hero:before{transform:scale(1.035);transform-origin:center;will-change:transform;transition:filter .6s ease}
+.hero:after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(115deg,rgba(4,7,13,.18),transparent 42%,rgba(229,35,79,.11)),radial-gradient(ellipse at 50% 100%,rgba(229,35,79,.18),transparent 58%);opacity:.9}
+.hero .container{z-index:2}
+.kurdia-mountain-scene{position:absolute;z-index:1;inset:0;pointer-events:none;overflow:hidden;opacity:.72;mask-image:linear-gradient(to bottom,black 30%,rgba(0,0,0,.8) 70%,transparent 100%)}
+.kurdia-mountain-scene svg{position:absolute;inset:auto 0 0;width:100%;height:76%;overflow:visible}
+.kurdia-mountain-scene .ridge-back{fill:#111927;opacity:.82}
+.kurdia-mountain-scene .ridge-mid{fill:#0b111d;opacity:.9}
+.kurdia-mountain-scene .ridge-front{fill:#060a12;opacity:.96}
+.kurdia-mountain-scene .ridge-line{fill:none;stroke:rgba(229,35,79,.52);stroke-width:1.2;stroke-dasharray:600;stroke-dashoffset:600;filter:drop-shadow(0 0 5px rgba(229,35,79,.6))}
+.kurdia-ambient{position:absolute;z-index:1;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(229,35,79,.18),transparent 68%);filter:blur(12px);pointer-events:none;left:-70px;top:10%}
+.brand{display:inline-flex;align-items:center;gap:9px;transition:filter .25s ease,transform .25s ease}
+.brand:hover{filter:drop-shadow(0 0 12px rgba(229,35,79,.42));transform:translateY(-1px)}
+.kurdia-logo-mark{width:29px;height:29px;flex:0 0 29px;overflow:visible;filter:drop-shadow(0 0 5px rgba(229,35,79,.3))}
+.kurdia-logo-mark path{stroke-dasharray:150;stroke-dashoffset:150;animation:kurdiaLogoDraw 1.6s cubic-bezier(.65,0,.35,1) .25s forwards}
+.kurdia-logo-mark .logo-fill{opacity:0;animation:kurdiaLogoGlow .8s ease 1.15s forwards}
+@keyframes kurdiaLogoDraw{to{stroke-dashoffset:0}}
+@keyframes kurdiaLogoGlow{to{opacity:.16}}
+.kurdia-hero-word{display:inline-block;will-change:transform,opacity}
+.kurdia-reveal-ready .kurdia-reveal{opacity:0;transform:translateY(22px)}
+.kurdia-reveal-ready .kurdia-reveal.kurdia-revealed{opacity:1;transform:translateY(0);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.75,.25,1)}
+.featured,.trip-card,.destination-card,.review-card,.article-card,.card{transition:transform .35s cubic-bezier(.2,.75,.25,1),border-color .35s ease,box-shadow .35s ease}
+.featured:hover,.trip-card:hover,.destination-card:hover,.review-card:hover,.article-card:hover,.card:hover{transform:translateY(-4px);border-color:rgba(229,35,79,.38);box-shadow:0 16px 40px rgba(0,0,0,.18),0 0 22px rgba(229,35,79,.06)}
+.btn,.iconbtn,.navitem{transition:transform .22s ease,box-shadow .25s ease,background-color .25s ease,border-color .25s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(229,35,79,.22)}
+.btn:active,.iconbtn:active{transform:scale(.97)}
+.kurdia-scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:99999;background:linear-gradient(90deg,#ff7a92,#e5234f);box-shadow:0 0 10px rgba(229,35,79,.7);pointer-events:none}
+.kurdia-cursor-glow{position:fixed;width:190px;height:190px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(229,35,79,.075),transparent 68%);transform:translate(-50%,-50%);opacity:0;transition:opacity .3s}
+@media(max-width:700px){.hero{min-height:590px}.kurdia-mountain-scene{opacity:.46}.kurdia-mountain-scene svg{height:58%}.kurdia-ambient{width:150px;height:150px;filter:blur(18px)}.featured:hover,.trip-card:hover,.destination-card:hover,.review-card:hover,.article-card:hover,.card:hover{transform:none;box-shadow:none}.kurdia-cursor-glow{display:none}}
+@media(prefers-reduced-motion:reduce){.kurdia-logo-mark path,.kurdia-logo-mark .logo-fill{animation:none!important;stroke-dashoffset:0!important;opacity:.15!important}*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.kurdia-reveal-ready .kurdia-reveal{opacity:1;transform:none}}
+</style>
+
+
+<style id="kurdia-hero-background-blend-v13">
+/* Blend the site background with the forest/mountain hero instead of flat pure black. */
+:root{--bg:#07070b;--panel:#0c0d13;--panel2:#111019}
+html,body{background-color:#07070b!important}
+body{background-image:radial-gradient(ellipse 100% 620px at 50% 0%,rgba(111,25,48,.18),transparent 74%),radial-gradient(ellipse 80% 520px at 85% 35%,rgba(30,37,49,.12),transparent 76%)!important;background-attachment:scroll!important}
+main,section,.section,.page-section{background-color:transparent}
+/* Let the hero fade naturally into the same dark burgundy atmosphere. */
+.hero{background-color:#08090d!important}
+.hero:after{background:linear-gradient(180deg,rgba(5,6,10,.12) 0%,rgba(7,7,11,.04) 42%,rgba(7,7,11,.58) 78%,#07070b 100%),linear-gradient(115deg,rgba(4,7,13,.14),transparent 42%,rgba(229,35,79,.09))!important}
+.hero:before{background-position:center;background-size:cover;filter:saturate(.9) contrast(1.04)}
+/* Subtle animated atmospheric glow across the page, not a flat black canvas. */
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 12% 22%,rgba(169,29,55,.055),transparent 34%),radial-gradient(ellipse at 88% 58%,rgba(57,43,62,.045),transparent 38%);animation:kurdiaAmbientDrift 18s ease-in-out infinite alternate}
+@keyframes kurdiaAmbientDrift{from{opacity:.55;transform:translate3d(-1%,0,0) scale(1)}to{opacity:1;transform:translate3d(1%,.6%,0) scale(1.04)}}
+@media(max-width:700px){body{background-image:radial-gradient(ellipse 125% 560px at 50% 0%,rgba(111,25,48,.19),transparent 78%),radial-gradient(ellipse 100% 420px at 50% 45%,rgba(25,31,43,.11),transparent 78%)!important}.hero:after{background:linear-gradient(180deg,rgba(5,6,10,.04) 0%,rgba(7,7,11,.02) 40%,rgba(7,7,11,.45) 76%,#07070b 100%),linear-gradient(115deg,rgba(4,7,13,.12),transparent 42%,rgba(229,35,79,.08))!important}}
+@media(prefers-reduced-motion:reduce){body:after{animation:none!important}}
+</style>
+
+
+<style id="kurdia-living-atmosphere-v14">
+/* V14: visibly animated atmosphere that visually connects every section to the hero. */
+html,body{background:#07070b!important}
+body{background-image:radial-gradient(ellipse 115% 680px at 50% 0%,rgba(137,24,52,.28),transparent 72%),radial-gradient(ellipse 90% 620px at 95% 38%,rgba(105,24,48,.17),transparent 70%),radial-gradient(ellipse 95% 650px at 0% 72%,rgba(47,39,62,.16),transparent 72%)!important;background-attachment:scroll!important}
+body:after{content:"";position:fixed;inset:-12%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 38% 30% at 18% 24%,rgba(225,35,79,.18),transparent 75%),radial-gradient(ellipse 34% 28% at 82% 54%,rgba(142,33,67,.19),transparent 74%),radial-gradient(ellipse 42% 32% at 48% 88%,rgba(75,42,65,.15),transparent 76%);filter:blur(22px);opacity:.85;animation:kurdiaAtmosphereFlow 12s ease-in-out infinite alternate}
+@keyframes kurdiaAtmosphereFlow{0%{transform:translate3d(-2%, -1%,0) scale(.98);opacity:.62}50%{transform:translate3d(1%,1%,0) scale(1.04);opacity:.95}100%{transform:translate3d(2%,-1%,0) scale(1.01);opacity:.72}}
+/* Keep section surfaces transparent so the animated atmosphere remains visible. */
+main,section,.section,.page-section{background-color:transparent!important}
+.hero{isolation:isolate}
+.hero:after{background:linear-gradient(180deg,rgba(5,6,10,.02) 0%,rgba(7,7,11,.02) 38%,rgba(7,7,11,.38) 72%,#07070b 100%),linear-gradient(115deg,rgba(4,7,13,.08),transparent 42%,rgba(229,35,79,.15))!important}
+@media(max-width:700px){body{background-image:radial-gradient(ellipse 145% 540px at 50% 0%,rgba(137,24,52,.30),transparent 76%),radial-gradient(ellipse 120% 520px at 0% 48%,rgba(89,26,48,.17),transparent 75%),radial-gradient(ellipse 110% 460px at 100% 82%,rgba(53,39,61,.18),transparent 76%)!important}body:after{inset:-8%;filter:blur(16px);animation-duration:14s}.hero:after{background:linear-gradient(180deg,rgba(5,6,10,.02) 0%,rgba(7,7,11,.01) 38%,rgba(7,7,11,.32) 72%,#07070b 100%),linear-gradient(115deg,rgba(4,7,13,.06),transparent 42%,rgba(229,35,79,.13))!important}}
+@media(prefers-reduced-motion:reduce){body:after{animation:none!important;opacity:.65}}
+</style>
+
 </head>
 <body>
+<div id="kurdia-intro" role="dialog" aria-label="KURDIA ADVENTURE intro" aria-modal="true">
+  <div class="intro-stars"></div>
+  <div class="intro-inner">
+    <div class="intro-kicker">DISCOVER THE WILD · KURDISTAN</div>
+    <svg class="intro-emblem" viewBox="0 0 320 190" aria-hidden="true">
+      <defs><linearGradient id="introMountainFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d32f4e"/><stop offset="1" stop-color="#d32f4e" stop-opacity="0"/></linearGradient></defs>
+      <path class="mountain-fill" d="M18 155 L79 83 L105 111 L157 36 L202 98 L224 76 L302 155 Z"/>
+      <path class="draw" d="M18 155 L79 83 L105 111 L157 36 L202 98 L224 76 L302 155"/>
+      <path class="draw" d="M56 155 L99 111 L119 130 L157 77 L184 119 L203 105 L250 155" style="stroke-width:1.25;opacity:.8"/>
+      <path class="draw" d="M142 55 L157 36 L171 57 M148 48 L158 53 L165 46" style="stroke:#f4c6ce;stroke-width:1.6"/>
+      <path class="draw" d="M20 165 H300" style="stroke-width:1;opacity:.55"/>
+    </svg>
+    <div class="intro-title">KURDIA</div>
+    <div class="intro-subtitle">A D V E N T U R E</div>
+    <div class="intro-tagline">هەر ڕێگایەک، چیرۆکێکی نوێیە.</div>
+    <div class="intro-loader"><span></span></div>
+  </div>
+  <button class="intro-skip" id="kurdia-intro-skip" type="button">بازدان بۆ ماڵپەڕ ←</button>
+</div>
+<script>
+(function(){
+  const overlay=document.getElementById('kurdia-intro');
+  if(!overlay)return;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let done=false;
+  function closeIntro(){if(done)return;done=true;overlay.classList.add('intro-out');document.documentElement.classList.remove('intro-lock');setTimeout(()=>{overlay.remove()},900);}
+  document.documentElement.classList.add('intro-lock');
+  document.getElementById('kurdia-intro-skip').addEventListener('click',closeIntro);
+  window.addEventListener('keydown',function(e){if(e.key==='Escape'&&!done)closeIntro()});
+  // Keep the entrance cinematic but short; skip automatically for reduced-motion users.
+  window.setTimeout(closeIntro,reduce?450:3900);
+})();
+</script>
+
 <div class="app">
 <header class="top">
   <div class="container topin">
@@ -1484,4 +1676,57 @@ document.addEventListener('click',function(e){
   window.addEventListener('load',()=>setTimeout(refreshCMSBeforeFirstPaint,60),{once:true});
 })();
 </script>
+
+<!-- KURDIA cinematic motion: GSAP + ScrollTrigger; falls back gracefully without CDN -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js"></script>
+<script id="kurdia-cinematic-motion-init">
+(function(){
+  'use strict';
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $=(sel,root=document)=>root.querySelector(sel);
+  const $$=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
+  function addLogoMark(){
+    const brand=$('.brand'); if(!brand||$('.kurdia-logo-mark',brand))return;
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 48 48');svg.setAttribute('class','kurdia-logo-mark');svg.setAttribute('aria-hidden','true');
+    svg.innerHTML='<defs><linearGradient id="kurdiaLogoGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8197"/><stop offset="1" stop-color="#e5234f"/></linearGradient></defs><path class="logo-fill" d="M4 38 17 19 23 27 31 10 44 38Z" fill="url(#kurdiaLogoGradient)"/><path d="M4 38 17 19 23 27 31 10 44 38Z" fill="none" stroke="url(#kurdiaLogoGradient)" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>';
+    brand.prepend(svg);
+  }
+  function addDecor(){
+    if(!$('.kurdia-scroll-progress')){const p=document.createElement('div');p.className='kurdia-scroll-progress';p.setAttribute('aria-hidden','true');document.body.appendChild(p);}
+    if(!reduce&&!('ontouchstart' in window)&&!$('.kurdia-cursor-glow')){const c=document.createElement('div');c.className='kurdia-cursor-glow';c.setAttribute('aria-hidden','true');document.body.appendChild(c);window.addEventListener('pointermove',e=>{c.style.opacity='1';c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';},{passive:true});window.addEventListener('pointerleave',()=>c.style.opacity='0');}
+  }
+  function prepareReveal(){
+    const selectors='.sectionhead,.featured,.featureimg,.stats,.trip-card,.destination-card,.review-card,.article-card,.booking-card,.private-card';
+    const nodes=$$(selectors).filter(el=>!el.closest('.modal')&&!el.classList.contains('kurdia-revealed'));
+    if(!nodes.length)return;
+    if(reduce){nodes.forEach(el=>el.classList.add('kurdia-revealed'));return;}
+    document.documentElement.classList.add('kurdia-reveal-ready');
+    if('IntersectionObserver' in window){const io=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('kurdia-revealed');io.unobserve(entry.target);}}),{threshold:.08,rootMargin:'0px 0px -35px 0px'});nodes.forEach(el=>{el.classList.add('kurdia-reveal');io.observe(el);});}
+    else nodes.forEach(el=>el.classList.add('kurdia-revealed'));
+  }
+  function initMotion(){
+    addLogoMark();addDecor();prepareReveal();
+    const hero=$('.hero');
+    if(window.gsap&&!reduce){
+      if(window.ScrollTrigger)gsap.registerPlugin(ScrollTrigger);
+      const intro=[$('.hero .eyebrow'),$('.hero h1'),$('.hero p'),$('.hero .actions')].filter(Boolean);
+      gsap.fromTo(intro,{y:24,opacity:0},{y:0,opacity:1,duration:.85,stagger:.13,ease:'power3.out',delay:.12,clearProps:'transform'});
+      const ridge=$('.kurdia-mountain-scene .ridge-line');
+      if(ridge)gsap.to(ridge,{strokeDashoffset:0,duration:2.2,ease:'power2.out',delay:.2});
+      if(hero&&window.ScrollTrigger){gsap.to(hero,{backgroundPositionY:'+=3%',ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'bottom top',scrub:.6}});}
+      if(window.ScrollTrigger){$$('.sectionhead,.featured,.stats').forEach((el,i)=>{if(el.classList.contains('kurdia-reveal'))return;gsap.fromTo(el,{y:18,opacity:.65},{y:0,opacity:1,duration:.65,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 92%',once:true}});});}
+    } else if(hero&&!reduce){hero.classList.add('kurdia-hero-fallback');}
+    // Lenis is optional: keep native scrolling if the library is absent or reduced motion is requested.
+    if(window.Lenis&&!reduce&&!window.__kurdiaLenis){try{const lenis=new Lenis({duration:1.05,smoothWheel:true,gestureOrientation:'vertical',touchMultiplier:1.05});window.__kurdiaLenis=lenis;if(window.gsap&&window.ScrollTrigger){lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);}else{const raf=t=>{lenis.raf(t);requestAnimationFrame(raf)};requestAnimationFrame(raf);}}catch(e){console.info('KURDIA motion: native scroll fallback',e);}}
+    let ticking=false;function progress(){if(ticking)return;ticking=true;requestAnimationFrame(()=>{const max=document.documentElement.scrollHeight-innerHeight;const pct=max>0?(scrollY/max)*100:0;const bar=$('.kurdia-scroll-progress');if(bar)bar.style.width=pct+'%';ticking=false;});}window.addEventListener('scroll',progress,{passive:true});progress();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initMotion,{once:true});else initMotion();
+  // Some site sections are rendered/switched dynamically; reveal newly activated content without touching their behavior.
+  document.addEventListener('click',e=>{const link=e.target.closest('[data-page],.navitem');if(!link)return;setTimeout(()=>{const active=$$('.page.active');active.forEach(page=>{const nodes=$$('.sectionhead,.featured,.featureimg,.stats,.trip-card,.destination-card,.review-card,.article-card',page).filter(el=>!el.classList.contains('kurdia-revealed'));nodes.forEach(el=>{el.classList.add('kurdia-reveal');requestAnimationFrame(()=>el.classList.add('kurdia-revealed'));});});},120);},{passive:true});
+})();
+</script>
+
 </body></html>
