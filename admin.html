@@ -208,6 +208,29 @@ textarea{ min-height:85px; resize:vertical; }
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<style>
+
+/* KURDIA safe release candidate: responsive readability polish (CSS-only). */
+@media (max-width: 850px) {
+  .content-body { min-width: 0; overflow-x: clip; }
+  .page-tab, .card, .wa-panel, .kat-card { min-width: 0; }
+  .page-tab table { min-width: 640px; }
+  .page-tab .table-wrap, .table-wrap, .overflow-x-auto { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  input, select, textarea, button { max-width: 100%; }
+  .grid-4, .grid-3, .grid-2 { min-width: 0; }
+}
+@media (max-width: 520px) {
+  .content-body { padding: 10px !important; }
+  .card { border-radius: 14px; }
+  .page-tab h2 { line-height: 1.45; overflow-wrap: anywhere; }
+  .page-tab .btn, .page-tab button { min-height: 42px; }
+  .topbar { gap: 8px; }
+  .topbar > * { min-width: 0; }
+  #tab-dashboard .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #tab-dashboard .grid-4 > .card { padding: 14px !important; }
+}
+
+</style>
 </head>
 <body>
 
@@ -1139,6 +1162,8 @@ async function saveStudioToCloud(){
       price: tripPriceKu,
       time: tripTimeKu,
       description: tripDescKu,
+      // Keep the public countdown date in the CMS object expected by index.html.
+      date: String(appState.tripTargetDate || trip.date || "").trim().slice(0, 10),
       heroImageUrl: appState.tripImageUrl || trip.heroImageUrl || "",
       capacity: Number(appState.capacity || trip.capacity || 40),
       booked: Number(appState.booked || trip.booked || 0),
