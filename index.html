@@ -554,9 +554,15 @@ main,section,.section,.page-section{background-color:transparent!important}
 <header class="top">
   <div class="container topin">
     <button class="iconbtn" onclick="goBackHome()"><i data-lucide="chevron-right"></i></button>
-    <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
-    <button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()"><i data-lucide="music"></i></button>
-    <button class="iconbtn" onclick="openSearch()"><i data-lucide="search"></i></button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
+      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.16);border:1px solid rgba(55,201,135,0.55);color:#6bf0b3;font-size:10px;font-weight:900;padding:3px 8px;border-radius:999px;direction:ltr;letter-spacing:.4px">v2.5.1 ↻</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <a id="siteToAdminLink" href="/admin.html?v=2.5.1" class="iconbtn" style="width:auto;padding:0 10px;font-size:11px;font-weight:800;gap:4px;display:inline-flex;align-items:center;border-color:rgba(229,35,79,0.45);background:rgba(229,35,79,0.14)" title="کۆنترۆڵ پانیڵی ئەدمین">⚙ ئەدمین</a>
+      <button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()"><i data-lucide="music"></i></button>
+      <button class="iconbtn" onclick="openSearch()"><i data-lucide="search"></i></button>
+    </div>
   </div>
 </header>
 <main>
@@ -836,6 +842,50 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
+const SITE_CODE_RELEASE='v2.5.1';
+(function(){
+  try{
+    if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
+      localStorage.removeItem('kurdia_builder_published_v3');
+      localStorage.removeItem('kurdia_premium_data');
+      localStorage.setItem('kurdia_code_release',SITE_CODE_RELEASE);
+      if(!localStorage.getItem('kurdia_live_version')){
+        localStorage.setItem('kurdia_live_version',SITE_CODE_RELEASE);
+      }
+      if(window.caches){
+        caches.keys().then(keys=>keys.forEach(k=>caches.delete(k))).catch(()=>{});
+      }
+    }
+  }catch(e){}
+})();
+
+function updateSiteVersionUI(ver){
+  const v = ver || localStorage.getItem('kurdia_live_version') || SITE_CODE_RELEASE;
+  const el = document.getElementById('siteVersionBadge');
+  if(el) el.textContent = v + ' ↻';
+  const adm = document.getElementById('siteToAdminLink');
+  if(adm) adm.href = '/admin.html?v=' + encodeURIComponent(v) + '&t=' + Date.now();
+}
+
+async function forceRefreshSiteVersion(){
+  try{
+    toast('⏳ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش...');
+    localStorage.removeItem('kurdia_builder_published_v3');
+    localStorage.removeItem('kurdia_premium_data');
+    if(window.caches){
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    await loadRemote();
+    render();
+    route();
+    const curV = localStorage.getItem('kurdia_live_version') || SITE_CODE_RELEASE;
+    toast('✅ نوێکرایەوە بۆ کۆتا ڤێرژن (' + curV + ')');
+  }catch(e){
+    location.reload();
+  }
+}
+
 const DEFAULT={
   heroTitle:'زیاتر لە گەشت.',
   heroText:'ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.',
@@ -967,11 +1017,20 @@ window.setLanguage=function(lang){
 
 async function loadRemote(){
   try{
-    const r=await fetch(WORKER+'/api/site/config',{cache:'no-store'});
+    updateSiteVersionUI();
+    const r=await fetch(WORKER+'/api/site/config?cb='+Date.now(),{cache:'no-store'});
     if(!r.ok) throw new Error('CMS HTTP '+r.status);
     const x=await r.json();
     const config=x.config||x.data||x;
     if(x.ok!==false && config && typeof config==='object'){
+      const badgeStr=String(config.home?.hero?.badge||config.siteVersion||'');
+      const vMatch=badgeStr.match(/v\d+\.\d+\.\d+/);
+      if(vMatch){
+        localStorage.setItem('kurdia_live_version',vMatch[0]);
+        updateSiteVersionUI(vMatch[0]);
+      } else {
+        updateSiteVersionUI();
+      }
       data=normalizeRemoteCMS(config);
       normalizePublicData();
       localStorage.setItem('kurdia_premium_data',JSON.stringify(data));
@@ -2102,13 +2161,18 @@ document.addEventListener('click',function(e){
   'use strict';
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 1. Live Sync from Admin Studio (kurdia_builder_published_v3) supporting Multiple Trips
+  // 1. Live Sync from Admin Studio (kurdia_admin_multitrip_v6) supporting Multiple Trips & Version
   function syncFromLocalAdmin(){
     try{
-      const raw = localStorage.getItem('kurdia_builder_published_v3');
+      updateSiteVersionUI();
+      const raw = localStorage.getItem('kurdia_admin_multitrip_v6');
       if(!raw) return;
       const adminState = JSON.parse(raw);
       if(!adminState || typeof adminState !== 'object') return;
+      if(adminState.appVersion){
+        localStorage.setItem('kurdia_live_version', adminState.appVersion);
+        updateSiteVersionUI(adminState.appVersion);
+      }
       const lang = localStorage.getItem('kurdia_language') || 'ku';
       const i18n = adminState.i18n?.[lang] || adminState.i18n?.ku || {};
       if(typeof data === 'object' && data){
@@ -2128,28 +2192,13 @@ document.addEventListener('click',function(e){
             data.trips = normalized;
             data.trip = normalized[0];
           }
-        } else if(data.trip){
-          if(i18n.tripTitle) data.trip.title = i18n.tripTitle;
-          if(i18n.tripLocation) data.trip.location = i18n.tripLocation;
-          if(i18n.tripPrice) data.trip.price = i18n.tripPrice;
-          if(i18n.tripTime) data.trip.time = i18n.tripTime;
-          if(i18n.tripDesc) data.trip.desc = i18n.tripDesc;
-          if(adminState.tripTargetDate) data.trip.date = String(adminState.tripTargetDate).slice(0,10);
-          if(adminState.tripImageUrl) data.trip.imageUrl = adminState.tripImageUrl;
-          if(adminState.capacity) data.trip.capacity = Number(adminState.capacity);
-          if(adminState.booked != null) data.trip.booked = Number(adminState.booked);
-          if(Array.isArray(data.trips) && data.trips.length){
-            data.trips[0] = { ...data.trips[0], ...data.trip };
-          } else {
-            data.trips = [data.trip];
-          }
         }
         if(typeof render === 'function') render();
       }
     }catch(e){}
   }
   window.addEventListener('storage', e => {
-    if(e.key === 'kurdia_builder_published_v3' || e.key === 'kurdia_premium_data') syncFromLocalAdmin();
+    if(e.key === 'kurdia_admin_multitrip_v6' || e.key === 'kurdia_premium_data' || e.key === 'kurdia_live_version') syncFromLocalAdmin();
   });
 
   // 2. Aceternity / 21st.dev Spotlight Mouse Tracker
