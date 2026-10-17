@@ -865,19 +865,19 @@ let data=JSON.parse(localStorage.getItem('kurdia_premium_data')||'null')||DEFAUL
 
 function normalizeTripItem(tr, fallbackTrip, lang, globalI18n, idx){
   if(!tr || typeof tr !== 'object') return null;
-  const ti = tr.i18n || (idx === 0 ? globalI18n : null) || {};
+  const ti = (tr.i18n && typeof tr.i18n === 'object') ? tr.i18n : {};
   const lti = ti[lang] || ti.ku || {};
   return {
     id: tr.id || ('trip-' + (idx + 1)),
-    title: lti.tripTitle ?? tr.title ?? fallbackTrip?.title ?? 'گەشتی KURDIA',
-    location: lti.tripLocation ?? tr.location ?? fallbackTrip?.location ?? 'کوردستان',
-    date: tr.date ?? tr.targetDate ?? fallbackTrip?.date ?? '',
-    price: lti.tripPrice ?? tr.price ?? fallbackTrip?.price ?? '—',
-    time: lti.tripTime ?? tr.time ?? fallbackTrip?.time ?? '',
+    title: lti.tripTitle || tr.title || fallbackTrip?.title || 'گەشتی KURDIA',
+    location: lti.tripLocation || tr.location || fallbackTrip?.location || 'کوردستان',
+    date: tr.date || (tr.targetDate ? String(tr.targetDate).slice(0, 10) : '') || (tr.tripTargetDate ? String(tr.tripTargetDate).slice(0, 10) : '') || fallbackTrip?.date || '',
+    price: lti.tripPrice || tr.price || fallbackTrip?.price || '—',
+    time: lti.tripTime || tr.time || fallbackTrip?.time || '',
     capacity: Number(tr.capacity ?? fallbackTrip?.capacity ?? 35),
     booked: Number(tr.booked ?? fallbackTrip?.booked ?? 0),
-    desc: lti.tripDesc ?? tr.description ?? tr.desc ?? fallbackTrip?.desc ?? '',
-    imageUrl: tr.heroImageUrl ?? tr.imageUrl ?? tr.img ?? fallbackTrip?.imageUrl ?? 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+    desc: lti.tripDesc || tr.description || tr.desc || fallbackTrip?.desc || '',
+    imageUrl: tr.heroImageUrl || tr.tripImageUrl || tr.imageUrl || tr.img || fallbackTrip?.imageUrl || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
     published: tr.published !== false,
     status: tr.status || 'active',
     i18n: tr.i18n || null

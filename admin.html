@@ -762,8 +762,13 @@ button{cursor:pointer;color:inherit}
     <section class="page" id="newtrip">
       <div class="toolbar">
         <button class="icon-btn" onclick="go('trips')">←</button>
-        <h2 id="editorTripHeader">دەستکاریکردنی گەشت #1</h2>
-        <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="createNewTrip()">＋ گەشتی نوێ</button>
+        <h2 id="editorTripHeader">زیادکردنی گەشتی نوێ</h2>
+        <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="createNewTrip()">＋ گەشتی نوێی بەتاڵ</button>
+      </div>
+
+      <!-- Mode Banner -->
+      <div id="editorModeBanner" style="background:linear-gradient(100deg,#073a2d,#061811);border:1px solid #11654b;border-radius:11px;padding:9px 12px;margin-bottom:9px;font-size:11px;color:#6bf0b3;font-weight:700">
+        ✨ دۆخی زیادکردنی گەشتی نوێ — گەشتە کۆنەکان پارێزراون و ناسڕێنەوە
       </div>
 
       <!-- Multi-Trip Switcher Pills -->
@@ -776,10 +781,10 @@ button{cursor:pointer;color:inherit}
 
       <div class="lang-box spotlight-card" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="tripPublishedSwitch" onchange="autoSync()" style="width:16px;height:16px"> پیشاندان لە پەڕەی سەرەکی
+          <input type="checkbox" id="tripPublishedSwitch" checked style="width:16px;height:16px"> پیشاندان لە پەڕەی سەرەکی
         </label>
         <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:16px;height:16px"> ناونووسین کراوەیە
+          <input type="checkbox" id="bookingOpen" checked style="width:16px;height:16px"> ناونووسین کراوەیە
         </label>
         <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
           <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" style="width:16px;height:16px"> OTP پێویستە
@@ -788,45 +793,48 @@ button{cursor:pointer;color:inherit}
 
       <div class="lang-box spotlight-card">
         <h4>☀️ زمانی کوردی (KU)</h4>
-        <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" oninput="autoSync()"></div>
-        <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" oninput="autoSync()"></div>
-        <div class="field"><label>نرخ</label><input id="tripPrice_ku" oninput="autoSync()"></div>
-        <div class="field"><label>کات و بەروار (دەق)</label><input id="tripTime_ku" oninput="autoSync()"></div>
-        <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" oninput="autoSync()"></textarea></div>
+        <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" placeholder="بۆ نموونە: گەشتی چەمانکێ و دهۆک"></div>
+        <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" placeholder="بۆ نموونە: دهۆک · چەمانکێ"></div>
+        <div class="field"><label>نرخ</label><input id="tripPrice_ku" placeholder="بۆ نموونە: 25,000 دینار"></div>
+        <div class="field"><label>کات و بەروار (دەق)</label><input id="tripTime_ku" placeholder="بۆ نموونە: بەیانی 06:00"></div>
+        <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" placeholder="وردەکاری و بەرنامەی گەشتەکە بنووسە..."></textarea></div>
       </div>
 
       <div class="lang-box spotlight-card">
         <h4>🌴 باللغة العربية (AR)</h4>
-        <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" oninput="autoSync()"></div>
-        <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" oninput="autoSync()"></div>
-        <div class="field"><label>السعر</label><input id="tripPrice_ar" oninput="autoSync()"></div>
-        <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" oninput="autoSync()"></div>
-        <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" oninput="autoSync()"></textarea></div>
+        <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" placeholder="اسم الرحلة بالعربية"></div>
+        <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" placeholder="المكان والمنطقة"></div>
+        <div class="field"><label>السعر</label><input id="tripPrice_ar" placeholder="25,000 دينار"></div>
+        <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" placeholder="صباحاً 06:00"></div>
+        <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" placeholder="تفاصيل الرحلة..."></textarea></div>
       </div>
 
       <div class="lang-box spotlight-card">
         <h4>🌐 In English (EN)</h4>
-        <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" oninput="autoSync()"></div>
-        <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" oninput="autoSync()"></div>
-        <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" oninput="autoSync()"></div>
-        <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" oninput="autoSync()"></div>
-        <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
+        <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" placeholder="Trip Title in English"></div>
+        <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" placeholder="Location"></div>
+        <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" placeholder="25,000 IQD"></div>
+        <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" placeholder="06:00 AM"></div>
+        <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" placeholder="Full trip itinerary..."></textarea></div>
       </div>
 
       <div class="lang-box spotlight-card">
         <h4>⚙️ بەروار، توانست و کەشوهەوا</h4>
-        <div class="field"><label>⏰ بەروار و کاتی گەشت (Countdown & Date)</label><input type="datetime-local" id="tripTargetDate" onchange="autoSync()"></div>
+        <div class="field"><label>⏰ بەروار و کاتی گەشت (Countdown & Date)</label><input type="datetime-local" id="tripTargetDate"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="field"><label>کۆی کورسی (Capacity)</label><input type="number" id="capacityInput" oninput="autoSync()"></div>
-          <div class="field"><label>گیراو (Booked)</label><input type="number" id="bookedInput" oninput="autoSync()"></div>
-          <div class="field"><label>پلەی گەرمی</label><input id="weatherTemp" oninput="autoSync()"></div>
-          <div class="field"><label>دۆخی کەشوهەوا</label><input id="weatherCondition" oninput="autoSync()"></div>
+          <div class="field"><label>کۆی کورسی (Capacity)</label><input type="number" id="capacityInput" value="35"></div>
+          <div class="field"><label>گیراو (Booked)</label><input type="number" id="bookedInput" value="0"></div>
+          <div class="field"><label>پلەی گەرمی</label><input id="weatherTemp" value="22°C"></div>
+          <div class="field"><label>دۆخی کەشوهەوا</label><input id="weatherCondition" value="ساماڵ ☀️"></div>
         </div>
       </div>
 
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button class="primary border-beam" style="margin:0;flex:1" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە (Publish)</button>
-        <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:0 14px" onclick="deleteTrip(activeTripIndex)" title="سڕینەوەی ئەم گەشتە">🗑️ سڕینەوە</button>
+      <div id="newTripActionButtons" style="display:grid;gap:8px;margin-top:12px">
+        <button id="btnSaveAsNewTrip" class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="saveFormAsNewTrip()">＋ زیادکردن وەک گەشتی نوێ و بڵاوکردنەوە (گەشتە کۆنەکان دەمێننەوە)</button>
+        <div id="editTripActionRow" style="display:flex;gap:8px">
+          <button id="btnUpdateExistingTrip" class="primary border-beam" style="margin:0;flex:1" onclick="saveFormToSelectedTrip()">💾 پاشەکەوتکردنی گۆڕانکاری لەم گەشتە</button>
+          <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:0 14px" onclick="deleteTrip(activeTripIndex)" title="سڕینەوەی ئەم گەشتە">🗑️ سڕینەوە</button>
+        </div>
       </div>
     </section>
 
@@ -1327,6 +1335,9 @@ function animateCounters(){
   });
 }
 
+let editorMode = "edit"; // "new" or "edit"
+let draftTripImageUrl = "";
+
 function go(id, btn){
   document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
   const activePage = document.getElementById(id);
@@ -1346,7 +1357,6 @@ function go(id, btn){
   }
   if(id === "dashboard") animateCounters();
   if(id === "trips" || id === "tripdetail") renderTripsAndDetail();
-  if(id === "newtrip") populateTripEditor(activeTripIndex);
   if(id === "bookings") fetchLiveRegistrations();
   if(id === "stories") fetchAdminStories();
   if(id === "private_requests") loadPrivateRequests();
@@ -1363,6 +1373,7 @@ function viewTripDetail(idx){
 
 function editTrip(idx){
   ensureTripsArray();
+  editorMode = "edit";
   activeTripIndex = Math.max(0, Math.min(idx, appState.trips.length - 1));
   populateTripEditor(activeTripIndex);
   go("newtrip");
@@ -1370,49 +1381,141 @@ function editTrip(idx){
 
 function createNewTrip(){
   ensureTripsArray();
+  editorMode = "new";
   const nextNum = appState.trips.length + 1;
-  const futureDate = new Date(Date.now() + nextNum * 7 * 86400000).toISOString().slice(0, 10) + "T06:00";
-  const newTrip = {
-    id: "trip-" + Date.now(),
-    published: true,
-    bookingOpen: true,
-    status: "active",
-    tripImageUrl: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85",
-    tripTargetDate: futureDate,
-    capacity: 35,
-    booked: 0,
-    weatherTemp: "22°C",
-    weatherCondition: "ساماڵ ☀️",
+  const futureDate = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10) + "T06:00";
+  draftTripImageUrl = "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85";
+
+  const hdr = document.getElementById("editorTripHeader");
+  if(hdr) hdr.textContent = `زیادکردنی گەشتی نوێ (#${nextNum})`;
+
+  const banner = document.getElementById("editorModeBanner");
+  if(banner){
+    banner.style.background = "linear-gradient(100deg,#073a2d,#061811)";
+    banner.style.borderColor = "#11654b";
+    banner.style.color = "#6bf0b3";
+    banner.textContent = `✨ دۆخی زیادکردنی گەشتی نوێ (#${nextNum}) — هەر ${appState.trips.length} گەشتەکەی پێشوو پارێزراون و ناسڕێنەوە`;
+  }
+
+  const editRow = document.getElementById("editTripActionRow");
+  if(editRow) editRow.style.display = "none";
+
+  renderEditorTabs();
+
+  const setEl = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ""; };
+  ["ku","ar","en"].forEach(l => {
+    setEl(`tripTitle_${l}`, "");
+    setEl(`tripLocation_${l}`, "");
+    setEl(`tripPrice_${l}`, "");
+    setEl(`tripTime_${l}`, "");
+    setEl(`tripDesc_${l}`, "");
+  });
+
+  const pubSw = document.getElementById("tripPublishedSwitch"); if(pubSw) pubSw.checked = true;
+  const bOpen = document.getElementById("bookingOpen"); if(bOpen) bOpen.checked = true;
+  const otpSw = document.getElementById("otpRequiredSwitch"); if(otpSw) otpSw.checked = appState.otpRequired !== false;
+
+  setEl("tripTargetDate", futureDate);
+  setEl("capacityInput", 35);
+  setEl("bookedInput", 0);
+  setEl("weatherTemp", "22°C");
+  setEl("weatherCondition", "ساماڵ ☀️");
+
+  const prev = document.getElementById("tripPreviewImg");
+  if(prev){
+    prev.src = draftTripImageUrl;
+    prev.style.display = "block";
+  }
+
+  go("newtrip");
+  setTimeout(() => document.getElementById("tripTitle_ku")?.focus(), 120);
+  toast(`✨ فۆڕمی گەشتی نوێ (#${nextNum}) ئامادەیە`);
+}
+
+function renderEditorTabs(){
+  const tabs = document.getElementById("editorTripTabs");
+  if(!tabs) return;
+  const tripButtons = appState.trips.map((item, i) => {
+    const tName = item.i18n?.ku?.tripTitle || item.title || `گەشتی #${i + 1}`;
+    const isAct = (editorMode === "edit" && i === activeTripIndex);
+    return `<button type="button" class="filter ${isAct ? 'active' : ''}" onclick="editTrip(${i})">#${i + 1} ${tName.slice(0, 18)}</button>`;
+  }).join("");
+  const newBtn = `<button type="button" class="filter ${editorMode === 'new' ? 'active' : ''}" style="${editorMode === 'new' ? 'background:#0c9b61;border-color:#26d08c;color:#fff' : 'border-color:#0c9b61;color:#43d6a0'}" onclick="createNewTrip()">＋ گەشتی نوێ</button>`;
+  tabs.innerHTML = tripButtons + newBtn;
+}
+
+function readTripFromForm(existingId){
+  const getVal = (id, fb="") => { const el = document.getElementById(id); return el ? el.value.trim() : fb; };
+  const kuTitle = getVal("tripTitle_ku") || getVal("tripTitle_ar") || getVal("tripTitle_en") || `گەشتی کوردیا #${appState.trips.length + 1}`;
+  const kuLoc = getVal("tripLocation_ku") || getVal("tripLocation_ar") || getVal("tripLocation_en") || "کوردستان";
+  const kuPrice = getVal("tripPrice_ku") || getVal("tripPrice_ar") || getVal("tripPrice_en") || "25,000 دینار";
+  const kuTime = getVal("tripTime_ku") || getVal("tripTime_ar") || getVal("tripTime_en") || "06:00 بەیانی";
+  const kuDesc = getVal("tripDesc_ku") || getVal("tripDesc_ar") || getVal("tripDesc_en") || "";
+
+  const pubSw = document.getElementById("tripPublishedSwitch");
+  const bOpen = document.getElementById("bookingOpen");
+  const isPublished = pubSw ? pubSw.checked : true;
+  const isBookingOpen = bOpen ? bOpen.checked : true;
+
+  return {
+    id: existingId || ("trip-" + Date.now()),
+    published: isPublished,
+    bookingOpen: isBookingOpen,
+    status: isBookingOpen ? "active" : "closed",
+    tripImageUrl: draftTripImageUrl || "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85",
+    tripTargetDate: getVal("tripTargetDate") || new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10) + "T06:00",
+    capacity: Number(getVal("capacityInput", "35") || 35),
+    booked: Number(getVal("bookedInput", "0") || 0),
+    weatherTemp: getVal("weatherTemp", "22°C"),
+    weatherCondition: getVal("weatherCondition", "ساماڵ ☀️"),
     i18n: {
       ku: {
-        tripTitle: `گەشتی نوێی کوردیا #${nextNum}`,
-        tripLocation: "کوردستان",
-        tripPrice: "35,000 دینار",
-        tripTime: "06:00 بەیانی",
-        tripDesc: "گەشتێکی تایبەت لەگەڵ تیمی KURDIA ADVENTURE بۆ ناو سروشتی کوردستان."
+        tripTitle: kuTitle,
+        tripLocation: kuLoc,
+        tripPrice: kuPrice,
+        tripTime: kuTime,
+        tripDesc: kuDesc
       },
       ar: {
-        tripTitle: `رحلة كورديا الجديدة #${nextNum}`,
-        tripLocation: "كوردستان",
-        tripPrice: "35,000 دينار",
-        tripTime: "06:00 صباحاً",
-        tripDesc: "رحلة مميزة مع فريق KURDIA ADVENTURE."
+        tripTitle: getVal("tripTitle_ar") || kuTitle,
+        tripLocation: getVal("tripLocation_ar") || kuLoc,
+        tripPrice: getVal("tripPrice_ar") || kuPrice,
+        tripTime: getVal("tripTime_ar") || kuTime,
+        tripDesc: getVal("tripDesc_ar") || kuDesc
       },
       en: {
-        tripTitle: `New KURDIA Expedition #${nextNum}`,
-        tripLocation: "Kurdistan",
-        tripPrice: "35,000 IQD",
-        tripTime: "06:00 AM",
-        tripDesc: "A special nature expedition with KURDIA ADVENTURE."
+        tripTitle: getVal("tripTitle_en") || kuTitle,
+        tripLocation: getVal("tripLocation_en") || kuLoc,
+        tripPrice: getVal("tripPrice_en") || kuPrice,
+        tripTime: getVal("tripTime_en") || kuTime,
+        tripDesc: getVal("tripDesc_en") || kuDesc
       }
     }
   };
+}
+
+async function saveFormAsNewTrip(){
+  ensureTripsArray();
+  const newTrip = readTripFromForm("trip-" + Date.now());
   appState.trips.push(newTrip);
   activeTripIndex = appState.trips.length - 1;
+  editorMode = "edit";
   populateTripEditor(activeTripIndex);
-  autoSync();
-  go("newtrip");
-  toast(`✨ گەشتی نوێ (#${nextNum}) دروست کرا!`);
+  await publishLive(true);
+  go("trips");
+}
+
+async function saveFormToSelectedTrip(){
+  ensureTripsArray();
+  if(editorMode === "new"){
+    return await saveFormAsNewTrip();
+  }
+  const current = appState.trips[activeTripIndex];
+  const updated = readTripFromForm(current?.id || ("trip-" + (activeTripIndex + 1)));
+  appState.trips[activeTripIndex] = updated;
+  populateTripEditor(activeTripIndex);
+  await publishLive(true);
+  go("trips");
 }
 
 function toggleTripPublished(idx, ev){
@@ -1424,7 +1527,7 @@ function toggleTripPublished(idx, ev){
   renderTripsAndDetail();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   syncPublicWebsiteBridge();
-  toast(tr.published ? "✅ گەشتەکە لە ماڵپەڕ چالاک کرا" : "👁️ گەشتەکە لە ماڵپەڕ شارایەوە");
+  publishLive(true);
 }
 
 function deleteTrip(idx, ev){
@@ -1433,32 +1536,48 @@ function deleteTrip(idx, ev){
   if(appState.trips.length <= 1){
     return toast("⚠️ لایەنی کەم دەبێت یەک گەشت بمێنێتەوە");
   }
-  appState.trips.splice(idx, 1);
+  const removed = appState.trips.splice(idx, 1)[0];
+  if(!Array.isArray(appState.deletedTripIds)) appState.deletedTripIds = [];
+  if(removed?.id && !appState.deletedTripIds.includes(removed.id)){
+    appState.deletedTripIds.push(removed.id);
+  }
   if(activeTripIndex >= appState.trips.length) activeTripIndex = appState.trips.length - 1;
+  editorMode = "edit";
   populateTripEditor(activeTripIndex);
   renderTripsAndDetail();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   syncPublicWebsiteBridge();
+  publishLive(true);
   go("trips");
   toast("🗑️ گەشتەکە سڕایەوە");
 }
 
 function populateTripEditor(idx){
   ensureTripsArray();
+  editorMode = "edit";
   activeTripIndex = Math.max(0, Math.min(idx, appState.trips.length - 1));
   const tr = appState.trips[activeTripIndex];
   if(!tr) return;
 
+  draftTripImageUrl = tr.tripImageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85";
+
   const hdr = document.getElementById("editorTripHeader");
   if(hdr) hdr.textContent = `دەستکاریکردنی گەشتی #${activeTripIndex + 1}`;
 
-  const tabs = document.getElementById("editorTripTabs");
-  if(tabs){
-    tabs.innerHTML = appState.trips.map((item, i) => {
-      const tName = item.i18n?.ku?.tripTitle || `گەشتی #${i + 1}`;
-      return `<button type="button" class="filter ${i === activeTripIndex ? 'active' : ''}" onclick="editTrip(${i})">#${i + 1} ${tName.slice(0, 18)}</button>`;
-    }).join("");
+  const banner = document.getElementById("editorModeBanner");
+  if(banner){
+    banner.style.background = "linear-gradient(100deg,#092d4a,#071321)";
+    banner.style.borderColor = "#174766";
+    banner.style.color = "#7dd3fc";
+    banner.textContent = `✎ خەریکی دەستکاریکردنی گەشتی #${activeTripIndex + 1} (${tr.i18n?.ku?.tripTitle || ''}) — یان کلیک لە «＋ زیادکردن وەک گەشتی نوێ» بکە بۆ زیادکردنی گەشتی تر`;
   }
+
+  const editRow = document.getElementById("editTripActionRow");
+  if(editRow) editRow.style.display = "flex";
+  const updateBtn = document.getElementById("btnUpdateExistingTrip");
+  if(updateBtn) updateBtn.textContent = `💾 پاشەکەوتکردنی گۆڕانکاری لە گەشتی #${activeTripIndex + 1}`;
+
+  renderEditorTabs();
 
   const setEl = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ""; };
   ["ku","ar","en"].forEach(l => {
@@ -1483,8 +1602,8 @@ function populateTripEditor(idx){
   setEl("weatherCondition", tr.weatherCondition || "ساماڵ ☀️");
 
   const prev = document.getElementById("tripPreviewImg");
-  if(prev && tr.tripImageUrl){
-    prev.src = tr.tripImageUrl;
+  if(prev && draftTripImageUrl){
+    prev.src = draftTripImageUrl;
     prev.style.display = "block";
   }
 }
@@ -1573,18 +1692,18 @@ function formatTripForPublic(tr, idx){
   const ku = tr.i18n?.ku || {};
   return {
     id: tr.id || ("trip-" + (idx + 1)),
-    title: ku.tripTitle || "گەشتی KURDIA",
-    location: ku.tripLocation || "کوردستان",
-    date: String(tr.tripTargetDate || "2026-10-24").slice(0, 10),
+    title: ku.tripTitle || tr.title || "گەشتی KURDIA",
+    location: ku.tripLocation || tr.location || "کوردستان",
+    date: String(tr.tripTargetDate || tr.date || "2026-10-24").slice(0, 10),
     targetDate: tr.tripTargetDate || "2026-10-24T05:00",
-    price: ku.tripPrice || "35,000 دینار",
-    time: ku.tripTime || "05:00 بەیانی",
+    price: ku.tripPrice || tr.price || "35,000 دینار",
+    time: ku.tripTime || tr.time || "05:00 بەیانی",
     capacity: Number(tr.capacity || 40),
     booked: Number(tr.booked || 0),
-    desc: ku.tripDesc || "",
-    description: ku.tripDesc || "",
-    imageUrl: tr.tripImageUrl || "",
-    heroImageUrl: tr.tripImageUrl || "",
+    desc: ku.tripDesc || tr.description || tr.desc || "",
+    description: ku.tripDesc || tr.description || tr.desc || "",
+    imageUrl: tr.tripImageUrl || tr.heroImageUrl || tr.imageUrl || "",
+    heroImageUrl: tr.tripImageUrl || tr.heroImageUrl || tr.imageUrl || "",
     published: tr.published !== false,
     status: tr.bookingOpen === false ? "closed" : "active",
     i18n: tr.i18n || null
@@ -1625,43 +1744,17 @@ function autoSync(){
   appState.gradColor1 = getVal("gradColor1", appState.gradColor1);
   appState.gradColor2 = getVal("gradColor2", appState.gradColor2);
 
-  const cur = appState.trips[activeTripIndex] || appState.trips[0];
-
   ["ku","ar","en"].forEach(lang => {
     if(!appState.i18n[lang]) appState.i18n[lang] = {};
     appState.i18n[lang].heroTitle = getVal(`heroTitle_${lang}`, appState.i18n[lang].heroTitle);
     appState.i18n[lang].heroSubtitle = getVal(`heroSubtitle_${lang}`, appState.i18n[lang].heroSubtitle);
-    if(cur){
-      if(!cur.i18n) cur.i18n = {};
-      if(!cur.i18n[lang]) cur.i18n[lang] = {};
-      cur.i18n[lang].tripTitle = getVal(`tripTitle_${lang}`, cur.i18n[lang].tripTitle);
-      cur.i18n[lang].tripLocation = getVal(`tripLocation_${lang}`, cur.i18n[lang].tripLocation);
-      cur.i18n[lang].tripPrice = getVal(`tripPrice_${lang}`, cur.i18n[lang].tripPrice);
-      cur.i18n[lang].tripTime = getVal(`tripTime_${lang}`, cur.i18n[lang].tripTime);
-      cur.i18n[lang].tripDesc = getVal(`tripDesc_${lang}`, cur.i18n[lang].tripDesc);
-    }
   });
-
-  if(cur){
-    const pubSw = document.getElementById("tripPublishedSwitch");
-    if(pubSw) cur.published = pubSw.checked;
-    const bOpen = document.getElementById("bookingOpen");
-    if(bOpen){
-      cur.bookingOpen = bOpen.checked;
-      cur.status = bOpen.checked ? "active" : "closed";
-    }
-    cur.tripTargetDate = getVal("tripTargetDate", cur.tripTargetDate);
-    cur.weatherTemp = getVal("weatherTemp", cur.weatherTemp);
-    cur.weatherCondition = getVal("weatherCondition", cur.weatherCondition);
-    cur.capacity = Number(getVal("capacityInput", cur.capacity) || 40);
-    cur.booked = Number(getVal("bookedInput", cur.booked) || 0);
-  }
 
   const otpSw = document.getElementById("otpRequiredSwitch");
   if(otpSw) appState.otpRequired = otpSw.checked;
   appState.fibAccount = getVal("fibAccount", appState.fibAccount);
 
-  // Sync top-level legacy fields from primary trip
+  // Sync top-level legacy fields from primary trip without mutating trips from unsubmitted form inputs
   const firstTrip = appState.trips[0];
   if(firstTrip){
     appState.tripImageUrl = firstTrip.tripImageUrl;
@@ -1687,25 +1780,55 @@ function autoSync(){
   }
 
   renderTripsAndDetail();
-  const tabs = document.getElementById("editorTripTabs");
-  if(tabs){
-    tabs.innerHTML = appState.trips.map((item, i) => {
-      const tName = item.i18n?.ku?.tripTitle || `گەشتی #${i + 1}`;
-      return `<button type="button" class="filter ${i === activeTripIndex ? 'active' : ''}" onclick="editTrip(${i})">#${i + 1} ${tName.slice(0, 18)}</button>`;
-    }).join("");
-  }
+  renderEditorTabs();
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   syncPublicWebsiteBridge();
 }
 
-async function publishLive(){
+async function publishLive(alreadySavedFromTripForm = false){
   try{
+    // If user clicked top Publish while inside #newtrip, commit the form according to editorMode!
+    const onNewTripPage = document.getElementById("newtrip")?.classList.contains("active");
+    if(onNewTripPage && !alreadySavedFromTripForm){
+      const titleInput = (document.getElementById("tripTitle_ku")?.value || "").trim();
+      if(titleInput){
+        if(editorMode === "new"){
+          const newTrip = readTripFromForm("trip-" + Date.now());
+          appState.trips.push(newTrip);
+          activeTripIndex = appState.trips.length - 1;
+          editorMode = "edit";
+          populateTripEditor(activeTripIndex);
+        } else {
+          const cur = appState.trips[activeTripIndex];
+          appState.trips[activeTripIndex] = readTripFromForm(cur?.id || ("trip-" + (activeTripIndex + 1)));
+          populateTripEditor(activeTripIndex);
+        }
+      }
+    }
+
     autoSync();
     toast("⏳ لە ناو سێرڤەر پاشەکەوت دەکرێت...");
     const currentRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store" });
     const current = await currentRes.json().catch(() => ({}));
     const data = current.data || {};
+
+    // Merge any existing remote trips that aren't in appState.trips (unless explicitly deleted) so no trip is ever lost!
+    const deletedIds = new Set(Array.isArray(appState.deletedTripIds) ? appState.deletedTripIds : []);
+    if(Array.isArray(data.trips) && data.trips.length){
+      data.trips.forEach((rtr, rIdx) => {
+        const normRemote = normalizeAdminTrip(rtr, rIdx);
+        if(deletedIds.has(normRemote.id)) return;
+        const rTitle = (normRemote.i18n?.ku?.tripTitle || "").trim();
+        const exists = appState.trips.some(ltr =>
+          ltr.id === normRemote.id ||
+          (rTitle && (ltr.i18n?.ku?.tripTitle || "").trim() === rTitle)
+        );
+        if(!exists){
+          appState.trips.push(normRemote);
+        }
+      });
+    }
 
     const heroT = appState.i18n?.ku?.heroTitle || "";
     const heroSub = appState.i18n?.ku?.heroSubtitle || "";
@@ -1719,6 +1842,11 @@ async function publishLive(){
     data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
     data.reviews = Array.isArray(appState.reviews) ? appState.reviews : [];
     data.gallery = Array.isArray(appState.gallery) ? appState.gallery : [];
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    syncPublicWebsiteBridge();
+    renderTripsAndDetail();
+    renderEditorTabs();
 
     const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
       method: "POST",
@@ -1786,24 +1914,25 @@ async function applyCropAndSave(){
     if(cropTarget.prop === "gallery"){
       appState.gallery.push({ url, title: "KURDIA" });
       renderGallery();
+      autoSync();
     } else if(cropTarget.prop === "tripImageUrl"){
-      ensureTripsArray();
-      if(appState.trips[activeTripIndex]){
+      draftTripImageUrl = url;
+      if(editorMode === "edit" && appState.trips[activeTripIndex]){
         appState.trips[activeTripIndex].tripImageUrl = url;
       }
-      appState.tripImageUrl = url;
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
         if(p){ p.src = url; p.style.display = "block"; }
       }
+      autoSync();
     } else {
       appState[cropTarget.prop] = url;
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
         if(p){ p.src = url; p.style.display = "block"; }
       }
+      autoSync();
     }
-    autoSync();
     closeCropModal();
     toast("✅ وێنەکە هەڵگیرا");
   }catch(e){
@@ -2201,9 +2330,31 @@ async function fetchRemoteCMSIntoAdmin(){
     const x = await r.json();
     const cfg = x.config || x.data || x;
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){
-      appState.trips = cfg.trips;
+      const deletedIds = new Set(Array.isArray(appState.deletedTripIds) ? appState.deletedTripIds : []);
+      const remoteNormalized = cfg.trips.map((t, i) => normalizeAdminTrip(t, i)).filter(t => !deletedIds.has(t.id));
+      // Merge remote trips with any local unsynced trips
+      const merged = [...remoteNormalized];
+      (appState.trips || []).forEach((ltr, lIdx) => {
+        const normLocal = normalizeAdminTrip(ltr, lIdx);
+        if(deletedIds.has(normLocal.id)) return;
+        const lTitle = (normLocal.i18n?.ku?.tripTitle || "").trim();
+        const exists = merged.some(rt =>
+          rt.id === normLocal.id ||
+          (lTitle && (rt.i18n?.ku?.tripTitle || "").trim() === lTitle)
+        );
+        if(!exists){
+          merged.push(normLocal);
+        }
+      });
+      if(merged.length){
+        appState.trips = merged;
+      }
       ensureTripsArray();
-      populateTripEditor(activeTripIndex);
+      if(editorMode !== "new"){
+        populateTripEditor(activeTripIndex);
+      } else {
+        renderEditorTabs();
+      }
       renderTripsAndDetail();
       animateCounters();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
