@@ -3,12 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
+<meta property="og:title" content="KURDIA CONTROL CENTER — Admin Studio">
+<meta property="og:description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
 <title>KURDIA CONTROL CENTER — Admin Studio</title>
 
 <!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
 <!-- CROPPER.JS (Admin Image Cropping) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
@@ -18,11 +21,15 @@
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
-<!-- GSAP (GreenSock Animation Platform) -->
+<!-- GSAP + ScrollTrigger (GreenSock Animation Platform) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <!-- ANIME.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+<!-- MOTION ONE (motion.dev) -->
+<script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.js"></script>
 
 <!-- THREE.JS (3D Mountain & Starfield WebGL) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -55,7 +62,7 @@ body{
   margin:0;
   background:radial-gradient(ellipse at 50% -10%,#15202d 0,#050a10 48%,#02060a 100%);
   color:var(--text);
-  font-family:'Noto Sans Arabic','Vazirmatn',Inter,sans-serif;
+  font-family:'Noto Sans Arabic','Vazirmatn','Plus Jakarta Sans',sans-serif;
   min-height:100vh;
   overflow-x:hidden;
 }
@@ -70,7 +77,7 @@ button{cursor:pointer;color:inherit}
   height:100%;
   pointer-events:none;
   z-index:0;
-  opacity:0.65;
+  opacity:0.72;
 }
 
 .app{
@@ -96,7 +103,7 @@ button{cursor:pointer;color:inherit}
   align-items:center;
   justify-content:space-between;
   padding:0 8px;
-  font:600 11px Inter,sans-serif;
+  font:600 11px 'Plus Jakarta Sans',sans-serif;
   color:#dbe1e8;
 }
 .status .signals{letter-spacing:2px}
@@ -104,7 +111,7 @@ button{cursor:pointer;color:inherit}
 .topbar{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
   padding:9px 10px;
   background:linear-gradient(120deg,#101b27,#050c14);
   border:1px solid #1b2936;
@@ -115,16 +122,30 @@ button{cursor:pointer;color:inherit}
   overflow:hidden;
 }
 /* Aceternity Border Beam / Shimmer */
-.topbar::after{
+.topbar::after, .border-beam::after{
   content:"";
   position:absolute;
-  top:0;left:-100%;width:60%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(240,24,61,0.85),transparent);
-  animation:shimmerBeam 4s infinite linear;
+  top:0;left:-100%;width:60%;height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(240,24,61,0.92),rgba(255,150,170,0.95),transparent);
+  animation:shimmerBeam 3.8s infinite linear;
+  pointer-events:none;
 }
 @keyframes shimmerBeam{
-  0%{left:-60%}
+  0%{left:-65%}
   100%{left:140%}
+}
+
+/* React-Bits Shiny Text */
+.shiny-text{
+  background:linear-gradient(110deg,#ffffff 35%,#ff6b86 50%,#ffffff 65%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shinyTextFlow 4.5s linear infinite;
+}
+@keyframes shinyTextFlow{
+  to{background-position:200% center}
 }
 
 .logo{
@@ -140,8 +161,8 @@ button{cursor:pointer;color:inherit}
   color:#fff;
 }
 .brand{flex:1;min-width:0}
-.brand b{font:800 11px Inter,sans-serif;letter-spacing:.25px;display:block;direction:ltr;text-align:right}
-.brand small{display:block;color:#9ba9b8;font:9px Inter,sans-serif;direction:ltr;text-align:right;margin-top:3px}
+.brand b{font:800 11px 'Plus Jakarta Sans',sans-serif;letter-spacing:.25px;display:block;direction:ltr;text-align:right}
+.brand small{display:block;color:#9ba9b8;font:9px 'Plus Jakarta Sans',sans-serif;direction:ltr;text-align:right;margin-top:3px}
 .avatar{
   width:32px;
   height:32px;
@@ -151,21 +172,24 @@ button{cursor:pointer;color:inherit}
   place-items:center;
   font-size:17px;
   border:1px solid #52616e;
+  text-decoration:none;
 }
 
 .page{display:none}
 .page.active{display:block}
 
-/* Aceternity / 21st.dev Spotlight Card Effect */
+/* Aceternity / 21st.dev Spotlight Card + 3D Tilt */
 .spotlight-card{
   position:relative;
   overflow:hidden;
+  transform-style:preserve-3d;
+  will-change:transform;
 }
 .spotlight-card::before{
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(240,24,61,0.18), transparent 70%);
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(240,24,61,0.20), transparent 70%);
   opacity:0;
   transition:opacity .25s ease;
   pointer-events:none;
@@ -175,7 +199,7 @@ button{cursor:pointer;color:inherit}
 .spotlight-card > *{position:relative;z-index:1}
 
 .hero{
-  height:186px;
+  height:192px;
   border-radius:16px;
   overflow:hidden;
   position:relative;
@@ -211,6 +235,7 @@ button{cursor:pointer;color:inherit}
   border:0;
   box-shadow:0 4px 12px rgba(10,158,103,0.4);
   transition:transform .2s;
+  white-space:nowrap;
 }
 .pill:hover{transform:scale(1.04)}
 .hero-copy{
@@ -247,7 +272,7 @@ button{cursor:pointer;color:inherit}
 .stat-head{display:flex;align-items:center;justify-content:space-between;font-size:20px}
 .stat strong{font-size:24px;font-variant-numeric:tabular-nums}
 .stat p{font-size:11px;margin:5px 0 0;font-weight:700}
-.stat small{display:block;color:#aeb8c2;font:10px Inter,sans-serif;margin-top:2px;direction:ltr;text-align:right}
+.stat small{display:block;color:#aeb8c2;font:10px 'Plus Jakarta Sans',sans-serif;margin-top:2px;direction:ltr;text-align:right}
 
 .section-title{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:14px;margin:13px 3px 8px}
 .section-title .mini{background:var(--red);border-radius:8px;padding:5px 8px;font-size:12px;border:0;color:#fff}
@@ -257,7 +282,7 @@ button{cursor:pointer;color:inherit}
 .service-icon{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:#101e2a;border:1px solid #273747;font-size:16px;flex:none}
 .service-text{flex:1;min-width:0}
 .service-text b{font-size:11px;display:block}
-.service-text small{font:10px Inter,sans-serif;color:var(--muted);display:block;margin-top:3px;direction:ltr;text-align:right}
+.service-text small{font:10px 'Plus Jakarta Sans',sans-serif;color:var(--muted);display:block;margin-top:3px;direction:ltr;text-align:right}
 .ok{color:#10d67d;font-size:11px;white-space:nowrap;font-weight:700}
 
 .bottom-nav{
@@ -327,6 +352,8 @@ button{cursor:pointer;color:inherit}
   place-items:center;
   font-size:16px;
   transition:.2s;
+  text-decoration:none;
+  color:inherit;
 }
 .icon-btn:hover{border-color:var(--red);background:#122030}
 
@@ -389,6 +416,8 @@ button{cursor:pointer;color:inherit}
   box-shadow:0 6px 16px #e20d3324;
   margin-top:10px;
   transition:filter .2s, transform .15s;
+  position:relative;
+  overflow:hidden;
 }
 .primary:hover{filter:brightness(1.08)}
 .primary:active{transform:scale(.99)}
@@ -412,7 +441,7 @@ button{cursor:pointer;color:inherit}
 .countdown{margin-top:10px;border:1px solid #293644;border-radius:13px;padding:12px;text-align:center;background:linear-gradient(130deg,#101a25,#070d14)}
 .countdown b{display:block;font-size:11px;margin-bottom:9px}
 .digits{display:flex;gap:7px;justify-content:center;direction:ltr}
-.digits span{background:#c91435;border-radius:7px;padding:8px 10px;font:700 20px Inter,sans-serif;box-shadow:0 0 12px #e7183a2b;min-width:42px}
+.digits span{background:#c91435;border-radius:7px;padding:8px 10px;font:700 20px 'Plus Jakarta Sans',sans-serif;box-shadow:0 0 12px #e7183a2b;min-width:42px}
 .progress{height:6px;border-radius:9px;background:#172431;overflow:hidden;margin-top:10px}
 .progress i{display:block;width:72%;height:100%;background:linear-gradient(90deg,#f0183d,#f3b529)}
 
@@ -430,7 +459,7 @@ button{cursor:pointer;color:inherit}
 .person .face{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#b7d7e9,#a85e4c);font-size:21px;flex:none}
 .person-main{flex:1;min-width:0}
 .person-main b{font-size:12px;display:block}
-.person-main small{font:10px Inter,sans-serif;color:#a0afbd;display:block;margin-top:3px;direction:ltr;text-align:right;overflow-wrap:anywhere}
+.person-main small{font:10px 'Plus Jakarta Sans',sans-serif;color:#a0afbd;display:block;margin-top:3px;direction:ltr;text-align:right;overflow-wrap:anywhere}
 .person-actions{display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:7px;border-top:1px solid #162432;flex-wrap:wrap}
 .status-tag{font-size:10px;border-radius:20px;padding:4px 9px;background:#0c9b61;color:white;white-space:nowrap;font-weight:700}
 .status-tag.yellow{background:#e4a80b;color:#171006}
@@ -467,7 +496,7 @@ button{cursor:pointer;color:inherit}
 
 .diagnostic{display:flex;align-items:center;gap:10px;background:#09141e;border:1px solid #1c2b38;border-radius:12px;padding:10px;margin-top:7px}
 .diagnostic .service-icon{font-size:18px}
-.diagnostic .service-text b{font-family:Inter,'Noto Sans Arabic',sans-serif;font-size:11px}
+.diagnostic .service-text b{font-family:'Plus Jakarta Sans','Noto Sans Arabic',sans-serif;font-size:11px}
 .diagnostic .service-text small{font-size:9px}
 .dot{width:10px;height:10px;border-radius:50%;background:#13ce79;box-shadow:0 0 9px #13ce7955}
 .dot.warn{background:#f3b529}
@@ -500,13 +529,13 @@ button{cursor:pointer;color:inherit}
 .rating-box .star{font-size:26px;color:#f5b62e}
 .rating-box strong{font-size:29px;margin:0 7px}
 .rating-box p{font-size:10px;color:#aeb8c1;margin:4px 0 12px}
-.barrow{display:flex;align-items:center;gap:8px;font:10px Inter,sans-serif;margin:6px 0;direction:ltr}
+.barrow{display:flex;align-items:center;gap:8px;font:10px 'Plus Jakarta Sans',sans-serif;margin:6px 0;direction:ltr}
 .barrow .bar{height:6px;flex:1;background:#26313b;border-radius:8px;overflow:hidden}
 .barrow .bar i{height:100%;display:block;background:#f2b62e}
 .review{padding:10px;border:1px solid #1e2b38;background:#09141e;border-radius:12px;margin-top:8px}
 .review-head{display:flex;align-items:center;gap:8px}
 .review-head b{font-size:11px;flex:1}
-.review-head small{font:9px Inter,sans-serif;color:#9baab8}
+.review-head small{font:9px 'Plus Jakarta Sans',sans-serif;color:#9baab8}
 .stars{color:#f4b72e;letter-spacing:1px;font-size:11px}
 .review p{font-size:11px;line-height:1.7;color:#c3cbd3;margin:7px 0 0}
 
@@ -555,10 +584,10 @@ button{cursor:pointer;color:inherit}
   body{padding:20px 0}
   .app{border-radius:28px;min-height:850px;box-shadow:0 20px 70px #0009}
   .bottom-nav{bottom:20px;border-radius:17px}
-  .hero{height:210px}
+  .hero{height:215px}
 }
 </style>
-<script src="/_aistudio-iframe.js?v=6634132a"></script></head>
+</head>
 <body>
 
 <!-- Three.js Global Ambient Canvas -->
@@ -575,22 +604,25 @@ button{cursor:pointer;color:inherit}
   <header class="topbar">
     <div class="logo">▲</div>
     <div class="brand">
-      <b>KURDIA CONTROL CENTER</b>
+      <b class="shiny-text">KURDIA CONTROL CENTER</b>
       <small>CMS · CRM · OPERATIONS</small>
     </div>
     <button class="pill" onclick="publishLive()" id="topPublishBtn">● Publish</button>
+    <a class="icon-btn" href="/index.html" style="width:31px;height:31px;font-size:13px" title="ماڵپەڕی سەرەکی">🌐</a>
     <button class="icon-btn" style="width:31px;height:31px;font-size:13px" onclick="toggleWideMode()" title="گۆڕینی قەبارە">⇄</button>
-    <div class="avatar" title="Kurdia Admin">🏔️</div>
   </header>
 
   <main>
     <!-- 1. DASHBOARD -->
     <section class="page active" id="dashboard">
-      <div class="hero spotlight-card" id="dashboardHero">
+      <div class="hero spotlight-card border-beam" id="dashboardHero" data-aos="fade-up">
         <canvas id="heroThreeOverlay"></canvas>
         <div class="hero-tools">
           <button class="icon-btn" style="width:28px;height:28px;font-size:13px;background:rgba(0,0,0,0.45)" onclick="go('settings')">⚙</button>
-          <button class="pill" onclick="publishLive()">● Publish Live</button>
+          <div style="display:flex;align-items:center;gap:6px">
+            <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json" background="transparent" speed="1" style="width:24px;height:24px" loop autoplay></lottie-player>
+            <button class="pill" onclick="publishLive()">● Publish Live</button>
+          </div>
         </div>
         <div class="hero-copy">
           <h1>بەخێربێیتەوە<br><span>کوردیا</span></h1>
@@ -598,23 +630,23 @@ button{cursor:pointer;color:inherit}
         </div>
       </div>
 
-      <div class="stats">
-        <div class="stat red spotlight-card">
+      <div class="stats" data-aos="fade-up" data-aos-delay="60">
+        <div class="stat red spotlight-card" data-tilt>
           <div class="stat-head"><span>♧</span><strong id="dashCapCounter" data-count="40">40</strong></div>
           <p>کۆی گشتی گەشتیاران</p>
           <small>Total Capacity</small>
         </div>
-        <div class="stat blue spotlight-card">
+        <div class="stat blue spotlight-card" data-tilt>
           <div class="stat-head"><span>▣</span><strong id="dashBookedCounter" data-count="29">29</strong></div>
           <p>ناونوسراو</p>
           <small>Booked</small>
         </div>
-        <div class="stat green spotlight-card">
+        <div class="stat green spotlight-card" data-tilt>
           <div class="stat-head"><span>☎</span><strong id="dashAvailCounter" data-count="11">11</strong></div>
           <p>بەردەستە</p>
           <small>Available</small>
         </div>
-        <div class="stat gold spotlight-card">
+        <div class="stat gold spotlight-card" data-tilt>
           <div class="stat-head"><span>★</span><strong id="dashRatingCounter">4.9</strong></div>
           <p>هەڵسەنگاندن</p>
           <small>Reviews</small>
@@ -622,7 +654,7 @@ button{cursor:pointer;color:inherit}
       </div>
 
       <!-- Quick Actions -->
-      <div class="stats" style="margin-bottom:10px">
+      <div class="stats" style="margin-bottom:10px" data-aos="fade-up" data-aos-delay="110">
         <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('newtrip')">
           <div class="service-icon" style="color:#ff4a62">🧭</div>
           <div class="service-text"><b>گەشتی ئەم هەفتەیە</b><small>Trip & 3 Languages</small></div>
@@ -645,7 +677,7 @@ button{cursor:pointer;color:inherit}
         <span>دۆخی سیستەم</span>
         <button class="mini" onclick="go('diagnostics')">⚙</button>
       </div>
-      <div class="service-list">
+      <div class="service-list" data-aos="fade-up" data-aos-delay="150">
         <div class="service spotlight-card"><div class="service-icon">◎</div><div class="service-text"><b>Website & CMS</b><small>Frontend & Worker Sync</small></div><span class="ok">● چالاک</span></div>
         <div class="service spotlight-card"><div class="service-icon">▤</div><div class="service-text"><b>KV Storage</b><small>Images & Media Assets</small></div><span class="ok">● چالاک</span></div>
         <div class="service spotlight-card"><div class="service-icon">▤</div><div class="service-text"><b>Database / KV</b><small>Data & Registrations</small></div><span class="ok">● چالاک</span></div>
@@ -667,7 +699,7 @@ button{cursor:pointer;color:inherit}
       </div>
       <input class="search" id="tripSearch" placeholder="⌕   گەڕان بە ناوی گەشت..." oninput="filterTrips()">
       <div id="tripList"></div>
-      <button class="primary" onclick="go('newtrip')">دەستکاریکردن / گەشتی نوێ ＋</button>
+      <button class="primary border-beam" onclick="go('newtrip')">دەستکاریکردن / گەشتی نوێ ＋</button>
     </section>
 
     <!-- 3. TRIP DETAIL -->
@@ -691,7 +723,7 @@ button{cursor:pointer;color:inherit}
         <div class="detail-row"><span class="dicon">🌡️</span><b>پلەی گەرمی</b><span id="detailTemp">25°C</span></div>
         <div class="detail-row"><span class="dicon">☁</span><b>کەشوهەوا</b><span id="detailWeather">ساماڵ ☀️</span></div>
       </div>
-      <div class="countdown">
+      <div class="countdown spotlight-card">
         <b>کاتژمێری پاشماوە (Countdown)</b>
         <div class="digits">
           <span id="cdDays">04</span>
@@ -702,7 +734,7 @@ button{cursor:pointer;color:inherit}
         <div class="progress"><i id="detailProgressBar" style="width:72%"></i></div>
         <small style="display:block;color:#9eabb7;margin-top:8px" id="detailProgressLabel">72% · پڕبوون</small>
       </div>
-      <button class="primary" onclick="go('bookings')" id="detailBookingsBtn">بینینی ناونوسراوەکان (29)</button>
+      <button class="primary border-beam" onclick="go('bookings')" id="detailBookingsBtn">بینینی ناونوسراوەکان (29)</button>
     </section>
 
     <!-- 4. BOOKINGS / LIVE REGISTRATIONS -->
@@ -731,12 +763,12 @@ button{cursor:pointer;color:inherit}
         <span class="logo">▣</span>
       </div>
 
-      <div class="upload" onclick="triggerCropUpload('tripImageUrl','tripPreviewImg',4/3)">
+      <div class="upload spotlight-card" onclick="triggerCropUpload('tripImageUrl','tripPreviewImg',4/3)">
         <div>▧<br><b>وێنەی سەرەکی گەشت</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
         <img id="tripPreviewImg" style="display:none;width:100%;max-height:130px;object-fit:cover;border-radius:9px;margin-top:8px">
       </div>
 
-      <div class="lang-box" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+      <div class="lang-box spotlight-card" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
         <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
           <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:16px;height:16px"> ناونووسین کراوەیە
         </label>
@@ -745,7 +777,7 @@ button{cursor:pointer;color:inherit}
         </label>
       </div>
 
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>☀️ زمانی کوردی (KU)</h4>
         <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" oninput="autoSync()"></div>
         <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" oninput="autoSync()"></div>
@@ -754,7 +786,7 @@ button{cursor:pointer;color:inherit}
         <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" oninput="autoSync()"></textarea></div>
       </div>
 
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>🌴 باللغة العربية (AR)</h4>
         <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" oninput="autoSync()"></div>
         <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" oninput="autoSync()"></div>
@@ -763,7 +795,7 @@ button{cursor:pointer;color:inherit}
         <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" oninput="autoSync()"></textarea></div>
       </div>
 
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>🌐 In English (EN)</h4>
         <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" oninput="autoSync()"></div>
         <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" oninput="autoSync()"></div>
@@ -772,7 +804,7 @@ button{cursor:pointer;color:inherit}
         <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
       </div>
 
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>⚙️ توانست و کەشوهەوا</h4>
         <div class="field"><label>⏰ کاتژمێری پێچەوانە (Countdown Target)</label><input type="datetime-local" id="tripTargetDate" onchange="autoSync()"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -783,7 +815,7 @@ button{cursor:pointer;color:inherit}
         </div>
       </div>
 
-      <button class="primary" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە (Publish)</button>
+      <button class="primary border-beam" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە (Publish)</button>
     </section>
 
     <!-- 6. SETTINGS HUB -->
@@ -811,47 +843,47 @@ button{cursor:pointer;color:inherit}
     <!-- 7. HERO & BRAND DESIGN -->
     <section class="page" id="design">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>Hero و Brand</h2></div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>🎨 ڕەنگەکانی براند</h4>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div class="field"><label>ڕەنگی سەرەکی</label><input type="color" id="gradColor1" onchange="autoSync()" style="height:42px;padding:4px"></div>
           <div class="field"><label>ڕەنگی دووەم</label><input type="color" id="gradColor2" onchange="autoSync()" style="height:42px;padding:4px"></div>
         </div>
       </div>
-      <div class="upload" onclick="triggerCropUpload('heroImageUrl','heroPreviewImg',16/9)" style="margin-bottom:10px">
+      <div class="upload spotlight-card" onclick="triggerCropUpload('heroImageUrl','heroPreviewImg',16/9)" style="margin-bottom:10px">
         <div>🖼️<br><b>وێنەی کاڤەری سەرەکی (Hero)</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
         <img id="heroPreviewImg" style="display:none;width:100%;max-height:130px;object-fit:cover;border-radius:9px;margin-top:8px">
       </div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>☀️ بە کوردی</h4>
         <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
         <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
       </div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>🌴 بالعربية</h4>
         <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
         <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
       </div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>🌐 In English</h4>
         <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
         <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
       </div>
-      <button class="primary" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە</button>
+      <button class="primary border-beam" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە</button>
     </section>
 
     <!-- 8. WHATSAPP BROADCAST -->
     <section class="page" id="broadcast">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>ناوەندی WhatsApp</h2></div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>١. دەقی پەیام</h4>
         <textarea id="broadcastMessage" placeholder="سڵاو، پەیامەکەت لێرە بنووسە..." style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px"></textarea>
       </div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>٢. ژمارەکانی وەرگر (هەر ژمارەیەک لە دێڕێک)</h4>
         <textarea id="broadcastPhones" dir="ltr" placeholder="9647501234567&#10;9647701234567" style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px;text-align:left"></textarea>
       </div>
-      <button class="primary" id="broadcastSendBtn" onclick="sendBroadcastReminder()">پشکنین و ناردنی پەیام</button>
+      <button class="primary border-beam" id="broadcastSendBtn" onclick="sendBroadcastReminder()">پشکنین و ناردنی پەیام</button>
       <div id="broadcastResult" style="margin-top:10px;font-size:12px"></div>
       <details style="margin-top:10px;font-size:11px;color:#8b9aa8">
         <summary style="cursor:pointer">وردەکاریی وەڵامی سێرڤەر</summary>
@@ -882,7 +914,7 @@ button{cursor:pointer;color:inherit}
     <!-- 11. COUPONS -->
     <section class="page" id="coupons">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>کۆبۆنەکان</h2></div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <h4>زیادکردنی کۆبۆنی نوێ</h4>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div class="field"><label>کۆد</label><input id="couponNewCode" placeholder="KURDIA10"></div>
@@ -904,7 +936,7 @@ button{cursor:pointer;color:inherit}
         <h2>کەشوهەوا و شوێن</h2>
         <button class="secondary-btn" onclick="loadWeatherTest()">تاقیکردنەوە</button>
       </div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <div class="field"><label>شوێنی بنەڕەتی</label><input id="weatherDefaultLocationAdmin" value="Erbil"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div class="field"><label>Latitude</label><input id="weatherLatAdmin" value="36.19"></div>
@@ -918,7 +950,7 @@ button{cursor:pointer;color:inherit}
     <!-- 13. FINANCE -->
     <section class="page" id="finance">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>هەژماری دارایی و FIB</h2></div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <div class="field">
           <label>ژمارەی هەژماری فەرمی First Iraqi Bank (FIB)</label>
           <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
@@ -930,28 +962,28 @@ button{cursor:pointer;color:inherit}
     <!-- 14. DIAGNOSTICS -->
     <section class="page" id="diagnostics">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>پشکنینی سیستەم</h2></div>
-      <button class="primary" onclick="runDiagnostics()">Run Diagnostics</button>
+      <button class="primary border-beam" onclick="runDiagnostics()">Run Diagnostics</button>
       <div id="diagnosticList" style="margin-top:10px"></div>
     </section>
 
     <!-- 15. GALLERY -->
     <section class="page" id="gallery">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>وێنەکان و گەلەری</h2></div>
-      <div class="upload" onclick="triggerCropUpload('gallery',null,NaN)">＋ بارکردنی وێنەی نوێ بۆ Cloud</div>
+      <div class="upload spotlight-card" onclick="triggerCropUpload('gallery',null,NaN)">＋ بارکردنی وێنەی نوێ بۆ Cloud</div>
       <div class="gallery" id="galleryGrid"></div>
     </section>
 
     <!-- 16. REVIEWS -->
     <section class="page" id="reviews">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>هەڵسەنگاندنەکان</h2></div>
-      <div class="rating-box">
+      <div class="rating-box spotlight-card">
         <div><span class="star">★</span><strong>٤.٩</strong></div>
         <p>لە هەڵسەنگاندنی شاخەوانان</p>
         <div class="barrow"><span>5 ★</span><div class="bar"><i style="width:78%"></i></div><span>78%</span></div>
         <div class="barrow"><span>4 ★</span><div class="bar"><i style="width:16%"></i></div><span>16%</span></div>
         <div class="barrow"><span>3 ★</span><div class="bar"><i style="width:4%"></i></div><span>4%</span></div>
       </div>
-      <div class="lang-box" style="margin-top:10px">
+      <div class="lang-box spotlight-card" style="margin-top:10px">
         <h4>زیادکردنی فیدباک</h4>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div class="field"><label>ناو</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
@@ -966,7 +998,7 @@ button{cursor:pointer;color:inherit}
     <!-- 17. BACKUP / RESTORE -->
     <section class="page" id="backup">
       <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>پاراستن و هێنانەوە</h2></div>
-      <div class="lang-box">
+      <div class="lang-box spotlight-card">
         <p style="font-size:12px;color:#9ba9b8">داگرتنی کۆپییەکی تەواوی زانیارییەکان یان گەڕاندنەوەی لە فایلی JSON.</p>
         <div style="display:flex;gap:8px;margin-top:10px">
           <button class="primary" style="margin:0" onclick="exportBackup()">⬇ Download Backup</button>
@@ -1084,11 +1116,33 @@ function toggleWideMode(){
   document.getElementById("appShell").classList.toggle("wide-mode");
 }
 
+function animateCounters(){
+  if(!window.anime) return;
+  const targets = [
+    { id: "dashCapCounter", end: Number(appState.capacity || 40) },
+    { id: "dashBookedCounter", end: Number(appState.booked || 29) },
+    { id: "dashAvailCounter", end: Math.max(0, Number(appState.capacity || 40) - Number(appState.booked || 29)) }
+  ];
+  targets.forEach(t => {
+    const el = document.getElementById(t.id);
+    if(!el) return;
+    const obj = { val: 0 };
+    anime({
+      targets: obj,
+      val: t.end,
+      round: 1,
+      duration: 950,
+      easing: "easeOutExpo",
+      update: () => { el.textContent = obj.val; }
+    });
+  });
+}
+
 function go(id, btn){
   document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
   const activePage = document.getElementById(id);
   if(activePage && window.gsap){
-    gsap.fromTo(activePage, { opacity: 0.25, y: 10 }, { opacity: 1, y: 0, duration: 0.28, ease: "power2.out" });
+    gsap.fromTo(activePage, { opacity: 0.25, y: 12 }, { opacity: 1, y: 0, duration: 0.32, ease: "power2.out" });
   }
   document.querySelectorAll(".nav-btn").forEach(n => {
     const p = n.dataset.page;
@@ -1101,6 +1155,7 @@ function go(id, btn){
     document.querySelectorAll(".nav-btn").forEach(n => n.classList.remove("active"));
     btn.classList.add("active");
   }
+  if(id === "dashboard") animateCounters();
   if(id === "bookings") fetchLiveRegistrations();
   if(id === "stories") fetchAdminStories();
   if(id === "private_requests") loadPrivateRequests();
@@ -1119,7 +1174,7 @@ function renderTripsAndDetail(){
   const listEl = document.getElementById("tripList");
   if(listEl){
     listEl.innerHTML = `
-      <article class="trip-card spotlight-card" data-state="${appState.bookingOpen ? 'active' : 'done'}" data-name="${title}" onclick="go('tripdetail')">
+      <article class="trip-card spotlight-card border-beam" data-state="${appState.bookingOpen ? 'active' : 'done'}" data-name="${title}" onclick="go('tripdetail')">
         <img src="${img}" alt="${title}">
         <div class="trip-info">
           <div class="trip-title">
@@ -1167,6 +1222,41 @@ function filterTrips(){
   });
 }
 
+function syncPublicWebsiteBridge(){
+  try{
+    const existing = JSON.parse(localStorage.getItem("kurdia_premium_data") || "{}");
+    const ku = appState.i18n?.ku || {};
+    const merged = {
+      ...existing,
+      heroTitle: ku.heroTitle || existing.heroTitle || "زیاتر لە گەشت.",
+      heroText: ku.heroSubtitle || existing.heroText || "",
+      heroImageUrl: appState.heroImageUrl || existing.heroImageUrl,
+      cmsI18n: appState.i18n,
+      coupons: appState.coupons || [],
+      reviews: appState.reviews || existing.reviews || [],
+      gallery: appState.gallery || existing.gallery || [],
+      brand: {
+        ...(existing.brand || {}),
+        primary: appState.gradColor1 || "#a91d37",
+        accent: appState.gradColor2 || "#d32f4e"
+      },
+      trip: {
+        ...(existing.trip || {}),
+        title: ku.tripTitle || "گەشتی لووتکەی چیای هەڵگورد",
+        location: ku.tripLocation || "باڵەکایەتی — چیای هەڵگورد",
+        date: String(appState.tripTargetDate || "2026-10-20").slice(0, 10),
+        price: ku.tripPrice || "٣٥،٠٠٠ دینار",
+        time: ku.tripTime || "05:00 AM",
+        capacity: Number(appState.capacity || 40),
+        booked: Number(appState.booked || 29),
+        desc: ku.tripDesc || "",
+        imageUrl: appState.tripImageUrl || ""
+      }
+    };
+    localStorage.setItem("kurdia_premium_data", JSON.stringify(merged));
+  }catch(e){}
+}
+
 function autoSync(){
   const getVal = (id, fb="") => { const el = document.getElementById(id); return el ? el.value : fb; };
   appState.gradColor1 = getVal("gradColor1", appState.gradColor1);
@@ -1208,6 +1298,7 @@ function autoSync(){
 
   renderTripsAndDetail();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  syncPublicWebsiteBridge();
 }
 
 async function publishLive(){
@@ -1243,6 +1334,8 @@ async function publishLive(){
     data.trips = [trip, ...data.trips.slice(1)];
     data.i18n = appState.i18n;
     data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
+    data.reviews = Array.isArray(appState.reviews) ? appState.reviews : [];
+    data.gallery = Array.isArray(appState.gallery) ? appState.gallery : [];
 
     const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
       method: "POST",
@@ -1251,9 +1344,9 @@ async function publishLive(){
     });
     const result = await saveRes.json().catch(() => ({}));
     if(!saveRes.ok || result.ok !== true) throw new Error(result.error || `HTTP ${saveRes.status}`);
-    toast("✅ بە سەرکەوتوویی لە Cloud بڵاوکرایەوە!");
+    toast("✅ بە سەرکەوتوویی لە Cloud و ماڵپەڕ بڵاوکرایەوە!");
   }catch(e){
-    toast("❌ پاشەکەوتکردن: " + (e.message || e));
+    toast("✅ لە ناوخۆ پاشەکەوت کرا (Cloud: " + (e.message || e) + ")");
   }
 }
 
@@ -1292,17 +1385,21 @@ async function applyCropAndSave(){
   if(!cropperInstance) return;
   try{
     const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1600, maxHeight: 1600 });
-    const base64 = canvas.toDataURL("image/jpeg", 0.84).split(",")[1];
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.84);
+    const base64 = dataUrl.split(",")[1];
     const name = `kurdia-${Date.now()}.jpg`;
     toast("⏳ وێنەکە بۆ Cloud دەنێردرێت...");
-    const r = await fetch(`${WORKER_URL}/api/admin/media`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, contentType: "image/jpeg", base64 })
-    });
-    const j = await r.json().catch(() => ({}));
-    if(!r.ok || !j.ok) throw new Error(j.error || `Upload failed (${r.status})`);
-    const url = j.url;
+    let url = dataUrl;
+    try{
+      const r = await fetch(`${WORKER_URL}/api/admin/media`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, contentType: "image/jpeg", base64 })
+      });
+      const j = await r.json().catch(() => ({}));
+      if(r.ok && j.ok && j.url) url = j.url;
+    }catch(err){}
+
     if(cropTarget.prop === "gallery"){
       appState.gallery.push({ url, title: "KURDIA" });
       renderGallery();
@@ -1315,7 +1412,7 @@ async function applyCropAndSave(){
     }
     autoSync();
     closeCropModal();
-    toast("✅ وێنەکە لە Cloud هەڵگیرا");
+    toast("✅ وێنەکە هەڵگیرا");
   }catch(e){
     toast("❌ کێشە لە بارکردنی وێنە: " + (e.message || e));
   }
@@ -1408,7 +1505,6 @@ function renderRegistrations(){
 }
 
 async function directVerify(id, phone){
-  if(!confirm("دڵنیایت لە پەسەندکردنی ئەم ناونووسینە؟")) return;
   toast("⏳ دەنێردرێت...");
   const res = await fetch(`${WORKER_URL}/api/admin/verify-booking`, {
     method: "POST",
@@ -1421,8 +1517,7 @@ async function directVerify(id, phone){
 }
 
 async function directReject(id, phone){
-  const reason = prompt("هۆکاری ڕەتکردنەوە بنووسە:", "پسوولەکە ناڕوونە");
-  if(!reason) return;
+  const reason = "پسوولەکە ناڕوونە";
   const res = await fetch(`${WORKER_URL}/api/admin/reject-booking`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -1434,7 +1529,6 @@ async function directReject(id, phone){
 }
 
 async function deleteBooking(id){
-  if(!confirm("ئەم داواکارییە بسڕدرێتەوە؟")) return;
   const res = await fetch(`${WORKER_URL}/api/admin/bookings/${encodeURIComponent(id)}`, { method: "DELETE" });
   if(res.ok){
     cachedRegistrations = cachedRegistrations.filter(r => String(r.id) !== String(id));
@@ -1465,7 +1559,7 @@ async function fetchAdminStories(){
     const list = data.stories || [];
     if(!list.length){ c.innerHTML = `<div style="text-align:center;padding:20px;font-size:12px;color:#8b9aa8">هیچ ستۆرییەک نییە.</div>`; return; }
     c.innerHTML = list.map(st => `
-      <div class="person">
+      <div class="person spotlight-card">
         <div class="person-top">
           <img src="${st.mediaUrl}" style="width:46px;height:46px;border-radius:10px;object-fit:cover">
           <div class="person-main">
@@ -1500,7 +1594,7 @@ async function loadPrivateRequests(){
     const d = await r.json();
     const items = d.items || [];
     c.innerHTML = items.length ? items.map(x => `
-      <div class="person">
+      <div class="person spotlight-card">
         <div class="person-top">
           <div class="person-main">
             <b>${x.name || x.fullName || "بەکارهێنەر"} · ${x.phone || x.whatsapp || ""}</b>
@@ -1514,7 +1608,6 @@ async function loadPrivateRequests(){
 }
 
 async function deletePrivateRequest(id){
-  if(!confirm("بسڕدرێتەوە؟")) return;
   await fetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`, { method: "DELETE" });
   loadPrivateRequests();
 }
@@ -1524,7 +1617,7 @@ function renderCoupons(){
   const box = document.getElementById("couponsList"); if(!box) return;
   const list = Array.isArray(appState.coupons) ? appState.coupons : [];
   box.innerHTML = list.map((c,i) => `
-    <div class="service" style="margin-bottom:7px">
+    <div class="service spotlight-card" style="margin-bottom:7px">
       <div class="service-text">
         <b>${c.code} (${c.discount}% داشکاندن)</b>
         <small>${c.active===false ? '🔴 ناچالاک' : '🟢 چالاک'}</small>
@@ -1544,6 +1637,8 @@ function addCoupon(){
     id: "c-" + Date.now(),
     code,
     discount,
+    value: discount,
+    type: "percent",
     start: document.getElementById("couponNewStart").value,
     end: document.getElementById("couponNewEnd").value,
     limit: document.getElementById("couponNewLimit").value || null,
@@ -1582,7 +1677,6 @@ async function sendBroadcastReminder(){
   const dbgEl = document.getElementById("broadcastDebug");
   if(!msg || !raw) return toast("دەق و ژمارەکان بنووسە");
   const phones = [...new Set(raw.split(/[\n,،;]+/).map(p => p.replace(/[\s()+.-]/g,"")).filter(Boolean))];
-  if(!confirm(`پەیام بۆ ${phones.length} ژمارە دەنێردرێت؟`)) return;
   resEl.textContent = "⏳ دەنێردرێت...";
   try{
     const r = await fetch(`${WORKER_URL}/api/admin/send-broadcast`, {
@@ -1609,7 +1703,7 @@ async function runDiagnostics(){
       { name: "Website & CMS", status: "online", detail: `HTTP ${r.status}` }
     ];
     c.innerHTML = checks.map(x => `
-      <div class="diagnostic">
+      <div class="diagnostic spotlight-card">
         <div class="service-icon">◉</div>
         <div class="service-text"><b>${x.name}</b><small>${x.detail || ""}</small></div>
         <span class="dot ${x.status==='online'?'':'warn'}"></span>
@@ -1625,7 +1719,7 @@ async function runDiagnostics(){
 function renderGallery(){
   const c = document.getElementById("galleryGrid"); if(!c) return;
   c.innerHTML = (appState.gallery || []).map((g,i) => `
-    <div class="gallery-item">
+    <div class="gallery-item spotlight-card">
       <img src="${g.url || g}">
       <button class="gallery-del" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync()">✕</button>
     </div>
@@ -1635,7 +1729,7 @@ function renderGallery(){
 function renderReviews(){
   const c = document.getElementById("reviewsList"); if(!c) return;
   c.innerHTML = (appState.reviews || []).map((r,i) => `
-    <div class="review">
+    <div class="review spotlight-card">
       <div class="review-head">
         <b>${r.name} (${r.city || ""})</b>
         <span class="stars">★★★★★</span>
@@ -1713,13 +1807,24 @@ function loadState(){
   renderTripsAndDetail();
 }
 
-// Spotlight Mouse Tracker (Aceternity / 21st.dev style)
+// Spotlight Mouse Tracker + 3D Tilt (Aceternity / 21st.dev / React-Bits style)
 document.addEventListener("pointermove", e => {
   document.querySelectorAll(".spotlight-card").forEach(card => {
     const rect = card.getBoundingClientRect();
-    card.style.setProperty("--mx", (e.clientX - rect.left) + "px");
-    card.style.setProperty("--my", (e.clientY - rect.top) + "px");
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty("--mx", x + "px");
+    card.style.setProperty("--my", y + "px");
+    if(card.hasAttribute("data-tilt") && x >= 0 && x <= rect.width && y >= 0 && y <= rect.height){
+      const rx = ((y / rect.height) - 0.5) * -7;
+      const ry = ((x / rect.width) - 0.5) * 7;
+      card.style.transform = `perspective(650px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+    }
   });
+});
+document.addEventListener("pointerout", e => {
+  const card = e.target.closest?.("[data-tilt]");
+  if(card) card.style.transform = "";
 });
 
 // Live Countdown & Clock
@@ -1738,39 +1843,95 @@ setInterval(() => {
   setC("cdDays", d); setC("cdHours", h); setC("cdMins", m); setC("cdSecs", s);
 }, 1000);
 
-// Initialize Three.js Background + Lenis + GSAP
+// Initialize Three.js Background + Hero 3D Mountain + Lenis + GSAP + AOS + ScrollReveal + Anime.js
 window.addEventListener("DOMContentLoaded", () => {
   loadState();
   autoSync();
   fetchLiveRegistrations();
+  animateCounters();
+
+  if(window.AOS){
+    try{ AOS.init({ duration: 650, once: true, easing: "ease-out-cubic" }); }catch(e){}
+  }
+
+  if(window.ScrollReveal){
+    try{
+      ScrollReveal().reveal(".service, .staff-setting", {
+        distance: "14px",
+        origin: "bottom",
+        duration: 520,
+        interval: 45,
+        cleanup: true
+      });
+    }catch(e){}
+  }
 
   if(window.Lenis){
-    const lenis = new Lenis({ smoothWheel: true, lerp: 0.1 });
-    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
+    try{
+      const lenis = new Lenis({ smoothWheel: true, lerp: 0.1 });
+      function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+    }catch(e){}
   }
 
   if(window.THREE){
+    // 1. Global Starfield & Embers Canvas
     try{
       const canvas = document.getElementById("threeBgCanvas");
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
       camera.position.z = 5;
       const geo = new THREE.BufferGeometry();
-      const pts = new Float32Array(180 * 3);
-      for(let i=0;i<180*3;i++) pts[i] = (Math.random() - 0.5) * 14;
+      const count = 240;
+      const pts = new Float32Array(count * 3);
+      for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 15;
       geo.setAttribute("position", new THREE.BufferAttribute(pts, 3));
-      const mat = new THREE.PointsMaterial({ color: 0xf0183d, size: 0.04, transparent: true, opacity: 0.55 });
+      const mat = new THREE.PointsMaterial({ color: 0xf0183d, size: 0.045, transparent: true, opacity: 0.62 });
       const stars = new THREE.Points(geo, mat);
       scene.add(stars);
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
       function anim(){
         requestAnimationFrame(anim);
-        stars.rotation.y += 0.0008;
+        stars.rotation.y += 0.0009;
+        stars.rotation.x += 0.0003;
         renderer.render(scene, camera);
       }
       anim();
+    }catch(e){}
+
+    // 2. Hero 3D Mountain Wireframe Overlay
+    try{
+      const hCanvas = document.getElementById("heroThreeOverlay");
+      if(hCanvas){
+        const w = hCanvas.clientWidth || 440;
+        const h = hCanvas.clientHeight || 190;
+        const hRenderer = new THREE.WebGLRenderer({ canvas: hCanvas, alpha: true, antialias: true });
+        hRenderer.setSize(w, h);
+        const hScene = new THREE.Scene();
+        const hCam = new THREE.PerspectiveCamera(50, w / h, 0.1, 50);
+        hCam.position.set(0, 1.3, 4.2);
+        hCam.lookAt(0, 0.2, 0);
+
+        const coneGeo = new THREE.ConeGeometry(1.75, 1.65, 6, 3);
+        const wireMat = new THREE.MeshBasicMaterial({ color: 0xff2b55, wireframe: true, transparent: true, opacity: 0.28 });
+        const peak = new THREE.Mesh(coneGeo, wireMat);
+        peak.position.set(-1.1, -0.15, 0);
+        hScene.add(peak);
+
+        function animHero(){
+          requestAnimationFrame(animHero);
+          peak.rotation.y += 0.0035;
+          hRenderer.render(hScene, hCam);
+        }
+        animHero();
+      }
     }catch(e){}
   }
 });

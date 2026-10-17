@@ -2,7 +2,9 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070a10"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز">
+<meta name="theme-color" content="#070a10"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
+<meta property="og:title" content="KURDIA ADVENTURE">
+<meta property="og:description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
 <title>KURDIA ADVENTURE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -10,6 +12,14 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <!-- زیادکردنی Lucide بۆ ئایکۆنە مۆدێرنەکان -->
 <script src="https://unpkg.com/lucide@latest"></script>
+<!-- AOS + Anime.js + Three.js + ScrollReveal + LottieFiles + Motion.dev -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.js"></script>
 <style>
 :root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -1487,6 +1497,7 @@ loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_langua
     <a href="#stories" class="ka-menu-item" data-ka-page="stories" onclick="kaMenuNavigate('stories');return false"><div class="ka-menu-icon">▤</div><div><div class="ka-menu-text">ستۆری</div><span class="ka-menu-desc">یادەوەری و ئەزموون</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#about" class="ka-menu-item" data-ka-page="about" onclick="kaMenuNavigate('about');return false"><div class="ka-menu-icon">ⓘ</div><div><div class="ka-menu-text">دەربارەی تیمەکە</div><span class="ka-menu-desc">ناساندنی KURDIA ADVENTURE</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#contact" class="ka-menu-item" data-ka-page="contact" onclick="kaMenuNavigate('contact');return false"><div class="ka-menu-icon">✉</div><div><div class="ka-menu-text">پەیوەندی</div><span class="ka-menu-desc">پەیوەندیمان پێوە بکە</span></div><div class="ka-menu-arrow">‹</div></a>
+    <a href="/admin.html" class="ka-menu-item" style="border-color:rgba(229,35,79,.38);background:linear-gradient(145deg,rgba(169,29,55,.22),rgba(12,15,21,.95))"><div class="ka-menu-icon" style="color:#ff4a68">⚙</div><div><div class="ka-menu-text">کۆنترۆڵ سەنتەری ئەدمین</div><span class="ka-menu-desc">KURDIA CONTROL CENTER — Admin Studio</span></div><div class="ka-menu-arrow">‹</div></a>
 
     <div class="ka-contact">
       <div class="ka-contact-title">پەیوەندی بە تیمی KURDIA</div>
@@ -1729,4 +1740,276 @@ document.addEventListener('click',function(e){
 })();
 </script>
 
+<!-- KURDIA V15 — Aceternity UI / 21st.dev / React-Bits + Three.js + Anime.js + AOS + ScrollReveal + Lottie + Live Admin Sync -->
+<style id="kurdia-v15-interactive-studio">
+#kurdiaThreeAmbientCanvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.55;
+}
+#kurdiaThreeHeroCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1;
+}
+.app{position:relative;z-index:1}
+
+/* Aceternity / 21st.dev Spotlight Radial Hover Effect */
+.featured,.dest,.tile,.glass,.safety-card,.public-review,.article,.stat,.ka-menu-item,.privateHero{
+  position:relative;
+  overflow:hidden;
+}
+.featured::before,.dest::before,.tile::before,.glass::before,.safety-card::before,.public-review::before,.article::before,.stat::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(229,35,79,0.16), transparent 70%);
+  opacity:0;
+  transition:opacity .28s ease;
+  pointer-events:none;
+  z-index:1;
+}
+.featured:hover::before,.dest:hover::before,.tile:hover::before,.glass:hover::before,.safety-card:hover::before,.public-review:hover::before,.article:hover::before,.stat:hover::before{
+  opacity:1;
+}
+
+/* Aceternity Border Beam Shimmer on Hero Header, Featured Card, and Primary CTAs */
+.top::after,.featured::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:55%;
+  height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(229,35,79,0.9),rgba(255,155,175,0.95),transparent);
+  animation:kurdiaBorderBeam 4.2s infinite linear;
+  pointer-events:none;
+  z-index:5;
+}
+@keyframes kurdiaBorderBeam{
+  0%{left:-65%}
+  100%{left:145%}
+}
+
+/* React-Bits Shiny Eyebrow Text */
+.eyebrow{
+  background:linear-gradient(110deg,#ff5c77 30%,#ffd1d9 50%,#ff5c77 70%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:kurdiaShinyEyebrow 4.5s linear infinite;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+@keyframes kurdiaShinyEyebrow{
+  to{background-position:200% center}
+}
+</style>
+
+<script id="kurdia-v15-interactive-engine">
+(function(){
+  'use strict';
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 1. Live Sync from Admin Studio (kurdia_builder_published_v3)
+  function syncFromLocalAdmin(){
+    try{
+      const raw = localStorage.getItem('kurdia_builder_published_v3');
+      if(!raw) return;
+      const adminState = JSON.parse(raw);
+      if(!adminState || typeof adminState !== 'object') return;
+      const lang = localStorage.getItem('kurdia_language') || 'ku';
+      const i18n = adminState.i18n?.[lang] || adminState.i18n?.ku || {};
+      if(typeof data === 'object' && data){
+        if(i18n.heroTitle) data.heroTitle = i18n.heroTitle;
+        if(i18n.heroSubtitle) data.heroText = i18n.heroSubtitle;
+        if(adminState.heroImageUrl) data.heroImageUrl = adminState.heroImageUrl;
+        data.cmsI18n = adminState.i18n || data.cmsI18n;
+        if(Array.isArray(adminState.coupons)) data.coupons = adminState.coupons;
+        if(Array.isArray(adminState.reviews) && adminState.reviews.length) data.reviews = adminState.reviews;
+        if(Array.isArray(adminState.gallery) && adminState.gallery.length) data.gallery = adminState.gallery;
+        if(data.trip){
+          if(i18n.tripTitle) data.trip.title = i18n.tripTitle;
+          if(i18n.tripLocation) data.trip.location = i18n.tripLocation;
+          if(i18n.tripPrice) data.trip.price = i18n.tripPrice;
+          if(i18n.tripTime) data.trip.time = i18n.tripTime;
+          if(i18n.tripDesc) data.trip.desc = i18n.tripDesc;
+          if(adminState.tripTargetDate) data.trip.date = String(adminState.tripTargetDate).slice(0,10);
+          if(adminState.tripImageUrl) data.trip.imageUrl = adminState.tripImageUrl;
+          if(adminState.capacity) data.trip.capacity = Number(adminState.capacity);
+          if(adminState.booked != null) data.trip.booked = Number(adminState.booked);
+        }
+        if(typeof render === 'function') render();
+      }
+    }catch(e){}
+  }
+  window.addEventListener('storage', e => {
+    if(e.key === 'kurdia_builder_published_v3' || e.key === 'kurdia_premium_data') syncFromLocalAdmin();
+  });
+
+  // 2. Aceternity / 21st.dev Spotlight Mouse Tracker
+  document.addEventListener('pointermove', e => {
+    const targets = document.querySelectorAll('.featured,.dest,.tile,.glass,.safety-card,.public-review,.article,.stat,.privateHero');
+    targets.forEach(card => {
+      const r = card.getBoundingClientRect();
+      if(e.clientY >= r.top - 120 && e.clientY <= r.bottom + 120){
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      }
+    });
+  }, { passive: true });
+
+  // 3. Initialize Three.js + AOS + ScrollReveal + Anime.js + Lottie
+  function initStudioLibraries(){
+    syncFromLocalAdmin();
+
+    // Inject Lottie pulse badge inside Hero Eyebrow
+    const heroEyebrow = document.querySelector('.hero .eyebrow');
+    if(heroEyebrow && !heroEyebrow.querySelector('lottie-player')){
+      const lp = document.createElement('lottie-player');
+      lp.setAttribute('src', 'https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json');
+      lp.setAttribute('background', 'transparent');
+      lp.setAttribute('speed', '1');
+      lp.style.cssText = 'width:20px;height:20px;display:inline-block;vertical-align:middle';
+      lp.setAttribute('loop', '');
+      lp.setAttribute('autoplay', '');
+      heroEyebrow.prepend(lp);
+    }
+
+    if(window.AOS && !reduce){
+      try{ AOS.init({ duration: 700, once: true, easing: 'ease-out-cubic' }); }catch(e){}
+    }
+
+    if(window.ScrollReveal && !reduce){
+      try{
+        ScrollReveal().reveal('.dest, .tile, .safety-card, .public-review, .public-photo', {
+          distance: '18px',
+          origin: 'bottom',
+          duration: 620,
+          interval: 60,
+          cleanup: true
+        });
+      }catch(e){}
+    }
+
+    if(window.anime && !reduce){
+      try{
+        anime({
+          targets: '.hero .actions .btn',
+          translateY: [14, 0],
+          opacity: [0, 1],
+          delay: anime.stagger(110, { start: 260 }),
+          duration: 820,
+          easing: 'easeOutExpo'
+        });
+      }catch(e){}
+    }
+
+    if(window.THREE && !reduce){
+      // Ambient 3D Starfield & Crimson Dust
+      try{
+        if(!document.getElementById('kurdiaThreeAmbientCanvas')){
+          const bgCanvas = document.createElement('canvas');
+          bgCanvas.id = 'kurdiaThreeAmbientCanvas';
+          document.body.prepend(bgCanvas);
+          const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+          camera.position.z = 6;
+
+          const geo = new THREE.BufferGeometry();
+          const count = 220;
+          const pts = new Float32Array(count * 3);
+          for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 16;
+          geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
+          const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.042, transparent: true, opacity: 0.52 });
+          const particles = new THREE.Points(geo, mat);
+          scene.add(particles);
+
+          window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+          });
+
+          function animateBg(){
+            requestAnimationFrame(animateBg);
+            particles.rotation.y += 0.0006;
+            particles.rotation.x += 0.0002;
+            renderer.render(scene, camera);
+          }
+          animateBg();
+        }
+      }catch(e){}
+
+      // Hero 3D Mountain Wireframe & Rising Embers
+      try{
+        const hero = document.querySelector('.hero');
+        if(hero && !document.getElementById('kurdiaThreeHeroCanvas')){
+          const hCanvas = document.createElement('canvas');
+          hCanvas.id = 'kurdiaThreeHeroCanvas';
+          hero.prepend(hCanvas);
+          const w = hero.clientWidth || window.innerWidth;
+          const h = hero.clientHeight || 650;
+          const hRenderer = new THREE.WebGLRenderer({ canvas: hCanvas, alpha: true, antialias: true });
+          hRenderer.setSize(w, h);
+          hRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+          const hScene = new THREE.Scene();
+          const hCam = new THREE.PerspectiveCamera(52, w / h, 0.1, 100);
+          hCam.position.set(0, 1.4, 4.8);
+          hCam.lookAt(0, 0.2, 0);
+
+          const group = new THREE.Group();
+          const peakGeo1 = new THREE.ConeGeometry(2.1, 2.2, 7, 3);
+          const peakMat1 = new THREE.MeshBasicMaterial({ color: 0xe5234f, wireframe: true, transparent: true, opacity: 0.18 });
+          const peak1 = new THREE.Mesh(peakGeo1, peakMat1);
+          peak1.position.set(-1.3, -0.35, -0.5);
+          group.add(peak1);
+
+          const peakGeo2 = new THREE.ConeGeometry(1.6, 1.7, 6, 2);
+          const peakMat2 = new THREE.MeshBasicMaterial({ color: 0xff7a92, wireframe: true, transparent: true, opacity: 0.13 });
+          const peak2 = new THREE.Mesh(peakGeo2, peakMat2);
+          peak2.position.set(1.4, -0.55, -0.8);
+          group.add(peak2);
+
+          hScene.add(group);
+
+          window.addEventListener('resize', () => {
+            const nw = hero.clientWidth || window.innerWidth;
+            const nh = hero.clientHeight || 650;
+            hCam.aspect = nw / nh;
+            hCam.updateProjectionMatrix();
+            hRenderer.setSize(nw, nh);
+          });
+
+          function animateHero(){
+            requestAnimationFrame(animateHero);
+            peak1.rotation.y += 0.0022;
+            peak2.rotation.y -= 0.0018;
+            hRenderer.render(hScene, hCam);
+          }
+          animateHero();
+        }
+      }catch(e){}
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initStudioLibraries, { once: true });
+  } else {
+    initStudioLibraries();
+  }
+})();
+</script>
 </body></html>
