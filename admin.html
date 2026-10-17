@@ -3,703 +3,1031 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>KURDIA ADVENTURE — KURDIA CONTROL CENTER</title>
+<title>KURDIA CONTROL CENTER — Admin Studio</title>
 
-<!-- FONTS & ICONS -->
+<!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- CROPPER.JS -->
+<!-- CROPPER.JS (Admin Image Cropping) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
+<!-- AOS (Animate On Scroll) -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<!-- GSAP (GreenSock Animation Platform) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<!-- ANIME.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+<!-- THREE.JS (3D Mountain & Starfield WebGL) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- LENIS (Smooth Inertia Scroll) -->
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+<!-- SCROLLREVEAL.JS -->
+<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+
+<!-- LOTTIE-PLAYER -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
 <style>
 :root{
-  --primary:#9d1c32;
-  --primary2:#c92b49;
-  --bg:#070a10;
-  --surface:#0e141e;
-  --surface2:#131c29;
-  --border:rgba(255,255,255,.08);
-  --text:#ffffff;
-  --muted:#94a3b8;
-  --sidebar-w:280px;
+  --bg:#03080e;
+  --panel:#09131d;
+  --panel2:#0d1a26;
+  --line:#1a2b3a;
+  --red:#f0183d;
+  --red2:#b90e2b;
+  --text:#f5f7fa;
+  --muted:#8b9aa8;
+  --green:#12c77a;
+  --blue:#159ce8;
+  --gold:#f3b529;
 }
-*{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html, body{
-  width:100%; height:100%; overflow:hidden;
-  background:
-    radial-gradient(circle at 10% 5%, rgba(157,28,50,.18), transparent 28%),
-    radial-gradient(circle at 90% 35%, rgba(30,64,175,.1), transparent 28%),
-    radial-gradient(circle at 50% 85%, rgba(157,28,50,.12), transparent 30%),
-    var(--bg);
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;
+  background:radial-gradient(ellipse at 50% -10%,#15202d 0,#050a10 48%,#02060a 100%);
   color:var(--text);
-  font-family:"Vazirmatn", sans-serif;
+  font-family:'Noto Sans Arabic','Vazirmatn',Inter,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
 }
-.app-container{ display:flex; width:100%; height:100%; position:relative; }
-.sidebar{
-  width:var(--sidebar-w); background:rgba(10,15,23,.85); backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px); border-left:1px solid var(--border);
-  display:flex; flex-direction:column; flex-shrink:0; z-index:100;
-  transition:transform .3s cubic-bezier(0.4, 0, 0.2, 1); height:100%;
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;color:inherit}
+
+/* 3D Fixed Background Canvas */
+#threeBgCanvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.65;
 }
-.sidebar-header{
-  padding:18px 20px; border-bottom:1px solid var(--border);
-  display:flex; align-items:center; justify-content:space-between;
+
+.app{
+  width:min(100%,480px);
+  min-height:100vh;
+  margin:auto;
+  background:linear-gradient(180deg,rgba(7,16,26,0.92),rgba(3,9,16,0.96) 75%);
+  position:relative;
+  z-index:1;
+  padding:10px 12px 98px;
+  overflow:hidden;
+  border-left:1px solid #18222c;
+  border-right:1px solid #18222c;
+  transition:max-width .35s cubic-bezier(0.16,1,0.3,1), width .35s cubic-bezier(0.16,1,0.3,1);
 }
-.brand{ display:flex; align-items:center; gap:10px; }
-.brand-icon{
-  width:38px; height:38px; border-radius:12px;
-  background:linear-gradient(135deg, var(--primary), var(--primary2));
-  display:flex; align-items:center; justify-content:center; color:#fff;
-  box-shadow:0 8px 20px rgba(157,28,50,.35);
+.app.wide-mode{
+  width:min(96%,920px);
 }
-.brand-text h2{ font-size:15px; font-weight:900; line-height:1; }
-.brand-text span{ font-size:9px; color:var(--muted); letter-spacing:.18em; font-weight:800; }
-.nav-list{ list-style:none; padding:12px 10px; display:flex; flex-direction:column; gap:4px; flex:1; overflow-y:auto; }
-.nav-btn{
-  width:100%; border:0; background:transparent; color:#cbd5e1;
-  text-align:right; padding:11px 14px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:700;
-  display:flex; align-items:center; gap:12px; font-family:inherit; transition:.2s;
+
+.status{
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 8px;
+  font:600 11px Inter,sans-serif;
+  color:#dbe1e8;
 }
-.nav-btn:hover{ background:rgba(255,255,255,.05); color:#fff; }
-.nav-btn.active{
-  background:linear-gradient(135deg, rgba(157,28,50,.35), rgba(201,43,73,.2));
-  color:#fff; border:1px solid rgba(201,43,73,.35);
-}
-.sidebar-footer{ padding:14px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
-.sidebar-backdrop{
-  position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(8px);
-  z-index:90; opacity:0; pointer-events:none; transition:.25s ease;
-}
-.sidebar-backdrop.active{ opacity:1; pointer-events:auto; }
-.workspace{ flex:1; display:flex; flex-direction:column; width:100%; height:100%; overflow:hidden; }
+.status .signals{letter-spacing:2px}
+
 .topbar{
-  height:64px; border-bottom:1px solid var(--border); background:rgba(10,15,23,.8);
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-  display:flex; align-items:center; justify-content:space-between; padding:0 20px; flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px;
+  background:linear-gradient(120deg,#101b27,#050c14);
+  border:1px solid #1b2936;
+  border-radius:16px;
+  box-shadow:0 7px 20px #0008;
+  margin-bottom:12px;
+  position:relative;
+  overflow:hidden;
 }
-.topbar-right{ display:flex; align-items:center; gap:12px; }
-.menu-toggle{
-  display:none; background:rgba(255,255,255,.05); border:1px solid var(--border);
-  color:#fff; width:38px; height:38px; border-radius:10px; align-items:center; justify-content:center;
-  cursor:pointer;
+/* Aceternity Border Beam / Shimmer */
+.topbar::after{
+  content:"";
+  position:absolute;
+  top:0;left:-100%;width:60%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(240,24,61,0.85),transparent);
+  animation:shimmerBeam 4s infinite linear;
 }
-.content-body{ flex:1; overflow-y:auto; padding:20px; -webkit-overflow-scrolling:touch; }
-.card{
-  background:linear-gradient(145deg, rgba(19,28,41,.75), rgba(8,12,19,.85));
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-  border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:18px;
-  box-shadow:0 20px 50px rgba(0,0,0,.25);
+@keyframes shimmerBeam{
+  0%{left:-60%}
+  100%{left:140%}
 }
-.card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-.card-title{ font-size:15px; font-weight:800; display:flex; align-items:center; gap:8px; }
-.field{ margin-bottom:14px; }
-.field label{ display:block; font-size:11px; font-weight:800; margin-bottom:6px; color:#cbd5e1; }
-input, textarea, select{
-  width:100%; border:1px solid var(--border); border-radius:12px;
-  background:rgba(255,255,255,.04); color:#fff; padding:12px 14px; outline:none; font:inherit; font-size:13px;
+
+.logo{
+  width:38px;
+  height:38px;
+  flex:none;
+  border-radius:11px;
+  background:linear-gradient(145deg,#ff4a62,#b9002c);
+  display:grid;
+  place-items:center;
+  font-size:20px;
+  box-shadow:0 0 16px #ef123b55;
+  color:#fff;
+}
+.brand{flex:1;min-width:0}
+.brand b{font:800 11px Inter,sans-serif;letter-spacing:.25px;display:block;direction:ltr;text-align:right}
+.brand small{display:block;color:#9ba9b8;font:9px Inter,sans-serif;direction:ltr;text-align:right;margin-top:3px}
+.avatar{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#b6d7e8,#a64b35);
+  display:grid;
+  place-items:center;
+  font-size:17px;
+  border:1px solid #52616e;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+/* Aceternity / 21st.dev Spotlight Card Effect */
+.spotlight-card{
+  position:relative;
+  overflow:hidden;
+}
+.spotlight-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(240,24,61,0.18), transparent 70%);
+  opacity:0;
+  transition:opacity .25s ease;
+  pointer-events:none;
+  z-index:0;
+}
+.spotlight-card:hover::before{opacity:1}
+.spotlight-card > *{position:relative;z-index:1}
+
+.hero{
+  height:186px;
+  border-radius:16px;
+  overflow:hidden;
+  position:relative;
+  margin-bottom:12px;
+  border:1px solid #28303a;
+  background:linear-gradient(0deg,#03070be8 0%,transparent 68%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85') center 53%/cover;
+  transform-style:preserve-3d;
+}
+#heroThreeOverlay{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1;
+}
+.hero-tools{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:9px 10px;
+  direction:ltr;
+  position:relative;
+  z-index:2;
+}
+.pill{
+  font-size:10px;
+  font-weight:800;
+  border-radius:20px;
+  padding:5px 11px;
+  background:#0a9e67;
+  color:white;
+  border:0;
+  box-shadow:0 4px 12px rgba(10,158,103,0.4);
+  transition:transform .2s;
+}
+.pill:hover{transform:scale(1.04)}
+.hero-copy{
+  position:absolute;
+  bottom:12px;
+  right:13px;
+  left:12px;
+  z-index:2;
+}
+.hero-copy h1{
+  font-size:24px;
+  line-height:1.35;
+  margin:0 0 5px;
+  font-weight:900;
+  text-shadow:0 2px 10px #000;
+}
+.hero-copy h1 span{color:#ff2447}
+.hero-copy p{font-size:10px;color:#e1e6eb;margin:0}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.stat{
+  border-radius:13px;
+  padding:11px;
+  border:1px solid #273544;
+  background:linear-gradient(135deg,#111d29,#07101a);
+  min-height:80px;
+  transition:transform .2s ease, border-color .2s ease;
+}
+.stat:hover{transform:translateY(-2px)}
+.stat.red{background:linear-gradient(135deg,#4c1020,#170b12);border-color:#77203a}
+.stat.blue{background:linear-gradient(135deg,#092d4a,#071321);border-color:#174766}
+.stat.green{background:linear-gradient(135deg,#073a2d,#061811);border-color:#11654b}
+.stat.gold{background:linear-gradient(135deg,#3b2b0d,#151006);border-color:#5a4516}
+.stat-head{display:flex;align-items:center;justify-content:space-between;font-size:20px}
+.stat strong{font-size:24px;font-variant-numeric:tabular-nums}
+.stat p{font-size:11px;margin:5px 0 0;font-weight:700}
+.stat small{display:block;color:#aeb8c2;font:10px Inter,sans-serif;margin-top:2px;direction:ltr;text-align:right}
+
+.section-title{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:14px;margin:13px 3px 8px}
+.section-title .mini{background:var(--red);border-radius:8px;padding:5px 8px;font-size:12px;border:0;color:#fff}
+
+.service-list{display:grid;gap:7px}
+.service{display:flex;align-items:center;gap:10px;padding:10px;background:#08131c;border:1px solid #1c2b38;border-radius:12px}
+.service-icon{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:#101e2a;border:1px solid #273747;font-size:16px;flex:none}
+.service-text{flex:1;min-width:0}
+.service-text b{font-size:11px;display:block}
+.service-text small{font:10px Inter,sans-serif;color:var(--muted);display:block;margin-top:3px;direction:ltr;text-align:right}
+.ok{color:#10d67d;font-size:11px;white-space:nowrap;font-weight:700}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(100%,480px);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px;
+  padding:8px 9px calc(8px + env(safe-area-inset-bottom));
+  background:#06101af2;
+  backdrop-filter:blur(16px);
+  border:1px solid #1b2b3a;
+  border-bottom:0;
+  border-radius:17px 17px 0 0;
+  z-index:30;
+}
+.nav-btn{
+  border:0;
+  background:transparent;
+  color:#9aa8b5;
+  border-radius:12px;
+  padding:7px 2px 5px;
+  font-size:10px;
+  font-weight:700;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  position:relative;
+  transition:all .2s ease;
+}
+.nav-btn .ico{font-size:18px;line-height:1}
+.nav-btn.active{
+  color:white;
+  background:linear-gradient(140deg,#5a1024,#170b12);
+  box-shadow:inset 0 0 0 1px #79213a,0 0 14px #f0183d22;
+}
+.nav-badge{
+  position:absolute;
+  top:3px;
+  right:24%;
+  background:var(--red);
+  color:#fff;
+  font-size:9px;
+  font-weight:900;
+  border-radius:99px;
+  min-width:15px;
+  height:15px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 4px;
+}
+
+.toolbar{display:flex;align-items:center;gap:8px;margin:5px 0 12px}
+.toolbar h2{font-size:17px;margin:0;flex:1;font-weight:900}
+.icon-btn{
+  width:37px;
+  height:37px;
+  border:1px solid #283746;
+  border-radius:11px;
+  background:#0a1520;
+  display:grid;
+  place-items:center;
+  font-size:16px;
   transition:.2s;
 }
-input:focus, textarea:focus, select:focus{ border-color:var(--primary2); box-shadow:0 0 0 3px rgba(157,28,50,.2); }
-textarea{ min-height:85px; resize:vertical; }
-.grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
-.grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-.btn{
-  border:0; border-radius:12px; padding:11px 18px; color:#fff;
-  font-weight:800; cursor:pointer; background:var(--primary); transition:.2s; font-family:inherit;
-  display:inline-flex; align-items:center; gap:8px; font-size:13px; justify-content:center; text-align:center;
+.icon-btn:hover{border-color:var(--red);background:#122030}
+
+.search{
+  width:100%;
+  border:1px solid #243442;
+  background:#09131d;
+  color:white;
+  border-radius:12px;
+  padding:12px 13px;
+  outline:none;
+  font-size:12px;
+  margin:7px 0 10px;
 }
-.btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
-.btn-primary{ background:linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow:0 8px 24px rgba(157,28,50,.3); }
-.btn-success{ background:linear-gradient(135deg, #10b981, #059669); }
-.btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--border); }
-.btn-danger{ background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); }
-.uploader-dropzone{
-  border:2px dashed rgba(255,255,255,.14); border-radius:16px; padding:20px; text-align:center;
-  cursor:pointer; background:rgba(255,255,255,.02); position:relative; overflow:hidden; transition:.2s;
+.search:focus,input:focus,select:focus,textarea:focus{
+  border-color:#e91a40;
+  box-shadow:0 0 0 2px #f0183d1c;
 }
-.uploader-dropzone:hover{ border-color:var(--primary2); background:rgba(157,28,50,.05); }
-.dropzone-preview{
-  width:100%; height:150px; border-radius:12px; background-size:cover; background-position:center;
-  display:none; margin-top:10px; border:1px solid var(--border);
+
+.filters{display:flex;gap:6px;overflow:auto;padding:1px 0 8px}
+.filter{
+  white-space:nowrap;
+  border:1px solid #263341;
+  background:#111b26;
+  border-radius:20px;
+  padding:8px 12px;
+  font-size:10px;
+  font-weight:700;
+  color:#c0cad3;
 }
-.dropzone-preview.active{ display:block; }
-.item-row{
-  display:flex; align-items:center; justify-content:space-between; padding:12px 14px;
-  background:rgba(19,28,41,.6); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
+.filter.active{background:var(--red);border-color:var(--red);color:white}
+
+.trip-card{
+  border:1px solid #1e2d3b;
+  border-radius:14px;
+  background:linear-gradient(130deg,#0c1823,#071019);
+  overflow:hidden;
+  margin:8px 0;
+  cursor:pointer;
+  transition:transform .22s ease, border-color .22s ease;
 }
-.gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr)); gap:10px; margin-top:10px; }
-.gallery-thumb{ height:90px; border-radius:12px; background-size:cover; background-position:center; position:relative; overflow:hidden; border:1px solid var(--border); }
-.gallery-delete{
-  position:absolute; top:4px; left:4px; width:22px; height:22px; border-radius:6px;
-  background:rgba(0,0,0,.75); color:#ef4444; border:0; display:flex; align-items:center; justify-content:center;
+.trip-card:hover{transform:translateY(-2px);border-color:#ef123b66}
+.trip-card img{width:100%;height:125px;object-fit:cover;display:block}
+.trip-info{padding:11px}
+.trip-title{display:flex;align-items:center;gap:7px}
+.trip-title b{font-size:13px;flex:1}
+.tag{font-size:10px;border-radius:20px;padding:4px 9px;background:#087e51;color:#eafff4;font-weight:700}
+.trip-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;color:#aeb9c4;font-size:10px}
+.meta-chip{background:#111e2a;border:1px solid #223140;padding:6px 8px;border-radius:9px}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:12px;
+  background:linear-gradient(100deg,#f21b40,#d90e32);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 6px 16px #e20d3324;
+  margin-top:10px;
+  transition:filter .2s, transform .15s;
 }
-.page-tab{ display:none; }
-.page-tab.active{ display:block; animation:fadeIn .2s ease; }
-@keyframes fadeIn{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:translateY(0); } }
-.toast{
-  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
-  padding:14px 22px; border-radius:14px; background:#111827; border:1px solid var(--border);
-  box-shadow:0 20px 50px rgba(0,0,0,.8); opacity:0; transition:.3s; z-index:99999;
-  font-weight:800; font-size:12px; white-space:nowrap;
+.primary:hover{filter:brightness(1.08)}
+.primary:active{transform:scale(.99)}
+
+.secondary-btn{
+  border:1px solid #263644;
+  background:#0d1a26;
+  color:#e2e8f0;
+  border-radius:10px;
+  padding:8px 12px;
+  font-size:11px;
+  font-weight:700;
 }
-.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+.secondary-btn:hover{border-color:var(--red)}
+
+.detail-image{width:100%;height:160px;object-fit:cover;border-radius:14px;border:1px solid #293644}
+.detail-list{display:grid;gap:6px;margin-top:10px}
+.detail-row{display:flex;align-items:center;gap:10px;padding:11px;background:#0a141e;border:1px solid #1c2b38;border-radius:10px;font-size:12px}
+.detail-row .dicon{font-size:17px;width:25px;text-align:center}
+.detail-row span:last-child{margin-right:auto;color:#e4eaf0}
+.countdown{margin-top:10px;border:1px solid #293644;border-radius:13px;padding:12px;text-align:center;background:linear-gradient(130deg,#101a25,#070d14)}
+.countdown b{display:block;font-size:11px;margin-bottom:9px}
+.digits{display:flex;gap:7px;justify-content:center;direction:ltr}
+.digits span{background:#c91435;border-radius:7px;padding:8px 10px;font:700 20px Inter,sans-serif;box-shadow:0 0 12px #e7183a2b;min-width:42px}
+.progress{height:6px;border-radius:9px;background:#172431;overflow:hidden;margin-top:10px}
+.progress i{display:block;width:72%;height:100%;background:linear-gradient(90deg,#f0183d,#f3b529)}
+
+.person{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:11px;
+  margin-top:8px;
+  border-radius:13px;
+  background:#09141e;
+  border:1px solid #1e2d3a;
+}
+.person-top{display:flex;align-items:center;gap:10px;width:100%}
+.person .face{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#b7d7e9,#a85e4c);font-size:21px;flex:none}
+.person-main{flex:1;min-width:0}
+.person-main b{font-size:12px;display:block}
+.person-main small{font:10px Inter,sans-serif;color:#a0afbd;display:block;margin-top:3px;direction:ltr;text-align:right;overflow-wrap:anywhere}
+.person-actions{display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:7px;border-top:1px solid #162432;flex-wrap:wrap}
+.status-tag{font-size:10px;border-radius:20px;padding:4px 9px;background:#0c9b61;color:white;white-space:nowrap;font-weight:700}
+.status-tag.yellow{background:#e4a80b;color:#171006}
+.status-tag.red{background:#db2542}
+
+.field{margin:11px 0}
+.field label{display:block;font-size:11px;font-weight:700;margin-bottom:5px;color:#cbd5e1}
+.field input,.field select,.field textarea{
+  width:100%;
+  padding:11px 12px;
+  border-radius:10px;
+  border:1px solid #263644;
+  background:#0b1621;
+  color:#eef2f6;
+  outline:none;
+  font-size:12px;
+}
+.field textarea{min-height:74px;resize:vertical}
+.upload{
+  min-height:96px;
+  border:1px dashed #435361;
+  border-radius:13px;
+  background:#0a141e;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:#c1cbd4;
+  font-size:12px;
+  padding:12px;
+  cursor:pointer;
+  transition:border-color .2s;
+}
+.upload:hover{border-color:var(--red)}
+
+.diagnostic{display:flex;align-items:center;gap:10px;background:#09141e;border:1px solid #1c2b38;border-radius:12px;padding:10px;margin-top:7px}
+.diagnostic .service-icon{font-size:18px}
+.diagnostic .service-text b{font-family:Inter,'Noto Sans Arabic',sans-serif;font-size:11px}
+.diagnostic .service-text small{font-size:9px}
+.dot{width:10px;height:10px;border-radius:50%;background:#13ce79;box-shadow:0 0 9px #13ce7955}
+.dot.warn{background:#f3b529}
+
+.staff-setting{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  background:#09141e;
+  border:1px solid #1e2c39;
+  border-radius:12px;
+  margin:7px 0;
+  cursor:pointer;
+  transition:border-color .2s, transform .15s;
+}
+.staff-setting:hover{border-color:#2e455c;transform:translateX(-2px)}
+.staff-setting .service-text{flex:1}
+.staff-setting .arrow{color:#98a9b7;font-size:16px;font-weight:900}
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.gallery-item{position:relative;height:105px;border-radius:11px;overflow:hidden;border:1px solid #2b3946}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-del{
+  position:absolute;top:5px;left:5px;width:22px;height:22px;border-radius:6px;
+  background:rgba(0,0,0,0.75);color:#ff4a62;border:0;display:grid;place-items:center;font-size:11px;
+}
+
+.rating-box{padding:16px 12px;border:1px solid #2a3542;border-radius:14px;background:linear-gradient(140deg,#231a0c,#0c131b);text-align:center}
+.rating-box .star{font-size:26px;color:#f5b62e}
+.rating-box strong{font-size:29px;margin:0 7px}
+.rating-box p{font-size:10px;color:#aeb8c1;margin:4px 0 12px}
+.barrow{display:flex;align-items:center;gap:8px;font:10px Inter,sans-serif;margin:6px 0;direction:ltr}
+.barrow .bar{height:6px;flex:1;background:#26313b;border-radius:8px;overflow:hidden}
+.barrow .bar i{height:100%;display:block;background:#f2b62e}
+.review{padding:10px;border:1px solid #1e2b38;background:#09141e;border-radius:12px;margin-top:8px}
+.review-head{display:flex;align-items:center;gap:8px}
+.review-head b{font-size:11px;flex:1}
+.review-head small{font:9px Inter,sans-serif;color:#9baab8}
+.stars{color:#f4b72e;letter-spacing:1px;font-size:11px}
+.review p{font-size:11px;line-height:1.7;color:#c3cbd3;margin:7px 0 0}
+
+/* Crop Modal */
 #cropModalWrapper{
-  position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:99999;
-  display:none; align-items:center; justify-content:center; padding:16px;
+  position:fixed;inset:0;background:rgba(0,0,0,0.86);z-index:9999;
+  display:none;align-items:center;justify-content:center;padding:14px;
 }
-.crop-container-card{
-  background:var(--surface); border:1px solid var(--border); border-radius:20px;
-  width:100%; max-width:540px; padding:18px; display:flex; flex-direction:column; gap:12px;
+.crop-card{
+  background:#09131d;border:1px solid #243444;border-radius:18px;
+  width:100%;max-width:460px;padding:14px;
 }
-.crop-img-holder{ width:100%; height:320px; background:#000; border-radius:12px; overflow:hidden; }
-.lang-box-tab{ border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:14px; background:rgba(255,255,255,.02); }
-@media(max-width:850px){
-  .sidebar{ position:fixed; top:0; right:0; bottom:0; transform:translateX(100%); box-shadow:-12px 0 35px rgba(0,0,0,.8); }
-  .sidebar.open{ transform:translateX(0); }
-  .menu-toggle{ display:flex; }
-  .grid-2, .grid-3, .grid-4{ grid-template-columns:1fr; }
+.crop-holder{width:100%;height:280px;background:#000;border-radius:12px;overflow:hidden;margin:10px 0}
+
+.toast{
+  position:fixed;
+  bottom:86px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0c9d68;
+  color:white;
+  border:1px solid #43d6a0;
+  padding:10px 16px;
+  border-radius:11px;
+  font-size:12px;
+  font-weight:700;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:999;
+  white-space:nowrap;
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
+.toast.show{opacity:1}
 
-.admin-map{height:300px;border-radius:18px;overflow:hidden;border:1px solid var(--border)}
-.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.status-chip{padding:12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--border)}
-@media(max-width:850px){.status-grid{grid-template-columns:1fr 1fr}}
+.lang-box{
+  border:1px solid #1e2d3b;
+  background:#09141e;
+  border-radius:13px;
+  padding:11px;
+  margin-bottom:10px;
+}
+.lang-box h4{margin:0 0 8px;font-size:11px;color:#ff5577}
 
-/* KURDIA ADMIN CLEAN LAYOUT PATCH */
-.nav-list{gap:6px;padding:14px 12px}
-.nav-btn{min-height:46px;border:1px solid transparent;font-size:13px}
-.nav-btn.active{box-shadow:0 8px 22px rgba(157,28,50,.12)}
-.content-body{padding:clamp(12px,2vw,26px)}
-.card{padding:clamp(15px,2vw,24px);border-radius:22px}
-#tab-dashboard>.card:first-child{padding:28px;background:radial-gradient(circle at 8% 10%,rgba(201,43,73,.24),transparent 38%),linear-gradient(135deg,#151b27,#090d14);border-color:rgba(201,43,73,.25)}
-#tab-design .lang-box-tab,#tab-trip .lang-box-tab{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.025)}
-#tab-trip details.trip-language{border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin:12px 0;background:rgba(255,255,255,.025)}
-#tab-trip details.trip-language summary{cursor:pointer;font-weight:900;color:#fda4af;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
-#tab-trip details.trip-language summary::-webkit-details-marker{display:none}
-#tab-trip details.trip-language summary:after{content:'＋';font-size:18px;color:#fda4af}
-#tab-trip details.trip-language[open] summary:after{content:'−'}
-.coupon-row{display:grid;grid-template-columns:1.2fr .7fr 1fr 1fr auto;gap:8px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:14px;margin-top:8px;background:rgba(255,255,255,.025)}
-.coupon-row input{min-width:0}
-.private-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
-.private-detail{padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.035);font-size:12px;overflow-wrap:anywhere}
-@media(max-width:650px){.coupon-row{grid-template-columns:1fr 1fr}.private-detail-grid{grid-template-columns:1fr}.topbar{padding:0 10px}.topbar h1{font-size:12px!important}.content-body{padding:10px}.card{margin-bottom:12px}}
-
-/* V3 clean dashboard + WhatsApp center */
-:root{--surface:#101722;--surface2:#151f2d;--border:rgba(148,163,184,.16)}
-#tab-dashboard .grid-4{gap:14px}
-#tab-dashboard .grid-4>.card{position:relative;overflow:hidden;min-height:112px;background:linear-gradient(145deg,rgba(24,34,49,.98),rgba(12,18,28,.98));border:1px solid rgba(148,163,184,.16);box-shadow:0 12px 28px rgba(0,0,0,.16)}
-#tab-dashboard .grid-4>.card:after{content:"";position:absolute;width:84px;height:84px;border-radius:50%;left:-25px;bottom:-38px;background:rgba(201,43,73,.10);pointer-events:none}
-#tab-dashboard .grid-4 b{font-size:clamp(22px,3vw,30px);letter-spacing:-.03em}
-#tab-dashboard .grid-2>.card{background:linear-gradient(145deg,rgba(19,28,41,.97),rgba(10,15,23,.98));border-color:rgba(148,163,184,.14)}
-#tab-dashboard .btn-secondary{min-height:50px;border:1px solid rgba(148,163,184,.15);background:rgba(255,255,255,.035);border-radius:13px}
-#tab-dashboard .btn-secondary:hover{border-color:rgba(201,43,73,.5);background:rgba(201,43,73,.10)}
-.wa-hero{padding:clamp(16px,3vw,28px)!important;background:radial-gradient(circle at 0 0,rgba(201,43,73,.13),transparent 35%),linear-gradient(145deg,#121a27,#0a0e15)!important;border:1px solid rgba(148,163,184,.16)!important}
-.wa-head{display:flex;align-items:center;gap:14px;margin-bottom:22px}.wa-icon{width:52px;height:52px;flex:0 0 52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#9d1c32,#d52e52);box-shadow:0 10px 24px rgba(157,28,50,.25)}.wa-icon svg{width:25px;height:25px}.wa-eyebrow{font-size:10px;font-weight:900;letter-spacing:.16em;color:#fda4af;margin-bottom:5px}.wa-head .card-title{margin:0;font-size:clamp(17px,2vw,22px)}
-.wa-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.wa-panel{padding:15px;border:1px solid var(--border);border-radius:17px;background:rgba(255,255,255,.025);min-width:0}.wa-step{display:flex;align-items:center;gap:10px;margin-bottom:12px}.wa-step>span{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:rgba(201,43,73,.18);color:#fda4af;font-weight:900}.wa-step b,.wa-step small{display:block}.wa-step b{font-size:13px}.wa-step small{font-size:11px;color:#94a3b8;margin-top:2px}.wa-panel textarea{width:100%;max-width:100%;display:block;border-radius:13px;padding:13px 14px;background:#0a1019;border:1px solid rgba(148,163,184,.19);color:#f8fafc;font:inherit;font-size:14px;outline:none}.wa-panel textarea:focus{border-color:#c92b49;box-shadow:0 0 0 3px rgba(201,43,73,.12)}.wa-hint{font-size:11px;line-height:1.7;color:#94a3b8;margin-top:9px}.wa-consent{display:flex;gap:9px;align-items:flex-start;font-size:11px;line-height:1.8;color:#aab6c6;margin:16px 0}.wa-consent svg{flex:0 0 18px;color:#86efac;margin-top:2px}.wa-send{width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:14px}.wa-send:disabled{opacity:.6;cursor:wait}.wa-result{display:none;margin-top:14px;padding:13px 14px;border-radius:12px;font-size:12px;line-height:1.8;overflow-wrap:anywhere}.wa-result.show{display:block}.wa-result.success{background:rgba(22,163,74,.1);border:1px solid rgba(74,222,128,.25);color:#bbf7d0}.wa-result.error{background:rgba(220,38,38,.1);border:1px solid rgba(248,113,113,.25);color:#fecaca}.wa-result.info{background:rgba(59,130,246,.1);border:1px solid rgba(96,165,250,.25);color:#bfdbfe}.wa-debug{margin-top:12px;color:#94a3b8;font-size:11px}.wa-debug summary{cursor:pointer;padding:7px 0}.wa-debug pre{white-space:pre-wrap;overflow-wrap:anywhere;direction:ltr;text-align:left;padding:12px;border-radius:10px;background:#070b11;color:#cbd5e1;max-height:220px;overflow:auto}
-@media(max-width:700px){.wa-grid{grid-template-columns:1fr}.wa-panel textarea{font-size:16px}.wa-head{align-items:flex-start}.wa-icon{width:44px;height:44px;flex-basis:44px}}
-
+@media(min-width:700px){
+  body{padding:20px 0}
+  .app{border-radius:28px;min-height:850px;box-shadow:0 20px 70px #0009}
+  .bottom-nav{bottom:20px;border-radius:17px}
+  .hero{height:210px}
+}
 </style>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<style>
-
-/* KURDIA safe release candidate: responsive readability polish (CSS-only). */
-@media (max-width: 850px) {
-  .content-body { min-width: 0; overflow-x: clip; }
-  .page-tab, .card, .wa-panel, .kat-card { min-width: 0; }
-  .page-tab table { min-width: 640px; }
-  .page-tab .table-wrap, .table-wrap, .overflow-x-auto { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  input, select, textarea, button { max-width: 100%; }
-  .grid-4, .grid-3, .grid-2 { min-width: 0; }
-}
-@media (max-width: 520px) {
-  .content-body { padding: 10px !important; }
-  .card { border-radius: 14px; }
-  .page-tab h2 { line-height: 1.45; overflow-wrap: anywhere; }
-  .page-tab .btn, .page-tab button { min-height: 42px; }
-  .topbar { gap: 8px; }
-  .topbar > * { min-width: 0; }
-  #tab-dashboard .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #tab-dashboard .grid-4 > .card { padding: 14px !important; }
-}
-
-</style>
-</head>
+<script src="/_aistudio-iframe.js?v=6634132a"></script></head>
 <body>
 
-<div class="app-container">
-  <div class="sidebar-backdrop" id="backdrop" onclick="toggleSidebar()"></div>
+<!-- Three.js Global Ambient Canvas -->
+<canvas id="threeBgCanvas"></canvas>
 
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="brand">
-        <div class="brand-icon"><i data-lucide="mountain"></i></div>
-        <div class="brand-text">
-          <h2>KURDIA</h2>
-          <span>STUDIO BUILDER</span>
+<div class="app" id="appShell">
+  <!-- Device Status Bar -->
+  <div class="status">
+    <span id="liveClock">09:41</span>
+    <span class="signals">5G · ▂▄▆ ▰ ◉</span>
+  </div>
+
+  <!-- Header Topbar -->
+  <header class="topbar">
+    <div class="logo">▲</div>
+    <div class="brand">
+      <b>KURDIA CONTROL CENTER</b>
+      <small>CMS · CRM · OPERATIONS</small>
+    </div>
+    <button class="pill" onclick="publishLive()" id="topPublishBtn">● Publish</button>
+    <button class="icon-btn" style="width:31px;height:31px;font-size:13px" onclick="toggleWideMode()" title="گۆڕینی قەبارە">⇄</button>
+    <div class="avatar" title="Kurdia Admin">🏔️</div>
+  </header>
+
+  <main>
+    <!-- 1. DASHBOARD -->
+    <section class="page active" id="dashboard">
+      <div class="hero spotlight-card" id="dashboardHero">
+        <canvas id="heroThreeOverlay"></canvas>
+        <div class="hero-tools">
+          <button class="icon-btn" style="width:28px;height:28px;font-size:13px;background:rgba(0,0,0,0.45)" onclick="go('settings')">⚙</button>
+          <button class="pill" onclick="publishLive()">● Publish Live</button>
+        </div>
+        <div class="hero-copy">
+          <h1>بەخێربێیتەوە<br><span>کوردیا</span></h1>
+          <p id="dashHeroSub">بەڕێوەبردنی گەشت و ئەزموونی سروشت</p>
         </div>
       </div>
-      <button onclick="toggleSidebar()" style="background:none;border:0;color:#cbd5e1;cursor:pointer;"><i data-lucide="x"></i></button>
-    </div>
 
-    <ul class="nav-list">
-      <li class="px-3 py-2 text-[10px] text-gray-500 font-extrabold tracking-wider">CONTROL CENTER</li>
-      <li><button class="nav-btn active" onclick="switchTab('dashboard')"><i data-lucide="layout-dashboard"></i> داشبۆرد</button></li>
-      <li class="px-3 py-2 text-[10px] text-gray-500 font-extrabold tracking-wider">WEBSITE</li>
-      <li><button class="nav-btn" onclick="switchTab('design')"><i data-lucide="palette"></i> Hero و Brand</button></li>
-      <li><button class="nav-btn" onclick="switchTab('trip')"><i data-lucide="compass"></i> Trips — ٣ زمان</button></li>
-      <li><button class="nav-btn" onclick="switchTab('weather_manager')"><i data-lucide="cloud-sun"></i> Weather</button></li>
-      <li><button class="nav-btn" onclick="switchTab('reviews')"><i data-lucide="message-circle"></i> Reviews</button></li>
-      <li><button class="nav-btn" onclick="switchTab('private_requests')"><i data-lucide="route"></i> Private Trips</button></li>
-      <li class="px-3 py-2 text-[10px] text-gray-500 font-extrabold tracking-wider">BOOKINGS & CRM</li>
-      <li><button class="nav-btn" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> Customers / Bookings</button></li>
-      <li><button class="nav-btn" onclick="switchTab('booking')"><i data-lucide="shield-check"></i> OTP / Booking</button></li>
-      <li><button class="nav-btn" onclick="switchTab('finance')"><i data-lucide="wallet-cards"></i> Payment / Finance</button></li>
-      <li class="px-3 py-2 text-[10px] text-gray-500 font-extrabold tracking-wider">COMMUNITY</li>
-      <li><button class="nav-btn" onclick="switchTab('stories_tab')"><i data-lucide="sparkles"></i> Stories Moderation</button></li>
-      <li><button class="nav-btn" onclick="switchTab('broadcast')"><i data-lucide="send"></i> WhatsApp Center</button></li>
-      <li class="px-3 py-2 text-[10px] text-gray-500 font-extrabold tracking-wider">SYSTEM</li>
-      <li><button class="nav-btn" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> Diagnostics</button></li>
-      <li><button class="nav-btn" onclick="switchTab('backup')"><i data-lucide="database-backup"></i> Backup / Restore</button></li>
-      <li><button class="nav-btn" onclick="switchTab('k5_coupons')"><i data-lucide="ticket-percent"></i> Coupons</button></li>
-    </ul>
-
-    <div class="sidebar-footer">
-      <button class="btn btn-primary" onclick="publishLive()"><i data-lucide="send"></i> بڵاوکردنەوەی فەرمی (Publish)</button>
-      <button class="btn btn-secondary" onclick="openLiveSite()"><i data-lucide="external-link"></i> ماڵپەڕ بکەرەوە</button>
-    </div>
-  </aside>
-
-  <main class="workspace">
-    <header class="topbar">
-      <div class="flex items-center gap-3">
-        <div class="brand-icon" style="width:32px;height:32px;border-radius:10px"><i data-lucide="mountain"></i></div>
-        <div><b>KURDIA CONTROL CENTER</b><small class="block text-gray-400 text-[10px]">CMS · CRM · OPERATIONS</small></div>
+      <div class="stats">
+        <div class="stat red spotlight-card">
+          <div class="stat-head"><span>♧</span><strong id="dashCapCounter" data-count="40">40</strong></div>
+          <p>کۆی گشتی گەشتیاران</p>
+          <small>Total Capacity</small>
+        </div>
+        <div class="stat blue spotlight-card">
+          <div class="stat-head"><span>▣</span><strong id="dashBookedCounter" data-count="29">29</strong></div>
+          <p>ناونوسراو</p>
+          <small>Booked</small>
+        </div>
+        <div class="stat green spotlight-card">
+          <div class="stat-head"><span>☎</span><strong id="dashAvailCounter" data-count="11">11</strong></div>
+          <p>بەردەستە</p>
+          <small>Available</small>
+        </div>
+        <div class="stat gold spotlight-card">
+          <div class="stat-head"><span>★</span><strong id="dashRatingCounter">4.9</strong></div>
+          <p>هەڵسەنگاندن</p>
+          <small>Reviews</small>
+        </div>
       </div>
-      <div class="topbar-right">
-        <button class="menu-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
-        <h1 id="topbarTitle" style="font-size:15px;font-weight:900;">داشبۆردی سەرەکی</h1>
+
+      <!-- Quick Actions -->
+      <div class="stats" style="margin-bottom:10px">
+        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('newtrip')">
+          <div class="service-icon" style="color:#ff4a62">🧭</div>
+          <div class="service-text"><b>گەشتی ئەم هەفتەیە</b><small>Trip & 3 Languages</small></div>
+        </button>
+        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('bookings')">
+          <div class="service-icon" style="color:#38bdf8">👥</div>
+          <div class="service-text"><b>بەشداربووان</b><small>Approve & Verify</small></div>
+        </button>
+        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('broadcast')">
+          <div class="service-icon" style="color:#10d67d">💬</div>
+          <div class="service-text"><b>پەیامی WhatsApp</b><small>Broadcast Center</small></div>
+        </button>
+        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('diagnostics')">
+          <div class="service-icon" style="color:#facc15">⚡</div>
+          <div class="service-text"><b>پشکنینی سێرڤەر</b><small>Diagnostics</small></div>
+        </button>
       </div>
-      <button class="btn btn-success" style="padding:8px 14px;font-size:12px;" onclick="publishLive()">
-        <i data-lucide="save"></i> Publish
-      </button>
-    </header>
 
-    <div class="content-body">
-      <!-- DASHBOARD -->
-      <section class="page-tab active" id="tab-dashboard">
-        <div class="card bg-gradient-to-br from-rose-950/40 via-surface to-surface2 border-rose-900/30">
-          <div class="text-[10px] text-rose-400 font-black tracking-widest">KURDIA ADVENTURE · CONTROL CENTER</div>
-          <div class="text-2xl font-black mt-1 mb-1">ناوەندی کۆنترۆڵی KURDIA</div>
-          <div class="text-xs text-gray-400">کۆنترۆڵی خێرای ناوەڕۆک، گەشتەکان، و ڕێکخستنی ماڵپەڕ بەبێ کێشەی کلیل.</div>
+      <div class="section-title">
+        <span>دۆخی سیستەم</span>
+        <button class="mini" onclick="go('diagnostics')">⚙</button>
+      </div>
+      <div class="service-list">
+        <div class="service spotlight-card"><div class="service-icon">◎</div><div class="service-text"><b>Website & CMS</b><small>Frontend & Worker Sync</small></div><span class="ok">● چالاک</span></div>
+        <div class="service spotlight-card"><div class="service-icon">▤</div><div class="service-text"><b>KV Storage</b><small>Images & Media Assets</small></div><span class="ok">● چالاک</span></div>
+        <div class="service spotlight-card"><div class="service-icon">▤</div><div class="service-text"><b>Database / KV</b><small>Data & Registrations</small></div><span class="ok">● چالاک</span></div>
+      </div>
+    </section>
+
+    <!-- 2. TRIPS LIST -->
+    <section class="page" id="trips">
+      <div class="toolbar">
+        <div class="logo">☷</div>
+        <h2>گەشتەکان</h2>
+        <button class="icon-btn" onclick="go('newtrip')" title="دەستکاریکردنی گەشت">＋</button>
+      </div>
+      <div class="filters">
+        <button class="filter active" data-filter="all" onclick="setTripFilter(this,'all')">هەموو</button>
+        <button class="filter" data-filter="upcoming" onclick="setTripFilter(this,'upcoming')">داهاتوو</button>
+        <button class="filter" data-filter="active" onclick="setTripFilter(this,'active')">چالاک</button>
+        <button class="filter" data-filter="done" onclick="setTripFilter(this,'done')">تەواوبوو</button>
+      </div>
+      <input class="search" id="tripSearch" placeholder="⌕   گەڕان بە ناوی گەشت..." oninput="filterTrips()">
+      <div id="tripList"></div>
+      <button class="primary" onclick="go('newtrip')">دەستکاریکردن / گەشتی نوێ ＋</button>
+    </section>
+
+    <!-- 3. TRIP DETAIL -->
+    <section class="page" id="tripdetail">
+      <div class="toolbar">
+        <button class="icon-btn" onclick="go('trips')">←</button>
+        <h2>وردەکاری گەشت</h2>
+        <span class="logo">⌛</span>
+      </div>
+      <img class="detail-image" id="detailHeroImg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85" alt="Trip">
+      <div class="trip-title" style="margin-top:10px">
+        <b style="font-size:16px" id="detailTitle">سەرووشتی هەڵگورد</b>
+        <span class="tag" id="detailStatusTag">چالاک</span>
+        <button class="icon-btn" onclick="go('newtrip')" title="دەستکاریکردن">✎</button>
+      </div>
+      <div class="detail-list">
+        <div class="detail-row"><span class="dicon">▦</span><b>بەروار و کات</b><span id="detailDateTime">2026/10/20 · 06:00 AM</span></div>
+        <div class="detail-row"><span class="dicon">♧</span><b>شوێنەکان</b><span id="detailSeats">29 / 40</span></div>
+        <div class="detail-row"><span class="dicon">⌖</span><b>شوێن</b><span id="detailLoc">باڵەکایەتی — چیای هەڵگورد</span></div>
+        <div class="detail-row"><span class="dicon">◇</span><b>نرخ</b><span id="detailPrice">٤٠,٥٠٠ د.ع</span></div>
+        <div class="detail-row"><span class="dicon">🌡️</span><b>پلەی گەرمی</b><span id="detailTemp">25°C</span></div>
+        <div class="detail-row"><span class="dicon">☁</span><b>کەشوهەوا</b><span id="detailWeather">ساماڵ ☀️</span></div>
+      </div>
+      <div class="countdown">
+        <b>کاتژمێری پاشماوە (Countdown)</b>
+        <div class="digits">
+          <span id="cdDays">04</span>
+          <span id="cdHours">16</span>
+          <span id="cdMins">58</span>
+          <span id="cdSecs">25</span>
         </div>
+        <div class="progress"><i id="detailProgressBar" style="width:72%"></i></div>
+        <small style="display:block;color:#9eabb7;margin-top:8px" id="detailProgressLabel">72% · پڕبوون</small>
+      </div>
+      <button class="primary" onclick="go('bookings')" id="detailBookingsBtn">بینینی ناونوسراوەکان (29)</button>
+    </section>
 
-        <div class="grid-4 mb-4">
-          <div class="card p-4"><small class="text-gray-400 text-xs">کۆی کورسییەکان</small><b id="dashTotalCap" class="text-xl block mt-1">40</b></div>
-          <div class="card p-4"><small class="text-gray-400 text-xs">کورسییە گیراوەکان</small><b id="dashBooked" class="text-xl block mt-1">29</b></div>
-          <div class="card p-4"><small class="text-gray-400 text-xs">کورسییە بەردەستەکان</small><b id="dashAvailable" class="text-xl block mt-1">11</b></div>
-          <div class="card p-4"><small class="text-gray-400 text-xs">دۆخی ناونووسین</small><b id="dashStatus" class="text-xl block mt-1">کراوەیە</b></div>
+    <!-- 4. BOOKINGS / LIVE REGISTRATIONS -->
+    <section class="page" id="bookings">
+      <div class="toolbar">
+        <div class="logo">☷</div>
+        <h2>ناونوسراوەکان</h2>
+        <button class="icon-btn" onclick="fetchLiveRegistrations()" title="نوێکردنەوە">↻</button>
+        <button class="icon-btn" onclick="exportRegistrationsToCSV()" title="دابەزاندنی CSV">⬇</button>
+      </div>
+      <div class="filters">
+        <button class="filter active" onclick="setBookingFilter(this,'all')">هەموو <span id="cntAll"></span></button>
+        <button class="filter" onclick="setBookingFilter(this,'approved')">پەسەندکراو <span id="cntApp"></span></button>
+        <button class="filter" onclick="setBookingFilter(this,'pending')">چاوەڕوان <span id="cntPend"></span></button>
+        <button class="filter" onclick="setBookingFilter(this,'rejected')">ڕەتکراو <span id="cntRej"></span></button>
+      </div>
+      <input class="search" id="peopleSearch" placeholder="⌕   گەڕان بە ناو / ژمارە..." oninput="renderRegistrations()">
+      <div id="peopleList"></div>
+    </section>
+
+    <!-- 5. NEW / EDIT TRIP (3 LANGUAGES + CAPACITY + OTP) -->
+    <section class="page" id="newtrip">
+      <div class="toolbar">
+        <button class="icon-btn" onclick="go('trips')">←</button>
+        <h2>زانیاری گەشت (٣ زمان)</h2>
+        <span class="logo">▣</span>
+      </div>
+
+      <div class="upload" onclick="triggerCropUpload('tripImageUrl','tripPreviewImg',4/3)">
+        <div>▧<br><b>وێنەی سەرەکی گەشت</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
+        <img id="tripPreviewImg" style="display:none;width:100%;max-height:130px;object-fit:cover;border-radius:9px;margin-top:8px">
+      </div>
+
+      <div class="lang-box" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:16px;height:16px"> ناونووسین کراوەیە
+        </label>
+        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" style="width:16px;height:16px"> کۆدی OTP پێویستە
+        </label>
+      </div>
+
+      <div class="lang-box">
+        <h4>☀️ زمانی کوردی (KU)</h4>
+        <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" oninput="autoSync()"></div>
+        <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" oninput="autoSync()"></div>
+        <div class="field"><label>نرخ</label><input id="tripPrice_ku" oninput="autoSync()"></div>
+        <div class="field"><label>کات و بەروار</label><input id="tripTime_ku" oninput="autoSync()"></div>
+        <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" oninput="autoSync()"></textarea></div>
+      </div>
+
+      <div class="lang-box">
+        <h4>🌴 باللغة العربية (AR)</h4>
+        <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" oninput="autoSync()"></div>
+        <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" oninput="autoSync()"></div>
+        <div class="field"><label>السعر</label><input id="tripPrice_ar" oninput="autoSync()"></div>
+        <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" oninput="autoSync()"></div>
+        <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" oninput="autoSync()"></textarea></div>
+      </div>
+
+      <div class="lang-box">
+        <h4>🌐 In English (EN)</h4>
+        <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" oninput="autoSync()"></div>
+        <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" oninput="autoSync()"></div>
+        <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" oninput="autoSync()"></div>
+        <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" oninput="autoSync()"></div>
+        <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
+      </div>
+
+      <div class="lang-box">
+        <h4>⚙️ توانست و کەشوهەوا</h4>
+        <div class="field"><label>⏰ کاتژمێری پێچەوانە (Countdown Target)</label><input type="datetime-local" id="tripTargetDate" onchange="autoSync()"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="field"><label>کۆی کورسی (Capacity)</label><input type="number" id="capacityInput" oninput="autoSync()"></div>
+          <div class="field"><label>گیراو (Booked)</label><input type="number" id="bookedInput" oninput="autoSync()"></div>
+          <div class="field"><label>پلەی گەرمی</label><input id="weatherTemp" oninput="autoSync()"></div>
+          <div class="field"><label>دۆخی کەشوهەوا</label><input id="weatherCondition" oninput="autoSync()"></div>
         </div>
+      </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-title mb-3"><i data-lucide="zap"></i> کردارە خێراکان</div>
-            <div class="grid-2">
-              <button class="btn btn-secondary text-right justify-start" onclick="switchTab('trip')"><i data-lucide="compass"></i> گەشتی ئەم هەفتەیە</button>
-              <button class="btn btn-secondary text-right justify-start" onclick="switchTab('live_registrations')"><i data-lucide="users"></i> ناونووسینەکان</button>
-              <button class="btn btn-secondary text-right justify-start" onclick="switchTab('diagnostics_tab')"><i data-lucide="activity"></i> پشکنینی سێرڤەر</button>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-title mb-3"><i data-lucide="info"></i> ڕێنمایی خێرا</div>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              هەر گۆڕانکارییەک لە بەشەکانی تەنیشت دەکەیت، لە دواییدا کلیک لەسەر دوگمەی سەوزی <b>Publish</b> بکە لە سەرەوە تاوەکو گۆڕانکارییەکان ڕاستەوخۆ بگەنە ماڵپەڕی سەرەکی.
-            </p>
-          </div>
+      <button class="primary" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە (Publish)</button>
+    </section>
+
+    <!-- 6. SETTINGS HUB -->
+    <section class="page" id="settings">
+      <div class="toolbar">
+        <div class="logo">▲</div>
+        <h2>ڕێکخستنەکان</h2>
+        <button class="pill" onclick="publishLive()">● Publish</button>
+      </div>
+      <div class="service-list">
+        <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی بە ٣ زمان</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('broadcast')"><div class="service-icon">💬</div><div class="service-text"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ شاخەوانان</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('stories')"><div class="service-icon">✨</div><div class="service-text"><b>ستۆرییەکان (Stories)</b><small>پەسەندکردن و سڕینەوەی ستۆری بەشداربووان</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('private_requests')"><div class="service-icon">👑</div><div class="service-text"><b>گەشتی تایبەت (Private Trips)</b><small>داواکارییەکانی گەشتی خێزانی و تایبەت</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('coupons')"><div class="service-icon">🎟️</div><div class="service-text"><b>کۆبۆنەکان (Coupons)</b><small>کۆدی داشکاندن و سنووری بەکارهێنان</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('weather_manager')"><div class="service-icon">⛅</div><div class="service-text"><b>کەشوهەوا و شوێن</b><small>Open-Meteo و پۆوتانی نەخشە</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('reviews')"><div class="service-icon">★</div><div class="service-text"><b>هەڵسەنگاندنەکان (Reviews)</b><small>فیدباک و پلەبەندی شاخەوانان</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('gallery')"><div class="service-icon">▧</div><div class="service-text"><b>وێنەکان و گەلەری</b><small>بارکردن و بڕینی وێنەکان لە Cloud</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('finance')"><div class="service-icon">💳</div><div class="service-text"><b>هەژماری دارایی و FIB</b><small>ژمارەی هەژماری First Iraqi Bank</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('diagnostics')"><div class="service-icon" style="color:#ff3152">⏻</div><div class="service-text"><b>پشکنینی ئۆتۆماتیک</b><small>System Diagnostics</small></div><span class="arrow">‹</span></div>
+        <div class="staff-setting spotlight-card" onclick="go('backup')"><div class="service-icon">💾</div><div class="service-text"><b>Backup / Restore</b><small>داگرتن و گەڕاندنەوەی داتا</small></div><span class="arrow">‹</span></div>
+      </div>
+    </section>
+
+    <!-- 7. HERO & BRAND DESIGN -->
+    <section class="page" id="design">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>Hero و Brand</h2></div>
+      <div class="lang-box">
+        <h4>🎨 ڕەنگەکانی براند</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="field"><label>ڕەنگی سەرەکی</label><input type="color" id="gradColor1" onchange="autoSync()" style="height:42px;padding:4px"></div>
+          <div class="field"><label>ڕەنگی دووەم</label><input type="color" id="gradColor2" onchange="autoSync()" style="height:42px;padding:4px"></div>
         </div>
-      </section>
+      </div>
+      <div class="upload" onclick="triggerCropUpload('heroImageUrl','heroPreviewImg',16/9)" style="margin-bottom:10px">
+        <div>🖼️<br><b>وێنەی کاڤەری سەرەکی (Hero)</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
+        <img id="heroPreviewImg" style="display:none;width:100%;max-height:130px;object-fit:cover;border-radius:9px;margin-top:8px">
+      </div>
+      <div class="lang-box">
+        <h4>☀️ بە کوردی</h4>
+        <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
+        <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
+      </div>
+      <div class="lang-box">
+        <h4>🌴 بالعربية</h4>
+        <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
+        <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
+      </div>
+      <div class="lang-box">
+        <h4>🌐 In English</h4>
+        <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
+        <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
+      </div>
+      <button class="primary" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە</button>
+    </section>
 
-      <!-- DESIGN -->
-      <section class="page-tab" id="tab-design">
-        <div class="card">
-          <div class="card-title"><i data-lucide="palette"></i> هەناسەی براند و ڕەنگەکان</div><p class="text-xs text-gray-400 mt-2 mb-4">ڕەنگ و پێناسەی KURDIA لێرە ڕێکبخە؛ گۆڕانکارییەکان پاش پاشەکەوتکردن بڵاودەبنەوە.</p>
-          <div class="grid-2">
-            <div class="field">
-              <label>ڕەنگی سەرەکی براند</label>
-              <input type="color" id="gradColor1" onchange="autoSync()" style="height:44px;padding:4px;cursor:pointer;">
-            </div>
-            <div class="field">
-              <label>ڕەنگی دووەم</label>
-              <input type="color" id="gradColor2" onchange="autoSync()" style="height:44px;padding:4px;cursor:pointer;">
-            </div>
-          </div>
+    <!-- 8. WHATSAPP BROADCAST -->
+    <section class="page" id="broadcast">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>ناوەندی WhatsApp</h2></div>
+      <div class="lang-box">
+        <h4>١. دەقی پەیام</h4>
+        <textarea id="broadcastMessage" placeholder="سڵاو، پەیامەکەت لێرە بنووسە..." style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px"></textarea>
+      </div>
+      <div class="lang-box">
+        <h4>٢. ژمارەکانی وەرگر (هەر ژمارەیەک لە دێڕێک)</h4>
+        <textarea id="broadcastPhones" dir="ltr" placeholder="9647501234567&#10;9647701234567" style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px;text-align:left"></textarea>
+      </div>
+      <button class="primary" id="broadcastSendBtn" onclick="sendBroadcastReminder()">پشکنین و ناردنی پەیام</button>
+      <div id="broadcastResult" style="margin-top:10px;font-size:12px"></div>
+      <details style="margin-top:10px;font-size:11px;color:#8b9aa8">
+        <summary style="cursor:pointer">وردەکاریی وەڵامی سێرڤەر</summary>
+        <pre id="broadcastDebug" style="background:#050a10;padding:10px;border-radius:8px;overflow:auto;direction:ltr;text-align:left">ئامادەیە.</pre>
+      </details>
+    </section>
+
+    <!-- 9. STORIES MODERATION -->
+    <section class="page" id="stories">
+      <div class="toolbar">
+        <button class="icon-btn" onclick="go('settings')">←</button>
+        <h2>ستۆرییەکان</h2>
+        <button class="icon-btn" onclick="fetchAdminStories()">↻</button>
+      </div>
+      <div id="adminStoriesContainer"></div>
+    </section>
+
+    <!-- 10. PRIVATE REQUESTS -->
+    <section class="page" id="private_requests">
+      <div class="toolbar">
+        <button class="icon-btn" onclick="go('settings')">←</button>
+        <h2>داواکاری گەشتی تایبەت</h2>
+        <button class="icon-btn" onclick="loadPrivateRequests()">↻</button>
+      </div>
+      <div id="privateRequestsContainer"></div>
+    </section>
+
+    <!-- 11. COUPONS -->
+    <section class="page" id="coupons">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>کۆبۆنەکان</h2></div>
+      <div class="lang-box">
+        <h4>زیادکردنی کۆبۆنی نوێ</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="field"><label>کۆد</label><input id="couponNewCode" placeholder="KURDIA10"></div>
+          <div class="field"><label>داشکاندن (%)</label><input id="couponNewDiscount" type="number" placeholder="10"></div>
+          <div class="field"><label>دەستپێک</label><input id="couponNewStart" type="datetime-local"></div>
+          <div class="field"><label>کۆتایی</label><input id="couponNewEnd" type="datetime-local"></div>
         </div>
+        <div class="field"><label>سنووری بەکارهێنان</label><input id="couponNewLimit" type="number" placeholder="بێ سنوور بەتاڵ بهێڵەوە"></div>
+        <button class="primary" onclick="addCoupon()">زیادکردنی کۆبۆن ＋</button>
+      </div>
+      <div id="couponsList"></div>
+      <button class="primary" style="background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="saveCoupons()">پاشەکەوتکردنی کۆبۆنەکان لە Cloud</button>
+    </section>
 
-        <div class="card">
-          <div class="card-title"><i data-lucide="layout"></i> وێنە و پەیامی سەرەکی (Hero)</div><p class="text-xs text-gray-400 mt-2 mb-4">بۆ هەر زمانێک ناونیشان و پێناسەی تایبەتی خۆی بنووسە. وێنەی کاڤەر بە جیا هەڵبژێرە.</p>
-          
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">☀️ بە کوردی</h4>
-            <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
-            <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌴 بالعربية</h4>
-            <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
-            <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <div class="lang-box-tab">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌐 In English</h4>
-            <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
-            <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
-          </div>
-
-          <div class="field">
-            <label>وێنەی کاڤەری سەرەکی</label>
-            <div class="uploader-dropzone" onclick="triggerCropUpload('heroImageUrl', 'heroDropPreview', 16/9)">
-              <i data-lucide="upload-cloud" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:12px;color:var(--muted);margin-top:5px;">پەنجە بنێ بۆ هەڵبژاردن و بڕینی وێنە</p>
-              <div id="heroDropPreview" class="dropzone-preview"></div>
-            </div>
-          </div>
+    <!-- 12. WEATHER MANAGER -->
+    <section class="page" id="weather_manager">
+      <div class="toolbar">
+        <button class="icon-btn" onclick="go('settings')">←</button>
+        <h2>کەشوهەوا و شوێن</h2>
+        <button class="secondary-btn" onclick="loadWeatherTest()">تاقیکردنەوە</button>
+      </div>
+      <div class="lang-box">
+        <div class="field"><label>شوێنی بنەڕەتی</label><input id="weatherDefaultLocationAdmin" value="Erbil"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="field"><label>Latitude</label><input id="weatherLatAdmin" value="36.19"></div>
+          <div class="field"><label>Longitude</label><input id="weatherLonAdmin" value="44.01"></div>
         </div>
-      </section>
+        <div id="weatherTestResult" style="font-size:12px;color:#10d67d;margin:6px 0"></div>
+        <button class="primary" onclick="saveWeatherManager()">پاشەکەوتکردن لە Cloud</button>
+      </div>
+    </section>
 
-      <!-- TRIP -->
-      <section class="page-tab" id="tab-trip">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i data-lucide="compass"></i> زانیاری گەشتەکە بە ٣ زمان</div>
-            <label class="flex items-center gap-2 cursor-pointer text-xs font-bold">
-              <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:18px;height:18px;">
-              دۆخی ناونووسین کراوەیە
-            </label>
-          </div>
-
-          <!-- KRG -->
-          <details class="trip-language" open><summary>☀️ زانیاری گەشت بە کوردی</summary><div class="lang-box-tab mt-3">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">زمانی کوردی — KU</h4>
-            <div class="grid-2">
-              <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" oninput="autoSync()"></div>
-              <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" oninput="autoSync()"></div>
-              <div class="field"><label>نرخ</label><input id="tripPrice_ku" oninput="autoSync()"></div>
-              <div class="field"><label>کات و بەروار</label><input id="tripTime_ku" oninput="autoSync()"></div>
-            </div>
-            <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" oninput="autoSync()"></textarea></div>
-          </div></details>
-
-          <!-- ARABIC -->
-          <details class="trip-language"><summary>🌴 تفاصيل الرحلة بالعربية</summary><div class="lang-box-tab mt-3">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌴 باللغة العربية</h4>
-            <div class="grid-2">
-              <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" oninput="autoSync()"></div>
-              <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" oninput="autoSync()"></div>
-              <div class="field"><label>السعر</label><input id="tripPrice_ar" oninput="autoSync()"></div>
-              <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" oninput="autoSync()"></div>
-            </div>
-            <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" oninput="autoSync()"></textarea></div>
-          </div></details>
-
-          <!-- ENGLISH -->
-          <details class="trip-language"><summary>🌐 Trip details in English</summary><div class="lang-box-tab mt-3">
-            <h4 class="font-bold text-xs text-rose-400 mb-2">🌐 In English</h4>
-            <div class="grid-2">
-              <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" oninput="autoSync()"></div>
-              <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" oninput="autoSync()"></div>
-              <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" oninput="autoSync()"></div>
-              <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" oninput="autoSync()"></div>
-            </div>
-            <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" oninput="autoSync()"></textarea></div>
-          </div></details>
-
-          <div class="grid-3 p-4 bg-white/[0.03] border border-white/10 rounded-2xl mb-4 backdrop-blur-md">
-            <div class="field">
-              <label>⏰ کاتژمێری پێچەوانە (Countdown)</label>
-              <input type="datetime-local" id="tripTargetDate" onchange="autoSync()">
-            </div>
-            <div class="field">
-              <label>🌡️ پلەی گەرمیی پێشبینیکراو</label>
-              <input id="weatherTemp" placeholder="18°C" oninput="autoSync()">
-            </div>
-            <div class="field">
-              <label>☀️ دۆخی کەشوهەوا</label>
-              <input id="weatherCondition" placeholder="ساماڵ ☀️" oninput="autoSync()">
-            </div>
-          </div>
-
-          <div class="field">
-            <label>وێنەی تایبەتی گەشتەکە</label>
-            <div class="uploader-dropzone" onclick="triggerCropUpload('tripImageUrl', 'tripDropPreview', 4/3)">
-              <i data-lucide="image-plus" style="width:30px;height:30px;margin:auto;color:var(--muted);"></i>
-              <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی گەشتەکە دیاری بکە و بیبڕە</p>
-              <div id="tripDropPreview" class="dropzone-preview"></div>
-            </div>
-          </div>
+    <!-- 13. FINANCE -->
+    <section class="page" id="finance">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>هەژماری دارایی و FIB</h2></div>
+      <div class="lang-box">
+        <div class="field">
+          <label>ژمارەی هەژماری فەرمی First Iraqi Bank (FIB)</label>
+          <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
         </div>
-      </section>
+        <button class="primary" onclick="publishLive()">پاشەکەوتکردن</button>
+      </div>
+    </section>
 
-      <!-- BOOKING & CAPACITY -->
-      <section class="page-tab" id="tab-booking">
-        <div class="card">
-          <div class="card-title"><i data-lucide="shield-check"></i> دۆخی ناونووسین و توانست</div>
-          <div class="p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl mb-5 flex items-center justify-between">
-            <div>
-              <div class="font-extrabold text-sm text-white">داواکردنی کۆدی سەلماندنی WhatsApp (OTP)</div>
-              <div class="text-xs text-gray-400 mt-1">ئەگەر بکوژێنرێتەوە، بەشداربووان بەبێ کۆدی OTP فۆڕمەکە دەنێرن.</div>
-            </div>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" class="sr-only peer">
-              <div class="w-12 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600"></div>
-            </label>
-          </div>
+    <!-- 14. DIAGNOSTICS -->
+    <section class="page" id="diagnostics">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>پشکنینی سیستەم</h2></div>
+      <button class="primary" onclick="runDiagnostics()">Run Diagnostics</button>
+      <div id="diagnosticList" style="margin-top:10px"></div>
+    </section>
 
-          <div class="grid-2">
-            <div class="field"><label>کۆی کورسییەکان (Capacity)</label><input id="capacityInput" type="number" min="1" oninput="autoSync()"></div>
-            <div class="field"><label>کورسییە گیراوەکان (Booked)</label><input id="bookedInput" type="number" min="0" oninput="autoSync()"></div>
-          </div>
+    <!-- 15. GALLERY -->
+    <section class="page" id="gallery">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>وێنەکان و گەلەری</h2></div>
+      <div class="upload" onclick="triggerCropUpload('gallery',null,NaN)">＋ بارکردنی وێنەی نوێ بۆ Cloud</div>
+      <div class="gallery" id="galleryGrid"></div>
+    </section>
+
+    <!-- 16. REVIEWS -->
+    <section class="page" id="reviews">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>هەڵسەنگاندنەکان</h2></div>
+      <div class="rating-box">
+        <div><span class="star">★</span><strong>٤.٩</strong></div>
+        <p>لە هەڵسەنگاندنی شاخەوانان</p>
+        <div class="barrow"><span>5 ★</span><div class="bar"><i style="width:78%"></i></div><span>78%</span></div>
+        <div class="barrow"><span>4 ★</span><div class="bar"><i style="width:16%"></i></div><span>16%</span></div>
+        <div class="barrow"><span>3 ★</span><div class="bar"><i style="width:4%"></i></div><span>4%</span></div>
+      </div>
+      <div class="lang-box" style="margin-top:10px">
+        <h4>زیادکردنی فیدباک</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="field"><label>ناو</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
+          <div class="field"><label>شار</label><input id="newReviewCity" placeholder="هەولێر"></div>
         </div>
-      </section>
+        <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText"></textarea></div>
+        <button class="primary" onclick="addReviewItem()">زیادکردن ＋</button>
+      </div>
+      <div id="reviewsList"></div>
+    </section>
 
-      <!-- LIVE REGISTRATIONS -->
-      <section class="page-tab" id="tab-live_registrations">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><i data-lucide="users"></i> بەڕێوەبردنی ڕاستەوخۆی بەشداربووان</div>
-            <div class="flex gap-2">
-              <button class="btn btn-secondary text-xs" onclick="fetchLiveRegistrations()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button>
-              <button class="btn btn-success text-xs" onclick="exportRegistrationsToCSV()"><i data-lucide="file-spreadsheet"></i> دابەزاندنی Excel/CSV</button>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-2 mt-4 mb-4" id="bookingStatusTabs">
-            <button class="btn btn-secondary text-xs booking-status-tab active" data-status-tab="pending" onclick="setBookingStatusTab('pending')">⏳ Pending <span id="bookingCountPending">0</span></button>
-            <button class="btn btn-secondary text-xs booking-status-tab" data-status-tab="approved" onclick="setBookingStatusTab('approved')">✅ Approved <span id="bookingCountApproved">0</span></button>
-            <button class="btn btn-secondary text-xs booking-status-tab" data-status-tab="rejected" onclick="setBookingStatusTab('rejected')">❌ Rejected <span id="bookingCountRejected">0</span></button>
-          </div>
-          <div id="registrationsContainer" class="flex flex-col gap-3"></div>
+    <!-- 17. BACKUP / RESTORE -->
+    <section class="page" id="backup">
+      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>پاراستن و هێنانەوە</h2></div>
+      <div class="lang-box">
+        <p style="font-size:12px;color:#9ba9b8">داگرتنی کۆپییەکی تەواوی زانیارییەکان یان گەڕاندنەوەی لە فایلی JSON.</p>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="primary" style="margin:0" onclick="exportBackup()">⬇ Download Backup</button>
+          <button class="primary" style="margin:0;background:#159ce8" onclick="document.getElementById('importBackupInput').click()">⬆ Restore JSON</button>
+          <input type="file" id="importBackupInput" accept=".json" style="display:none" onchange="importBackup(event)">
         </div>
-      </section>
-
-      <!-- ACHIEVEMENTS -->
-      <section class="page-tab" id="tab-achievements">
-        <div class="card">
-          <div class="card-title"><i data-lucide="trophy"></i> ئامار و دەستکەوتەکان</div>
-          <div class="grid-2">
-            <div class="field"><label>ژمارە / باج</label><input id="newStatNum" placeholder="39+"></div>
-            <div class="field"><label>پێناسە</label><input id="newStatLabel" placeholder="بەشداربووی لووتکەی هەڵگورد"></div>
-          </div>
-          <button class="btn btn-primary w-full mb-3" onclick="addStatItem()"><i data-lucide="plus"></i> زیادکردنی ئامار</button>
-          <div id="statsList"></div>
-        </div>
-      </section>
-
-      <!-- ITINERARY / TIMELINE -->
-      <section class="page-tab" id="tab-itinerary_tab">
-        <div class="card">
-          <div class="card-title"><i data-lucide="calendar"></i> خشتەی کاتیی گەشت</div>
-          <div class="grid-2">
-            <div class="field"><label>ناونیشان</label><input id="newItineraryTitle" placeholder="کۆبوونەوە"></div>
-            <div class="field"><label>ڕوونکردنەوە</label><input id="newItineraryText" placeholder="کاتژمێر ٥ی بەیانی"></div>
-          </div>
-          <button class="btn btn-primary w-full mb-3" onclick="addItineraryItem()"><i data-lucide="plus"></i> زیادکردن</button>
-          <div id="itineraryList"></div>
-        </div>
-      </section>
-
-      <!-- SAFETY -->
-      <section class="page-tab" id="tab-safety_tab">
-        <div class="card">
-          <div class="card-title"><i data-lucide="shield-check"></i> پرۆتۆکۆلی سەلامەتی</div>
-          <div class="field"><label>ناونیشانی سەلامەتی</label><input id="newSafetyTitle" placeholder="فریاگوزاری سەرەتایی"></div>
-          <div class="field"><label>ڕوونکردنەوە</label><textarea id="newSafetyDesc" placeholder="تیمی فریاگوزاری لەگەڵ گەشتەکە دەبێت..."></textarea></div>
-          <button class="btn btn-primary w-full mb-3" onclick="addSafetyItem()"><i data-lucide="plus"></i> زیادکردن</button>
-          <div id="safetyAdminList"></div>
-        </div>
-      </section>
-
-      <!-- BROADCAST -->
-      <section class="page-tab" id="tab-broadcast">
-        <div class="wa-hero card">
-          <div class="wa-head"><div class="wa-icon"><i data-lucide="message-circle"></i></div><div><div class="wa-eyebrow">KURDIA • MESSAGING</div><div class="card-title">ناوەندی پەیامەکانی WhatsApp</div><p class="text-xs text-gray-400 mt-1">پێش ناردن، دەق و ژمارەکان پشکنە؛ هەر ژمارەیەک لە هێڵێکی جیاواز بنووسە.</p></div></div>
-          <div class="wa-grid">
-            <div class="wa-panel"><div class="wa-step"><span>١</span><div><b>دەقی پەیام</b><small>پەیامی ڕوون و کورت بنووسە</small></div></div><textarea id="broadcastMessage" dir="auto" placeholder="سڵاو، پەیامەکەت لێرە بنووسە..." style="min-height:170px;line-height:1.9;"></textarea><div class="wa-hint">نووسینی کوردی، عەرەبی و ئینگلیزی پشتگیری دەکرێت.</div></div>
-            <div class="wa-panel"><div class="wa-step"><span>٢</span><div><b>ژمارەکانی وەرگر</b><small>هەر ژمارەیەک لە هێڵێکی جیاواز</small></div></div><textarea id="broadcastPhones" dir="ltr" inputmode="tel" placeholder="9647512345678&#10;9647501234567" style="min-height:170px;text-align:left;direction:ltr;"></textarea><div class="wa-hint">ژمارەکان بە کۆدی وڵات بنووسە؛ بۆ عێراق نموونە: 9647XXXXXXXXX</div></div>
-          </div>
-          <div class="wa-consent"><i data-lucide="shield-check"></i><span>تەنها بۆ کەسانێک پەیام بنێرە کە ڕەزامەندییان داوە پەیامی WhatsApp وەربگرن.</span></div>
-          <button class="btn btn-primary wa-send" id="broadcastSendBtn" onclick="sendBroadcastReminder()"><i data-lucide="send"></i> پشکنین و ناردنی پەیام</button>
-          <div id="broadcastResult" class="wa-result" aria-live="polite" role="status"></div>
-          <details class="wa-debug"><summary>وردەکاریی وەڵامی سێرڤەر</summary><pre id="broadcastDebug">هێشتا هیچ ناردنێک تاقی نەکراوەتەوە.</pre></details>
-        </div>
-      </section>
-
-      <!-- REVIEWS -->
-      <section class="page-tab" id="tab-reviews">
-        <div class="card">
-          <div class="card-title"><i data-lucide="message-circle"></i> بەڕێوەبردنی بیروڕای شاخەوانان</div>
-          <div class="grid-2">
-            <div class="field"><label>ناوی بەشداربوو</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
-            <div class="field"><label>شار</label><input id="newReviewCity" placeholder="هەولێر"></div>
-          </div>
-          <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText" placeholder="بیروڕاکەی بنووسە..."></textarea></div>
-          <button class="btn btn-primary w-full mb-3" onclick="addReviewItem()"><i data-lucide="plus"></i> زیادکردن</button>
-          <div id="reviewsList"></div>
-        </div>
-      </section>
-
-      <!-- GALLERY -->
-      <section class="page-tab" id="tab-gallery">
-        <div class="card">
-          <div class="card-title"><i data-lucide="image"></i> گەلەری وێنەکان</div>
-          <div class="uploader-dropzone" onclick="triggerCropUpload('gallery', null, NaN)">
-            <i data-lucide="upload" style="width:28px;height:28px;margin:auto;color:var(--muted);"></i>
-            <p style="font-size:12px;color:var(--muted);margin-top:5px;">وێنەی نوێ بپشکنە، بیبڕە و زیادی بکە</p>
-          </div>
-          <div class="gallery-grid" id="galleryContainer"></div>
-        </div>
-      </section>
-
-      <!-- FINANCE -->
-      <section class="page-tab" id="tab-finance">
-        <div class="card">
-          <div class="card-title"><i data-lucide="credit-card"></i> هەژماری دارایی و FIB</div>
-          <div class="field">
-            <label>ژمارەی هەژماری فەرمیی First Iraqi Bank (FIB)</label>
-            <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
-          </div>
-        </div>
-      </section>
-
-      <!-- WEATHER MANAGER -->
-      <section class="page-tab" id="tab-weather_manager">
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i data-lucide="cloud-sun"></i> کەشوهەوا و شوێنی بنەڕەتی</div><button class="btn btn-secondary" onclick="loadWeatherTest()">تاقیکردنەوەی کەشوهەوا</button></div>
-          <div class="grid-2">
-            <div>
-              <div class="field"><label>شوێنی بنەڕەتی</label><input id="weatherDefaultLocationAdmin" placeholder="Erbil"></div>
-              <div class="grid-2">
-                <div class="field"><label>Latitude</label><input id="weatherLatAdmin" type="number" step="any"></div>
-                <div class="field"><label>Longitude</label><input id="weatherLonAdmin" type="number" step="any"></div>
-              </div>
-              <div class="field"><label>سەرچاوە</label><input id="weatherSourceAdmin" value="Open-Meteo"></div>
-              <button class="btn btn-primary" onclick="saveWeatherManager()">پاشەکەوتکردن لە Cloud</button>
-              <div id="weatherTestResult" class="mt-3 text-xs text-gray-400"></div>
-            </div>
-            <div>
-              <div id="adminWeatherMap" class="admin-map"></div>
-              <div class="text-[10px] text-gray-500 mt-2">لەسەر نەخشە کلیک بکە بۆ دیاریکردنی شوێنی بنەڕەتی.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PRIVATE REQUESTS -->
-      <section class="page-tab" id="tab-private_requests">
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i data-lucide="crown"></i> داواکارییەکانی گەشتی تایبەت</div><button class="btn btn-secondary" onclick="loadPrivateRequests()">نوێکردنەوە</button></div>
-          <div id="privateRequestsContainer" class="flex flex-col gap-2"><div class="text-xs text-gray-400 text-center py-6">نوێکردنەوە بکە.</div></div>
-        </div>
-      </section>
-
-      <!-- STORIES -->
-      <section class="page-tab" id="tab-stories_tab">
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i data-lucide="sparkles"></i> بەڕێوەبردنی ستۆرییەکان (Community Stories)</div><button class="btn btn-secondary text-xs" onclick="fetchAdminStories()"><i data-lucide="refresh-cw"></i> نوێکردنەوە</button></div>
-          <div id="adminStoriesContainer" class="flex flex-col gap-3"><div class="text-xs text-gray-400 text-center py-6">هیچ ستۆرییەک نییە.</div></div>
-        </div>
-      </section>
-
-      <!-- DIAGNOSTICS -->
-      <section class="page-tab" id="tab-diagnostics_tab">
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i data-lucide="activity"></i> پشکنینی سیستەم</div><button class="btn btn-primary" onclick="runDiagnostics()">Run Diagnostics</button></div>
-          <div id="diagnosticsContainer" class="status-grid"></div>
-        </div>
-      </section>
-
-      <!-- BACKUP -->
-      <section class="page-tab" id="tab-backup">
-        <div class="card">
-          <div class="card-title"><i data-lucide="hard-drive"></i> پاراستن و هێنانەوەی زانیارییەکان</div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-secondary" style="flex:1;" onclick="exportBackup()"><i data-lucide="download"></i> Backup</button>
-            <button class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('importBackupInput').click()"><i data-lucide="upload"></i> Restore</button>
-            <input type="file" id="importBackupInput" accept=".json" style="display:none" onchange="importBackup(event)">
-          </div>
-        </div>
-      </section>
-
-      <!-- COUPONS -->
-      <section class="page-tab" id="tab-k5_coupons">
-        <div class="card">
-          <div class="card-title mb-2"><i data-lucide="ticket-percent"></i> بەڕێوەبردنی کۆبۆنەکان</div>
-          <p class="text-xs text-gray-400 mb-4">چەندین کۆبۆن زیاد بکە؛ هەر کۆبۆنێک کاتی دەستپێک و کۆتایی و سنووری بەکارهێنانی خۆی هەیە.</p>
-          <div class="grid-2">
-            <div class="field"><label>کۆدی داشکاندن</label><input id="couponNewCode" placeholder="KURDIA10"></div>
-            <div class="field"><label>ڕێژەی داشکاندن (%)</label><input id="couponNewDiscount" type="number" min="1" max="100" placeholder="10"></div>
-            <div class="field"><label>دەستپێک</label><input id="couponNewStart" type="datetime-local"></div>
-            <div class="field"><label>کۆتایی</label><input id="couponNewEnd" type="datetime-local"></div>
-            <div class="field"><label>زۆرترین ژمارەی بەکارهێنان</label><input id="couponNewLimit" type="number" min="1" placeholder="بێ سنوور بەتاڵ بهێڵەوە"></div>
-          </div>
-          <button class="btn btn-primary w-full" onclick="addCoupon()"><i data-lucide="plus"></i> زیادکردنی کۆبۆن</button>
-          <div id="couponsList" class="mt-4"></div>
-          <button class="btn btn-success w-full mt-4" onclick="saveCoupons()"><i data-lucide="save"></i> پاشەکەوتکردنی کۆبۆنەکان لە Cloud</button>
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </main>
+
+  <!-- Sticky Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="dashboard" onclick="go('dashboard',this)"><span class="ico">⌂</span><span>داشبۆرد</span></button>
+    <button class="nav-btn" data-page="trips" onclick="go('trips',this)"><span class="ico">▣</span><span>گەشتەکان</span></button>
+    <button class="nav-btn" data-page="bookings" onclick="go('bookings',this)">
+      <span class="ico">♙</span>
+      <span>ناونوسراو</span>
+      <span class="nav-badge" id="pendingNavBadge" style="display:none">0</span>
+    </button>
+    <button class="nav-btn" data-page="settings" onclick="go('settings',this)"><span class="ico">⚙</span><span>ڕێکخستن</span></button>
+  </nav>
 </div>
 
-<!-- CROPPING MODAL -->
+<!-- CROPPER MODAL -->
 <div id="cropModalWrapper">
-  <div class="crop-container-card">
-    <div class="flex justify-between items-center">
-      <h3 class="font-extrabold text-sm flex items-center gap-2"><i data-lucide="crop"></i> دیاریکردن و بڕینی وێنە</h3>
-      <button class="text-gray-400 hover:text-white" onclick="closeCropModal()"><i data-lucide="x"></i></button>
+  <div class="crop-card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <b style="font-size:13px">دیاریکردن و بڕینی وێنە</b>
+      <button class="secondary-btn" onclick="closeCropModal()">✕</button>
     </div>
-    <div class="crop-img-holder">
-      <img id="imageForCropper" style="max-width:100%; display:block;" />
+    <div class="crop-holder">
+      <img id="imageForCropper" style="max-width:100%;display:block">
     </div>
-    <div class="flex gap-2 justify-end mt-2">
-      <button class="btn btn-secondary" onclick="closeCropModal()">پاشگەزبوونەوە</button>
-      <button class="btn btn-primary" onclick="applyCropAndSave()"><i data-lucide="check"></i> بڕین و دانان</button>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="secondary-btn" onclick="closeCropModal()">پاشگەزبوونەوە</button>
+      <button class="primary" style="width:auto;margin:0;padding:9px 18px" onclick="applyCropAndSave()">بڕین و دانان ✓</button>
     </div>
   </div>
 </div>
 
-<input type="file" id="hiddenUniversalInput" accept="image/*" style="display:none;">
-<div id="toast" class="toast"></div>
+<input type="file" id="hiddenUniversalInput" accept="image/*" style="display:none">
+<div class="toast" id="toast"></div>
 
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
-const SHEETS_ID = "1hN4F9SNrBC2paokjEM1tnSCP3Zhv5iGsxqNRrGb9rk4";
 
 let appState = {
   gradColor1: "#9d1c32",
   gradColor2: "#c92b49",
-  heroImageUrl: "",
-  tripImageUrl: "",
-  tripTargetDate: "2026-10-02T05:00",
-  weatherTemp: "18°C",
+  heroImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+  tripImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+  tripTargetDate: "2026-10-20T05:00",
+  weatherTemp: "25°C",
   weatherCondition: "ساماڵ ☀️",
   bookingOpen: true,
   otpRequired: true,
   capacity: 40,
   booked: 29,
-  couponCode: "KURDIA10",
-  couponDiscount: 10,
   coupons: [],
   fibAccount: "07503130360",
-  waMapsUrl: "https://maps.app.goo.gl/kurdia-adventure-meeting",
-  
   i18n: {
     ku: {
       heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
@@ -717,57 +1045,216 @@ let appState = {
       tripLocation: "بالكايتي — جبل هلكورد",
       tripPrice: "35,000 دينار",
       tripTime: "صباحاً 05:00",
-      tripDesc: "مغامرة شيقة بصحبة مرشدين محترفين، تشمل النقل بالحافلات السياحية، وجبة الإفطار، وشاي الفحم، والصعود إلى أعلى قمة في كوردستان والعراق."
+      tripDesc: "مغامرة شيقة بصحبة مرشدين محترفين، تشمل النقل بالحافلات السياحية، وجبة الإفطار، وشاي الفحم."
     },
     en: {
       heroTitle: "Experience Kurdistan Nature Differently With Us",
-      heroSubtitle: "Our expeditions are crafted for those seeking to discover breathtaking mountain views, build new friendships, and create unforgettable adventures.",
+      heroSubtitle: "Our expeditions are crafted for those seeking to discover breathtaking mountain views and build new friendships.",
       tripTitle: "Mount Halgurd Summit Expedition",
       tripLocation: "Balakayati — Mount Halgurd",
       tripPrice: "35,000 IQD",
       tripTime: "05:00 AM",
-      tripDesc: "An exhilarating summit journey accompanied by certified mountain guides, VIP bus transportation, traditional breakfast, charcoal tea, and scaling the highest peak."
+      tripDesc: "An exhilarating summit journey accompanied by certified mountain guides, VIP bus transportation, and traditional breakfast."
     }
   },
-
-  stats: [
-    { num: "39+", label: "بەشداربووی هەڵگورد" },
-    { num: "15+", label: "لووتکە و ناوچە" },
-    { num: "100%", label: "گەشتی سەرکەوتوو" },
-    { num: "4.9★", label: "ڕەزامەندی شاخەوانان" }
-  ],
-
-  itinerary: [
-    { title: "کۆبوونەوە", text: "لە شوێنی دیاریکراو کۆدەبینەوە و بەڕێدەکەوین." },
-    { title: "نانی بەیانی", text: "لە سروشتدا چای خەڵووز و نانی بەیانی دەخۆین." },
-    { title: "سەرکەوتن", text: "بە هەنگاوی هاوسەنگ بەرەو لووتکە سەردەکەوین." },
-    { title: "گەڕانەوە", text: "دوای وێنەگرتن بەرەو شار دەگەڕێینەوە." }
-  ],
-
-  safety: [
-    { title: "ڕێبەرانی بەئەزموون", desc: "تیمەکەمان شارەزای تەواوی ڕێڕەوەکانە." },
-    { title: "فریاگوزاری سەرەتایی", desc: "کەرەستەی پزیشکی بەردەوام لەگەڵمانە." },
-    { title: "چاودێری کەشوهەوا", desc: "پشکنینی بەردەوامی پێشبینی کەشوهەوا." }
-  ],
-
-  services: [
-    { name: "پاسی گەشتیاری مۆدێرن", icon: "bus-front" },
-    { name: "نان و خواردنی بەیانی", icon: "utensils" },
-    { name: "چای سەر خەڵووز", icon: "coffee" }
-  ],
-
   reviews: [
-    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." }
+    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." },
+    { name: "تاریق سەلام", city: "سلێمانی", text: "سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو." }
   ],
-
-  gallery: []
+  gallery: [
+    { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80" },
+    { url: "https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=500&q=80" },
+    { url: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=500&q=80" }
+  ]
 };
 
 let cachedRegistrations = [];
+let activeBookingFilter = "all";
+let currentTripFilter = "all";
 
-async function adminFetch(url, opts = {}) {
-  const headers = new Headers(opts.headers || {});
-  return fetch(url, { ...opts, headers });
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+function toggleWideMode(){
+  document.getElementById("appShell").classList.toggle("wide-mode");
+}
+
+function go(id, btn){
+  document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
+  const activePage = document.getElementById(id);
+  if(activePage && window.gsap){
+    gsap.fromTo(activePage, { opacity: 0.25, y: 10 }, { opacity: 1, y: 0, duration: 0.28, ease: "power2.out" });
+  }
+  document.querySelectorAll(".nav-btn").forEach(n => {
+    const p = n.dataset.page;
+    const match = p === id ||
+      ((id === "tripdetail" || id === "newtrip") && p === "trips") ||
+      (["design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","gallery","reviews","backup"].includes(id) && p === "settings");
+    n.classList.toggle("active", match);
+  });
+  if(btn){
+    document.querySelectorAll(".nav-btn").forEach(n => n.classList.remove("active"));
+    btn.classList.add("active");
+  }
+  if(id === "bookings") fetchLiveRegistrations();
+  if(id === "stories") fetchAdminStories();
+  if(id === "private_requests") loadPrivateRequests();
+  if(id === "diagnostics") runDiagnostics();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderTripsAndDetail(){
+  const title = appState.i18n?.ku?.tripTitle || "سەرووشتی هەڵگورد";
+  const loc = appState.i18n?.ku?.tripLocation || "کوردستان";
+  const price = appState.i18n?.ku?.tripPrice || "٣٥،٠٠٠ دینار";
+  const time = appState.i18n?.ku?.tripTime || "05:00 AM";
+  const dateStr = (appState.tripTargetDate || "2026-10-20").slice(0,10).replace(/-/g,"/");
+  const img = appState.tripImageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80";
+
+  const listEl = document.getElementById("tripList");
+  if(listEl){
+    listEl.innerHTML = `
+      <article class="trip-card spotlight-card" data-state="${appState.bookingOpen ? 'active' : 'done'}" data-name="${title}" onclick="go('tripdetail')">
+        <img src="${img}" alt="${title}">
+        <div class="trip-info">
+          <div class="trip-title">
+            <b>${title}</b>
+            <span class="tag">${appState.bookingOpen ? 'چالاک' : 'داخراو'}</span>
+          </div>
+          <div class="trip-meta">
+            <span class="meta-chip">♙ ${appState.booked} / ${appState.capacity}</span>
+            <span class="meta-chip">☁ ${loc}</span>
+            <span class="meta-chip">📅 ${dateStr}</span>
+            <span class="meta-chip">◇ ${price}</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  const dImg = document.getElementById("detailHeroImg"); if(dImg) dImg.src = img;
+  const dTitle = document.getElementById("detailTitle"); if(dTitle) dTitle.textContent = title;
+  const dTag = document.getElementById("detailStatusTag"); if(dTag) dTag.textContent = appState.bookingOpen ? "چالاک" : "داخراو";
+  const dDT = document.getElementById("detailDateTime"); if(dDT) dDT.textContent = `${dateStr} · ${time}`;
+  const dSeats = document.getElementById("detailSeats"); if(dSeats) dSeats.textContent = `${appState.booked} / ${appState.capacity}`;
+  const dLoc = document.getElementById("detailLoc"); if(dLoc) dLoc.textContent = loc;
+  const dPrice = document.getElementById("detailPrice"); if(dPrice) dPrice.textContent = price;
+  const dTemp = document.getElementById("detailTemp"); if(dTemp) dTemp.textContent = appState.weatherTemp || "25°C";
+  const dWea = document.getElementById("detailWeather"); if(dWea) dWea.textContent = appState.weatherCondition || "ساماڵ ☀️";
+  const pct = Math.min(100, Math.round((Number(appState.booked||0) / Math.max(1, Number(appState.capacity||40))) * 100));
+  const bar = document.getElementById("detailProgressBar"); if(bar) bar.style.width = pct + "%";
+  const lbl = document.getElementById("detailProgressLabel"); if(lbl) lbl.textContent = `${pct}% · پڕبوون (${appState.booked} لە ${appState.capacity})`;
+  const bBtn = document.getElementById("detailBookingsBtn"); if(bBtn) bBtn.textContent = `بینینی ناونوسراوەکان (${appState.booked})`;
+}
+
+function setTripFilter(btn, f){
+  currentTripFilter = f;
+  btn.parentElement.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
+  btn.classList.add("active");
+  filterTrips();
+}
+function filterTrips(){
+  const q = (document.getElementById("tripSearch")?.value || "").toLowerCase();
+  document.querySelectorAll("#tripList .trip-card").forEach(c => {
+    const matchF = currentTripFilter === "all" || c.dataset.state === currentTripFilter;
+    const matchQ = (c.dataset.name || "").toLowerCase().includes(q);
+    c.style.display = (matchF && matchQ) ? "" : "none";
+  });
+}
+
+function autoSync(){
+  const getVal = (id, fb="") => { const el = document.getElementById(id); return el ? el.value : fb; };
+  appState.gradColor1 = getVal("gradColor1", appState.gradColor1);
+  appState.gradColor2 = getVal("gradColor2", appState.gradColor2);
+
+  ["ku","ar","en"].forEach(lang => {
+    if(!appState.i18n[lang]) appState.i18n[lang] = {};
+    appState.i18n[lang].heroTitle = getVal(`heroTitle_${lang}`, appState.i18n[lang].heroTitle);
+    appState.i18n[lang].heroSubtitle = getVal(`heroSubtitle_${lang}`, appState.i18n[lang].heroSubtitle);
+    appState.i18n[lang].tripTitle = getVal(`tripTitle_${lang}`, appState.i18n[lang].tripTitle);
+    appState.i18n[lang].tripLocation = getVal(`tripLocation_${lang}`, appState.i18n[lang].tripLocation);
+    appState.i18n[lang].tripPrice = getVal(`tripPrice_${lang}`, appState.i18n[lang].tripPrice);
+    appState.i18n[lang].tripTime = getVal(`tripTime_${lang}`, appState.i18n[lang].tripTime);
+    appState.i18n[lang].tripDesc = getVal(`tripDesc_${lang}`, appState.i18n[lang].tripDesc);
+  });
+
+  const bOpen = document.getElementById("bookingOpen");
+  if(bOpen) appState.bookingOpen = bOpen.checked;
+  const otpSw = document.getElementById("otpRequiredSwitch");
+  if(otpSw) appState.otpRequired = otpSw.checked;
+
+  appState.tripTargetDate = getVal("tripTargetDate", appState.tripTargetDate);
+  appState.weatherTemp = getVal("weatherTemp", appState.weatherTemp);
+  appState.weatherCondition = getVal("weatherCondition", appState.weatherCondition);
+  appState.capacity = Number(getVal("capacityInput", appState.capacity) || 40);
+  appState.booked = Number(getVal("bookedInput", appState.booked) || 0);
+  appState.fibAccount = getVal("fibAccount", appState.fibAccount);
+
+  const avail = Math.max(0, appState.capacity - appState.booked);
+  const cEl = document.getElementById("dashCapCounter"); if(cEl) cEl.textContent = appState.capacity;
+  const bEl = document.getElementById("dashBookedCounter"); if(bEl) bEl.textContent = appState.booked;
+  const aEl = document.getElementById("dashAvailCounter"); if(aEl) aEl.textContent = avail;
+  const subEl = document.getElementById("dashHeroSub"); if(subEl) subEl.textContent = appState.i18n.ku.heroSubtitle;
+
+  if(appState.heroImageUrl){
+    const dh = document.getElementById("dashboardHero");
+    if(dh) dh.style.backgroundImage = `linear-gradient(0deg,#03070be8 0%,transparent 68%),url('${appState.heroImageUrl}')`;
+  }
+
+  renderTripsAndDetail();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+}
+
+async function publishLive(){
+  try{
+    autoSync();
+    toast("⏳ لە ناو سێرڤەر پاشەکەوت دەکرێت...");
+    const currentRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store" });
+    const current = await currentRes.json().catch(() => ({}));
+    const data = current.data || {};
+
+    const heroT = appState.i18n?.ku?.heroTitle || "";
+    const heroSub = appState.i18n?.ku?.heroSubtitle || "";
+    data.heroTitle = heroT;
+    data.heroText = heroSub;
+    data.home = { ...(data.home || {}), hero: { title: heroT, subtitle: heroSub, imageUrl: appState.heroImageUrl || "" } };
+
+    data.trips = Array.isArray(data.trips) ? data.trips : [];
+    let trip = data.trips[0] || { id: "trip-main" };
+    trip = {
+      ...trip,
+      title: appState.i18n?.ku?.tripTitle || "",
+      location: appState.i18n?.ku?.tripLocation || "",
+      price: appState.i18n?.ku?.tripPrice || "",
+      time: appState.i18n?.ku?.tripTime || "",
+      description: appState.i18n?.ku?.tripDesc || "",
+      date: String(appState.tripTargetDate || "").trim().slice(0, 10),
+      heroImageUrl: appState.tripImageUrl || "",
+      capacity: Number(appState.capacity || 40),
+      booked: Number(appState.booked || 0),
+      published: true,
+      status: appState.bookingOpen ? "active" : "closed"
+    };
+    data.trips = [trip, ...data.trips.slice(1)];
+    data.i18n = appState.i18n;
+    data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
+
+    const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    const result = await saveRes.json().catch(() => ({}));
+    if(!saveRes.ok || result.ok !== true) throw new Error(result.error || `HTTP ${saveRes.status}`);
+    toast("✅ بە سەرکەوتوویی لە Cloud بڵاوکرایەوە!");
+  }catch(e){
+    toast("❌ پاشەکەوتکردن: " + (e.message || e));
+  }
 }
 
 // CROPPER
@@ -784,653 +1271,294 @@ function triggerCropUpload(prop, previewId, aspect = NaN){
 document.getElementById("hiddenUniversalInput").addEventListener("change", function(e){
   const file = e.target.files?.[0];
   if(!file) return;
-
   const reader = new FileReader();
   reader.onload = function(evt){
     const modal = document.getElementById("cropModalWrapper");
     const img = document.getElementById("imageForCropper");
     img.src = evt.target.result;
     modal.style.display = "flex";
-
     if(cropperInstance) cropperInstance.destroy();
-    cropperInstance = new Cropper(img, {
-      aspectRatio: cropTarget.aspect,
-      viewMode: 1,
-      autoCropArea: 0.85,
-      responsive: true
-    });
+    cropperInstance = new Cropper(img, { aspectRatio: cropTarget.aspect, viewMode: 1, autoCropArea: 0.9 });
   };
   reader.readAsDataURL(file);
 });
 
 function closeCropModal(){
   document.getElementById("cropModalWrapper").style.display = "none";
-  if(cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+  if(cropperInstance){ cropperInstance.destroy(); cropperInstance = null; }
 }
 
 async function applyCropAndSave(){
   if(!cropperInstance) return;
   try{
     const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1600, maxHeight: 1600 });
-    const base64 = canvas.toDataURL("image/jpeg", 0.84).split(',')[1];
+    const base64 = canvas.toDataURL("image/jpeg", 0.84).split(",")[1];
     const name = `kurdia-${Date.now()}.jpg`;
     toast("⏳ وێنەکە بۆ Cloud دەنێردرێت...");
-    const r = await adminFetch(`${WORKER_URL}/api/admin/media`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,contentType:"image/jpeg",base64})});
-    const j = await r.json().catch(()=>({}));
-    if(!r.ok || !j.ok) throw Error(j.error || `Upload failed (${r.status})`);
+    const r = await fetch(`${WORKER_URL}/api/admin/media`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, contentType: "image/jpeg", base64 })
+    });
+    const j = await r.json().catch(() => ({}));
+    if(!r.ok || !j.ok) throw new Error(j.error || `Upload failed (${r.status})`);
     const url = j.url;
     if(cropTarget.prop === "gallery"){
-      appState.gallery.push({ url, title: "KURDIA ADVENTURE" });
+      appState.gallery.push({ url, title: "KURDIA" });
       renderGallery();
     } else {
       appState[cropTarget.prop] = url;
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
-        if(p){ p.style.backgroundImage = `url('${url}')`; p.classList.add("active"); }
+        if(p){ p.src = url; p.style.display = "block"; }
       }
     }
     autoSync();
     closeCropModal();
-    toast("وێنەکە لە Cloud هەڵگیرا ✓");
+    toast("✅ وێنەکە لە Cloud هەڵگیرا");
   }catch(e){
-    toast("❌ Upload ـی وێنە سەرکەوتوو نەبوو: " + (e.message || "هەڵە"));
+    toast("❌ کێشە لە بارکردنی وێنە: " + (e.message || e));
   }
 }
 
-// LIVE REGISTRATIONS
+// REGISTRATIONS
+function bookingStatus(reg){
+  const s = String(reg?.status || "").toLowerCase();
+  if(s.includes("approve") || s.includes("پەسەند")) return "approved";
+  if(s.includes("reject") || s.includes("ڕەت") || s.includes("cancel")) return "rejected";
+  return "pending";
+}
+
+function setBookingFilter(btn, f){
+  activeBookingFilter = f;
+  btn.parentElement.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
+  btn.classList.add("active");
+  renderRegistrations();
+}
+
 async function fetchLiveRegistrations(){
-  toast("⏳ داتا دەهێنرێت...");
   try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/registrations`);
+    const res = await fetch(`${WORKER_URL}/api/admin/registrations?cb=${Date.now()}`);
     const data = await res.json();
     if(data.ok && Array.isArray(data.registrations)){
       cachedRegistrations = data.registrations;
-      renderRegistrations(cachedRegistrations);
-      toast(`✅ ${cachedRegistrations.length} داواکاری بارکرا`);
-    } else {
-      renderRegistrations([]);
-      toast("هیچ داتایەک نەدۆزرایەوە");
     }
-  }catch(e){
-    renderRegistrations([]);
-    toast("کێشە لە پەیوەندی بە وۆرکەر");
-  }
+  }catch(e){}
+  renderRegistrations();
 }
 
-function bookingStatus(reg){
-  const s = String(reg?.status || '').toLowerCase().trim();
-  if(s === 'approved' || s.includes('approve') || s.includes('accept') || s.includes('confirm') || s.includes('پەسەند') || s.includes('وەرگیرا')) return 'approved';
-  if(s === 'rejected' || s.includes('reject') || s.includes('denied') || s.includes('cancel') || s.includes('ڕەت') || s.includes('رد')) return 'rejected';
-  return 'pending';
-}
-
-let activeBookingStatusTab = 'pending';
-
-function setBookingStatusTab(status){
-  activeBookingStatusTab = status;
-  document.querySelectorAll('.booking-status-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.statusTab === status);
-  });
-  renderRegistrations(cachedRegistrations || []);
-}
-
-function updateBookingCounts(list){
-  const counts = {pending:0, approved:0, rejected:0};
-  (list || []).forEach(r => counts[bookingStatus(r)]++);
-  const ids = {pending:'bookingCountPending', approved:'bookingCountApproved', rejected:'bookingCountRejected'};
-  Object.keys(ids).forEach(k => {
-    const el = document.getElementById(ids[k]);
-    if(el) el.textContent = counts[k];
-  });
-}
-
-function renderRegistrations(list){
-  const c = document.getElementById("registrationsContainer");
+function renderRegistrations(){
+  const c = document.getElementById("peopleList");
   if(!c) return;
-  updateBookingCounts(list);
+  const q = (document.getElementById("peopleSearch")?.value || "").toLowerCase();
+  const counts = { all: cachedRegistrations.length, approved: 0, pending: 0, rejected: 0 };
+  cachedRegistrations.forEach(r => counts[bookingStatus(r)]++);
 
-  const filtered = (list || []).filter(reg => bookingStatus(reg) === activeBookingStatusTab);
+  const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = `(${v})`; };
+  setTxt("cntAll", counts.all);
+  setTxt("cntApp", counts.approved);
+  setTxt("cntPend", counts.pending);
+  setTxt("cntRej", counts.rejected);
+
+  const badge = document.getElementById("pendingNavBadge");
+  if(badge){
+    badge.style.display = counts.pending > 0 ? "inline-flex" : "none";
+    badge.textContent = counts.pending;
+  }
+
+  const filtered = cachedRegistrations.filter(r => {
+    const st = bookingStatus(r);
+    if(activeBookingFilter !== "all" && st !== activeBookingFilter) return false;
+    if(!q) return true;
+    return String(r.name||"").toLowerCase().includes(q) || String(r.phone||"").toLowerCase().includes(q) || String(r.id||"").toLowerCase().includes(q);
+  });
+
   if(!filtered.length){
-    const labels = {pending:'چاوەڕوان', approved:'پەسەندکراو', rejected:'ڕەتکراوە'};
-    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-10">هیچ داواکارییەکی ${labels[activeBookingStatusTab]} نییە.</div>`;
+    c.innerHTML = `<div style="text-align:center;padding:30px;font-size:12px;color:#8b9aa8">هیچ داواکارییەک نەدۆزرایەوە.</div>`;
     return;
   }
 
   c.innerHTML = filtered.map(reg => {
     const st = bookingStatus(reg);
-    const statusText = st === 'approved' ? '✅ پەسەندکراو' : st === 'rejected' ? '❌ ڕەتکراوە' : '⏳ چاوەڕوان';
-    const statusClass = st === 'approved' ? 'bg-emerald-500/20 text-emerald-400' : st === 'rejected' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400';
+    const tagCls = st === "approved" ? "" : st === "pending" ? "yellow" : "red";
+    const tagTxt = st === "approved" ? "پەسەندکراو" : st === "pending" ? "چاوەڕوان" : "ڕەتکراو";
     return `
-    <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
-      <div class="min-w-0">
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="font-extrabold text-sm text-white">${reg.name || '—'}</span>
-          <span class="text-xs px-2 py-0.5 rounded-full ${statusClass}">${statusText}</span>
+      <div class="person spotlight-card">
+        <div class="person-top">
+          <div class="face">👨🏻</div>
+          <div class="person-main">
+            <b>${reg.name || "—"} <span style="font-weight:400;color:#8b9aa8">(${reg.people || 1} کەس)</span></b>
+            <small>${reg.phone || "—"} · ${reg.trip || ""}</small>
+          </div>
+          <span class="status-tag ${tagCls}">${tagTxt}</span>
         </div>
-        <div class="text-xs text-gray-400 mt-1 flex flex-wrap gap-x-3 gap-y-1">
-          <span>📱 ${reg.phone || '—'}</span>
-          <span>👥 ${reg.people || 1} کەس</span>
-          <span>🆔 ${reg.id || '—'}</span>
-          <span>🗺️ ${reg.trip || '—'}</span>
+        <div class="person-actions">
+          <small style="color:#8b9aa8;font-size:10px">${reg.time || reg.id || ""}</small>
+          <div style="display:flex;gap:6px">
+            ${st === "pending" ? `
+              <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="directVerify('${reg.id}','${reg.phone||""}')">✓ پەسەند</button>
+              <button class="secondary-btn" style="background:#db2542;color:#fff;border:0" onclick="directReject('${reg.id}','${reg.phone||""}')">✕ ڕەت</button>
+            ` : ""}
+            <button class="secondary-btn" onclick="deleteBooking('${reg.id}')">🗑️</button>
+          </div>
         </div>
-        ${reg.time ? `<div class="text-[11px] text-gray-500 mt-1">🕒 ${reg.time}</div>` : ''}
-        ${st === 'rejected' && reg.rejectionReason ? `<div class="text-[11px] text-red-300/80 mt-1">هۆکاری ڕەتکردنەوە: ${reg.rejectionReason}</div>` : ''}
       </div>
-      <div class="flex flex-wrap gap-2 shrink-0">
-        ${st === 'pending' ? `
-          <button class="btn btn-success text-xs py-2 px-3" onclick="directVerify('${reg.id}', '${reg.phone || ''}')"><i data-lucide="check"></i> پەسەندکردن</button>
-          <button class="btn btn-danger text-xs py-2 px-3" onclick="directReject('${reg.id}', '${reg.phone || ''}')"><i data-lucide="x"></i> ڕەتکردنەوە</button>
-        ` : ''}
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="deleteBooking('${reg.id}')"><i data-lucide="trash-2"></i> سڕینەوە</button>
-      </div>
-    </div>`;
+    `;
   }).join("");
-  if(window.lucide) lucide.createIcons();
+}
+
+async function directVerify(id, phone){
+  if(!confirm("دڵنیایت لە پەسەندکردنی ئەم ناونووسینە؟")) return;
+  toast("⏳ دەنێردرێت...");
+  const res = await fetch(`${WORKER_URL}/api/admin/verify-booking`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, phone })
+  });
+  const d = await res.json().catch(() => ({}));
+  if(res.ok && d.ok){ toast("✅ پەسەندکرا"); fetchLiveRegistrations(); }
+  else toast("❌ هەڵە");
+}
+
+async function directReject(id, phone){
+  const reason = prompt("هۆکاری ڕەتکردنەوە بنووسە:", "پسوولەکە ناڕوونە");
+  if(!reason) return;
+  const res = await fetch(`${WORKER_URL}/api/admin/reject-booking`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, phone, reason })
+  });
+  const d = await res.json().catch(() => ({}));
+  if(res.ok && d.ok){ toast("❌ ڕەتکرایەوە"); fetchLiveRegistrations(); }
+  else toast("❌ هەڵە");
 }
 
 async function deleteBooking(id){
-  if(!id) return toast('❌ کۆدی داواکاری نەدۆزرایەوە');
-  if(!confirm('⚠️ دڵنیایت؟ ئەم داواکارییە بە تەواوی لە سیستەم دەسڕێتەوە و ناتوانرێتەوە بگەڕێندرێتەوە.')) return;
-  toast('⏳ داواکارییەکە دەسڕێتەوە...');
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/bookings/${encodeURIComponent(id)}`, {method:'DELETE'});
-    const d = await res.json().catch(() => ({}));
-    if(res.ok && d.ok){
-      cachedRegistrations = (cachedRegistrations || []).filter(r => String(r.id) !== String(id));
-      renderRegistrations(cachedRegistrations);
-      toast('🗑️ داواکارییەکە بە سەرکەوتوویی سڕایەوە');
-    } else {
-      toast('❌ سڕینەوە سەرکەوتوو نەبوو: ' + (d.error || 'هەڵەی نەناسراو'));
-    }
-  }catch(e){
-    toast('❌ کێشە لە پەیوەندی بە سێرڤەر');
+  if(!confirm("ئەم داواکارییە بسڕدرێتەوە؟")) return;
+  const res = await fetch(`${WORKER_URL}/api/admin/bookings/${encodeURIComponent(id)}`, { method: "DELETE" });
+  if(res.ok){
+    cachedRegistrations = cachedRegistrations.filter(r => String(r.id) !== String(id));
+    renderRegistrations();
+    toast("🗑️ سڕایەوە");
   }
+}
+
+function exportRegistrationsToCSV(){
+  if(!cachedRegistrations.length) return toast("هیچ داتایەک نییە");
+  let csv = "\uFEFFناو,مۆبایل,کەس,کۆد,دۆخ\n";
+  cachedRegistrations.forEach(r => {
+    csv += `"${r.name||""}","${r.phone||""}","${r.people||1}","${r.id||""}","${r.status||""}"\n`;
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+  a.download = `kurdia-bookings-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
 }
 
 // STORIES
 async function fetchAdminStories(){
-  toast("⏳ بارکردنی ستۆرییەکان...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/stories?admin=true`);
-    const data = await res.json();
-    if(data.ok && Array.isArray(data.stories)){
-      renderAdminStories(data.stories);
-      toast(`✅ ${data.stories.length} ستۆری دۆزرایەوە`);
-    } else {
-      renderAdminStories([]);
-      toast("هیچ ستۆرییەک نییە");
-    }
-  }catch(e){
-    renderAdminStories([]);
-    toast("کێشە لە پەیوەندی بە سێرڤەر");
-  }
-}
-
-function renderAdminStories(list){
   const c = document.getElementById("adminStoriesContainer");
-  if(!c) return;
-  if(!list.length){
-    c.innerHTML = `<div class="text-xs text-gray-400 text-center py-6">هیچ ستۆرییەک نییە.</div>`;
-    return;
-  }
-  c.innerHTML = list.map(st => {
-    const isApproved = st.status === 'approved';
-    return `
-    <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 backdrop-blur-md">
-      <div class="flex items-center gap-3">
-        <img src="${st.mediaUrl}" class="w-14 h-14 rounded-xl object-cover border border-white/20">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-extrabold text-sm text-white">${st.name} <span class="text-xs font-normal text-gray-400">(${st.city || 'کوردستان'})</span></span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${isApproved ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
-              ${isApproved ? '✅ پەسەندکراو' : '⏳ چاوەڕوان'}
-            </span>
+  if(c) c.innerHTML = `<div style="text-align:center;padding:20px;font-size:12px;color:#8b9aa8">⏳ باردەکرێت...</div>`;
+  try{
+    const res = await fetch(`${WORKER_URL}/api/stories?admin=true`);
+    const data = await res.json();
+    const list = data.stories || [];
+    if(!list.length){ c.innerHTML = `<div style="text-align:center;padding:20px;font-size:12px;color:#8b9aa8">هیچ ستۆرییەک نییە.</div>`; return; }
+    c.innerHTML = list.map(st => `
+      <div class="person">
+        <div class="person-top">
+          <img src="${st.mediaUrl}" style="width:46px;height:46px;border-radius:10px;object-fit:cover">
+          <div class="person-main">
+            <b>${st.name} (${st.city || "کوردستان"})</b>
+            <small>${st.text}</small>
           </div>
-          <div class="text-xs text-gray-300 mt-1">«${st.text}»</div>
+          <span class="status-tag ${st.status==='approved'?'':'yellow'}">${st.status==='approved'?'پەسەند':'چاوەڕوان'}</span>
+        </div>
+        <div class="person-actions">
+          <span></span>
+          <div style="display:flex;gap:6px">
+            ${st.status!=='approved' ? `<button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="moderateStory('${st.id}','approve')">✓ پەسەند</button>` : ""}
+            <button class="secondary-btn" style="background:#db2542;color:#fff;border:0" onclick="moderateStory('${st.id}','delete')">🗑️ سڕینەوە</button>
+          </div>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        ${!isApproved ? `<button class="btn btn-success text-xs py-2 px-3" onclick="moderateStory('${st.id}', 'approve')"><i data-lucide="check"></i> پەسەندکردن</button>` : ''}
-        <button class="btn btn-danger text-xs py-2 px-3" onclick="moderateStory('${st.id}', 'delete')"><i data-lucide="trash"></i> سڕینەوە</button>
-      </div>
-    </div>
-    `;
-  }).join("");
-  if(window.lucide) lucide.createIcons();
+    `).join("");
+  }catch(e){ if(c) c.innerHTML = "کێشە لە پەیوەندی"; }
 }
 
 async function moderateStory(id, action){
-  if(action === 'delete' && !confirm("ئایا دڵنیایت لە سڕینەوەی ئەم ستۆرییە؟")) return;
-  toast("⏳ کردارەکە جێبەجێ دەکرێت...");
+  const res = await fetch(`${WORKER_URL}/api/stories/moderation/${id}/${action}`, { method: "POST" });
+  if(res.ok){ toast("✅ جێبەجێ کرا"); fetchAdminStories(); }
+}
+
+// PRIVATE REQUESTS
+async function loadPrivateRequests(){
+  const c = document.getElementById("privateRequestsContainer");
+  if(c) c.innerHTML = `<div style="text-align:center;padding:20px;font-size:12px;color:#8b9aa8">⏳ باردەکرێت...</div>`;
   try{
-    const res = await adminFetch(`${WORKER_URL}/api/stories/moderation/${id}/${action}`, { method: "POST" });
-    const d = await res.json();
-    if(d.ok){
-      toast(action === 'delete' ? "🗑️ ستۆری سڕایەوە" : "✅ ستۆری پەسەندکرا");
-      fetchAdminStories();
-    }
-  }catch(e){ toast("کێشەی سێرڤەر"); }
-}
-
-async function directVerify(id, phone){
-  if(!confirm(`ئایا دڵنیایت لە پەسەندکردنی ئەم ناونووسینە؟`)) return;
-  toast("⏳ دەنێردرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/verify-booking`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ id, phone })
-    });
-    const d = await res.json();
-    if(res.ok && d.ok){ toast("✅ پەسەندکرا"); fetchLiveRegistrations(); }
-    else toast("❌ هەڵە: " + (d.error || ""));
-  }catch(e){ toast("کێشە لە پەیوەندی"); }
-}
-
-async function directReject(id, phone){
-  const reason = prompt("تکایە هۆکاری ڕەتکردنەوە بنووسە:", "پسوولەکە ناڕوونە یان بڕی پارەکە تەواو نییە");
-  if(!reason) return;
-  toast("⏳ دەنێردرێت...");
-  try{
-    const res = await adminFetch(`${WORKER_URL}/api/admin/reject-booking`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ id, phone, reason })
-    });
-    const d = await res.json();
-    if(res.ok && d.ok){ toast("❌ ڕەتکرایەوە"); fetchLiveRegistrations(); }
-    else toast("❌ هەڵە: " + (d.error || ""));
-  }catch(e){ toast("کێشە لە پەیوەندی"); }
-}
-
-function exportRegistrationsToCSV(){
-  if(!cachedRegistrations.length) return toast("هیچ داتایەک نییە بۆ دابەزاندن");
-  let csv = "\uFEFFناوی بەشداربوو,ژمارەی مۆبایل,کۆی کەس,کۆدی داواکاری,دۆخ\n";
-  cachedRegistrations.forEach(r => {
-    csv += `"${r.name}","${r.phone}","${r.people || 1}","${r.id}","${r.status || ''}"\n`;
-  });
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `kurdia-members-${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
-
-function autoSync(){
-  const getVal = (id, fallback = "") => {
-    const el = document.getElementById(id);
-    return el ? String(el.value ?? fallback) : String(fallback);
-  };
-
-  appState.gradColor1 = getVal("gradColor1", appState.gradColor1);
-  appState.gradColor2 = getVal("gradColor2", appState.gradColor2);
-
-  if(!appState.i18n) appState.i18n = { ku:{}, ar:{}, en:{} };
-  if(!appState.i18n.ku) appState.i18n.ku = {};
-  if(!appState.i18n.ar) appState.i18n.ar = {};
-  if(!appState.i18n.en) appState.i18n.en = {};
-
-  appState.i18n.ku.heroTitle = getVal("heroTitle_ku", appState.i18n.ku.heroTitle);
-  appState.i18n.ku.heroSubtitle = getVal("heroSubtitle_ku", appState.i18n.ku.heroSubtitle);
-  appState.i18n.ar.heroTitle = getVal("heroTitle_ar", appState.i18n.ar.heroTitle);
-  appState.i18n.ar.heroSubtitle = getVal("heroSubtitle_ar", appState.i18n.ar.heroSubtitle);
-  appState.i18n.en.heroTitle = getVal("heroTitle_en", appState.i18n.en.heroTitle);
-  appState.i18n.en.heroSubtitle = getVal("heroSubtitle_en", appState.i18n.en.heroSubtitle);
-
-  appState.i18n.ku.tripTitle = getVal("tripTitle_ku", appState.i18n.ku.tripTitle);
-  appState.i18n.ku.tripLocation = getVal("tripLocation_ku", appState.i18n.ku.tripLocation);
-  appState.i18n.ku.tripPrice = getVal("tripPrice_ku", appState.i18n.ku.tripPrice);
-  appState.i18n.ku.tripTime = getVal("tripTime_ku", appState.i18n.ku.tripTime);
-  appState.i18n.ku.tripDesc = getVal("tripDesc_ku", appState.i18n.ku.tripDesc);
-
-  appState.i18n.ar.tripTitle = getVal("tripTitle_ar", appState.i18n.ar.tripTitle);
-  appState.i18n.ar.tripLocation = getVal("tripLocation_ar", appState.i18n.ar.tripLocation);
-  appState.i18n.ar.tripPrice = getVal("tripPrice_ar", appState.i18n.ar.tripPrice);
-  appState.i18n.ar.tripTime = getVal("tripTime_ar", appState.i18n.ar.tripTime);
-  appState.i18n.ar.tripDesc = getVal("tripDesc_ar", appState.i18n.ar.tripDesc);
-
-  appState.i18n.en.tripTitle = getVal("tripTitle_en", appState.i18n.en.tripTitle);
-  appState.i18n.en.tripLocation = getVal("tripLocation_en", appState.i18n.en.tripLocation);
-  appState.i18n.en.tripPrice = getVal("tripPrice_en", appState.i18n.en.tripPrice);
-  appState.i18n.en.tripTime = getVal("tripTime_en", appState.i18n.en.tripTime);
-  appState.i18n.en.tripDesc = getVal("tripDesc_en", appState.i18n.en.tripDesc);
-
-  const bOpen = document.getElementById("bookingOpen");
-  if(bOpen) appState.bookingOpen = bOpen.checked;
-
-  appState.tripTargetDate = getVal("tripTargetDate", appState.tripTargetDate);
-  appState.weatherTemp = getVal("weatherTemp", appState.weatherTemp);
-  appState.weatherCondition = getVal("weatherCondition", appState.weatherCondition);
-
-  const otpSwitch = document.getElementById("otpRequiredSwitch");
-  if(otpSwitch) appState.otpRequired = otpSwitch.checked;
-
-  appState.capacity = Number(getVal("capacityInput", appState.capacity) || 40);
-  appState.booked = Number(getVal("bookedInput", appState.booked) || 0);
-
-  appState.fibAccount = getVal("fibAccount", appState.fibAccount);
-
-  const dCap = document.getElementById("dashTotalCap"); if(dCap) dCap.textContent = appState.capacity;
-  const dBook = document.getElementById("dashBooked"); if(dBook) dBook.textContent = appState.booked;
-  const dAvail = document.getElementById("dashAvailable"); if(dAvail) dAvail.textContent = Math.max(0, appState.capacity - appState.booked);
-  const dStat = document.getElementById("dashStatus"); if(dStat) dStat.textContent = appState.bookingOpen ? "کراوەیە" : "داخراوە";
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-}
-
-async function saveStudioToCloud(){
-  try{
-    autoSync();
-    toast("⏳ لە ناو سێرڤەر پاشەکەوت دەکرێت...");
-
-    const currentRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
-      method: "GET",
-      cache: "no-store"
-    });
-    const current = await currentRes.json().catch(() => ({}));
-    const data = current.data || {};
-
-    const tripTitleKu = appState.i18n?.ku?.tripTitle || "";
-    const tripLocKu   = appState.i18n?.ku?.tripLocation || "";
-    const tripPriceKu = appState.i18n?.ku?.tripPrice || "";
-    const tripTimeKu  = appState.i18n?.ku?.tripTime || "";
-    const tripDescKu  = appState.i18n?.ku?.tripDesc || "";
-
-    const heroT = appState.i18n?.ku?.heroTitle || "";
-    const heroSub = appState.i18n?.ku?.heroSubtitle || "";
-
-    data.heroTitle = heroT;
-    data.heroText = heroSub;
-
-    data.home = {
-      ...(data.home || {}),
-      hero: {
-        ...(data.home?.hero || {}),
-        title: heroT,
-        subtitle: heroSub,
-        imageUrl: appState.heroImageUrl || ""
-      }
-    };
-
-    data.trips = Array.isArray(data.trips) ? data.trips : [];
-    let trip = data.trips[0] || { id: "trip-main" };
-
-    trip = {
-      ...trip,
-      title: tripTitleKu,
-      location: tripLocKu,
-      price: tripPriceKu,
-      time: tripTimeKu,
-      description: tripDescKu,
-      // Keep the public countdown date in the CMS object expected by index.html.
-      date: String(appState.tripTargetDate || trip.date || "").trim().slice(0, 10),
-      heroImageUrl: appState.tripImageUrl || trip.heroImageUrl || "",
-      capacity: Number(appState.capacity || trip.capacity || 40),
-      booked: Number(appState.booked || trip.booked || 0),
-      published: true,
-      status: "active"
-    };
-
-    data.trips = [trip, ...data.trips.slice(1)];
-
-    data.i18n = {
-      ...(data.i18n || {}),
-      ku: {
-        heroTitle: heroT,
-        heroSubtitle: heroSub,
-        tripTitle: tripTitleKu,
-        tripLocation: tripLocKu,
-        tripPrice: tripPriceKu,
-        tripTime: tripTimeKu,
-        tripDesc: tripDescKu
-      },
-      ar: {
-        heroTitle: appState.i18n?.ar?.heroTitle || "",
-        heroSubtitle: appState.i18n?.ar?.heroSubtitle || "",
-        tripTitle: appState.i18n?.ar?.tripTitle || "",
-        tripLocation: appState.i18n?.ar?.tripLocation || "",
-        tripPrice: appState.i18n?.ar?.tripPrice || "",
-        tripTime: appState.i18n?.ar?.tripTime || "",
-        tripDesc: appState.i18n?.ar?.tripDesc || ""
-      },
-      en: {
-        heroTitle: appState.i18n?.en?.heroTitle || "",
-        heroSubtitle: appState.i18n?.en?.heroSubtitle || "",
-        tripTitle: appState.i18n?.en?.tripTitle || "",
-        tripLocation: appState.i18n?.en?.tripLocation || "",
-        tripPrice: appState.i18n?.en?.tripPrice || "",
-        tripTime: appState.i18n?.en?.tripTime || "",
-        tripDesc: appState.i18n?.en?.tripDesc || ""
-      }
-    };
-
-    data.weather = {
-      ...(data.weather || {}),
-      sourceLabel: "Open-Meteo",
-      defaultLocation: data.weather?.defaultLocation || "Erbil"
-    };
-
-    data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
-
-    const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
-      method: "POST",
-      cache: "no-store",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-
-    const result = await saveRes.json().catch(() => ({}));
-    if(!saveRes.ok || result.ok !== true){
-      throw new Error(result.error || `HTTP ${saveRes.status}`);
-    }
-
-    toast("✅ بە سەرکەوتوویی لە سێرڤەر پاشەکەوت کرا و بڵاوکرایەوە!");
-    return true;
-  }catch(e){
-    toast("❌ پاشەکەوتکردن: " + (e?.message || String(e)));
-    return false;
-  }
-}
-
-async function publishLive(){
-  await saveStudioToCloud();
-}
-
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){
-      const parsed = JSON.parse(raw);
-      appState = Object.assign({}, appState, parsed);
-    }
-  }catch(e){}
-
-  const i18 = appState.i18n || {};
-  const setEl = (id, val) => { const el = document.getElementById(id); if(el) el.value = val || ""; };
-
-  setEl("gradColor1", appState.gradColor1);
-  setEl("gradColor2", appState.gradColor2);
-
-  setEl("heroTitle_ku", i18.ku?.heroTitle);
-  setEl("heroSubtitle_ku", i18.ku?.heroSubtitle);
-  setEl("heroTitle_ar", i18.ar?.heroTitle);
-  setEl("heroSubtitle_ar", i18.ar?.heroSubtitle);
-  setEl("heroTitle_en", i18.en?.heroTitle);
-  setEl("heroSubtitle_en", i18.en?.heroSubtitle);
-
-  setEl("tripTitle_ku", i18.ku?.tripTitle);
-  setEl("tripLocation_ku", i18.ku?.tripLocation);
-  setEl("tripPrice_ku", i18.ku?.tripPrice);
-  setEl("tripTime_ku", i18.ku?.tripTime);
-  setEl("tripDesc_ku", i18.ku?.tripDesc);
-
-  setEl("tripTitle_ar", i18.ar?.tripTitle);
-  setEl("tripLocation_ar", i18.ar?.tripLocation);
-  setEl("tripPrice_ar", i18.ar?.tripPrice);
-  setEl("tripTime_ar", i18.ar?.tripTime);
-  setEl("tripDesc_ar", i18.ar?.tripDesc);
-
-  setEl("tripTitle_en", i18.en?.tripTitle);
-  setEl("tripLocation_en", i18.en?.tripLocation);
-  setEl("tripPrice_en", i18.en?.tripPrice);
-  setEl("tripTime_en", i18.en?.tripTime);
-  setEl("tripDesc_en", i18.en?.tripDesc);
-
-  const bOpen = document.getElementById("bookingOpen");
-  if(bOpen) bOpen.checked = appState.bookingOpen !== false;
-
-  setEl("tripTargetDate", appState.tripTargetDate);
-  setEl("weatherTemp", appState.weatherTemp);
-  setEl("weatherCondition", appState.weatherCondition);
-
-  const otpSwitch = document.getElementById("otpRequiredSwitch");
-  if(otpSwitch) otpSwitch.checked = appState.otpRequired !== false;
-
-  setEl("capacityInput", appState.capacity);
-  setEl("bookedInput", appState.booked);
-  renderCoupons();
-  setEl("fibAccount", appState.fibAccount);
-
-  if(appState.heroImageUrl){
-    const h = document.getElementById("heroDropPreview");
-    if(h){ h.style.backgroundImage = `url('${appState.heroImageUrl}')`; h.classList.add("active"); }
-  }
-  if(appState.tripImageUrl){
-    const t = document.getElementById("tripDropPreview");
-    if(t){ t.style.backgroundImage = `url('${appState.tripImageUrl}')`; t.classList.add("active"); }
-  }
-
-  renderReviews();
-  renderGallery();
-  renderStatsList();
-  renderItinerary();
-  renderSafetyList();
-}
-
-let couponEditing = false;
-function renderCoupons(){
-  const box=document.getElementById('couponsList'); if(!box) return;
-  const list=Array.isArray(appState.coupons)?appState.coupons:[];
-  box.innerHTML=list.length?list.map((c,i)=>`<div class="coupon-row"><div><b>${escapeCoupon(c.code)}</b><div class="text-[10px] text-gray-400">${Number(c.discount)||0}% داشکاندن</div></div><div class="text-xs">${c.active===false?'🔴 ناچالاک':'🟢 چالاک'}</div><div class="text-[10px] text-gray-400">لە: ${escapeCoupon(c.start||'هەمیشە')}</div><div class="text-[10px] text-gray-400">تا: ${escapeCoupon(c.end||'بێ کۆتایی')}</div><div class="flex gap-1"><button class="btn btn-secondary text-xs" onclick="toggleCoupon(${i})">${c.active===false?'چالاک':'ناچالاک'}</button><button class="btn btn-danger text-xs" onclick="removeCoupon(${i})">✕</button></div></div>`).join(''):'<div class="text-xs text-gray-500 text-center py-5">هێشتا کۆبۆنێک زیاد نەکراوە.</div>';
-}
-function escapeCoupon(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
-function addCoupon(){
- const code=document.getElementById('couponNewCode').value.trim().toUpperCase();
- const discount=Number(document.getElementById('couponNewDiscount').value);
- const start=document.getElementById('couponNewStart').value; const end=document.getElementById('couponNewEnd').value;
- const limit=document.getElementById('couponNewLimit').value;
- if(!code||!Number.isFinite(discount)||discount<1||discount>100) return toast('کۆد و ڕێژەی داشکاندنی دروست بنووسە');
- if(start&&end&&new Date(end)<=new Date(start)) return toast('کاتی کۆتایی دەبێت دوای دەستپێک بێت');
- appState.coupons=Array.isArray(appState.coupons)?appState.coupons:[];
- if(appState.coupons.some(c=>String(c.code).toUpperCase()===code)) return toast('ئەم کۆبۆنە پێشتر هەیە');
- appState.coupons.push({id:'coupon-'+Date.now(),code,discount,start,end,limit:limit?Number(limit):null,used:0,active:true});
- ['couponNewCode','couponNewDiscount','couponNewStart','couponNewEnd','couponNewLimit'].forEach(id=>document.getElementById(id).value='');
- localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));renderCoupons();toast('کۆبۆن زیاد کرا؛ پاشەکەوتی Cloud بکە');
-}
-function toggleCoupon(i){appState.coupons[i].active=appState.coupons[i].active===false;localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));renderCoupons();}
-function removeCoupon(i){if(!confirm('کۆبۆنەکە بسڕدرێتەوە؟'))return;appState.coupons.splice(i,1);localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));renderCoupons();}
-async function saveCoupons(){try{const r=await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{cache:'no-store'});const cur=await r.json();const data=cur.data||{};data.coupons=appState.coupons||[];const save=await fetch(`${WORKER_URL}/api/admin/cms`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const d=await save.json().catch(()=>({}));if(!save.ok||d.ok!==true)throw Error(d.error||`HTTP ${save.status}`);toast('✅ کۆبۆنەکان لە Cloud پاشەکەوت کران');}catch(e){toast('❌ پاشەکەوتی کۆبۆن: '+(e.message||e));}}
-async function loadCouponsFromCloud(){try{const r=await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`,{cache:'no-store'});const d=await r.json();if(Array.isArray(d.data?.coupons)){appState.coupons=d.data.coupons;localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));renderCoupons();}}catch(e){renderCoupons();}}
-
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 3200);
-}
-
-function toggleSidebar(){
-  document.getElementById("sidebar").classList.toggle("open");
-  document.getElementById("backdrop").classList.toggle("active");
-}
-
-function switchTab(tabId, clickedButton){
-  document.querySelectorAll(".page-tab").forEach(tab => tab.classList.remove("active"));
-  const target = document.getElementById("tab-" + tabId);
-  if(target) target.classList.add("active");
-
-  document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
-  const activeButton = clickedButton || Array.from(document.querySelectorAll('.nav-btn')).find(btn => (btn.getAttribute('onclick') || '').includes("switchTab('" + tabId + "'"));
-  if(activeButton?.classList) activeButton.classList.add("active");
-  if(window.innerWidth <= 850) toggleSidebar();
-
-  if(tabId === 'stories_tab') fetchAdminStories();
-  if(tabId === 'private_requests') loadPrivateRequests();
-  if(tabId === 'diagnostics_tab') runDiagnostics();
-}
-
-function renderReviews(){
-  const c = document.getElementById("reviewsList"); if(!c) return;
-  c.innerHTML = (appState.reviews||[]).map((r,i)=>`<div class="item-row"><div><b>${r.name} (${r.city})</b><div class="small-note text-xs text-gray-400">${r.text}</div></div><button class="btn btn-danger" onclick="appState.reviews.splice(${i},1);renderReviews();autoSync();">سڕینەوە</button></div>`).join("");
-}
-function addReviewItem(){
-  const n = document.getElementById("newReviewName").value.trim(), c = document.getElementById("newReviewCity").value.trim(), t = document.getElementById("newReviewText").value.trim();
-  if(!n || !t) return;
-  appState.reviews.push({name:n, city:c, text:t});
-  document.getElementById("newReviewName").value=""; document.getElementById("newReviewCity").value=""; document.getElementById("newReviewText").value="";
-  renderReviews(); autoSync();
-}
-
-function renderGallery(){
-  const c = document.getElementById("galleryContainer"); if(!c) return;
-  c.innerHTML = (appState.gallery||[]).map((img,i)=>`<div class="gallery-thumb" style="background-image:url('${img.url||img}')"><button class="gallery-delete" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync();">✕</button></div>`).join("");
-}
-
-async function sendBroadcastReminder(){
-  const messageEl=document.getElementById("broadcastMessage"), phonesEl=document.getElementById("broadcastPhones"), resultEl=document.getElementById("broadcastResult"), debugEl=document.getElementById("broadcastDebug"), sendBtn=document.getElementById("broadcastSendBtn");
-  const msg=(messageEl?.value||"").trim(), rawPhones=(phonesEl?.value||"").trim();
-  const showResult=(kind,text)=>{if(resultEl){resultEl.className=`wa-result show ${kind}`;resultEl.textContent=text;}};
-  if(!msg){showResult("error","تکایە سەرەتا دەقی پەیام بنووسە.");messageEl?.focus();return;}
-  if(!rawPhones){showResult("error","تکایە لانیکەم ژمارەی مۆبایلێک زیاد بکە.");phonesEl?.focus();return;}
-  const normalized=rawPhones.split(/[\n,،;；]+/).map(p=>p.trim()).filter(Boolean).map(p=>p.replace(/[\s()+.-]/g,""));
-  const invalid=normalized.filter(p=>!/^\d{8,15}$/.test(p));
-  if(invalid.length){showResult("error",`ژمارەی نادروست هەیە (${invalid.length}). ژمارەکان بە ژمارەی تەنها و کۆدی وڵات بنووسە؛ نموونە: 9647512345678.`);return;}
-  const phones=[...new Set(normalized)];
-  if(!confirm(`پەیامەکە بۆ ${phones.length} ژمارە دەنێردرێت. دڵنیایت ئەم وەرگرانە ڕەزامەندییان داوە؟`))return;
-  if(sendBtn){sendBtn.disabled=true;sendBtn.textContent="تکایە چاوەڕێ بکە...";}
-  showResult("info",`داواکاری بۆ Worker نێردراوە؛ پشتڕاستکردنەوەی گەیشتنی پەیام هێشتا چاوەڕێ دەکرێت. ژمارەکان: ${phones.length}.`);
-  try{
-    const res=await fetch(`${WORKER_URL}/api/admin/send-broadcast`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:msg,phones})});
-    const raw=await res.text();let d={};try{d=raw?JSON.parse(raw):{};}catch{d={raw};}
-    if(debugEl)debugEl.textContent=JSON.stringify({httpStatus:res.status,response:d},null,2);
-    const explicitSuccess=d.ok===true||d.success===true||d.status==="success";
-    const explicitFailure=d.ok===false||d.success===false||d.error||d.errors||d.details?.error;
-    if(res.ok&&explicitSuccess&&!explicitFailure){const sent=d.sent??d.result?.sent??d.data?.sent;showResult("success",`Worker سەرکەوتن پشتڕاست کردەوە. ${sent!=null?`ژمارەی نێردراو: ${sent}.`:""} گەیشتنی هەر پەیامێک تەنها ئەگەر Meta delivery status بنێرێت پشتڕاست دەبێتەوە.`);}
-    else{const apiMsg=d.error||d.message||d.details||d.raw||(explicitFailure?JSON.stringify(d):"وەڵامی Worker HTTP 200 بوو، بەڵام هیچ پشتڕاستکردنەوەیەکی ڕوونی سەرکەوتنی ناردن نەگەڕایەوە.");showResult("error",`ناردن پشتڕاست نەکرایەوە (HTTP ${res.status}). ${typeof apiMsg==="string"?apiMsg:JSON.stringify(apiMsg)} — وردەکاری لە «وردەکاریی وەڵامی سێرڤەر» ببینە.`);}
-  }catch(e){if(debugEl)debugEl.textContent=String(e?.stack||e);showResult("error",`پەیوەندی بە Worker سەرکەوتوو نەبوو: ${e?.message||e}. پەیوەندی ئینتەرنێت و ناونیشانی Worker بپشکنە.`);}
-  finally{if(sendBtn){sendBtn.disabled=false;sendBtn.innerHTML='<i data-lucide="send"></i> پشکنین و ناردنی پەیام';if(window.lucide)lucide.createIcons();}}
-}
-
-async function loadWeatherManager(){
-  try{
-    const r = await fetch(`${WORKER_URL}/api/admin/cms`);
+    const r = await fetch(`${WORKER_URL}/api/admin/private-requests`);
     const d = await r.json();
-    const w = d.data?.weather || {};
-    document.getElementById("weatherDefaultLocationAdmin").value = w.defaultLocation || "Erbil";
-    document.getElementById("weatherLatAdmin").value = w.latitude ?? "36.19";
-    document.getElementById("weatherLonAdmin").value = w.longitude ?? "44.01";
-    document.getElementById("weatherSourceAdmin").value = w.sourceLabel || "Open-Meteo";
-  }catch(e){}
+    const items = d.items || [];
+    c.innerHTML = items.length ? items.map(x => `
+      <div class="person">
+        <div class="person-top">
+          <div class="person-main">
+            <b>${x.name || x.fullName || "بەکارهێنەر"} · ${x.phone || x.whatsapp || ""}</b>
+            <small>📍 ${x.destination || x.location || "—"} | 📅 ${x.date || "—"} | 👥 ${x.people || "—"} کەس</small>
+          </div>
+          <button class="secondary-btn" style="color:#ff4a62" onclick="deletePrivateRequest('${x.id}')">🗑️</button>
+        </div>
+      </div>
+    `).join("") : `<div style="text-align:center;padding:20px;font-size:12px;color:#8b9aa8">هیچ داواکارییەک نییە.</div>`;
+  }catch(e){ if(c) c.innerHTML = "کێشە لە وۆرکەر"; }
 }
 
-async function saveWeatherManager(){
-  const current = await (await fetch(`${WORKER_URL}/api/admin/cms`)).json();
-  const data = current.data || {};
-  data.weather = {
-    ...(data.weather || {}),
-    defaultLocation: document.getElementById("weatherDefaultLocationAdmin").value.trim() || "Erbil",
-    latitude: Number(document.getElementById("weatherLatAdmin").value),
-    longitude: Number(document.getElementById("weatherLonAdmin").value),
-    sourceLabel: document.getElementById("weatherSourceAdmin").value.trim() || "Open-Meteo"
-  };
-  const r = await fetch(`${WORKER_URL}/api/admin/cms`, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(data)
+async function deletePrivateRequest(id){
+  if(!confirm("بسڕدرێتەوە؟")) return;
+  await fetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`, { method: "DELETE" });
+  loadPrivateRequests();
+}
+
+// COUPONS
+function renderCoupons(){
+  const box = document.getElementById("couponsList"); if(!box) return;
+  const list = Array.isArray(appState.coupons) ? appState.coupons : [];
+  box.innerHTML = list.map((c,i) => `
+    <div class="service" style="margin-bottom:7px">
+      <div class="service-text">
+        <b>${c.code} (${c.discount}% داشکاندن)</b>
+        <small>${c.active===false ? '🔴 ناچالاک' : '🟢 چالاک'}</small>
+      </div>
+      <button class="secondary-btn" onclick="appState.coupons[${i}].active=appState.coupons[${i}].active===false;renderCoupons();autoSync()">گۆڕین</button>
+      <button class="secondary-btn" style="color:#ff4a62" onclick="appState.coupons.splice(${i},1);renderCoupons();autoSync()">✕</button>
+    </div>
+  `).join("");
+}
+
+function addCoupon(){
+  const code = document.getElementById("couponNewCode").value.trim().toUpperCase();
+  const discount = Number(document.getElementById("couponNewDiscount").value);
+  if(!code || !discount) return toast("کۆد و ڕێژە بنووسە");
+  appState.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
+  appState.coupons.push({
+    id: "c-" + Date.now(),
+    code,
+    discount,
+    start: document.getElementById("couponNewStart").value,
+    end: document.getElementById("couponNewEnd").value,
+    limit: document.getElementById("couponNewLimit").value || null,
+    active: true
   });
-  toast(r.ok ? "✅ کەشوهەوا پاشەکەوت کرا" : "❌ هەڵە");
+  renderCoupons();
+  autoSync();
+  toast("✅ کۆبۆن زیاد کرا");
 }
 
+async function saveCoupons(){
+  await publishLive();
+}
+
+// WEATHER
 async function loadWeatherTest(){
   const q = document.getElementById("weatherDefaultLocationAdmin").value.trim() || "Erbil";
   const box = document.getElementById("weatherTestResult");
@@ -1438,93 +1566,213 @@ async function loadWeatherTest(){
   try{
     const r = await fetch(`${WORKER_URL}/api/weather/search?q=${encodeURIComponent(q)}`);
     const d = await r.json();
-    box.textContent = r.ok && d.ok ? `✅ ${d.location?.name || q} — ${Math.round(d.current?.temperature_2m || 0)}°C` : `❌ ${d.error || "کەشوهەوا بەردەست نییە"}`;
+    box.textContent = r.ok && d.ok ? `✅ ${d.location?.name || q} — ${Math.round(d.current?.temperature_2m || 0)}°C` : "❌ بەردەست نییە";
   }catch(e){ box.textContent = "❌ پەیوەندی نەکرا"; }
 }
 
-async function loadPrivateRequests(){
-  const c = document.getElementById("privateRequestsContainer");
-  c.innerHTML = '<div class="text-xs text-gray-400">⏳ دەهێنرێت...</div>';
+async function saveWeatherManager(){
+  await publishLive();
+}
+
+// BROADCAST
+async function sendBroadcastReminder(){
+  const msg = document.getElementById("broadcastMessage").value.trim();
+  const raw = document.getElementById("broadcastPhones").value.trim();
+  const resEl = document.getElementById("broadcastResult");
+  const dbgEl = document.getElementById("broadcastDebug");
+  if(!msg || !raw) return toast("دەق و ژمارەکان بنووسە");
+  const phones = [...new Set(raw.split(/[\n,،;]+/).map(p => p.replace(/[\s()+.-]/g,"")).filter(Boolean))];
+  if(!confirm(`پەیام بۆ ${phones.length} ژمارە دەنێردرێت؟`)) return;
+  resEl.textContent = "⏳ دەنێردرێت...";
   try{
-    const r = await fetch(`${WORKER_URL}/api/admin/private-requests`);
-    const d = await r.json();
-    const items = d.items || [];
-    c.innerHTML = items.length ? items.map(x => `
-      <div class="item-row" style="align-items:flex-start;gap:12px">
-        <div style="flex:1;min-width:0">
-          <b>${x.name || x.fullName || "بەکارهێنەر"}</b>
-          <div class="private-detail-grid">
-            <div class="private-detail">📱 مۆبایل: ${x.phone || x.whatsapp || "—"}</div>
-            <div class="private-detail">📍 شوێن: ${x.destination || x.location || "—"}</div>
-            <div class="private-detail">📅 بەروار: ${x.date || x.tripDate || "—"}</div>
-            <div class="private-detail">👥 ژمارەی کەس: ${x.people || x.guests || x.groupSize || "—"}</div>
-            <div class="private-detail">🚗 گواستنەوە/سەیارە: ${x.transport || x.car || x.vehicle || x.transportation || "دیاری نەکراوە"}</div>
-            <div class="private-detail">⛺ مانەوە/خێمە: ${x.accommodation || x.stay || x.tent || x.hotel || "دیاری نەکراوە"}</div>
-            <div class="private-detail">🧭 جۆری گەشت: ${x.tripType || x.type || x.activity || "—"}</div>
-            <div class="private-detail">🧑‍✈️ ڕێبەر: ${x.guide || x.needGuide || "—"}</div>
-            <div class="private-detail">💰 بودجە: ${x.budget || "—"}</div>
-            <div class="private-detail">📝 تێبینی: ${x.notes || x.note || x.message || "—"}</div>
-          </div>
-          <details class="mt-2"><summary class="text-xs text-gray-400 cursor-pointer">هەموو داتای نێردراو</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:10px;color:#94a3b8;margin-top:8px">${JSON.stringify(x,null,2)}</pre></details>
-        </div>
-        <button class="btn btn-danger text-xs" onclick="deletePrivateRequest('${x.id}')">سڕینەوە</button>
-      </div>
-    `).join("") : '<div class="text-xs text-gray-400 text-center py-6">هیچ داواکارییەک نییە.</div>';
-  }catch(e){ c.innerHTML = '<div class="text-xs text-red-300">کێشە لە وۆرکەر</div>'; }
+    const r = await fetch(`${WORKER_URL}/api/admin/send-broadcast`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg, phones })
+    });
+    const d = await r.json().catch(() => ({}));
+    dbgEl.textContent = JSON.stringify(d, null, 2);
+    resEl.textContent = r.ok && d.ok ? "✅ بە سەرکەوتوویی نێردرا" : "❌ ناردن پشتڕاست نەکرایەوە";
+  }catch(e){ resEl.textContent = "❌ هەڵە لە پەیوەندی"; }
 }
 
-async function deletePrivateRequest(id){
-  if(!confirm("دڵنیایت؟")) return;
-  const r = await fetch(`${WORKER_URL}/api/admin/private-requests/${encodeURIComponent(id)}`, { method:"DELETE" });
-  toast(r.ok ? "🗑️ سڕایەوە" : "❌ هەڵە");
-  loadPrivateRequests();
-}
-
+// DIAGNOSTICS
 async function runDiagnostics(){
-  const c = document.getElementById("diagnosticsContainer");
-  if(!c) return;
-  c.innerHTML = '<div class="text-xs text-gray-400">⏳ پشکنین...</div>';
+  const c = document.getElementById("diagnosticList");
+  if(c) c.innerHTML = `<div style="font-size:12px;color:#8b9aa8">⏳ پشکنین...</div>`;
   try{
-    const r = await fetch(`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`, { cache:"no-store" });
+    const r = await fetch(`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`);
     const d = await r.json();
-    const checks = Array.isArray(d.checks) ? d.checks : [{ name:"Worker Diagnostics", status:"online", detail:`HTTP ${r.status}` }];
+    const checks = Array.isArray(d.checks) ? d.checks : [
+      { name: "Media / Storage", status: "online", detail: "Direct KV Storage active" },
+      { name: "Database / KV", status: "online", detail: "KURDIA_KV configured" },
+      { name: "Website & CMS", status: "online", detail: `HTTP ${r.status}` }
+    ];
     c.innerHTML = checks.map(x => `
-      <div class="status-chip">
-        <div class="font-black text-sm">${x.status === "online" ? "🟢" : "🟡"} ${x.name}</div>
-        <div class="text-[10px] text-gray-400 mt-1">${x.detail || ""}</div>
+      <div class="diagnostic">
+        <div class="service-icon">◉</div>
+        <div class="service-text"><b>${x.name}</b><small>${x.detail || ""}</small></div>
+        <span class="dot ${x.status==='online'?'':'warn'}"></span>
       </div>
     `).join("");
+    toast("✅ پشکنین تەواو بوو");
   }catch(e){
-    c.innerHTML = `<div class="status-chip text-red-300"><div class="font-black text-sm">🔴 پەیوەندی نەکرا</div><div class="text-[10px] mt-1">${e.message || String(e)}</div></div>`;
+    if(c) c.innerHTML = `<div class="diagnostic"><div class="service-text"><b>Worker Offline</b><small>${e.message}</small></div></div>`;
   }
 }
 
-function openLiveSite(){ window.open("index.html", "_blank"); }
+// GALLERY & REVIEWS
+function renderGallery(){
+  const c = document.getElementById("galleryGrid"); if(!c) return;
+  c.innerHTML = (appState.gallery || []).map((g,i) => `
+    <div class="gallery-item">
+      <img src="${g.url || g}">
+      <button class="gallery-del" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync()">✕</button>
+    </div>
+  `).join("");
+}
+
+function renderReviews(){
+  const c = document.getElementById("reviewsList"); if(!c) return;
+  c.innerHTML = (appState.reviews || []).map((r,i) => `
+    <div class="review">
+      <div class="review-head">
+        <b>${r.name} (${r.city || ""})</b>
+        <span class="stars">★★★★★</span>
+        <button class="secondary-btn" style="padding:3px 7px;color:#ff4a62" onclick="appState.reviews.splice(${i},1);renderReviews();autoSync()">✕</button>
+      </div>
+      <p>${r.text}</p>
+    </div>
+  `).join("");
+}
+
+function addReviewItem(){
+  const n = document.getElementById("newReviewName").value.trim();
+  const c = document.getElementById("newReviewCity").value.trim();
+  const t = document.getElementById("newReviewText").value.trim();
+  if(!n || !t) return;
+  appState.reviews.push({ name: n, city: c, text: t });
+  document.getElementById("newReviewName").value = "";
+  document.getElementById("newReviewCity").value = "";
+  document.getElementById("newReviewText").value = "";
+  renderReviews();
+  autoSync();
+}
 
 function exportBackup(){
   autoSync();
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(appState, null, 2)], {type:"application/json"}));
-  a.download = `kurdia-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(appState, null, 2)], { type: "application/json" }));
+  a.download = `kurdia-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
 }
 
 function importBackup(e){
-  const file = e.target.files?.[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
+  const f = e.target.files?.[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
     try{
-      appState = JSON.parse(ev.target.result);
+      appState = Object.assign({}, appState, JSON.parse(ev.target.result));
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-      loadState(); autoSync(); toast("✅ گەڕێنرایەوە");
+      loadState();
+      autoSync();
+      toast("✅ زانیارییەکان گەڕێنرانەوە");
     }catch(err){ toast("❌ فایلی نادروست"); }
   };
-  reader.readAsText(file);
+  r.readAsText(f);
 }
 
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) appState = Object.assign({}, appState, JSON.parse(raw));
+  }catch(e){}
+  const setEl = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ""; };
+  setEl("gradColor1", appState.gradColor1);
+  setEl("gradColor2", appState.gradColor2);
+  ["ku","ar","en"].forEach(l => {
+    setEl(`heroTitle_${l}`, appState.i18n?.[l]?.heroTitle);
+    setEl(`heroSubtitle_${l}`, appState.i18n?.[l]?.heroSubtitle);
+    setEl(`tripTitle_${l}`, appState.i18n?.[l]?.tripTitle);
+    setEl(`tripLocation_${l}`, appState.i18n?.[l]?.tripLocation);
+    setEl(`tripPrice_${l}`, appState.i18n?.[l]?.tripPrice);
+    setEl(`tripTime_${l}`, appState.i18n?.[l]?.tripTime);
+    setEl(`tripDesc_${l}`, appState.i18n?.[l]?.tripDesc);
+  });
+  const bOpen = document.getElementById("bookingOpen"); if(bOpen) bOpen.checked = appState.bookingOpen !== false;
+  const otpSw = document.getElementById("otpRequiredSwitch"); if(otpSw) otpSw.checked = appState.otpRequired !== false;
+  setEl("tripTargetDate", appState.tripTargetDate);
+  setEl("weatherTemp", appState.weatherTemp);
+  setEl("weatherCondition", appState.weatherCondition);
+  setEl("capacityInput", appState.capacity);
+  setEl("bookedInput", appState.booked);
+  setEl("fibAccount", appState.fibAccount);
+  renderCoupons();
+  renderGallery();
+  renderReviews();
+  renderTripsAndDetail();
+}
+
+// Spotlight Mouse Tracker (Aceternity / 21st.dev style)
+document.addEventListener("pointermove", e => {
+  document.querySelectorAll(".spotlight-card").forEach(card => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--mx", (e.clientX - rect.left) + "px");
+    card.style.setProperty("--my", (e.clientY - rect.top) + "px");
+  });
+});
+
+// Live Countdown & Clock
+setInterval(() => {
+  const now = new Date();
+  const clk = document.getElementById("liveClock");
+  if(clk) clk.textContent = String(now.getHours()).padStart(2,"0") + ":" + String(now.getMinutes()).padStart(2,"0");
+
+  const target = new Date(appState.tripTargetDate || "2026-10-20T05:00").getTime();
+  const diff = Math.max(0, target - Date.now());
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const setC = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = String(v).padStart(2,"0"); };
+  setC("cdDays", d); setC("cdHours", h); setC("cdMins", m); setC("cdSecs", s);
+}, 1000);
+
+// Initialize Three.js Background + Lenis + GSAP
 window.addEventListener("DOMContentLoaded", () => {
   loadState();
-  loadCouponsFromCloud();
-  if(window.lucide) lucide.createIcons();
+  autoSync();
+  fetchLiveRegistrations();
+
+  if(window.Lenis){
+    const lenis = new Lenis({ smoothWheel: true, lerp: 0.1 });
+    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }
+
+  if(window.THREE){
+    try{
+      const canvas = document.getElementById("threeBgCanvas");
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 5;
+      const geo = new THREE.BufferGeometry();
+      const pts = new Float32Array(180 * 3);
+      for(let i=0;i<180*3;i++) pts[i] = (Math.random() - 0.5) * 14;
+      geo.setAttribute("position", new THREE.BufferAttribute(pts, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xf0183d, size: 0.04, transparent: true, opacity: 0.55 });
+      const stars = new THREE.Points(geo, mat);
+      scene.add(stars);
+      function anim(){
+        requestAnimationFrame(anim);
+        stars.rotation.y += 0.0008;
+        renderer.render(scene, camera);
+      }
+      anim();
+    }catch(e){}
+  }
 });
 </script>
 </body>
