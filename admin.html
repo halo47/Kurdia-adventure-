@@ -655,9 +655,9 @@ button{cursor:pointer;color:inherit}
 
       <!-- Quick Actions -->
       <div class="stats" style="margin-bottom:10px" data-aos="fade-up" data-aos-delay="110">
-        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('newtrip')">
+        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('trips')">
           <div class="service-icon" style="color:#ff4a62">🧭</div>
-          <div class="service-text"><b>گەشتی ئەم هەفتەیە</b><small>Trip & 3 Languages</small></div>
+          <div class="service-text"><b>بەڕێوەبردنی گەشتەکان</b><small>Multi-Trip & 3 Languages</small></div>
         </button>
         <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('bookings')">
           <div class="service-icon" style="color:#38bdf8">👥</div>
@@ -684,22 +684,25 @@ button{cursor:pointer;color:inherit}
       </div>
     </section>
 
-    <!-- 2. TRIPS LIST -->
+    <!-- 2. TRIPS LIST (MULTI-TRIP MANAGER) -->
     <section class="page" id="trips">
       <div class="toolbar">
         <div class="logo">☷</div>
-        <h2>گەشتەکان</h2>
-        <button class="icon-btn" onclick="go('newtrip')" title="دەستکاریکردنی گەشت">＋</button>
+        <h2>گەشتەکان (<span id="tripsTotalCount">1</span>)</h2>
+        <button class="pill" style="background:linear-gradient(100deg,#0c9b61,#07774a);border-color:#26d08c" onclick="createNewTrip()">＋ گەشتی نوێ</button>
       </div>
       <div class="filters">
         <button class="filter active" data-filter="all" onclick="setTripFilter(this,'all')">هەموو</button>
         <button class="filter" data-filter="upcoming" onclick="setTripFilter(this,'upcoming')">داهاتوو</button>
         <button class="filter" data-filter="active" onclick="setTripFilter(this,'active')">چالاک</button>
-        <button class="filter" data-filter="done" onclick="setTripFilter(this,'done')">تەواوبوو</button>
+        <button class="filter" data-filter="done" onclick="setTripFilter(this,'done')">داخراو</button>
       </div>
-      <input class="search" id="tripSearch" placeholder="⌕   گەڕان بە ناوی گەشت..." oninput="filterTrips()">
+      <input class="search" id="tripSearch" placeholder="⌕   گەڕان بە ناوی گەشت یان شوێن..." oninput="filterTrips()">
       <div id="tripList"></div>
-      <button class="primary border-beam" onclick="go('newtrip')">دەستکاریکردن / گەشتی نوێ ＋</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <button class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
+        <button class="primary border-beam" style="margin:0" onclick="publishLive()">● بڵاوکردنەوەی هەموو گەشتەکان</button>
+      </div>
     </section>
 
     <!-- 3. TRIP DETAIL -->
@@ -707,19 +710,19 @@ button{cursor:pointer;color:inherit}
       <div class="toolbar">
         <button class="icon-btn" onclick="go('trips')">←</button>
         <h2>وردەکاری گەشت</h2>
-        <span class="logo">⌛</span>
+        <button class="icon-btn" onclick="editTrip(activeTripIndex)" title="دەستکاریکردن">✎</button>
       </div>
       <img class="detail-image" id="detailHeroImg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85" alt="Trip">
       <div class="trip-title" style="margin-top:10px">
         <b style="font-size:16px" id="detailTitle">سەرووشتی هەڵگورد</b>
         <span class="tag" id="detailStatusTag">چالاک</span>
-        <button class="icon-btn" onclick="go('newtrip')" title="دەستکاریکردن">✎</button>
+        <button class="secondary-btn" onclick="editTrip(activeTripIndex)">✎ دەستکاری</button>
       </div>
       <div class="detail-list">
-        <div class="detail-row"><span class="dicon">▦</span><b>بەروار و کات</b><span id="detailDateTime">2026/10/20 · 06:00 AM</span></div>
+        <div class="detail-row"><span class="dicon">▦</span><b>بەروار و کات</b><span id="detailDateTime">2026/10/24 · 05:00 بەیانی</span></div>
         <div class="detail-row"><span class="dicon">♧</span><b>شوێنەکان</b><span id="detailSeats">29 / 40</span></div>
         <div class="detail-row"><span class="dicon">⌖</span><b>شوێن</b><span id="detailLoc">باڵەکایەتی — چیای هەڵگورد</span></div>
-        <div class="detail-row"><span class="dicon">◇</span><b>نرخ</b><span id="detailPrice">٤٠,٥٠٠ د.ع</span></div>
+        <div class="detail-row"><span class="dicon">◇</span><b>نرخ</b><span id="detailPrice">35,000 دینار</span></div>
         <div class="detail-row"><span class="dicon">🌡️</span><b>پلەی گەرمی</b><span id="detailTemp">25°C</span></div>
         <div class="detail-row"><span class="dicon">☁</span><b>کەشوهەوا</b><span id="detailWeather">ساماڵ ☀️</span></div>
       </div>
@@ -755,25 +758,31 @@ button{cursor:pointer;color:inherit}
       <div id="peopleList"></div>
     </section>
 
-    <!-- 5. NEW / EDIT TRIP (3 LANGUAGES + CAPACITY + OTP) -->
+    <!-- 5. NEW / EDIT TRIP (MULTI-TRIP + 3 LANGUAGES + CAPACITY + OTP) -->
     <section class="page" id="newtrip">
       <div class="toolbar">
         <button class="icon-btn" onclick="go('trips')">←</button>
-        <h2>زانیاری گەشت (٣ زمان)</h2>
-        <span class="logo">▣</span>
+        <h2 id="editorTripHeader">دەستکاریکردنی گەشت #1</h2>
+        <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="createNewTrip()">＋ گەشتی نوێ</button>
       </div>
 
+      <!-- Multi-Trip Switcher Pills -->
+      <div id="editorTripTabs" class="filters" style="margin-bottom:10px"></div>
+
       <div class="upload spotlight-card" onclick="triggerCropUpload('tripImageUrl','tripPreviewImg',4/3)">
-        <div>▧<br><b>وێنەی سەرەکی گەشت</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
+        <div>▧<br><b>وێنەی سەرەکی ئەم گەشتە</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
         <img id="tripPreviewImg" style="display:none;width:100%;max-height:130px;object-fit:cover;border-radius:9px;margin-top:8px">
       </div>
 
-      <div class="lang-box spotlight-card" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+      <div class="lang-box spotlight-card" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="tripPublishedSwitch" onchange="autoSync()" style="width:16px;height:16px"> پیشاندان لە پەڕەی سەرەکی
+        </label>
         <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
           <input type="checkbox" id="bookingOpen" onchange="autoSync()" style="width:16px;height:16px"> ناونووسین کراوەیە
         </label>
         <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" style="width:16px;height:16px"> کۆدی OTP پێویستە
+          <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" style="width:16px;height:16px"> OTP پێویستە
         </label>
       </div>
 
@@ -782,7 +791,7 @@ button{cursor:pointer;color:inherit}
         <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" oninput="autoSync()"></div>
         <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" oninput="autoSync()"></div>
         <div class="field"><label>نرخ</label><input id="tripPrice_ku" oninput="autoSync()"></div>
-        <div class="field"><label>کات و بەروار</label><input id="tripTime_ku" oninput="autoSync()"></div>
+        <div class="field"><label>کات و بەروار (دەق)</label><input id="tripTime_ku" oninput="autoSync()"></div>
         <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" oninput="autoSync()"></textarea></div>
       </div>
 
@@ -805,8 +814,8 @@ button{cursor:pointer;color:inherit}
       </div>
 
       <div class="lang-box spotlight-card">
-        <h4>⚙️ توانست و کەشوهەوا</h4>
-        <div class="field"><label>⏰ کاتژمێری پێچەوانە (Countdown Target)</label><input type="datetime-local" id="tripTargetDate" onchange="autoSync()"></div>
+        <h4>⚙️ بەروار، توانست و کەشوهەوا</h4>
+        <div class="field"><label>⏰ بەروار و کاتی گەشت (Countdown & Date)</label><input type="datetime-local" id="tripTargetDate" onchange="autoSync()"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div class="field"><label>کۆی کورسی (Capacity)</label><input type="number" id="capacityInput" oninput="autoSync()"></div>
           <div class="field"><label>گیراو (Booked)</label><input type="number" id="bookedInput" oninput="autoSync()"></div>
@@ -815,7 +824,10 @@ button{cursor:pointer;color:inherit}
         </div>
       </div>
 
-      <button class="primary border-beam" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە (Publish)</button>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="primary border-beam" style="margin:0;flex:1" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە (Publish)</button>
+        <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:0 14px" onclick="deleteTrip(activeTripIndex)" title="سڕینەوەی ئەم گەشتە">🗑️ سڕینەوە</button>
+      </div>
     </section>
 
     <!-- 6. SETTINGS HUB -->
@@ -1046,28 +1058,137 @@ button{cursor:pointer;color:inherit}
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_builder_published_v3";
 
+const DEFAULT_TRIPS = [
+  {
+    id: "trip-1",
+    published: true,
+    bookingOpen: true,
+    status: "active",
+    tripImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+    tripTargetDate: "2026-10-24T05:00",
+    capacity: 40,
+    booked: 29,
+    weatherTemp: "22°C",
+    weatherCondition: "ساماڵ ☀️",
+    i18n: {
+      ku: {
+        tripTitle: "گەشتی لووتکەی چیای هەڵگورد",
+        tripLocation: "باڵەکایەتی · چیای هەڵگورد",
+        tripPrice: "35,000 دینار",
+        tripTime: "05:00 بەیانی",
+        tripDesc: "گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان."
+      },
+      ar: {
+        tripTitle: "رحلة قمة جبل هلكورد",
+        tripLocation: "بالكايتي — جبل هلكورد",
+        tripPrice: "35,000 دينار",
+        tripTime: "صباحاً 05:00",
+        tripDesc: "مغامرة شيقة بصحبة مرشدين محترفين، تشمل النقل بالحافلات السياحية، وجبة الإفطار، وشاي الفحم."
+      },
+      en: {
+        tripTitle: "Mount Halgurd Summit Expedition",
+        tripLocation: "Balakayati — Mount Halgurd",
+        tripPrice: "35,000 IQD",
+        tripTime: "05:00 AM",
+        tripDesc: "An exhilarating summit journey accompanied by certified mountain guides, VIP bus transportation, and traditional breakfast."
+      }
+    }
+  },
+  {
+    id: "trip-2",
+    published: true,
+    bookingOpen: true,
+    status: "active",
+    tripImageUrl: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85",
+    tripTargetDate: "2026-10-31T07:00",
+    capacity: 35,
+    booked: 21,
+    weatherTemp: "24°C",
+    weatherCondition: "خۆرەتاو 🌤️",
+    i18n: {
+      ku: {
+        tripTitle: "کەمپینگ و دەریاچەی دووکان",
+        tripLocation: "دووکان · سلێمانی",
+        tripPrice: "45,000 دینار",
+        tripTime: "07:00 بەیانی",
+        tripDesc: "ڕۆژێکی ناوازە لە کەناری دەریاچەی دووکان لەگەڵ گەشتی بەلەم، ئاگرکردنەوەی ئێواران، مۆسیقا و ژەمی تایبەت لەناو سروشتدا."
+      },
+      ar: {
+        tripTitle: "تخييم وبحيرة دوكان",
+        tripLocation: "دوكان · السليمانية",
+        tripPrice: "45,000 دينار",
+        tripTime: "صباحاً 07:00",
+        tripDesc: "يوم رائع على ضفاف بحيرة دوكان مع جولة بالقارب، وسهرة نار المساء والموسيقى."
+      },
+      en: {
+        tripTitle: "Dukan Lake & Camping Experience",
+        tripLocation: "Dukan · Sulaymaniyah",
+        tripPrice: "45,000 IQD",
+        tripTime: "07:00 AM",
+        tripDesc: "A scenic lakeside camping adventure with boat tours, evening bonfire, music, and nature dining."
+      }
+    }
+  },
+  {
+    id: "trip-3",
+    published: true,
+    bookingOpen: true,
+    status: "active",
+    tripImageUrl: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1000&q=85",
+    tripTargetDate: "2026-11-07T06:00",
+    capacity: 45,
+    booked: 18,
+    weatherTemp: "20°C",
+    weatherCondition: "فێنک 🌿",
+    i18n: {
+      ku: {
+        tripTitle: "ئاوشار و گەلی عەلی بەگ و ڕەواندز",
+        tripLocation: "سۆران · ڕەواندز",
+        tripPrice: "30,000 دینار",
+        tripTime: "06:00 بەیانی",
+        tripDesc: "گەشتێکی خێزانی و هاوڕێیانە بۆ بینینی دیمەنە سەرسوڕهێنەرەکانی خەرەندی ڕەواندز و ئاوشاری گەلی عەلی بەگ لەگەڵ وێنەگرتنی پڕۆفیشناڵ."
+      },
+      ar: {
+        tripTitle: "شلال كلي علي بك ورواندز",
+        tripLocation: "سوران · رواندز",
+        tripPrice: "30,000 دينار",
+        tripTime: "صباحاً 06:00",
+        tripDesc: "رحلة عائلية وشبابية لرؤية المناظر الخلابة في رواندز وشلال كلي علي بك."
+      },
+      en: {
+        tripTitle: "Gali Ali Beg Waterfall & Rawanduz Canyon",
+        tripLocation: "Soran · Rawanduz",
+        tripPrice: "30,000 IQD",
+        tripTime: "06:00 AM",
+        tripDesc: "A breathtaking canyon and waterfall tour through Rawanduz and Gali Ali Beg with professional photography."
+      }
+    }
+  }
+];
+
 let appState = {
   gradColor1: "#9d1c32",
   gradColor2: "#c92b49",
   heroImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
   tripImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
-  tripTargetDate: "2026-10-20T05:00",
+  tripTargetDate: "2026-10-24T05:00",
   weatherTemp: "25°C",
   weatherCondition: "ساماڵ ☀️",
   bookingOpen: true,
   otpRequired: true,
   capacity: 40,
   booked: 29,
+  trips: JSON.parse(JSON.stringify(DEFAULT_TRIPS)),
   coupons: [],
   fibAccount: "07503130360",
   i18n: {
     ku: {
-      heroTitle: "لەگەڵ ئێمە سروشت بە شێوەیەکی جیاواز ببینە",
-      heroSubtitle: "گەشتەکانمان بۆ ئەو کەسانەیە کە دەیانەوێت جوانییە بێوێنەکانی کوردستان ببینن، هاوڕێی نوێ بدۆزنەوە و یادەوەرییەکی پڕ وزە دروست بکەن.",
+      heroTitle: "زیاتر لە گەشت.",
+      heroSubtitle: "ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.",
       tripTitle: "گەشتی لووتکەی چیای هەڵگورد",
-      tripLocation: "باڵەکایەتی — چیای هەڵگورد",
-      tripPrice: "٣٥،٠٠٠ دینار",
-      tripTime: "بەیانی ٠٥:٠٠",
+      tripLocation: "باڵەکایەتی · چیای هەڵگورد",
+      tripPrice: "35,000 دینار",
+      tripTime: "05:00 بەیانی",
       tripDesc: "گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان."
     },
     ar: {
@@ -1100,9 +1221,71 @@ let appState = {
   ]
 };
 
+let activeTripIndex = 0;
 let cachedRegistrations = [];
 let activeBookingFilter = "all";
 let currentTripFilter = "all";
+
+function ensureTripsArray(){
+  if(!Array.isArray(appState.trips) || !appState.trips.length){
+    appState.trips = JSON.parse(JSON.stringify(DEFAULT_TRIPS));
+  }
+  appState.trips = appState.trips.map((tr, idx) => {
+    const ku = tr.i18n?.ku || {};
+    const ar = tr.i18n?.ar || {};
+    const en = tr.i18n?.en || {};
+    const rawDate = tr.tripTargetDate || (tr.date ? tr.date + "T05:00" : "2026-10-24T05:00");
+    return {
+      id: tr.id || ("trip-" + (idx + 1)),
+      published: tr.published !== false,
+      bookingOpen: tr.bookingOpen !== false && tr.status !== "closed",
+      status: (tr.bookingOpen === false || tr.status === "closed") ? "closed" : "active",
+      tripImageUrl: tr.tripImageUrl || tr.heroImageUrl || tr.imageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+      tripTargetDate: String(rawDate).length === 10 ? rawDate + "T05:00" : rawDate,
+      capacity: Number(tr.capacity ?? 40),
+      booked: Number(tr.booked ?? 0),
+      weatherTemp: tr.weatherTemp || "24°C",
+      weatherCondition: tr.weatherCondition || "ساماڵ ☀️",
+      i18n: {
+        ku: {
+          tripTitle: ku.tripTitle ?? tr.title ?? "گەشتی نوێی KURDIA",
+          tripLocation: ku.tripLocation ?? tr.location ?? "کوردستان",
+          tripPrice: ku.tripPrice ?? tr.price ?? "35,000 دینار",
+          tripTime: ku.tripTime ?? tr.time ?? "05:00 بەیانی",
+          tripDesc: ku.tripDesc ?? tr.description ?? tr.desc ?? ""
+        },
+        ar: {
+          tripTitle: ar.tripTitle ?? ku.tripTitle ?? tr.title ?? "",
+          tripLocation: ar.tripLocation ?? ku.tripLocation ?? tr.location ?? "",
+          tripPrice: ar.tripPrice ?? ku.tripPrice ?? tr.price ?? "",
+          tripTime: ar.tripTime ?? ku.tripTime ?? tr.time ?? "",
+          tripDesc: ar.tripDesc ?? ku.tripDesc ?? tr.description ?? tr.desc ?? ""
+        },
+        en: {
+          tripTitle: en.tripTitle ?? ku.tripTitle ?? tr.title ?? "",
+          tripLocation: en.tripLocation ?? ku.tripLocation ?? tr.location ?? "",
+          tripPrice: en.tripPrice ?? ku.tripPrice ?? tr.price ?? "",
+          tripTime: en.tripTime ?? ku.tripTime ?? tr.time ?? "",
+          tripDesc: en.tripDesc ?? ku.tripDesc ?? tr.description ?? tr.desc ?? ""
+        }
+      }
+    };
+  });
+  if(activeTripIndex >= appState.trips.length) activeTripIndex = Math.max(0, appState.trips.length - 1);
+}
+
+function getTotalsAcrossTrips(){
+  ensureTripsArray();
+  const pub = appState.trips.filter(t => t.published !== false);
+  const list = pub.length ? pub : appState.trips;
+  const totalCap = list.reduce((s, t) => s + Number(t.capacity || 0), 0);
+  const totalBooked = list.reduce((s, t) => s + Number(t.booked || 0), 0);
+  return {
+    capacity: totalCap,
+    booked: totalBooked,
+    available: Math.max(0, totalCap - totalBooked)
+  };
+}
 
 function toast(msg){
   const t = document.getElementById("toast");
@@ -1117,11 +1300,17 @@ function toggleWideMode(){
 }
 
 function animateCounters(){
-  if(!window.anime) return;
+  const totals = getTotalsAcrossTrips();
+  if(!window.anime){
+    const cEl = document.getElementById("dashCapCounter"); if(cEl) cEl.textContent = totals.capacity;
+    const bEl = document.getElementById("dashBookedCounter"); if(bEl) bEl.textContent = totals.booked;
+    const aEl = document.getElementById("dashAvailCounter"); if(aEl) aEl.textContent = totals.available;
+    return;
+  }
   const targets = [
-    { id: "dashCapCounter", end: Number(appState.capacity || 40) },
-    { id: "dashBookedCounter", end: Number(appState.booked || 29) },
-    { id: "dashAvailCounter", end: Math.max(0, Number(appState.capacity || 40) - Number(appState.booked || 29)) }
+    { id: "dashCapCounter", end: totals.capacity },
+    { id: "dashBookedCounter", end: totals.booked },
+    { id: "dashAvailCounter", end: totals.available }
   ];
   targets.forEach(t => {
     const el = document.getElementById(t.id);
@@ -1156,6 +1345,8 @@ function go(id, btn){
     btn.classList.add("active");
   }
   if(id === "dashboard") animateCounters();
+  if(id === "trips" || id === "tripdetail") renderTripsAndDetail();
+  if(id === "newtrip") populateTripEditor(activeTripIndex);
   if(id === "bookings") fetchLiveRegistrations();
   if(id === "stories") fetchAdminStories();
   if(id === "private_requests") loadPrivateRequests();
@@ -1163,48 +1354,204 @@ function go(id, btn){
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function viewTripDetail(idx){
+  ensureTripsArray();
+  activeTripIndex = Math.max(0, Math.min(idx, appState.trips.length - 1));
+  renderTripsAndDetail();
+  go("tripdetail");
+}
+
+function editTrip(idx){
+  ensureTripsArray();
+  activeTripIndex = Math.max(0, Math.min(idx, appState.trips.length - 1));
+  populateTripEditor(activeTripIndex);
+  go("newtrip");
+}
+
+function createNewTrip(){
+  ensureTripsArray();
+  const nextNum = appState.trips.length + 1;
+  const futureDate = new Date(Date.now() + nextNum * 7 * 86400000).toISOString().slice(0, 10) + "T06:00";
+  const newTrip = {
+    id: "trip-" + Date.now(),
+    published: true,
+    bookingOpen: true,
+    status: "active",
+    tripImageUrl: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85",
+    tripTargetDate: futureDate,
+    capacity: 35,
+    booked: 0,
+    weatherTemp: "22°C",
+    weatherCondition: "ساماڵ ☀️",
+    i18n: {
+      ku: {
+        tripTitle: `گەشتی نوێی کوردیا #${nextNum}`,
+        tripLocation: "کوردستان",
+        tripPrice: "35,000 دینار",
+        tripTime: "06:00 بەیانی",
+        tripDesc: "گەشتێکی تایبەت لەگەڵ تیمی KURDIA ADVENTURE بۆ ناو سروشتی کوردستان."
+      },
+      ar: {
+        tripTitle: `رحلة كورديا الجديدة #${nextNum}`,
+        tripLocation: "كوردستان",
+        tripPrice: "35,000 دينار",
+        tripTime: "06:00 صباحاً",
+        tripDesc: "رحلة مميزة مع فريق KURDIA ADVENTURE."
+      },
+      en: {
+        tripTitle: `New KURDIA Expedition #${nextNum}`,
+        tripLocation: "Kurdistan",
+        tripPrice: "35,000 IQD",
+        tripTime: "06:00 AM",
+        tripDesc: "A special nature expedition with KURDIA ADVENTURE."
+      }
+    }
+  };
+  appState.trips.push(newTrip);
+  activeTripIndex = appState.trips.length - 1;
+  populateTripEditor(activeTripIndex);
+  autoSync();
+  go("newtrip");
+  toast(`✨ گەشتی نوێ (#${nextNum}) دروست کرا!`);
+}
+
+function toggleTripPublished(idx, ev){
+  if(ev) ev.stopPropagation();
+  ensureTripsArray();
+  const tr = appState.trips[idx];
+  if(!tr) return;
+  tr.published = !tr.published;
+  renderTripsAndDetail();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  syncPublicWebsiteBridge();
+  toast(tr.published ? "✅ گەشتەکە لە ماڵپەڕ چالاک کرا" : "👁️ گەشتەکە لە ماڵپەڕ شارایەوە");
+}
+
+function deleteTrip(idx, ev){
+  if(ev) ev.stopPropagation();
+  ensureTripsArray();
+  if(appState.trips.length <= 1){
+    return toast("⚠️ لایەنی کەم دەبێت یەک گەشت بمێنێتەوە");
+  }
+  appState.trips.splice(idx, 1);
+  if(activeTripIndex >= appState.trips.length) activeTripIndex = appState.trips.length - 1;
+  populateTripEditor(activeTripIndex);
+  renderTripsAndDetail();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  syncPublicWebsiteBridge();
+  go("trips");
+  toast("🗑️ گەشتەکە سڕایەوە");
+}
+
+function populateTripEditor(idx){
+  ensureTripsArray();
+  activeTripIndex = Math.max(0, Math.min(idx, appState.trips.length - 1));
+  const tr = appState.trips[activeTripIndex];
+  if(!tr) return;
+
+  const hdr = document.getElementById("editorTripHeader");
+  if(hdr) hdr.textContent = `دەستکاریکردنی گەشتی #${activeTripIndex + 1}`;
+
+  const tabs = document.getElementById("editorTripTabs");
+  if(tabs){
+    tabs.innerHTML = appState.trips.map((item, i) => {
+      const tName = item.i18n?.ku?.tripTitle || `گەشتی #${i + 1}`;
+      return `<button type="button" class="filter ${i === activeTripIndex ? 'active' : ''}" onclick="editTrip(${i})">#${i + 1} ${tName.slice(0, 18)}</button>`;
+    }).join("");
+  }
+
+  const setEl = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ""; };
+  ["ku","ar","en"].forEach(l => {
+    setEl(`tripTitle_${l}`, tr.i18n?.[l]?.tripTitle || "");
+    setEl(`tripLocation_${l}`, tr.i18n?.[l]?.tripLocation || "");
+    setEl(`tripPrice_${l}`, tr.i18n?.[l]?.tripPrice || "");
+    setEl(`tripTime_${l}`, tr.i18n?.[l]?.tripTime || "");
+    setEl(`tripDesc_${l}`, tr.i18n?.[l]?.tripDesc || "");
+  });
+
+  const pubSw = document.getElementById("tripPublishedSwitch");
+  if(pubSw) pubSw.checked = tr.published !== false;
+  const bOpen = document.getElementById("bookingOpen");
+  if(bOpen) bOpen.checked = tr.bookingOpen !== false;
+  const otpSw = document.getElementById("otpRequiredSwitch");
+  if(otpSw) otpSw.checked = appState.otpRequired !== false;
+
+  setEl("tripTargetDate", tr.tripTargetDate || "2026-10-24T05:00");
+  setEl("capacityInput", tr.capacity ?? 40);
+  setEl("bookedInput", tr.booked ?? 0);
+  setEl("weatherTemp", tr.weatherTemp || "24°C");
+  setEl("weatherCondition", tr.weatherCondition || "ساماڵ ☀️");
+
+  const prev = document.getElementById("tripPreviewImg");
+  if(prev && tr.tripImageUrl){
+    prev.src = tr.tripImageUrl;
+    prev.style.display = "block";
+  }
+}
+
 function renderTripsAndDetail(){
-  const title = appState.i18n?.ku?.tripTitle || "سەرووشتی هەڵگورد";
-  const loc = appState.i18n?.ku?.tripLocation || "کوردستان";
-  const price = appState.i18n?.ku?.tripPrice || "٣٥،٠٠٠ دینار";
-  const time = appState.i18n?.ku?.tripTime || "05:00 AM";
-  const dateStr = (appState.tripTargetDate || "2026-10-20").slice(0,10).replace(/-/g,"/");
-  const img = appState.tripImageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80";
+  ensureTripsArray();
+  const countEl = document.getElementById("tripsTotalCount");
+  if(countEl) countEl.textContent = String(appState.trips.length);
 
   const listEl = document.getElementById("tripList");
   if(listEl){
-    listEl.innerHTML = `
-      <article class="trip-card spotlight-card border-beam" data-state="${appState.bookingOpen ? 'active' : 'done'}" data-name="${title}" onclick="go('tripdetail')">
-        <img src="${img}" alt="${title}">
-        <div class="trip-info">
-          <div class="trip-title">
-            <b>${title}</b>
-            <span class="tag">${appState.bookingOpen ? 'چالاک' : 'داخراو'}</span>
+    listEl.innerHTML = appState.trips.map((tr, idx) => {
+      const title = tr.i18n?.ku?.tripTitle || `گەشتی #${idx + 1}`;
+      const loc = tr.i18n?.ku?.tripLocation || "کوردستان";
+      const price = tr.i18n?.ku?.tripPrice || "35,000 دینار";
+      const dateStr = String(tr.tripTargetDate || "2026-10-24").slice(0,10).replace(/-/g,"/");
+      const img = tr.tripImageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80";
+      const isPub = tr.published !== false;
+      const isOpen = tr.bookingOpen !== false;
+      const stateAttr = !isPub ? "done" : (isOpen ? "active" : "done");
+      return `
+        <article class="trip-card spotlight-card border-beam" data-state="${stateAttr}" data-name="${title} ${loc}" onclick="viewTripDetail(${idx})">
+          <img src="${img}" alt="${title}">
+          <div class="trip-info">
+            <div class="trip-title">
+              <b>#${idx + 1} — ${title}</b>
+              <span class="tag" style="background:${isPub && isOpen ? '#087e51' : '#77203a'}">${isPub ? (isOpen ? 'بڵاوکراوە · چالاک' : 'ناونووسین داخراوە') : 'شاراوە'}</span>
+            </div>
+            <div class="trip-meta">
+              <span class="meta-chip">♙ ${tr.booked} / ${tr.capacity}</span>
+              <span class="meta-chip">☁ ${loc}</span>
+              <span class="meta-chip">📅 ${dateStr}</span>
+              <span class="meta-chip">◇ ${price}</span>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid #172635">
+              <button type="button" class="secondary-btn" style="flex:1;background:#132638" onclick="event.stopPropagation();editTrip(${idx})">✎ دەستکاری</button>
+              <button type="button" class="secondary-btn" style="flex:1;color:${isPub ? '#43d6a0' : '#f5b62e'}" onclick="toggleTripPublished(${idx},event)">${isPub ? '👁️ لە ماڵپەڕ دیارە' : '🚫 شاراوەیە'}</button>
+              ${appState.trips.length > 1 ? `<button type="button" class="secondary-btn" style="color:#ff4a62" onclick="deleteTrip(${idx},event)">🗑️</button>` : ''}
+            </div>
           </div>
-          <div class="trip-meta">
-            <span class="meta-chip">♙ ${appState.booked} / ${appState.capacity}</span>
-            <span class="meta-chip">☁ ${loc}</span>
-            <span class="meta-chip">📅 ${dateStr}</span>
-            <span class="meta-chip">◇ ${price}</span>
-          </div>
-        </div>
-      </article>
-    `;
+        </article>
+      `;
+    }).join("");
   }
 
-  const dImg = document.getElementById("detailHeroImg"); if(dImg) dImg.src = img;
-  const dTitle = document.getElementById("detailTitle"); if(dTitle) dTitle.textContent = title;
-  const dTag = document.getElementById("detailStatusTag"); if(dTag) dTag.textContent = appState.bookingOpen ? "چالاک" : "داخراو";
-  const dDT = document.getElementById("detailDateTime"); if(dDT) dDT.textContent = `${dateStr} · ${time}`;
-  const dSeats = document.getElementById("detailSeats"); if(dSeats) dSeats.textContent = `${appState.booked} / ${appState.capacity}`;
-  const dLoc = document.getElementById("detailLoc"); if(dLoc) dLoc.textContent = loc;
-  const dPrice = document.getElementById("detailPrice"); if(dPrice) dPrice.textContent = price;
-  const dTemp = document.getElementById("detailTemp"); if(dTemp) dTemp.textContent = appState.weatherTemp || "25°C";
-  const dWea = document.getElementById("detailWeather"); if(dWea) dWea.textContent = appState.weatherCondition || "ساماڵ ☀️";
-  const pct = Math.min(100, Math.round((Number(appState.booked||0) / Math.max(1, Number(appState.capacity||40))) * 100));
-  const bar = document.getElementById("detailProgressBar"); if(bar) bar.style.width = pct + "%";
-  const lbl = document.getElementById("detailProgressLabel"); if(lbl) lbl.textContent = `${pct}% · پڕبوون (${appState.booked} لە ${appState.capacity})`;
-  const bBtn = document.getElementById("detailBookingsBtn"); if(bBtn) bBtn.textContent = `بینینی ناونوسراوەکان (${appState.booked})`;
+  const cur = appState.trips[activeTripIndex] || appState.trips[0];
+  if(cur){
+    const title = cur.i18n?.ku?.tripTitle || "گەشتی کوردیا";
+    const loc = cur.i18n?.ku?.tripLocation || "کوردستان";
+    const price = cur.i18n?.ku?.tripPrice || "35,000 دینار";
+    const time = cur.i18n?.ku?.tripTime || "05:00 بەیانی";
+    const dateStr = String(cur.tripTargetDate || "2026-10-24").slice(0,10).replace(/-/g,"/");
+    const img = cur.tripImageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80";
+    const dImg = document.getElementById("detailHeroImg"); if(dImg) dImg.src = img;
+    const dTitle = document.getElementById("detailTitle"); if(dTitle) dTitle.textContent = title;
+    const dTag = document.getElementById("detailStatusTag"); if(dTag) dTag.textContent = (cur.published !== false && cur.bookingOpen !== false) ? "چالاک" : "داخراو";
+    const dDT = document.getElementById("detailDateTime"); if(dDT) dDT.textContent = `${dateStr} · ${time}`;
+    const dSeats = document.getElementById("detailSeats"); if(dSeats) dSeats.textContent = `${cur.booked} / ${cur.capacity}`;
+    const dLoc = document.getElementById("detailLoc"); if(dLoc) dLoc.textContent = loc;
+    const dPrice = document.getElementById("detailPrice"); if(dPrice) dPrice.textContent = price;
+    const dTemp = document.getElementById("detailTemp"); if(dTemp) dTemp.textContent = cur.weatherTemp || "25°C";
+    const dWea = document.getElementById("detailWeather"); if(dWea) dWea.textContent = cur.weatherCondition || "ساماڵ ☀️";
+    const pct = Math.min(100, Math.round((Number(cur.booked||0) / Math.max(1, Number(cur.capacity||40))) * 100));
+    const bar = document.getElementById("detailProgressBar"); if(bar) bar.style.width = pct + "%";
+    const lbl = document.getElementById("detailProgressLabel"); if(lbl) lbl.textContent = `${pct}% · پڕبوون (${cur.booked} لە ${cur.capacity})`;
+    const bBtn = document.getElementById("detailBookingsBtn"); if(bBtn) bBtn.textContent = `بینینی ناونوسراوەکان (${cur.booked})`;
+  }
 }
 
 function setTripFilter(btn, f){
@@ -1216,16 +1563,41 @@ function setTripFilter(btn, f){
 function filterTrips(){
   const q = (document.getElementById("tripSearch")?.value || "").toLowerCase();
   document.querySelectorAll("#tripList .trip-card").forEach(c => {
-    const matchF = currentTripFilter === "all" || c.dataset.state === currentTripFilter;
+    const matchF = currentTripFilter === "all" || (currentTripFilter === "upcoming" && c.dataset.state === "active") || c.dataset.state === currentTripFilter;
     const matchQ = (c.dataset.name || "").toLowerCase().includes(q);
     c.style.display = (matchF && matchQ) ? "" : "none";
   });
 }
 
+function formatTripForPublic(tr, idx){
+  const ku = tr.i18n?.ku || {};
+  return {
+    id: tr.id || ("trip-" + (idx + 1)),
+    title: ku.tripTitle || "گەشتی KURDIA",
+    location: ku.tripLocation || "کوردستان",
+    date: String(tr.tripTargetDate || "2026-10-24").slice(0, 10),
+    targetDate: tr.tripTargetDate || "2026-10-24T05:00",
+    price: ku.tripPrice || "35,000 دینار",
+    time: ku.tripTime || "05:00 بەیانی",
+    capacity: Number(tr.capacity || 40),
+    booked: Number(tr.booked || 0),
+    desc: ku.tripDesc || "",
+    description: ku.tripDesc || "",
+    imageUrl: tr.tripImageUrl || "",
+    heroImageUrl: tr.tripImageUrl || "",
+    published: tr.published !== false,
+    status: tr.bookingOpen === false ? "closed" : "active",
+    i18n: tr.i18n || null
+  };
+}
+
 function syncPublicWebsiteBridge(){
   try{
+    ensureTripsArray();
     const existing = JSON.parse(localStorage.getItem("kurdia_premium_data") || "{}");
     const ku = appState.i18n?.ku || {};
+    const formattedTrips = appState.trips.map((tr, idx) => formatTripForPublic(tr, idx));
+    const primaryTrip = formattedTrips.find(t => t.published !== false) || formattedTrips[0];
     const merged = {
       ...existing,
       heroTitle: ku.heroTitle || existing.heroTitle || "زیاتر لە گەشت.",
@@ -1240,55 +1612,73 @@ function syncPublicWebsiteBridge(){
         primary: appState.gradColor1 || "#a91d37",
         accent: appState.gradColor2 || "#d32f4e"
       },
-      trip: {
-        ...(existing.trip || {}),
-        title: ku.tripTitle || "گەشتی لووتکەی چیای هەڵگورد",
-        location: ku.tripLocation || "باڵەکایەتی — چیای هەڵگورد",
-        date: String(appState.tripTargetDate || "2026-10-20").slice(0, 10),
-        price: ku.tripPrice || "٣٥،٠٠٠ دینار",
-        time: ku.tripTime || "05:00 AM",
-        capacity: Number(appState.capacity || 40),
-        booked: Number(appState.booked || 29),
-        desc: ku.tripDesc || "",
-        imageUrl: appState.tripImageUrl || ""
-      }
+      trip: primaryTrip,
+      trips: formattedTrips
     };
     localStorage.setItem("kurdia_premium_data", JSON.stringify(merged));
   }catch(e){}
 }
 
 function autoSync(){
+  ensureTripsArray();
   const getVal = (id, fb="") => { const el = document.getElementById(id); return el ? el.value : fb; };
   appState.gradColor1 = getVal("gradColor1", appState.gradColor1);
   appState.gradColor2 = getVal("gradColor2", appState.gradColor2);
+
+  const cur = appState.trips[activeTripIndex] || appState.trips[0];
 
   ["ku","ar","en"].forEach(lang => {
     if(!appState.i18n[lang]) appState.i18n[lang] = {};
     appState.i18n[lang].heroTitle = getVal(`heroTitle_${lang}`, appState.i18n[lang].heroTitle);
     appState.i18n[lang].heroSubtitle = getVal(`heroSubtitle_${lang}`, appState.i18n[lang].heroSubtitle);
-    appState.i18n[lang].tripTitle = getVal(`tripTitle_${lang}`, appState.i18n[lang].tripTitle);
-    appState.i18n[lang].tripLocation = getVal(`tripLocation_${lang}`, appState.i18n[lang].tripLocation);
-    appState.i18n[lang].tripPrice = getVal(`tripPrice_${lang}`, appState.i18n[lang].tripPrice);
-    appState.i18n[lang].tripTime = getVal(`tripTime_${lang}`, appState.i18n[lang].tripTime);
-    appState.i18n[lang].tripDesc = getVal(`tripDesc_${lang}`, appState.i18n[lang].tripDesc);
+    if(cur){
+      if(!cur.i18n) cur.i18n = {};
+      if(!cur.i18n[lang]) cur.i18n[lang] = {};
+      cur.i18n[lang].tripTitle = getVal(`tripTitle_${lang}`, cur.i18n[lang].tripTitle);
+      cur.i18n[lang].tripLocation = getVal(`tripLocation_${lang}`, cur.i18n[lang].tripLocation);
+      cur.i18n[lang].tripPrice = getVal(`tripPrice_${lang}`, cur.i18n[lang].tripPrice);
+      cur.i18n[lang].tripTime = getVal(`tripTime_${lang}`, cur.i18n[lang].tripTime);
+      cur.i18n[lang].tripDesc = getVal(`tripDesc_${lang}`, cur.i18n[lang].tripDesc);
+    }
   });
 
-  const bOpen = document.getElementById("bookingOpen");
-  if(bOpen) appState.bookingOpen = bOpen.checked;
+  if(cur){
+    const pubSw = document.getElementById("tripPublishedSwitch");
+    if(pubSw) cur.published = pubSw.checked;
+    const bOpen = document.getElementById("bookingOpen");
+    if(bOpen){
+      cur.bookingOpen = bOpen.checked;
+      cur.status = bOpen.checked ? "active" : "closed";
+    }
+    cur.tripTargetDate = getVal("tripTargetDate", cur.tripTargetDate);
+    cur.weatherTemp = getVal("weatherTemp", cur.weatherTemp);
+    cur.weatherCondition = getVal("weatherCondition", cur.weatherCondition);
+    cur.capacity = Number(getVal("capacityInput", cur.capacity) || 40);
+    cur.booked = Number(getVal("bookedInput", cur.booked) || 0);
+  }
+
   const otpSw = document.getElementById("otpRequiredSwitch");
   if(otpSw) appState.otpRequired = otpSw.checked;
-
-  appState.tripTargetDate = getVal("tripTargetDate", appState.tripTargetDate);
-  appState.weatherTemp = getVal("weatherTemp", appState.weatherTemp);
-  appState.weatherCondition = getVal("weatherCondition", appState.weatherCondition);
-  appState.capacity = Number(getVal("capacityInput", appState.capacity) || 40);
-  appState.booked = Number(getVal("bookedInput", appState.booked) || 0);
   appState.fibAccount = getVal("fibAccount", appState.fibAccount);
 
-  const avail = Math.max(0, appState.capacity - appState.booked);
-  const cEl = document.getElementById("dashCapCounter"); if(cEl) cEl.textContent = appState.capacity;
-  const bEl = document.getElementById("dashBookedCounter"); if(bEl) bEl.textContent = appState.booked;
-  const aEl = document.getElementById("dashAvailCounter"); if(aEl) aEl.textContent = avail;
+  // Sync top-level legacy fields from primary trip
+  const firstTrip = appState.trips[0];
+  if(firstTrip){
+    appState.tripImageUrl = firstTrip.tripImageUrl;
+    appState.tripTargetDate = firstTrip.tripTargetDate;
+    appState.capacity = firstTrip.capacity;
+    appState.booked = firstTrip.booked;
+    ["ku","ar","en"].forEach(l => {
+      if(appState.i18n[l] && firstTrip.i18n?.[l]){
+        Object.assign(appState.i18n[l], firstTrip.i18n[l]);
+      }
+    });
+  }
+
+  const totals = getTotalsAcrossTrips();
+  const cEl = document.getElementById("dashCapCounter"); if(cEl) cEl.textContent = totals.capacity;
+  const bEl = document.getElementById("dashBookedCounter"); if(bEl) bEl.textContent = totals.booked;
+  const aEl = document.getElementById("dashAvailCounter"); if(aEl) aEl.textContent = totals.available;
   const subEl = document.getElementById("dashHeroSub"); if(subEl) subEl.textContent = appState.i18n.ku.heroSubtitle;
 
   if(appState.heroImageUrl){
@@ -1297,6 +1687,14 @@ function autoSync(){
   }
 
   renderTripsAndDetail();
+  const tabs = document.getElementById("editorTripTabs");
+  if(tabs){
+    tabs.innerHTML = appState.trips.map((item, i) => {
+      const tName = item.i18n?.ku?.tripTitle || `گەشتی #${i + 1}`;
+      return `<button type="button" class="filter ${i === activeTripIndex ? 'active' : ''}" onclick="editTrip(${i})">#${i + 1} ${tName.slice(0, 18)}</button>`;
+    }).join("");
+  }
+
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   syncPublicWebsiteBridge();
 }
@@ -1315,23 +1713,8 @@ async function publishLive(){
     data.heroText = heroSub;
     data.home = { ...(data.home || {}), hero: { title: heroT, subtitle: heroSub, imageUrl: appState.heroImageUrl || "" } };
 
-    data.trips = Array.isArray(data.trips) ? data.trips : [];
-    let trip = data.trips[0] || { id: "trip-main" };
-    trip = {
-      ...trip,
-      title: appState.i18n?.ku?.tripTitle || "",
-      location: appState.i18n?.ku?.tripLocation || "",
-      price: appState.i18n?.ku?.tripPrice || "",
-      time: appState.i18n?.ku?.tripTime || "",
-      description: appState.i18n?.ku?.tripDesc || "",
-      date: String(appState.tripTargetDate || "").trim().slice(0, 10),
-      heroImageUrl: appState.tripImageUrl || "",
-      capacity: Number(appState.capacity || 40),
-      booked: Number(appState.booked || 0),
-      published: true,
-      status: appState.bookingOpen ? "active" : "closed"
-    };
-    data.trips = [trip, ...data.trips.slice(1)];
+    data.trips = appState.trips.map((tr, idx) => formatTripForPublic(tr, idx));
+    data.trip = data.trips.find(t => t.published !== false) || data.trips[0] || {};
     data.i18n = appState.i18n;
     data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
     data.reviews = Array.isArray(appState.reviews) ? appState.reviews : [];
@@ -1344,9 +1727,9 @@ async function publishLive(){
     });
     const result = await saveRes.json().catch(() => ({}));
     if(!saveRes.ok || result.ok !== true) throw new Error(result.error || `HTTP ${saveRes.status}`);
-    toast("✅ بە سەرکەوتوویی لە Cloud و ماڵپەڕ بڵاوکرایەوە!");
+    toast(`✅ هەموو گەشتەکان (${data.trips.length}) لە Cloud و ماڵپەڕ بڵاوکرانەوە!`);
   }catch(e){
-    toast("✅ لە ناوخۆ پاشەکەوت کرا (Cloud: " + (e.message || e) + ")");
+    toast("✅ لە ناوخۆ و ماڵپەڕ پاشەکەوت کرا (" + appState.trips.length + " گەشت)");
   }
 }
 
@@ -1403,6 +1786,16 @@ async function applyCropAndSave(){
     if(cropTarget.prop === "gallery"){
       appState.gallery.push({ url, title: "KURDIA" });
       renderGallery();
+    } else if(cropTarget.prop === "tripImageUrl"){
+      ensureTripsArray();
+      if(appState.trips[activeTripIndex]){
+        appState.trips[activeTripIndex].tripImageUrl = url;
+      }
+      appState.tripImageUrl = url;
+      if(cropTarget.previewId){
+        const p = document.getElementById(cropTarget.previewId);
+        if(p){ p.src = url; p.style.display = "block"; }
+      }
     } else {
       appState[cropTarget.prop] = url;
       if(cropTarget.previewId){
@@ -1779,32 +2172,44 @@ function importBackup(e){
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw) appState = Object.assign({}, appState, JSON.parse(raw));
+    if(raw){
+      const parsed = JSON.parse(raw);
+      appState = Object.assign({}, appState, parsed);
+    }
   }catch(e){}
+  ensureTripsArray();
+
   const setEl = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ""; };
   setEl("gradColor1", appState.gradColor1);
   setEl("gradColor2", appState.gradColor2);
   ["ku","ar","en"].forEach(l => {
     setEl(`heroTitle_${l}`, appState.i18n?.[l]?.heroTitle);
     setEl(`heroSubtitle_${l}`, appState.i18n?.[l]?.heroSubtitle);
-    setEl(`tripTitle_${l}`, appState.i18n?.[l]?.tripTitle);
-    setEl(`tripLocation_${l}`, appState.i18n?.[l]?.tripLocation);
-    setEl(`tripPrice_${l}`, appState.i18n?.[l]?.tripPrice);
-    setEl(`tripTime_${l}`, appState.i18n?.[l]?.tripTime);
-    setEl(`tripDesc_${l}`, appState.i18n?.[l]?.tripDesc);
   });
-  const bOpen = document.getElementById("bookingOpen"); if(bOpen) bOpen.checked = appState.bookingOpen !== false;
-  const otpSw = document.getElementById("otpRequiredSwitch"); if(otpSw) otpSw.checked = appState.otpRequired !== false;
-  setEl("tripTargetDate", appState.tripTargetDate);
-  setEl("weatherTemp", appState.weatherTemp);
-  setEl("weatherCondition", appState.weatherCondition);
-  setEl("capacityInput", appState.capacity);
-  setEl("bookedInput", appState.booked);
   setEl("fibAccount", appState.fibAccount);
+  populateTripEditor(activeTripIndex);
   renderCoupons();
   renderGallery();
   renderReviews();
   renderTripsAndDetail();
+}
+
+async function fetchRemoteCMSIntoAdmin(){
+  try{
+    const r = await fetch(`${WORKER_URL}/api/site/config?cb=${Date.now()}`, { cache: "no-store" });
+    if(!r.ok) return;
+    const x = await r.json();
+    const cfg = x.config || x.data || x;
+    if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){
+      appState.trips = cfg.trips;
+      ensureTripsArray();
+      populateTripEditor(activeTripIndex);
+      renderTripsAndDetail();
+      animateCounters();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      syncPublicWebsiteBridge();
+    }
+  }catch(e){}
 }
 
 // Spotlight Mouse Tracker + 3D Tilt (Aceternity / 21st.dev / React-Bits style)
@@ -1833,7 +2238,8 @@ setInterval(() => {
   const clk = document.getElementById("liveClock");
   if(clk) clk.textContent = String(now.getHours()).padStart(2,"0") + ":" + String(now.getMinutes()).padStart(2,"0");
 
-  const target = new Date(appState.tripTargetDate || "2026-10-20T05:00").getTime();
+  const cur = appState.trips?.[activeTripIndex] || appState.trips?.[0];
+  const target = new Date(cur?.tripTargetDate || appState.tripTargetDate || "2026-10-24T05:00").getTime();
   const diff = Math.max(0, target - Date.now());
   const d = Math.floor(diff / 86400000);
   const h = Math.floor((diff % 86400000) / 3600000);
@@ -1843,10 +2249,11 @@ setInterval(() => {
   setC("cdDays", d); setC("cdHours", h); setC("cdMins", m); setC("cdSecs", s);
 }, 1000);
 
-// Initialize Three.js Background + Hero 3D Mountain + Lenis + GSAP + AOS + ScrollReveal + Anime.js
+// Initialize Three.js Background + Lenis + GSAP + AOS + ScrollReveal + Anime.js
 window.addEventListener("DOMContentLoaded", () => {
   loadState();
   autoSync();
+  fetchRemoteCMSIntoAdmin();
   fetchLiveRegistrations();
   animateCounters();
 
@@ -1875,7 +2282,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   if(window.THREE){
-    // 1. Global Starfield & Embers Canvas
+    // Ambient Starfield & Embers Canvas
     try{
       const canvas = document.getElementById("threeBgCanvas");
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
@@ -1904,34 +2311,6 @@ window.addEventListener("DOMContentLoaded", () => {
         renderer.render(scene, camera);
       }
       anim();
-    }catch(e){}
-
-    // 2. Hero 3D Mountain Wireframe Overlay
-    try{
-      const hCanvas = document.getElementById("heroThreeOverlay");
-      if(hCanvas){
-        const w = hCanvas.clientWidth || 440;
-        const h = hCanvas.clientHeight || 190;
-        const hRenderer = new THREE.WebGLRenderer({ canvas: hCanvas, alpha: true, antialias: true });
-        hRenderer.setSize(w, h);
-        const hScene = new THREE.Scene();
-        const hCam = new THREE.PerspectiveCamera(50, w / h, 0.1, 50);
-        hCam.position.set(0, 1.3, 4.2);
-        hCam.lookAt(0, 0.2, 0);
-
-        const coneGeo = new THREE.ConeGeometry(1.75, 1.65, 6, 3);
-        const wireMat = new THREE.MeshBasicMaterial({ color: 0xff2b55, wireframe: true, transparent: true, opacity: 0.28 });
-        const peak = new THREE.Mesh(coneGeo, wireMat);
-        peak.position.set(-1.1, -0.15, 0);
-        hScene.add(peak);
-
-        function animHero(){
-          requestAnimationFrame(animHero);
-          peak.rotation.y += 0.0035;
-          hRenderer.render(hScene, hCam);
-        }
-        animHero();
-      }
     }catch(e){}
   }
 });

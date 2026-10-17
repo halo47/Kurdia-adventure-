@@ -413,26 +413,37 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<!-- KURDIA ADVENTURE — OneSignal Web Push v16 -->
-<!-- FIX 2026-10-03: OneSignal uses isolated /onesignal/ worker; root /sw.js is native KURDIA push only. -->
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<!-- KURDIA ADVENTURE — OneSignal Web Push v16 (Domain-Guarded) -->
 <script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "5610b681-d8d1-4641-8ea9-49ee792ed647",
-      safari_web_id: "web.onesignal.auto.251f0eae-dd1c-4527-b78a-dfbe622fe6a9",
-      serviceWorkerPath: "/onesignal/OneSignalSDKWorker.js",
-      serviceWorkerParam: { scope: "/onesignal/" }
-    });
-    window.KurdiaOneSignal = OneSignal;
-    window.KurdiaOneSignalPrompt = async function() {
-      if (OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
-        return await OneSignal.Notifications.requestPermission();
-      }
-      return false;
-    };
-  });
+  (function(){
+    var h = String(location.hostname || '').toLowerCase();
+    if (h === 'kurdia-adventure.vercel.app' || h.endsWith('kurdiaadventure.com')) {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';
+      s.defer = true;
+      document.head.appendChild(s);
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      window.OneSignalDeferred.push(async function(OneSignal) {
+        try {
+          await OneSignal.init({
+            appId: "5610b681-d8d1-4641-8ea9-49ee792ed647",
+            safari_web_id: "web.onesignal.auto.251f0eae-dd1c-4527-b78a-dfbe622fe6a9",
+            serviceWorkerPath: "/onesignal/OneSignalSDKWorker.js",
+            serviceWorkerParam: { scope: "/onesignal/" }
+          });
+          window.KurdiaOneSignal = OneSignal;
+          window.KurdiaOneSignalPrompt = async function() {
+            if (OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
+              return await OneSignal.Notifications.requestPermission();
+            }
+            return false;
+          };
+        } catch (err) {
+          console.warn('OneSignal skipped:', err);
+        }
+      });
+    }
+  })();
 </script>
 
 <style id="kurdia-cinematic-motion">
@@ -563,19 +574,29 @@ main,section,.section,.page-section{background-color:transparent!important}
     </div>
   </div>
   <div class="container">
-    <section class="section">
-      <div class="sectionhead"><div><h2>گەشتی ئەم هەفتەیە</h2><p>ئەو ئەزموونەی کە ئێستا چاوەڕێتە</p></div><a class="link" href="#booking">هەموو گەشتەکان</a></div>
-      <div class="featured">
-        <div class="featureimg"><span class="pill" id="tripStatus">کراوە</span></div>
-        <div class="featurebody">
-          <h3 id="tripTitle">کوردستان</h3>
-          <div class="muted" id="tripLocation"></div>
-          <p class="muted" id="tripDesc">ڕۆژێک لەگەڵ سروشت، دەریاچە و هاوڕێیەتی.</p>
-          <div class="stats">
-            <div class="stat"><b id="tripDate">03/10</b><span>بەروار</span></div>
-            <div class="stat"><b id="tripPrice">150,000</b><span>نرخ</span></div>
+    <section class="section" id="upcomingTripsSection">
+      <div class="sectionhead">
+        <div>
+          <div class="eyebrow">UPCOMING EXPEDITIONS</div>
+          <h2 id="upcomingSectionTitle">گەشتەکانی داهاتوو</h2>
+          <p id="upcomingSectionDesc">هەموو ئەو گەشتانەی ئێستا ناونووسینیان بۆ کراوەیە</p>
+        </div>
+        <a class="link" href="#booking">بینینی هەموو (<span id="upcomingTripsCount">1</span>)</a>
+      </div>
+      <!-- Multi-Trip Dynamic Container -->
+      <div id="homeTripsList" class="home-trips-grid">
+        <div class="featured">
+          <div class="featureimg"><span class="pill" id="tripStatus">کراوە</span></div>
+          <div class="featurebody">
+            <h3 id="tripTitle">کوردستان</h3>
+            <div class="muted" id="tripLocation"></div>
+            <p class="muted" id="tripDesc">ڕۆژێک لەگەڵ سروشت، دەریاچە و هاوڕێیەتی.</p>
+            <div class="stats">
+              <div class="stat"><b id="tripDate">24/10</b><span>بەروار</span></div>
+              <div class="stat"><b id="tripPrice">35,000</b><span>نرخ</span></div>
             </div>
-          <button class="btn red" style="width:100%;margin-top:12px" onclick="go('booking')">بەشداری بکە</button>
+            <button class="btn red" style="width:100%;margin-top:12px" onclick="go('booking')">بەشداری بکە</button>
+          </div>
         </div>
       </div>
     </section>
@@ -815,7 +836,16 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const DEFAULT={heroTitle:'زیاتر لە گەشت.',heroText:'ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.',trip:{title:'دریاچەی دووکان',location:'دووکان · سلێمانی',date:'2026-10-03',price:'150,000 IQD',capacity:35,booked:28,desc:'ڕۆژێک لەگەڵ سروشت، دەریاچە و هاوڕێیەتی.'},destinations:[{name:'دەریاچەی دووکان',description:'یەکێکە لە شوێنە جوانەکانی ناوچەی دووکان؛ بۆ دیمەن، ئارامگرتن و گەشتی سروشتی گونجاوە.',type:'دریاچە',img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=80'},{name:'ئاوشاری گۆیژە',description:'شوێنێکی سروشتی بۆ بینینی ئاوی ڕووبار و دیمەنە سەوزەکان و ڕۆژێکی خۆش لەگەڵ سروشت.',type:'ئاوشار',img:'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=700&q=80'},{name:'هەڵگورد',description:'ناوچەیەکی شاخاویی بە دیمەنی فراوان و ڕێڕەوی سروشتی بۆ ئەو کەسانەی حەزی گەشت و سەرکێشییانە.',type:'شاخ',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80'},{name:'دارستان',description:'شوێنێکی ئارام بۆ پیاچوونەوە، هەناسەدان و تێکەڵبوون لەگەڵ سروشت.',type:'سروشت',img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&q=80'},{name:'شوێنە مێژووییەکان',description:'شوێنە مێژووییەکان کە چیرۆک و ناسنامەی ناوچەکە لەگەڵ گەشت و سەیران کۆدەکەنەوە.',type:'مێژوو',img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=700&q=80'},{name:'ڕێگای دۆکان',description:'ڕێگایەکی جوان بۆ Road Trip و گۆڕینی دیمەن لە نێوان سروشت و شوێنە جیاوازەکان.',type:'ڕێگای گەشت',img:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=700&q=80'}],stories:[{name:'Hawar',img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=200&q=80'},{name:'Dalan',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80'},{name:'Sara',img:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=200&q=80'},{name:'Rebin',img:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=200&q=80'}],safety:[
+const DEFAULT={
+  heroTitle:'زیاتر لە گەشت.',
+  heroText:'ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.',
+  trip:{title:'گەشتی لووتکەی چیای هەڵگورد',location:'باڵەکایەتی · چیای هەڵگورد',date:'2026-10-24',time:'05:00 بەیانی',price:'35,000 دینار',capacity:40,booked:29,desc:'گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان.',imageUrl:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85'},
+  trips:[
+    {id:'trip-1',title:'گەشتی لووتکەی چیای هەڵگورد',location:'باڵەکایەتی · چیای هەڵگورد',date:'2026-10-24',time:'05:00 بەیانی',price:'35,000 دینار',capacity:40,booked:29,desc:'گەشتێکی پڕ لە جۆش و خرۆش بە هاوڕێیەتی ڕێبەرانی شارەزا، هاتوچۆ بە پاسی گەشتیاری، چا و نانی بەیانی و سەرکەوتن بۆ بەرزترین لووتکەی کوردستان.',imageUrl:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85',published:true,status:'active'},
+    {id:'trip-2',title:'کەمپینگ و دەریاچەی دووکان',location:'دووکان · سلێمانی',date:'2026-10-31',time:'07:00 بەیانی',price:'45,000 دینار',capacity:35,booked:21,desc:'ڕۆژێکی ناوازە لە کەناری دەریاچەی دووکان لەگەڵ گەشتی بەلەم، ئاگرکردنەوەی ئێواران، مۆسیقا و ژەمی تایبەت لەناو سروشتدا.',imageUrl:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',published:true,status:'active'},
+    {id:'trip-3',title:'ئاوشار و گەلی عەلی بەگ و ڕەواندز',location:'سۆران · ڕەواندز',date:'2026-11-07',time:'06:00 بەیانی',price:'30,000 دینار',capacity:45,booked:18,desc:'گەشتێکی خێزانی و هاوڕێیانە بۆ بینینی دیمەنە سەرسوڕهێنەرەکانی خەرەندی ڕەواندز و ئاوشاری گەلی عەلی بەگ لەگەڵ وێنەگرتنی پڕۆفیشناڵ.',imageUrl:'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1000&q=85',published:true,status:'active'}
+  ],
+  destinations:[{name:'دەریاچەی دووکان',description:'یەکێکە لە شوێنە جوانەکانی ناوچەی دووکان؛ بۆ دیمەن، ئارامگرتن و گەشتی سروشتی گونجاوە.',type:'دریاچە',img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=80'},{name:'ئاوشاری گۆیژە',description:'شوێنێکی سروشتی بۆ بینینی ئاوی ڕووبار و دیمەنە سەوزەکان و ڕۆژێکی خۆش لەگەڵ سروشت.',type:'ئاوشار',img:'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=700&q=80'},{name:'هەڵگورد',description:'ناوچەیەکی شاخاویی بە دیمەنی فراوان و ڕێڕەوی سروشتی بۆ ئەو کەسانەی حەزی گەشت و سەرکێشییانە.',type:'شاخ',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80'},{name:'دارستان',description:'شوێنێکی ئارام بۆ پیاچوونەوە، هەناسەدان و تێکەڵبوون لەگەڵ سروشت.',type:'سروشت',img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&q=80'},{name:'شوێنە مێژووییەکان',description:'شوێنە مێژووییەکان کە چیرۆک و ناسنامەی ناوچەکە لەگەڵ گەشت و سەیران کۆدەکەنەوە.',type:'مێژوو',img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=700&q=80'},{name:'ڕێگای دۆکان',description:'ڕێگایەکی جوان بۆ Road Trip و گۆڕینی دیمەن لە نێوان سروشت و شوێنە جیاوازەکان.',type:'ڕێگای گەشت',img:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=700&q=80'}],stories:[{name:'Hawar',img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=200&q=80'},{name:'Dalan',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80'},{name:'Sara',img:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=200&q=80'},{name:'Rebin',img:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=200&q=80'}],safety:[
 ['☀','گەرما و ئاودان','ئاو، پشوودان و نیشتەجێبوون لە شوێنی سێبەر.','https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85'],
 ['❄','سەرما','جل و کەرەستەی گونجاو و پاراستنی دەست و پێ.','https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=85'],
 ['☼','UV و خۆر','کریم، کڵاو، ئاو و کەمکردنەوەی ماوەی ڕاستەوخۆ لە خۆر.','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=85'],
@@ -832,14 +862,35 @@ DEFAULT.about={title:'گەشت، سروشت، هاوڕێیەتی.',text:'ئێم�
 DEFAULT.contact={whatsapp:'+9647503130360',phone:'+9647503130360',city:'هەولێر — کوردستان',email:'',mapUrl:''};
 DEFAULT.social={instagram:'',tiktok:'',youtube:'',facebook:'',telegram:''};
 let data=JSON.parse(localStorage.getItem('kurdia_premium_data')||'null')||DEFAULT;
+
+function normalizeTripItem(tr, fallbackTrip, lang, globalI18n, idx){
+  if(!tr || typeof tr !== 'object') return null;
+  const ti = tr.i18n || (idx === 0 ? globalI18n : null) || {};
+  const lti = ti[lang] || ti.ku || {};
+  return {
+    id: tr.id || ('trip-' + (idx + 1)),
+    title: lti.tripTitle ?? tr.title ?? fallbackTrip?.title ?? 'گەشتی KURDIA',
+    location: lti.tripLocation ?? tr.location ?? fallbackTrip?.location ?? 'کوردستان',
+    date: tr.date ?? tr.targetDate ?? fallbackTrip?.date ?? '',
+    price: lti.tripPrice ?? tr.price ?? fallbackTrip?.price ?? '—',
+    time: lti.tripTime ?? tr.time ?? fallbackTrip?.time ?? '',
+    capacity: Number(tr.capacity ?? fallbackTrip?.capacity ?? 35),
+    booked: Number(tr.booked ?? fallbackTrip?.booked ?? 0),
+    desc: lti.tripDesc ?? tr.description ?? tr.desc ?? fallbackTrip?.desc ?? '',
+    imageUrl: tr.heroImageUrl ?? tr.imageUrl ?? tr.img ?? fallbackTrip?.imageUrl ?? 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
+    published: tr.published !== false,
+    status: tr.status || 'active',
+    i18n: tr.i18n || null
+  };
+}
+
 function normalizeRemoteCMS(config){
-  // Cloud CMS is stored by Admin in a structured shape. The public site uses
-  // a flatter rendering model, so normalize BOTH shapes here.
+  // Cloud CMS is stored by Admin in a structured shape. Normalize ALL posted trips!
   if(!config || typeof config!=='object') return data;
   const home=config.home||{};
   const hero=home.hero||{};
-  const trips=Array.isArray(config.trips)?config.trips:[];
-  const t=trips.find(x=>x && (x.published!==false)) || trips[0] || {};
+  const rawTrips=Array.isArray(config.trips)?config.trips:(config.trip?[config.trip]:[]);
+  const t=rawTrips.find(x=>x && (x.published!==false)) || rawTrips[0] || {};
   const out={...data};
   out.cmsI18n=config.i18n||hero.i18n||t.i18n||out.cmsI18n||{};
   const lang=localStorage.getItem('kurdia_language')||'ku';
@@ -850,20 +901,21 @@ function normalizeRemoteCMS(config){
   if(hero.subtitle!==undefined && hi.heroSubtitle===undefined) out.heroText=hero.subtitle;
   if(hero.text!==undefined && hero.subtitle===undefined && hi.heroSubtitle===undefined) out.heroText=hero.text;
   if(hero.imageUrl!==undefined) out.heroImageUrl=hero.imageUrl;
-  if(Object.keys(t).length){
-    const ti=t.i18n||out.cmsI18n||{};
-    const lti=ti[lang]||ti.ku||{};
-    out.trip={...out.trip,
-      title:lti.tripTitle??t.title??out.trip?.title,
-      location:lti.tripLocation??t.location??out.trip?.location,
-      date:t.date??t.targetDate??out.trip?.date,
-      price:lti.tripPrice??t.price??out.trip?.price,
-      time:lti.tripTime??t.time??out.trip?.time,
-      capacity:Number(t.capacity??out.trip?.capacity??35),
-      booked:Number(t.booked??out.trip?.booked??0),
-      desc:lti.tripDesc??t.description??t.desc??out.trip?.desc,
-      imageUrl:t.heroImageUrl??t.imageUrl??out.trip?.imageUrl
-    };
+
+  if(rawTrips.length){
+    const normalizedList = rawTrips
+      .map((item, idx) => normalizeTripItem(item, out.trip, lang, out.cmsI18n, idx))
+      .filter(Boolean);
+    if(normalizedList.length){
+      out.trips = normalizedList;
+      out.trip = normalizedList[0];
+    }
+  } else if(Object.keys(t).length){
+    const single = normalizeTripItem(t, out.trip, lang, out.cmsI18n, 0);
+    if(single){
+      out.trip = single;
+      out.trips = [single];
+    }
   }
   ['destinations','safety','gallery','reviews','about','contact','social','stories'].forEach(k=>{
     if(config[k]!==undefined) out[k]=config[k];
@@ -900,17 +952,16 @@ window.setLanguage=function(lang){
     if(hi){
       if(hi.heroTitle!==undefined)data.heroTitle=hi.heroTitle;
       if(hi.heroSubtitle!==undefined)data.heroText=hi.heroSubtitle;
-      if(data.trip){
-        const ti=(data.cmsI18n?.[lang]||{});
-        data.trip.title=ti.tripTitle??data.trip.title;
-        data.trip.location=ti.tripLocation??data.trip.location;
-        data.trip.price=ti.tripPrice??data.trip.price;
-        data.trip.time=ti.tripTime??data.trip.time;
-        data.trip.desc=ti.tripDesc??data.trip.desc;
-      }
-      render();
-      route();
     }
+    if(Array.isArray(data.trips) && data.trips.length){
+      data.trips = data.trips.map((tr, idx) => normalizeTripItem(tr, tr, lang, data.cmsI18n, idx));
+      data.trip = data.trips[0];
+    } else if(data.trip){
+      data.trip = normalizeTripItem(data.trip, data.trip, lang, data.cmsI18n, 0);
+      data.trips = [data.trip];
+    }
+    render();
+    route();
   }catch(e){}
 };
 
@@ -966,6 +1017,15 @@ function normalizePublicData(){
   if(!data.ai) data.ai={enabled:true,name:'یاریدەدەری KURDIA',welcome:'سڵاو هاوڕێ 🌿'};
   if(!data.booking) data.booking={open:true,otpRequired:true};
   if(!data.system) data.system={status:'online',maintenance:false,defaultLanguage:'ku'};
+  if(!Array.isArray(data.trips) || !data.trips.length){
+    if(data.trip && typeof data.trip === 'object'){
+      const defTrips = (DEFAULT.trips || []).slice(1);
+      data.trips = [data.trip, ...defTrips];
+    } else {
+      data.trips = DEFAULT.trips || [DEFAULT.trip];
+    }
+  }
+  data.trip = data.trips[0] || DEFAULT.trip;
 }
 function safeImageUrl(value){
  const v=String(value||"").trim();
@@ -1004,43 +1064,131 @@ function applyCMSPresentation(){
   if(si && s.enabled===false) si.disabled=true;
   const ai=document.querySelector('.ai'); if(ai&&data.ai?.enabled===false) ai.style.display='none';
 }
+
+window.selectTripForBooking = function(tripIdx){
+  const trips = getActiveTripsList();
+  const chosen = trips[tripIdx] || trips[0];
+  go('booking');
+  setTimeout(()=>{
+    const sel = $('bookingTrip');
+    if(sel && chosen){
+      sel.value = chosen.title || '';
+      if(sel.selectedIndex < 0 && sel.options.length > tripIdx) sel.selectedIndex = tripIdx;
+    }
+    document.querySelectorAll('#tripList .article').forEach((el, idx)=>{
+      el.classList.toggle('trip-article-active', idx === tripIdx);
+    });
+  }, 60);
+};
+
+function getActiveTripsList(){
+  const rawList = Array.isArray(data.trips) && data.trips.length ? data.trips : (data.trip ? [data.trip] : []);
+  const published = rawList.filter(item => item && item.published !== false && item.status !== 'archived' && String(item.title || '').trim());
+  const upcoming = published.filter(item => {
+    const dv = String(item.date || '').trim();
+    if(!dv) return true;
+    const dobj = new Date(dv + 'T23:59:59');
+    return Number.isNaN(dobj.getTime()) || dobj.getTime() >= Date.now();
+  });
+  return upcoming.length ? upcoming : published;
+}
+
+function formatTripDateKu(dateStr){
+  const dv = String(dateStr || '').trim();
+  if(!dv) return 'بەم زووانە';
+  const dobj = new Date(dv + 'T23:59:59');
+  if(Number.isNaN(dobj.getTime())) return dv;
+  return dobj.toLocaleDateString('ku-IQ', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
 function render(){
  normalizePublicData();
  applyCMSPresentation();
  const heroUrl=safeImageUrl(data.heroImageUrl);
  document.documentElement.style.setProperty("--hero-image",heroUrl?`url("${heroUrl.replace(/"/g,'\\"')}")`:"url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85')");
- const feature=document.querySelector('.featureimg');
- if(feature){const tripUrl=safeImageUrl(data.trip?.imageUrl); if(tripUrl) feature.style.backgroundImage=`url("${tripUrl.replace(/"/g,'\\"')}")`;}
  $('heroTitle').textContent=data.heroTitle;$('heroText').textContent=data.heroText;
- const t=data.trip;
- const tripDateValue=String(t?.date||'').trim();
- const tripDateObj=tripDateValue?new Date(tripDateValue+'T23:59:59'):null;
- const tripDateValid=!!tripDateObj&&!Number.isNaN(tripDateObj.getTime());
- const tripIsUpcoming=tripDateValid&&tripDateObj.getTime()>=Date.now();
- const featuredSection=document.querySelector('#home .section');
- const featuredCard=document.querySelector('#home .featured');
+
+ const activeTrips = getActiveTripsList();
+ const t = activeTrips[0] || data.trip || {};
+ const tripIsUpcoming = activeTrips.length > 0;
+ const featuredSection = document.getElementById('upcomingTripsSection') || document.querySelector('#home .section');
+ const homeTripsList = document.getElementById('homeTripsList');
+ const countBadge = document.getElementById('upcomingTripsCount');
+ if(countBadge) countBadge.textContent = String(activeTrips.length);
+
  if(featuredSection){
    let noTripNotice=document.getElementById('noUpcomingTripNotice');
-   if(!noTripNotice){noTripNotice=document.createElement('div');noTripNotice.id='noUpcomingTripNotice';noTripNotice.className='glass';noTripNotice.style.cssText='margin-top:12px;padding:18px;line-height:1.9';noTripNotice.textContent='بەرواری گەشتی داهاتوو هێشتا بڵاونەکراوەتەوە. تکایە دواتر سەردانمان بکە.';featuredSection.appendChild(noTripNotice)}
-   if(featuredCard)featuredCard.style.display=tripIsUpcoming?'':'none';
-   noTripNotice.style.display=tripIsUpcoming?'none':'';
+   if(!noTripNotice){
+     noTripNotice=document.createElement('div');
+     noTripNotice.id='noUpcomingTripNotice';
+     noTripNotice.className='glass';
+     noTripNotice.style.cssText='margin-top:12px;padding:18px;line-height:1.9';
+     noTripNotice.textContent='بەرواری گەشتی داهاتوو هێشتا بڵاونەکراوەتەوە. تکایە دواتر سەردانمان بکە.';
+     featuredSection.appendChild(noTripNotice);
+   }
+   if(homeTripsList) homeTripsList.style.display = tripIsUpcoming ? '' : 'none';
+   noTripNotice.style.display = tripIsUpcoming ? 'none' : '';
    const sectionTitle=featuredSection.querySelector('.sectionhead h2');
    const sectionDesc=featuredSection.querySelector('.sectionhead p');
-   if(sectionTitle)sectionTitle.textContent=tripIsUpcoming?'گەشتی داهاتوو':'گەشتی داهاتوو';
-   if(sectionDesc)sectionDesc.textContent=tripIsUpcoming?'ئەو ئەزموونەی کە ئێستا چاوەڕێتە':'بەرواری گەشتی داهاتوو هێشتا دیاری نەکراوە';
+   if(sectionTitle) sectionTitle.textContent = activeTrips.length > 1 ? 'گەشتەکانی داهاتوو' : 'گەشتی داهاتوو';
+   if(sectionDesc) sectionDesc.textContent = tripIsUpcoming
+     ? `ئێستا ${activeTrips.length} گەشتی جیاواز بەردەستە بۆ ناونووسین و بەشداریکردن`
+     : 'بەرواری گەشتی داهاتوو هێشتا دیاری نەکراوە';
  }
- $('tripTitle').textContent=t.title||'';$('tripLocation').textContent=t.location||'';$('tripDesc').textContent=t.desc||'';
- $('tripDate').textContent=tripDateValid?tripDateObj.toLocaleDateString('ku-IQ',{year:'numeric',month:'2-digit',day:'2-digit'}):'—';$('tripPrice').textContent=t.price||'—';
+
+ if(homeTripsList && tripIsUpcoming){
+   homeTripsList.classList.toggle('multi-trips', activeTrips.length > 1);
+   homeTripsList.innerHTML = activeTrips.map((tr, idx) => {
+     const imgUrl = safeImageUrl(tr.imageUrl) || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85';
+     const cap = Math.max(1, Number(tr.capacity || 35));
+     const bkd = Math.min(cap, Math.max(0, Number(tr.booked || 0)));
+     const rem = Math.max(0, cap - bkd);
+     const pct = Math.min(100, Math.round((bkd / cap) * 100));
+     const fDate = formatTripDateKu(tr.date);
+     const isFull = rem === 0 || tr.status === 'full';
+     const statusLabel = isFull ? 'پڕبووە' : (rem <= 6 ? `${rem} شوێن ماوە 🔥` : 'ناونووسین کراوەیە');
+     return `<article class="featured trip-showcase-card" data-trip-index="${idx}" data-aos="fade-up" data-aos-delay="${idx * 90}">
+       <div class="featureimg" style="background-image:url('${esc(imgUrl)}')">
+         <span class="pill trip-status-pill ${isFull ? 'is-full' : ''}">${esc(statusLabel)}</span>
+         <span class="trip-number-badge">گەشتی #${idx + 1}</span>
+       </div>
+       <div class="featurebody">
+         <div class="trip-meta-top">
+           <span class="trip-loc-tag"><i data-lucide="map-pin" style="width:13px;height:13px"></i> ${esc(tr.location || 'کوردستان')}</span>
+           ${tr.time ? `<span class="trip-time-tag"><i data-lucide="clock" style="width:13px;height:13px"></i> ${esc(tr.time)}</span>` : ''}
+         </div>
+         <h3 class="trip-card-title">${esc(tr.title || 'گەشتی KURDIA')}</h3>
+         <p class="muted trip-card-desc">${esc(tr.desc || 'ئەزموونێکی تایبەت لەگەڵ تیمی KURDIA ADVENTURE.')}</p>
+         <div class="trip-capacity-bar-wrap">
+           <div class="trip-capacity-labels">
+             <span>شوێنی گیراو: <b>${bkd}/${cap}</b></span>
+             <span class="trip-rem-text">${rem > 0 ? `${rem} کورسی بەتاڵە` : 'تەواو بووە'}</span>
+           </div>
+           <div class="trip-capacity-track"><div class="trip-capacity-fill" style="width:${pct}%"></div></div>
+         </div>
+         <div class="stats trip-stats-grid">
+           <div class="stat"><b>${esc(fDate)}</b><span>بەرواری گەشت</span></div>
+           <div class="stat"><b>${esc(tr.price || '—')}</b><span>نرخی بەشداری</span></div>
+           <div class="stat"><b>${rem} کەس</b><span>شوێنی ماوە</span></div>
+         </div>
+         <button class="btn red trip-join-btn" style="width:100%;margin-top:14px" onclick="selectTripForBooking(${idx})" ${isFull ? 'disabled' : ''}>
+           ${isFull ? 'شوێن نەماوە' : 'بەشداری لەم گەشتە بکە ←'}
+         </button>
+       </div>
+     </article>`;
+   }).join('');
+ }
+
  const bookingSubmit=$('bookingSubmitBtn');if(bookingSubmit)bookingSubmit.disabled=!tripIsUpcoming;
- const bookingForm=$('bookingForm');if(bookingForm){let bookingNotice=document.getElementById('bookingTripNotice');if(!bookingNotice){bookingNotice=document.createElement('p');bookingNotice.id='bookingTripNotice';bookingNotice.className='muted';bookingNotice.style.cssText='line-height:1.9;margin:10px 0';bookingForm.prepend(bookingNotice)}bookingNotice.textContent=tripIsUpcoming?'تکایە زانیارییەکان پڕ بکەرەوە و شوێنت بگرە.':'تۆمارکردن بۆ ئەم گەشتە بەردەست نییە؛ کاتێک بەرواری ڕاستەقینە بڵاوکرایەوە دەتوانیت تۆمار بکەیت.';bookingNotice.style.display=tripIsUpcoming?'none':'';}
+ const bookingForm=$('bookingForm');if(bookingForm){let bookingNotice=document.getElementById('bookingTripNotice');if(!bookingNotice){bookingNotice=document.createElement('p');bookingNotice.id='bookingTripNotice';bookingNotice.className='muted';bookingNotice.style.cssText='line-height:1.9;margin:10px 0';bookingForm.prepend(bookingNotice)}bookingNotice.textContent=tripIsUpcoming?'تکایە گەشتی دڵخوازت هەڵبژێرە و زانیارییەکان پڕ بکەرەوە.':'تۆمارکردن بۆ ئەم گەشتە بەردەست نییە؛ کاتێک بەرواری ڕاستەقینە بڵاوکرایەوە دەتوانیت تۆمار بکەیت.';bookingNotice.style.display=tripIsUpcoming?'none':'';}
  const cards=data.destinations.map((x,i)=>`<button type="button" class="dest" style="background-image:url('${esc(x.img)}')" onclick="openDestination(${i})"><span>${esc(x.name)}${x.type?`<small style="display:block;font-size:9px;color:#c9ced6;margin-top:3px">${esc(x.type)}</small>`:''}</span></button>`).join('');$('homeDests').innerHTML=cards;$('destList').innerHTML=cards;
  const addStoryBtn=`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,.05);border:1px dashed var(--muted)"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;
  $('homeStories').innerHTML=addStoryBtn+data.stories.map(st=>`<div class="story"><div class="ring"><img src="${esc(st.img)}"></div><small>${esc(st.name)}</small></div>`).join('');
  $('storyGrid').innerHTML=data.stories.map(st=>`<div class="tile" style="background:url('${esc(st.img)}') center/cover"><div><b>${esc(st.name)}</b><small>ئەزموونی KURDIA</small></div></div>`).join('');
  $('safetyList').innerHTML=data.safety.map(x=>{const title=x.title??x[1]??'';const desc=x.desc??x[2]??'';const icon=x.icon??x[0]??'🛡️';const img=x.imageUrl||x.image||x[3]||'';const imgUrl=safeImageUrl(img)||img;return `<article class="safety-card">${imgUrl?`<img src="${esc(imgUrl)}" alt="${esc(title)}" loading="lazy">`:''}<div class="safety-card-body"><div class="safety-icon">${esc(icon)}</div><div><b>${esc(title)}</b><p>${esc(desc)}</p>${x.source?`<small>سەرچاوە: ${esc(x.source)}</small>`:''}</div></div></article>`}).join('');
  $('prepTypes').innerHTML=data.prep.map((x,i)=>{const name=x.name??x[0]??'Camping';const title=x.title??x[1]??name;const icon=x.icon??x[2]??'🎒';return `<button class="article" style="text-align:right" onclick="prep(${i})"><div class="articleIcon">${esc(icon)}</div><div><b>${esc(title)}</b><small>${esc(name)}</small></div></button>`}).join('');prep(0);
- $('tripList').innerHTML=tripIsUpcoming?[t].map(x=>`<div class="article"><div class="articleIcon"><i data-lucide="compass"></i></div><div style="flex:1"><b>${esc(x.title)}</b><small>${esc(x.location)} · ${esc(tripDateObj.toLocaleDateString('ku-IQ',{year:'numeric',month:'2-digit',day:'2-digit'}))} · ${esc(x.price)}</small></div></div>`).join(''):'<div class="article"><div style="flex:1"><b>هیچ گەشتێکی داهاتوو بۆ تۆمارکردن نییە</b><small>بەروار و زانیاریی گەشتی نوێ دوای بڵاوکردنەوە لێرە دەردەکەوێت.</small></div></div>';
- $('bookingTrip').innerHTML=tripIsUpcoming?`<option>${esc(t.title)}</option>`:'<option value="">هیچ گەشتێکی بەردەست نییە</option>'; $('bookingTrip').disabled=!tripIsUpcoming;
+ $('tripList').innerHTML=tripIsUpcoming?activeTrips.map((x,idx)=>`<div class="article trip-booking-item" style="cursor:pointer" onclick="selectTripForBooking(${idx})"><div class="articleIcon"><i data-lucide="compass"></i></div><div style="flex:1"><b>${esc(x.title)}</b><small>${esc(x.location)} · ${esc(formatTripDateKu(x.date))} · ${esc(x.price)}</small></div><span class="pill" style="position:static;font-size:10px">هەڵبژاردن</span></div>`).join(''):'<div class="article"><div style="flex:1"><b>هیچ گەشتێکی داهاتوو بۆ تۆمارکردن نییە</b><small>بەروار و زانیاریی گەشتی نوێ دوای بڵاوکردنەوە لێرە دەردەکەوێت.</small></div></div>';
+ $('bookingTrip').innerHTML=tripIsUpcoming?activeTrips.map(x=>`<option value="${esc(x.title)}">${esc(x.title)} — (${esc(formatTripDateKu(x.date))} · ${esc(x.price)})</option>`).join(''):'<option value="">هیچ گەشتێکی بەردەست نییە</option>'; $('bookingTrip').disabled=!tripIsUpcoming;
  renderGalleryPublic();renderReviewsPublic();renderAboutPublic();renderContactPublic();
  renderWeather();renderPage(location.hash.slice(1)||'home');
  if(window.lucide)lucide.createIcons();
@@ -1240,12 +1388,12 @@ function initWeatherMap(){
 }
 function initPrivateMap(){if(privateMap)return;privateMap=createMap('privateMap',36.19,44.01,async({lat,lng})=>{privateMarker=setMapMarker(privateMap,privateMarker,lat,lng);$('privateLat').value=lat.toFixed(6);$('privateLng').value=lng.toFixed(6);try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ku`).then(r=>r.json());const n=g?.display_name;if(n){const d=document.querySelector('input[name="destination"]');if(d&&!d.value)d.value=n;const h=document.getElementById('privatePlaceHint');if(h)h.textContent='شوێنی دیاریکراو: '+n}}catch(e){}})}
 function prep(i){const x=data.prep[i]||{};const name=x.name??x[0]??'Camping';const items=Array.isArray(x.items)?x.items:({Camping:['خێمە','کیسەی خەوتن','چرای سەر','ئاو','کەرەستەی پزیشکی'],Nature:['جل و پێڵاو','ئاو','کریم خۆر','نەخشە/GPS','Power Bank'],Waterfall:['پێڵاوی دژ بە ئاو','جل گۆڕین','ئاو','کریم خۆر','کیت یارمەتیدانی یەکەم'],'Road Trip':['شۆفێری','سووتەمەنی','چارەسەری پەنچر','شارژەر','نەخشە'],Family:['خواردن','ئاو','کەرەستەی منداڵ','First Aid','پلانێکی ئارام']}[name]||[]);$('prepChecklist').innerHTML=items.map(v=>`<label><input type="checkbox">${esc(v)}</label>`).join('')}
-function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value||'').toLowerCase();const all=[...data.destinations.map(x=>x.name),...data.safety.map(x=>x[1]),...data.prep.map(x=>x[0])];$('searchResults').innerHTML=all.filter(x=>x.toLowerCase().includes(q)).slice(0,8).map(x=>`<div class="article"><div class="articleIcon"><i data-lucide="search"></i></div><div><b>${esc(x)}</b><small>KURDIA ADVENTURE</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';if(window.lucide)lucide.createIcons();}
+function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value||'').toLowerCase();const tripItems=getActiveTripsList().map((tr,idx)=>({label:tr.title+' — '+tr.location,sub:formatTripDateKu(tr.date)+' · '+tr.price,action:`closeModal('searchModal');selectTripForBooking(${idx})`}));const otherItems=[...data.destinations.map(x=>({label:x.name,sub:x.type||'شوێن',action:`closeModal('searchModal');go('destinations')`})),...data.safety.map(x=>({label:x[1],sub:'سەلامەتی',action:`closeModal('searchModal');go('safety')`})),...data.prep.map(x=>({label:x[0],sub:'ئامادەکاری',action:`closeModal('searchModal');go('prep')`}))];const all=[...tripItems,...otherItems];$('searchResults').innerHTML=all.filter(x=>String(x.label||'').toLowerCase().includes(q)||String(x.sub||'').toLowerCase().includes(q)).slice(0,10).map(x=>`<div class="article" style="cursor:pointer" onclick="${x.action}"><div class="articleIcon"><i data-lucide="search"></i></div><div><b>${esc(x.label)}</b><small>${esc(x.sub||'KURDIA ADVENTURE')}</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';if(window.lucide)lucide.createIcons();}
 function openAI(){ $('aiModal').classList.add('show');setTimeout(()=>{const i=$('aiInput');if(i)i.focus();const m=$('aiMessages');if(m)m.scrollTop=m.scrollHeight;if(window.lucide)lucide.createIcons()},80)}
 function closeModal(id){$(id).classList.remove('show')}
 function addAIMessage(text,type){const m=$('aiMessages');if(!m)return;const d=document.createElement('div');d.className='ai-msg '+type;d.textContent=text;m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
 function aiQuick(q){const i=$('aiInput');if(i)i.value=q;const f=document.querySelector('.ai-chat-form');if(f)askAI({preventDefault:()=>{}})}
-function aiSiteContext(){const t=data.trip||{};return {brand:'KURDIA ADVENTURE',language:'کوردی سۆرانی',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت؛ تەنها شاخەوانی نییە.',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},destinations:(data.destinations||[]).map(x=>({name:x.name,type:x.type,description:x.description||x.desc})),safety:(data.safety||[]).map(x=>({title:x[1],text:x[2]})),preparation:(data.prep||[]).map(x=>({type:x.name||x[0],label:x.label||x[1]})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','سەلامەتی','ئامادەکاری','شوێنەکان','ستۆری','گەلەری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
+function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',language:'کوردی سۆرانی',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت؛ تەنها شاخەوانی نییە.',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,type:x.type,description:x.description||x.desc})),safety:(data.safety||[]).map(x=>({title:x[1],text:x[2]})),preparation:(data.prep||[]).map(x=>({type:x.name||x[0],label:x.label||x[1]})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','سەلامەتی','ئامادەکاری','شوێنەکان','ستۆری','گەلەری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
 async function askAI(e){e.preventDefault();const i=$('aiInput');const q=(i?.value||'').trim();if(!q)return;addAIMessage(q,'user');i.value='';const loading=addAIMessage('خەریکم سەیری زانیارییەکانی KURDIA دەکەم... 🌿','bot loading');try{const r=await fetch(WORKER+'/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q,lang:'ku',siteState:aiSiteContext()})});const x=await r.json().catch(()=>({}));loading.remove();addAIMessage(x.text||'ببورە، ئێستا نەتوانیم وەڵام بدەم. تکایە دووبارە هەوڵ بدەوە.','bot')}catch(err){loading.remove();addAIMessage('پەیوەندی بە یاریدەدەری KURDIA نەکرا. تکایە دووبارە هەوڵ بدەوە.','bot')}}
 function bookingGo(step){const form=$('bookingForm');if(!form)return;form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on)});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2&&$('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}bookingGo(step+1)}
@@ -1813,6 +1961,140 @@ document.addEventListener('click',function(e){
 @keyframes kurdiaShinyEyebrow{
   to{background-position:200% center}
 }
+/* Multi-Trip Showcase Grid & Cards (Aceternity UI / 21st.dev / React-Bits) */
+.home-trips-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+@media(min-width:720px){
+  .home-trips-grid.multi-trips{
+    grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));
+    gap:20px;
+  }
+}
+.trip-showcase-card{
+  display:flex;
+  flex-direction:column;
+  transition:transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .3s ease;
+  border:1px solid rgba(255,255,255,.11);
+  background:linear-gradient(180deg, rgba(18,25,38,.92), rgba(10,14,22,.96));
+  box-shadow:0 18px 42px rgba(0,0,0,.42);
+}
+.trip-showcase-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(229,35,79,.45);
+  box-shadow:0 24px 54px rgba(0,0,0,.6), 0 0 28px rgba(229,35,79,.16);
+}
+.trip-showcase-card .featureimg{
+  height:225px;
+  position:relative;
+  overflow:hidden;
+  background-size:cover;
+  background-position:center;
+}
+.trip-showcase-card .featureimg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(5,7,11,.15) 0%, rgba(5,7,11,.35) 55%, rgba(10,14,22,.96) 100%);
+}
+.trip-status-pill{
+  z-index:2;
+  background:rgba(12,18,28,.76);
+  border:1px solid rgba(55,201,135,.45);
+  color:#6bf0b3;
+  font-weight:800;
+  letter-spacing:.3px;
+}
+.trip-status-pill.is-full{
+  border-color:rgba(255,92,118,.5);
+  color:#ff8096;
+}
+.trip-number-badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  z-index:2;
+  background:rgba(229,35,79,.85);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+  padding:6px 11px;
+  border-radius:999px;
+  box-shadow:0 6px 16px rgba(229,35,79,.35);
+}
+.trip-showcase-card .featurebody{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  padding:18px;
+}
+.trip-meta-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+  font-size:11px;
+  color:#ff8197;
+  font-weight:700;
+}
+.trip-loc-tag,.trip-time-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  padding:4px 9px;
+  border-radius:10px;
+}
+.trip-card-title{
+  margin:0 0 8px;
+  font-size:20px;
+  font-weight:900;
+  line-height:1.35;
+}
+.trip-card-desc{
+  margin:0 0 14px;
+  font-size:12.5px;
+  line-height:1.85;
+  flex:1;
+}
+.trip-capacity-bar-wrap{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  padding:10px 12px;
+  margin-bottom:12px;
+}
+.trip-capacity-labels{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+.trip-capacity-labels b{color:#fff}
+.trip-rem-text{color:#5de4a5;font-weight:700}
+.trip-capacity-track{
+  height:6px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.trip-capacity-fill{
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg, #ff5c77, #e5234f);
+  transition:width .8s cubic-bezier(.22,1,.36,1);
+}
+.trip-article-active{
+  border-color:rgba(229,35,79,.65) !important;
+  background:rgba(229,35,79,.1) !important;
+}
 </style>
 
 <script id="kurdia-v15-interactive-engine">
@@ -1820,7 +2102,7 @@ document.addEventListener('click',function(e){
   'use strict';
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 1. Live Sync from Admin Studio (kurdia_builder_published_v3)
+  // 1. Live Sync from Admin Studio (kurdia_builder_published_v3) supporting Multiple Trips
   function syncFromLocalAdmin(){
     try{
       const raw = localStorage.getItem('kurdia_builder_published_v3');
@@ -1837,7 +2119,16 @@ document.addEventListener('click',function(e){
         if(Array.isArray(adminState.coupons)) data.coupons = adminState.coupons;
         if(Array.isArray(adminState.reviews) && adminState.reviews.length) data.reviews = adminState.reviews;
         if(Array.isArray(adminState.gallery) && adminState.gallery.length) data.gallery = adminState.gallery;
-        if(data.trip){
+
+        if(Array.isArray(adminState.trips) && adminState.trips.length){
+          const normalized = adminState.trips
+            .map((item, idx) => normalizeTripItem(item, data.trip, lang, data.cmsI18n, idx))
+            .filter(Boolean);
+          if(normalized.length){
+            data.trips = normalized;
+            data.trip = normalized[0];
+          }
+        } else if(data.trip){
           if(i18n.tripTitle) data.trip.title = i18n.tripTitle;
           if(i18n.tripLocation) data.trip.location = i18n.tripLocation;
           if(i18n.tripPrice) data.trip.price = i18n.tripPrice;
@@ -1847,6 +2138,11 @@ document.addEventListener('click',function(e){
           if(adminState.tripImageUrl) data.trip.imageUrl = adminState.tripImageUrl;
           if(adminState.capacity) data.trip.capacity = Number(adminState.capacity);
           if(adminState.booked != null) data.trip.booked = Number(adminState.booked);
+          if(Array.isArray(data.trips) && data.trips.length){
+            data.trips[0] = { ...data.trips[0], ...data.trip };
+          } else {
+            data.trips = [data.trip];
+          }
         }
         if(typeof render === 'function') render();
       }
@@ -1891,11 +2187,11 @@ document.addEventListener('click',function(e){
 
     if(window.ScrollReveal && !reduce){
       try{
-        ScrollReveal().reveal('.dest, .tile, .safety-card, .public-review, .public-photo', {
+        ScrollReveal().reveal('.trip-showcase-card, .dest, .tile, .safety-card, .public-review, .public-photo', {
           distance: '18px',
           origin: 'bottom',
           duration: 620,
-          interval: 60,
+          interval: 70,
           cleanup: true
         });
       }catch(e){}
@@ -1910,6 +2206,14 @@ document.addEventListener('click',function(e){
           delay: anime.stagger(110, { start: 260 }),
           duration: 820,
           easing: 'easeOutExpo'
+        });
+        anime({
+          targets: '.trip-showcase-card',
+          translateY: [22, 0],
+          opacity: [0, 1],
+          delay: anime.stagger(120, { start: 180 }),
+          duration: 760,
+          easing: 'easeOutCubic'
         });
       }catch(e){}
     }
