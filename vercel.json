@@ -1,5 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": null,
+  "outputDirectory": ".",
   "routes": [
     {
       "src": "^/$",
@@ -9,24 +11,11 @@
           "value": "admin.kurdiaadventure.com"
         }
       ],
-      "dest": "/admin.html",
-      "headers": {
-        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
-      }
+      "dest": "/admin.html"
     },
     {
       "src": "^/(admin|control|kurdia-control-center-admin)/?$",
-      "dest": "/admin.html",
-      "headers": {
-        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
-      }
-    },
-    {
-      "src": "^/(index\\.html|admin\\.html|sw\\.js)$",
-      "dest": "/$1",
-      "headers": {
-        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
-      }
+      "dest": "/admin.html"
     },
     {
       "handle": "filesystem"
