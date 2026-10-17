@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
-<meta property="og:title" content="KURDIA CONTROL CENTER — Admin Studio">
-<meta property="og:description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
-<title>KURDIA CONTROL CENTER — Admin Studio</title>
+<meta name="description" content="KURDIA ADVENTURE — پلاتفۆرمی پێشکەوتووی بەڕێوەبردنی ئەدمین و کۆنترۆڵ سەنتەر (KURDIA Executive Admin Dashboard)">
+<meta property="og:title" content="KURDIA CONTROL CENTER — Executive Admin Dashboard">
+<meta property="og:description" content="KURDIA ADVENTURE — پلاتفۆرمی پێشکەوتووی بەڕێوەبردنی ئەدمین و کۆنترۆڵ سەنتەر (KURDIA Executive Admin Dashboard)">
+<title>KURDIA CONTROL CENTER — Executive Admin Dashboard</title>
 
 <!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,52 +15,35 @@
 
 <!-- CROPPER.JS (Admin Image Cropping) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" defer></script>
 
-<!-- AOS (Animate On Scroll) -->
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-
-<!-- GSAP + ScrollTrigger (GreenSock Animation Platform) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-<!-- ANIME.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
-
-<!-- MOTION ONE (motion.dev) -->
-<script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.js"></script>
-
-<!-- THREE.JS (3D Mountain & Starfield WebGL) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<!-- LENIS (Smooth Inertia Scroll) -->
-<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-
-<!-- SCROLLREVEAL.JS -->
-<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
-
-<!-- LOTTIE-PLAYER -->
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<!-- GSAP + ANIME.JS + THREE.JS (Non-blocking defer) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 
 <style>
 :root{
-  --bg:#03080e;
-  --panel:#09131d;
-  --panel2:#0d1a26;
-  --line:#1a2b3a;
+  --bg:#04080f;
+  --panel:#09131e;
+  --panel2:#0d1b2a;
+  --panel3:#112235;
+  --line:#1b2d40;
+  --line-bright:#28415c;
   --red:#f0183d;
   --red2:#b90e2b;
-  --text:#f5f7fa;
-  --muted:#8b9aa8;
+  --text:#f5f8fc;
+  --muted:#8fa1b3;
   --green:#12c77a;
   --blue:#159ce8;
   --gold:#f3b529;
+  --purple:#8b5cf6;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{
+html,body{
   margin:0;
-  background:radial-gradient(ellipse at 50% -10%,#15202d 0,#050a10 48%,#02060a 100%);
+  padding:0;
+  background:radial-gradient(ellipse at 50% -10%,#172638 0,#060c14 48%,#03060b 100%);
   color:var(--text);
   font-family:'Noto Sans Arabic','Vazirmatn','Plus Jakarta Sans',sans-serif;
   min-height:100vh;
@@ -68,6 +51,14 @@ body{
 }
 button,input,select,textarea{font:inherit}
 button{cursor:pointer;color:inherit}
+
+/* Guarantee 100% visibility of active pages and elements at all times */
+.page{display:none;opacity:1 !important;visibility:visible !important}
+.page.active{display:block !important;opacity:1 !important;visibility:visible !important;animation:pageFadeIn .22s ease-out}
+@keyframes pageFadeIn{
+  from{opacity:0.4;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
 
 /* 3D Fixed Background Canvas */
 #threeBgCanvas{
@@ -77,51 +68,158 @@ button{cursor:pointer;color:inherit}
   height:100%;
   pointer-events:none;
   z-index:0;
-  opacity:0.72;
+  opacity:0.55;
+}
+
+/* EXECUTIVE SHELL LAYOUT (Full Desktop + Sleek Mobile) */
+.admin-shell{
+  position:relative;
+  z-index:1;
+  width:min(100%, 1480px);
+  margin:0 auto;
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+  padding:10px 12px 104px;
+}
+
+/* Desktop Sidebar (Visible >= 960px) */
+.admin-sidebar{
+  display:none;
+  background:linear-gradient(180deg,rgba(10,20,32,0.96),rgba(5,11,19,0.98));
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:16px 14px;
+  height:calc(100vh - 32px);
+  position:sticky;
+  top:16px;
+  overflow-y:auto;
+  flex-direction:column;
+  gap:12px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.55);
+}
+.sidebar-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  background:linear-gradient(135deg,#132234,#09121c);
+  border:1px solid #223548;
+  border-radius:16px;
+}
+.sidebar-nav-group{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.sidebar-group-label{
+  font-size:10px;
+  font-weight:800;
+  color:#6c8196;
+  padding:6px 10px 3px;
+  letter-spacing:.4px;
+}
+.side-btn{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  text-align:right;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid transparent;
+  background:transparent;
+  color:#b6c4d2;
+  font-size:12px;
+  font-weight:700;
+  transition:all .18s ease;
+}
+.side-btn:hover{
+  background:#0f1e2e;
+  color:#fff;
+  border-color:#1f3347;
+}
+.side-btn.active{
+  background:linear-gradient(135deg,#5a1024,#1a0c14);
+  color:#fff;
+  border-color:#8c233f;
+  box-shadow:0 6px 18px rgba(240,24,61,0.2);
+}
+.side-btn .s-ico{
+  width:28px;
+  height:28px;
+  border-radius:8px;
+  background:rgba(255,255,255,0.05);
+  display:grid;
+  place-items:center;
+  font-size:14px;
+  flex:none;
+}
+.side-btn .s-badge{
+  margin-right:auto;
+  background:#132638;
+  border:1px solid #274059;
+  color:#7dd3fc;
+  font-size:10px;
+  font-weight:800;
+  padding:2px 7px;
+  border-radius:99px;
 }
 
 .app{
-  width:min(100%,480px);
-  min-height:100vh;
-  margin:auto;
-  background:linear-gradient(180deg,rgba(7,16,26,0.92),rgba(3,9,16,0.96) 75%);
-  position:relative;
-  z-index:1;
-  padding:10px 12px 98px;
-  overflow:hidden;
-  border-left:1px solid #18222c;
-  border-right:1px solid #18222c;
-  transition:max-width .35s cubic-bezier(0.16,1,0.3,1), width .35s cubic-bezier(0.16,1,0.3,1);
+  width:100%;
+  min-width:0;
+  background:linear-gradient(180deg,rgba(8,17,28,0.92),rgba(4,9,16,0.96) 75%);
+  border:1px solid #182736;
+  border-radius:22px;
+  padding:12px 14px 32px;
+  box-shadow:0 18px 60px rgba(0,0,0,0.5);
 }
-.app.wide-mode{
-  width:min(96%,920px);
+
+@media(min-width:960px){
+  .admin-shell{
+    grid-template-columns:270px 1fr;
+    padding:16px 20px 36px;
+    align-items:start;
+  }
+  .admin-sidebar{
+    display:flex;
+  }
+  .app{
+    padding:18px 22px 40px;
+  }
+  .bottom-nav{
+    display:none !important;
+  }
 }
 
 .status{
-  height:22px;
+  height:24px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 8px;
-  font:600 11px 'Plus Jakarta Sans',sans-serif;
+  font:600 11px 'Plus Jakarta Sans','Noto Sans Arabic',sans-serif;
   color:#dbe1e8;
+  margin-bottom:4px;
 }
-.status .signals{letter-spacing:2px}
+.status .signals{letter-spacing:1px;color:#6bf0b3;font-weight:700}
 
 .topbar{
   display:flex;
   align-items:center;
   gap:8px;
-  padding:9px 10px;
-  background:linear-gradient(120deg,#101b27,#050c14);
-  border:1px solid #1b2936;
+  padding:10px 12px;
+  background:linear-gradient(120deg,#101d2b,#060d16);
+  border:1px solid #1e3042;
   border-radius:16px;
   box-shadow:0 7px 20px #0008;
   margin-bottom:12px;
   position:relative;
   overflow:hidden;
+  flex-wrap:wrap;
 }
-/* Aceternity Border Beam / Shimmer */
 .topbar::after, .border-beam::after{
   content:"";
   position:absolute;
@@ -135,7 +233,6 @@ button{cursor:pointer;color:inherit}
   100%{left:140%}
 }
 
-/* React-Bits Shiny Text */
 .shiny-text{
   background:linear-gradient(110deg,#ffffff 35%,#ff6b86 50%,#ffffff 65%);
   background-size:200% auto;
@@ -149,47 +246,61 @@ button{cursor:pointer;color:inherit}
 }
 
 .logo{
-  width:38px;
-  height:38px;
+  width:40px;
+  height:40px;
   flex:none;
-  border-radius:11px;
+  border-radius:12px;
   background:linear-gradient(145deg,#ff4a62,#b9002c);
   display:grid;
   place-items:center;
   font-size:20px;
   box-shadow:0 0 16px #ef123b55;
   color:#fff;
+  font-weight:900;
 }
-.brand{flex:1;min-width:0}
-.brand b{font:800 11px 'Plus Jakarta Sans',sans-serif;letter-spacing:.25px;display:block;direction:ltr;text-align:right}
-.brand small{display:block;color:#9ba9b8;font:9px 'Plus Jakarta Sans',sans-serif;direction:ltr;text-align:right;margin-top:3px}
-.avatar{
-  width:32px;
-  height:32px;
-  border-radius:10px;
-  background:linear-gradient(135deg,#b6d7e8,#a64b35);
-  display:grid;
-  place-items:center;
-  font-size:17px;
-  border:1px solid #52616e;
-  text-decoration:none;
+.brand{flex:1;min-width:140px}
+.brand b{font:800 12px 'Plus Jakarta Sans',sans-serif;letter-spacing:.3px;display:block;direction:ltr;text-align:right}
+.brand small{display:block;color:#9ba9b8;font:10px 'Plus Jakarta Sans',sans-serif;direction:ltr;text-align:right;margin-top:2px}
+
+/* Quick Horizontal Module Strip (Great on mobile & desktop) */
+.quick-nav-strip{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding:2px 1px 10px;
+  margin-bottom:8px;
+  scrollbar-width:none;
 }
+.quick-nav-strip::-webkit-scrollbar{display:none}
+.q-chip{
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 13px;
+  border-radius:12px;
+  font-size:11px;
+  font-weight:800;
+  background:#0d1a27;
+  border:1px solid #1e3144;
+  color:#d3dde7;
+  transition:.18s;
+}
+.q-chip:hover{border-color:var(--red);color:#fff;transform:translateY(-1px)}
+.q-chip.green{background:linear-gradient(120deg,#093829,#071f17);border-color:#157a56;color:#6bf0b3}
+.q-chip.orange{background:linear-gradient(120deg,#3b1d11,#1c0e08);border-color:#9a3412;color:#fdba74}
+.q-chip.blue{background:linear-gradient(120deg,#0c2c47,#071829);border-color:#1d588a;color:#7dd3fc}
 
-.page{display:none}
-.page.active{display:block}
-
-/* Aceternity / 21st.dev Spotlight Card + 3D Tilt */
+/* Spotlight Card */
 .spotlight-card{
   position:relative;
   overflow:hidden;
-  transform-style:preserve-3d;
-  will-change:transform;
 }
 .spotlight-card::before{
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(240,24,61,0.20), transparent 70%);
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(240,24,61,0.15), transparent 70%);
   opacity:0;
   transition:opacity .25s ease;
   pointer-events:none;
@@ -198,109 +309,301 @@ button{cursor:pointer;color:inherit}
 .spotlight-card:hover::before{opacity:1}
 .spotlight-card > *{position:relative;z-index:1}
 
-.hero{
-  height:192px;
-  border-radius:16px;
+/* Executive Hero Banner */
+.exec-hero{
+  border-radius:18px;
   overflow:hidden;
   position:relative;
-  margin-bottom:12px;
-  border:1px solid #28303a;
-  background:linear-gradient(0deg,#03070be8 0%,transparent 68%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85') center 53%/cover;
-  transform-style:preserve-3d;
+  margin-bottom:14px;
+  border:1px solid #283a4d;
+  background:linear-gradient(115deg,rgba(4,10,18,0.92) 15%,rgba(12,22,36,0.78) 55%,rgba(185,14,43,0.38) 100%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85') center/cover;
+  padding:18px 16px;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
 }
-#heroThreeOverlay{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:1;
+@media(min-width:768px){
+  .exec-hero{
+    grid-template-columns:1.35fr 1fr;
+    align-items:center;
+    padding:22px 24px;
+  }
 }
-.hero-tools{
+.exec-hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(18,199,122,0.16);
+  border:1px solid rgba(18,199,122,0.5);
+  color:#6bf0b3;
+  font-size:10px;
+  font-weight:800;
+  padding:4px 10px;
+  border-radius:99px;
+  margin-bottom:8px;
+}
+.exec-hero h1{
+  font-size:clamp(20px, 3vw, 28px);
+  line-height:1.3;
+  margin:0 0 6px;
+  font-weight:900;
+}
+.exec-hero h1 span{color:#ff3358}
+.exec-hero p{
+  font-size:12px;
+  color:#cbd5e1;
+  margin:0 0 12px;
+  line-height:1.6;
+}
+.exec-hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.hero-countdown-box{
+  background:rgba(6,13,22,0.82);
+  backdrop-filter:blur(12px);
+  border:1px solid #26394d;
+  border-radius:15px;
+  padding:12px 14px;
+  text-align:center;
+}
+.hero-countdown-box small{
+  display:block;
+  font-size:10px;
+  color:#94a3b8;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.hero-cd-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  direction:ltr;
+}
+.hero-cd-item{
+  background:linear-gradient(145deg,#152436,#09121d);
+  border:1px solid #263c54;
+  border-radius:10px;
+  padding:7px 4px;
+}
+.hero-cd-item b{
+  display:block;
+  font:800 18px 'Plus Jakarta Sans',sans-serif;
+  color:#fff;
+}
+.hero-cd-item span{
+  font-size:9px;
+  color:#8fa1b3;
+  display:block;
+  margin-top:2px;
+}
+
+.pill{
+  font-size:11px;
+  font-weight:800;
+  border-radius:12px;
+  padding:8px 13px;
+  background:linear-gradient(120deg,#0c9b61,#07774a);
+  color:white;
+  border:1px solid #26d08c;
+  box-shadow:0 4px 12px rgba(10,158,103,0.35);
+  transition:transform .18s;
+  white-space:nowrap;
+}
+.pill:hover{transform:scale(1.03)}
+
+/* 6 KPI EXECUTIVE GRID */
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:14px;
+}
+@media(min-width:680px){
+  .kpi-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:1180px){
+  .kpi-grid{grid-template-columns:repeat(6,1fr)}
+}
+.stat{
+  border-radius:15px;
+  padding:13px;
+  border:1px solid #243547;
+  background:linear-gradient(135deg,#101d2b,#071019);
+  min-height:96px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:transform .2s ease, border-color .2s ease;
+}
+.stat:hover{transform:translateY(-2px);border-color:#3a5673}
+.stat.red{background:linear-gradient(135deg,#421020,#140910);border-color:#77203a}
+.stat.blue{background:linear-gradient(135deg,#092b46,#07121f);border-color:#194e78}
+.stat.green{background:linear-gradient(135deg,#07382b,#061610);border-color:#136c50}
+.stat.gold{background:linear-gradient(135deg,#3b290b,#150f05);border-color:#694e17}
+.stat.purple{background:linear-gradient(135deg,#27154a,#0e091c);border-color:#533096}
+.stat.cyan{background:linear-gradient(135deg,#083344,#06141d);border-color:#155e75}
+.stat-head{display:flex;align-items:center;justify-content:space-between;font-size:18px;gap:6px}
+.stat strong{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;direction:ltr}
+.stat p{font-size:11px;margin:6px 0 2px;font-weight:800;color:#f1f5f9}
+.stat small{display:block;color:#9fb0c2;font:10px 'Plus Jakarta Sans','Noto Sans Arabic',sans-serif;direction:ltr;text-align:right}
+
+/* DASHBOARD BENTO 2-COLUMN GRIDS */
+.dash-bento{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-bottom:14px;
+}
+@media(min-width:860px){
+  .dash-bento{
+    grid-template-columns:1.15fr 0.85fr;
+  }
+  .dash-bento.equal{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+.panel-card{
+  background:linear-gradient(160deg,#0b1622,#071019);
+  border:1px solid #1d2f42;
+  border-radius:16px;
+  padding:14px;
+  box-shadow:0 8px 26px rgba(0,0,0,0.35);
+}
+.panel-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:9px 10px;
-  direction:ltr;
-  position:relative;
-  z-index:2;
+  gap:8px;
+  margin-bottom:12px;
+  padding-bottom:9px;
+  border-bottom:1px solid #172636;
 }
-.pill{
-  font-size:10px;
-  font-weight:800;
-  border-radius:20px;
-  padding:5px 11px;
-  background:#0a9e67;
-  color:white;
-  border:0;
-  box-shadow:0 4px 12px rgba(10,158,103,0.4);
-  transition:transform .2s;
-  white-space:nowrap;
-}
-.pill:hover{transform:scale(1.04)}
-.hero-copy{
-  position:absolute;
-  bottom:12px;
-  right:13px;
-  left:12px;
-  z-index:2;
-}
-.hero-copy h1{
-  font-size:24px;
-  line-height:1.35;
-  margin:0 0 5px;
+.panel-head h3{
+  margin:0;
+  font-size:14px;
   font-weight:900;
-  text-shadow:0 2px 10px #000;
+  display:flex;
+  align-items:center;
+  gap:7px;
 }
-.hero-copy h1 span{color:#ff2447}
-.hero-copy p{font-size:10px;color:#e1e6eb;margin:0}
-
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
-.stat{
-  border-radius:13px;
-  padding:11px;
-  border:1px solid #273544;
-  background:linear-gradient(135deg,#111d29,#07101a);
-  min-height:80px;
-  transition:transform .2s ease, border-color .2s ease;
+.panel-head small{
+  font-size:10px;
+  color:var(--muted);
 }
-.stat:hover{transform:translateY(-2px)}
-.stat.red{background:linear-gradient(135deg,#4c1020,#170b12);border-color:#77203a}
-.stat.blue{background:linear-gradient(135deg,#092d4a,#071321);border-color:#174766}
-.stat.green{background:linear-gradient(135deg,#073a2d,#061811);border-color:#11654b}
-.stat.gold{background:linear-gradient(135deg,#3b2b0d,#151006);border-color:#5a4516}
-.stat-head{display:flex;align-items:center;justify-content:space-between;font-size:20px}
-.stat strong{font-size:24px;font-variant-numeric:tabular-nums}
-.stat p{font-size:11px;margin:5px 0 0;font-weight:700}
-.stat small{display:block;color:#aeb8c2;font:10px 'Plus Jakarta Sans',sans-serif;margin-top:2px;direction:ltr;text-align:right}
 
-.section-title{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:14px;margin:13px 3px 8px}
-.section-title .mini{background:var(--red);border-radius:8px;padding:5px 8px;font-size:12px;border:0;color:#fff}
+/* Occupancy Bar Item */
+.occ-row{
+  background:#08121c;
+  border:1px solid #192a3b;
+  border-radius:12px;
+  padding:10px 12px;
+  margin-bottom:8px;
+}
+.occ-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-size:12px;
+  font-weight:800;
+}
+.occ-bar{
+  height:7px;
+  border-radius:99px;
+  background:#142231;
+  overflow:hidden;
+  margin:7px 0 6px;
+}
+.occ-bar i{
+  display:block;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,#f0183d,#f3b529);
+}
+.occ-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:10px;
+  color:#94a3b8;
+  flex-wrap:wrap;
+  gap:6px;
+}
 
-.service-list{display:grid;gap:7px}
-.service{display:flex;align-items:center;gap:10px;padding:10px;background:#08131c;border:1px solid #1c2b38;border-radius:12px}
-.service-icon{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:#101e2a;border:1px solid #273747;font-size:16px;flex:none}
+/* Command Modules Grid (12 Modules) */
+.module-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+@media(min-width:640px){
+  .module-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:1100px){
+  .module-grid{grid-template-columns:repeat(4,1fr)}
+}
+.module-card{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  background:linear-gradient(145deg,#0b1724,#071019);
+  border:1px solid #1d2f42;
+  border-radius:14px;
+  text-align:right;
+  cursor:pointer;
+  transition:transform .18s ease, border-color .18s ease;
+}
+.module-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--red);
+}
+.module-card .m-ico{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  background:#112233;
+  border:1px solid #243b52;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+  flex:none;
+}
+.module-card .m-txt{min-width:0;flex:1}
+.module-card .m-txt b{display:block;font-size:12px;font-weight:800;color:#fff}
+.module-card .m-txt small{display:block;font-size:10px;color:#8fa1b3;margin-top:2px}
+
+.section-title{display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:14px;margin:16px 2px 10px}
+.section-title .mini{background:var(--red);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:800;border:0;color:#fff}
+
+.service-list{display:grid;gap:8px}
+.service{display:flex;align-items:center;gap:10px;padding:11px 12px;background:#08131d;border:1px solid #1c2c3c;border-radius:13px}
+.service-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#101f2e;border:1px solid #27394a;font-size:16px;flex:none}
 .service-text{flex:1;min-width:0}
-.service-text b{font-size:11px;display:block}
-.service-text small{font:10px 'Plus Jakarta Sans',sans-serif;color:var(--muted);display:block;margin-top:3px;direction:ltr;text-align:right}
-.ok{color:#10d67d;font-size:11px;white-space:nowrap;font-weight:700}
+.service-text b{font-size:12px;display:block}
+.service-text small{font:10px 'Plus Jakarta Sans','Noto Sans Arabic',sans-serif;color:var(--muted);display:block;margin-top:3px}
+.ok{color:#10d67d;font-size:11px;white-space:nowrap;font-weight:800}
 
 .bottom-nav{
   position:fixed;
   bottom:0;
   left:50%;
   transform:translateX(-50%);
-  width:min(100%,480px);
+  width:min(100%,640px);
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(5,1fr);
   gap:4px;
   padding:8px 9px calc(8px + env(safe-area-inset-bottom));
-  background:#06101af2;
+  background:#06101af5;
   backdrop-filter:blur(16px);
-  border:1px solid #1b2b3a;
+  border:1px solid #1c2e40;
   border-bottom:0;
-  border-radius:17px 17px 0 0;
-  z-index:30;
+  border-radius:18px 18px 0 0;
+  z-index:50;
+  box-shadow:0 -10px 30px rgba(0,0,0,0.6);
 }
 .nav-btn{
   border:0;
@@ -309,7 +612,7 @@ button{cursor:pointer;color:inherit}
   border-radius:12px;
   padding:7px 2px 5px;
   font-size:10px;
-  font-weight:700;
+  font-weight:800;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -340,8 +643,8 @@ button{cursor:pointer;color:inherit}
   padding:0 4px;
 }
 
-.toolbar{display:flex;align-items:center;gap:8px;margin:5px 0 12px}
-.toolbar h2{font-size:17px;margin:0;flex:1;font-weight:900}
+.toolbar{display:flex;align-items:center;gap:8px;margin:4px 0 14px;flex-wrap:wrap}
+.toolbar h2{font-size:18px;margin:0;flex:1;font-weight:900}
 .icon-btn{
   width:37px;
   height:37px;
@@ -350,7 +653,7 @@ button{cursor:pointer;color:inherit}
   background:#0a1520;
   display:grid;
   place-items:center;
-  font-size:16px;
+  font-size:15px;
   transition:.2s;
   text-decoration:none;
   color:inherit;
@@ -380,35 +683,52 @@ button{cursor:pointer;color:inherit}
   background:#111b26;
   border-radius:20px;
   padding:8px 12px;
-  font-size:10px;
+  font-size:11px;
   font-weight:700;
   color:#c0cad3;
 }
 .filter.active{background:var(--red);border-color:var(--red);color:white}
 
+.trips-grid-container{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+@media(min-width:760px){
+  .trips-grid-container{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+@media(min-width:1200px){
+  .trips-grid-container{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
 .trip-card{
   border:1px solid #1e2d3b;
-  border-radius:14px;
+  border-radius:15px;
   background:linear-gradient(130deg,#0c1823,#071019);
   overflow:hidden;
-  margin:8px 0;
   cursor:pointer;
   transition:transform .22s ease, border-color .22s ease;
+  display:flex;
+  flex-direction:column;
 }
 .trip-card:hover{transform:translateY(-2px);border-color:#ef123b66}
-.trip-card img{width:100%;height:125px;object-fit:cover;display:block}
-.trip-info{padding:11px}
+.trip-card img{width:100%;height:145px;object-fit:cover;display:block}
+.trip-info{padding:12px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
 .trip-title{display:flex;align-items:center;gap:7px}
-.trip-title b{font-size:13px;flex:1}
-.tag{font-size:10px;border-radius:20px;padding:4px 9px;background:#087e51;color:#eafff4;font-weight:700}
-.trip-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;color:#aeb9c4;font-size:10px}
-.meta-chip{background:#111e2a;border:1px solid #223140;padding:6px 8px;border-radius:9px}
+.trip-title b{font-size:14px;flex:1}
+.tag{font-size:10px;border-radius:20px;padding:4px 9px;background:#087e51;color:#eafff4;font-weight:700;white-space:nowrap}
+.trip-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;color:#aeb9c4;font-size:10px}
+.meta-chip{background:#111e2a;border:1px solid #223140;padding:5px 8px;border-radius:8px}
 
 .primary{
   width:100%;
   border:0;
   border-radius:11px;
-  padding:12px;
+  padding:12px 14px;
   background:linear-gradient(100deg,#f21b40,#d90e32);
   color:#fff;
   font-size:12px;
@@ -433,43 +753,43 @@ button{cursor:pointer;color:inherit}
 }
 .secondary-btn:hover{border-color:var(--red)}
 
-.detail-image{width:100%;height:160px;object-fit:cover;border-radius:14px;border:1px solid #293644}
-.detail-list{display:grid;gap:6px;margin-top:10px}
-.detail-row{display:flex;align-items:center;gap:10px;padding:11px;background:#0a141e;border:1px solid #1c2b38;border-radius:10px;font-size:12px}
+.detail-image{width:100%;height:220px;object-fit:cover;border-radius:15px;border:1px solid #293644}
+.detail-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:10px}
+.detail-row{display:flex;align-items:center;gap:10px;padding:11px 13px;background:#0a141e;border:1px solid #1c2b38;border-radius:11px;font-size:12px}
 .detail-row .dicon{font-size:17px;width:25px;text-align:center}
-.detail-row span:last-child{margin-right:auto;color:#e4eaf0}
-.countdown{margin-top:10px;border:1px solid #293644;border-radius:13px;padding:12px;text-align:center;background:linear-gradient(130deg,#101a25,#070d14)}
-.countdown b{display:block;font-size:11px;margin-bottom:9px}
+.detail-row span:last-child{margin-right:auto;color:#e4eaf0;font-weight:700}
+.countdown{margin-top:12px;border:1px solid #293644;border-radius:14px;padding:14px;text-align:center;background:linear-gradient(130deg,#101a25,#070d14)}
+.countdown b{display:block;font-size:12px;margin-bottom:9px}
 .digits{display:flex;gap:7px;justify-content:center;direction:ltr}
-.digits span{background:#c91435;border-radius:7px;padding:8px 10px;font:700 20px 'Plus Jakarta Sans',sans-serif;box-shadow:0 0 12px #e7183a2b;min-width:42px}
-.progress{height:6px;border-radius:9px;background:#172431;overflow:hidden;margin-top:10px}
+.digits span{background:#c91435;border-radius:8px;padding:8px 12px;font:800 20px 'Plus Jakarta Sans',sans-serif;box-shadow:0 0 12px #e7183a2b;min-width:46px}
+.progress{height:7px;border-radius:9px;background:#172431;overflow:hidden;margin-top:10px}
 .progress i{display:block;width:72%;height:100%;background:linear-gradient(90deg,#f0183d,#f3b529)}
 
 .person{
   display:flex;
   flex-direction:column;
   gap:8px;
-  padding:11px;
+  padding:12px;
   margin-top:8px;
   border-radius:13px;
   background:#09141e;
   border:1px solid #1e2d3a;
 }
 .person-top{display:flex;align-items:center;gap:10px;width:100%}
-.person .face{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#b7d7e9,#a85e4c);font-size:21px;flex:none}
+.person .face{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#b7d7e9,#a85e4c);font-size:20px;flex:none}
 .person-main{flex:1;min-width:0}
 .person-main b{font-size:12px;display:block}
-.person-main small{font:10px 'Plus Jakarta Sans',sans-serif;color:#a0afbd;display:block;margin-top:3px;direction:ltr;text-align:right;overflow-wrap:anywhere}
+.person-main small{font:10px 'Plus Jakarta Sans','Noto Sans Arabic',sans-serif;color:#a0afbd;display:block;margin-top:3px;direction:ltr;text-align:right;overflow-wrap:anywhere}
 .person-actions{display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:7px;border-top:1px solid #162432;flex-wrap:wrap}
 .status-tag{font-size:10px;border-radius:20px;padding:4px 9px;background:#0c9b61;color:white;white-space:nowrap;font-weight:700}
 .status-tag.yellow{background:#e4a80b;color:#171006}
 .status-tag.red{background:#db2542}
 
-.field{margin:11px 0}
+.field{margin:9px 0}
 .field label{display:block;font-size:11px;font-weight:700;margin-bottom:5px;color:#cbd5e1}
 .field input,.field select,.field textarea{
   width:100%;
-  padding:11px 12px;
+  padding:10px 12px;
   border-radius:10px;
   border:1px solid #263644;
   background:#0b1621;
@@ -479,7 +799,7 @@ button{cursor:pointer;color:inherit}
 }
 .field textarea{min-height:74px;resize:vertical}
 .upload{
-  min-height:96px;
+  min-height:92px;
   border:1px dashed #435361;
   border-radius:13px;
   background:#0a141e;
@@ -517,12 +837,12 @@ button{cursor:pointer;color:inherit}
 .staff-setting .service-text{flex:1}
 .staff-setting .arrow{color:#98a9b7;font-size:16px;font-weight:900}
 
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
-.gallery-item{position:relative;height:105px;border-radius:11px;overflow:hidden;border:1px solid #2b3946}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:10px}
+.gallery-item{position:relative;height:120px;border-radius:11px;overflow:hidden;border:1px solid #2b3946}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-del{
-  position:absolute;top:5px;left:5px;width:22px;height:22px;border-radius:6px;
-  background:rgba(0,0,0,0.75);color:#ff4a62;border:0;display:grid;place-items:center;font-size:11px;
+  position:absolute;top:5px;left:5px;width:24px;height:24px;border-radius:6px;
+  background:rgba(0,0,0,0.75);color:#ff4a62;border:0;display:grid;place-items:center;font-size:12px;
 }
 
 .rating-box{padding:16px 12px;border:1px solid #2a3542;border-radius:14px;background:linear-gradient(140deg,#231a0c,#0c131b);text-align:center}
@@ -546,9 +866,9 @@ button{cursor:pointer;color:inherit}
 }
 .crop-card{
   background:#09131d;border:1px solid #243444;border-radius:18px;
-  width:100%;max-width:460px;padding:14px;
+  width:100%;max-width:480px;padding:14px;
 }
-.crop-holder{width:100%;height:280px;background:#000;border-radius:12px;overflow:hidden;margin:10px 0}
+.crop-holder{width:100%;height:300px;background:#000;border-radius:12px;overflow:hidden;margin:10px 0}
 
 .toast{
   position:fixed;
@@ -558,33 +878,35 @@ button{cursor:pointer;color:inherit}
   background:#0c9d68;
   color:white;
   border:1px solid #43d6a0;
-  padding:10px 16px;
-  border-radius:11px;
+  padding:10px 18px;
+  border-radius:12px;
   font-size:12px;
-  font-weight:700;
+  font-weight:800;
   opacity:0;
   pointer-events:none;
   transition:.25s;
-  z-index:999;
+  z-index:9999;
   white-space:nowrap;
-  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+  box-shadow:0 10px 30px rgba(0,0,0,0.65);
 }
 .toast.show{opacity:1}
 
 .lang-box{
   border:1px solid #1e2d3b;
   background:#09141e;
-  border-radius:13px;
-  padding:11px;
+  border-radius:14px;
+  padding:13px;
   margin-bottom:10px;
 }
-.lang-box h4{margin:0 0 8px;font-size:11px;color:#ff5577}
+.lang-box h4{margin:0 0 8px;font-size:12px;color:#ff5577}
 
-@media(min-width:700px){
-  body{padding:20px 0}
-  .app{border-radius:28px;min-height:850px;box-shadow:0 20px 70px #0009}
-  .bottom-nav{bottom:20px;border-radius:17px}
-  .hero{height:215px}
+.lang-3col{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+@media(min-width:960px){
+  .lang-3col{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -593,511 +915,767 @@ button{cursor:pointer;color:inherit}
 <!-- Three.js Global Ambient Canvas -->
 <canvas id="threeBgCanvas"></canvas>
 
-<div class="app" id="appShell">
-  <!-- Device Status Bar -->
-  <div class="status">
-    <span id="liveClock">09:41</span>
-    <span class="signals">5G · ▂▄▆ ▰ ◉</span>
-  </div>
-
-  <!-- Header Topbar -->
-  <header class="topbar">
-    <div class="logo">▲</div>
-    <div class="brand">
-      <div style="display:flex;align-items:center;gap:6px">
-        <b class="shiny-text">KURDIA ADMIN</b>
-        <span id="adminVersionBadge" onclick="forceRefreshAdminVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش" style="cursor:pointer;background:rgba(12,155,97,0.22);border:1px solid #26d08c;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 7px;border-radius:999px;direction:ltr;display:inline-block">v2.5.2 ↻</span>
+<div class="admin-shell">
+  <!-- PERSISTENT DESKTOP SIDEBAR COMMAND CENTER -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">▲</div>
+      <div style="flex:1;min-width:0">
+        <b class="shiny-text" style="font-size:13px;display:block;direction:ltr;text-align:right">KURDIA OS PRO</b>
+        <small style="font-size:10px;color:#6bf0b3;display:block;margin-top:2px" id="sidebarVersionLabel">v2.6.0 · متصل بە Cloud</small>
       </div>
-      <small id="adminVersionSub">MULTI-TRIP · PUSH · LIVE v2.5.2</small>
     </div>
-    <button class="pill" onclick="publishLive()" id="topPublishBtn">● Publish</button>
-    <button class="icon-btn" style="width:31px;height:31px;font-size:13px;position:relative" onclick="go('push_center')" title="ناردنی نۆتیفیکەیشن بۆ خەڵک">🔔<span id="topPushBadge" style="position:absolute;top:-4px;left:-4px;background:#0c9b61;color:#fff;font-size:9px;font-weight:900;padding:1px 4px;border-radius:99px;display:none">0</span></button>
-    <a class="icon-btn" id="adminToSiteLink" href="/index.html?v=2.5.2" style="width:31px;height:31px;font-size:13px" title="ماڵپەڕی سەرەکی">🌐</a>
-    <button class="icon-btn" style="width:31px;height:31px;font-size:13px" onclick="toggleWideMode()" title="گۆڕینی قەبارە">⇄</button>
-  </header>
 
-  <main>
-    <!-- 1. DASHBOARD -->
-    <section class="page active" id="dashboard">
-      <div class="hero spotlight-card border-beam" id="dashboardHero" data-aos="fade-up">
-        <canvas id="heroThreeOverlay"></canvas>
-        <div class="hero-tools">
-          <button class="icon-btn" style="width:28px;height:28px;font-size:13px;background:rgba(0,0,0,0.45)" onclick="go('settings')">⚙</button>
-          <div style="display:flex;align-items:center;gap:6px">
-            <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json" background="transparent" speed="1" style="width:24px;height:24px" loop autoplay></lottie-player>
-            <button class="pill" onclick="publishLive()">● Publish Live</button>
-          </div>
+    <button class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
+
+    <div class="sidebar-nav-group">
+      <div class="sidebar-group-label">بەڕێوەبردنی سەرەکی</div>
+      <button class="side-btn active" data-side="dashboard" onclick="go('dashboard')"><span class="s-ico">⌂</span><span>داشبۆردی گشتی</span><span class="s-badge">LIVE</span></button>
+      <button class="side-btn" data-side="trips" onclick="go('trips')"><span class="s-ico">🧭</span><span>گەشتەکان</span><span class="s-badge" id="sideTripsBadge">3</span></button>
+      <button class="side-btn" data-side="newtrip" onclick="createNewTrip()"><span class="s-ico">＋</span><span>زیادکردنی گەشتی نوێ</span></button>
+      <button class="side-btn" data-side="push_center" onclick="go('push_center')"><span class="s-ico">🔔</span><span>ناردنی نۆتیفیکەیشن</span><span class="s-badge" id="sidePushBadge">0</span></button>
+      <button class="side-btn" data-side="bookings" onclick="go('bookings')"><span class="s-ico">👥</span><span>ناونوسراوەکان</span><span class="s-badge" id="sideBookingsBadge">0</span></button>
+    </div>
+
+    <div class="sidebar-nav-group">
+      <div class="sidebar-group-label">میدیا، پەیوەندی و ناوەڕۆک</div>
+      <button class="side-btn" data-side="design" onclick="go('design')"><span class="s-ico">🎨</span><span>دیزاینی Hero و Brand</span></button>
+      <button class="side-btn" data-side="broadcast" onclick="go('broadcast')"><span class="s-ico">💬</span><span>ناوەندی WhatsApp</span></button>
+      <button class="side-btn" data-side="stories" onclick="go('stories')"><span class="s-ico">✨</span><span>ستۆری بەشداربووان</span></button>
+      <button class="side-btn" data-side="private_requests" onclick="go('private_requests')"><span class="s-ico">👑</span><span>داواکاری گەشتی تایبەت</span></button>
+      <button class="side-btn" data-side="gallery" onclick="go('gallery')"><span class="s-ico">🖼️</span><span>گەلەری و وێنەکان</span></button>
+      <button class="side-btn" data-side="reviews" onclick="go('reviews')"><span class="s-ico">★</span><span>هەڵسەنگاندنەکان</span></button>
+    </div>
+
+    <div class="sidebar-nav-group">
+      <div class="sidebar-group-label">دارایی و سیستەم</div>
+      <button class="side-btn" data-side="coupons" onclick="go('coupons')"><span class="s-ico">🎟️</span><span>کۆبۆنی داشکاندن</span></button>
+      <button class="side-btn" data-side="finance" onclick="go('finance')"><span class="s-ico">💳</span><span>دارایی و هەژماری FIB</span></button>
+      <button class="side-btn" data-side="weather_manager" onclick="go('weather_manager')"><span class="s-ico">⛅</span><span>کەشوهەوا و نەخشە</span></button>
+      <button class="side-btn" data-side="diagnostics" onclick="go('diagnostics')"><span class="s-ico">⏻</span><span>پشکنینی سیستەم</span></button>
+      <button class="side-btn" data-side="backup" onclick="go('backup')"><span class="s-ico">💾</span><span>Backup & Restore</span></button>
+    </div>
+
+    <div style="margin-top:auto;padding-top:10px;border-top:1px solid #192a3b;display:grid;gap:7px">
+      <button class="primary" style="margin:0" onclick="publishLive()">● بڵاوکردنەوەی هەموو گۆڕانکاری</button>
+      <a href="/index.html?v=2.6.0" class="secondary-btn" style="text-align:center;text-decoration:none;display:block">🌐 کردنەوەی ماڵپەڕی سەرەکی</a>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="app" id="appShell">
+    <!-- Status Bar -->
+    <div class="status">
+      <span id="liveClock">09:41</span>
+      <span class="signals">● CLOUDFLARE WORKER CMS · ACTIVE</span>
+    </div>
+
+    <!-- Header Topbar -->
+    <header class="topbar">
+      <div class="logo">▲</div>
+      <div class="brand">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <b class="shiny-text">KURDIA EXECUTIVE ADMIN</b>
+          <span id="adminVersionBadge" onclick="forceRefreshAdminVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش" style="cursor:pointer;background:rgba(12,155,97,0.22);border:1px solid #26d08c;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px;direction:ltr;display:inline-block">v2.6.0 ↻</span>
         </div>
-        <div class="hero-copy">
-          <h1>بەخێربێیتەوە<br><span>کوردیا</span></h1>
-          <p id="dashHeroSub">بەڕێوەبردنی گەشت و ئەزموونی سروشت</p>
-        </div>
+        <small id="adminVersionSub">FULL COMMAND DASHBOARD · MULTI-TRIP · WEB PUSH · v2.6.0</small>
       </div>
+      <button class="pill" onclick="createNewTrip()" style="background:linear-gradient(120deg,#0c9b61,#07774a)">＋ گەشتی نوێ</button>
+      <button class="pill" onclick="publishLive()" id="topPublishBtn" style="background:linear-gradient(120deg,#f0183d,#b90e2b);border-color:#ff4a68">● Publish Live</button>
+      <button class="icon-btn" style="width:34px;height:34px;font-size:14px;position:relative" onclick="go('push_center')" title="ناردنی نۆتیفیکەیشن بۆ خەڵک">🔔<span id="topPushBadge" style="position:absolute;top:-4px;left:-4px;background:#0c9b61;color:#fff;font-size:9px;font-weight:900;padding:1px 5px;border-radius:99px;display:none">0</span></button>
+      <button class="icon-btn" style="width:34px;height:34px;font-size:14px" onclick="forceRefreshAdminVersion()" title="هاوکاتکردن لەگەڵ سێرڤەر">↻</button>
+      <a class="icon-btn" id="adminToSiteLink" href="/index.html?v=2.6.0" style="width:34px;height:34px;font-size:14px" title="ماڵپەڕی سەرەکی">🌐</a>
+    </header>
 
-      <div class="stats" data-aos="fade-up" data-aos-delay="60">
-        <div class="stat red spotlight-card" data-tilt>
-          <div class="stat-head"><span>♧</span><strong id="dashCapCounter" data-count="40">40</strong></div>
-          <p>کۆی گشتی گەشتیاران</p>
-          <small>Total Capacity</small>
-        </div>
-        <div class="stat blue spotlight-card" data-tilt>
-          <div class="stat-head"><span>▣</span><strong id="dashBookedCounter" data-count="29">29</strong></div>
-          <p>ناونوسراو</p>
-          <small>Booked</small>
-        </div>
-        <div class="stat green spotlight-card" data-tilt>
-          <div class="stat-head"><span>☎</span><strong id="dashAvailCounter" data-count="11">11</strong></div>
-          <p>بەردەستە</p>
-          <small>Available</small>
-        </div>
-        <div class="stat gold spotlight-card" data-tilt>
-          <div class="stat-head"><span>★</span><strong id="dashRatingCounter">4.9</strong></div>
-          <p>هەڵسەنگاندن</p>
-          <small>Reviews</small>
-        </div>
-      </div>
+    <!-- Quick Jump Bar -->
+    <div class="quick-nav-strip">
+      <button class="q-chip" onclick="go('dashboard')">⌂ داشبۆردی گشتی</button>
+      <button class="q-chip green" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
+      <button class="q-chip" onclick="go('trips')">🧭 هەموو گەشتەکان (<span id="qTripsCount">3</span>)</button>
+      <button class="q-chip orange" onclick="go('push_center')">🔔 ناردنی نۆتیفیکەیشن</button>
+      <button class="q-chip blue" onclick="go('bookings')">👥 ناونوسراوەکان (<span id="qBookingsCount">0</span>)</button>
+      <button class="q-chip" onclick="go('design')">🎨 دیزاین و براند</button>
+      <button class="q-chip" onclick="go('broadcast')">💬 WhatsApp</button>
+      <button class="q-chip" onclick="go('coupons')">🎟️ کۆبۆنەکان</button>
+      <button class="q-chip" onclick="go('gallery')">🖼️ گەلەری</button>
+      <button class="q-chip" onclick="go('settings')">⚙ هەموو بەشەکان</button>
+    </div>
 
-      <!-- Quick Actions -->
-      <div class="stats" style="margin-bottom:10px" data-aos="fade-up" data-aos-delay="110">
-        <button class="service spotlight-card" style="text-align:right;cursor:pointer;border-color:#0f7a50" onclick="createNewTrip()">
-          <div class="service-icon" style="color:#26d08c;background:rgba(12,155,97,0.18)">＋</div>
-          <div class="service-text"><b>زیادکردنی گەشتی نوێ</b><small>بەبێ سڕینەوەی کۆنەکان</small></div>
-        </button>
-        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('trips')">
-          <div class="service-icon" style="color:#ff4a62">🧭</div>
-          <div class="service-text"><b>هەموو گەشتەکان (<span id="dashTripsCount">3</span>)</b><small>بینین و دەستکاری</small></div>
-        </button>
-        <button class="service spotlight-card" style="text-align:right;cursor:pointer;border-color:#7c2d12" onclick="go('push_center')">
-          <div class="service-icon" style="color:#fb923c;background:rgba(251,146,60,0.15)">🔔</div>
-          <div class="service-text"><b>ناردنی نۆتیفیکەیشن</b><small>بۆ مۆبایل و وێبسایت</small></div>
-        </button>
-        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('bookings')">
-          <div class="service-icon" style="color:#38bdf8">👥</div>
-          <div class="service-text"><b>بەشداربووان</b><small>Approve & Verify</small></div>
-        </button>
-      </div>
-
-      <div class="section-title">
-        <span>دۆخی سیستەم</span>
-        <button class="mini" onclick="go('diagnostics')">⚙</button>
-      </div>
-      <div class="service-list" data-aos="fade-up" data-aos-delay="150">
-        <div class="service spotlight-card"><div class="service-icon">◎</div><div class="service-text"><b>Website & CMS</b><small>Frontend & Worker Sync</small></div><span class="ok">● چالاک</span></div>
-        <div class="service spotlight-card"><div class="service-icon">▤</div><div class="service-text"><b>KV Storage</b><small>Images & Media Assets</small></div><span class="ok">● چالاک</span></div>
-        <div class="service spotlight-card"><div class="service-icon">▤</div><div class="service-text"><b>Database / KV</b><small>Data & Registrations</small></div><span class="ok">● چالاک</span></div>
-      </div>
-    </section>
-
-    <!-- 2. TRIPS LIST (MULTI-TRIP MANAGER) -->
-    <section class="page" id="trips">
-      <div class="toolbar">
-        <div class="logo">☷</div>
-        <h2>گەشتەکان (<span id="tripsTotalCount">1</span>)</h2>
-        <button class="pill" style="background:linear-gradient(100deg,#0c9b61,#07774a);border-color:#26d08c" onclick="createNewTrip()">＋ گەشتی نوێ</button>
-      </div>
-      <div class="filters">
-        <button class="filter active" data-filter="all" onclick="setTripFilter(this,'all')">هەموو</button>
-        <button class="filter" data-filter="upcoming" onclick="setTripFilter(this,'upcoming')">داهاتوو</button>
-        <button class="filter" data-filter="active" onclick="setTripFilter(this,'active')">چالاک</button>
-        <button class="filter" data-filter="done" onclick="setTripFilter(this,'done')">داخراو</button>
-      </div>
-      <input class="search" id="tripSearch" placeholder="⌕   گەڕان بە ناوی گەشت یان شوێن..." oninput="filterTrips()">
-      <div id="tripList"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-        <button class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
-        <button class="primary border-beam" style="margin:0" onclick="publishLive()">● بڵاوکردنەوەی هەموو گەشتەکان</button>
-      </div>
-    </section>
-
-    <!-- 3. TRIP DETAIL -->
-    <section class="page" id="tripdetail">
-      <div class="toolbar">
-        <button class="icon-btn" onclick="go('trips')">←</button>
-        <h2>وردەکاری گەشت</h2>
-        <button class="icon-btn" onclick="editTrip(activeTripIndex)" title="دەستکاریکردن">✎</button>
-      </div>
-      <img class="detail-image" id="detailHeroImg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85" alt="Trip">
-      <div class="trip-title" style="margin-top:10px">
-        <b style="font-size:16px" id="detailTitle">سەرووشتی هەڵگورد</b>
-        <span class="tag" id="detailStatusTag">چالاک</span>
-        <button class="secondary-btn" onclick="editTrip(activeTripIndex)">✎ دەستکاری</button>
-      </div>
-      <div class="detail-list">
-        <div class="detail-row"><span class="dicon">▦</span><b>بەروار و کات</b><span id="detailDateTime">2026/10/24 · 05:00 بەیانی</span></div>
-        <div class="detail-row"><span class="dicon">♧</span><b>شوێنەکان</b><span id="detailSeats">29 / 40</span></div>
-        <div class="detail-row"><span class="dicon">⌖</span><b>شوێن</b><span id="detailLoc">باڵەکایەتی — چیای هەڵگورد</span></div>
-        <div class="detail-row"><span class="dicon">◇</span><b>نرخ</b><span id="detailPrice">35,000 دینار</span></div>
-        <div class="detail-row"><span class="dicon">🌡️</span><b>پلەی گەرمی</b><span id="detailTemp">25°C</span></div>
-        <div class="detail-row"><span class="dicon">☁</span><b>کەشوهەوا</b><span id="detailWeather">ساماڵ ☀️</span></div>
-      </div>
-      <div class="countdown spotlight-card">
-        <b>کاتژمێری پاشماوە (Countdown)</b>
-        <div class="digits">
-          <span id="cdDays">04</span>
-          <span id="cdHours">16</span>
-          <span id="cdMins">58</span>
-          <span id="cdSecs">25</span>
-        </div>
-        <div class="progress"><i id="detailProgressBar" style="width:72%"></i></div>
-        <small style="display:block;color:#9eabb7;margin-top:8px" id="detailProgressLabel">72% · پڕبوون</small>
-      </div>
-      <button class="primary border-beam" onclick="go('bookings')" id="detailBookingsBtn">بینینی ناونوسراوەکان (29)</button>
-    </section>
-
-    <!-- 4. BOOKINGS / LIVE REGISTRATIONS -->
-    <section class="page" id="bookings">
-      <div class="toolbar">
-        <div class="logo">☷</div>
-        <h2>ناونوسراوەکان</h2>
-        <button class="icon-btn" onclick="fetchLiveRegistrations()" title="نوێکردنەوە">↻</button>
-        <button class="icon-btn" onclick="exportRegistrationsToCSV()" title="دابەزاندنی CSV">⬇</button>
-      </div>
-      <div class="filters">
-        <button class="filter active" onclick="setBookingFilter(this,'all')">هەموو <span id="cntAll"></span></button>
-        <button class="filter" onclick="setBookingFilter(this,'approved')">پەسەندکراو <span id="cntApp"></span></button>
-        <button class="filter" onclick="setBookingFilter(this,'pending')">چاوەڕوان <span id="cntPend"></span></button>
-        <button class="filter" onclick="setBookingFilter(this,'rejected')">ڕەتکراو <span id="cntRej"></span></button>
-      </div>
-      <input class="search" id="peopleSearch" placeholder="⌕   گەڕان بە ناو / ژمارە..." oninput="renderRegistrations()">
-      <div id="peopleList"></div>
-    </section>
-
-    <!-- 5. NEW / EDIT TRIP (MULTI-TRIP + 3 LANGUAGES + CAPACITY + OTP) -->
-    <section class="page" id="newtrip">
-      <div class="toolbar">
-        <button class="icon-btn" onclick="go('trips')">←</button>
-        <h2 id="editorTripHeader">زیادکردنی گەشتی نوێ</h2>
-        <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="createNewTrip()">＋ گەشتی نوێی بەتاڵ</button>
-      </div>
-
-      <!-- Mode Banner -->
-      <div id="editorModeBanner" style="background:linear-gradient(100deg,#073a2d,#061811);border:1px solid #11654b;border-radius:11px;padding:9px 12px;margin-bottom:9px;font-size:11px;color:#6bf0b3;font-weight:700">
-        ✨ دۆخی زیادکردنی گەشتی نوێ — گەشتە کۆنەکان پارێزراون و ناسڕێنەوە
-      </div>
-
-      <!-- Multi-Trip Switcher Pills -->
-      <div id="editorTripTabs" class="filters" style="margin-bottom:10px"></div>
-
-      <div class="upload spotlight-card" onclick="triggerCropUpload('tripImageUrl','tripPreviewImg',4/3)">
-        <div>▧<br><b>وێنەی سەرەکی ئەم گەشتە</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
-        <img id="tripPreviewImg" style="display:none;width:100%;max-height:130px;object-fit:cover;border-radius:9px;margin-top:8px">
-      </div>
-
-      <div class="lang-box spotlight-card" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="tripPublishedSwitch" checked style="width:16px;height:16px"> پیشاندان لە پەڕەی سەرەکی
-        </label>
-        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="bookingOpen" checked style="width:16px;height:16px"> ناونووسین کراوەیە
-        </label>
-        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" style="width:16px;height:16px"> OTP پێویستە
-        </label>
-      </div>
-
-      <div class="lang-box spotlight-card">
-        <h4>☀️ زمانی کوردی (KU)</h4>
-        <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" placeholder="بۆ نموونە: گەشتی چەمانکێ و دهۆک"></div>
-        <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" placeholder="بۆ نموونە: دهۆک · چەمانکێ"></div>
-        <div class="field"><label>نرخ</label><input id="tripPrice_ku" placeholder="بۆ نموونە: 25,000 دینار"></div>
-        <div class="field"><label>کات و بەروار (دەق)</label><input id="tripTime_ku" placeholder="بۆ نموونە: بەیانی 06:00"></div>
-        <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" placeholder="وردەکاری و بەرنامەی گەشتەکە بنووسە..."></textarea></div>
-      </div>
-
-      <div class="lang-box spotlight-card">
-        <h4>🌴 باللغة العربية (AR)</h4>
-        <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" placeholder="اسم الرحلة بالعربية"></div>
-        <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" placeholder="المكان والمنطقة"></div>
-        <div class="field"><label>السعر</label><input id="tripPrice_ar" placeholder="25,000 دينار"></div>
-        <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" placeholder="صباحاً 06:00"></div>
-        <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" placeholder="تفاصيل الرحلة..."></textarea></div>
-      </div>
-
-      <div class="lang-box spotlight-card">
-        <h4>🌐 In English (EN)</h4>
-        <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" placeholder="Trip Title in English"></div>
-        <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" placeholder="Location"></div>
-        <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" placeholder="25,000 IQD"></div>
-        <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" placeholder="06:00 AM"></div>
-        <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" placeholder="Full trip itinerary..."></textarea></div>
-      </div>
-
-      <div class="lang-box spotlight-card">
-        <h4>⚙️ بەروار، توانست و کەشوهەوا</h4>
-        <div class="field"><label>⏰ بەروار و کاتی گەشت (Countdown & Date)</label><input type="datetime-local" id="tripTargetDate"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="field"><label>کۆی کورسی (Capacity)</label><input type="number" id="capacityInput" value="35"></div>
-          <div class="field"><label>گیراو (Booked)</label><input type="number" id="bookedInput" value="0"></div>
-          <div class="field"><label>پلەی گەرمی</label><input id="weatherTemp" value="22°C"></div>
-          <div class="field"><label>دۆخی کەشوهەوا</label><input id="weatherCondition" value="ساماڵ ☀️"></div>
-        </div>
-      </div>
-
-      <div class="lang-box spotlight-card" style="margin-top:10px;border-color:#155e75">
-        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer;color:#7dd3fc">
-          <input type="checkbox" id="autoPushOnNewTrip" checked style="width:16px;height:16px"> 🔔 لەگەڵ بڵاوکردنەوەی گەشتی نوێ، نۆتیفیکەیشن بۆ هەموو بەشداربووان بنێرە
-        </label>
-      </div>
-
-      <div id="newTripActionButtons" style="display:grid;gap:8px;margin-top:12px">
-        <button id="btnSaveAsNewTrip" class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="saveFormAsNewTrip()">＋ زیادکردن وەک گەشتی نوێ و بڵاوکردنەوە (گەشتە کۆنەکان دەمێننەوە)</button>
-        <div id="editTripActionRow" style="display:flex;gap:8px">
-          <button id="btnUpdateExistingTrip" class="primary border-beam" style="margin:0;flex:1" onclick="saveFormToSelectedTrip()">💾 پاشەکەوتکردنی گۆڕانکاری لەم گەشتە</button>
-          <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:0 14px" onclick="deleteTrip(activeTripIndex)" title="سڕینەوەی ئەم گەشتە">🗑️ سڕینەوە</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. SETTINGS HUB -->
-    <section class="page" id="settings">
-      <div class="toolbar">
-        <div class="logo">▲</div>
-        <h2>ڕێکخستنەکان</h2>
-        <button class="pill" onclick="publishLive()">● Publish</button>
-      </div>
-      <div class="service-list">
-        <div class="staff-setting spotlight-card" style="border-color:#7c2d12" onclick="go('push_center')"><div class="service-icon" style="color:#fb923c">🔔</div><div class="service-text"><b>ناردنی نۆتیفیکەیشن بۆ خەڵک (Web Push)</b><small>ناردنی ئاگاداری ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەری بەشداربووان</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی بە ٣ زمان</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('broadcast')"><div class="service-icon">💬</div><div class="service-text"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ شاخەوانان</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('stories')"><div class="service-icon">✨</div><div class="service-text"><b>ستۆرییەکان (Stories)</b><small>پەسەندکردن و سڕینەوەی ستۆری بەشداربووان</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('private_requests')"><div class="service-icon">👑</div><div class="service-text"><b>گەشتی تایبەت (Private Trips)</b><small>داواکارییەکانی گەشتی خێزانی و تایبەت</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('coupons')"><div class="service-icon">🎟️</div><div class="service-text"><b>کۆبۆنەکان (Coupons)</b><small>کۆدی داشکاندن و سنووری بەکارهێنان</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('weather_manager')"><div class="service-icon">⛅</div><div class="service-text"><b>کەشوهەوا و شوێن</b><small>Open-Meteo و پۆوتانی نەخشە</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('reviews')"><div class="service-icon">★</div><div class="service-text"><b>هەڵسەنگاندنەکان (Reviews)</b><small>فیدباک و پلەبەندی شاخەوانان</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('gallery')"><div class="service-icon">▧</div><div class="service-text"><b>وێنەکان و گەلەری</b><small>بارکردن و بڕینی وێنەکان لە Cloud</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('finance')"><div class="service-icon">💳</div><div class="service-text"><b>هەژماری دارایی و FIB</b><small>ژمارەی هەژماری First Iraqi Bank</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('diagnostics')"><div class="service-icon" style="color:#ff3152">⏻</div><div class="service-text"><b>پشکنینی ئۆتۆماتیک</b><small>System Diagnostics</small></div><span class="arrow">‹</span></div>
-        <div class="staff-setting spotlight-card" onclick="go('backup')"><div class="service-icon">💾</div><div class="service-text"><b>Backup / Restore</b><small>داگرتن و گەڕاندنەوەی داتا</small></div><span class="arrow">‹</span></div>
-      </div>
-    </section>
-
-    <!-- 6B. PUSH NOTIFICATIONS CENTER -->
-    <section class="page" id="push_center">
-      <div class="toolbar">
-        <button class="icon-btn" onclick="go('dashboard')">←</button>
-        <h2>🔔 ناوەندی ناردنی نۆتیفیکەیشن</h2>
-        <button class="icon-btn" onclick="loadPushCenterStats()" title="نوێکردنەوە">↻</button>
-      </div>
-
-      <div class="lang-box spotlight-card" style="background:linear-gradient(125deg,#1d1427,#0c1420);border-color:#4c1d95">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+    <main>
+      <!-- =========================================================
+           1. ULTRA-ADVANCED FULL EXECUTIVE DASHBOARD (#dashboard)
+           ========================================================= -->
+      <section class="page active" id="dashboard">
+        <!-- Executive Hero + Live Next Trip Countdown -->
+        <div class="exec-hero spotlight-card border-beam" id="dashboardHero">
           <div>
-            <div style="font-size:11px;color:#c4b5fd;font-weight:700">بەشداربووانی چالاکی نۆتیفیکەیشن (Web Push)</div>
-            <div style="font-size:26px;font-weight:900;color:#fff;margin-top:2px"><span id="pushSubscriberCount">...</span> <small style="font-size:12px;color:#a78bfa">ئامێر / کەس</small></div>
+            <div class="exec-hero-badge">● سیستەمی ناوەندیی کوردیا چالاکە · هاوکاتکراو لەگەڵ Cloud</div>
+            <h1>کۆنترۆڵ سەنتەری <span>KURDIA ADVENTURE</span></h1>
+            <p id="dashHeroSub">بەڕێوەبردنی فرە-گەشت (Multi-Trip)، ناردنی نۆتیفیکەیشنی ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەر، پەسەندکردنی ناونوسراوەکان و چاودێریی دارایی لە یەک شاشەدا.</p>
+            <div class="exec-hero-actions">
+              <button class="pill" onclick="createNewTrip()" style="background:linear-gradient(120deg,#0c9b61,#07774a);padding:9px 15px;font-size:12px">＋ زیادکردنی گەشتی نوێ</button>
+              <button class="pill" onclick="go('push_center')" style="background:linear-gradient(120deg,#ea580c,#9a3412);border-color:#fb923c;padding:9px 15px;font-size:12px">🔔 ناردنی نۆتیفیکەیشن</button>
+              <button class="pill" onclick="publishLive()" style="background:linear-gradient(120deg,#f0183d,#b90e2b);border-color:#ff4a68;padding:9px 15px;font-size:12px">● بڵاوکردنەوە لە ماڵپەڕ</button>
+            </div>
           </div>
-          <button type="button" class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;padding:8px 12px" onclick="enableAdminDevicePush()">📲 چالاککردن لەم مۆبایلە</button>
+
+          <div class="hero-countdown-box">
+            <small id="dashCountdownTripLabel">⏳ کاتژمێری پاشماوە بۆ گەشتی داهاتوو</small>
+            <div class="hero-cd-grid">
+              <div class="hero-cd-item"><b id="dashCdDays">04</b><span>DAYS · ڕۆژ</span></div>
+              <div class="hero-cd-item"><b id="dashCdHours">16</b><span>HRS · کاتژمێر</span></div>
+              <div class="hero-cd-item"><b id="dashCdMins">45</b><span>MIN · خولەک</span></div>
+              <div class="hero-cd-item"><b id="dashCdSecs">12</b><span>SEC · چرکە</span></div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="lang-box spotlight-card">
-        <h4>⚡ قاڵبی ئامادەکراو (کلیک بکە بۆ پڕکردنەوە)</h4>
-        <div class="filters" style="margin-bottom:4px">
-          <button type="button" class="filter active" onclick="fillPushTemplate('new_trip')">🔥 گەشتی نوێ بەردەستە</button>
-          <button type="button" class="filter" onclick="fillPushTemplate('seats')">⏳ تەنها چەند کورسییەک ماوە</button>
-          <button type="button" class="filter" onclick="fillPushTemplate('reminder')">🚌 بیرخستنەوەی کاتی دەرچوون</button>
+        <!-- 6 Executive KPI Cards -->
+        <div class="kpi-grid">
+          <div class="stat purple spotlight-card" onclick="go('trips')" style="cursor:pointer">
+            <div class="stat-head"><span>🧭</span><strong id="dashActiveTripsCounter">3</strong></div>
+            <p>گەشتە چالاکەکان</p>
+            <small id="dashTripsSubLabel">لە پەڕەی سەرەکی دیارن</small>
+          </div>
+          <div class="stat red spotlight-card" onclick="go('trips')" style="cursor:pointer">
+            <div class="stat-head"><span>💺</span><strong id="dashCapCounter">40</strong></div>
+            <p>کۆی گشتی کورسییەکان</p>
+            <small>Total Capacity</small>
+          </div>
+          <div class="stat blue spotlight-card" onclick="go('bookings')" style="cursor:pointer">
+            <div class="stat-head"><span>👥</span><strong id="dashBookedCounter">29</strong></div>
+            <p>بەشداربووانی تۆمارکراو</p>
+            <small id="dashBookedPctSub">72% پڕبووەتەوە</small>
+          </div>
+          <div class="stat green spotlight-card" onclick="go('trips')" style="cursor:pointer">
+            <div class="stat-head"><span>✓</span><strong id="dashAvailCounter">11</strong></div>
+            <p>کورسی بەردەست</p>
+            <small>Available Seats</small>
+          </div>
+          <div class="stat gold spotlight-card" onclick="go('finance')" style="cursor:pointer">
+            <div class="stat-head"><span>💰</span><strong id="dashRevenueCounter" style="font-size:17px">1,015,000</strong></div>
+            <p>داهاتی خەمڵێنراو (د.ع)</p>
+            <small id="dashMaxRevenueSub">لە کۆی گەشتەکان</small>
+          </div>
+          <div class="stat cyan spotlight-card" onclick="go('push_center')" style="cursor:pointer">
+            <div class="stat-head"><span>🔔</span><strong id="dashPushSubCounter">6</strong></div>
+            <p>بەشداربووی نۆتیفیکەیشن</p>
+            <small>Web Push Devices</small>
+          </div>
         </div>
-      </div>
 
-      <div class="lang-box spotlight-card">
-        <h4>١. ناونیشانی نۆتیفیکەیشن</h4>
-        <div class="field"><input id="pushTitleInput" value="KURDIA ADVENTURE 🔥" placeholder="بۆ نموونە: گەشتی نوێ ڕاگەیەندرا!"></div>
-        <h4 style="margin-top:10px">٢. دەقی پەیام / ئاگاداری بۆ خەڵک</h4>
-        <div class="field"><textarea id="pushBodyInput" placeholder="دەقی نۆتیفیکەیشن لێرە بنووسە بۆ ئەوەی بچێت بۆ مۆبایلی هەموو بەشداربووان..." style="min-height:95px"></textarea></div>
-        <h4 style="margin-top:10px">٣. لینک لە کاتی کردنەوەی نۆتیفیکەیشن</h4>
-        <div class="field"><input id="pushUrlInput" dir="ltr" value="/#booking" placeholder="/#booking"></div>
-      </div>
+        <!-- BENTO ROW 1: Live Trip Occupancy & Revenue Analytics + Quick-Add New Trip Studio -->
+        <div class="dash-bento">
+          <!-- Left: Live Multi-Trip Occupancy & Financial Breakdown -->
+          <div class="panel-card spotlight-card">
+            <div class="panel-head">
+              <div>
+                <h3>📊 ئاماری پڕبوونی کورسی و داهاتی هەر گەشتێک</h3>
+                <small>چاودێریی ڕاستەوخۆی سەرجەم گەشتە بڵاوکراوەکان لە یەک کاتدا</small>
+              </div>
+              <button class="secondary-btn" onclick="createNewTrip()" style="background:#0c9b61;color:#fff;border:0">＋ گەشتی نوێ</button>
+            </div>
+            <div id="dashTripAnalyticsList"></div>
+          </div>
 
-      <button class="primary border-beam" id="btnSendPushNow" style="background:linear-gradient(100deg,#e11d48,#be123c)" onclick="sendPushNotificationToAll()">🔔 ناردنی نۆتیفیکەیشن بۆ هەموو خەڵک</button>
-      <div id="pushSendResultBox" style="margin-top:10px;font-size:12px;font-weight:700"></div>
-
-      <div class="section-title" style="margin-top:18px">
-        <span>دوایین چالاکی و ئاگادارییەکان</span>
-        <button class="mini" onclick="loadPushCenterStats()">↻</button>
-      </div>
-      <div id="adminActivityNotificationsList" class="service-list"></div>
-    </section>
-
-    <!-- 7. HERO & BRAND DESIGN -->
-    <section class="page" id="design">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>Hero و Brand</h2></div>
-      <div class="lang-box spotlight-card">
-        <h4>🎨 ڕەنگەکانی براند</h4>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="field"><label>ڕەنگی سەرەکی</label><input type="color" id="gradColor1" onchange="autoSync()" style="height:42px;padding:4px"></div>
-          <div class="field"><label>ڕەنگی دووەم</label><input type="color" id="gradColor2" onchange="autoSync()" style="height:42px;padding:4px"></div>
+          <!-- Right: Instant Quick-Add New Trip Directly From Dashboard -->
+          <div class="panel-card spotlight-card" style="border-color:#136c50;background:linear-gradient(160deg,#081d18,#061018)">
+            <div class="panel-head">
+              <div>
+                <h3 style="color:#6bf0b3">⚡ زیادکردنی خێرای گەشتی نوێ</h3>
+                <small>ڕاستەوخۆ گەشتی نوێ زیاد بکە بەبێ دەستکاریکردن یان سڕینەوەی کۆنەکان</small>
+              </div>
+              <button class="secondary-btn" onclick="createNewTrip()">فۆڕمی ٣ زمان ←</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div class="field" style="margin:4px 0"><label>ناوی گەشت (کوردی)</label><input id="quickTripTitle" placeholder="بۆ نموونە: گەشتی سەرسەنگ و ئامێدی"></div>
+              <div class="field" style="margin:4px 0"><label>شوێن و ناوچە</label><input id="quickTripLoc" placeholder="بۆ نموونە: دهۆک · ئامێدی"></div>
+              <div class="field" style="margin:4px 0"><label>نرخی بەشداری</label><input id="quickTripPrice" placeholder="25,000 دینار"></div>
+              <div class="field" style="margin:4px 0"><label>کاتی دەرچوون</label><input id="quickTripTime" placeholder="06:00 بەیانی"></div>
+              <div class="field" style="margin:4px 0"><label>بەرواری گەشت</label><input type="datetime-local" id="quickTripDate"></div>
+              <div class="field" style="margin:4px 0"><label>ژمارەی کورسی</label><input type="number" id="quickTripCap" value="35"></div>
+            </div>
+            <div class="field" style="margin:6px 0">
+              <label>کورتەی بەرنامەی گەشت</label>
+              <input id="quickTripDesc" placeholder="گەشتێکی تایبەت بە پاسی گەشتیاری و نانی بەیانی و وێنەگرتن...">
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;flex-wrap:wrap">
+              <button type="button" class="secondary-btn" onclick="triggerCropUpload('quickTripImage','quickTripPreview',4/3)">🖼️ هەڵبژاردنی وێنەی گەشت</button>
+              <label style="font-size:11px;font-weight:800;color:#7dd3fc;display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="quickTripAutoPush" checked> 🔔 ناردنی نۆتیفیکەیشن لەگەڵ بڵاوکردنەوە
+              </label>
+            </div>
+            <img id="quickTripPreview" style="display:none;width:100%;max-height:95px;object-fit:cover;border-radius:9px;margin-top:8px">
+            <button class="primary border-beam" style="background:linear-gradient(100deg,#0c9b61,#07774a);margin-top:10px" onclick="submitQuickDashboardTrip()">＋ زیادکردن و بڵاوکردنەوەی ئەم گەشتە لە ماڵپەڕ</button>
+          </div>
         </div>
-      </div>
-      <div class="upload spotlight-card" onclick="triggerCropUpload('heroImageUrl','heroPreviewImg',16/9)" style="margin-bottom:10px">
-        <div>🖼️<br><b>وێنەی کاڤەری سەرەکی (Hero)</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
-        <img id="heroPreviewImg" style="display:none;width:100%;max-height:130px;object-fit:cover;border-radius:9px;margin-top:8px">
-      </div>
-      <div class="lang-box spotlight-card">
-        <h4>☀️ بە کوردی</h4>
-        <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
-        <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
-      </div>
-      <div class="lang-box spotlight-card">
-        <h4>🌴 بالعربية</h4>
-        <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
-        <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
-      </div>
-      <div class="lang-box spotlight-card">
-        <h4>🌐 In English</h4>
-        <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
-        <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
-      </div>
-      <button class="primary border-beam" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە</button>
-    </section>
 
-    <!-- 8. WHATSAPP BROADCAST -->
-    <section class="page" id="broadcast">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>ناوەندی WhatsApp</h2></div>
-      <div class="lang-box spotlight-card">
-        <h4>١. دەقی پەیام</h4>
-        <textarea id="broadcastMessage" placeholder="سڵاو، پەیامەکەت لێرە بنووسە..." style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px"></textarea>
-      </div>
-      <div class="lang-box spotlight-card">
-        <h4>٢. ژمارەکانی وەرگر (هەر ژمارەیەک لە دێڕێک)</h4>
-        <textarea id="broadcastPhones" dir="ltr" placeholder="9647501234567&#10;9647701234567" style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px;text-align:left"></textarea>
-      </div>
-      <button class="primary border-beam" id="broadcastSendBtn" onclick="sendBroadcastReminder()">پشکنین و ناردنی پەیام</button>
-      <div id="broadcastResult" style="margin-top:10px;font-size:12px"></div>
-      <details style="margin-top:10px;font-size:11px;color:#8b9aa8">
-        <summary style="cursor:pointer">وردەکاریی وەڵامی سێرڤەر</summary>
-        <pre id="broadcastDebug" style="background:#050a10;padding:10px;border-radius:8px;overflow:auto;direction:ltr;text-align:left">ئامادەیە.</pre>
-      </details>
-    </section>
+        <!-- BENTO ROW 2: Instant Web Push Notification Broadcaster + Live Recent Bookings -->
+        <div class="dash-bento equal">
+          <!-- Left: Instant Web Push Notification Sender on Dashboard -->
+          <div class="panel-card spotlight-card" style="border-color:#7c2d12">
+            <div class="panel-head">
+              <div>
+                <h3 style="color:#fb923c">🔔 ناردنی ڕاستەوخۆی نۆتیفیکەیشن بۆ خەڵک</h3>
+                <small>ئاگاداری بنێرە بۆ مۆبایل و کۆمپیوتەری هەموو بەشداربووان (<span id="dashInlinePushCount">6</span> ئامێر)</small>
+              </div>
+              <button class="secondary-btn" onclick="enableAdminDevicePush()" style="background:#0c9b61;color:#fff;border:0">📲 چالاککردن لەم ئامێرە</button>
+            </div>
+            <div class="filters" style="margin-bottom:6px">
+              <button type="button" class="filter active" onclick="fillDashboardPushTemplate('new_trip')">🔥 گەشتی نوێ</button>
+              <button type="button" class="filter" onclick="fillDashboardPushTemplate('seats')">⏳ کۆتا کورسییەکان</button>
+              <button type="button" class="filter" onclick="fillDashboardPushTemplate('reminder')">🚌 بیرخستنەوەی کات</button>
+            </div>
+            <div class="field" style="margin:6px 0">
+              <label>ناونیشانی نۆتیفیکەیشن</label>
+              <input id="dashPushTitle" value="KURDIA ADVENTURE 🔥" placeholder="ناونیشانی نۆتیفیکەیشن...">
+            </div>
+            <div class="field" style="margin:6px 0">
+              <label>دەقی پەیام بۆ بەشداربووان</label>
+              <textarea id="dashPushBody" style="min-height:68px" placeholder="دەقی ئاگاداری لێرە بنووسە..."></textarea>
+            </div>
+            <button class="primary border-beam" style="background:linear-gradient(100deg,#e11d48,#be123c);margin-top:8px" onclick="sendPushFromDashboard()">🔔 ناردنی نۆتیفیکەیشن بۆ هەموو بەشداربووان</button>
+            <div id="dashPushResultMsg" style="margin-top:8px;font-size:11px;font-weight:700"></div>
+          </div>
 
-    <!-- 9. STORIES MODERATION -->
-    <section class="page" id="stories">
-      <div class="toolbar">
-        <button class="icon-btn" onclick="go('settings')">←</button>
-        <h2>ستۆرییەکان</h2>
-        <button class="icon-btn" onclick="fetchAdminStories()">↻</button>
-      </div>
-      <div id="adminStoriesContainer"></div>
-    </section>
-
-    <!-- 10. PRIVATE REQUESTS -->
-    <section class="page" id="private_requests">
-      <div class="toolbar">
-        <button class="icon-btn" onclick="go('settings')">←</button>
-        <h2>داواکاری گەشتی تایبەت</h2>
-        <button class="icon-btn" onclick="loadPrivateRequests()">↻</button>
-      </div>
-      <div id="privateRequestsContainer"></div>
-    </section>
-
-    <!-- 11. COUPONS -->
-    <section class="page" id="coupons">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>کۆبۆنەکان</h2></div>
-      <div class="lang-box spotlight-card">
-        <h4>زیادکردنی کۆبۆنی نوێ</h4>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="field"><label>کۆد</label><input id="couponNewCode" placeholder="KURDIA10"></div>
-          <div class="field"><label>داشکاندن (%)</label><input id="couponNewDiscount" type="number" placeholder="10"></div>
-          <div class="field"><label>دەستپێک</label><input id="couponNewStart" type="datetime-local"></div>
-          <div class="field"><label>کۆتایی</label><input id="couponNewEnd" type="datetime-local"></div>
+          <!-- Right: Live Recent Bookings & Approvals -->
+          <div class="panel-card spotlight-card">
+            <div class="panel-head">
+              <div>
+                <h3>👥 دوایین داواکاری و ناونوسراوەکان</h3>
+                <small>پەسەندکردن و ڕەتکردنەوەی خێرای بەشداربووان</small>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button class="secondary-btn" onclick="fetchLiveRegistrations()">↻</button>
+                <button class="secondary-btn" onclick="go('bookings')">هەموو ←</button>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;text-align:center">
+              <div style="background:#07291e;border:1px solid #126146;border-radius:10px;padding:7px"><b style="color:#43d6a0;font-size:15px" id="dashRegApprovedCount">0</b><small style="display:block;font-size:10px;color:#94a3b8">پەسەندکراو</small></div>
+              <div style="background:#2e2107;border:1px solid #785511;border-radius:10px;padding:7px"><b style="color:#f5b62e;font-size:15px" id="dashRegPendingCount">0</b><small style="display:block;font-size:10px;color:#94a3b8">چاوەڕوان</small></div>
+              <div style="background:#330d17;border:1px solid #7a1c33;border-radius:10px;padding:7px"><b style="color:#ff5577;font-size:15px" id="dashRegRejectedCount">0</b><small style="display:block;font-size:10px;color:#94a3b8">ڕەتکراو</small></div>
+            </div>
+            <div id="dashRecentBookingsList" style="max-height:255px;overflow-y:auto"></div>
+          </div>
         </div>
-        <div class="field"><label>سنووری بەکارهێنان</label><input id="couponNewLimit" type="number" placeholder="بێ سنوور بەتاڵ بهێڵەوە"></div>
-        <button class="primary" onclick="addCoupon()">زیادکردنی کۆبۆن ＋</button>
-      </div>
-      <div id="couponsList"></div>
-      <button class="primary" style="background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="saveCoupons()">پاشەکەوتکردنی کۆبۆنەکان لە Cloud</button>
-    </section>
 
-    <!-- 12. WEATHER MANAGER -->
-    <section class="page" id="weather_manager">
-      <div class="toolbar">
-        <button class="icon-btn" onclick="go('settings')">←</button>
-        <h2>کەشوهەوا و شوێن</h2>
-        <button class="secondary-btn" onclick="loadWeatherTest()">تاقیکردنەوە</button>
-      </div>
-      <div class="lang-box spotlight-card">
-        <div class="field"><label>شوێنی بنەڕەتی</label><input id="weatherDefaultLocationAdmin" value="Erbil"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="field"><label>Latitude</label><input id="weatherLatAdmin" value="36.19"></div>
-          <div class="field"><label>Longitude</label><input id="weatherLonAdmin" value="44.01"></div>
+        <!-- LIVE MULTI-TRIP CARDS RIGHT ON THE DASHBOARD -->
+        <div class="section-title">
+          <span>🧭 گەشتە چالاک و بڵاوکراوەکان (<span id="dashTripsCount">3</span>)</span>
+          <div style="display:flex;gap:6px">
+            <button class="mini" style="background:#0c9b61" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
+            <button class="mini" onclick="go('trips')">بینینی هەموو ←</button>
+          </div>
         </div>
-        <div id="weatherTestResult" style="font-size:12px;color:#10d67d;margin:6px 0"></div>
-        <button class="primary" onclick="saveWeatherManager()">پاشەکەوتکردن لە Cloud</button>
-      </div>
-    </section>
+        <div id="dashTripsCardsGrid" class="trips-grid-container" style="margin-bottom:16px"></div>
 
-    <!-- 13. FINANCE -->
-    <section class="page" id="finance">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>هەژماری دارایی و FIB</h2></div>
-      <div class="lang-box spotlight-card">
-        <div class="field">
-          <label>ژمارەی هەژماری فەرمی First Iraqi Bank (FIB)</label>
-          <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
+        <!-- ALL 12 ADMIN MODULES COMMAND GRID -->
+        <div class="section-title">
+          <span>🎛️ هەموو بەشەکانی کۆنترۆڵ سەنتەر (١٢ بەشی پێشکەوتوو)</span>
+          <button class="mini" onclick="go('diagnostics')">⏻ پشکنینی سیستەم</button>
         </div>
-        <button class="primary" onclick="publishLive()">پاشەکەوتکردن</button>
-      </div>
-    </section>
-
-    <!-- 14. DIAGNOSTICS -->
-    <section class="page" id="diagnostics">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>پشکنینی سیستەم</h2></div>
-      <button class="primary border-beam" onclick="runDiagnostics()">Run Diagnostics</button>
-      <div id="diagnosticList" style="margin-top:10px"></div>
-    </section>
-
-    <!-- 15. GALLERY -->
-    <section class="page" id="gallery">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>وێنەکان و گەلەری</h2></div>
-      <div class="upload spotlight-card" onclick="triggerCropUpload('gallery',null,NaN)">＋ بارکردنی وێنەی نوێ بۆ Cloud</div>
-      <div class="gallery" id="galleryGrid"></div>
-    </section>
-
-    <!-- 16. REVIEWS -->
-    <section class="page" id="reviews">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>هەڵسەنگاندنەکان</h2></div>
-      <div class="rating-box spotlight-card">
-        <div><span class="star">★</span><strong>٤.٩</strong></div>
-        <p>لە هەڵسەنگاندنی شاخەوانان</p>
-        <div class="barrow"><span>5 ★</span><div class="bar"><i style="width:78%"></i></div><span>78%</span></div>
-        <div class="barrow"><span>4 ★</span><div class="bar"><i style="width:16%"></i></div><span>16%</span></div>
-        <div class="barrow"><span>3 ★</span><div class="bar"><i style="width:4%"></i></div><span>4%</span></div>
-      </div>
-      <div class="lang-box spotlight-card" style="margin-top:10px">
-        <h4>زیادکردنی فیدباک</h4>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div class="field"><label>ناو</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
-          <div class="field"><label>شار</label><input id="newReviewCity" placeholder="هەولێر"></div>
+        <div class="module-grid">
+          <button class="module-card spotlight-card" onclick="createNewTrip()">
+            <div class="m-ico" style="color:#43d6a0;border-color:#157a56">＋</div>
+            <div class="m-txt"><b>زیادکردنی گەشتی نوێ</b><small>بە ٣ زمان + وێنە و کورسی</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('trips')">
+            <div class="m-ico" style="color:#ff4a68">🧭</div>
+            <div class="m-txt"><b>بەڕێوەبردنی گەشتەکان</b><small>دەستکاری، شاردنەوە و سڕینەوە</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('push_center')">
+            <div class="m-ico" style="color:#fb923c">🔔</div>
+            <div class="m-txt"><b>ناوەندی نۆتیفیکەیشن</b><small>Web Push بۆ هەموو مۆبایلەکان</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('bookings')">
+            <div class="m-ico" style="color:#38bdf8">👥</div>
+            <div class="m-txt"><b>ناونوسراوەکان و پسوولە</b><small>پەسەندکردن و دابەزاندنی Excel/CSV</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('design')">
+            <div class="m-ico" style="color:#c084fc">🎨</div>
+            <div class="m-txt"><b>دیزاینی Hero و Brand</b><small>وێنەی کاڤەر، ڕەنگەکان و تێکست</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('broadcast')">
+            <div class="m-ico" style="color:#22c55e">💬</div>
+            <div class="m-txt"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ گەشتیاران</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('stories')">
+            <div class="m-ico" style="color:#f472b6">✨</div>
+            <div class="m-txt"><b>ستۆری بەشداربووان</b><small>پەسەندکردن و بەڕێوەبردنی ستۆری</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('private_requests')">
+            <div class="m-ico" style="color:#facc15">👑</div>
+            <div class="m-txt"><b>داواکاری گەشتی تایبەت</b><small>گەشتی خێزانی و گروپە تایبەتەکان</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('coupons')">
+            <div class="m-ico" style="color:#34d399">🎟️</div>
+            <div class="m-txt"><b>کۆبۆنەکانی داشکاندن</b><small>دروستکردنی کۆدی داشکاندن بە ڕێژە</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('gallery')">
+            <div class="m-ico" style="color:#60a5fa">🖼️</div>
+            <div class="m-txt"><b>گەلەری و میدیا</b><small>بارکردن و بڕینی وێنە لە Cloud</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('finance')">
+            <div class="m-ico" style="color:#fbbf24">💳</div>
+            <div class="m-txt"><b>دارایی و هەژماری FIB</b><small>ڕێکخستنی ژمارەی FIB و پارەدان</small></div>
+          </button>
+          <button class="module-card spotlight-card" onclick="go('backup')">
+            <div class="m-ico" style="color:#a78bfa">💾</div>
+            <div class="m-txt"><b>Backup & Restore</b><small>داگرتن و گەڕاندنەوەی داتا</small></div>
+          </button>
         </div>
-        <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText"></textarea></div>
-        <button class="primary" onclick="addReviewItem()">زیادکردن ＋</button>
-      </div>
-      <div id="reviewsList"></div>
-    </section>
+      </section>
 
-    <!-- 17. BACKUP / RESTORE -->
-    <section class="page" id="backup">
-      <div class="toolbar"><button class="icon-btn" onclick="go('settings')">←</button><h2>پاراستن و هێنانەوە</h2></div>
-      <div class="lang-box spotlight-card">
-        <p style="font-size:12px;color:#9ba9b8">داگرتنی کۆپییەکی تەواوی زانیارییەکان یان گەڕاندنەوەی لە فایلی JSON.</p>
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="primary" style="margin:0" onclick="exportBackup()">⬇ Download Backup</button>
-          <button class="primary" style="margin:0;background:#159ce8" onclick="document.getElementById('importBackupInput').click()">⬆ Restore JSON</button>
-          <input type="file" id="importBackupInput" accept=".json" style="display:none" onchange="importBackup(event)">
+      <!-- =========================================================
+           2. TRIPS LIST (MULTI-TRIP MANAGER)
+           ========================================================= -->
+      <section class="page" id="trips">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>گەشتەکان (<span id="tripsTotalCount">1</span>)</h2>
+          <button class="pill" style="background:linear-gradient(100deg,#0c9b61,#07774a);border-color:#26d08c" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
         </div>
-      </div>
-    </section>
-  </main>
+        <div class="filters">
+          <button class="filter active" data-filter="all" onclick="setTripFilter(this,'all')">هەموو</button>
+          <button class="filter" data-filter="upcoming" onclick="setTripFilter(this,'upcoming')">داهاتوو</button>
+          <button class="filter" data-filter="active" onclick="setTripFilter(this,'active')">چالاک</button>
+          <button class="filter" data-filter="done" onclick="setTripFilter(this,'done')">داخراو / شاراوە</button>
+        </div>
+        <input class="search" id="tripSearch" placeholder="⌕   گەڕان بە ناوی گەشت یان شوێن..." oninput="filterTrips()">
+        <div id="tripList" class="trips-grid-container"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+          <button class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
+          <button class="primary border-beam" style="margin:0" onclick="publishLive()">● بڵاوکردنەوەی هەموو گەشتەکان</button>
+        </div>
+      </section>
 
-  <!-- Sticky Bottom Navigation -->
-  <nav class="bottom-nav" style="grid-template-columns:repeat(5,1fr)">
-    <button class="nav-btn active" data-page="dashboard" onclick="go('dashboard',this)"><span class="ico">⌂</span><span>داشبۆرد</span></button>
-    <button class="nav-btn" data-page="trips" onclick="go('trips',this)"><span class="ico">▣</span><span>گەشتەکان</span></button>
-    <button class="nav-btn" data-page="push_center" onclick="go('push_center',this)"><span class="ico">🔔</span><span>نۆتیفیکەیشن</span></button>
-    <button class="nav-btn" data-page="bookings" onclick="go('bookings',this)">
-      <span class="ico">♙</span>
-      <span>ناونوسراو</span>
-      <span class="nav-badge" id="pendingNavBadge" style="display:none">0</span>
-    </button>
-    <button class="nav-btn" data-page="settings" onclick="go('settings',this)"><span class="ico">⚙</span><span>ڕێکخستن</span></button>
-  </nav>
+      <!-- =========================================================
+           3. TRIP DETAIL
+           ========================================================= -->
+      <section class="page" id="tripdetail">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('trips')">←</button>
+          <h2>وردەکاری گەشت</h2>
+          <button class="secondary-btn" onclick="notifyAboutTrip(activeTripIndex)" style="color:#fb923c">🔔 نۆتیفیکەیشن</button>
+          <button class="icon-btn" onclick="editTrip(activeTripIndex)" title="دەستکاریکردن">✎</button>
+        </div>
+        <img class="detail-image" id="detailHeroImg" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85" alt="Trip">
+        <div class="trip-title" style="margin-top:12px">
+          <b style="font-size:18px" id="detailTitle">سەرووشتی هەڵگورد</b>
+          <span class="tag" id="detailStatusTag">چالاک</span>
+          <button class="secondary-btn" onclick="editTrip(activeTripIndex)">✎ دەستکاری</button>
+        </div>
+        <div class="detail-list">
+          <div class="detail-row"><span class="dicon">▦</span><b>بەروار و کات</b><span id="detailDateTime">2026/10/24 · 05:00 بەیانی</span></div>
+          <div class="detail-row"><span class="dicon">♧</span><b>شوێنەکان</b><span id="detailSeats">29 / 40</span></div>
+          <div class="detail-row"><span class="dicon">⌖</span><b>شوێن</b><span id="detailLoc">باڵەکایەتی — چیای هەڵگورد</span></div>
+          <div class="detail-row"><span class="dicon">◇</span><b>نرخ</b><span id="detailPrice">35,000 دینار</span></div>
+          <div class="detail-row"><span class="dicon">🌡️</span><b>پلەی گەرمی</b><span id="detailTemp">25°C</span></div>
+          <div class="detail-row"><span class="dicon">☁</span><b>کەشوهەوا</b><span id="detailWeather">ساماڵ ☀️</span></div>
+        </div>
+        <div class="countdown spotlight-card">
+          <b>کاتژمێری پاشماوە (Countdown)</b>
+          <div class="digits">
+            <span id="cdDays">04</span>
+            <span id="cdHours">16</span>
+            <span id="cdMins">58</span>
+            <span id="cdSecs">25</span>
+          </div>
+          <div class="progress"><i id="detailProgressBar" style="width:72%"></i></div>
+          <small style="display:block;color:#9eabb7;margin-top:8px" id="detailProgressLabel">72% · پڕبوون</small>
+        </div>
+        <button class="primary border-beam" onclick="go('bookings')" id="detailBookingsBtn">بینینی ناونوسراوەکان (29)</button>
+      </section>
+
+      <!-- =========================================================
+           4. BOOKINGS / LIVE REGISTRATIONS
+           ========================================================= -->
+      <section class="page" id="bookings">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>ناونوسراوەکان</h2>
+          <button class="icon-btn" onclick="fetchLiveRegistrations()" title="نوێکردنەوە">↻</button>
+          <button class="secondary-btn" onclick="exportRegistrationsToCSV()" title="دابەزاندنی CSV">⬇ دابەزاندنی CSV</button>
+        </div>
+        <div class="filters">
+          <button class="filter active" onclick="setBookingFilter(this,'all')">هەموو <span id="cntAll"></span></button>
+          <button class="filter" onclick="setBookingFilter(this,'approved')">پەسەندکراو <span id="cntApp"></span></button>
+          <button class="filter" onclick="setBookingFilter(this,'pending')">چاوەڕوان <span id="cntPend"></span></button>
+          <button class="filter" onclick="setBookingFilter(this,'rejected')">ڕەتکراو <span id="cntRej"></span></button>
+        </div>
+        <input class="search" id="peopleSearch" placeholder="⌕   گەڕان بە ناو / ژمارەی مۆبایل / کۆد..." oninput="renderRegistrations()">
+        <div id="peopleList"></div>
+      </section>
+
+      <!-- =========================================================
+           5. NEW / EDIT TRIP (MULTI-TRIP + 3 LANGUAGES + CAPACITY)
+           ========================================================= -->
+      <section class="page" id="newtrip">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('trips')">←</button>
+          <h2 id="editorTripHeader">زیادکردنی گەشتی نوێ</h2>
+          <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="createNewTrip()">＋ فۆڕمی گەشتی نوێی بەتاڵ</button>
+        </div>
+
+        <!-- Mode Banner -->
+        <div id="editorModeBanner" style="background:linear-gradient(100deg,#073a2d,#061811);border:1px solid #11654b;border-radius:11px;padding:10px 13px;margin-bottom:10px;font-size:12px;color:#6bf0b3;font-weight:800">
+          ✨ دۆخی زیادکردنی گەشتی نوێ — گەشتە کۆنەکان پارێزراون و ناسڕێنەوە
+        </div>
+
+        <!-- Multi-Trip Switcher Pills -->
+        <div id="editorTripTabs" class="filters" style="margin-bottom:10px"></div>
+
+        <div class="upload spotlight-card" onclick="triggerCropUpload('tripImageUrl','tripPreviewImg',4/3)">
+          <div>▧<br><b>وێنەی سەرەکی ئەم گەشتە</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
+          <img id="tripPreviewImg" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:9px;margin-top:8px">
+        </div>
+
+        <div class="lang-box spotlight-card" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" id="tripPublishedSwitch" checked style="width:16px;height:16px"> پیشاندان لە پەڕەی سەرەکی
+          </label>
+          <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" id="bookingOpen" checked style="width:16px;height:16px"> ناونووسین کراوەیە
+          </label>
+          <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" style="width:16px;height:16px"> OTP پێویستە
+          </label>
+        </div>
+
+        <div class="lang-3col">
+          <div class="lang-box spotlight-card">
+            <h4>☀️ زمانی کوردی (KU)</h4>
+            <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" placeholder="بۆ نموونە: گەشتی چەمانکێ و دهۆک"></div>
+            <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" placeholder="بۆ نموونە: دهۆک · چەمانکێ"></div>
+            <div class="field"><label>نرخ</label><input id="tripPrice_ku" placeholder="بۆ نموونە: 25,000 دینار"></div>
+            <div class="field"><label>کات و بەروار (دەق)</label><input id="tripTime_ku" placeholder="بۆ نموونە: بەیانی 06:00"></div>
+            <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" placeholder="وردەکاری و بەرنامەی گەشتەکە بنووسە..."></textarea></div>
+          </div>
+
+          <div class="lang-box spotlight-card">
+            <h4>🌴 باللغة العربية (AR — ئارەزوومەندانە)</h4>
+            <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" placeholder="اسم الرحلة بالعربية"></div>
+            <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" placeholder="المكان والمنطقة"></div>
+            <div class="field"><label>السعر</label><input id="tripPrice_ar" placeholder="25,000 دينار"></div>
+            <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" placeholder="صباحاً 06:00"></div>
+            <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" placeholder="تفاصيل الرحلة..."></textarea></div>
+          </div>
+
+          <div class="lang-box spotlight-card">
+            <h4>🌐 In English (EN — Optional)</h4>
+            <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" placeholder="Trip Title in English"></div>
+            <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" placeholder="Location"></div>
+            <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" placeholder="25,000 IQD"></div>
+            <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" placeholder="06:00 AM"></div>
+            <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" placeholder="Full trip itinerary..."></textarea></div>
+          </div>
+        </div>
+
+        <div class="lang-box spotlight-card">
+          <h4>⚙️ بەروار، توانست و کەشوهەوا</h4>
+          <div class="field"><label>⏰ بەروار و کاتی گەشت (Countdown & Date)</label><input type="datetime-local" id="tripTargetDate"></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px">
+            <div class="field"><label>کۆی کورسی (Capacity)</label><input type="number" id="capacityInput" value="35"></div>
+            <div class="field"><label>گیراو (Booked)</label><input type="number" id="bookedInput" value="0"></div>
+            <div class="field"><label>پلەی گەرمی</label><input id="weatherTemp" value="22°C"></div>
+            <div class="field"><label>دۆخی کەشوهەوا</label><input id="weatherCondition" value="ساماڵ ☀️"></div>
+          </div>
+        </div>
+
+        <div class="lang-box spotlight-card" style="margin-top:10px;border-color:#155e75">
+          <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer;color:#7dd3fc">
+            <input type="checkbox" id="autoPushOnNewTrip" checked style="width:16px;height:16px"> 🔔 لەگەڵ بڵاوکردنەوەی گەشتی نوێ، نۆتیفیکەیشن بۆ هەموو بەشداربووان بنێرە
+          </label>
+        </div>
+
+        <div id="newTripActionButtons" style="display:grid;gap:8px;margin-top:12px">
+          <button id="btnSaveAsNewTrip" class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="saveFormAsNewTrip()">＋ زیادکردن وەک گەشتی نوێ و بڵاوکردنەوە (گەشتە کۆنەکان دەمێننەوە)</button>
+          <div id="editTripActionRow" style="display:flex;gap:8px">
+            <button id="btnUpdateExistingTrip" class="primary border-beam" style="margin:0;flex:1" onclick="saveFormToSelectedTrip()">💾 پاشەکەوتکردنی گۆڕانکاری لەم گەشتە</button>
+            <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:0 16px" onclick="deleteTrip(activeTripIndex)" title="سڕینەوەی ئەم گەشتە">🗑️ سڕینەوە</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           6. SETTINGS HUB
+           ========================================================= -->
+      <section class="page" id="settings">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>هەموو بەشەکان و ڕێکخستن</h2>
+          <button class="pill" onclick="publishLive()">● Publish</button>
+        </div>
+        <div class="service-list">
+          <div class="staff-setting spotlight-card" style="border-color:#7c2d12" onclick="go('push_center')"><div class="service-icon" style="color:#fb923c">🔔</div><div class="service-text"><b>ناردنی نۆتیفیکەیشن بۆ خەڵک (Web Push)</b><small>ناردنی ئاگاداری ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەری بەشداربووان</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی بە ٣ زمان</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('broadcast')"><div class="service-icon">💬</div><div class="service-text"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ شاخەوانان</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('stories')"><div class="service-icon">✨</div><div class="service-text"><b>ستۆرییەکان (Stories)</b><small>پەسەندکردن و سڕینەوەی ستۆری بەشداربووان</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('private_requests')"><div class="service-icon">👑</div><div class="service-text"><b>گەشتی تایبەت (Private Trips)</b><small>داواکارییەکانی گەشتی خێزانی و تایبەت</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('coupons')"><div class="service-icon">🎟️</div><div class="service-text"><b>کۆبۆنەکان (Coupons)</b><small>کۆدی داشکاندن و سنووری بەکارهێنان</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('weather_manager')"><div class="service-icon">⛅</div><div class="service-text"><b>کەشوهەوا و شوێن</b><small>Open-Meteo و پۆوتانی نەخشە</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('reviews')"><div class="service-icon">★</div><div class="service-text"><b>هەڵسەنگاندنەکان (Reviews)</b><small>فیدباک و پلەبەندی شاخەوانان</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('gallery')"><div class="service-icon">▧</div><div class="service-text"><b>وێنەکان و گەلەری</b><small>بارکردن و بڕینی وێنەکان لە Cloud</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('finance')"><div class="service-icon">💳</div><div class="service-text"><b>هەژماری دارایی و FIB</b><small>ژمارەی هەژماری First Iraqi Bank</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('diagnostics')"><div class="service-icon" style="color:#ff3152">⏻</div><div class="service-text"><b>پشکنینی ئۆتۆماتیک</b><small>System Diagnostics</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('backup')"><div class="service-icon">💾</div><div class="service-text"><b>Backup / Restore</b><small>داگرتن و گەڕاندنەوەی داتا</small></div><span class="arrow">‹</span></div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           6B. PUSH NOTIFICATIONS CENTER
+           ========================================================= -->
+      <section class="page" id="push_center">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>🔔 ناوەندی ناردنی نۆتیفیکەیشن</h2>
+          <button class="icon-btn" onclick="loadPushCenterStats()" title="نوێکردنەوە">↻</button>
+        </div>
+
+        <div class="lang-box spotlight-card" style="background:linear-gradient(125deg,#1d1427,#0c1420);border-color:#4c1d95">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:11px;color:#c4b5fd;font-weight:700">بەشداربووانی چالاکی نۆتیفیکەیشن (Web Push)</div>
+              <div style="font-size:26px;font-weight:900;color:#fff;margin-top:2px"><span id="pushSubscriberCount">...</span> <small style="font-size:12px;color:#a78bfa">ئامێر / کەس</small></div>
+            </div>
+            <button type="button" class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;padding:8px 12px" onclick="enableAdminDevicePush()">📲 چالاککردن لەم مۆبایلە</button>
+          </div>
+        </div>
+
+        <div class="lang-box spotlight-card">
+          <h4>⚡ قاڵبی ئامادەکراو (کلیک بکە بۆ پڕکردنەوە)</h4>
+          <div class="filters" style="margin-bottom:4px">
+            <button type="button" class="filter active" onclick="fillPushTemplate('new_trip')">🔥 گەشتی نوێ بەردەستە</button>
+            <button type="button" class="filter" onclick="fillPushTemplate('seats')">⏳ تەنها چەند کورسییەک ماوە</button>
+            <button type="button" class="filter" onclick="fillPushTemplate('reminder')">🚌 بیرخستنەوەی کاتی دەرچوون</button>
+          </div>
+        </div>
+
+        <div class="lang-box spotlight-card">
+          <h4>١. ناونیشانی نۆتیفیکەیشن</h4>
+          <div class="field"><input id="pushTitleInput" value="KURDIA ADVENTURE 🔥" placeholder="بۆ نموونە: گەشتی نوێ ڕاگەیەندرا!"></div>
+          <h4 style="margin-top:10px">٢. دەقی پەیام / ئاگاداری بۆ خەڵک</h4>
+          <div class="field"><textarea id="pushBodyInput" placeholder="دەقی نۆتیفیکەیشن لێرە بنووسە بۆ ئەوەی بچێت بۆ مۆبایلی هەموو بەشداربووان..." style="min-height:95px"></textarea></div>
+          <h4 style="margin-top:10px">٣. لینک لە کاتی کردنەوەی نۆتیفیکەیشن</h4>
+          <div class="field"><input id="pushUrlInput" dir="ltr" value="/#booking" placeholder="/#booking"></div>
+        </div>
+
+        <button class="primary border-beam" id="btnSendPushNow" style="background:linear-gradient(100deg,#e11d48,#be123c)" onclick="sendPushNotificationToAll()">🔔 ناردنی نۆتیفیکەیشن بۆ هەموو خەڵک</button>
+        <div id="pushSendResultBox" style="margin-top:10px;font-size:12px;font-weight:700"></div>
+
+        <div class="section-title" style="margin-top:18px">
+          <span>دوایین چالاکی و ئاگادارییەکان</span>
+          <button class="mini" onclick="loadPushCenterStats()">↻</button>
+        </div>
+        <div id="adminActivityNotificationsList" class="service-list"></div>
+      </section>
+
+      <!-- =========================================================
+           7. HERO & BRAND DESIGN
+           ========================================================= -->
+      <section class="page" id="design">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>Hero و Brand</h2></div>
+        <div class="lang-box spotlight-card">
+          <h4>🎨 ڕەنگەکانی براند</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field"><label>ڕەنگی سەرەکی</label><input type="color" id="gradColor1" onchange="autoSync()" style="height:42px;padding:4px"></div>
+            <div class="field"><label>ڕەنگی دووەم</label><input type="color" id="gradColor2" onchange="autoSync()" style="height:42px;padding:4px"></div>
+          </div>
+        </div>
+        <div class="upload spotlight-card" onclick="triggerCropUpload('heroImageUrl','heroPreviewImg',16/9)" style="margin-bottom:10px">
+          <div>🖼️<br><b>وێنەی کاڤەری سەرەکی (Hero)</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
+          <img id="heroPreviewImg" style="display:none;width:100%;max-height:150px;object-fit:cover;border-radius:9px;margin-top:8px">
+        </div>
+        <div class="lang-3col">
+          <div class="lang-box spotlight-card">
+            <h4>☀️ بە کوردی</h4>
+            <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
+            <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
+          </div>
+          <div class="lang-box spotlight-card">
+            <h4>🌴 بالعربية</h4>
+            <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
+            <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
+          </div>
+          <div class="lang-box spotlight-card">
+            <h4>🌐 In English</h4>
+            <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
+            <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
+          </div>
+        </div>
+        <button class="primary border-beam" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە</button>
+      </section>
+
+      <!-- =========================================================
+           8. WHATSAPP BROADCAST
+           ========================================================= -->
+      <section class="page" id="broadcast">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>ناوەندی WhatsApp</h2></div>
+        <div class="lang-box spotlight-card">
+          <h4>١. دەقی پەیام</h4>
+          <textarea id="broadcastMessage" placeholder="سڵاو، پەیامەکەت لێرە بنووسە..." style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px"></textarea>
+        </div>
+        <div class="lang-box spotlight-card">
+          <h4>٢. ژمارەکانی وەرگر (هەر ژمارەیەک لە دێڕێک)</h4>
+          <textarea id="broadcastPhones" dir="ltr" placeholder="9647501234567&#10;9647701234567" style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px;text-align:left"></textarea>
+        </div>
+        <button class="primary border-beam" id="broadcastSendBtn" onclick="sendBroadcastReminder()">پشکنین و ناردنی پەیام</button>
+        <div id="broadcastResult" style="margin-top:10px;font-size:12px"></div>
+        <details style="margin-top:10px;font-size:11px;color:#8b9aa8">
+          <summary style="cursor:pointer">وردەکاریی وەڵامی سێرڤەر</summary>
+          <pre id="broadcastDebug" style="background:#050a10;padding:10px;border-radius:8px;overflow:auto;direction:ltr;text-align:left">ئامادەیە.</pre>
+        </details>
+      </section>
+
+      <!-- =========================================================
+           9. STORIES MODERATION
+           ========================================================= -->
+      <section class="page" id="stories">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>ستۆرییەکان</h2>
+          <button class="icon-btn" onclick="fetchAdminStories()">↻</button>
+        </div>
+        <div id="adminStoriesContainer"></div>
+      </section>
+
+      <!-- =========================================================
+           10. PRIVATE REQUESTS
+           ========================================================= -->
+      <section class="page" id="private_requests">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>داواکاری گەشتی تایبەت</h2>
+          <button class="icon-btn" onclick="loadPrivateRequests()">↻</button>
+        </div>
+        <div id="privateRequestsContainer"></div>
+      </section>
+
+      <!-- =========================================================
+           11. COUPONS
+           ========================================================= -->
+      <section class="page" id="coupons">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>کۆبۆنەکان</h2></div>
+        <div class="lang-box spotlight-card">
+          <h4>زیادکردنی کۆبۆنی نوێ</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="field"><label>کۆد</label><input id="couponNewCode" placeholder="KURDIA10"></div>
+            <div class="field"><label>داشکاندن (%)</label><input id="couponNewDiscount" type="number" placeholder="10"></div>
+            <div class="field"><label>دەستپێک</label><input id="couponNewStart" type="datetime-local"></div>
+            <div class="field"><label>کۆتایی</label><input id="couponNewEnd" type="datetime-local"></div>
+          </div>
+          <div class="field"><label>سنووری بەکارهێنان</label><input id="couponNewLimit" type="number" placeholder="بێ سنوور بەتاڵ بهێڵەوە"></div>
+          <button class="primary" onclick="addCoupon()">زیادکردنی کۆبۆن ＋</button>
+        </div>
+        <div id="couponsList"></div>
+        <button class="primary" style="background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="saveCoupons()">پاشەکەوتکردنی کۆبۆنەکان لە Cloud</button>
+      </section>
+
+      <!-- =========================================================
+           12. WEATHER MANAGER
+           ========================================================= -->
+      <section class="page" id="weather_manager">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>کەشوهەوا و شوێن</h2>
+          <button class="secondary-btn" onclick="loadWeatherTest()">تاقیکردنەوە</button>
+        </div>
+        <div class="lang-box spotlight-card">
+          <div class="field"><label>شوێنی بنەڕەتی</label><input id="weatherDefaultLocationAdmin" value="Erbil"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="field"><label>Latitude</label><input id="weatherLatAdmin" value="36.19"></div>
+            <div class="field"><label>Longitude</label><input id="weatherLonAdmin" value="44.01"></div>
+          </div>
+          <div id="weatherTestResult" style="font-size:12px;color:#10d67d;margin:6px 0"></div>
+          <button class="primary" onclick="saveWeatherManager()">پاشەکەوتکردن لە Cloud</button>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           13. FINANCE
+           ========================================================= -->
+      <section class="page" id="finance">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>هەژماری دارایی و FIB</h2></div>
+        <div class="lang-box spotlight-card">
+          <div class="field">
+            <label>ژمارەی هەژماری فەرمی First Iraqi Bank (FIB)</label>
+            <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
+          </div>
+          <button class="primary" onclick="publishLive()">پاشەکەوتکردن</button>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           14. DIAGNOSTICS
+           ========================================================= -->
+      <section class="page" id="diagnostics">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>پشکنینی سیستەم</h2></div>
+        <button class="primary border-beam" onclick="runDiagnostics()">Run Diagnostics</button>
+        <div id="diagnosticList" style="margin-top:10px"></div>
+      </section>
+
+      <!-- =========================================================
+           15. GALLERY
+           ========================================================= -->
+      <section class="page" id="gallery">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>وێنەکان و گەلەری</h2></div>
+        <div class="upload spotlight-card" onclick="triggerCropUpload('gallery',null,NaN)">＋ بارکردنی وێنەی نوێ بۆ Cloud</div>
+        <div class="gallery" id="galleryGrid"></div>
+      </section>
+
+      <!-- =========================================================
+           16. REVIEWS
+           ========================================================= -->
+      <section class="page" id="reviews">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>هەڵسەنگاندنەکان</h2></div>
+        <div class="rating-box spotlight-card">
+          <div><span class="star">★</span><strong>٤.٩</strong></div>
+          <p>لە هەڵسەنگاندنی شاخەوانان</p>
+          <div class="barrow"><span>5 ★</span><div class="bar"><i style="width:78%"></i></div><span>78%</span></div>
+          <div class="barrow"><span>4 ★</span><div class="bar"><i style="width:16%"></i></div><span>16%</span></div>
+          <div class="barrow"><span>3 ★</span><div class="bar"><i style="width:4%"></i></div><span>4%</span></div>
+        </div>
+        <div class="lang-box spotlight-card" style="margin-top:10px">
+          <h4>زیادکردنی فیدباک</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="field"><label>ناو</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
+            <div class="field"><label>شار</label><input id="newReviewCity" placeholder="هەولێر"></div>
+          </div>
+          <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText"></textarea></div>
+          <button class="primary" onclick="addReviewItem()">زیادکردن ＋</button>
+        </div>
+        <div id="reviewsList"></div>
+      </section>
+
+      <!-- =========================================================
+           17. BACKUP / RESTORE
+           ========================================================= -->
+      <section class="page" id="backup">
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>پاراستن و هێنانەوە</h2></div>
+        <div class="lang-box spotlight-card">
+          <p style="font-size:12px;color:#9ba9b8">داگرتنی کۆپییەکی تەواوی زانیارییەکان یان گەڕاندنەوەی لە فایلی JSON.</p>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+            <button class="primary" style="margin:0;flex:1" onclick="exportBackup()">⬇ Download Backup</button>
+            <button class="primary" style="margin:0;flex:1;background:#159ce8" onclick="document.getElementById('importBackupInput').click()">⬆ Restore JSON</button>
+            <input type="file" id="importBackupInput" accept=".json" style="display:none" onchange="importBackup(event)">
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Sticky Bottom Navigation (Mobile/Tablet) -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-page="dashboard" onclick="go('dashboard',this)"><span class="ico">⌂</span><span>داشبۆرد</span></button>
+      <button class="nav-btn" data-page="trips" onclick="go('trips',this)"><span class="ico">🧭</span><span>گەشتەکان</span></button>
+      <button class="nav-btn" data-page="push_center" onclick="go('push_center',this)"><span class="ico">🔔</span><span>نۆتیفیکەیشن</span></button>
+      <button class="nav-btn" data-page="bookings" onclick="go('bookings',this)">
+        <span class="ico">👥</span>
+        <span>ناونوسراو</span>
+        <span class="nav-badge" id="pendingNavBadge" style="display:none">0</span>
+      </button>
+      <button class="nav-btn" data-page="settings" onclick="go('settings',this)"><span class="ico">⚙</span><span>بەشەکان</span></button>
+    </nav>
+  </div>
 </div>
 
 <!-- CROPPER MODAL -->
@@ -1123,7 +1701,7 @@ button{cursor:pointer;color:inherit}
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_admin_multitrip_v6";
-const CODE_RELEASE_VERSION = "v2.5.2";
+const CODE_RELEASE_VERSION = "v2.6.0";
 
 // Immediately purge old single-trip cached localStorage on version upgrade
 (function(){
@@ -1147,7 +1725,7 @@ function getCurrentLiveVersion(){
 function bumpLiveVersion(){
   const cur = getCurrentLiveVersion();
   const m = String(cur).match(/^v?(\d+)\.(\d+)\.(\d+)$/);
-  let next = "v2.5.3";
+  let next = "v2.6.1";
   if(m){
     next = `v${m[1]}.${m[2]}.${Number(m[3]) + 1}`;
   }
@@ -1162,7 +1740,9 @@ function updateAdminVersionUI(ver){
   const b = document.getElementById("adminVersionBadge");
   if(b) b.textContent = `${v} ↻`;
   const s = document.getElementById("adminVersionSub");
-  if(s) s.textContent = `MULTI-TRIP · PUSH · LIVE ${v}`;
+  if(s) s.textContent = `FULL COMMAND DASHBOARD · MULTI-TRIP · WEB PUSH · ${v}`;
+  const sb = document.getElementById("sidebarVersionLabel");
+  if(sb) sb.textContent = `${v} · پەیوەستە بە Cloud`;
   const lnk = document.getElementById("adminToSiteLink");
   if(lnk) lnk.href = `/index.html?v=${encodeURIComponent(v)}&t=${Date.now()}`;
 }
@@ -1177,6 +1757,8 @@ async function forceRefreshAdminVersion(){
       await Promise.all(keys.map(k => caches.delete(k)));
     }
     await fetchRemoteCMSIntoAdmin();
+    await fetchLiveRegistrations();
+    await loadPushCenterStats();
     toast(`✅ نوێکرایەوە بۆ کۆتا ڤێرژن (${getCurrentLiveVersion()})`);
   }catch(e){
     location.reload();
@@ -1350,6 +1932,15 @@ let activeTripIndex = 0;
 let cachedRegistrations = [];
 let activeBookingFilter = "all";
 let currentTripFilter = "all";
+let editorMode = "new";
+let draftTripImageUrl = "";
+let quickDashboardTripImageUrl = "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85";
+
+function parsePriceNumber(priceStr){
+  const digits = String(priceStr || "25000").replace(/[^\d]/g, "");
+  const n = Number(digits);
+  return (n > 0 && n < 10000000) ? n : 25000;
+}
 
 function normalizeAdminTrip(tr, idx = 0){
   if(!tr || typeof tr !== "object") tr = {};
@@ -1361,9 +1952,8 @@ function normalizeAdminTrip(tr, idx = 0){
   let rawLoc = ku.tripLocation || tr.location || "کوردستان";
   let rawPrice = ku.tripPrice || tr.price || "25,000 دینار";
   let rawTime = ku.tripTime || tr.time || "06:00 بەیانی";
-  // Auto-heal legacy shifted fields if title accidentally got English hero text
   if(rawTitle === "Experience Kurdistan Nature Differently With Us"){
-    rawTitle = rawLoc && rawLoc.includes("چەمانکێ") ? "گەشتی چەمانکێ" : "گەشتی چەمانکێ";
+    rawTitle = "گەشتی چەمانکێ";
     rawLoc = "دهۆک · چەمانکێ";
     rawPrice = "23,000 دینار";
     rawTime = "06:00 بەیانی";
@@ -1420,62 +2010,52 @@ function getTotalsAcrossTrips(){
   const list = pub.length ? pub : appState.trips;
   const totalCap = list.reduce((s, t) => s + Number(t.capacity || 0), 0);
   const totalBooked = list.reduce((s, t) => s + Number(t.booked || 0), 0);
+  const totalRevenue = list.reduce((s, t) => {
+    const p = parsePriceNumber(t.i18n?.ku?.tripPrice || t.price);
+    return s + (Number(t.booked || 0) * p);
+  }, 0);
+  const maxRevenue = list.reduce((s, t) => {
+    const p = parsePriceNumber(t.i18n?.ku?.tripPrice || t.price);
+    return s + (Number(t.capacity || 0) * p);
+  }, 0);
   return {
+    activeCount: pub.length,
+    totalCount: appState.trips.length,
     capacity: totalCap,
     booked: totalBooked,
-    available: Math.max(0, totalCap - totalBooked)
+    available: Math.max(0, totalCap - totalBooked),
+    revenue: totalRevenue,
+    maxRevenue: maxRevenue
   };
 }
 
 function toast(msg){
   const t = document.getElementById("toast");
+  if(!t) return;
   t.textContent = msg;
   t.classList.add("show");
   clearTimeout(window.toastTimer);
   window.toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
 }
 
-function toggleWideMode(){
-  document.getElementById("appShell").classList.toggle("wide-mode");
-}
-
 function animateCounters(){
   const totals = getTotalsAcrossTrips();
-  if(!window.anime){
-    const cEl = document.getElementById("dashCapCounter"); if(cEl) cEl.textContent = totals.capacity;
-    const bEl = document.getElementById("dashBookedCounter"); if(bEl) bEl.textContent = totals.booked;
-    const aEl = document.getElementById("dashAvailCounter"); if(aEl) aEl.textContent = totals.available;
-    return;
-  }
-  const targets = [
-    { id: "dashCapCounter", end: totals.capacity },
-    { id: "dashBookedCounter", end: totals.booked },
-    { id: "dashAvailCounter", end: totals.available }
-  ];
-  targets.forEach(t => {
-    const el = document.getElementById(t.id);
-    if(!el) return;
-    const obj = { val: 0 };
-    anime({
-      targets: obj,
-      val: t.end,
-      round: 1,
-      duration: 950,
-      easing: "easeOutExpo",
-      update: () => { el.textContent = obj.val; }
-    });
-  });
+  const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  setTxt("dashActiveTripsCounter", totals.activeCount);
+  setTxt("dashTripsSubLabel", `لە کۆی ${totals.totalCount} گەشت`);
+  setTxt("dashCapCounter", totals.capacity);
+  setTxt("dashBookedCounter", totals.booked);
+  const pct = Math.min(100, Math.round((totals.booked / Math.max(1, totals.capacity)) * 100));
+  setTxt("dashBookedPctSub", `${pct}% پڕبووەتەوە`);
+  setTxt("dashAvailCounter", totals.available);
+  setTxt("dashRevenueCounter", totals.revenue.toLocaleString("en-US"));
+  setTxt("dashMaxRevenueSub", `توانستی تەواو: ${totals.maxRevenue.toLocaleString("en-US")} د.ع`);
+  setTxt("sideTripsBadge", totals.totalCount);
+  setTxt("qTripsCount", totals.totalCount);
 }
-
-let editorMode = "new"; // Default to "new" so opening the form never accidentally overwrites Trip #1!
-let draftTripImageUrl = "";
 
 function go(id, btn){
   document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
-  const activePage = document.getElementById(id);
-  if(activePage && window.gsap){
-    gsap.fromTo(activePage, { opacity: 0.25, y: 12 }, { opacity: 1, y: 0, duration: 0.32, ease: "power2.out" });
-  }
   document.querySelectorAll(".nav-btn").forEach(n => {
     const p = n.dataset.page;
     const match = p === id ||
@@ -1483,11 +2063,18 @@ function go(id, btn){
       (["design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","gallery","reviews","backup"].includes(id) && p === "settings");
     n.classList.toggle("active", match);
   });
+  document.querySelectorAll(".side-btn").forEach(s => {
+    s.classList.toggle("active", s.dataset.side === id);
+  });
   if(btn){
     document.querySelectorAll(".nav-btn").forEach(n => n.classList.remove("active"));
     btn.classList.add("active");
   }
-  if(id === "dashboard") animateCounters();
+  if(id === "dashboard"){
+    animateCounters();
+    renderTripsAndDetail();
+    renderRegistrations();
+  }
   if(id === "trips" || id === "tripdetail") renderTripsAndDetail();
   if(id === "push_center") loadPushCenterStats();
   if(id === "bookings") fetchLiveRegistrations();
@@ -1560,11 +2147,65 @@ function createNewTrip(silentInit = false){
     prev.style.display = "block";
   }
 
+  // Also set default date for Dashboard Quick-Add Trip
+  setEl("quickTripDate", futureDate);
+
   if(!silentInit){
     go("newtrip");
     setTimeout(() => document.getElementById("tripTitle_ku")?.focus(), 120);
     toast(`✨ فۆڕمی گەشتی نوێ (#${nextNum}) ئامادەیە`);
   }
+}
+
+// Instant Quick-Add Trip directly from Dashboard!
+async function submitQuickDashboardTrip(){
+  ensureTripsArray();
+  const title = (document.getElementById("quickTripTitle")?.value || "").trim();
+  const loc = (document.getElementById("quickTripLoc")?.value || "کوردستان").trim();
+  const price = (document.getElementById("quickTripPrice")?.value || "25,000 دینار").trim();
+  const time = (document.getElementById("quickTripTime")?.value || "06:00 بەیانی").trim();
+  const dateVal = (document.getElementById("quickTripDate")?.value || new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10) + "T06:00").trim();
+  const cap = Number(document.getElementById("quickTripCap")?.value || 35);
+  const desc = (document.getElementById("quickTripDesc")?.value || "گەشتێکی ناوازە لەگەڵ تیمی KURDIA ADVENTURE.").trim();
+
+  if(!title){
+    return toast("⚠️ تکایە ناوی گەشتەکە بنووسە");
+  }
+
+  const newTrip = {
+    id: "trip-" + Date.now(),
+    published: true,
+    bookingOpen: true,
+    status: "active",
+    tripImageUrl: quickDashboardTripImageUrl || "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85",
+    tripTargetDate: dateVal,
+    capacity: cap,
+    booked: 0,
+    weatherTemp: "22°C",
+    weatherCondition: "ساماڵ ☀️",
+    i18n: {
+      ku: { tripTitle: title, tripLocation: loc, tripPrice: price, tripTime: time, tripDesc: desc },
+      ar: { tripTitle: title, tripLocation: loc, tripPrice: price, tripTime: time, tripDesc: desc },
+      en: { tripTitle: title, tripLocation: loc, tripPrice: price, tripTime: time, tripDesc: desc }
+    }
+  };
+
+  appState.trips.push(newTrip);
+  activeTripIndex = appState.trips.length - 1;
+
+  // Clear quick inputs
+  ["quickTripTitle","quickTripLoc","quickTripPrice","quickTripTime","quickTripDesc"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = "";
+  });
+
+  await publishLive(true);
+
+  if(document.getElementById("quickTripAutoPush")?.checked){
+    await sendDirectPush(`🔥 گەشتی نوێ: ${title}`, `ئێستا ناونووسین کراوەیە بۆ ${title} (${loc}) — نرخ: ${price} 🏔️`, "/#booking");
+  }
+  renderTripsAndDetail();
+  animateCounters();
 }
 
 function renderEditorTabs(){
@@ -1689,7 +2330,6 @@ function deleteTrip(idx, ev){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   syncPublicWebsiteBridge();
   publishLive(true);
-  go("trips");
   toast("🗑️ گەشتەکە سڕایەوە");
 }
 
@@ -1749,6 +2389,43 @@ function populateTripEditor(idx){
   }
 }
 
+function buildTripCardHTML(tr, idx){
+  const title = tr.i18n?.ku?.tripTitle || `گەشتی #${idx + 1}`;
+  const loc = tr.i18n?.ku?.tripLocation || "کوردستان";
+  const price = tr.i18n?.ku?.tripPrice || "35,000 دینار";
+  const dateStr = String(tr.tripTargetDate || "2026-10-24").slice(0,10).replace(/-/g,"/");
+  const img = tr.tripImageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80";
+  const isPub = tr.published !== false;
+  const isOpen = tr.bookingOpen !== false;
+  const stateAttr = !isPub ? "done" : (isOpen ? "active" : "done");
+  const pct = Math.min(100, Math.round((Number(tr.booked || 0) / Math.max(1, Number(tr.capacity || 35))) * 100));
+  return `
+    <article class="trip-card spotlight-card border-beam" data-state="${stateAttr}" data-name="${title} ${loc}" onclick="viewTripDetail(${idx})">
+      <img src="${img}" alt="${title}">
+      <div class="trip-info">
+        <div>
+          <div class="trip-title">
+            <b>#${idx + 1} — ${title}</b>
+            <span class="tag" style="background:${isPub && isOpen ? '#087e51' : '#77203a'}">${isPub ? (isOpen ? 'بڵاوکراوە · چالاک' : 'ناونووسین داخراوە') : 'شاراوە'}</span>
+          </div>
+          <div class="trip-meta">
+            <span class="meta-chip">♙ ${tr.booked} / ${tr.capacity} (${pct}%)</span>
+            <span class="meta-chip">⌖ ${loc}</span>
+            <span class="meta-chip">📅 ${dateStr}</span>
+            <span class="meta-chip">◇ ${price}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid #172635;flex-wrap:wrap">
+          <button type="button" class="secondary-btn" style="flex:1;background:#132638" onclick="event.stopPropagation();editTrip(${idx})">✎ دەستکاری</button>
+          <button type="button" class="secondary-btn" style="flex:1;background:#2e1636;color:#fb923c" onclick="notifyAboutTrip(${idx},event)">🔔 نۆتیفیکەیشن</button>
+          <button type="button" class="secondary-btn" style="flex:1;color:${isPub ? '#43d6a0' : '#f5b62e'}" onclick="toggleTripPublished(${idx},event)">${isPub ? '👁️ دیارە' : '🚫 شاراوە'}</button>
+          ${appState.trips.length > 1 ? `<button type="button" class="secondary-btn" style="color:#ff4a62" onclick="deleteTrip(${idx},event)">🗑️</button>` : ''}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 function renderTripsAndDetail(){
   ensureTripsArray();
   const countEl = document.getElementById("tripsTotalCount");
@@ -1756,39 +2433,41 @@ function renderTripsAndDetail(){
   const dashCountEl = document.getElementById("dashTripsCount");
   if(dashCountEl) dashCountEl.textContent = String(appState.trips.length);
 
+  const cardsHtml = appState.trips.map((tr, idx) => buildTripCardHTML(tr, idx)).join("");
+
   const listEl = document.getElementById("tripList");
-  if(listEl){
-    listEl.innerHTML = appState.trips.map((tr, idx) => {
+  if(listEl) listEl.innerHTML = cardsHtml;
+
+  const dashGridEl = document.getElementById("dashTripsCardsGrid");
+  if(dashGridEl) dashGridEl.innerHTML = cardsHtml;
+
+  // Render Dashboard Live Analytics & Occupancy Bars
+  const analyticsEl = document.getElementById("dashTripAnalyticsList");
+  if(analyticsEl){
+    analyticsEl.innerHTML = appState.trips.map((tr, idx) => {
       const title = tr.i18n?.ku?.tripTitle || `گەشتی #${idx + 1}`;
       const loc = tr.i18n?.ku?.tripLocation || "کوردستان";
-      const price = tr.i18n?.ku?.tripPrice || "35,000 دینار";
-      const dateStr = String(tr.tripTargetDate || "2026-10-24").slice(0,10).replace(/-/g,"/");
-      const img = tr.tripImageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80";
-      const isPub = tr.published !== false;
-      const isOpen = tr.bookingOpen !== false;
-      const stateAttr = !isPub ? "done" : (isOpen ? "active" : "done");
+      const priceStr = tr.i18n?.ku?.tripPrice || "25,000 دینار";
+      const unitPrice = parsePriceNumber(priceStr);
+      const rev = (Number(tr.booked || 0) * unitPrice).toLocaleString("en-US");
+      const pct = Math.min(100, Math.round((Number(tr.booked || 0) / Math.max(1, Number(tr.capacity || 35))) * 100));
+      const dateStr = String(tr.tripTargetDate || "").slice(0,10);
       return `
-        <article class="trip-card spotlight-card border-beam" data-state="${stateAttr}" data-name="${title} ${loc}" onclick="viewTripDetail(${idx})">
-          <img src="${img}" alt="${title}">
-          <div class="trip-info">
-            <div class="trip-title">
-              <b>#${idx + 1} — ${title}</b>
-              <span class="tag" style="background:${isPub && isOpen ? '#087e51' : '#77203a'}">${isPub ? (isOpen ? 'بڵاوکراوە · چالاک' : 'ناونووسین داخراوە') : 'شاراوە'}</span>
-            </div>
-            <div class="trip-meta">
-              <span class="meta-chip">♙ ${tr.booked} / ${tr.capacity}</span>
-              <span class="meta-chip">☁ ${loc}</span>
-              <span class="meta-chip">📅 ${dateStr}</span>
-              <span class="meta-chip">◇ ${price}</span>
-            </div>
-            <div style="display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid #172635;flex-wrap:wrap">
-              <button type="button" class="secondary-btn" style="flex:1;background:#132638" onclick="event.stopPropagation();editTrip(${idx})">✎ دەستکاری</button>
-              <button type="button" class="secondary-btn" style="flex:1;background:#2e1636;color:#fb923c" onclick="notifyAboutTrip(${idx},event)">🔔 نۆتیفیکەیشن</button>
-              <button type="button" class="secondary-btn" style="flex:1;color:${isPub ? '#43d6a0' : '#f5b62e'}" onclick="toggleTripPublished(${idx},event)">${isPub ? '👁️ دیارە' : '🚫 شاراوە'}</button>
-              ${appState.trips.length > 1 ? `<button type="button" class="secondary-btn" style="color:#ff4a62" onclick="deleteTrip(${idx},event)">🗑️</button>` : ''}
+        <div class="occ-row">
+          <div class="occ-top">
+            <span>#${idx + 1} · ${title} <small style="color:#8fa1b3;font-weight:500">(${loc})</small></span>
+            <span style="color:#6bf0b3">${tr.booked} / ${tr.capacity} کورسی (${pct}%)</span>
+          </div>
+          <div class="occ-bar"><i style="width:${pct}%"></i></div>
+          <div class="occ-foot">
+            <span>📅 ${dateStr} · نرخ: ${priceStr}</span>
+            <span style="color:#f3b529;font-weight:800">💰 داهات: ${rev} د.ع</span>
+            <div style="display:flex;gap:5px">
+              <button type="button" class="secondary-btn" style="padding:3px 8px;font-size:10px" onclick="editTrip(${idx})">✎ دەستکاری</button>
+              <button type="button" class="secondary-btn" style="padding:3px 8px;font-size:10px;color:#fb923c" onclick="notifyAboutTrip(${idx},event)">🔔 ئاگاداری</button>
             </div>
           </div>
-        </article>
+        </div>
       `;
     }).join("");
   }
@@ -1814,6 +2493,8 @@ function renderTripsAndDetail(){
     const bar = document.getElementById("detailProgressBar"); if(bar) bar.style.width = pct + "%";
     const lbl = document.getElementById("detailProgressLabel"); if(lbl) lbl.textContent = `${pct}% · پڕبوون (${cur.booked} لە ${cur.capacity})`;
     const bBtn = document.getElementById("detailBookingsBtn"); if(bBtn) bBtn.textContent = `بینینی ناونوسراوەکان (${cur.booked})`;
+    const cdTripLbl = document.getElementById("dashCountdownTripLabel");
+    if(cdTripLbl) cdTripLbl.textContent = `⏳ کاتی ماوە بۆ: ${title}`;
   }
 }
 
@@ -1898,7 +2579,6 @@ function autoSync(){
   if(otpSw) appState.otpRequired = otpSw.checked;
   appState.fibAccount = getVal("fibAccount", appState.fibAccount);
 
-  // Sync top-level legacy fields from primary trip without mutating trips from unsubmitted form inputs
   const firstTrip = appState.trips[0];
   if(firstTrip){
     appState.tripImageUrl = firstTrip.tripImageUrl;
@@ -1912,17 +2592,7 @@ function autoSync(){
     });
   }
 
-  const totals = getTotalsAcrossTrips();
-  const cEl = document.getElementById("dashCapCounter"); if(cEl) cEl.textContent = totals.capacity;
-  const bEl = document.getElementById("dashBookedCounter"); if(bEl) bEl.textContent = totals.booked;
-  const aEl = document.getElementById("dashAvailCounter"); if(aEl) aEl.textContent = totals.available;
-  const subEl = document.getElementById("dashHeroSub"); if(subEl) subEl.textContent = appState.i18n.ku.heroSubtitle;
-
-  if(appState.heroImageUrl){
-    const dh = document.getElementById("dashboardHero");
-    if(dh) dh.style.backgroundImage = `linear-gradient(0deg,#03070be8 0%,transparent 68%),url('${appState.heroImageUrl}')`;
-  }
-
+  animateCounters();
   renderTripsAndDetail();
   renderEditorTabs();
 
@@ -1932,14 +2602,12 @@ function autoSync(){
 
 async function publishLive(alreadySavedFromTripForm = false){
   try{
-    // If user clicked top Publish while inside #newtrip, ensure we NEVER overwrite an old trip when adding a new trip!
     const onNewTripPage = document.getElementById("newtrip")?.classList.contains("active");
     if(onNewTripPage && !alreadySavedFromTripForm){
       const titleInput = (document.getElementById("tripTitle_ku")?.value || "").trim();
       if(titleInput){
         const cur = appState.trips[activeTripIndex];
         const curTitle = (cur?.i18n?.ku?.tripTitle || "").trim();
-        // If editorMode is 'new' OR the user typed a different trip title than the current trip, ADD as a new trip!
         if(editorMode === "new" || (curTitle && titleInput !== curTitle)){
           const newTrip = readTripFromForm("trip-" + Date.now());
           appState.trips.push(newTrip);
@@ -1959,7 +2627,6 @@ async function publishLive(alreadySavedFromTripForm = false){
     const current = await currentRes.json().catch(() => ({}));
     const data = current.data || {};
 
-    // Merge any existing remote trips that aren't in appState.trips (unless explicitly deleted) so no trip is ever lost!
     const deletedIds = new Set(Array.isArray(appState.deletedTripIds) ? appState.deletedTripIds : []);
     if(Array.isArray(data.trips) && data.trips.length){
       data.trips.forEach((rtr, rIdx) => {
@@ -2004,6 +2671,7 @@ async function publishLive(alreadySavedFromTripForm = false){
     syncPublicWebsiteBridge();
     renderTripsAndDetail();
     renderEditorTabs();
+    animateCounters();
 
     const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
       method: "POST",
@@ -2039,7 +2707,9 @@ document.getElementById("hiddenUniversalInput").addEventListener("change", funct
     img.src = evt.target.result;
     modal.style.display = "flex";
     if(cropperInstance) cropperInstance.destroy();
-    cropperInstance = new Cropper(img, { aspectRatio: cropTarget.aspect, viewMode: 1, autoCropArea: 0.9 });
+    if(window.Cropper){
+      cropperInstance = new Cropper(img, { aspectRatio: cropTarget.aspect, viewMode: 1, autoCropArea: 0.9 });
+    }
   };
   reader.readAsDataURL(file);
 });
@@ -2072,6 +2742,12 @@ async function applyCropAndSave(){
       appState.gallery.push({ url, title: "KURDIA" });
       renderGallery();
       autoSync();
+    } else if(cropTarget.prop === "quickTripImage"){
+      quickDashboardTripImageUrl = url;
+      if(cropTarget.previewId){
+        const p = document.getElementById(cropTarget.previewId);
+        if(p){ p.src = url; p.style.display = "block"; }
+      }
     } else if(cropTarget.prop === "tripImageUrl"){
       draftTripImageUrl = url;
       if(editorMode === "edit" && appState.trips[activeTripIndex]){
@@ -2124,17 +2800,19 @@ async function fetchLiveRegistrations(){
 }
 
 function renderRegistrations(){
-  const c = document.getElementById("peopleList");
-  if(!c) return;
-  const q = (document.getElementById("peopleSearch")?.value || "").toLowerCase();
   const counts = { all: cachedRegistrations.length, approved: 0, pending: 0, rejected: 0 };
   cachedRegistrations.forEach(r => counts[bookingStatus(r)]++);
 
-  const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = `(${v})`; };
-  setTxt("cntAll", counts.all);
-  setTxt("cntApp", counts.approved);
-  setTxt("cntPend", counts.pending);
-  setTxt("cntRej", counts.rejected);
+  const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  setTxt("cntAll", `(${counts.all})`);
+  setTxt("cntApp", `(${counts.approved})`);
+  setTxt("cntPend", `(${counts.pending})`);
+  setTxt("cntRej", `(${counts.rejected})`);
+  setTxt("dashRegApprovedCount", counts.approved);
+  setTxt("dashRegPendingCount", counts.pending);
+  setTxt("dashRegRejectedCount", counts.rejected);
+  setTxt("sideBookingsBadge", counts.all);
+  setTxt("qBookingsCount", counts.all);
 
   const badge = document.getElementById("pendingNavBadge");
   if(badge){
@@ -2142,6 +2820,38 @@ function renderRegistrations(){
     badge.textContent = counts.pending;
   }
 
+  // Render on Dashboard recent bookings feed
+  const dashFeed = document.getElementById("dashRecentBookingsList");
+  if(dashFeed){
+    if(!cachedRegistrations.length){
+      dashFeed.innerHTML = `<div style="text-align:center;padding:22px;font-size:12px;color:#8fa1b3">هیچ ناونوسراوێکی نوێ نییە لەم کاتەدا.</div>`;
+    } else {
+      dashFeed.innerHTML = cachedRegistrations.slice(0, 5).map(reg => {
+        const st = bookingStatus(reg);
+        const tagCls = st === "approved" ? "" : st === "pending" ? "yellow" : "red";
+        const tagTxt = st === "approved" ? "پەسەندکراو" : st === "pending" ? "چاوەڕوان" : "ڕەتکراو";
+        return `
+          <div class="person" style="margin-top:6px;padding:9px 11px">
+            <div class="person-top">
+              <div class="person-main">
+                <b>${reg.name || "—"} <span style="font-weight:400;color:#8b9aa8">(${reg.people || 1} کەس)</span></b>
+                <small>${reg.phone || "—"} · ${reg.trip || ""}</small>
+              </div>
+              <span class="status-tag ${tagCls}">${tagTxt}</span>
+              ${st === "pending" ? `
+                <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;padding:4px 8px" onclick="directVerify('${reg.id}','${reg.phone||""}')">✓</button>
+                <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:4px 8px" onclick="directReject('${reg.id}','${reg.phone||""}')">✕</button>
+              ` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+  }
+
+  const c = document.getElementById("peopleList");
+  if(!c) return;
+  const q = (document.getElementById("peopleSearch")?.value || "").toLowerCase();
   const filtered = cachedRegistrations.filter(r => {
     const st = bookingStatus(r);
     if(activeBookingFilter !== "all" && st !== activeBookingFilter) return false;
@@ -2497,8 +3207,11 @@ async function loadPushCenterStats(){
     const d = await r.json();
     if(d && d.ok !== false){
       const cnt = Number(d.count ?? d.subscribers ?? 0);
-      const el = document.getElementById("pushSubscriberCount");
-      if(el) el.textContent = String(cnt);
+      const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = String(v); };
+      setTxt("pushSubscriberCount", cnt);
+      setTxt("dashPushSubCounter", cnt);
+      setTxt("dashInlinePushCount", cnt);
+      setTxt("sidePushBadge", cnt);
       const badge = document.getElementById("topPushBadge");
       if(badge){
         badge.textContent = String(cnt);
@@ -2525,7 +3238,7 @@ async function loadPushCenterStats(){
   }catch(e){}
 }
 
-function fillPushTemplate(type){
+function getPushTemplateData(type){
   ensureTripsArray();
   const latest = appState.trips[activeTripIndex] || appState.trips[0] || {};
   const tTitle = latest.i18n?.ku?.tripTitle || "گەشتی نوێی کوردیا";
@@ -2533,23 +3246,43 @@ function fillPushTemplate(type){
   const tPrice = latest.i18n?.ku?.tripPrice || "25,000 دینار";
   const tTime = latest.i18n?.ku?.tripTime || "06:00 بەیانی";
 
+  if(type === "seats"){
+    return {
+      title: `⏳ تەنها چەند کورسییەک ماوە — ${tTitle}`,
+      body: `ژمارەی کورسییە بەتاڵەکان بۆ ${tTitle} زۆر کەم ماوە! ئێستا ناوت تۆمار بکە پێش داخستنی ناونووسین.`,
+      url: "/#booking"
+    };
+  }
+  if(type === "reminder"){
+    return {
+      title: `🚌 بیرخستنەوەی گەشت: ${tTitle}`,
+      body: `بەشداربووانی ئازیزی ${tTitle}، کاتی دەرچوونمان کاتژمێر ${tTime} دەبێت. تکایە ١٥ خولەک زووتر ئامادە بن.`,
+      url: "/#safety"
+    };
+  }
+  return {
+    title: `🔥 گەشتی نوێ: ${tTitle}`,
+    body: `ئێستا ناونووسین کراوەیە بۆ ${tTitle} (${tLoc}) بە نرخی ${tPrice}. پەلە بکە و شوێنەکەت حیجز بکە! 🏔️`,
+    url: "/#booking"
+  };
+}
+
+function fillPushTemplate(type){
+  const tpl = getPushTemplateData(type);
   const titleEl = document.getElementById("pushTitleInput");
   const bodyEl = document.getElementById("pushBodyInput");
   const urlEl = document.getElementById("pushUrlInput");
+  if(titleEl) titleEl.value = tpl.title;
+  if(bodyEl) bodyEl.value = tpl.body;
+  if(urlEl) urlEl.value = tpl.url;
+}
 
-  if(type === "new_trip"){
-    if(titleEl) titleEl.value = `🔥 گەشتی نوێ: ${tTitle}`;
-    if(bodyEl) bodyEl.value = `ئێستا ناونووسین کراوەیە بۆ ${tTitle} (${tLoc}) بە نرخی ${tPrice}. پەلە بکە و شوێنەکەت حیجز بکە! 🏔️`;
-    if(urlEl) urlEl.value = "/#booking";
-  } else if(type === "seats"){
-    if(titleEl) titleEl.value = `⏳ تەنها چەند کورسییەک ماوە — ${tTitle}`;
-    if(bodyEl) bodyEl.value = `ژمارەی کورسییە بەتاڵەکان بۆ ${tTitle} زۆر کەم ماوە! ئێستا ناوت تۆمار بکە پێش داخستنی ناونووسین.`;
-    if(urlEl) urlEl.value = "/#booking";
-  } else if(type === "reminder"){
-    if(titleEl) titleEl.value = `🚌 بیرخستنەوەی گەشت: ${tTitle}`;
-    if(bodyEl) bodyEl.value = `بەشداربووانی ئازیزی ${tTitle}، کاتی دەرچوونمان کاتژمێر ${tTime} دەبێت. تکایە ١٥ خولەک زووتر ئامادە بن.`;
-    if(urlEl) urlEl.value = "/#safety";
-  }
+function fillDashboardPushTemplate(type){
+  const tpl = getPushTemplateData(type);
+  const titleEl = document.getElementById("dashPushTitle");
+  const bodyEl = document.getElementById("dashPushBody");
+  if(titleEl) titleEl.value = tpl.title;
+  if(bodyEl) bodyEl.value = tpl.body;
 }
 
 function notifyAboutTrip(idx, ev){
@@ -2557,6 +3290,7 @@ function notifyAboutTrip(idx, ev){
   ensureTripsArray();
   activeTripIndex = Math.max(0, Math.min(idx, appState.trips.length - 1));
   fillPushTemplate("new_trip");
+  fillDashboardPushTemplate("new_trip");
   go("push_center");
   toast("🔔 ئامادەیە بۆ ناردنی نۆتیفیکەیشنی ئەم گەشتە");
 }
@@ -2578,6 +3312,29 @@ async function sendDirectPush(title, body, url = "/#booking"){
     return { ok: r.ok && d.ok !== false, data: d };
   }catch(e){
     return { ok: false, error: e.message };
+  }
+}
+
+async function sendPushFromDashboard(){
+  const title = (document.getElementById("dashPushTitle")?.value || "KURDIA ADVENTURE").trim();
+  const body = (document.getElementById("dashPushBody")?.value || "").trim();
+  const resBox = document.getElementById("dashPushResultMsg");
+  if(!body){
+    toast("⚠️ تکایە دەقی نۆتیفیکەیشن بنووسە");
+    if(resBox) resBox.innerHTML = `<span style="color:#ff4a62">⚠️ تکایە دەقی پەیامەکە بنووسە</span>`;
+    return;
+  }
+  if(resBox) resBox.innerHTML = `<span style="color:#38bdf8">⏳ دەنێردرێت بۆ هەموو بەشداربووان...</span>`;
+  const res = await sendDirectPush(title, body, "/#booking");
+  if(res.ok){
+    const sent = res.data?.sent ?? res.data?.count ?? "هەموو";
+    if(resBox) resBox.innerHTML = `<span style="color:#43d6a0">✅ بە سەرکەوتوویی نێردرا بۆ بەشداربووان (${sent})!</span>`;
+    toast("✅ نۆتیفیکەیشن بۆ هەموو بەشداربووان نێردرا!");
+    loadPushCenterStats();
+  } else {
+    const errMsg = res.data?.error || res.error || "کێشە لە ناردن";
+    if(resBox) resBox.innerHTML = `<span style="color:#ff4a62">❌ ${errMsg}</span>`;
+    toast("❌ " + errMsg);
   }
 }
 
@@ -2626,13 +3383,14 @@ function loadState(){
   });
   setEl("fibAccount", appState.fibAccount);
   updateAdminVersionUI();
-  // Start #newtrip in clean "Add New Trip" mode so it never overwrites Trip #1 by accident
   createNewTrip(true);
   fillPushTemplate("new_trip");
+  fillDashboardPushTemplate("new_trip");
   renderCoupons();
   renderGallery();
   renderReviews();
   renderTripsAndDetail();
+  animateCounters();
   loadPushCenterStats();
 }
 
@@ -2643,7 +3401,6 @@ async function fetchRemoteCMSIntoAdmin(){
     const x = await r.json();
     const cfg = x.config || x.data || x;
     if(cfg){
-      // Extract live version from remote hero badge if newer
       const badgeStr = String(cfg.home?.hero?.badge || cfg.siteVersion || "");
       const vMatch = badgeStr.match(/v\d+\.\d+\.\d+/);
       if(vMatch){
@@ -2660,10 +3417,8 @@ async function fetchRemoteCMSIntoAdmin(){
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){
       const deletedIds = new Set(Array.isArray(appState.deletedTripIds) ? appState.deletedTripIds : []);
       const remoteNormalized = cfg.trips.map((t, i) => normalizeAdminTrip(t, i)).filter(t => !deletedIds.has(t.id));
-      // Use remote trips as authoritative source and append any local unsynced trips
       const merged = [...remoteNormalized];
       (appState.trips || []).forEach((ltr, lIdx) => {
-        // Skip default placeholder IDs if remote already has real trips
         if(["trip-1","trip-2","trip-3"].includes(ltr.id) && remoteNormalized.length > 0) return;
         const normLocal = normalizeAdminTrip(ltr, lIdx);
         if(deletedIds.has(normLocal.id)) return;
@@ -2687,13 +3442,14 @@ async function fetchRemoteCMSIntoAdmin(){
       }
       renderTripsAndDetail();
       animateCounters();
+      fillDashboardPushTemplate("new_trip");
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       syncPublicWebsiteBridge();
     }
   }catch(e){}
 }
 
-// Spotlight Mouse Tracker + 3D Tilt (Aceternity / 21st.dev / React-Bits style)
+// Spotlight Mouse Tracker
 document.addEventListener("pointermove", e => {
   document.querySelectorAll(".spotlight-card").forEach(card => {
     const rect = card.getBoundingClientRect();
@@ -2701,23 +3457,14 @@ document.addEventListener("pointermove", e => {
     const y = e.clientY - rect.top;
     card.style.setProperty("--mx", x + "px");
     card.style.setProperty("--my", y + "px");
-    if(card.hasAttribute("data-tilt") && x >= 0 && x <= rect.width && y >= 0 && y <= rect.height){
-      const rx = ((y / rect.height) - 0.5) * -7;
-      const ry = ((x / rect.width) - 0.5) * 7;
-      card.style.transform = `perspective(650px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
-    }
   });
 });
-document.addEventListener("pointerout", e => {
-  const card = e.target.closest?.("[data-tilt]");
-  if(card) card.style.transform = "";
-});
 
-// Live Countdown & Clock
-setInterval(() => {
+// Live Countdown & Clock (Updates both Dashboard & Detail View)
+function updateLiveClocks(){
   const now = new Date();
   const clk = document.getElementById("liveClock");
-  if(clk) clk.textContent = String(now.getHours()).padStart(2,"0") + ":" + String(now.getMinutes()).padStart(2,"0");
+  if(clk) clk.textContent = String(now.getHours()).padStart(2,"0") + ":" + String(now.getMinutes()).padStart(2,"0") + ":" + String(now.getSeconds()).padStart(2,"0");
 
   const cur = appState.trips?.[activeTripIndex] || appState.trips?.[0];
   const target = new Date(cur?.tripTargetDate || appState.tripTargetDate || "2026-10-24T05:00").getTime();
@@ -2728,42 +3475,19 @@ setInterval(() => {
   const s = Math.floor((diff % 60000) / 1000);
   const setC = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = String(v).padStart(2,"0"); };
   setC("cdDays", d); setC("cdHours", h); setC("cdMins", m); setC("cdSecs", s);
-}, 1000);
+  setC("dashCdDays", d); setC("dashCdHours", h); setC("dashCdMins", m); setC("dashCdSecs", s);
+}
+setInterval(updateLiveClocks, 1000);
 
-// Initialize Three.js Background + Lenis + GSAP + AOS + ScrollReveal + Anime.js
-window.addEventListener("DOMContentLoaded", () => {
-  loadState();
-  autoSync();
-  fetchRemoteCMSIntoAdmin();
-  fetchLiveRegistrations();
-  animateCounters();
+// Initialize immediately so dashboard is 100% populated without waiting for external CDNs
+loadState();
+autoSync();
+updateLiveClocks();
+fetchRemoteCMSIntoAdmin();
+fetchLiveRegistrations();
 
-  if(window.AOS){
-    try{ AOS.init({ duration: 650, once: true, easing: "ease-out-cubic" }); }catch(e){}
-  }
-
-  if(window.ScrollReveal){
-    try{
-      ScrollReveal().reveal(".service, .staff-setting", {
-        distance: "14px",
-        origin: "bottom",
-        duration: 520,
-        interval: 45,
-        cleanup: true
-      });
-    }catch(e){}
-  }
-
-  if(window.Lenis){
-    try{
-      const lenis = new Lenis({ smoothWheel: true, lerp: 0.1 });
-      function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
-      requestAnimationFrame(raf);
-    }catch(e){}
-  }
-
+window.addEventListener("load", () => {
   if(window.THREE){
-    // Ambient Starfield & Embers Canvas
     try{
       const canvas = document.getElementById("threeBgCanvas");
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
@@ -2773,11 +3497,11 @@ window.addEventListener("DOMContentLoaded", () => {
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
       camera.position.z = 5;
       const geo = new THREE.BufferGeometry();
-      const count = 240;
+      const count = 220;
       const pts = new Float32Array(count * 3);
       for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 15;
       geo.setAttribute("position", new THREE.BufferAttribute(pts, 3));
-      const mat = new THREE.PointsMaterial({ color: 0xf0183d, size: 0.045, transparent: true, opacity: 0.62 });
+      const mat = new THREE.PointsMaterial({ color: 0xf0183d, size: 0.045, transparent: true, opacity: 0.55 });
       const stars = new THREE.Points(geo, mat);
       scene.add(stars);
       window.addEventListener("resize", () => {
@@ -2787,7 +3511,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
       function anim(){
         requestAnimationFrame(anim);
-        stars.rotation.y += 0.0009;
+        stars.rotation.y += 0.0008;
         stars.rotation.x += 0.0003;
         renderer.render(scene, camera);
       }
