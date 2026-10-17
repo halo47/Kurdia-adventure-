@@ -608,6 +608,7 @@ button{cursor:pointer;color:inherit}
       <small>CMS · CRM · OPERATIONS</small>
     </div>
     <button class="pill" onclick="publishLive()" id="topPublishBtn">● Publish</button>
+    <button class="icon-btn" style="width:31px;height:31px;font-size:13px;position:relative" onclick="go('push_center')" title="ناردنی نۆتیفیکەیشن بۆ خەڵک">🔔<span id="topPushBadge" style="position:absolute;top:-4px;left:-4px;background:#0c9b61;color:#fff;font-size:9px;font-weight:900;padding:1px 4px;border-radius:99px;display:none">0</span></button>
     <a class="icon-btn" href="/index.html" style="width:31px;height:31px;font-size:13px" title="ماڵپەڕی سەرەکی">🌐</a>
     <button class="icon-btn" style="width:31px;height:31px;font-size:13px" onclick="toggleWideMode()" title="گۆڕینی قەبارە">⇄</button>
   </header>
@@ -655,21 +656,21 @@ button{cursor:pointer;color:inherit}
 
       <!-- Quick Actions -->
       <div class="stats" style="margin-bottom:10px" data-aos="fade-up" data-aos-delay="110">
+        <button class="service spotlight-card" style="text-align:right;cursor:pointer;border-color:#0f7a50" onclick="createNewTrip()">
+          <div class="service-icon" style="color:#26d08c;background:rgba(12,155,97,0.18)">＋</div>
+          <div class="service-text"><b>زیادکردنی گەشتی نوێ</b><small>بەبێ سڕینەوەی کۆنەکان</small></div>
+        </button>
         <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('trips')">
           <div class="service-icon" style="color:#ff4a62">🧭</div>
-          <div class="service-text"><b>بەڕێوەبردنی گەشتەکان</b><small>Multi-Trip & 3 Languages</small></div>
+          <div class="service-text"><b>هەموو گەشتەکان (<span id="dashTripsCount">3</span>)</b><small>بینین و دەستکاری</small></div>
+        </button>
+        <button class="service spotlight-card" style="text-align:right;cursor:pointer;border-color:#7c2d12" onclick="go('push_center')">
+          <div class="service-icon" style="color:#fb923c;background:rgba(251,146,60,0.15)">🔔</div>
+          <div class="service-text"><b>ناردنی نۆتیفیکەیشن</b><small>بۆ مۆبایل و وێبسایت</small></div>
         </button>
         <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('bookings')">
           <div class="service-icon" style="color:#38bdf8">👥</div>
           <div class="service-text"><b>بەشداربووان</b><small>Approve & Verify</small></div>
-        </button>
-        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('broadcast')">
-          <div class="service-icon" style="color:#10d67d">💬</div>
-          <div class="service-text"><b>پەیامی WhatsApp</b><small>Broadcast Center</small></div>
-        </button>
-        <button class="service spotlight-card" style="text-align:right;cursor:pointer" onclick="go('diagnostics')">
-          <div class="service-icon" style="color:#facc15">⚡</div>
-          <div class="service-text"><b>پشکنینی سێرڤەر</b><small>Diagnostics</small></div>
         </button>
       </div>
 
@@ -829,6 +830,12 @@ button{cursor:pointer;color:inherit}
         </div>
       </div>
 
+      <div class="lang-box spotlight-card" style="margin-top:10px;border-color:#155e75">
+        <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer;color:#7dd3fc">
+          <input type="checkbox" id="autoPushOnNewTrip" checked style="width:16px;height:16px"> 🔔 لەگەڵ بڵاوکردنەوەی گەشتی نوێ، نۆتیفیکەیشن بۆ هەموو بەشداربووان بنێرە
+        </label>
+      </div>
+
       <div id="newTripActionButtons" style="display:grid;gap:8px;margin-top:12px">
         <button id="btnSaveAsNewTrip" class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="saveFormAsNewTrip()">＋ زیادکردن وەک گەشتی نوێ و بڵاوکردنەوە (گەشتە کۆنەکان دەمێننەوە)</button>
         <div id="editTripActionRow" style="display:flex;gap:8px">
@@ -846,6 +853,7 @@ button{cursor:pointer;color:inherit}
         <button class="pill" onclick="publishLive()">● Publish</button>
       </div>
       <div class="service-list">
+        <div class="staff-setting spotlight-card" style="border-color:#7c2d12" onclick="go('push_center')"><div class="service-icon" style="color:#fb923c">🔔</div><div class="service-text"><b>ناردنی نۆتیفیکەیشن بۆ خەڵک (Web Push)</b><small>ناردنی ئاگاداری ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەری بەشداربووان</small></div><span class="arrow">‹</span></div>
         <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی بە ٣ زمان</small></div><span class="arrow">‹</span></div>
         <div class="staff-setting spotlight-card" onclick="go('broadcast')"><div class="service-icon">💬</div><div class="service-text"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ شاخەوانان</small></div><span class="arrow">‹</span></div>
         <div class="staff-setting spotlight-card" onclick="go('stories')"><div class="service-icon">✨</div><div class="service-text"><b>ستۆرییەکان (Stories)</b><small>پەسەندکردن و سڕینەوەی ستۆری بەشداربووان</small></div><span class="arrow">‹</span></div>
@@ -858,6 +866,52 @@ button{cursor:pointer;color:inherit}
         <div class="staff-setting spotlight-card" onclick="go('diagnostics')"><div class="service-icon" style="color:#ff3152">⏻</div><div class="service-text"><b>پشکنینی ئۆتۆماتیک</b><small>System Diagnostics</small></div><span class="arrow">‹</span></div>
         <div class="staff-setting spotlight-card" onclick="go('backup')"><div class="service-icon">💾</div><div class="service-text"><b>Backup / Restore</b><small>داگرتن و گەڕاندنەوەی داتا</small></div><span class="arrow">‹</span></div>
       </div>
+    </section>
+
+    <!-- 6B. PUSH NOTIFICATIONS CENTER -->
+    <section class="page" id="push_center">
+      <div class="toolbar">
+        <button class="icon-btn" onclick="go('dashboard')">←</button>
+        <h2>🔔 ناوەندی ناردنی نۆتیفیکەیشن</h2>
+        <button class="icon-btn" onclick="loadPushCenterStats()" title="نوێکردنەوە">↻</button>
+      </div>
+
+      <div class="lang-box spotlight-card" style="background:linear-gradient(125deg,#1d1427,#0c1420);border-color:#4c1d95">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <div>
+            <div style="font-size:11px;color:#c4b5fd;font-weight:700">بەشداربووانی چالاکی نۆتیفیکەیشن (Web Push)</div>
+            <div style="font-size:26px;font-weight:900;color:#fff;margin-top:2px"><span id="pushSubscriberCount">...</span> <small style="font-size:12px;color:#a78bfa">ئامێر / کەس</small></div>
+          </div>
+          <button type="button" class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;padding:8px 12px" onclick="enableAdminDevicePush()">📲 چالاککردن لەم مۆبایلە</button>
+        </div>
+      </div>
+
+      <div class="lang-box spotlight-card">
+        <h4>⚡ قاڵبی ئامادەکراو (کلیک بکە بۆ پڕکردنەوە)</h4>
+        <div class="filters" style="margin-bottom:4px">
+          <button type="button" class="filter active" onclick="fillPushTemplate('new_trip')">🔥 گەشتی نوێ بەردەستە</button>
+          <button type="button" class="filter" onclick="fillPushTemplate('seats')">⏳ تەنها چەند کورسییەک ماوە</button>
+          <button type="button" class="filter" onclick="fillPushTemplate('reminder')">🚌 بیرخستنەوەی کاتی دەرچوون</button>
+        </div>
+      </div>
+
+      <div class="lang-box spotlight-card">
+        <h4>١. ناونیشانی نۆتیفیکەیشن</h4>
+        <div class="field"><input id="pushTitleInput" value="KURDIA ADVENTURE 🔥" placeholder="بۆ نموونە: گەشتی نوێ ڕاگەیەندرا!"></div>
+        <h4 style="margin-top:10px">٢. دەقی پەیام / ئاگاداری بۆ خەڵک</h4>
+        <div class="field"><textarea id="pushBodyInput" placeholder="دەقی نۆتیفیکەیشن لێرە بنووسە بۆ ئەوەی بچێت بۆ مۆبایلی هەموو بەشداربووان..." style="min-height:95px"></textarea></div>
+        <h4 style="margin-top:10px">٣. لینک لە کاتی کردنەوەی نۆتیفیکەیشن</h4>
+        <div class="field"><input id="pushUrlInput" dir="ltr" value="/#booking" placeholder="/#booking"></div>
+      </div>
+
+      <button class="primary border-beam" id="btnSendPushNow" style="background:linear-gradient(100deg,#e11d48,#be123c)" onclick="sendPushNotificationToAll()">🔔 ناردنی نۆتیفیکەیشن بۆ هەموو خەڵک</button>
+      <div id="pushSendResultBox" style="margin-top:10px;font-size:12px;font-weight:700"></div>
+
+      <div class="section-title" style="margin-top:18px">
+        <span>دوایین چالاکی و ئاگادارییەکان</span>
+        <button class="mini" onclick="loadPushCenterStats()">↻</button>
+      </div>
+      <div id="adminActivityNotificationsList" class="service-list"></div>
     </section>
 
     <!-- 7. HERO & BRAND DESIGN -->
@@ -1030,9 +1084,10 @@ button{cursor:pointer;color:inherit}
   </main>
 
   <!-- Sticky Bottom Navigation -->
-  <nav class="bottom-nav">
+  <nav class="bottom-nav" style="grid-template-columns:repeat(5,1fr)">
     <button class="nav-btn active" data-page="dashboard" onclick="go('dashboard',this)"><span class="ico">⌂</span><span>داشبۆرد</span></button>
     <button class="nav-btn" data-page="trips" onclick="go('trips',this)"><span class="ico">▣</span><span>گەشتەکان</span></button>
+    <button class="nav-btn" data-page="push_center" onclick="go('push_center',this)"><span class="ico">🔔</span><span>نۆتیفیکەیشن</span></button>
     <button class="nav-btn" data-page="bookings" onclick="go('bookings',this)">
       <span class="ico">♙</span>
       <span>ناونوسراو</span>
@@ -1064,7 +1119,7 @@ button{cursor:pointer;color:inherit}
 
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
-const STORAGE_KEY = "kurdia_builder_published_v3";
+const STORAGE_KEY = "kurdia_admin_multitrip_v6";
 
 const DEFAULT_TRIPS = [
   {
@@ -1234,51 +1289,66 @@ let cachedRegistrations = [];
 let activeBookingFilter = "all";
 let currentTripFilter = "all";
 
+function normalizeAdminTrip(tr, idx = 0){
+  if(!tr || typeof tr !== "object") tr = {};
+  const ku = tr.i18n?.ku || {};
+  const ar = tr.i18n?.ar || {};
+  const en = tr.i18n?.en || {};
+  const rawDate = tr.tripTargetDate || tr.targetDate || (tr.date ? tr.date + "T06:00" : "2026-10-24T06:00");
+  let rawTitle = ku.tripTitle || tr.title || `گەشتی کوردیا #${idx + 1}`;
+  let rawLoc = ku.tripLocation || tr.location || "کوردستان";
+  let rawPrice = ku.tripPrice || tr.price || "25,000 دینار";
+  let rawTime = ku.tripTime || tr.time || "06:00 بەیانی";
+  // Auto-heal legacy shifted fields if title accidentally got English hero text
+  if(rawTitle === "Experience Kurdistan Nature Differently With Us"){
+    rawTitle = rawLoc && rawLoc.includes("چەمانکێ") ? "گەشتی چەمانکێ" : "گەشتی چەمانکێ";
+    rawLoc = "دهۆک · چەمانکێ";
+    rawPrice = "23,000 دینار";
+    rawTime = "06:00 بەیانی";
+  }
+  const rawDesc = ku.tripDesc || tr.description || tr.desc || "";
+  return {
+    id: tr.id || ("trip-" + (idx + 1) + "-" + Date.now()),
+    published: tr.published !== false,
+    bookingOpen: tr.bookingOpen !== false && tr.status !== "closed",
+    status: (tr.bookingOpen === false || tr.status === "closed") ? "closed" : "active",
+    tripImageUrl: tr.tripImageUrl || tr.heroImageUrl || tr.imageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+    tripTargetDate: String(rawDate).length === 10 ? rawDate + "T06:00" : rawDate,
+    capacity: Number(tr.capacity ?? 35),
+    booked: Number(tr.booked ?? 0),
+    weatherTemp: tr.weatherTemp || "22°C",
+    weatherCondition: tr.weatherCondition || "ساماڵ ☀️",
+    i18n: {
+      ku: {
+        tripTitle: rawTitle,
+        tripLocation: rawLoc,
+        tripPrice: rawPrice,
+        tripTime: rawTime,
+        tripDesc: rawDesc
+      },
+      ar: {
+        tripTitle: ar.tripTitle || rawTitle,
+        tripLocation: ar.tripLocation || rawLoc,
+        tripPrice: ar.tripPrice || rawPrice,
+        tripTime: ar.tripTime || rawTime,
+        tripDesc: ar.tripDesc || rawDesc
+      },
+      en: {
+        tripTitle: en.tripTitle || rawTitle,
+        tripLocation: en.tripLocation || rawLoc,
+        tripPrice: en.tripPrice || rawPrice,
+        tripTime: en.tripTime || rawTime,
+        tripDesc: en.tripDesc || rawDesc
+      }
+    }
+  };
+}
+
 function ensureTripsArray(){
   if(!Array.isArray(appState.trips) || !appState.trips.length){
     appState.trips = JSON.parse(JSON.stringify(DEFAULT_TRIPS));
   }
-  appState.trips = appState.trips.map((tr, idx) => {
-    const ku = tr.i18n?.ku || {};
-    const ar = tr.i18n?.ar || {};
-    const en = tr.i18n?.en || {};
-    const rawDate = tr.tripTargetDate || (tr.date ? tr.date + "T05:00" : "2026-10-24T05:00");
-    return {
-      id: tr.id || ("trip-" + (idx + 1)),
-      published: tr.published !== false,
-      bookingOpen: tr.bookingOpen !== false && tr.status !== "closed",
-      status: (tr.bookingOpen === false || tr.status === "closed") ? "closed" : "active",
-      tripImageUrl: tr.tripImageUrl || tr.heroImageUrl || tr.imageUrl || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
-      tripTargetDate: String(rawDate).length === 10 ? rawDate + "T05:00" : rawDate,
-      capacity: Number(tr.capacity ?? 40),
-      booked: Number(tr.booked ?? 0),
-      weatherTemp: tr.weatherTemp || "24°C",
-      weatherCondition: tr.weatherCondition || "ساماڵ ☀️",
-      i18n: {
-        ku: {
-          tripTitle: ku.tripTitle ?? tr.title ?? "گەشتی نوێی KURDIA",
-          tripLocation: ku.tripLocation ?? tr.location ?? "کوردستان",
-          tripPrice: ku.tripPrice ?? tr.price ?? "35,000 دینار",
-          tripTime: ku.tripTime ?? tr.time ?? "05:00 بەیانی",
-          tripDesc: ku.tripDesc ?? tr.description ?? tr.desc ?? ""
-        },
-        ar: {
-          tripTitle: ar.tripTitle ?? ku.tripTitle ?? tr.title ?? "",
-          tripLocation: ar.tripLocation ?? ku.tripLocation ?? tr.location ?? "",
-          tripPrice: ar.tripPrice ?? ku.tripPrice ?? tr.price ?? "",
-          tripTime: ar.tripTime ?? ku.tripTime ?? tr.time ?? "",
-          tripDesc: ar.tripDesc ?? ku.tripDesc ?? tr.description ?? tr.desc ?? ""
-        },
-        en: {
-          tripTitle: en.tripTitle ?? ku.tripTitle ?? tr.title ?? "",
-          tripLocation: en.tripLocation ?? ku.tripLocation ?? tr.location ?? "",
-          tripPrice: en.tripPrice ?? ku.tripPrice ?? tr.price ?? "",
-          tripTime: en.tripTime ?? ku.tripTime ?? tr.time ?? "",
-          tripDesc: en.tripDesc ?? ku.tripDesc ?? tr.description ?? tr.desc ?? ""
-        }
-      }
-    };
-  });
+  appState.trips = appState.trips.map((tr, idx) => normalizeAdminTrip(tr, idx));
   if(activeTripIndex >= appState.trips.length) activeTripIndex = Math.max(0, appState.trips.length - 1);
 }
 
@@ -1335,7 +1405,7 @@ function animateCounters(){
   });
 }
 
-let editorMode = "edit"; // "new" or "edit"
+let editorMode = "new"; // Default to "new" so opening the form never accidentally overwrites Trip #1!
 let draftTripImageUrl = "";
 
 function go(id, btn){
@@ -1357,6 +1427,7 @@ function go(id, btn){
   }
   if(id === "dashboard") animateCounters();
   if(id === "trips" || id === "tripdetail") renderTripsAndDetail();
+  if(id === "push_center") loadPushCenterStats();
   if(id === "bookings") fetchLiveRegistrations();
   if(id === "stories") fetchAdminStories();
   if(id === "private_requests") loadPrivateRequests();
@@ -1379,7 +1450,7 @@ function editTrip(idx){
   go("newtrip");
 }
 
-function createNewTrip(){
+function createNewTrip(silentInit = false){
   ensureTripsArray();
   editorMode = "new";
   const nextNum = appState.trips.length + 1;
@@ -1427,9 +1498,11 @@ function createNewTrip(){
     prev.style.display = "block";
   }
 
-  go("newtrip");
-  setTimeout(() => document.getElementById("tripTitle_ku")?.focus(), 120);
-  toast(`✨ فۆڕمی گەشتی نوێ (#${nextNum}) ئامادەیە`);
+  if(!silentInit){
+    go("newtrip");
+    setTimeout(() => document.getElementById("tripTitle_ku")?.focus(), 120);
+    toast(`✨ فۆڕمی گەشتی نوێ (#${nextNum}) ئامادەیە`);
+  }
 }
 
 function renderEditorTabs(){
@@ -1502,6 +1575,12 @@ async function saveFormAsNewTrip(){
   editorMode = "edit";
   populateTripEditor(activeTripIndex);
   await publishLive(true);
+  if(document.getElementById("autoPushOnNewTrip")?.checked){
+    const tName = newTrip.i18n?.ku?.tripTitle || "گەشتی نوێ";
+    const tLoc = newTrip.i18n?.ku?.tripLocation || "";
+    const tPrice = newTrip.i18n?.ku?.tripPrice || "";
+    await sendDirectPush(`🔥 گەشتی نوێ: ${tName}`, `ئێستا ناونووسین کراوەیە بۆ ${tName} (${tLoc}) — نرخ: ${tPrice} 🏔️`, "/#booking");
+  }
   go("trips");
 }
 
@@ -1612,6 +1691,8 @@ function renderTripsAndDetail(){
   ensureTripsArray();
   const countEl = document.getElementById("tripsTotalCount");
   if(countEl) countEl.textContent = String(appState.trips.length);
+  const dashCountEl = document.getElementById("dashTripsCount");
+  if(dashCountEl) dashCountEl.textContent = String(appState.trips.length);
 
   const listEl = document.getElementById("tripList");
   if(listEl){
@@ -1638,9 +1719,10 @@ function renderTripsAndDetail(){
               <span class="meta-chip">📅 ${dateStr}</span>
               <span class="meta-chip">◇ ${price}</span>
             </div>
-            <div style="display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid #172635">
+            <div style="display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid #172635;flex-wrap:wrap">
               <button type="button" class="secondary-btn" style="flex:1;background:#132638" onclick="event.stopPropagation();editTrip(${idx})">✎ دەستکاری</button>
-              <button type="button" class="secondary-btn" style="flex:1;color:${isPub ? '#43d6a0' : '#f5b62e'}" onclick="toggleTripPublished(${idx},event)">${isPub ? '👁️ لە ماڵپەڕ دیارە' : '🚫 شاراوەیە'}</button>
+              <button type="button" class="secondary-btn" style="flex:1;background:#2e1636;color:#fb923c" onclick="notifyAboutTrip(${idx},event)">🔔 نۆتیفیکەیشن</button>
+              <button type="button" class="secondary-btn" style="flex:1;color:${isPub ? '#43d6a0' : '#f5b62e'}" onclick="toggleTripPublished(${idx},event)">${isPub ? '👁️ دیارە' : '🚫 شاراوە'}</button>
               ${appState.trips.length > 1 ? `<button type="button" class="secondary-btn" style="color:#ff4a62" onclick="deleteTrip(${idx},event)">🗑️</button>` : ''}
             </div>
           </div>
@@ -1788,19 +1870,21 @@ function autoSync(){
 
 async function publishLive(alreadySavedFromTripForm = false){
   try{
-    // If user clicked top Publish while inside #newtrip, commit the form according to editorMode!
+    // If user clicked top Publish while inside #newtrip, ensure we NEVER overwrite an old trip when adding a new trip!
     const onNewTripPage = document.getElementById("newtrip")?.classList.contains("active");
     if(onNewTripPage && !alreadySavedFromTripForm){
       const titleInput = (document.getElementById("tripTitle_ku")?.value || "").trim();
       if(titleInput){
-        if(editorMode === "new"){
+        const cur = appState.trips[activeTripIndex];
+        const curTitle = (cur?.i18n?.ku?.tripTitle || "").trim();
+        // If editorMode is 'new' OR the user typed a different trip title than the current trip, ADD as a new trip!
+        if(editorMode === "new" || (curTitle && titleInput !== curTitle)){
           const newTrip = readTripFromForm("trip-" + Date.now());
           appState.trips.push(newTrip);
           activeTripIndex = appState.trips.length - 1;
           editorMode = "edit";
           populateTripEditor(activeTripIndex);
         } else {
-          const cur = appState.trips[activeTripIndex];
           appState.trips[activeTripIndex] = readTripFromForm(cur?.id || ("trip-" + (activeTripIndex + 1)));
           populateTripEditor(activeTripIndex);
         }
@@ -2298,6 +2382,158 @@ function importBackup(e){
   r.readAsText(f);
 }
 
+// WEB PUSH NOTIFICATIONS CENTER
+function urlBase64ToUint8Array(base64String){
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = atob(base64);
+  return Uint8Array.from([...rawData].map(ch => ch.charCodeAt(0)));
+}
+
+async function enableAdminDevicePush(){
+  try{
+    if(!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)){
+      return toast("⚠️ ئەم وێبگەڕە پشتگیری Web Push ناکات");
+    }
+    const perm = await Notification.requestPermission();
+    if(perm !== "granted") return toast("⚠️ ڕێگەپێدانی نۆتیفیکەیشن ڕەتکرایەوە");
+    const reg = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+    await navigator.serviceWorker.ready;
+    const keyRes = await fetch(`${WORKER_URL}/api/push/public-key`, { cache: "no-store" });
+    const keyData = await keyRes.json();
+    const existing = await reg.pushManager.getSubscription();
+    const sub = existing || await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(keyData.publicKey)
+    });
+    await fetch(`${WORKER_URL}/api/push/subscribe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subscription: sub.toJSON ? sub.toJSON() : sub, source: "admin", url: "/admin.html" })
+    });
+    toast("✅ نۆتیفیکەیشن لەم ئامێرە چالاک کرا!");
+    loadPushCenterStats();
+  }catch(e){
+    toast("❌ کێشە لە چالاککردن: " + (e.message || e));
+  }
+}
+
+async function loadPushCenterStats(){
+  try{
+    const r = await fetch(`${WORKER_URL}/api/admin/push/stats?cb=${Date.now()}`, { cache: "no-store" });
+    const d = await r.json();
+    if(d && d.ok !== false){
+      const cnt = Number(d.count ?? d.subscribers ?? 0);
+      const el = document.getElementById("pushSubscriberCount");
+      if(el) el.textContent = String(cnt);
+      const badge = document.getElementById("topPushBadge");
+      if(badge){
+        badge.textContent = String(cnt);
+        badge.style.display = cnt > 0 ? "inline-block" : "none";
+      }
+    }
+  }catch(e){}
+
+  try{
+    const r2 = await fetch(`${WORKER_URL}/api/admin/notifications?cb=${Date.now()}`, { cache: "no-store" });
+    const d2 = await r2.json();
+    const listEl = document.getElementById("adminActivityNotificationsList");
+    if(listEl && Array.isArray(d2.notifications)){
+      listEl.innerHTML = d2.notifications.slice(0, 12).map(n => `
+        <div class="service spotlight-card">
+          <div class="service-icon" style="color:#38bdf8">🔔</div>
+          <div class="service-text">
+            <b>${n.title || n.type || "ئاگاداری"}</b>
+            <small>${n.message || ""} · ${String(n.createdAt || "").slice(0, 16).replace("T", " ")}</small>
+          </div>
+        </div>
+      `).join("") || `<div style="font-size:12px;color:#8b9aa8">هیچ ئاگادارییەک نییە.</div>`;
+    }
+  }catch(e){}
+}
+
+function fillPushTemplate(type){
+  ensureTripsArray();
+  const latest = appState.trips[activeTripIndex] || appState.trips[0] || {};
+  const tTitle = latest.i18n?.ku?.tripTitle || "گەشتی نوێی کوردیا";
+  const tLoc = latest.i18n?.ku?.tripLocation || "کوردستان";
+  const tPrice = latest.i18n?.ku?.tripPrice || "25,000 دینار";
+  const tTime = latest.i18n?.ku?.tripTime || "06:00 بەیانی";
+
+  const titleEl = document.getElementById("pushTitleInput");
+  const bodyEl = document.getElementById("pushBodyInput");
+  const urlEl = document.getElementById("pushUrlInput");
+
+  if(type === "new_trip"){
+    if(titleEl) titleEl.value = `🔥 گەشتی نوێ: ${tTitle}`;
+    if(bodyEl) bodyEl.value = `ئێستا ناونووسین کراوەیە بۆ ${tTitle} (${tLoc}) بە نرخی ${tPrice}. پەلە بکە و شوێنەکەت حیجز بکە! 🏔️`;
+    if(urlEl) urlEl.value = "/#booking";
+  } else if(type === "seats"){
+    if(titleEl) titleEl.value = `⏳ تەنها چەند کورسییەک ماوە — ${tTitle}`;
+    if(bodyEl) bodyEl.value = `ژمارەی کورسییە بەتاڵەکان بۆ ${tTitle} زۆر کەم ماوە! ئێستا ناوت تۆمار بکە پێش داخستنی ناونووسین.`;
+    if(urlEl) urlEl.value = "/#booking";
+  } else if(type === "reminder"){
+    if(titleEl) titleEl.value = `🚌 بیرخستنەوەی گەشت: ${tTitle}`;
+    if(bodyEl) bodyEl.value = `بەشداربووانی ئازیزی ${tTitle}، کاتی دەرچوونمان کاتژمێر ${tTime} دەبێت. تکایە ١٥ خولەک زووتر ئامادە بن.`;
+    if(urlEl) urlEl.value = "/#safety";
+  }
+}
+
+function notifyAboutTrip(idx, ev){
+  if(ev) ev.stopPropagation();
+  ensureTripsArray();
+  activeTripIndex = Math.max(0, Math.min(idx, appState.trips.length - 1));
+  fillPushTemplate("new_trip");
+  go("push_center");
+  toast("🔔 ئامادەیە بۆ ناردنی نۆتیفیکەیشنی ئەم گەشتە");
+}
+
+async function sendDirectPush(title, body, url = "/#booking"){
+  try{
+    const r = await fetch(`${WORKER_URL}/api/admin/push/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: title || "KURDIA ADVENTURE",
+        body,
+        message: body,
+        url: url || "/",
+        tag: "kurdia-push-" + Date.now()
+      })
+    });
+    const d = await r.json().catch(() => ({}));
+    return { ok: r.ok && d.ok !== false, data: d };
+  }catch(e){
+    return { ok: false, error: e.message };
+  }
+}
+
+async function sendPushNotificationToAll(){
+  const title = (document.getElementById("pushTitleInput")?.value || "KURDIA ADVENTURE").trim();
+  const body = (document.getElementById("pushBodyInput")?.value || "").trim();
+  const url = (document.getElementById("pushUrlInput")?.value || "/#booking").trim();
+  const resBox = document.getElementById("pushSendResultBox");
+
+  if(!body){
+    toast("⚠️ تکایە دەقی نۆتیفیکەیشن بنووسە");
+    if(resBox) resBox.innerHTML = `<span style="color:#ff4a62">⚠️ تکایە دەقی پەیامەکە بنووسە</span>`;
+    return;
+  }
+
+  if(resBox) resBox.innerHTML = `<span style="color:#38bdf8">⏳ نۆتیفیکەیشن دەنێردرێت بۆ هەموو بەشداربووان...</span>`;
+  const res = await sendDirectPush(title, body, url);
+  if(res.ok){
+    const sent = res.data?.sent ?? res.data?.count ?? "هەموو";
+    if(resBox) resBox.innerHTML = `<span style="color:#43d6a0">✅ بە سەرکەوتوویی نێردرا بۆ بەشداربووان (${sent})!</span>`;
+    toast("✅ نۆتیفیکەیشن بۆ هەموو بەشداربووان نێردرا!");
+    loadPushCenterStats();
+  } else {
+    const errMsg = res.data?.error || res.error || "کێشە لە ناردن";
+    if(resBox) resBox.innerHTML = `<span style="color:#ff4a62">❌ ${errMsg}</span>`;
+    toast("❌ " + errMsg);
+  }
+}
+
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -2316,11 +2552,14 @@ function loadState(){
     setEl(`heroSubtitle_${l}`, appState.i18n?.[l]?.heroSubtitle);
   });
   setEl("fibAccount", appState.fibAccount);
-  populateTripEditor(activeTripIndex);
+  // Start #newtrip in clean "Add New Trip" mode so it never overwrites Trip #1 by accident
+  createNewTrip(true);
+  fillPushTemplate("new_trip");
   renderCoupons();
   renderGallery();
   renderReviews();
   renderTripsAndDetail();
+  loadPushCenterStats();
 }
 
 async function fetchRemoteCMSIntoAdmin(){
@@ -2332,9 +2571,11 @@ async function fetchRemoteCMSIntoAdmin(){
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){
       const deletedIds = new Set(Array.isArray(appState.deletedTripIds) ? appState.deletedTripIds : []);
       const remoteNormalized = cfg.trips.map((t, i) => normalizeAdminTrip(t, i)).filter(t => !deletedIds.has(t.id));
-      // Merge remote trips with any local unsynced trips
+      // Use remote trips as authoritative source and append any local unsynced trips
       const merged = [...remoteNormalized];
       (appState.trips || []).forEach((ltr, lIdx) => {
+        // Skip default placeholder IDs if remote already has real trips
+        if(["trip-1","trip-2","trip-3"].includes(ltr.id) && remoteNormalized.length > 0) return;
         const normLocal = normalizeAdminTrip(ltr, lIdx);
         if(deletedIds.has(normLocal.id)) return;
         const lTitle = (normLocal.i18n?.ku?.tripTitle || "").trim();
@@ -2350,7 +2591,7 @@ async function fetchRemoteCMSIntoAdmin(){
         appState.trips = merged;
       }
       ensureTripsArray();
-      if(editorMode !== "new"){
+      if(editorMode === "edit"){
         populateTripEditor(activeTripIndex);
       } else {
         renderEditorTabs();
