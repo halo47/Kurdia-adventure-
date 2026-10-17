@@ -12,14 +12,13 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <!-- زیادکردنی Lucide بۆ ئایکۆنە مۆدێرنەکان -->
 <script src="https://unpkg.com/lucide@latest"></script>
-<!-- AOS + Anime.js + Three.js + ScrollReveal + LottieFiles + Motion.dev -->
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<!-- World-Class Motion & 3D Stack: GSAP 3.12 + ScrollTrigger + Lenis + Three.js + Anime.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.js"></script>
 <style>
 :root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -468,8 +467,8 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 @keyframes kurdiaLogoDraw{to{stroke-dashoffset:0}}
 @keyframes kurdiaLogoGlow{to{opacity:.16}}
 .kurdia-hero-word{display:inline-block;will-change:transform,opacity}
-.kurdia-reveal-ready .kurdia-reveal{opacity:0;transform:translateY(22px)}
-.kurdia-reveal-ready .kurdia-reveal.kurdia-revealed{opacity:1;transform:translateY(0);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.75,.25,1)}
+.kurdia-reveal-ready .kurdia-reveal{opacity:1;transform:none}
+.kurdia-reveal-ready .kurdia-reveal.kurdia-revealed{opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.75,.25,1)}
 .featured,.trip-card,.destination-card,.review-card,.article-card,.card{transition:transform .35s cubic-bezier(.2,.75,.25,1),border-color .35s ease,box-shadow .35s ease}
 .featured:hover,.trip-card:hover,.destination-card:hover,.review-card:hover,.article-card:hover,.card:hover{transform:translateY(-4px);border-color:rgba(229,35,79,.38);box-shadow:0 16px 40px rgba(0,0,0,.18),0 0 22px rgba(229,35,79,.06)}
 .btn,.iconbtn,.navitem{transition:transform .22s ease,box-shadow .25s ease,background-color .25s ease,border-color .25s ease}
@@ -540,13 +539,18 @@ main,section,.section,.page-section{background-color:transparent!important}
   const overlay=document.getElementById('kurdia-intro');
   if(!overlay)return;
   const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const seen=sessionStorage.getItem('kurdia_intro_seen')==='1';
+  if(seen||reduce){
+    overlay.remove();
+    document.documentElement.classList.remove('intro-lock');
+    return;
+  }
   let done=false;
-  function closeIntro(){if(done)return;done=true;overlay.classList.add('intro-out');document.documentElement.classList.remove('intro-lock');setTimeout(()=>{overlay.remove()},900);}
+  function closeIntro(){if(done)return;done=true;sessionStorage.setItem('kurdia_intro_seen','1');overlay.classList.add('intro-out');document.documentElement.classList.remove('intro-lock');setTimeout(()=>{overlay.remove()},750);}
   document.documentElement.classList.add('intro-lock');
   document.getElementById('kurdia-intro-skip').addEventListener('click',closeIntro);
   window.addEventListener('keydown',function(e){if(e.key==='Escape'&&!done)closeIntro()});
-  // Keep the entrance cinematic but short; skip automatically for reduced-motion users.
-  window.setTimeout(closeIntro,reduce?450:3900);
+  window.setTimeout(closeIntro,1850);
 })();
 </script>
 
@@ -556,7 +560,7 @@ main,section,.section,.page-section{background-color:transparent!important}
     <button class="iconbtn" onclick="goBackHome()"><i data-lucide="chevron-right"></i></button>
     <div style="display:flex;align-items:center;gap:8px">
       <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
-      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.16);border:1px solid rgba(55,201,135,0.55);color:#6bf0b3;font-size:10px;font-weight:900;padding:3px 8px;border-radius:999px;direction:ltr;letter-spacing:.4px">v2.6.0 ↻</span>
+      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.16);border:1px solid rgba(55,201,135,0.55);color:#6bf0b3;font-size:10px;font-weight:900;padding:3px 8px;border-radius:999px;direction:ltr;letter-spacing:.4px">v2.8.0 ↻</span>
     </div>
     <button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()"><i data-lucide="music"></i></button>
     <button class="iconbtn" onclick="openSearch()"><i data-lucide="search"></i></button>
@@ -567,7 +571,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <section id="home" class="page active">
   <div class="hero">
     <div class="container">
-      <div class="eyebrow">KURDIA ADVENTURE</div>
+      <div class="eyebrow">KURDIA ADVENTURE · PREMIER EXPEDITIONS</div>
       <h1 id="heroTitle">زیاتر لە گەشت.</h1>
       <p id="heroText">ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.</p>
       <div class="actions">
@@ -594,11 +598,11 @@ main,section,.section,.page-section{background-color:transparent!important}
             <h3 id="tripTitle">کوردستان</h3>
             <div class="muted" id="tripLocation"></div>
             <p class="muted" id="tripDesc">ڕۆژێک لەگەڵ سروشت، دەریاچە و هاوڕێیەتی.</p>
-            <div class="stats">
+            <div class="stats trip-stats-grid">
               <div class="stat"><b id="tripDate">24/10</b><span>بەروار</span></div>
               <div class="stat"><b id="tripPrice">35,000</b><span>نرخ</span></div>
             </div>
-            <button class="btn red" style="width:100%;margin-top:12px" onclick="go('booking')">بەشداری بکە</button>
+            <button class="btn red" style="width:100%;margin-top:14px" onclick="go('booking')">بەشداری بکە ←</button>
           </div>
         </div>
       </div>
@@ -839,7 +843,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v2.6.0';
+const SITE_CODE_RELEASE='v2.8.0';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -1050,7 +1054,36 @@ function goBackHome(){
         }
       }
     }
-function route(){let id=location.hash.slice(1)||'home';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));window.scrollTo(0,0);renderPage(id);if(window.lucide)lucide.createIcons();}
+function route(){
+  let id=location.hash.slice(1)||'home';
+  const prevPage = document.querySelector('.page.active');
+  const targetPage = document.getElementById(id);
+  if(prevPage && targetPage && prevPage !== targetPage && window.gsap){
+    gsap.to(prevPage, {
+      opacity: 0,
+      y: -8,
+      duration: 0.16,
+      ease: 'power2.in',
+      onComplete: () => {
+        document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+        document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
+        window.scrollTo(0,0);
+        renderPage(id);
+        if(window.lucide)lucide.createIcons();
+        gsap.fromTo(targetPage, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out', onComplete: () => {
+          if(window.ScrollTrigger) ScrollTrigger.refresh();
+        }});
+      }
+    });
+  } else {
+    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+    document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
+    window.scrollTo(0,0);
+    renderPage(id);
+    if(window.lucide)lucide.createIcons();
+    if(window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+}
 window.addEventListener('hashchange',route);
 function normalizePublicData(){
   if(!Array.isArray(data.gallery)) data.gallery=DEFAULT.gallery||[];
@@ -1153,6 +1186,32 @@ function formatTripDateKu(dateStr){
   return dobj.toLocaleDateString('ku-IQ', { year: 'numeric', month: '2-digit', day: '2-digit' });
 }
 
+window.currentPublicTripFilter = 'all';
+window.filterPublicTrips = function(mode, btn){
+  window.currentPublicTripFilter = mode || 'all';
+  document.querySelectorAll('#publicTripFilterBar .tf-chip').forEach(b => b.classList.toggle('active', b === btn));
+  render();
+};
+window.inquireTripWhatsApp = function(tripIdx){
+  const trips = getActiveTripsList();
+  const chosen = trips[tripIdx] || trips[0] || {};
+  const rawPhone = String(data?.contact?.whatsapp || '+9647503130360').replace(/\D/g, '') || '9647503130360';
+  const msg = `سڵاو تیمی KURDIA ADVENTURE 🌿\nدەمەوێت زانیاری زیاتر وەربگرم دەربارەی گەشتی: (${chosen.title || 'گەشتی داهاتوو'}) لە بەرواری (${formatTripDateKu(chosen.date)}).`;
+  window.location.href = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
+};
+function getTripRemainingTimeBadge(dateStr){
+  const dv = String(dateStr || '').trim();
+  if(!dv) return '⏳ کاتی گەشت بەم زووانە';
+  const target = new Date(dv.includes('T') ? dv : (dv + 'T06:00:00')).getTime();
+  if(Number.isNaN(target)) return '⏳ ناونووسین بەردەوامە';
+  const diff = target - Date.now();
+  if(diff <= 0) return '🔥 ئەمڕۆ / دەستی پێکردووە';
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  if(days > 0) return `⏳ ${days} ڕۆژ و ${hours} کاتژمێر ماوە`;
+  return `⏳ تەنها ${hours} کاتژمێر ماوە 🔥`;
+}
+
 function render(){
  normalizePublicData();
  applyCMSPresentation();
@@ -1167,6 +1226,8 @@ function render(){
  const homeTripsList = document.getElementById('homeTripsList');
  const countBadge = document.getElementById('upcomingTripsCount');
  if(countBadge) countBadge.textContent = String(activeTrips.length);
+ const heroLiveCount = document.getElementById('heroLiveTripsCount');
+ if(heroLiveCount) heroLiveCount.textContent = String(activeTrips.length);
 
  if(featuredSection){
    let noTripNotice=document.getElementById('noUpcomingTripNotice');
@@ -1195,14 +1256,12 @@ function render(){
      const cap = Math.max(1, Number(tr.capacity || 35));
      const bkd = Math.min(cap, Math.max(0, Number(tr.booked || 0)));
      const rem = Math.max(0, cap - bkd);
-     const pct = Math.min(100, Math.round((bkd / cap) * 100));
      const fDate = formatTripDateKu(tr.date);
      const isFull = rem === 0 || tr.status === 'full';
-     const statusLabel = isFull ? 'پڕبووە' : (rem <= 6 ? `${rem} شوێن ماوە 🔥` : 'ناونووسین کراوەیە');
-     return `<article class="featured trip-showcase-card" data-trip-index="${idx}" data-aos="fade-up" data-aos-delay="${idx * 90}">
+     const statusLabel = isFull ? 'پڕبووە' : (rem <= 8 ? `تەنها ${rem} شوێن ماوە 🔥` : 'ناونووسین کراوەیە ✓');
+     return `<article class="featured trip-showcase-card tilt-3d-card" data-trip-index="${idx}">
        <div class="featureimg" style="background-image:url('${esc(imgUrl)}')">
          <span class="pill trip-status-pill ${isFull ? 'is-full' : ''}">${esc(statusLabel)}</span>
-         <span class="trip-number-badge">گەشتی #${idx + 1}</span>
        </div>
        <div class="featurebody">
          <div class="trip-meta-top">
@@ -1211,24 +1270,23 @@ function render(){
          </div>
          <h3 class="trip-card-title">${esc(tr.title || 'گەشتی KURDIA')}</h3>
          <p class="muted trip-card-desc">${esc(tr.desc || 'ئەزموونێکی تایبەت لەگەڵ تیمی KURDIA ADVENTURE.')}</p>
-         <div class="trip-capacity-bar-wrap">
-           <div class="trip-capacity-labels">
-             <span>شوێنی گیراو: <b>${bkd}/${cap}</b></span>
-             <span class="trip-rem-text">${rem > 0 ? `${rem} کورسی بەتاڵە` : 'تەواو بووە'}</span>
-           </div>
-           <div class="trip-capacity-track"><div class="trip-capacity-fill" style="width:${pct}%"></div></div>
-         </div>
          <div class="stats trip-stats-grid">
            <div class="stat"><b>${esc(fDate)}</b><span>بەرواری گەشت</span></div>
            <div class="stat"><b>${esc(tr.price || '—')}</b><span>نرخی بەشداری</span></div>
-           <div class="stat"><b>${rem} کەس</b><span>شوێنی ماوە</span></div>
          </div>
-         <button class="btn red trip-join-btn" style="width:100%;margin-top:14px" onclick="selectTripForBooking(${idx})" ${isFull ? 'disabled' : ''}>
-           ${isFull ? 'شوێن نەماوە' : 'بەشداری لەم گەشتە بکە ←'}
-         </button>
+         <div class="trip-card-actions">
+           <button class="btn red trip-join-btn" style="flex:1" onclick="selectTripForBooking(${idx})" ${isFull ? 'disabled' : ''}>
+             ${isFull ? 'شوێن نەماوە' : 'بەشداری بکە ←'}
+           </button>
+           <button class="btn ghost trip-wa-btn" type="button" onclick="inquireTripWhatsApp(${idx})" title="پرسیار لە ڕێگەی وەتسئەپ">
+             💬 پرسیار
+           </button>
+         </div>
        </div>
      </article>`;
    }).join('');
+   if(window.lucide) lucide.createIcons();
+   if(typeof window.kurdiaRefreshMotion === 'function') window.kurdiaRefreshMotion();
  }
 
  const bookingSubmit=$('bookingSubmitBtn');if(bookingSubmit)bookingSubmit.disabled=!tripIsUpcoming;
@@ -1887,60 +1945,8 @@ document.addEventListener('click',function(e){
 })();
 </script>
 
-<!-- KURDIA cinematic motion: GSAP + ScrollTrigger; falls back gracefully without CDN -->
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js"></script>
-<script id="kurdia-cinematic-motion-init">
-(function(){
-  'use strict';
-  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const $=(sel,root=document)=>root.querySelector(sel);
-  const $$=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
-  function addLogoMark(){
-    const brand=$('.brand'); if(!brand||$('.kurdia-logo-mark',brand))return;
-    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 48 48');svg.setAttribute('class','kurdia-logo-mark');svg.setAttribute('aria-hidden','true');
-    svg.innerHTML='<defs><linearGradient id="kurdiaLogoGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8197"/><stop offset="1" stop-color="#e5234f"/></linearGradient></defs><path class="logo-fill" d="M4 38 17 19 23 27 31 10 44 38Z" fill="url(#kurdiaLogoGradient)"/><path d="M4 38 17 19 23 27 31 10 44 38Z" fill="none" stroke="url(#kurdiaLogoGradient)" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>';
-    brand.prepend(svg);
-  }
-  function addDecor(){
-    if(!$('.kurdia-scroll-progress')){const p=document.createElement('div');p.className='kurdia-scroll-progress';p.setAttribute('aria-hidden','true');document.body.appendChild(p);}
-    if(!reduce&&!('ontouchstart' in window)&&!$('.kurdia-cursor-glow')){const c=document.createElement('div');c.className='kurdia-cursor-glow';c.setAttribute('aria-hidden','true');document.body.appendChild(c);window.addEventListener('pointermove',e=>{c.style.opacity='1';c.style.left=e.clientX+'px';c.style.top=e.clientY+'px';},{passive:true});window.addEventListener('pointerleave',()=>c.style.opacity='0');}
-  }
-  function prepareReveal(){
-    const selectors='.sectionhead,.featured,.featureimg,.stats,.trip-card,.destination-card,.review-card,.article-card,.booking-card,.private-card';
-    const nodes=$$(selectors).filter(el=>!el.closest('.modal')&&!el.classList.contains('kurdia-revealed'));
-    if(!nodes.length)return;
-    if(reduce){nodes.forEach(el=>el.classList.add('kurdia-revealed'));return;}
-    document.documentElement.classList.add('kurdia-reveal-ready');
-    if('IntersectionObserver' in window){const io=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('kurdia-revealed');io.unobserve(entry.target);}}),{threshold:.08,rootMargin:'0px 0px -35px 0px'});nodes.forEach(el=>{el.classList.add('kurdia-reveal');io.observe(el);});}
-    else nodes.forEach(el=>el.classList.add('kurdia-revealed'));
-  }
-  function initMotion(){
-    addLogoMark();addDecor();prepareReveal();
-    const hero=$('.hero');
-    if(window.gsap&&!reduce){
-      if(window.ScrollTrigger)gsap.registerPlugin(ScrollTrigger);
-      const intro=[$('.hero .eyebrow'),$('.hero h1'),$('.hero p'),$('.hero .actions')].filter(Boolean);
-      gsap.fromTo(intro,{y:24,opacity:0},{y:0,opacity:1,duration:.85,stagger:.13,ease:'power3.out',delay:.12,clearProps:'transform'});
-      const ridge=$('.kurdia-mountain-scene .ridge-line');
-      if(ridge)gsap.to(ridge,{strokeDashoffset:0,duration:2.2,ease:'power2.out',delay:.2});
-      if(hero&&window.ScrollTrigger){gsap.to(hero,{backgroundPositionY:'+=3%',ease:'none',scrollTrigger:{trigger:hero,start:'top top',end:'bottom top',scrub:.6}});}
-      if(window.ScrollTrigger){$$('.sectionhead,.featured,.stats').forEach((el,i)=>{if(el.classList.contains('kurdia-reveal'))return;gsap.fromTo(el,{y:18,opacity:.65},{y:0,opacity:1,duration:.65,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 92%',once:true}});});}
-    } else if(hero&&!reduce){hero.classList.add('kurdia-hero-fallback');}
-    // Lenis is optional: keep native scrolling if the library is absent or reduced motion is requested.
-    if(window.Lenis&&!reduce&&!window.__kurdiaLenis){try{const lenis=new Lenis({duration:1.05,smoothWheel:true,gestureOrientation:'vertical',touchMultiplier:1.05});window.__kurdiaLenis=lenis;if(window.gsap&&window.ScrollTrigger){lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);}else{const raf=t=>{lenis.raf(t);requestAnimationFrame(raf)};requestAnimationFrame(raf);}}catch(e){console.info('KURDIA motion: native scroll fallback',e);}}
-    let ticking=false;function progress(){if(ticking)return;ticking=true;requestAnimationFrame(()=>{const max=document.documentElement.scrollHeight-innerHeight;const pct=max>0?(scrollY/max)*100:0;const bar=$('.kurdia-scroll-progress');if(bar)bar.style.width=pct+'%';ticking=false;});}window.addEventListener('scroll',progress,{passive:true});progress();
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initMotion,{once:true});else initMotion();
-  // Some site sections are rendered/switched dynamically; reveal newly activated content without touching their behavior.
-  document.addEventListener('click',e=>{const link=e.target.closest('[data-page],.navitem');if(!link)return;setTimeout(()=>{const active=$$('.page.active');active.forEach(page=>{const nodes=$$('.sectionhead,.featured,.featureimg,.stats,.trip-card,.destination-card,.review-card,.article-card',page).filter(el=>!el.classList.contains('kurdia-revealed'));nodes.forEach(el=>{el.classList.add('kurdia-reveal');requestAnimationFrame(()=>el.classList.add('kurdia-revealed'));});});},120);},{passive:true});
-})();
-</script>
-
-<!-- KURDIA V15 — Aceternity UI / 21st.dev / React-Bits + Three.js + Anime.js + AOS + ScrollReveal + Lottie + Live Admin Sync -->
-<style id="kurdia-v15-interactive-studio">
+<!-- KURDIA CINEMATIC MOTION & STUDIO STYLES -->
+<style id="kurdia-cinematic-studio-styles">
 #kurdiaThreeAmbientCanvas{
   position:fixed;
   inset:0;
@@ -1948,58 +1954,73 @@ document.addEventListener('click',function(e){
   height:100%;
   pointer-events:none;
   z-index:0;
-  opacity:0.55;
-}
-#kurdiaThreeHeroCanvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:1;
+  opacity:0.65;
 }
 .app{position:relative;z-index:1}
 
-/* Aceternity / 21st.dev Spotlight Radial Hover Effect */
-.featured,.dest,.tile,.glass,.safety-card,.public-review,.article,.stat,.ka-menu-item,.privateHero{
+/* Top Navigation Bar Glass & Border Glow */
+.top{
+  transition:background-color .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.top.scrolled{
+  background:rgba(4,7,12,0.92);
+  border-bottom-color:rgba(229,35,79,0.25);
+  box-shadow:0 12px 30px rgba(0,0,0,0.65);
+}
+
+/* Scroll Progress Bar */
+.kurdia-scroll-progress{
+  position:fixed;
+  top:0;
+  left:0;
+  height:3px;
+  background:linear-gradient(90deg, #e5234f, #ff6b86, #37c987);
+  z-index:100;
+  width:0%;
+  pointer-events:none;
+  transition:width .1s linear;
+}
+
+/* Spotlight Radial Glow on Cards */
+.featured, .dest, .tile, .glass, .safety-card, .public-review, .article, .stat, .privateHero{
   position:relative;
   overflow:hidden;
 }
-.featured::before,.dest::before,.tile::before,.glass::before,.safety-card::before,.public-review::before,.article::before,.stat::before{
+.featured::before, .dest::before, .tile::before, .glass::before, .safety-card::before, .public-review::before, .article::before, .stat::before, .privateHero::before{
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(229,35,79,0.16), transparent 70%);
+  background:radial-gradient(350px circle at var(--mx,50%) var(--my,50%), rgba(229,35,79,0.18), transparent 70%);
   opacity:0;
-  transition:opacity .28s ease;
+  transition:opacity .25s ease;
   pointer-events:none;
   z-index:1;
 }
-.featured:hover::before,.dest:hover::before,.tile:hover::before,.glass:hover::before,.safety-card:hover::before,.public-review:hover::before,.article:hover::before,.stat:hover::before{
+.featured:hover::before, .dest:hover::before, .tile:hover::before, .glass:hover::before, .safety-card:hover::before, .public-review:hover::before, .article:hover::before, .stat:hover::before, .privateHero:hover::before{
   opacity:1;
 }
 
-/* Aceternity Border Beam Shimmer on Hero Header, Featured Card, and Primary CTAs */
-.top::after,.featured::after{
+/* Moving Border Beam on Hero Top & Featured Card */
+.top::after, .featured::after{
   content:"";
   position:absolute;
   top:0;
   left:-100%;
-  width:55%;
+  width:50%;
   height:1.5px;
-  background:linear-gradient(90deg,transparent,rgba(229,35,79,0.9),rgba(255,155,175,0.95),transparent);
-  animation:kurdiaBorderBeam 4.2s infinite linear;
+  background:linear-gradient(90deg, transparent, rgba(229,35,79,0.9), rgba(255,160,180,0.95), transparent);
+  animation:kurdiaBorderBeam 4s infinite linear;
   pointer-events:none;
-  z-index:5;
+  z-index:4;
 }
 @keyframes kurdiaBorderBeam{
-  0%{left:-65%}
-  100%{left:145%}
+  0%{left:-60%}
+  100%{left:140%}
 }
 
-/* React-Bits Shiny Eyebrow Text */
+/* Shiny Eyebrow Text */
 .eyebrow{
-  background:linear-gradient(110deg,#ff5c77 30%,#ffd1d9 50%,#ff5c77 70%);
+  background:linear-gradient(110deg,#ff5c77 25%,#ffe4e8 50%,#ff5c77 75%);
   background-size:200% auto;
   -webkit-background-clip:text;
   background-clip:text;
@@ -2012,75 +2033,68 @@ document.addEventListener('click',function(e){
 @keyframes kurdiaShinyEyebrow{
   to{background-position:200% center}
 }
-/* Multi-Trip Showcase Grid & Cards (Aceternity UI / 21st.dev / React-Bits) */
+
+/* Multi-Trip Showcase Grid */
 .home-trips-grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:18px;
+  gap:20px;
 }
-@media(min-width:720px){
+@media(min-width:768px){
   .home-trips-grid.multi-trips{
-    grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));
-    gap:20px;
+    grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));
+    gap:22px;
   }
 }
 .trip-showcase-card{
   display:flex;
   flex-direction:column;
-  transition:transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .3s ease;
-  border:1px solid rgba(255,255,255,.11);
-  background:linear-gradient(180deg, rgba(18,25,38,.92), rgba(10,14,22,.96));
-  box-shadow:0 18px 42px rgba(0,0,0,.42);
+  transition:transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s cubic-bezier(.22,1,.36,1), border-color .3s ease;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(16,22,34,.95), rgba(8,11,18,.98));
+  box-shadow:0 18px 42px rgba(0,0,0,.45);
+  transform-style:preserve-3d;
 }
 .trip-showcase-card:hover{
-  transform:translateY(-5px);
-  border-color:rgba(229,35,79,.45);
-  box-shadow:0 24px 54px rgba(0,0,0,.6), 0 0 28px rgba(229,35,79,.16);
+  transform:translateY(-6px);
+  border-color:rgba(229,35,79,.52);
+  box-shadow:0 24px 55px rgba(0,0,0,.65), 0 0 30px rgba(229,35,79,.16);
 }
 .trip-showcase-card .featureimg{
-  height:225px;
+  height:235px;
   position:relative;
   overflow:hidden;
   background-size:cover;
   background-position:center;
+  transition:transform .65s cubic-bezier(.22,1,.36,1);
+}
+.trip-showcase-card:hover .featureimg{
+  transform:scale(1.03);
 }
 .trip-showcase-card .featureimg::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg, rgba(5,7,11,.15) 0%, rgba(5,7,11,.35) 55%, rgba(10,14,22,.96) 100%);
+  background:linear-gradient(180deg, rgba(5,7,11,.1) 0%, rgba(5,7,11,.3) 55%, rgba(8,11,18,.96) 100%);
 }
 .trip-status-pill{
   z-index:2;
-  background:rgba(12,18,28,.76);
-  border:1px solid rgba(55,201,135,.45);
+  background:rgba(8,13,20,.85);
+  border:1px solid rgba(55,201,135,.55);
   color:#6bf0b3;
   font-weight:800;
   letter-spacing:.3px;
+  backdrop-filter:blur(10px);
 }
 .trip-status-pill.is-full{
   border-color:rgba(255,92,118,.5);
   color:#ff8096;
 }
-.trip-number-badge{
-  position:absolute;
-  top:14px;
-  left:14px;
-  z-index:2;
-  background:rgba(229,35,79,.85);
-  backdrop-filter:blur(10px);
-  color:#fff;
-  font-size:10px;
-  font-weight:800;
-  padding:6px 11px;
-  border-radius:999px;
-  box-shadow:0 6px 16px rgba(229,35,79,.35);
-}
 .trip-showcase-card .featurebody{
   display:flex;
   flex-direction:column;
   flex:1;
-  padding:18px;
+  padding:20px;
 }
 .trip-meta-top{
   display:flex;
@@ -2089,7 +2103,7 @@ document.addEventListener('click',function(e){
   gap:8px;
   flex-wrap:wrap;
   margin-bottom:8px;
-  font-size:11px;
+  font-size:11.5px;
   color:#ff8197;
   font-weight:700;
 }
@@ -2098,212 +2112,407 @@ document.addEventListener('click',function(e){
   align-items:center;
   gap:5px;
   background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.08);
   padding:4px 9px;
   border-radius:10px;
 }
 .trip-card-title{
   margin:0 0 8px;
-  font-size:20px;
+  font-size:22px;
   font-weight:900;
   line-height:1.35;
 }
 .trip-card-desc{
-  margin:0 0 14px;
-  font-size:12.5px;
+  margin:0 0 16px;
+  font-size:13px;
   line-height:1.85;
   flex:1;
 }
-.trip-capacity-bar-wrap{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px;
-  padding:10px 12px;
-  margin-bottom:12px;
+.trip-stats-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:10px;
+  margin-top:14px;
 }
-.trip-capacity-labels{
+.trip-card-actions{
   display:flex;
-  justify-content:space-between;
-  font-size:11px;
-  color:var(--muted);
-  margin-bottom:7px;
+  gap:8px;
+  margin-top:16px;
 }
-.trip-capacity-labels b{color:#fff}
-.trip-rem-text{color:#5de4a5;font-weight:700}
-.trip-capacity-track{
-  height:6px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
+.trip-wa-btn{
+  padding-inline:14px;
+  font-size:12px;
+  white-space:nowrap;
+  border-color:rgba(55,201,135,0.35)!important;
+  color:#6bf0b3!important;
+  background:rgba(55,201,135,0.08)!important;
+}
+.trip-wa-btn:hover{
+  background:rgba(55,201,135,0.18)!important;
+  border-color:rgba(55,201,135,0.65)!important;
+}
+
+/* Micro-interaction on buttons */
+.btn{
+  position:relative;
   overflow:hidden;
+  transition:transform .2s ease, box-shadow .2s ease;
 }
-.trip-capacity-fill{
-  height:100%;
-  border-radius:999px;
-  background:linear-gradient(90deg, #ff5c77, #e5234f);
-  transition:width .8s cubic-bezier(.22,1,.36,1);
+.btn:hover{
+  transform:translateY(-2px);
 }
-.trip-article-active{
-  border-color:rgba(229,35,79,.65) !important;
-  background:rgba(229,35,79,.1) !important;
+.btn:active{
+  transform:scale(0.97);
 }
 </style>
 
-<script id="kurdia-v15-interactive-engine">
+<!-- KURDIA MASTER CINEMATIC MOTION ENGINE (GSAP + ScrollTrigger + Lenis + Three.js) -->
+<script id="kurdia-master-motion-engine">
 (function(){
   'use strict';
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isDesktop = window.innerWidth > 900 && !('ontouchstart' in window);
 
-  // 1. Live Sync from Admin Studio (kurdia_admin_multitrip_v6) supporting Multiple Trips & Version
-  function syncFromLocalAdmin(){
+  // 1. Scroll Progress Bar
+  if(!document.querySelector('.kurdia-scroll-progress')){
+    const bar = document.createElement('div');
+    bar.className = 'kurdia-scroll-progress';
+    document.body.appendChild(bar);
+    window.addEventListener('scroll', () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
+      bar.style.width = pct + '%';
+      const topNav = document.querySelector('.top');
+      if(topNav) topNav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+  }
+
+  // 2. Lenis Smooth Scrolling Engine
+  let lenisInstance = null;
+  if(window.Lenis && !reduce){
     try{
-      updateSiteVersionUI();
+      lenisInstance = new Lenis({
+        duration: isDesktop ? 1.15 : 0.85,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1.05,
+        touchMultiplier: 1.2
+      });
+      window.__kurdiaLenis = lenisInstance;
+      if(window.gsap && window.ScrollTrigger){
+        gsap.registerPlugin(ScrollTrigger);
+        lenisInstance.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          lenisInstance.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+      } else {
+        const raf = (time) => { lenisInstance.raf(time); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      }
+    }catch(e){}
+  }
+
+  // 3. Hero Opening Cinematic
+  function playHeroEntrance(){
+    if(!window.gsap || reduce) return;
+    const hero = document.querySelector('.hero');
+    if(!hero) return;
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.fromTo('.top', { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.85 })
+      .fromTo('.hero .eyebrow', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.45')
+      .fromTo('#heroTitle', { y: 40, opacity: 0, scale: 0.98 }, { y: 0, opacity: 1, scale: 1, duration: 0.95, ease: 'power4.out' }, '-=0.5')
+      .fromTo('#heroText', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.55')
+      .fromTo('.hero .actions .btn', { y: 20, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.65, ease: 'back.out(1.5)' }, '-=0.5');
+
+    // Subtle parallax on hero background
+    if(window.ScrollTrigger){
+      gsap.to('.hero', {
+        backgroundPositionY: '35%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.4
+        }
+      });
+    }
+  }
+
+  // 4. ScrollTrigger Reveals across every section and element
+  function initScrollTriggers(){
+    if(!window.gsap || !window.ScrollTrigger || reduce) return;
+
+    // A. Section Headers
+    document.querySelectorAll('.sectionhead').forEach(head => {
+      if(head.dataset.animated) return;
+      head.dataset.animated = '1';
+      gsap.fromTo(head,
+        { y: 32, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: head,
+            start: 'top 88%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    // B. Trip Showcase Cards
+    document.querySelectorAll('.trip-showcase-card, #homeTripsList .featured').forEach(card => {
+      if(card.dataset.animated) return;
+      card.dataset.animated = '1';
+      gsap.fromTo(card,
+        { y: 45, opacity: 0, scale: 0.97 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 86%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+
+    // C. Destinations Grid - Staggered Waterfall
+    const destParent = document.getElementById('homeDests');
+    const destItems = destParent ? destParent.querySelectorAll('.dest') : [];
+    if(destItems.length && !destParent.dataset.animated){
+      destParent.dataset.animated = '1';
+      gsap.fromTo(destItems,
+        { y: 35, opacity: 0, scale: 0.95 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          stagger: 0.08,
+          duration: 0.65,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: destParent,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }
+
+    // D. Stories Rings - Bouncy Pop-In
+    const storiesParent = document.getElementById('homeStories');
+    const storyItems = storiesParent ? storiesParent.querySelectorAll('.story') : [];
+    if(storyItems.length && !storiesParent.dataset.animated){
+      storiesParent.dataset.animated = '1';
+      gsap.fromTo(storyItems,
+        { scale: 0.65, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          stagger: 0.05,
+          duration: 0.5,
+          ease: 'back.out(1.8)',
+          scrollTrigger: {
+            trigger: storiesParent,
+            start: 'top 88%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }
+
+    // E. Private Experience Hero Banner
+    const priv = document.querySelector('.privateHero');
+    if(priv && !priv.dataset.animated){
+      priv.dataset.animated = '1';
+      gsap.fromTo(priv,
+        { y: 35, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: priv,
+            start: 'top 86%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }
+
+    // F. About Glass Card
+    const about = document.querySelector('.about .glass');
+    if(about && !about.dataset.animated){
+      about.dataset.animated = '1';
+      gsap.fromTo(about,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: about,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }
+
+    // G. Safety Cards
+    const safety = document.querySelectorAll('.safety-card');
+    if(safety.length && !document.getElementById('safetyList')?.dataset.animated){
+      const sl = document.getElementById('safetyList');
+      if(sl) sl.dataset.animated = '1';
+      gsap.fromTo(safety,
+        { x: 30, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          stagger: 0.07,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#safetyList',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }
+
+    // H. Public Reviews
+    const reviews = document.querySelectorAll('.public-review');
+    if(reviews.length && !document.getElementById('reviewsListPublic')?.dataset.animated){
+      const rl = document.getElementById('reviewsListPublic');
+      if(rl) rl.dataset.animated = '1';
+      gsap.fromTo(reviews,
+        { y: 28, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.09,
+          duration: 0.65,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#reviewsListPublic',
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    }
+  }
+
+  window.kurdiaRefreshMotion = function(){
+    setTimeout(() => {
+      if(window.ScrollTrigger) ScrollTrigger.refresh();
+      initScrollTriggers();
+    }, 120);
+  };
+
+  // 5. Aceternity Spotlight & 3D Tilt on Desktop
+  document.addEventListener('pointermove', e => {
+    const targets = document.querySelectorAll('.featured, .dest, .tile, .glass, .safety-card, .public-review, .article, .stat, .privateHero');
+    targets.forEach(card => {
+      const r = card.getBoundingClientRect();
+      if(e.clientY >= r.top - 100 && e.clientY <= r.bottom + 100){
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        card.style.setProperty('--mx', x + 'px');
+        card.style.setProperty('--my', y + 'px');
+        if(isDesktop && card.classList.contains('tilt-3d-card') && e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom){
+          const rx = ((y / r.height) - 0.5) * -5;
+          const ry = ((x / r.width) - 0.5) * 5;
+          card.style.transform = `perspective(900px) translateY(-5px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+        } else if(isDesktop && card.classList.contains('tilt-3d-card')){
+          card.style.transform = '';
+        }
+      }
+    });
+  }, { passive: true });
+
+  // 6. Three.js Ambient Starfield & Kurdish Night Embers Canvas
+  function initThreeAtmosphere(){
+    if(!window.THREE || reduce) return;
+    try{
+      if(document.getElementById('kurdiaThreeAmbientCanvas')) return;
+      const bgCanvas = document.createElement('canvas');
+      bgCanvas.id = 'kurdiaThreeAmbientCanvas';
+      document.body.prepend(bgCanvas);
+      const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 6;
+
+      const count = isDesktop ? 220 : 120;
+      const geo = new THREE.BufferGeometry();
+      const pts = new Float32Array(count * 3);
+      for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 16;
+      geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.046, transparent: true, opacity: 0.6 });
+      const particles = new THREE.Points(geo, mat);
+      scene.add(particles);
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      function animateThree(){
+        requestAnimationFrame(animateThree);
+        particles.rotation.y += 0.0005;
+        particles.rotation.x += 0.00018;
+        renderer.render(scene, camera);
+      }
+      animateThree();
+    }catch(e){}
+  }
+
+  // 7. Sync with Admin LocalStorage
+  function syncAdminData(){
+    try{
       const raw = localStorage.getItem('kurdia_admin_multitrip_v6');
       if(!raw) return;
       const adminState = JSON.parse(raw);
       if(!adminState || typeof adminState !== 'object') return;
       if(adminState.appVersion){
         localStorage.setItem('kurdia_live_version', adminState.appVersion);
-        updateSiteVersionUI(adminState.appVersion);
-      }
-      const lang = localStorage.getItem('kurdia_language') || 'ku';
-      const i18n = adminState.i18n?.[lang] || adminState.i18n?.ku || {};
-      if(typeof data === 'object' && data){
-        if(i18n.heroTitle) data.heroTitle = i18n.heroTitle;
-        if(i18n.heroSubtitle) data.heroText = i18n.heroSubtitle;
-        if(adminState.heroImageUrl) data.heroImageUrl = adminState.heroImageUrl;
-        data.cmsI18n = adminState.i18n || data.cmsI18n;
-        if(Array.isArray(adminState.coupons)) data.coupons = adminState.coupons;
-        if(Array.isArray(adminState.reviews) && adminState.reviews.length) data.reviews = adminState.reviews;
-        if(Array.isArray(adminState.gallery) && adminState.gallery.length) data.gallery = adminState.gallery;
-
-        if(Array.isArray(adminState.trips) && adminState.trips.length){
-          const normalized = adminState.trips
-            .map((item, idx) => normalizeTripItem(item, data.trip, lang, data.cmsI18n, idx))
-            .filter(Boolean);
-          if(normalized.length){
-            data.trips = normalized;
-            data.trip = normalized[0];
-          }
-        }
-        if(typeof render === 'function') render();
+        if(typeof updateSiteVersionUI === 'function') updateSiteVersionUI(adminState.appVersion);
       }
     }catch(e){}
   }
   window.addEventListener('storage', e => {
-    if(e.key === 'kurdia_admin_multitrip_v6' || e.key === 'kurdia_premium_data' || e.key === 'kurdia_live_version') syncFromLocalAdmin();
+    if(e.key === 'kurdia_admin_multitrip_v6' || e.key === 'kurdia_live_version') syncAdminData();
   });
 
-  // 2. Aceternity / 21st.dev Spotlight Mouse Tracker
-  document.addEventListener('pointermove', e => {
-    const targets = document.querySelectorAll('.featured,.dest,.tile,.glass,.safety-card,.public-review,.article,.stat,.privateHero');
-    targets.forEach(card => {
-      const r = card.getBoundingClientRect();
-      if(e.clientY >= r.top - 120 && e.clientY <= r.bottom + 120){
-        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-      }
-    });
-  }, { passive: true });
-
-  // 3. Initialize Three.js + AOS + ScrollReveal + Anime.js + Lottie
-  function initStudioLibraries(){
-    syncFromLocalAdmin();
-
-    // Inject Lottie pulse badge inside Hero Eyebrow
-    const heroEyebrow = document.querySelector('.hero .eyebrow');
-    if(heroEyebrow && !heroEyebrow.querySelector('lottie-player')){
-      const lp = document.createElement('lottie-player');
-      lp.setAttribute('src', 'https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json');
-      lp.setAttribute('background', 'transparent');
-      lp.setAttribute('speed', '1');
-      lp.style.cssText = 'width:20px;height:20px;display:inline-block;vertical-align:middle';
-      lp.setAttribute('loop', '');
-      lp.setAttribute('autoplay', '');
-      heroEyebrow.prepend(lp);
-    }
-
-    if(window.AOS && !reduce){
-      try{ AOS.init({ duration: 700, once: true, easing: 'ease-out-cubic' }); }catch(e){}
-    }
-
-    if(window.ScrollReveal && !reduce){
-      try{
-        ScrollReveal().reveal('.trip-showcase-card, .dest, .tile, .safety-card, .public-review, .public-photo', {
-          distance: '18px',
-          origin: 'bottom',
-          duration: 620,
-          interval: 70,
-          cleanup: true
-        });
-      }catch(e){}
-    }
-
-    if(window.anime && !reduce){
-      try{
-        anime({
-          targets: '.hero .actions .btn',
-          translateY: [14, 0],
-          opacity: [0, 1],
-          delay: anime.stagger(110, { start: 260 }),
-          duration: 820,
-          easing: 'easeOutExpo'
-        });
-        anime({
-          targets: '.trip-showcase-card',
-          translateY: [22, 0],
-          opacity: [0, 1],
-          delay: anime.stagger(120, { start: 180 }),
-          duration: 760,
-          easing: 'easeOutCubic'
-        });
-      }catch(e){}
-    }
-
-    if(window.THREE && !reduce){
-      // Ambient 3D Starfield & Crimson Dust
-      try{
-        if(!document.getElementById('kurdiaThreeAmbientCanvas')){
-          const bgCanvas = document.createElement('canvas');
-          bgCanvas.id = 'kurdiaThreeAmbientCanvas';
-          document.body.prepend(bgCanvas);
-          const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
-          renderer.setSize(window.innerWidth, window.innerHeight);
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-          const scene = new THREE.Scene();
-          const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-          camera.position.z = 6;
-
-          const geo = new THREE.BufferGeometry();
-          const count = 220;
-          const pts = new Float32Array(count * 3);
-          for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 16;
-          geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-          const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.042, transparent: true, opacity: 0.52 });
-          const particles = new THREE.Points(geo, mat);
-          scene.add(particles);
-
-          window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-          });
-
-          function animateBg(){
-            requestAnimationFrame(animateBg);
-            particles.rotation.y += 0.0006;
-            particles.rotation.x += 0.0002;
-            renderer.render(scene, camera);
-          }
-          animateBg();
-        }
-      }catch(e){}
-    }
+  function startAll(){
+    syncAdminData();
+    initThreeAtmosphere();
+    setTimeout(playHeroEntrance, 100);
+    setTimeout(initScrollTriggers, 250);
   }
 
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', initStudioLibraries, { once: true });
+    document.addEventListener('DOMContentLoaded', startAll, { once: true });
   } else {
-    initStudioLibraries();
+    startAll();
   }
 })();
 </script>
