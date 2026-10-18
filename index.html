@@ -6,10 +6,40 @@
 <meta property="og:title" content="KURDIA ADVENTURE">
 <meta property="og:description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
 <title>KURDIA ADVENTURE</title>
+<script>
+// Auto cache buster: upgrade stale cached versions (such as v2.7.0) immediately
+(function(){
+  var V = 'v3.2.0';
+  try {
+    var stored = localStorage.getItem('kurdia_app_ver');
+    if (stored !== V) {
+      localStorage.setItem('kurdia_app_ver', V);
+      localStorage.setItem('kurdia_code_release', V);
+      localStorage.setItem('kurdia_live_version', V);
+      if (window.caches) {
+        caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); }).catch(function(){});
+      }
+    }
+  } catch(e){}
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<!-- Leaflet Map Engine (Local primary + CDN fallback) -->
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';">
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script>
+if(!window.L || typeof window.L.map !== 'function'){
+  var _s1 = document.createElement('script');
+  _s1.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  _s1.onerror = function(){
+    var _s2 = document.createElement('script');
+    _s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    document.head.appendChild(_s2);
+  };
+  document.head.appendChild(_s1);
+}
+</script>
 <!-- زیادکردنی Lucide بۆ ئایکۆنە مۆدێرنەکان -->
 <script src="https://unpkg.com/lucide@latest"></script>
 <!-- World-Class Motion & 3D Stack: GSAP 3.12 + ScrollTrigger + Lenis + Three.js + Anime.js -->
@@ -98,16 +128,29 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .weather-chip:hover{background:rgba(169,29,55,0.18);border-color:rgba(211,47,78,0.4);color:#fff;transform:translateY(-1px)}
 .weather-chip.active{background:linear-gradient(135deg,rgba(169,29,55,0.4),rgba(211,47,78,0.25));border-color:var(--red2);color:#fff;box-shadow:0 0 16px rgba(211,47,78,0.3)}
 
-.weather-map-box{position:relative;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);background:#070a10;box-shadow:0 20px 50px rgba(0,0,0,0.5)}
-.weather-map-element{height:360px;width:100%;background:#090d14}
-.weather-map-overlay-top{position:absolute;top:10px;left:10px;right:10px;z-index:400;display:flex;justify-content:space-between;align-items:center;pointer-events:none;gap:8px;flex-wrap:wrap}
-.weather-map-badge{pointer-events:auto;background:rgba(7,10,16,0.88);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.14);padding:6px 12px;border-radius:12px;font-size:11px;font-weight:700;color:#fff;display:inline-flex;align-items:center;gap:6px}
-.weather-map-layers{pointer-events:auto;display:inline-flex;background:rgba(7,10,16,0.88);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:3px;gap:2px}
+.weather-map-box{position:relative;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.14);background:#070a10;box-shadow:0 20px 50px rgba(0,0,0,0.55);min-height:380px}
+.weather-map-element{height:390px;width:100%;min-height:390px;background:#090d14;position:relative;z-index:1}
+.weather-wind-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:350;pointer-events:none;opacity:0.92}
+/* Leaflet container & tile layout resilience */
+.leaflet-container{width:100%!important;height:100%!important;position:relative!important;outline:none!important;cursor:crosshair}
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container{position:absolute;left:0;top:0}
+.leaflet-tile{visibility:visible!important;user-select:none;-webkit-user-drag:none}
+.leaflet-tile-container{pointer-events:none}
+.leaflet-zoom-animated{transform-origin:0 0}
+.weather-map-overlay-top{position:absolute;top:8px;left:8px;right:8px;z-index:450;display:flex;justify-content:space-between;align-items:center;pointer-events:none;gap:6px;flex-wrap:wrap}
+.weather-map-badge{pointer-events:auto;background:rgba(7,10,16,0.9);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.16);padding:6px 12px;border-radius:12px;font-size:11px;font-weight:700;color:#fff;display:inline-flex;align-items:center;gap:6px}
+.weather-map-layers{pointer-events:auto;display:inline-flex;background:rgba(7,10,16,0.9);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:3px;gap:2px}
 .weather-layer-btn{border:none;background:transparent;color:#94a3b8;font-size:10px;font-weight:700;padding:5px 9px;border-radius:9px;cursor:pointer;transition:.2s}
 .weather-layer-btn:hover{color:#fff}
 .weather-layer-btn.active{background:var(--red);color:#fff}
-.weather-map-overlay-bottom{position:absolute;bottom:10px;left:10px;right:10px;z-index:400;display:flex;justify-content:space-between;align-items:center;pointer-events:none;gap:8px}
-.weather-map-hint{pointer-events:auto;background:rgba(7,10,16,0.85);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);padding:6px 14px;border-radius:999px;font-size:11px;color:#cbd5e1}
+.weather-map-overlay-bottom{position:absolute;bottom:8px;left:8px;right:8px;z-index:450;display:flex;justify-content:space-between;align-items:center;pointer-events:none;gap:6px;flex-wrap:wrap}
+.weather-map-hint{pointer-events:auto;background:rgba(7,10,16,0.88);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);padding:6px 14px;border-radius:999px;font-size:11px;color:#cbd5e1}
+
+/* Wind Stream Animation Badge & Particles */
+.wind-toggle-badge{cursor:pointer;transition:all .2s ease;gap:7px}
+.wind-toggle-badge.active{background:rgba(56,189,248,0.22);border-color:#38bdf8;color:#fff;box-shadow:0 0 16px rgba(56,189,248,0.45)}
+.wind-pulse-dot{width:8px;height:8px;border-radius:50%;background:#38bdf8;box-shadow:0 0 10px #38bdf8;display:inline-block;animation:windDotPulse 1.4s infinite ease-in-out}
+@keyframes windDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
 
 /* Custom Glowing GPS Radar Pin */
 .kurdia-pin-marker{position:relative}
@@ -125,6 +168,9 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .weather-temp-giant{font-size:clamp(48px,8vw,72px);font-weight:900;line-height:1;letter-spacing:-1px;background:linear-gradient(180deg,#ffffff 20%,#cbd5e1 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .weather-cond-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);font-size:14px;font-weight:700;color:#fff}
 
+/* Live Wind Flow Strip inside Hero */
+.weather-wind-strip{margin:14px 0 6px;padding:10px 14px;border-radius:16px;background:linear-gradient(90deg,rgba(56,189,248,0.12),rgba(107,240,179,0.08),rgba(56,189,248,0.04));border:1px solid rgba(56,189,248,0.22);display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:#e2e8f0}
+
 /* Adventure Advisory Banner */
 .weather-advisory{border-radius:20px;padding:14px 18px;display:flex;align-items:center;gap:14px;border:1px solid rgba(55,201,135,0.3);background:linear-gradient(135deg,rgba(55,201,135,0.1),rgba(55,201,135,0.02));color:#e2e8f0;margin:14px 0}
 .weather-advisory.warning{border-color:rgba(245,158,11,0.35);background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.02))}
@@ -140,6 +186,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoratio
 .metric-box .m-head{display:flex;align-items:center;justify-content:space-between;color:#94a3b8;font-size:11px;font-weight:600}
 .metric-box .m-val{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.2px}
 .metric-box .m-sub{font-size:10px;color:#64748b}
+
+/* Wind Turbine & Compass Card */
+.wind-metric-box{border-color:rgba(56,189,248,0.22)!important;background:linear-gradient(160deg,rgba(56,189,248,0.06),rgba(255,255,255,0.02))!important}
+.wind-turbine-wrap{display:inline-flex;align-items:center;color:#38bdf8}
+.turbine-svg{width:22px;height:22px;transform-origin:12px 12px;animation:spinTurbine 2.2s linear infinite}
+@keyframes spinTurbine{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.wind-compass{display:inline-flex;align-items:center;gap:4px;background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:800}
+.compass-arrow{display:inline-block;transition:transform .5s cubic-bezier(0.34,1.56,0.64,1);font-weight:900}
 
 /* 7-Day Matrix with Gradient Temperature Bar */
 .days-container{display:grid;gap:8px}
@@ -621,7 +675,7 @@ main,section,.section,.page-section{background-color:transparent!important}
     <button class="iconbtn" onclick="goBackHome()"><i data-lucide="chevron-right"></i></button>
     <div style="display:flex;align-items:center;gap:8px">
       <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
-      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.16);border:1px solid rgba(55,201,135,0.55);color:#6bf0b3;font-size:10px;font-weight:900;padding:3px 8px;border-radius:999px;direction:ltr;letter-spacing:.4px">v2.9.0 ↻</span>
+      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.16);border:1px solid rgba(55,201,135,0.55);color:#6bf0b3;font-size:10px;font-weight:900;padding:3px 8px;border-radius:999px;direction:ltr;letter-spacing:.4px">v3.2.0 ↻</span>
     </div>
     <button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()"><i data-lucide="music"></i></button>
     <button class="iconbtn" onclick="openSearch()"><i data-lucide="search"></i></button>
@@ -765,33 +819,39 @@ main,section,.section,.page-section{background-color:transparent!important}
         <button class="btn ghost" onclick="locateUserGPS()" title="شوێنی من لەسەر GPS" aria-label="شوێنی ئێستام" style="padding:0 14px;flex-shrink:0"><i data-lucide="crosshair"></i></button>
       </div>
 
-      <!-- Interactive Kurdish Mountain Map -->
+      <!-- Interactive Kurdish Mountain Map with Live Wind Overlay -->
       <div class="weather-map-box">
         <div class="weather-map-overlay-top">
           <div class="weather-map-badge" id="weatherMapCoords">
             <i data-lucide="map-pin" style="width:13px;height:13px;color:var(--red2)"></i>
             <span id="weatherCoordsText">36.1901°N, 44.0091°E</span>
-          </div>
-          <div class="weather-map-badge" id="weatherElevationBadge">
-            <i data-lucide="mountain" style="width:13px;height:13px;color:#38bdf8"></i>
-            <span id="weatherElevationText">430 م لە ئاستی دەریا</span>
+            <span style="opacity:.4">·</span>
+            <span id="weatherElevationText" style="color:#38bdf8">430 م</span>
           </div>
           <div class="weather-map-layers">
-            <button type="button" class="weather-layer-btn active" id="layerDarkBtn" onclick="switchMapLayer('dark')">تاریک</button>
-            <button type="button" class="weather-layer-btn" id="layerVoyagerBtn" onclick="switchMapLayer('voyager')">ڕوون</button>
-            <button type="button" class="weather-layer-btn" id="layerOsmBtn" onclick="switchMapLayer('osm')">نەخشە</button>
+            <button type="button" class="weather-layer-btn active" id="layerSatelliteBtn" onclick="switchMapLayer('satellite')">مانگی دەستکرد</button>
+            <button type="button" class="weather-layer-btn" id="layerDarkBtn" onclick="switchMapLayer('dark')">تاریک</button>
+            <button type="button" class="weather-layer-btn" id="layerTopoBtn" onclick="switchMapLayer('topo')">تۆپۆگرافی</button>
+            <button type="button" class="weather-layer-btn" id="layerOsmBtn" onclick="switchMapLayer('osm')">شارەکان</button>
           </div>
         </div>
 
         <div id="weatherMap" class="weather-map-element"></div>
+        <canvas id="weatherWindCanvas" class="weather-wind-canvas"></canvas>
 
         <div class="weather-map-overlay-bottom">
           <div class="weather-map-hint">
-            <span>👆 کلیک لەسەر هەر شوێنێکی نەخشەکە بکە بۆ هێنانی کەشوهەواکەی</span>
+            <span>👆 کلیک لەسەر هەر شوێنێک بکە بۆ هێنانی کەشوهەواکەی</span>
           </div>
-          <button type="button" class="weather-map-badge" onclick="flyToKurdistanCenter()" style="cursor:pointer" title="ناوەندی کوردستان">
-            <i data-lucide="focus" style="width:13px;height:13px"></i> ناوەند
-          </button>
+          <div style="display:flex;gap:6px">
+            <button type="button" class="weather-map-badge wind-toggle-badge active" id="windStreamBtn" onclick="toggleWindAnimation()" title="ئەنیمەیشنی بای زیندوو" style="cursor:pointer">
+              <span class="wind-pulse-dot"></span>
+              <span id="windStreamLabel">💨 بای زیندوو</span>
+            </button>
+            <button type="button" class="weather-map-badge" onclick="flyToKurdistanCenter()" style="cursor:pointer" title="ناوەندی کوردستان">
+              <i data-lucide="focus" style="width:13px;height:13px"></i> ناوەند
+            </button>
+          </div>
         </div>
       </div>
 
@@ -825,6 +885,20 @@ main,section,.section,.page-section{background-color:transparent!important}
           </div>
         </div>
 
+        <!-- Live Atmospheric Wind Stream Flow Banner -->
+        <div class="weather-wind-strip" id="weatherWindStrip">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="color:#38bdf8;font-size:16px">💨</span>
+            <div>
+              <b id="wWindStreamTitle">ڕەوتی بای کوردستان (زیندوو)</b>
+              <small id="wWindStreamSub" style="display:block;font-size:10px;color:#94a3b8">خێرایی: 12 km/h · ئاراستە: باکووری ڕۆژئاوا (NW)</small>
+            </div>
+          </div>
+          <svg class="wind-waves-svg" viewBox="0 0 60 16">
+            <path d="M0,8 Q15,0 30,8 T60,8" stroke-dasharray="6,4"></path>
+          </svg>
+        </div>
+
         <!-- Adventure Trekking Advisory -->
         <div class="weather-advisory" id="weatherAdvisory">
           <div class="advisory-icon" id="advisoryIcon">🌿</div>
@@ -841,10 +915,22 @@ main,section,.section,.page-section{background-color:transparent!important}
             <div class="m-val" id="wHum">--%</div>
             <div class="m-sub" id="wHumSub">شێی گونجاو</div>
           </div>
-          <div class="metric-box">
-            <div class="m-head"><span>💨 خێرایی با</span><small>km/h</small></div>
-            <div class="m-val" id="wWind">-- km/h</div>
+          <div class="metric-box wind-metric-box">
+            <div class="m-head">
+              <span>💨 خێرایی با</span>
+              <span class="wind-turbine-wrap" id="windTurbineIcon" title="تۆرباینی با">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="turbine-svg" id="turbineSvg"><path d="M12 12m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/><path d="M12 9.5V3l3 2.5"/><path d="M14.2 13.3l5.5 3.2-3.8.5"/><path d="M9.8 13.3L4.3 16.5l.8-3.8"/></svg>
+              </span>
+            </div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:6px">
+              <div class="m-val" id="wWind">-- km/h</div>
+              <div class="wind-compass" id="windCompassBadge" title="ئاراستەی با">
+                <span id="windCompassArrow" class="compass-arrow">↑</span>
+                <span id="windCompassDir">N</span>
+              </div>
+            </div>
             <div class="m-sub" id="wWindGust">تەوژمی با: --</div>
+            <div class="m-sub" id="wWindDirName" style="color:#6bf0b3;font-weight:700;margin-top:2px">بای ئارام</div>
           </div>
           <div class="metric-box">
             <div class="m-head"><span>☀️ تیشکی خۆر UV</span><small>Index</small></div>
@@ -1073,7 +1159,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v2.9.0';
+const SITE_CODE_RELEASE='v3.2.0';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -1088,28 +1174,31 @@ const SITE_CODE_RELEASE='v2.9.0';
   }catch(e){}
 })();
 
-function updateSiteVersionUI(ver){
-  const v = ver || localStorage.getItem('kurdia_live_version') || SITE_CODE_RELEASE;
+function updateSiteVersionUI(){
   const el = document.getElementById('siteVersionBadge');
-  if(el) el.textContent = v + ' ↻';
+  if(el) el.textContent = SITE_CODE_RELEASE + ' ↻';
 }
 
 async function forceRefreshSiteVersion(){
   try{
-    toast('⏳ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش...');
+    toast('⏳ پاککردنەوەی تەواوی کاش و نوێکردنەوەی پەیج...');
     localStorage.removeItem('kurdia_builder_published_v3');
     localStorage.removeItem('kurdia_premium_data');
+    localStorage.setItem('kurdia_code_release', SITE_CODE_RELEASE);
+    localStorage.setItem('kurdia_live_version', SITE_CODE_RELEASE);
     if(window.caches){
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
     }
-    await loadRemote();
-    render();
-    route();
-    const curV = localStorage.getItem('kurdia_live_version') || SITE_CODE_RELEASE;
-    toast('✅ نوێکرایەوە بۆ کۆتا ڤێرژن (' + curV + ')');
+    if(navigator.serviceWorker){
+      try{
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for(const reg of regs) await reg.unregister();
+      }catch(_){}
+    }
+    window.location.href = window.location.origin + window.location.pathname + '?rel=' + SITE_CODE_RELEASE + '&_t=' + Date.now() + (window.location.hash || '');
   }catch(e){
-    location.reload();
+    window.location.reload(true);
   }
 }
 
@@ -1612,11 +1701,23 @@ function ensureLeafletReady(cb){
     if(window.L && typeof window.L.map === 'function'){
       clearInterval(timer);
       cb();
-    } else if(tries >= 60){
+    } else if(tries >= 30){
       clearInterval(timer);
-      console.warn('Leaflet map library loading timed out');
+      if(!document.getElementById('leafletFallbackScript')){
+        const s = document.createElement('script');
+        s.id = 'leafletFallbackScript';
+        s.src = '/vendor/leaflet/leaflet.js';
+        s.onload = () => { if(window.L) cb(); };
+        s.onerror = () => {
+          const s2 = document.createElement('script');
+          s2.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+          s2.onload = () => { if(window.L) cb(); };
+          document.head.appendChild(s2);
+        };
+        document.head.appendChild(s);
+      }
     }
-  }, 80);
+  }, 60);
 }
 
 function createKurdiaPin(){
@@ -1647,40 +1748,90 @@ function createMap(containerId, lat, lng, onClick, zoom){
   }
 
   if(el._leaflet_id){
-    try{ delete el._leaflet_id; el.innerHTML = ''; }catch(e){}
+    try{
+      el._leaflet_id = null;
+      delete el._leaflet_id;
+      el.innerHTML = '';
+    }catch(e){}
   }
 
   try {
     const map = L.map(el, {
       zoomControl: true,
-      preferCanvas: true,
+      preferCanvas: false,
       attributionControl: false
     }).setView([Number(lat)||36.19, Number(lng)||44.01], Number(zoom)||9);
 
-    // Carto Dark Matter luxury tiles (matching Kurdia dark theme)
-    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-      subdomains: 'abcd'
-    });
-    // Voyager Clean tiles
-    const voyagerLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-      subdomains: 'abcd'
-    });
-    // OpenStreetMap standard fallback
-    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19
+    // 1. High-Speed Google Hybrid Satellite (Photorealistic satellite imagery + roads/places in Kurdish & English)
+    const satLayer = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      subdomains: ['0', '1', '2', '3']
     });
 
-    darkLayer.addTo(map);
-    map._availableLayers = { dark: darkLayer, voyager: voyagerLayer, osm: osmLayer };
-    map._currentLayerName = 'dark';
+    // 2. Carto Dark Matter luxury tiles
+    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      subdomains: 'abcd'
+    });
+
+    // 3. Topographic / Mountain relief
+    const topoLayer = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      subdomains: ['0', '1', '2', '3']
+    });
+
+    // 4. OpenStreetMap standard / Google road
+    const osmLayer = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      subdomains: ['0', '1', '2', '3']
+    });
+
+    // Auto-fallback on tile loading error
+    satLayer.on('tileerror', function(e){
+      if(e && e.tile && !e.tile._fallbackAttempted && e.coords){
+        e.tile._fallbackAttempted = true;
+        e.tile.src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${e.coords.z}/${e.coords.y}/${e.coords.x}`;
+      }
+    });
+
+    darkLayer.on('tileerror', function(e){
+      if(e && e.tile && !e.tile._fallbackAttempted && e.coords){
+        e.tile._fallbackAttempted = true;
+        e.tile.src = `https://tile.openstreetmap.org/${e.coords.z}/${e.coords.x}/${e.coords.y}.png`;
+      }
+    });
+
+    topoLayer.on('tileerror', function(e){
+      if(e && e.tile && !e.tile._fallbackAttempted && e.coords){
+        e.tile._fallbackAttempted = true;
+        e.tile.src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/${e.coords.z}/${e.coords.y}/${e.coords.x}`;
+      }
+    });
+
+    satLayer.addTo(map);
+    map._availableLayers = { satellite: satLayer, dark: darkLayer, topo: topoLayer, osm: osmLayer };
+    map._currentLayerName = 'satellite';
 
     if(typeof onClick === 'function'){
       map.on('click', e => onClick(e.latlng, map));
     }
 
+    map.on('move', () => {
+      if(window.kurdiaWind) window.kurdiaWind.resize();
+    });
+
     el._leafletMap = map;
+
+    if(window.ResizeObserver){
+      try {
+        const ro = new ResizeObserver(() => {
+          try { map.invalidateSize(false); } catch(e){}
+        });
+        ro.observe(el);
+        map._resizeObserver = ro;
+      }catch(_){}
+    }
+
     return map;
   } catch(err) {
     console.error('Error initializing map:', err);
@@ -1715,8 +1866,186 @@ function switchMapLayer(layerKey){
     weatherMap._currentLayerName = layerKey;
   }
   document.querySelectorAll('.weather-layer-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.getElementById(`layer${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}Btn`);
+  const btn = document.getElementById(`layer${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}Btn`) ||
+              document.getElementById(layerKey === 'satellite' ? 'layerSatBtn' : `layer${layerKey}Btn`);
   if(btn) btn.classList.add('active');
+}
+
+/* ========================================================
+   HIGH-PERFORMANCE REAL-TIME WIND PARTICLE ENGINE (60 FPS)
+   ======================================================== */
+class WindAnimation {
+  constructor(canvasId) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+    this.particles = [];
+    this.numParticles = 130;
+    this.speed = 1.6;
+    this.deg = 240;
+    this.animId = null;
+    this.active = true;
+    this.resize = this.resize.bind(this);
+    this.loop = this.loop.bind(this);
+    if(this.canvas){
+      window.addEventListener('resize', this.resize);
+      this.resize();
+      this.initParticles();
+      this.start();
+    }
+  }
+
+  resize() {
+    if(!this.canvas) return;
+    const parent = this.canvas.parentElement;
+    const rect = parent ? parent.getBoundingClientRect() : null;
+    const w = Math.round((rect && rect.width) || this.canvas.clientWidth || 360);
+    const h = Math.round((rect && rect.height) || this.canvas.clientHeight || 390);
+    if(this.canvas.width !== w || this.canvas.height !== h){
+      this.canvas.width = w;
+      this.canvas.height = h;
+      this.initParticles();
+    }
+  }
+
+  initParticles() {
+    this.particles = [];
+    const w = this.canvas ? this.canvas.width : 360;
+    const h = this.canvas ? this.canvas.height : 390;
+    for(let i = 0; i < this.numParticles; i++) {
+      this.particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        age: Math.floor(Math.random() * 80),
+        maxAge: 40 + Math.floor(Math.random() * 60),
+        speedScale: 0.7 + Math.random() * 0.6
+      });
+    }
+  }
+
+  updateWind(speedKmH, deg) {
+    this.deg = typeof deg === 'number' && !Number.isNaN(deg) ? deg : 240;
+    const raw = Number(speedKmH) || 12;
+    this.speed = Math.max(0.7, Math.min(4.8, raw * 0.12));
+  }
+
+  start() {
+    if(!this.animId && this.active) {
+      this.loop();
+    }
+  }
+
+  stop() {
+    if(this.animId) {
+      cancelAnimationFrame(this.animId);
+      this.animId = null;
+    }
+    if(this.ctx && this.canvas) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  }
+
+  toggle() {
+    this.active = !this.active;
+    if(this.active) {
+      this.start();
+    } else {
+      this.stop();
+    }
+    return this.active;
+  }
+
+  loop() {
+    if(!this.active || !this.ctx || !this.canvas) return;
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    if(w <= 0 || h <= 0) {
+      this.animId = requestAnimationFrame(this.loop);
+      return;
+    }
+
+    // MUST clear canvas completely so the underlying map is 100% visible!
+    this.ctx.clearRect(0, 0, w, h);
+
+    // Meteorological wind direction: angle wind comes FROM.
+    // Blowing direction is (deg + 180) degrees.
+    const blowRad = ((this.deg + 180) % 360) * (Math.PI / 180);
+    const vx = Math.sin(blowRad);
+    const vy = -Math.cos(blowRad);
+
+    this.ctx.lineCap = 'round';
+
+    for(let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+      p.age++;
+
+      const pSpeed = this.speed * p.speedScale;
+      const wave = Math.sin(p.age * 0.08 + i) * 0.35;
+      const nx = p.x + (vx + vy * wave * 0.25) * pSpeed;
+      const ny = p.y + (vy - vx * wave * 0.25) * pSpeed;
+
+      const progress = p.age / p.maxAge;
+      const alpha = progress < 0.2 ? progress / 0.2 : (progress > 0.8 ? (1 - progress) / 0.2 : 1);
+
+      // Particle streamline trail
+      const trailLen = Math.max(8, pSpeed * 7);
+      this.ctx.beginPath();
+      this.ctx.moveTo(p.x - vx * trailLen, p.y - vy * trailLen);
+      this.ctx.lineTo(nx, ny);
+      this.ctx.lineWidth = 1.8;
+      this.ctx.strokeStyle = `rgba(56, 189, 248, ${(alpha * 0.7).toFixed(3)})`;
+      this.ctx.stroke();
+
+      // Glowing head spark
+      this.ctx.beginPath();
+      this.ctx.arc(nx, ny, 1.4, 0, Math.PI * 2);
+      this.ctx.fillStyle = `rgba(255, 255, 255, ${(alpha * 0.95).toFixed(3)})`;
+      this.ctx.fill();
+
+      p.x = nx;
+      p.y = ny;
+
+      if(p.age >= p.maxAge || p.x < -20 || p.x > w + 20 || p.y < -20 || p.y > h + 20) {
+        p.age = 0;
+        p.maxAge = 40 + Math.floor(Math.random() * 60);
+        if(Math.random() < 0.6) {
+          p.x = vx > 0 ? (Math.random() * 40 - 20) : (w - Math.random() * 40 + 20);
+          p.y = vy > 0 ? (Math.random() * 40 - 20) : (h - Math.random() * 40 + 20);
+        } else {
+          p.x = Math.random() * w;
+          p.y = Math.random() * h;
+        }
+      }
+    }
+
+    this.animId = requestAnimationFrame(this.loop);
+  }
+}
+
+function toggleWindAnimation(){
+  if(!window.kurdiaWind){
+    window.kurdiaWind = new WindAnimation('weatherWindCanvas');
+  }
+  const active = window.kurdiaWind.toggle();
+  const btn = document.getElementById('windStreamBtn');
+  const label = document.getElementById('windStreamLabel');
+  if(btn) btn.classList.toggle('active', active);
+  if(label) label.textContent = active ? '💨 بای زیندوو' : '💨 با (ناچالاکە)';
+  toast(active ? 'ئەنیمەیشنی بای زیندوو چالاک کرا 💨' : 'ئەنیمەیشنی با ناچالاک کرا');
+}
+
+function kurdishWindDirection(deg){
+  const directions = [
+    { label: 'باکوور (شەماڵ)', code: 'N' },
+    { label: 'باکووری ڕۆژهەڵات', code: 'NE' },
+    { label: 'ڕۆژهەڵات', code: 'E' },
+    { label: 'باشووری ڕۆژهەڵات', code: 'SE' },
+    { label: 'باشوور', code: 'S' },
+    { label: 'باشووری ڕۆژئاوا', code: 'SW' },
+    { label: 'ڕۆژئاوا', code: 'W' },
+    { label: 'باکووری ڕۆژئاوا', code: 'NW' }
+  ];
+  const idx = Math.round(((Number(deg) || 0) % 360) / 45) % 8;
+  return directions[idx] || directions[0];
 }
 
 function flyToKurdistanCenter(){
@@ -1828,8 +2157,17 @@ function initWeatherMap(){
       try { weatherMap.invalidateSize(true); }catch(e){}
     }
 
-    [80, 250, 550, 900].forEach(ms => setTimeout(() => {
+    // Initialize or resize Wind Simulation
+    if(!window.kurdiaWind){
+      window.kurdiaWind = new WindAnimation('weatherWindCanvas');
+    } else {
+      window.kurdiaWind.resize();
+      window.kurdiaWind.start();
+    }
+
+    [60, 200, 500, 900].forEach(ms => setTimeout(() => {
       try{ weatherMap?.invalidateSize(true); }catch(e){}
+      try{ window.kurdiaWind?.resize(); }catch(e){}
     }, ms));
   });
 }
@@ -1902,7 +2240,7 @@ function applyWeather(d, label, lat, lng){
   const elevEl = document.getElementById('weatherElevationText');
   if(elevEl){
     const elev = d.elevation != null ? Math.round(d.elevation) : (lat > 36.6 ? 1200 : 430);
-    elevEl.textContent = `${elev} م لە ئاستی دەریا`;
+    elevEl.textContent = `${elev} م`;
   }
 
   // 9 Metrics
@@ -1912,12 +2250,41 @@ function applyWeather(d, label, lat, lng){
   const humSub = document.getElementById('wHumSub');
   if(humSub) humSub.textContent = hum < 30 ? 'هەوای وشک' : (hum > 70 ? 'شێی بەرز' : 'شێی گونجاو');
 
+  // Wind Metrics & Dynamic Animation Sync
   const wind = Math.round(cur.wind_speed_10m ?? 12);
+  const windDeg = Number(cur.wind_direction_10m ?? 240);
   const windEl = document.getElementById('wWind');
   if(windEl) windEl.textContent = `${wind} km/h`;
   const gust = Math.round(cur.wind_gusts_10m ?? wind * 1.3);
   const gustEl = document.getElementById('wWindGust');
-  if(gustEl) gustEl.textContent = `تەوژم: ${gust} km/h`;
+  if(gustEl) gustEl.textContent = `تەوژمی با: ${gust} km/h`;
+
+  const windDirInfo = kurdishWindDirection(windDeg);
+  const dirNameEl = document.getElementById('wWindDirName');
+  if(dirNameEl) dirNameEl.textContent = `${windDirInfo.label} (${windDirInfo.code})`;
+
+  const compassArrow = document.getElementById('windCompassArrow');
+  if(compassArrow) compassArrow.style.transform = `rotate(${windDeg}deg)`;
+  const compassDir = document.getElementById('windCompassDir');
+  if(compassDir) compassDir.textContent = windDirInfo.code;
+
+  // Spin Turbine SVG proportional to real wind speed
+  const turbineSvg = document.getElementById('turbineSvg');
+  if(turbineSvg){
+    const spinDur = Math.max(0.4, 3.8 - (wind * 0.08));
+    turbineSvg.style.animationDuration = `${spinDur.toFixed(2)}s`;
+  }
+
+  // Update Live Wind Strip Banner
+  const windStripSub = document.getElementById('wWindStreamSub');
+  if(windStripSub){
+    windStripSub.textContent = `خێرایی: ${wind} km/h (تەوژم: ${gust} km/h) · ئاراستە: ${windDirInfo.label} (${windDeg}°)`;
+  }
+
+  // Drive Live Map Wind Particle Simulation
+  if(window.kurdiaWind){
+    window.kurdiaWind.updateWind(wind, windDeg);
+  }
 
   const uv = Math.round(cur.uv_index ?? daily.uv_index_max?.[0] ?? 4);
   const uvEl = document.getElementById('wUV');
