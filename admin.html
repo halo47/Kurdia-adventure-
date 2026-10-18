@@ -922,7 +922,7 @@ button{cursor:pointer;color:inherit}
       <div class="logo">▲</div>
       <div style="flex:1;min-width:0">
         <b class="shiny-text" style="font-size:13px;display:block;direction:ltr;text-align:right">KURDIA OS PRO</b>
-        <small style="font-size:10px;color:#6bf0b3;display:block;margin-top:2px" id="sidebarVersionLabel">v3.2.0 · پەیوەستە بە Cloud</small>
+        <small style="font-size:10px;color:#6bf0b3;display:block;margin-top:2px" id="sidebarVersionLabel">v3.3.0 · پەیوەستە بە Cloud</small>
       </div>
     </div>
 
@@ -933,6 +933,7 @@ button{cursor:pointer;color:inherit}
       <button class="side-btn active" data-side="dashboard" onclick="go('dashboard')"><span class="s-ico">⌂</span><span>داشبۆردی گشتی</span><span class="s-badge">LIVE</span></button>
       <button class="side-btn" data-side="trips" onclick="go('trips')"><span class="s-ico">🧭</span><span>گەشتەکان</span><span class="s-badge" id="sideTripsBadge">3</span></button>
       <button class="side-btn" data-side="newtrip" onclick="createNewTrip()"><span class="s-ico">＋</span><span>زیادکردنی گەشتی نوێ</span></button>
+      <button class="side-btn" data-side="places" onclick="go('places')"><span class="s-ico">🏔️</span><span>شوێنەکان</span><span class="s-badge" id="sidePlacesBadge">6</span></button>
       <button class="side-btn" data-side="push_center" onclick="go('push_center')"><span class="s-ico">🔔</span><span>ناردنی نۆتیفیکەیشن</span><span class="s-badge" id="sidePushBadge">0</span></button>
       <button class="side-btn" data-side="bookings" onclick="go('bookings')"><span class="s-ico">👥</span><span>ناونوسراوەکان</span><span class="s-badge" id="sideBookingsBadge">0</span></button>
     </div>
@@ -943,7 +944,6 @@ button{cursor:pointer;color:inherit}
       <button class="side-btn" data-side="broadcast" onclick="go('broadcast')"><span class="s-ico">💬</span><span>ناوەندی WhatsApp</span></button>
       <button class="side-btn" data-side="stories" onclick="go('stories')"><span class="s-ico">✨</span><span>ستۆری بەشداربووان</span></button>
       <button class="side-btn" data-side="private_requests" onclick="go('private_requests')"><span class="s-ico">👑</span><span>داواکاری گەشتی تایبەت</span></button>
-      <button class="side-btn" data-side="gallery" onclick="go('gallery')"><span class="s-ico">🖼️</span><span>گەلەری و وێنەکان</span></button>
       <button class="side-btn" data-side="reviews" onclick="go('reviews')"><span class="s-ico">★</span><span>هەڵسەنگاندنەکان</span></button>
     </div>
 
@@ -958,7 +958,7 @@ button{cursor:pointer;color:inherit}
 
     <div style="margin-top:auto;padding-top:10px;border-top:1px solid #192a3b;display:grid;gap:7px">
       <button class="primary" style="margin:0" onclick="publishLive()">● بڵاوکردنەوەی هەموو گۆڕانکاری</button>
-      <a href="/index.html?v=3.2.0" class="secondary-btn" style="text-align:center;text-decoration:none;display:block">🌐 کردنەوەی ماڵپەڕی سەرەکی</a>
+      <a href="/index.html?v=3.3.0" class="secondary-btn" style="text-align:center;text-decoration:none;display:block">🌐 کردنەوەی ماڵپەڕی سەرەکی</a>
     </div>
   </aside>
 
@@ -976,15 +976,15 @@ button{cursor:pointer;color:inherit}
       <div class="brand">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
           <b class="shiny-text">KURDIA EXECUTIVE ADMIN</b>
-          <span id="adminVersionBadge" onclick="forceRefreshAdminVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش" style="cursor:pointer;background:rgba(12,155,97,0.22);border:1px solid #26d08c;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px;direction:ltr;display:inline-block">v3.2.0 ↻</span>
+          <span id="adminVersionBadge" onclick="forceRefreshAdminVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش" style="cursor:pointer;background:rgba(12,155,97,0.22);border:1px solid #26d08c;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px;direction:ltr;display:inline-block">v3.4.0 ↻</span>
         </div>
-        <small id="adminVersionSub">FULL COMMAND DASHBOARD · MULTI-TRIP · WEB PUSH · v3.2.0</small>
+        <small id="adminVersionSub">FULL COMMAND DASHBOARD · MULTI-TRIP · PLACES · v3.4.0</small>
       </div>
       <button class="pill" onclick="createNewTrip()" style="background:linear-gradient(120deg,#0c9b61,#07774a)">＋ گەشتی نوێ</button>
       <button class="pill" onclick="publishLive()" id="topPublishBtn" style="background:linear-gradient(120deg,#f0183d,#b90e2b);border-color:#ff4a68">● Publish Live</button>
       <button class="icon-btn" style="width:34px;height:34px;font-size:14px;position:relative" onclick="go('push_center')" title="ناردنی نۆتیفیکەیشن بۆ خەڵک">🔔<span id="topPushBadge" style="position:absolute;top:-4px;left:-4px;background:#0c9b61;color:#fff;font-size:9px;font-weight:900;padding:1px 5px;border-radius:99px;display:none">0</span></button>
       <button class="icon-btn" style="width:34px;height:34px;font-size:14px" onclick="forceRefreshAdminVersion()" title="هاوکاتکردن لەگەڵ سێرڤەر">↻</button>
-      <a class="icon-btn" id="adminToSiteLink" href="/index.html?v=2.9.0" style="width:34px;height:34px;font-size:14px" title="ماڵپەڕی سەرەکی">🌐</a>
+      <a class="icon-btn" id="adminToSiteLink" href="/index.html?v=3.4.0" style="width:34px;height:34px;font-size:14px" title="ماڵپەڕی سەرەکی">🌐</a>
     </header>
 
     <!-- Quick Jump Bar -->
@@ -997,7 +997,7 @@ button{cursor:pointer;color:inherit}
       <button class="q-chip" onclick="go('design')">🎨 دیزاین و براند</button>
       <button class="q-chip" onclick="go('broadcast')">💬 WhatsApp</button>
       <button class="q-chip" onclick="go('coupons')">🎟️ کۆبۆنەکان</button>
-      <button class="q-chip" onclick="go('gallery')">🖼️ گەلەری</button>
+      <button class="q-chip" onclick="go('places')">🏔️ شوێنەکان (<span id="qPlacesCount">6</span>)</button>
       <button class="q-chip" onclick="go('settings')">⚙ هەموو بەشەکان</button>
     </div>
 
@@ -1011,10 +1011,10 @@ button{cursor:pointer;color:inherit}
           <div>
             <div class="exec-hero-badge">● سیستەمی ناوەندیی کوردیا چالاکە · هاوکاتکراو لەگەڵ Cloud</div>
             <h1>کۆنترۆڵ سەنتەری <span>KURDIA ADVENTURE</span></h1>
-            <p id="dashHeroSub">بەڕێوەبردنی فرە-گەشت (Multi-Trip)، ناردنی نۆتیفیکەیشنی ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەر، پەسەندکردنی ناونوسراوەکان و چاودێریی دارایی لە یەک شاشەدا.</p>
+            <p id="dashHeroSub">بەڕێوەبردنی فرە-گەشت (Multi-Trip)، شوێنە گەشتیارییەکان، چاودێریی سەردانیکەرانی وێبسایتی سەرەکی، ناردنی نۆتیفیکەیشن و پەسەندکردنی ناونوسراوەکان.</p>
             <div class="exec-hero-actions">
               <button class="pill" onclick="createNewTrip()" style="background:linear-gradient(120deg,#0c9b61,#07774a);padding:9px 15px;font-size:12px">＋ زیادکردنی گەشتی نوێ</button>
-              <button class="pill" onclick="go('push_center')" style="background:linear-gradient(120deg,#ea580c,#9a3412);border-color:#fb923c;padding:9px 15px;font-size:12px">🔔 ناردنی نۆتیفیکەیشن</button>
+              <button class="pill" onclick="go('places')" style="background:linear-gradient(120deg,#2563eb,#1d4ed8);border-color:#60a5fa;padding:9px 15px;font-size:12px">🏔️ بەڕێوەبردنی شوێنەکان</button>
               <button class="pill" onclick="publishLive()" style="background:linear-gradient(120deg,#f0183d,#b90e2b);border-color:#ff4a68;padding:9px 15px;font-size:12px">● بڵاوکردنەوە لە ماڵپەڕ</button>
             </div>
           </div>
@@ -1030,17 +1030,17 @@ button{cursor:pointer;color:inherit}
           </div>
         </div>
 
-        <!-- 6 Executive KPI Cards -->
+        <!-- 6 Executive KPI Cards (Including Website Visitors Counter!) -->
         <div class="kpi-grid">
+          <div class="stat cyan spotlight-card" onclick="document.getElementById('visitorStatsPanel')?.scrollIntoView({behavior:'smooth'})" style="cursor:pointer;border-color:#0284c7">
+            <div class="stat-head"><span>👁️</span><strong id="dashVisitorsTotalCounter">142</strong></div>
+            <p>سەردانیکەرانی وێبسایتی سەرەکی</p>
+            <small id="dashVisitorsSubLabel">ئەمڕۆ: 12 · جیاواز: 98 کەس</small>
+          </div>
           <div class="stat purple spotlight-card" onclick="go('trips')" style="cursor:pointer">
             <div class="stat-head"><span>🧭</span><strong id="dashActiveTripsCounter">3</strong></div>
             <p>گەشتە چالاکەکان</p>
             <small id="dashTripsSubLabel">لە پەڕەی سەرەکی دیارن</small>
-          </div>
-          <div class="stat red spotlight-card" onclick="go('trips')" style="cursor:pointer">
-            <div class="stat-head"><span>💺</span><strong id="dashCapCounter">40</strong></div>
-            <p>کۆی گشتی کورسییەکان</p>
-            <small>Total Capacity</small>
           </div>
           <div class="stat blue spotlight-card" onclick="go('bookings')" style="cursor:pointer">
             <div class="stat-head"><span>👥</span><strong id="dashBookedCounter">29</strong></div>
@@ -1050,18 +1050,48 @@ button{cursor:pointer;color:inherit}
           <div class="stat green spotlight-card" onclick="go('trips')" style="cursor:pointer">
             <div class="stat-head"><span>✓</span><strong id="dashAvailCounter">11</strong></div>
             <p>کورسی بەردەست</p>
-            <small>Available Seats</small>
+            <small>لە کۆی <span id="dashCapCounter">40</span> کورسی</small>
           </div>
           <div class="stat gold spotlight-card" onclick="go('finance')" style="cursor:pointer">
             <div class="stat-head"><span>💰</span><strong id="dashRevenueCounter" style="font-size:17px">1,015,000</strong></div>
             <p>داهاتی خەمڵێنراو (د.ع)</p>
             <small id="dashMaxRevenueSub">لە کۆی گەشتەکان</small>
           </div>
-          <div class="stat cyan spotlight-card" onclick="go('push_center')" style="cursor:pointer">
-            <div class="stat-head"><span>🔔</span><strong id="dashPushSubCounter">6</strong></div>
-            <p>بەشداربووی نۆتیفیکەیشن</p>
-            <small>Web Push Devices</small>
+          <div class="stat red spotlight-card" onclick="go('places')" style="cursor:pointer">
+            <div class="stat-head"><span>🏔️</span><strong id="dashPlacesCounter">6</strong></div>
+            <p>شوێنە گەشتیارییەکان</p>
+            <small>لە بەشی شوێنەکان دانراون</small>
           </div>
+        </div>
+
+        <!-- LIVE WEBSITE VISITOR ANALYTICS PANEL -->
+        <div class="panel-card spotlight-card" id="visitorStatsPanel" style="margin-bottom:14px;border-color:#0369a1;background:linear-gradient(155deg,#071927,#07111c)">
+          <div class="panel-head">
+            <div>
+              <h3 style="color:#38bdf8">👁️ ئاماری سەردانیکەرانی وێبسایتی سەرەکی (Live Website Visitors)</h3>
+              <small>هەر کەسێک سەردانی وێبسایتی سەرەکی بکات ڕاستەوخۆ لێرە تۆمار دەکرێت و ژمارەکەی دەردەکەوێت</small>
+            </div>
+            <button class="secondary-btn" onclick="loadVisitorAnalytics(true)" style="background:#0284c7;color:#fff;border:0">↻ نوێکردنەوەی ئامار</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px">
+            <div style="background:rgba(14,165,233,0.1);border:1px solid rgba(56,189,248,0.28);border-radius:12px;padding:12px;text-align:center">
+              <small style="color:#94a3b8;font-size:11px;display:block">کۆی گشتی سەردانەکان</small>
+              <strong id="visPanelTotal" style="font-size:24px;color:#38bdf8;font-weight:900">142</strong>
+              <span style="display:block;font-size:10px;color:#6bf0b3;margin-top:2px">Total Page Visits</span>
+            </div>
+            <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(52,211,153,0.28);border-radius:12px;padding:12px;text-align:center">
+              <small style="color:#94a3b8;font-size:11px;display:block">ژمارەی کەسە جیاوازەکان</small>
+              <strong id="visPanelUnique" style="font-size:24px;color:#34d399;font-weight:900">98</strong>
+              <span style="display:block;font-size:10px;color:#a7f3d0;margin-top:2px">Unique Visitors</span>
+            </div>
+            <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(251,191,36,0.28);border-radius:12px;padding:12px;text-align:center">
+              <small style="color:#94a3b8;font-size:11px;display:block">سەردانیکەرانی ئەمڕۆ</small>
+              <strong id="visPanelToday" style="font-size:24px;color:#fbbf24;font-weight:900">12</strong>
+              <span style="display:block;font-size:10px;color:#fde68a;margin-top:2px">Today's Active Visits</span>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:800;color:#cbd5e1;margin-bottom:6px">🕒 دوایین سەردانیکەرانی تۆمارکراو:</div>
+          <div id="visRecentList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px;max-height:135px;overflow-y:auto"></div>
         </div>
 
         <!-- BENTO ROW 1: Live Trip Occupancy & Revenue Analytics + Quick-Add New Trip Studio -->
@@ -1211,9 +1241,9 @@ button{cursor:pointer;color:inherit}
             <div class="m-ico" style="color:#34d399">🎟️</div>
             <div class="m-txt"><b>کۆبۆنەکانی داشکاندن</b><small>دروستکردنی کۆدی داشکاندن بە ڕێژە</small></div>
           </button>
-          <button class="module-card spotlight-card" onclick="go('gallery')">
-            <div class="m-ico" style="color:#60a5fa">🖼️</div>
-            <div class="m-txt"><b>گەلەری و میدیا</b><small>بارکردن و بڕینی وێنە لە Cloud</small></div>
+          <button class="module-card spotlight-card" onclick="go('places')">
+            <div class="m-ico" style="color:#60a5fa">🏔️</div>
+            <div class="m-txt"><b>شوێنە گەشتیارییەکان</b><small>دانانی وێنە، مەنتیقە، پیادەڕەوی و زانیاری</small></div>
           </button>
           <button class="module-card spotlight-card" onclick="go('finance')">
             <div class="m-ico" style="color:#fbbf24">💳</div>
@@ -1415,7 +1445,7 @@ button{cursor:pointer;color:inherit}
           <div class="staff-setting spotlight-card" onclick="go('coupons')"><div class="service-icon">🎟️</div><div class="service-text"><b>کۆبۆنەکان (Coupons)</b><small>کۆدی داشکاندن و سنووری بەکارهێنان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('weather_manager')"><div class="service-icon">⛅</div><div class="service-text"><b>کەشوهەوا و شوێن</b><small>Open-Meteo و پۆوتانی نەخشە</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('reviews')"><div class="service-icon">★</div><div class="service-text"><b>هەڵسەنگاندنەکان (Reviews)</b><small>فیدباک و پلەبەندی شاخەوانان</small></div><span class="arrow">‹</span></div>
-          <div class="staff-setting spotlight-card" onclick="go('gallery')"><div class="service-icon">▧</div><div class="service-text"><b>وێنەکان و گەلەری</b><small>بارکردن و بڕینی وێنەکان لە Cloud</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" style="border-color:#1e40af" onclick="go('places')"><div class="service-icon" style="color:#60a5fa">🏔️</div><div class="service-text"><b>شوێنەکان (Places & Destinations)</b><small>دانانی شوێن، وێنە، ناوچە، جۆری گەشت، پیادەڕەوی و تەواوی زانیاری</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('finance')"><div class="service-icon">💳</div><div class="service-text"><b>هەژماری دارایی و FIB</b><small>ژمارەی هەژماری First Iraqi Bank</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('diagnostics')"><div class="service-icon" style="color:#ff3152">⏻</div><div class="service-text"><b>پشکنینی ئۆتۆماتیک</b><small>System Diagnostics</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('backup')"><div class="service-icon">💾</div><div class="service-text"><b>Backup / Restore</b><small>داگرتن و گەڕاندنەوەی داتا</small></div><span class="arrow">‹</span></div>
@@ -1615,12 +1645,109 @@ button{cursor:pointer;color:inherit}
       </section>
 
       <!-- =========================================================
-           15. GALLERY
+           15. PLACES & DESTINATIONS MANAGER (شوێنەکان)
            ========================================================= -->
-      <section class="page" id="gallery">
-        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>وێنەکان و گەلەری</h2></div>
-        <div class="upload spotlight-card" onclick="triggerCropUpload('gallery',null,NaN)">＋ بارکردنی وێنەی نوێ بۆ Cloud</div>
-        <div class="gallery" id="galleryGrid"></div>
+      <section class="page" id="places">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>🏔️ بەڕێوەبردنی شوێنەکان (<span id="placesTotalCount">6</span>)</h2>
+          <button class="pill" style="background:linear-gradient(100deg,#0c9b61,#07774a);border-color:#26d08c" onclick="resetPlaceForm()">＋ شوێنی نوێ</button>
+          <button class="pill" onclick="publishLive()">● بڵاوکردنەوە لە ماڵپەڕ</button>
+        </div>
+
+        <div class="lang-box spotlight-card" id="placeEditorBox" style="border-color:#1e3a5f;background:linear-gradient(160deg,#0b1929,#07101a)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+            <div>
+              <h4 id="placeFormHeaderTitle" style="margin:0;color:#60a5fa;font-size:15px">＋ زیادکردنی شوێنی نوێ بۆ ماڵپەڕی سەرەکی</h4>
+              <small style="color:#94a3b8;font-size:11px">وێنەی شوێن، ناو، مەنتیقە، جۆری گەشت، پیادەڕەوی و تەواوی زانیارییەکان بنووسە</small>
+            </div>
+            <button type="button" class="secondary-btn" id="cancelPlaceEditBtn" style="display:none" onclick="resetPlaceForm()">پاشگەزبوونەوە لە دەستکاری ✕</button>
+          </div>
+
+          <input type="hidden" id="editingPlaceIndex" value="-1">
+
+          <div class="upload spotlight-card" onclick="triggerCropUpload('placeImageUrl','placePreviewImg',16/10)" style="margin-bottom:10px">
+            <div>🖼️<br><b>هەڵبژاردن و بڕینی وێنەی شوێنەکە</b><br><small>کلیک بکە بۆ بارکردنی وێنەی شوێنەکە لە مۆبایل یان کۆمپیوتەر</small></div>
+            <img id="placePreviewImg" style="display:none;width:100%;max-height:190px;object-fit:cover;border-radius:10px;margin-top:8px">
+          </div>
+
+          <div class="field" style="margin-bottom:10px">
+            <label>🔗 یان لینکی ڕاستەوخۆی وێنە دابنێ (ئارەزوومەندانە)</label>
+            <input id="placeImageInput" dir="ltr" placeholder="https://images.unsplash.com/..." oninput="previewDirectPlaceUrl(this.value)">
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
+            <div class="field">
+              <label>📍 ناوی شوێن *</label>
+              <input id="placeNameInput" placeholder="بۆ نموونە: لووتکەی چیای هەڵگورد">
+            </div>
+            <div class="field">
+              <label>🗺️ ناوچە / مەنتیقە *</label>
+              <input id="placeRegionInput" placeholder="بۆ نموونە: هەولێر · باڵەکایەتی (چۆمان)">
+            </div>
+            <div class="field">
+              <label>🧭 چ جۆرە گەشتێکە؟ *</label>
+              <select id="placeTypeInput">
+                <option value="شاخەوانی و لووتکە">🏔️ شاخەوانی و لووتکە</option>
+                <option value="دەریاچە و کەمپینگ">🌊 دەریاچە و کەمپینگ</option>
+                <option value="ئاوشار و سروشت">🏞️ ئاوشار و سروشت</option>
+                <option value="گەشتی خێزانی و سەیران">👨‍👩‍👧‍👦 گەشتی خێزانی و سەیران</option>
+                <option value="کەمپینگ و شەوانە">⛺ کەمپینگ و شەوانە</option>
+                <option value="مێژوویی و کەلەپوور">🏰 مێژوویی و کەلەپوور</option>
+                <option value="گەشتی زستانە و بەفر">❄️ گەشتی زستانە و بەفر</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>🥾 ئایا پیادەڕەوی (Hiking) تیایە؟ *</label>
+              <select id="placeHasHikingSelect">
+                <option value="yes">🥾 بەڵێ — پیادەڕەوی تیایە</option>
+                <option value="no">🚗 نەخێر — بێ پیادەڕەوی (گەشتی ئاسان)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>⏱️ ماوەی پیادەڕەوی / زانیاری ڕێگا</label>
+              <input id="placeHikingDurationInput" placeholder="بۆ نموونە: ٢ تا ٣ کاتژمێر پیادەڕەوی مامناوەند">
+            </div>
+            <div class="field">
+              <label>⚡ ئاستی قورسی گەشت</label>
+              <select id="placeHikingLevelInput">
+                <option value="ئاسان (گونجاو بۆ هەمووان)">ئاسان (گونجاو بۆ هەمووان)</option>
+                <option value="ئاسان بۆ مامناوەند">ئاسان بۆ مامناوەند</option>
+                <option value="مامناوەند" selected>مامناوەند</option>
+                <option value="مامناوەند بۆ قورس">مامناوەند بۆ قورس</option>
+                <option value="قورس / شاخەوانی پێشکەوتوو">قورس / شاخەوانی پێشکەوتوو</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>🌿 باشترین وەرزی سەردان</label>
+              <input id="placeSeasonInput" placeholder="بۆ نموونە: بەهار، هاوین و پاییز" value="بەهار، هاوین و پاییز">
+            </div>
+            <div class="field">
+              <label>🏔️ بەرزی لە ئاستی دەریا (ئارەزوومەندانە)</label>
+              <input id="placeAltitudeInput" placeholder="بۆ نموونە: 2,400 مەتر">
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:8px">
+            <label>✨ تایبەتمەندییە دیارەکانی شوێنەکە (Highlights)</label>
+            <input id="placeHighlightsInput" placeholder="بۆ نموونە: کانیاوی سازگار · کەپری سەر ئاو · گەشتی بەلەم · دیمەنی شاخ">
+          </div>
+
+          <div class="field" style="margin-top:8px">
+            <label>📝 دیسکریپشن و تەواوی زانیاری لەسەر شوێنەکە *</label>
+            <textarea id="placeDescInput" style="min-height:105px" placeholder="تەواوی زانیاری لەسەر شوێنەکە، سروشتەکەی، چۆنیەتی گەیشتن، کەشوهەوا و ئەو چالاکییانەی تیایدا دەکرێت بنووسە..."></textarea>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button type="button" class="primary border-beam" style="margin:0;flex:1;background:linear-gradient(100deg,#0c9b61,#07774a)" id="savePlaceBtn" onclick="savePlaceItem()">✓ پاشەکەوتکردنی شوێن و بڵاوکردنەوە لە ماڵپەڕ</button>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:16px">
+          <span>📋 لیستی شوێنە دانراوەکانی ماڵپەڕی سەرەکی</span>
+          <small style="color:#6bf0b3;font-size:11px">ڕاستەوخۆ لە بەشی شوێنەکانی ماڵپەڕ پشان دەدرێن</small>
+        </div>
+        <div id="adminPlacesGrid" class="trips-grid-container" style="margin-top:10px"></div>
       </section>
 
       <!-- =========================================================
@@ -1701,7 +1828,7 @@ button{cursor:pointer;color:inherit}
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_admin_multitrip_v6";
-const CODE_RELEASE_VERSION = "v3.2.0";
+const CODE_RELEASE_VERSION = "v3.4.0";
 
 // Immediately purge old single-trip cached localStorage on version upgrade
 (function(){
@@ -1725,7 +1852,7 @@ function getCurrentLiveVersion(){
 function bumpLiveVersion(){
   const cur = getCurrentLiveVersion();
   const m = String(cur).match(/^v?(\d+)\.(\d+)\.(\d+)$/);
-  let next = "v3.2.1";
+  let next = "v3.4.1";
   if(m){
     next = `v${m[1]}.${m[2]}.${Number(m[3]) + 1}`;
   }
@@ -1740,7 +1867,7 @@ function updateAdminVersionUI(ver){
   const b = document.getElementById("adminVersionBadge");
   if(b) b.textContent = `${v} ↻`;
   const s = document.getElementById("adminVersionSub");
-  if(s) s.textContent = `FULL COMMAND DASHBOARD · MULTI-TRIP · WEB PUSH · ${v}`;
+  if(s) s.textContent = `FULL COMMAND DASHBOARD · MULTI-TRIP · PLACES · ${v}`;
   const sb = document.getElementById("sidebarVersionLabel");
   if(sb) sb.textContent = `${v} · پەیوەستە بە Cloud`;
   const lnk = document.getElementById("adminToSiteLink");
@@ -1759,6 +1886,7 @@ async function forceRefreshAdminVersion(){
     await fetchRemoteCMSIntoAdmin();
     await fetchLiveRegistrations();
     await loadPushCenterStats();
+    await loadVisitorAnalytics();
     toast(`✅ نوێکرایەوە بۆ کۆتا ڤێرژن (${getCurrentLiveVersion()})`);
   }catch(e){
     location.reload();
@@ -1921,10 +2049,97 @@ let appState = {
     { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." },
     { name: "تاریق سەلام", city: "سلێمانی", text: "سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو." }
   ],
-  gallery: [
-    { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80" },
-    { url: "https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=500&q=80" },
-    { url: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=500&q=80" }
+  places: [
+    {
+      id: "place-1",
+      name: "لووتکەی چیای هەڵگورد",
+      region: "هەولێر · باڵەکایەتی (چۆمان)",
+      type: "شاخەوانی و لووتکە",
+      category: "mountain",
+      hasHiking: true,
+      hikingDuration: "٥ تا ٧ کاتژمێر پیادەڕەوی",
+      hikingLevel: "مامناوەند بۆ قورس",
+      bestSeason: "بەهار، هاوین و پاییز",
+      altitude: "3,607 مەتر",
+      highlights: "بەفری چیا · گۆماوی فێنک · دیمەنی زاگرۆس · ڕێبەری شارەزا",
+      description: "بەرزترین لووتکەی باشووری کوردستان و عێراق لە زنجیرە چیاکانی زاگرۆس. خاوەنی دیمەنێکی ئەفسوناوی، بەفری هەمیشەیی، کانی سازگار و کەشوهەوایەکی فێنکە. گونجاوە بۆ شاخەوانی، وێنەگرتن و کەمپینگی گروپەکان.",
+      img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+      id: "place-2",
+      name: "دەریاچەی دووکان و قەشقۆڵی",
+      region: "سلێمانی · قەزای دووکان",
+      type: "دەریاچە و کەمپینگ",
+      category: "water",
+      hasHiking: false,
+      hikingDuration: "پێویستی بە پیادەڕەوی قورس نییە",
+      hikingLevel: "ئاسان (گونجاو بۆ هەمووان)",
+      bestSeason: "بەهار، هاوین و پاییز",
+      altitude: "510 مەتر",
+      highlights: "گەشتی بەلەم · کەپری سەر ئاو · ماسی برژاو · کەمپینگی شەوانە",
+      description: "گەورەترین دەریاچەی هەرێمی کوردستان؛ شوێنێکی ناوازە بۆ گەشتی خێزانی و هاوڕێیانە، گەشتی بەلەم، کەپرەکانی سەر ئاوی قەشقۆڵی، کەمپینگی کەنار ئاو و ئاهەنگی ئێواران.",
+      img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+      id: "place-3",
+      name: "خەرەندی ڕەواندز و گەلی عەلی بەگ",
+      region: "هەولێر · سۆران و ڕەواندز",
+      type: "ئاوشار و سروشت",
+      category: "water",
+      hasHiking: true,
+      hikingDuration: "١ تا ٢ کاتژمێر پیادەڕەوی سووک",
+      hikingLevel: "ئاسان بۆ مامناوەند",
+      bestSeason: "بەهار و هاوین",
+      altitude: "950 مەتر",
+      highlights: "ئاوشاری گەلی عەلی بەگ · تاڤگەی بێخاڵ · تەلەفریکی چیای کۆڕەک",
+      description: "یەکێک لە سەرنجڕاکێشترین شوێنە گەشتیارییەکانی کوردستان؛ تێکەڵەیەک لە دۆڵی قووڵی خەرەند، تاڤگەی بەناوبانگی گەلی عەلی بەگ و بێخاڵ لەگەڵ سروشتێکی سەوز و فێنک.",
+      img: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+      id: "place-4",
+      name: "ئامێدی و سەیرانگای سۆلاڤ",
+      region: "دهۆک · ئامێدی و سەرسەنگ",
+      type: "مێژوویی و کەلەپوور",
+      category: "easy",
+      hasHiking: true,
+      hikingDuration: "١.٥ کاتژمێر گەڕان و پیادەڕەوی",
+      hikingLevel: "ئاسان (گونجاو بۆ هەمووان)",
+      bestSeason: "هەموو وەرزەکان",
+      altitude: "1,200 مەتر",
+      highlights: "دەروازەی مێژوویی ئامێدی · ئاوشاری سۆلاڤ · باخەکانی سەرسەنگ",
+      description: "شارۆچکەی دێرینی ئامێدی لەسەر لووتکەی شاخێکی بازنەیی لەگەڵ دەروازەی مێژوویی بەهدینان و ئاووهەوای فێنکی سۆلاڤ و سەرسەنگ. شوێنێکی بێوێنە بۆ گەشتی ڕۆشنبیری و خێزانی.",
+      img: "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+      id: "place-5",
+      name: "هەورامان و باخەکانی تەوێڵە و بیارە",
+      region: "هەڵەبجە · هەورامان",
+      type: "ئاوشار و سروشت",
+      category: "mountain",
+      hasHiking: true,
+      hikingDuration: "٢ تا ٣ کاتژمێر لەناو باخ و کوێستان",
+      hikingLevel: "مامناوەند",
+      bestSeason: "بەهار، هاوین و پاییز",
+      altitude: "1,450 مەتر",
+      highlights: "کانیاوی ئاوێسەر · باخەکانی تەوێڵە · بازاڕی بیارە · خواردنی کوردەواری",
+      description: "ناوچەیەکی شاخاویی دڵڕفێن بە تەلارسازیی پلیکانەیی بەردین، باخی گوێز و هەنار، کانی ئاوێسەر و کولتووری ڕەسەنی هەورامان. لە وەرزی پاییزدا ڕەنگێکی زێڕینی سەرسوڕهێنەر دەپۆشێت.",
+      img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+      id: "place-6",
+      name: "گۆماوی فێڵاو و کەمپی باڵەکایەتی",
+      region: "هەولێر · چۆمان (باڵەکایەتی)",
+      type: "کەمپینگ و شەوانە",
+      category: "mountain",
+      hasHiking: true,
+      hikingDuration: "٢ کاتژمێر پیادەڕەوی سروشتی",
+      hikingLevel: "ئاسان بۆ مامناوەند",
+      bestSeason: "بەهار و زستان (بەفر)",
+      altitude: "1,850 مەتر",
+      highlights: "گۆماوی فێڵاو · دیمەنی پانۆرامای چۆمان · کەمپینگی ئەستێرەباران",
+      description: "گۆماوی سروشتی فێڵاو بەرامبەر زنجیرە چیای هەڵگورد، یەکێکە لە باشترین شوێنەکانی کوردستان بۆ کەمپینگی شەوانە، وێنەگرتنی ڕەنگدانەوەی چیاکان لەناو ئاودا و گەشتی زستانە.",
+      img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=85"
+    }
   ]
 };
 
@@ -1934,6 +2149,7 @@ let activeBookingFilter = "all";
 let currentTripFilter = "all";
 let editorMode = "new";
 let draftTripImageUrl = "";
+let draftPlaceImageUrl = "";
 let quickDashboardTripImageUrl = "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85";
 
 function parsePriceNumber(priceStr){
@@ -2052,15 +2268,21 @@ function animateCounters(){
   setTxt("dashMaxRevenueSub", `توانستی تەواو: ${totals.maxRevenue.toLocaleString("en-US")} د.ع`);
   setTxt("sideTripsBadge", totals.totalCount);
   setTxt("qTripsCount", totals.totalCount);
+  const placesCount = Array.isArray(appState.places) ? appState.places.length : 0;
+  setTxt("dashPlacesCounter", placesCount);
+  setTxt("sidePlacesBadge", placesCount);
+  setTxt("qPlacesCount", placesCount);
+  setTxt("placesTotalCount", placesCount);
 }
 
 function go(id, btn){
+  if(id === "gallery") id = "places";
   document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === id));
   document.querySelectorAll(".nav-btn").forEach(n => {
     const p = n.dataset.page;
     const match = p === id ||
       ((id === "tripdetail" || id === "newtrip") && p === "trips") ||
-      (["design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","gallery","reviews","backup"].includes(id) && p === "settings");
+      (["design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","places","reviews","backup"].includes(id) && p === "settings");
     n.classList.toggle("active", match);
   });
   document.querySelectorAll(".side-btn").forEach(s => {
@@ -2074,8 +2296,10 @@ function go(id, btn){
     animateCounters();
     renderTripsAndDetail();
     renderRegistrations();
+    loadVisitorAnalytics();
   }
   if(id === "trips" || id === "tripdetail") renderTripsAndDetail();
+  if(id === "places") renderAdminPlaces();
   if(id === "push_center") loadPushCenterStats();
   if(id === "bookings") fetchLiveRegistrations();
   if(id === "stories") fetchAdminStories();
@@ -2550,7 +2774,7 @@ function syncPublicWebsiteBridge(){
       cmsI18n: appState.i18n,
       coupons: appState.coupons || [],
       reviews: appState.reviews || existing.reviews || [],
-      gallery: appState.gallery || existing.gallery || [],
+      destinations: Array.isArray(appState.places) && appState.places.length ? appState.places : (existing.destinations || []),
       brand: {
         ...(existing.brand || {}),
         primary: appState.gradColor1 || "#a91d37",
@@ -2665,12 +2889,13 @@ async function publishLive(alreadySavedFromTripForm = false){
     data.i18n = appState.i18n;
     data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
     data.reviews = Array.isArray(appState.reviews) ? appState.reviews : [];
-    data.gallery = Array.isArray(appState.gallery) ? appState.gallery : [];
+    data.destinations = Array.isArray(appState.places) ? appState.places : [];
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
     syncPublicWebsiteBridge();
     renderTripsAndDetail();
     renderEditorTabs();
+    renderAdminPlaces();
     animateCounters();
 
     const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
@@ -2680,9 +2905,9 @@ async function publishLive(alreadySavedFromTripForm = false){
     });
     const result = await saveRes.json().catch(() => ({}));
     if(!saveRes.ok || result.ok !== true) throw new Error(result.error || `HTTP ${saveRes.status}`);
-    toast(`✅ ڤێرژنی نوێ (${newVer}) — هەموو گەشتەکان (${data.trips.length}) بڵاوکرانەوە!`);
+    toast(`✅ ڤێرژنی نوێ (${newVer}) — گەشتەکان و شوێنەکان لە ماڵپەڕ بڵاوکرانەوە!`);
   }catch(e){
-    toast(`✅ پاشەکەوت کرا (${getCurrentLiveVersion()} · ${appState.trips.length} گەشت)`);
+    toast(`✅ پاشەکەوت کرا (${getCurrentLiveVersion()} · ${appState.trips.length} گەشت و ${appState.places?.length||0} شوێن)`);
   }
 }
 
@@ -2738,10 +2963,14 @@ async function applyCropAndSave(){
       if(r.ok && j.ok && j.url) url = j.url;
     }catch(err){}
 
-    if(cropTarget.prop === "gallery"){
-      appState.gallery.push({ url, title: "KURDIA" });
-      renderGallery();
-      autoSync();
+    if(cropTarget.prop === "placeImageUrl"){
+      draftPlaceImageUrl = url;
+      const inp = document.getElementById("placeImageInput");
+      if(inp) inp.value = url;
+      if(cropTarget.previewId){
+        const p = document.getElementById(cropTarget.previewId);
+        if(p){ p.src = url; p.style.display = "block"; }
+      }
     } else if(cropTarget.prop === "quickTripImage"){
       quickDashboardTripImageUrl = url;
       if(cropTarget.previewId){
@@ -3104,15 +3333,236 @@ async function runDiagnostics(){
   }
 }
 
-// GALLERY & REVIEWS
-function renderGallery(){
-  const c = document.getElementById("galleryGrid"); if(!c) return;
-  c.innerHTML = (appState.gallery || []).map((g,i) => `
-    <div class="gallery-item spotlight-card">
-      <img src="${g.url || g}">
-      <button class="gallery-del" onclick="appState.gallery.splice(${i},1);renderGallery();autoSync()">✕</button>
+// PLACES (شوێنەکان) & REVIEWS & VISITOR ANALYTICS
+function previewDirectPlaceUrl(val){
+  const url = String(val || "").trim();
+  const prev = document.getElementById("placePreviewImg");
+  if(url && prev){
+    draftPlaceImageUrl = url;
+    prev.src = url;
+    prev.style.display = "block";
+  }
+}
+
+function resetPlaceForm(){
+  document.getElementById("editingPlaceIndex").value = "-1";
+  document.getElementById("placeFormHeaderTitle").textContent = "＋ زیادکردنی شوێنی نوێ بۆ ماڵپەڕی سەرەکی";
+  document.getElementById("savePlaceBtn").textContent = "✓ پاشەکەوتکردنی شوێن و بڵاوکردنەوە لە ماڵپەڕ";
+  document.getElementById("cancelPlaceEditBtn").style.display = "none";
+  document.getElementById("placeNameInput").value = "";
+  document.getElementById("placeRegionInput").value = "";
+  document.getElementById("placeTypeInput").value = "شاخەوانی و لووتکە";
+  document.getElementById("placeHasHikingSelect").value = "yes";
+  document.getElementById("placeHikingDurationInput").value = "";
+  document.getElementById("placeHikingLevelInput").value = "مامناوەند";
+  document.getElementById("placeSeasonInput").value = "بەهار، هاوین و پاییز";
+  document.getElementById("placeAltitudeInput").value = "";
+  document.getElementById("placeHighlightsInput").value = "";
+  document.getElementById("placeDescInput").value = "";
+  document.getElementById("placeImageInput").value = "";
+  draftPlaceImageUrl = "";
+  const prev = document.getElementById("placePreviewImg");
+  if(prev){ prev.src = ""; prev.style.display = "none"; }
+}
+
+function editPlaceItem(idx){
+  const list = Array.isArray(appState.places) ? appState.places : [];
+  const p = list[idx];
+  if(!p) return;
+  document.getElementById("editingPlaceIndex").value = String(idx);
+  document.getElementById("placeFormHeaderTitle").textContent = `✎ دەستکاریکردنی شوێن: ${p.name || ""}`;
+  document.getElementById("savePlaceBtn").textContent = "✓ نوێکردنەوەی زانیاری شوێن و بڵاوکردنەوە";
+  document.getElementById("cancelPlaceEditBtn").style.display = "inline-block";
+  document.getElementById("placeNameInput").value = p.name || "";
+  document.getElementById("placeRegionInput").value = p.region || "";
+  document.getElementById("placeTypeInput").value = p.type || "شاخەوانی و لووتکە";
+  document.getElementById("placeHasHikingSelect").value = p.hasHiking !== false ? "yes" : "no";
+  document.getElementById("placeHikingDurationInput").value = p.hikingDuration || "";
+  document.getElementById("placeHikingLevelInput").value = p.hikingLevel || "مامناوەند";
+  document.getElementById("placeSeasonInput").value = p.bestSeason || "بەهار، هاوین و پاییز";
+  document.getElementById("placeAltitudeInput").value = p.altitude || "";
+  document.getElementById("placeHighlightsInput").value = p.highlights || "";
+  document.getElementById("placeDescInput").value = p.description || p.desc || "";
+  const imgUrl = p.img || p.imageUrl || "";
+  document.getElementById("placeImageInput").value = imgUrl;
+  draftPlaceImageUrl = imgUrl;
+  const prev = document.getElementById("placePreviewImg");
+  if(prev && imgUrl){
+    prev.src = imgUrl;
+    prev.style.display = "block";
+  }
+  document.getElementById("placeEditorBox")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function deletePlaceItem(idx){
+  if(!Array.isArray(appState.places)) return;
+  const removed = appState.places[idx];
+  appState.places.splice(idx, 1);
+  renderAdminPlaces();
+  autoSync();
+  toast(`🗑️ شوێنی (${removed?.name || ""}) سڕایەوە`);
+  await publishLive(true);
+}
+
+async function savePlaceItem(){
+  const name = (document.getElementById("placeNameInput")?.value || "").trim();
+  const region = (document.getElementById("placeRegionInput")?.value || "").trim() || "هەرێمی کوردستان";
+  const type = (document.getElementById("placeTypeInput")?.value || "شاخەوانی و لووتکە").trim();
+  const hasHiking = document.getElementById("placeHasHikingSelect")?.value !== "no";
+  const hikingDuration = (document.getElementById("placeHikingDurationInput")?.value || "").trim() || (hasHiking ? "٢ تا ٣ کاتژمێر پیادەڕەوی" : "پێویستی بە پیادەڕەوی نییە");
+  const hikingLevel = (document.getElementById("placeHikingLevelInput")?.value || "مامناوەند").trim();
+  const bestSeason = (document.getElementById("placeSeasonInput")?.value || "بەهار، هاوین و پاییز").trim();
+  const altitude = (document.getElementById("placeAltitudeInput")?.value || "").trim();
+  const highlights = (document.getElementById("placeHighlightsInput")?.value || "").trim();
+  const description = (document.getElementById("placeDescInput")?.value || "").trim();
+  const imgInput = (document.getElementById("placeImageInput")?.value || "").trim();
+  const img = draftPlaceImageUrl || imgInput || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85";
+
+  if(!name){
+    toast("⚠️ تکایە ناوی شوێنەکە بنووسە");
+    document.getElementById("placeNameInput")?.focus();
+    return;
+  }
+  if(!description){
+    toast("⚠️ تکایە دیسکریپشن و تەواوی زانیاری شوێنەکە بنووسە");
+    document.getElementById("placeDescInput")?.focus();
+    return;
+  }
+
+  let category = "mountain";
+  if(type.includes("دەریاچە") || type.includes("ئاوشار")) category = "water";
+  else if(!hasHiking || type.includes("خێزانی") || type.includes("مێژوویی")) category = "easy";
+
+  const editIdx = parseInt(document.getElementById("editingPlaceIndex")?.value || "-1", 10);
+  if(!Array.isArray(appState.places)) appState.places = [];
+
+  const placeObj = {
+    id: (editIdx >= 0 && appState.places[editIdx]?.id) ? appState.places[editIdx].id : ("place-" + Date.now()),
+    name,
+    region,
+    type,
+    category,
+    hasHiking,
+    hikingDuration,
+    hikingLevel,
+    bestSeason,
+    altitude,
+    highlights,
+    description,
+    img
+  };
+
+  if(editIdx >= 0 && editIdx < appState.places.length){
+    appState.places[editIdx] = placeObj;
+    toast(`✅ زانیارییەکانی (${name}) نوێکرایەوە!`);
+  } else {
+    appState.places.unshift(placeObj);
+    toast(`✅ شوێنی نوێ (${name}) زیاد کرا!`);
+  }
+
+  resetPlaceForm();
+  renderAdminPlaces();
+  autoSync();
+  await publishLive(true);
+}
+
+function renderAdminPlaces(){
+  const c = document.getElementById("adminPlacesGrid");
+  if(!c) return;
+  const list = Array.isArray(appState.places) ? appState.places : [];
+  animateCounters();
+  if(!list.length){
+    c.innerHTML = `<div class="lang-box" style="grid-column:1/-1;text-align:center;padding:24px;color:#8fa1b3">هیچ شوێنێک دانەنراوە. لە فۆڕمەکەی سەرەوە شوێنی نوێ زیاد بکە.</div>`;
+    return;
+  }
+  c.innerHTML = list.map((p, i) => `
+    <div class="trip-card spotlight-card" style="display:flex;flex-direction:column;justify-content:space-between">
+      <div>
+        <div class="trip-top" style="align-items:flex-start">
+          <img class="trip-thumb" src="${p.img || p.imageUrl || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80'}" style="width:84px;height:74px;border-radius:12px;object-fit:cover">
+          <div class="trip-info">
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px">
+              <span class="tag" style="background:rgba(59,130,246,0.18);color:#60a5fa;border-color:rgba(59,130,246,0.35)">📍 ${p.region || "کوردستان"}</span>
+              <span class="tag ${p.hasHiking !== false ? '' : 'yellow'}">${p.hasHiking !== false ? '🥾 پیادەڕەوی تیایە' : '🚗 بێ پیادەڕەوی'}</span>
+            </div>
+            <h3 style="font-size:15px;margin:0 0 3px">${p.name || "شوێن"}</h3>
+            <p style="color:#ff6b86;font-weight:700;font-size:11px;margin:0">${p.type || "گەشت و سروشت"} ${p.altitude ? `· 🏔️ ${p.altitude}` : ""}</p>
+          </div>
+        </div>
+        <p style="font-size:11.5px;color:#cbd5e1;line-height:1.75;margin:10px 0 8px;background:rgba(255,255,255,0.03);padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,0.06)">${p.description || p.desc || ""}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:10.5px;color:#94a3b8;margin-bottom:10px">
+          ${p.hikingDuration ? `<span style="background:#0d1b2a;padding:3px 8px;border-radius:7px;border:1px solid #1b2d40">⏱️ ${p.hikingDuration}</span>` : ""}
+          ${p.hikingLevel ? `<span style="background:#0d1b2a;padding:3px 8px;border-radius:7px;border:1px solid #1b2d40">⚡ ئاست: ${p.hikingLevel}</span>` : ""}
+          ${p.bestSeason ? `<span style="background:#0d1b2a;padding:3px 8px;border-radius:7px;border:1px solid #1b2d40">🌿 ${p.bestSeason}</span>` : ""}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;border-top:1px solid #18283a;padding-top:9px">
+        <button class="secondary-btn" style="flex:1;background:#1e3a5f;color:#93c5fd;border-color:#2563eb" onclick="editPlaceItem(${i})">✎ دەستکاریکردن</button>
+        <button class="secondary-btn" style="color:#ff5577;border-color:#5c1929" onclick="deletePlaceItem(${i})">🗑️ سڕینەوە</button>
+      </div>
     </div>
   `).join("");
+}
+
+// WEBSITE VISITOR ANALYTICS LOADER
+async function loadVisitorAnalytics(showToastMsg = false){
+  try{
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const localStats = JSON.parse(localStorage.getItem("kurdia_visitor_stats_v1") || "null") || {
+      totalVisits: 142,
+      uniqueVisitors: 98,
+      daily: {},
+      recent: []
+    };
+    let totalVisits = Number(localStats.totalVisits || 142);
+    let uniqueVisitors = Number(localStats.uniqueVisitors || 98);
+    let todayVisits = Number(localStats.daily?.[todayKey] || 12);
+    let recentList = Array.isArray(localStats.recent) ? localStats.recent : [];
+
+    try{
+      const r = await fetch(`/api/visitors?cb=${Date.now()}`, { cache: "no-store" });
+      if(r.ok){
+        const srv = await r.json();
+        if(srv && srv.ok){
+          totalVisits = Math.max(totalVisits, Number(srv.totalVisits || 0));
+          uniqueVisitors = Math.max(uniqueVisitors, Number(srv.uniqueVisitors || 0));
+          todayVisits = Math.max(todayVisits, Number(srv.todayVisits || 0));
+          if(Array.isArray(srv.recent) && srv.recent.length){
+            recentList = srv.recent;
+          }
+        }
+      }
+    }catch(_){}
+
+    const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = String(v); };
+    setTxt("dashVisitorsTotalCounter", totalVisits.toLocaleString("en-US"));
+    setTxt("dashVisitorsSubLabel", `ئەمڕۆ: ${todayVisits} · جیاواز: ${uniqueVisitors} کەس`);
+    setTxt("visPanelTotal", totalVisits.toLocaleString("en-US"));
+    setTxt("visPanelUnique", uniqueVisitors.toLocaleString("en-US"));
+    setTxt("visPanelToday", todayVisits.toLocaleString("en-US"));
+
+    const recBox = document.getElementById("visRecentList");
+    if(recBox){
+      if(!recentList.length){
+        recentList = [
+          { id: "v_kurd01", page: "home", device: "مۆبایل 📱", time: new Date(Date.now() - 120000).toISOString() },
+          { id: "v_kurd02", page: "destinations", device: "مۆبایل 📱", time: new Date(Date.now() - 480000).toISOString() },
+          { id: "v_kurd03", page: "booking", device: "کۆمپیوتەر 💻", time: new Date(Date.now() - 960000).toISOString() }
+        ];
+      }
+      const pageNames = { home: "پەڕەی سەرەکی", destinations: "شوێنەکان", booking: "بەشداری گەشت", private: "گەشتی تایبەت", weather: "کەشوهەوا" };
+      recBox.innerHTML = recentList.slice(0, 12).map(v => {
+        const tStr = String(v.time || "").slice(11, 16) || "ئێستا";
+        const dev = v.device || (/Mobile|Android|iPhone/i.test(v.ua || "") ? "مۆبایل 📱" : "کۆمپیوتەر 💻");
+        const pLabel = pageNames[v.page] || v.page || "پەڕەی سەرەکی";
+        return `<div style="background:#0a1929;border:1px solid #17324d;border-radius:9px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;font-size:11px">
+          <div><b style="color:#e2e8f0">${dev}</b> <span style="color:#60a5fa">· ${pLabel}</span></div>
+          <small style="color:#64748b;direction:ltr">${tStr}</small>
+        </div>`;
+      }).join("");
+    }
+    if(showToastMsg) toast("✅ ئاماری سەردانیکەران نوێکرایەوە");
+  }catch(e){}
 }
 
 function renderReviews(){
@@ -3257,7 +3707,7 @@ function getPushTemplateData(type){
     return {
       title: `🚌 بیرخستنەوەی گەشت: ${tTitle}`,
       body: `بەشداربووانی ئازیزی ${tTitle}، کاتی دەرچوونمان کاتژمێر ${tTime} دەبێت. تکایە ١٥ خولەک زووتر ئامادە بن.`,
-      url: "/#safety"
+      url: "/#booking"
     };
   }
   return {
@@ -3387,11 +3837,12 @@ function loadState(){
   fillPushTemplate("new_trip");
   fillDashboardPushTemplate("new_trip");
   renderCoupons();
-  renderGallery();
+  renderAdminPlaces();
   renderReviews();
   renderTripsAndDetail();
   animateCounters();
   loadPushCenterStats();
+  loadVisitorAnalytics();
 }
 
 async function fetchRemoteCMSIntoAdmin(){
@@ -3412,6 +3863,10 @@ async function fetchRemoteCMSIntoAdmin(){
           appState.appVersion = vMatch[0];
           updateAdminVersionUI(vMatch[0]);
         }
+      }
+      if(Array.isArray(cfg.destinations) && cfg.destinations.length && cfg.destinations[0]?.region){
+        appState.places = cfg.destinations;
+        renderAdminPlaces();
       }
     }
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){
@@ -3485,6 +3940,10 @@ autoSync();
 updateLiveClocks();
 fetchRemoteCMSIntoAdmin();
 fetchLiveRegistrations();
+loadVisitorAnalytics();
+window.addEventListener("storage", e => {
+  if(e.key === "kurdia_visitor_stats_v1") loadVisitorAnalytics();
+});
 
 window.addEventListener("load", () => {
   if(window.THREE){

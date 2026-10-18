@@ -7,9 +7,9 @@
 <meta property="og:description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
 <title>KURDIA ADVENTURE</title>
 <script>
-// Auto cache buster: upgrade stale cached versions (such as v2.7.0) immediately
+// Auto cache buster: upgrade stale cached versions immediately
 (function(){
-  var V = 'v3.2.0';
+  var V = 'v3.4.0';
   try {
     var stored = localStorage.getItem('kurdia_app_ver');
     if (stored !== V) {
@@ -672,13 +672,13 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div class="app">
 <header class="top">
   <div class="container topin">
-    <button class="iconbtn" onclick="goBackHome()"><i data-lucide="chevron-right"></i></button>
-    <div style="display:flex;align-items:center;gap:8px">
+    <button class="iconbtn" onclick="goBackHome()" aria-label="گەڕانەوە"><i data-lucide="chevron-right"></i></button>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;min-width:0">
       <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
-      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.16);border:1px solid rgba(55,201,135,0.55);color:#6bf0b3;font-size:10px;font-weight:900;padding:3px 8px;border-radius:999px;direction:ltr;letter-spacing:.4px">v3.2.0 ↻</span>
+      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.16);border:1px solid rgba(55,201,135,0.55);color:#6bf0b3;font-size:10px;font-weight:900;padding:3px 8px;border-radius:999px;direction:ltr;letter-spacing:.4px;flex-shrink:0">v3.4.0 ↻</span>
     </div>
-    <button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()"><i data-lucide="music"></i></button>
-    <button class="iconbtn" onclick="openSearch()"><i data-lucide="search"></i></button>
+    <button id="musicToggleBtn" class="iconbtn" onclick="toggleMusic()" aria-label="مۆسیقا"><i data-lucide="music"></i></button>
+    <button class="iconbtn" onclick="openSearch()" aria-label="گەڕان"><i data-lucide="search"></i></button>
   </div>
 </header>
 <main>
@@ -724,8 +724,15 @@ main,section,.section,.page-section{background-color:transparent!important}
     </section>
 
     <section class="section">
-      <div class="sectionhead"><div><h2>شوێنەکان</h2><p>شوێنێک هەڵبژێرە و دەست بە گەشت بکە</p></div><a class="link" href="#destinations">هەموو</a></div>
-      <div id="homeDests" class="destgrid"></div>
+      <div class="sectionhead">
+        <div>
+          <div class="eyebrow">DISCOVER KURDISTAN</div>
+          <h2>شوێنەکان</h2>
+          <p>جوانترین شوێنە گەشتیاری و شاخەوانییەکانی کوردستان بە تەواوی زانیارییەوە</p>
+        </div>
+        <a class="link" href="#destinations">بینینی هەموو ←</a>
+      </div>
+      <div id="homeDests" class="places-grid"></div>
     </section>
 
     <!-- LIVE HOMEPAGE WEATHER SECTION -->
@@ -746,7 +753,7 @@ main,section,.section,.page-section{background-color:transparent!important}
               <span id="homeWeatherLoc">هەولێر · پایتەختی کوردستان</span>
             </span>
             <div style="display:flex;align-items:baseline;gap:14px;margin:8px 0 4px;flex-wrap:wrap">
-              <span id="homeWeatherTemp" style="font-size:46px;font-weight:900;line-height:1;color:#fff">--°C</span>
+              <span id="homeWeatherTemp" style="font-size:42px;font-weight:900;line-height:1;color:#fff">--°C</span>
               <span id="homeWeatherCond" style="font-size:14px;font-weight:700;color:#94a3b8">لە بارکردندایە...</span>
             </div>
             <div id="homeWeatherAdv" style="font-size:12px;color:#6bf0b3;margin-top:6px;font-weight:600">
@@ -754,8 +761,8 @@ main,section,.section,.page-section{background-color:transparent!important}
             </div>
           </div>
           <div style="text-align:left;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-            <div id="homeWeatherIcon" style="font-size:48px;line-height:1">🌤️</div>
-            <span class="btn ghost" style="padding:6px 14px;font-size:11px;border-radius:999px">کردنەوەی نەخشە و پێشبینی ٧ ڕۆژ ←</span>
+            <div id="homeWeatherIcon" style="font-size:44px;line-height:1">🌤️</div>
+            <span class="btn ghost" style="padding:7px 14px;font-size:11px;border-radius:12px">کردنەوەی نەخشە و پێشبینی ٧ ڕۆژ ←</span>
           </div>
         </div>
       </div>
@@ -769,11 +776,25 @@ main,section,.section,.page-section{background-color:transparent!important}
     </section>
 
     <section class="section">
-      <div class="privateHero">
-        <div class="eyebrow">PRIVATE EXPERIENCE</div>
-        <h2>گەشتەکەت خۆت دیاری بکە.</h2>
-        <p>شوێن، بەروار، ژمارەی کەس و شێوازی گەشت دیاری بکە؛ ئێمە بۆت ڕێکی دەخەین.</p>
-        <button class="btn red" onclick="go('private')">داواکاری گەشتی تایبەت</button>
+      <div class="private-vip-showcase" onclick="go('private')">
+        <div class="private-vip-glow"></div>
+        <div class="private-vip-content">
+          <div class="private-vip-top">
+            <span class="private-vip-kicker">👑 VIP PRIVATE EXPEDITIONS</span>
+            <span class="private-vip-tag">تایبەت بە خێزان و گروپەکان</span>
+          </div>
+          <h2>گەشتی تایبەت بە دڵی خۆت ڕێکبخە</h2>
+          <p>شوێن، بەروار، ژمارەی کەس و شێوازی گەشتەکەت دیاری بکە؛ تیمی KURDIA هەموو وردەکارییەکان لە گواستنەوە، مانەوە، ڕێبەر و وێنەگرتن بۆ تۆ و هاوڕێکانت یان خێزانەکەت ئامادە دەکات.</p>
+          <div class="private-vip-features">
+            <span>🚌 پاس و ئۆتۆمبێلی تایبەت</span>
+            <span>🏕️ کەمپ و کەپری تایبەت</span>
+            <span>🧭 ڕێبەری شارەزا و فۆتۆگرافەر</span>
+          </div>
+          <div class="private-vip-actions">
+            <button type="button" class="btn red" onclick="event.stopPropagation();go('private')">داواکاری گەشتی تایبەت ←</button>
+            <button type="button" class="btn ghost" onclick="event.stopPropagation();inquirePrivateWhatsApp()">💬 ڕاوێژکاری لە وەتسئەپ</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1013,27 +1034,159 @@ main,section,.section,.page-section{background-color:transparent!important}
 <section id="booking" class="page">
   <div class="container">
     <section class="section">
-      <div class="eyebrow">بەشداری لە گەشت</div><h2>بەشداری گەشت</h2><p class="muted">گەشتی هەفتەییەکان ببینە و شوێنت بگرە.</p>
-      <div id="tripList" class="articleList"></div>
-      <div class="glass" style="margin-top:12px">
-        <h3>تۆمارکردن</h3>
+      <div class="booking-hero-banner">
+        <div>
+          <div class="eyebrow">EXPEDITION REGISTRATION · بەشداری لە گەشت</div>
+          <h2>بەشداری گەشت و حیجزکردنی کورسی</h2>
+          <p class="muted">گەشتی دڵخوازت لە خوارەوە هەڵبژێرە و بە ٣ هەنگاوی خێرا ناوی خۆت و هاوڕێکانت تۆمار بکە.</p>
+        </div>
+        <div class="booking-trust-badges">
+          <span>✓ پشتڕاستکردنەوەی خێرا</span>
+          <span>🚌 پاسی گەشتیاری VIP</span>
+          <span>🧭 ڕێبەری شارەزا</span>
+        </div>
+      </div>
+
+      <div class="booking-section-label">
+        <span>١. گەشتی دڵخوازت هەڵبژێرە</span>
+        <small id="bookingAvailableTripsCount">گەشتە بەردەستەکان</small>
+      </div>
+      <div id="tripList" class="booking-trips-cards-grid"></div>
+
+      <div class="booking-form-card" id="bookingFormCardWrap">
+        <div class="booking-form-card-head">
+          <div>
+            <span class="booking-form-kicker">٢. فۆڕمی تۆمارکردنی بەشداربوو</span>
+            <h3>تۆمارکردنی ناو و زانیاری</h3>
+          </div>
+          <div class="booking-selected-summary" id="bookingSelectedSummaryBox">
+            <small>گەشتی هەڵبژێردراو</small>
+            <b id="bookingSelectedTripName">گەشتی داهاتوو</b>
+            <span id="bookingSelectedTripMeta">—</span>
+          </div>
+        </div>
+
         <form class="form booking-wizard" id="bookingForm" novalidate onsubmit="submitBooking(event)">
-          <div class="booking-progress" aria-label="هەنگاوەکانی تۆمارکردن"><span class="booking-progress-line"><i id="bookingProgressFill"></i></span><div class="booking-step-dot active" data-step-dot="1"><b>١</b><small>زانیاری</small></div><div class="booking-step-dot" data-step-dot="2"><b>٢</b><small>مۆبایل</small></div><div class="booking-step-dot" data-step-dot="3"><b>٣</b><small>تەواوکردن</small></div></div>
-          <div class="booking-step-panel active" data-booking-step="1"><div class="booking-step-title"><span>هەنگاوی ١ لە ٣</span><h4>زانیارییە سەرەتاییەکان</h4><p>ناوت بنووسە و گەشت و ژمارەی بەشداربووان هەڵبژێرە.</p></div>
-            <label class="booking-label" for="bookingName">ناوی تەواو</label><input class="input" id="bookingName" name="name" placeholder="ناوی تەواو" autocomplete="name" required>
-            <label class="booking-label" for="bookingTrip">گەشت هەڵبژێرە</label><select class="select" name="trip" id="bookingTrip" required></select>
-            <label class="booking-label" for="bookingPeople">ژمارەی بەشداربووان</label><input class="input" id="bookingPeople" name="people" type="number" min="1" value="1" placeholder="ژمارەی کەس" onchange="handlePeopleCount(this.value)" required>
-            <div id="extraNamesContainer" class="extra-names"></div><button type="button" class="btn red wizard-next" onclick="bookingNext(1)">بەردەوامبوون ←</button>
+          <div class="booking-progress" aria-label="هەنگاوەکانی تۆمارکردن">
+            <span class="booking-progress-line"><i id="bookingProgressFill"></i></span>
+            <div class="booking-step-dot active" data-step-dot="1" onclick="bookingGo(1)" style="cursor:pointer"><b>١</b><small>زانیاری</small></div>
+            <div class="booking-step-dot" data-step-dot="2"><b>٢</b><small>مۆبایل</small></div>
+            <div class="booking-step-dot" data-step-dot="3"><b>٣</b><small>تەواوکردن</small></div>
           </div>
-          <div class="booking-step-panel" data-booking-step="2" hidden><div class="booking-step-title"><span>هەنگاوی ٢ لە ٣</span><h4>پشتڕاستکردنەوەی ژمارەی مۆبایل</h4><p>کۆدی پشتڕاستکردنەوە بۆ ژمارەی WhatsApp ـت دەنێرین.</p></div>
-            <label class="booking-label" for="bookingPhone">ژمارەی WhatsApp</label><div class="otp-row"><input class="input" id="bookingPhone" name="phone" inputmode="tel" autocomplete="tel" placeholder="ژمارەی WhatsApp" required><button type="button" class="btn ghost otp-btn" id="sendOtpBtn" onclick="sendBookingOTP()">ناردنی OTP</button></div>
-            <div id="otpBox" class="otp-box" style="display:none"><div class="otp-head"><b>پشتڕاستکردنەوەی ژمارە</b><span id="otpStatus" class="muted">کۆدەکە بۆ WhatsApp ـت نێردراوە</span></div><div class="otp-slots" dir="ltr" aria-label="کۆدی چوار ژمارەیی"><input class="otp-slot" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="ژمارەی یەکەم"><input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی دووەم"><input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی سێیەم"><input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی چوارەم"></div><input type="hidden" id="bookingOtp" value=""><button type="button" class="btn green" onclick="verifyBookingOTP()">پشتڕاستکردنەوەی ژمارە ✓</button></div>
-            <input type="hidden" name="otp_verified" id="otpVerified" value="0"><div class="wizard-actions"><button type="button" class="btn ghost" onclick="bookingGo(1)">→ گەڕانەوە</button><button type="button" class="btn red" onclick="bookingNext(2)">بەردەوامبوون ←</button></div>
+
+          <div class="booking-step-panel active" data-booking-step="1">
+            <div class="booking-step-title">
+              <span>هەنگاوی ١ لە ٣</span>
+              <h4>زانیارییە سەرەتاییەکان</h4>
+              <p>ناوی تەواوت بنووسە و گەشت و ژمارەی بەشداربووان دیاری بکە.</p>
+            </div>
+            <div class="booking-field-grid">
+              <div>
+                <label class="booking-label" for="bookingName">👤 ناوی سیانی / تەواو *</label>
+                <input class="input" id="bookingName" name="name" placeholder="بۆ نموونە: ئارام محەمەد ئەحمەد" autocomplete="name" required>
+              </div>
+              <div>
+                <label class="booking-label" for="bookingTrip">🧭 گەشتی هەڵبژێردراو *</label>
+                <select class="select" name="trip" id="bookingTrip" onchange="syncSelectedTripBanner()" required></select>
+              </div>
+            </div>
+
+            <div class="booking-people-row">
+              <div>
+                <label class="booking-label" for="bookingPeople" style="margin:0">👥 ژمارەی بەشداربووان</label>
+                <small style="display:block;font-size:11px;color:var(--muted);margin-top:2px">ژمارەی خۆت و ئەو کەسانەی لەگەڵتن</small>
+              </div>
+              <div class="people-stepper">
+                <button type="button" class="stepper-btn" onclick="stepBookingPeople(-1)" aria-label="کەمکردنەوە">−</button>
+                <input class="input" id="bookingPeople" name="people" type="number" min="1" max="25" value="1" onchange="handlePeopleCount(this.value)" required>
+                <button type="button" class="stepper-btn" onclick="stepBookingPeople(1)" aria-label="زیادکردن">＋</button>
+              </div>
+            </div>
+
+            <div id="extraNamesContainer" class="extra-names"></div>
+
+            <div class="booking-live-total" id="bookingLivePriceBar">
+              <span>کۆی نرخی بەشداری:</span>
+              <strong id="bookingCalculatedTotal">—</strong>
+            </div>
+
+            <button type="button" class="btn red wizard-next" onclick="bookingNext(1)">بەردەوامبوون بۆ هەنگاوی دووەم ←</button>
           </div>
-          <div class="booking-step-panel" data-booking-step="3" hidden><div class="booking-step-title"><span>هەنگاوی ٣ لە ٣</span><h4>داواکارییەکەت تەواو بکە</h4><p>ئەگەر کۆدی داشکاندنت هەیە بیخەرە ناوەوە و پسوڵەی پارەدان باربکە.</p></div>
-            <div class="glass coupon-box" style="padding:14px;margin:4px 0 8px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px"><b>🎟️ کۆدی داشکاندن</b><span class="muted" style="font-size:10px">ئارەزوومەندانە</span></div><div class="coupon-row"><input class="input" id="couponInput" name="coupon" placeholder="نموونە: KURDIA10" autocomplete="off"><button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button></div><div id="couponStatus" class="coupon-status"></div><input type="hidden" name="coupon_code" id="appliedCouponCode" value=""><input type="hidden" name="coupon_discount" id="appliedCouponDiscount" value="0"></div>
-            <div class="receipt-box"><b>پسوڵەی پارەدان</b><small>وێنەی پسوڵەکەت هەڵبژێرە بۆ ئەوەی لەگەڵ داواکارییەکەت بنێردرێت.</small><input class="input" id="receiptInput" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required><div id="receiptPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div></div>
-            <textarea class="textarea" name="note" placeholder="تێبینی (ئارەزوومەندانە)..."></textarea><div class="wizard-actions"><button type="button" class="btn ghost" onclick="bookingGo(2)">→ گەڕانەوە</button><button class="btn red" id="bookingSubmitBtn">ناردنی داواکاری</button></div>
+
+          <div class="booking-step-panel" data-booking-step="2" hidden>
+            <div class="booking-step-title">
+              <span>هەنگاوی ٢ لە ٣</span>
+              <h4>پشتڕاستکردنەوەی ژمارەی WhatsApp</h4>
+              <p>کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.</p>
+            </div>
+            <label class="booking-label" for="bookingPhone">📱 ژمارەی مۆبایل (WhatsApp) *</label>
+            <div class="otp-row">
+              <input class="input" id="bookingPhone" name="phone" inputmode="tel" autocomplete="tel" placeholder="0750 000 0000" required>
+              <button type="button" class="btn red otp-btn" id="sendOtpBtn" onclick="sendBookingOTP()">ناردنی کۆدی OTP</button>
+            </div>
+            <div id="otpBox" class="otp-box" style="display:none">
+              <div class="otp-head">
+                <b>پشتڕاستکردنەوەی کۆد</b>
+                <span id="otpStatus" class="muted">کۆدەکە بۆ WhatsApp ـت نێردراوە</span>
+              </div>
+              <div class="otp-slots" dir="ltr" aria-label="کۆدی چوار ژمارەیی">
+                <input class="otp-slot" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="ژمارەی یەکەم">
+                <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی دووەم">
+                <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی سێیەم">
+                <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی چوارەم">
+              </div>
+              <input type="hidden" id="bookingOtp" value="">
+              <button type="button" class="btn green" onclick="verifyBookingOTP()">پشتڕاستکردنەوەی ژمارە ✓</button>
+            </div>
+            <input type="hidden" name="otp_verified" id="otpVerified" value="0">
+            <div class="wizard-actions">
+              <button type="button" class="btn ghost" onclick="bookingGo(1)">→ گەڕانەوە</button>
+              <button type="button" class="btn red" onclick="bookingNext(2)">بەردەوامبوون ←</button>
+            </div>
+          </div>
+
+          <div class="booking-step-panel" data-booking-step="3" hidden>
+            <div class="booking-step-title">
+              <span>هەنگاوی ٣ لە ٣</span>
+              <h4>پارەدان و تەواوکردنی ناونووسین</h4>
+              <p>بڕی بەشداری بنێرە بۆ هەژماری FIB و وێنەی پسوڵەکە باربکە.</p>
+            </div>
+
+            <div class="fib-payment-card">
+              <div class="fib-payment-left">
+                <span class="fib-badge">💳 هەژماری فەرمی پارەدان (FIB)</span>
+                <strong id="publicFibNumberDisplay" dir="ltr">0750 313 0360</strong>
+                <small>تکایە وێنەی شاشەی پسوڵەی ناردنی پارەکە لە خوارەوە دابنێ</small>
+              </div>
+              <button type="button" class="btn ghost fib-copy-btn" onclick="copyFibAccount()">📋 کۆپیکردنی ژمارە</button>
+            </div>
+
+            <div class="glass coupon-box" style="padding:14px;margin:4px 0 8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">
+                <b>🎟️ کۆدی داشکاندن</b>
+                <span class="muted" style="font-size:10px">ئارەزوومەندانە</span>
+              </div>
+              <div class="coupon-row">
+                <input class="input" id="couponInput" name="coupon" placeholder="نموونە: KURDIA10" autocomplete="off">
+                <button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button>
+              </div>
+              <div id="couponStatus" class="coupon-status"></div>
+              <input type="hidden" name="coupon_code" id="appliedCouponCode" value="">
+              <input type="hidden" name="coupon_discount" id="appliedCouponDiscount" value="0">
+            </div>
+
+            <div class="receipt-box">
+              <b>📸 وێنەی پسوڵەی پارەدان *</b>
+              <small>وێنەی پسوڵەی FIB هەڵبژێرە بۆ ئەوەی داواکارییەکەت دەستبەجێ پەسەند بکرێت.</small>
+              <input class="input" id="receiptInput" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required>
+              <div id="receiptPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div>
+            </div>
+
+            <textarea class="textarea" name="note" placeholder="تێبینی یان داواکاری تایبەت (ئارەزوومەندانە)..."></textarea>
+            <div class="wizard-actions">
+              <button type="button" class="btn ghost" onclick="bookingGo(2)">→ گەڕانەوە</button>
+              <button class="btn red" id="bookingSubmitBtn">✓ ناردنی داواکاری و تەواوکردن</button>
+            </div>
           </div>
         </form>
       </div>
@@ -1045,64 +1198,160 @@ main,section,.section,.page-section{background-color:transparent!important}
 <section id="private" class="page">
   <div class="container">
     <section class="section">
-      <div class="eyebrow">گەشتی تایبەت</div><h2>گەشتی تایبەت</h2><p class="muted">گەشتەکەت خۆت دیاری بکە، ئێمە بۆت ڕێکی دەخەین.</p>
-      <div class="glass">
-        <form class="form private-trip-wizard" id="privateTripForm" onsubmit="submitPrivate(event)">
-          <div class="private-wizard-progress" aria-label="هەنگاوەکانی داواکاری گەشتی تایبەت"><span class="active" data-private-progress="1"></span><span data-private-progress="2"></span><span data-private-progress="3"></span></div>
-          <div class="private-wizard-heading"><b id="privateWizardTitle">هەنگاوی ١: زانیاریی کەسی</b><small id="privateWizardCount">١ لە ٣</small></div>
-          <div class="private-wizard-panel" data-private-step="1">
-          <input class="input" name="name" placeholder="ناوی تەواو *" autocomplete="name" required>
-          <input class="input" name="phone" type="tel" inputmode="tel" placeholder="ژمارەی WhatsApp *" autocomplete="tel" required>
+      <div class="private-page-hero">
+        <div class="eyebrow">BESPOKE & PRIVATE EXPEDITIONS · گەشتی تایبەت</div>
+        <h2>داواکاری گەشتی تایبەت (VIP & گروپ)</h2>
+        <p class="muted">کات، شوێن و شێوازی گەشتەکەت بە دڵی خۆت دیاری بکە؛ تیمی KURDIA پلانی تەواو بۆ تۆ، خێزانەکەت یان هاوڕێکانت ڕێکدەخات.</p>
 
-          <div class="private-wizard-actions"><button type="button" class="btn red" onclick="privateTripNext(2)">بەردەوامبوون ←</button></div>
+        <!-- Quick Package Presets -->
+        <div class="private-presets-bar">
+          <button type="button" class="private-preset-card active" data-preset-type="Family" onclick="selectPrivatePreset('Family','گەشتی خێزانی تایبەت',6,this)">
+            <span class="pp-ico">👨‍👩‍👧‍👦</span>
+            <div class="pp-text"><b>گەشتی خێزانی</b><small>ئارام و خۆشگوزەران</small></div>
+          </button>
+          <button type="button" class="private-preset-card" data-preset-type="Hiking" onclick="selectPrivatePreset('Hiking','شاخەوانی و لووتکە',8,this)">
+            <span class="pp-ico">🏔️</span>
+            <div class="pp-text"><b>شاخەوانی گروپ</b><small>سەرکێشی و ڕێبەری شارەزا</small></div>
+          </button>
+          <button type="button" class="private-preset-card" data-preset-type="Camping" onclick="selectPrivatePreset('Camping','کەمپینگی شەوانە VIP',5,this)">
+            <span class="pp-ico">⛺</span>
+            <div class="pp-text"><b>کەمپینگی شەوانە</b><small>خێمە و ئاگردان لە سروشت</small></div>
+          </button>
+          <button type="button" class="private-preset-card" data-preset-type="Nature" onclick="selectPrivatePreset('Nature','گەشتی سروشت و ئاوشار',4,this)">
+            <span class="pp-ico">🌿</span>
+            <div class="pp-text"><b>سروشت و وێنەگرتن</b><small>شوێنە دڵڕفێنەکانی کوردستان</small></div>
+          </button>
+        </div>
+      </div>
+
+      <div class="private-trip-card">
+        <form class="form private-trip-wizard" id="privateTripForm" onsubmit="submitPrivate(event)">
+          <div class="private-wizard-steps-nav">
+            <button type="button" class="pw-step-pill active" data-private-progress="1" onclick="privateTripGo(1)">
+              <span class="pw-num">١</span>
+              <span>زانیاری کەسی</span>
+            </button>
+            <button type="button" class="pw-step-pill" data-private-progress="2" onclick="privateTripNext(2)">
+              <span class="pw-num">٢</span>
+              <span>شوێن و جۆری گەشت</span>
+            </button>
+            <button type="button" class="pw-step-pill" data-private-progress="3" onclick="privateTripNext(3)">
+              <span class="pw-num">٣</span>
+              <span>خزمەتگوزاری و ناردن</span>
+            </button>
           </div>
-          <div class="private-wizard-panel" data-private-step="2" hidden>
-          <div class="glass" style="padding:14px; margin-bottom:8px;">
-            <b>شوێنی دڵخوازتان *</b>
-            <div class="searchbar" style="margin-top:10px">
-              <input class="input" name="destination" placeholder="ناوی شوێن بنووسە..." required>
+
+          <div class="private-wizard-heading">
+            <b id="privateWizardTitle">هەنگاوی ١: زانیاریی کەسی و پەیوەندی</b>
+            <small id="privateWizardCount">١ لە ٣</small>
+          </div>
+
+          <div class="private-wizard-panel" data-private-step="1">
+            <div class="private-field-group">
+              <label class="booking-label">👤 ناوی تەواو *</label>
+              <input class="input" name="name" placeholder="ناوی خۆت یان سەرپەرشتیاری گروپ بنووسە..." autocomplete="name" required>
+            </div>
+            <div class="private-field-group">
+              <label class="booking-label">📱 ژمارەی مۆبایل (WhatsApp) *</label>
+              <input class="input" name="phone" type="tel" inputmode="tel" placeholder="0750 000 0000" autocomplete="tel" required>
+            </div>
+            <div class="private-perks-strip">
+              <div><span>🛡️</span><small>سەلامەتی و ڕێکخستنی تەواو</small></div>
+              <div><span>⏱️</span><small>وەڵامدانەوە لە کەمتر لە ١ کاتژمێر</small></div>
+              <div><span>✨</span><small>بەرنامەی تایبەت بە بودجەی خۆت</small></div>
+            </div>
+            <div class="private-wizard-actions">
+              <button type="button" class="btn red" onclick="privateTripNext(2)">بەردەوامبوون بۆ هەڵبژاردنی شوێن ←</button>
             </div>
           </div>
 
-          <div class="private-date-card">
-            <label for="privateDate">📅 بەرواری گەشت *</label>
-            <input class="input" name="date" id="privateDate" type="date" required>
-          </div>
-          
-          <div style="display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:5px 14px;">
-            <label style="flex:1;font-size:12px;">ژمارەی کەسان *</label>
-            <input class="input" name="people" type="number" min="1" value="1" style="width:70px;background:transparent;border:0;text-align:center;">
+          <div class="private-wizard-panel" data-private-step="2" hidden>
+            <div class="private-dest-box">
+              <label class="booking-label">📍 شوێنی دڵخوازتان بۆ گەشت *</label>
+              <input class="input" id="privateDestInput" name="destination" placeholder="ناوی شوێن یان ناوچە بنووسە (نموونە: هەڵگورد، دووکان، ئامێدی...)" required>
+              <div class="private-quick-dests">
+                <button type="button" onclick="setPrivateDestination('چیای هەڵگورد · باڵەکایەتی')">🏔️ هەڵگورد</button>
+                <button type="button" onclick="setPrivateDestination('دەریاچەی دووکان')">🌊 دووکان</button>
+                <button type="button" onclick="setPrivateDestination('ڕەواندز و گەلی عەلی بەگ')">🏞️ ڕەواندز</button>
+                <button type="button" onclick="setPrivateDestination('ئامێدی و سەرسەنگ')">🦅 ئامێدی</button>
+                <button type="button" onclick="setPrivateDestination('هەورامان و تەوێڵە')">🌸 هەورامان</button>
+                <button type="button" onclick="setPrivateDestination('ئاکرێ و گەلی زنتا')">🌿 ئاکرێ</button>
+              </div>
+            </div>
+
+            <div class="booking-field-grid">
+              <div class="private-date-card">
+                <label for="privateDate">📅 بەرواری پێشنیارکراوی گەشت *</label>
+                <input class="input" name="date" id="privateDate" type="date" required>
+              </div>
+              <div class="private-date-card" style="display:flex;flex-direction:column;justify-content:space-between">
+                <label>👥 ژمارەی بەشداربووان *</label>
+                <div class="people-stepper" style="width:100%;justify-content:space-between">
+                  <button type="button" class="stepper-btn" onclick="stepPrivatePeople(-1)">−</button>
+                  <input class="input" id="privatePeopleInput" name="people" type="number" min="1" max="100" value="4" style="text-align:center;border:0;background:transparent;font-size:16px;font-weight:900">
+                  <button type="button" class="stepper-btn" onclick="stepPrivatePeople(1)">＋</button>
+                </div>
+              </div>
+            </div>
+
+            <label class="booking-label" style="margin-top:6px;display:block">🧭 شێواز و جۆری گەشت هەڵبژێرە *</label>
+            <div class="type-grid">
+              <label class="type-btn"><input type="radio" name="type" value="Hiking" checked><i data-lucide="mountain"></i><span>شاخەوانی</span><small>لووتکە و پیادەڕەوی</small></label>
+              <label class="type-btn"><input type="radio" name="type" value="Camping"><i data-lucide="tent"></i><span>کەمپینگ</span><small>مانەوەی شەوانە</small></label>
+              <label class="type-btn"><input type="radio" name="type" value="Nature"><i data-lucide="leaf"></i><span>گەشتی سروشت</span><small>دیمەن و ئارامی</small></label>
+              <label class="type-btn"><input type="radio" name="type" value="Road Trip"><i data-lucide="car"></i><span>گەشتی ڕێگا</span><small>گەڕانی چەند ناوچەیەک</small></label>
+              <label class="type-btn"><input type="radio" name="type" value="Family"><i data-lucide="users"></i><span>گەشتی خێزانی</span><small>تایبەت بە خێزان</small></label>
+              <label class="type-btn"><input type="radio" name="type" value="Other"><i data-lucide="sparkles"></i><span>VIP تایبەت</span><small>بەپێی داواکاری</small></label>
+            </div>
+
+            <div class="private-wizard-actions">
+              <button type="button" class="btn ghost" onclick="privateTripGo(1)">→ گەڕانەوە</button>
+              <button type="button" class="btn red" onclick="privateTripNext(3)">بەردەوامبوون ←</button>
+            </div>
           </div>
 
-          <label style="font-size:12px;margin-top:10px;display:block;">جۆری گەشت *</label>
-          <div class="type-grid">
-            <label class="type-btn"><input type="radio" name="type" value="Hiking" checked><i data-lucide="mountain"></i> شاخەوانی</label>
-            <label class="type-btn"><input type="radio" name="type" value="Camping"><i data-lucide="tent"></i> کەمپینگ</label>
-            <label class="type-btn"><input type="radio" name="type" value="Nature"><i data-lucide="leaf"></i> سروشت</label>
-            <label class="type-btn"><input type="radio" name="type" value="Road Trip"><i data-lucide="car"></i> گەشتی ڕێگا</label>
-            <label class="type-btn"><input type="radio" name="type" value="Family"><i data-lucide="users"></i> گەشتی خێزانی</label>
-            <label class="type-btn"><input type="radio" name="type" value="Other"><i data-lucide="more-horizontal"></i> هی تر</label>
-          </div>
-
-          <div class="private-wizard-actions"><button type="button" class="btn ghost" onclick="privateTripGo(1)">→ گەڕانەوە</button><button type="button" class="btn red" onclick="privateTripNext(3)">بەردەوامبوون ←</button></div>
-          </div>
           <div class="private-wizard-panel" data-private-step="3" hidden>
-          <label class="toggle-row">گواستنەوە پێویستە؟ <input type="checkbox" name="transport" class="switch"></label>
-          <label class="toggle-row">هۆتێل / کەمپ؟ <input type="checkbox" name="stay" class="switch"></label>
-          <label class="toggle-row">ڕێبەر / فۆتۆگرافەر؟ <input type="checkbox" name="guide" class="switch"></label>
+            <label class="booking-label">✨ چ خزمەتگوزارییەکتان پێویستە؟</label>
+            <div class="private-services-grid">
+              <label class="toggle-row">
+                <div class="toggle-info"><b>🚌 گواستنەوەی تایبەت</b><small>پاس یان ئۆتۆمبێلی چوارپاڵەوانی تایبەت</small></div>
+                <input type="checkbox" name="transport" class="switch" checked>
+              </label>
+              <label class="toggle-row">
+                <div class="toggle-info"><b>🏕️ هۆتێل / کەپر و کەمپ</b><small>ئامادەکردنی شوێنی مانەوە و خێمە</small></div>
+                <input type="checkbox" name="stay" class="switch">
+              </label>
+              <label class="toggle-row">
+                <div class="toggle-info"><b>📸 ڕێبەر و فۆتۆگرافەر</b><small>ڕێبەری شارەزای ناوچەکە و وێنەگرتنی پڕۆفیشناڵ</small></div>
+                <input type="checkbox" name="guide" class="switch" checked>
+              </label>
+            </div>
 
-          <input class="input" name="budget" placeholder="بودجەی نزیکەیی (دینار)">
-          <textarea class="textarea" name="special" placeholder="داواکاری تایبەت (پێداویستی، خواردن...)"></textarea>
-          
-          <div class="glass" style="padding:14px;display:none;">
-            <b>شوێنی وردی گەشت</b><div id="privateMap" class="mapbox" style="margin-top:10px"></div>
-            <div class="maphint">شوێنی گەشت لەسەر نەخشە دیاری بکە. ئەمە دەبێتە ناونیشانی وردی داواکارییەکەت.</div>
-            <div class="coords"><input class="input" id="privateLat" name="latitude" placeholder="Latitude" readonly><input class="input" id="privateLng" name="longitude" placeholder="Longitude" readonly></div>
-            <div class="maphint" id="privatePlaceHint">هێشتا شوێنێک دیاری نەکراوە.</div>
-          </div>
-          
-          <div class="private-submit-note">🔒 داواکارییەکەت بۆ تیمی KURDIA دەنێردرێت و بەپێی زانیارییەکەت پەیوەندیت پێوە دەکەین.</div>
-          <div class="private-wizard-actions"><button type="button" class="btn ghost" onclick="privateTripGo(2)">→ گەڕانەوە</button><button type="submit" class="btn red"><i data-lucide="send" style="width:16px;height:16px;display:inline-block;margin-left:5px;vertical-align:middle;"></i> ناردنی داواکاری</button></div>
+            <div class="booking-field-grid" style="margin-top:4px">
+              <div>
+                <label class="booking-label">💰 بودجەی نزیکەیی (ئارەزوومەندانە)</label>
+                <input class="input" name="budget" placeholder="بۆ نموونە: 250,000 دینار">
+              </div>
+              <div>
+                <label class="booking-label">🍽️ ژەمە خواردن و پێداویستی</label>
+                <input class="input" name="meals" placeholder="بۆ نموونە: نانی بەیانی و نیوەڕۆ">
+              </div>
+            </div>
+
+            <label class="booking-label">📝 تێبینی و داواکاری تایبەت</label>
+            <textarea class="textarea" name="special" placeholder="هەر داواکارییەکی تایبەتت هەیە لێرە بنووسە..."></textarea>
+
+            <div class="glass" style="padding:14px;display:none;">
+              <b>شوێنی وردی گەشت</b><div id="privateMap" class="mapbox" style="margin-top:10px"></div>
+              <div class="coords"><input class="input" id="privateLat" name="latitude" placeholder="Latitude" readonly><input class="input" id="privateLng" name="longitude" placeholder="Longitude" readonly></div>
+              <div class="maphint" id="privatePlaceHint">هێشتا شوێنێک دیاری نەکراوە.</div>
+            </div>
+
+            <div class="private-submit-note">🔒 داواکارییەکەت ڕاستەوخۆ دەگاتە بەڕێوەبەرایەتی KURDIA ADVENTURE و لە ڕێگەی WhatsApp پەیوەندیت پێوە دەکەین.</div>
+            <div class="private-wizard-actions">
+              <button type="button" class="btn ghost" onclick="privateTripGo(2)">→ گەڕانەوە</button>
+              <button type="submit" class="btn red"><i data-lucide="send" style="width:16px;height:16px;display:inline-block;margin-left:5px;vertical-align:middle;"></i> ناردنی داواکاری گەشتی تایبەت</button>
+            </div>
           </div>
         </form>
       </div>
@@ -1110,12 +1359,29 @@ main,section,.section,.page-section{background-color:transparent!important}
   </div>
 </section>
 
-<section id="safety" class="page"><div class="container"><section class="section"><div class="eyebrow">سەلامەتی</div><h2>سەلامەتی گەشت</h2><p class="muted">زانیارییە هەمیشەییەکان بۆ گەشتێکی ئاگادارانە.</p><div id="safetyList" class="safety-grid"></div></section></div></section>
-<section id="prep" class="page"><div class="container"><section class="section"><div class="eyebrow">ئامادەکاری</div><h2>ئامادەکاری گەشت</h2><p class="muted">Check-list ـی خۆت بەپێی جۆری گەشت هەڵبژێرە.</p><div class="grid2" id="prepTypes"></div><div id="prepChecklist" class="check" style="margin-top:14px"></div></section></div></section>
-<section id="destinations" class="page"><div class="container"><section class="section"><div class="eyebrow">شوێنەکان</div><h2>شوێنەکان</h2><p class="muted">دەریاچە، ئاوشار، شاخ، دارستان، مێژوو و ڕێگاکان.</p><div id="destList" class="destgrid"></div></section></div></section>
+<section id="destinations" class="page">
+  <div class="container">
+    <section class="section">
+      <div class="sectionhead">
+        <div>
+          <div class="eyebrow">KURDISTAN DESTINATIONS · شوێنەکان</div>
+          <h2>شوێنە گەشتیاری و شاخەوانییەکان</h2>
+          <p class="muted">ناوچەکان، جۆری گەشت، زانیاری پیادەڕەوی و تەواوی وردەکارییەکانی هەر شوێنێک ببینە.</p>
+        </div>
+      </div>
+      <div class="places-filter-bar" id="placesFilterBar">
+        <button type="button" class="pf-chip active" onclick="filterPlaces('all',this)">هەموو شوێنەکان</button>
+        <button type="button" class="pf-chip" onclick="filterPlaces('hiking',this)">🥾 پیادەڕەوی تیایە</button>
+        <button type="button" class="pf-chip" onclick="filterPlaces('easy',this)">🚗 گەشتی ئاسان / خێزانی</button>
+        <button type="button" class="pf-chip" onclick="filterPlaces('mountain',this)">🏔️ شاخ و لووتکە</button>
+        <button type="button" class="pf-chip" onclick="filterPlaces('water',this)">🌊 دەریاچە و ئاوشار</button>
+      </div>
+      <div id="destList" class="places-grid"></div>
+    </section>
+  </div>
+</section>
 <section id="stories" class="page"><div class="container"><section class="section"><div class="eyebrow">ستۆری</div><h2>ستۆرییەکان</h2><p class="muted">ئەزموونی بەشداربووان و هاوڕێکانی KURDIA.</p><div id="storyGrid" class="grid2"></div></section></div></section>
 
-<section id="gallery" class="page"><div class="container"><section class="section"><div class="eyebrow">گەلەری</div><h2>گەلەری</h2><p class="muted">وێنە و یادەوەرییەکانی گەشتەکانی KURDIA ADVENTURE.</p><div id="galleryList" class="public-gallery"></div></section></div></section>
 <section id="reviews" class="page"><div class="container"><section class="section">
   <div class="eyebrow">بیروڕا</div><h2>بیروڕا و هەڵسەنگاندن</h2><p class="muted">ئەزموونەکەت لەگەڵ KURDIA بنووسە و هەڵسەنگاندنەکەت دابنێ.</p>
   <div class="review-write glass">
@@ -1135,31 +1401,53 @@ main,section,.section,.page-section{background-color:transparent!important}
   <div id="reviewsListPublic" class="reviews-public-grid" style="margin-top:14px"></div>
 </section></div></section>
 <section id="about" class="page"><div class="container"><section class="section"><div class="about"><img id="aboutImagePublic" src="" alt="KURDIA ADVENTURE"><div><div class="eyebrow">KURDIA ADVENTURE</div><h2 id="aboutTitlePublic"></h2><p id="aboutTextPublic" class="muted" style="line-height:2"></p><div id="aboutStatsPublic" class="stats"></div></div></div></section></div></section>
-<section id="contact" class="page"><div class="container"><section class="section"><div class="eyebrow">CONTACT</div><h2>پەیوەندی</h2><div class="articleList"><a id="contactWhatsAppPublic" class="article" href="#"><div class="articleIcon"><i data-lucide="message-circle"></i></div><div><b>WhatsApp</b><small></small></div></a><a id="contactPhonePublic" class="article" href="#"><div class="articleIcon"><i data-lucide="phone"></i></div><div><b>تەلەفۆن</b><small></small></div></a><div class="article"><div class="articleIcon"><i data-lucide="map-pin"></i></div><div><b id="contactCity">هەولێر — کوردستان</b><small>شوێنی کار</small></div></div><div class="article"><div class="articleIcon"><i data-lucide="mail"></i></div><div><b>Email</b><small id="contactEmailPublic"></small></div></div></div><div class="social-public"><a id="social_instagram" href="#">IG</a><a id="social_tiktok" href="#">TT</a><a id="social_youtube" href="#">YT</a><a id="social_facebook" href="#">FB</a><a id="social_telegram" href="#">TG</a></div></section></div></section></div></section>
+<section id="contact" class="page"><div class="container"><section class="section"><div class="eyebrow">CONTACT</div><h2>پەیوەندی</h2><div class="articleList"><a id="contactWhatsAppPublic" class="article" href="#"><div class="articleIcon"><i data-lucide="message-circle"></i></div><div><b>WhatsApp</b><small></small></div></a><a id="contactPhonePublic" class="article" href="#"><div class="articleIcon"><i data-lucide="phone"></i></div><div><b>تەلەفۆن</b><small></small></div></a><div class="article"><div class="articleIcon"><i data-lucide="map-pin"></i></div><div><b id="contactCity">هەولێر — کوردستان</b><small>شوێنی کار</small></div></div><div class="article"><div class="articleIcon"><i data-lucide="mail"></i></div><div><b>Email</b><small id="contactEmailPublic"></small></div></div></div><div class="social-public"><a id="social_instagram" href="#">IG</a><a id="social_tiktok" href="#">TT</a><a id="social_youtube" href="#">YT</a><a id="social_facebook" href="#">FB</a><a id="social_telegram" href="#">TG</a></div></section></div></section>
 </main>
 </div>
-<button class="ai" onclick="openAI()"><i data-lucide="bot"></i></button>
+<button class="ai" onclick="openAI()" aria-label="یاریدەدەر"><i data-lucide="bot"></i></button>
 
 <!-- Navigation مۆدێرنکراو بە ئایکۆنی Lucide -->
 <nav class="bottom">
-  <a class="navitem active" data-page="home" href="#home"><i data-lucide="home" class="ico"></i>سەرەکی</a>
-  <a class="navitem" data-page="weather" href="#weather"><i data-lucide="cloud-sun" class="ico"></i>کەشوهەوا</a>
-  <a class="navitem navjoin" data-page="booking" href="#booking"><i data-lucide="ticket" class="ico"></i>بەشداری</a>
-  <a class="navitem" data-page="private" href="#private"><i data-lucide="crown" class="ico"></i>تایبەت</a>
+  <a class="navitem active" data-page="home" href="#home"><i data-lucide="home" class="ico"></i><span>سەرەکی</span></a>
+  <a class="navitem" data-page="weather" href="#weather"><i data-lucide="cloud-sun" class="ico"></i><span>کەشوهەوا</span></a>
+  <a class="navitem navjoin" data-page="booking" href="#booking"><i data-lucide="ticket" class="ico"></i><span>بەشداری</span></a>
+  <a class="navitem" data-page="private" href="#private"><i data-lucide="crown" class="ico"></i><span>تایبەت</span></a>
   <a class="navitem" data-page="more" href="#more" onclick="kaOpenMoreMenu();return false"><i data-lucide="menu" class="ico"></i><span>زیاتر</span></a>
 </nav>
 
-<div id="searchModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('searchModal')"><i data-lucide="x"></i></button><h3>گەڕان لە KURDIA</h3><input id="siteSearch" class="input" placeholder="شوێن، گەشت، کەمپینگ..." oninput="filterSearch()"><div id="searchResults" class="articleList" style="margin-top:12px"></div></div></div>
-<div id="aiModal" class="modal"><div class="sheet ai-chat-sheet"><button class="iconbtn close" onclick="closeModal('aiModal')"><i data-lucide="x"></i></button><div class="ai-chat-head"><div class="ai-chat-avatar"><i data-lucide="bot"></i></div><div><h3 style="margin:0">یاریدەدەری KURDIA</h3><small class="muted">هاوڕێی گەشت و ماڵپەڕی KURDIA ADVENTURE</small></div></div><div id="aiMessages" class="ai-messages"><div class="ai-msg bot">سڵاو هاوڕێ 🌿<br>من یاریدەدەری KURDIA ADVENTURE ـم. دەتوانیت هەر پرسیارێک لەسەر گەشت، شاخەوانی، کەمپینگ، شوێنەکان، کەشوهەوا، ئامادەکاری، نرخ، بەشداری و بەکارهێنانی ئەم ماڵپەڕە لێم بکەیت.<br><br>هەروەها ئەگەر دەتەوێت کارێک لە ماڵپەڕەکە ئاسانتر بکەیت، بڵێ بۆت ڕێنمایی دەکەم. 🤍</div></div><div class="ai-quick"><button type="button" onclick="aiQuick('گەشتی ئەم هەفتەیە چییە؟')">گەشتی ئەم هەفتەیە؟</button><button type="button" onclick="aiQuick('چۆن بەشداری گەشت بکەم؟')">چۆن بەشداری بکەم؟</button><button type="button" onclick="aiQuick('KURDIA ADVENTURE چییە؟')">KURDIA چییە؟</button></div><form class="ai-chat-form" onsubmit="askAI(event)"><input id="aiInput" class="input" autocomplete="off" placeholder="سڵاو... پرسیارەکەت بنووسە"><button class="btn red" aria-label="ناردن"><i data-lucide="send"></i></button></form></div></div>
+<div id="searchModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('searchModal')"><i data-lucide="x"></i></button><h3>گەڕان لە KURDIA</h3><input id="siteSearch" class="input" placeholder="شوێن، ناوچە، گەشت..." oninput="filterSearch()"><div id="searchResults" class="articleList" style="margin-top:12px"></div></div></div>
+<div id="aiModal" class="modal"><div class="sheet ai-chat-sheet"><button class="iconbtn close" onclick="closeModal('aiModal')"><i data-lucide="x"></i></button><div class="ai-chat-head"><div class="ai-chat-avatar"><i data-lucide="bot"></i></div><div><h3 style="margin:0">یاریدەدەری KURDIA</h3><small class="muted">هاوڕێی گەشت و ماڵپەڕی KURDIA ADVENTURE</small></div></div><div id="aiMessages" class="ai-messages"><div class="ai-msg bot">سڵاو هاوڕێ 🌿<br>من یاریدەدەری KURDIA ADVENTURE ـم. دەتوانیت هەر پرسیارێک لەسەر گەشت، شاخەوانی، کەمپینگ، شوێنەکان، کەشوهەوا، نرخ و بەشداری لێم بکەیت. 🤍</div></div><div class="ai-quick"><button type="button" onclick="aiQuick('گەشتی ئەم هەفتەیە چییە؟')">گەشتی ئەم هەفتەیە؟</button><button type="button" onclick="aiQuick('چۆن بەشداری گەشت بکەم؟')">چۆن بەشداری بکەم؟</button><button type="button" onclick="aiQuick('چ شوێنێک پیادەڕەوی تیایە؟')">شوێنەکانی پیادەڕەوی؟</button></div><form class="ai-chat-form" onsubmit="askAI(event)"><input id="aiInput" class="input" autocomplete="off" placeholder="سڵاو... پرسیارەکەت بنووسە"><button class="btn red" aria-label="ناردن"><i data-lucide="send"></i></button></form></div></div>
 
-<div id="destinationModal" class="modal"><div class="sheet destination-sheet"><button class="iconbtn close" onclick="closeModal('destinationModal')"><i data-lucide="x"></i></button><img id="destinationModalImage" class="destination-modal-image" src="" alt=""><div class="eyebrow" id="destinationModalType" style="margin-top:14px"></div><h2 id="destinationModalTitle"></h2><p id="destinationModalDescription" class="muted" style="line-height:2;margin-top:8px"></p><button class="btn red" style="width:100%;margin-top:14px" onclick="closeModal('destinationModal');go('private')">داوای گەشت بۆ ئەم شوێنە</button></div></div>
+<div id="destinationModal" class="modal">
+  <div class="sheet destination-sheet">
+    <button class="iconbtn close" onclick="closeModal('destinationModal')"><i data-lucide="x"></i></button>
+    <div class="dest-modal-hero">
+      <img id="destinationModalImage" class="destination-modal-image" src="" alt="">
+      <div class="dest-modal-badges">
+        <span class="dest-modal-region" id="destinationModalRegion">📍 کوردستان</span>
+        <span class="dest-modal-hiking" id="destinationModalHiking">🥾 پیادەڕەوی تیایە</span>
+      </div>
+    </div>
+    <div class="eyebrow" id="destinationModalType" style="margin-top:14px"></div>
+    <h2 id="destinationModalTitle" style="margin:6px 0 10px;font-size:24px"></h2>
+    <div class="dest-modal-specs" id="destinationModalSpecs"></div>
+    <div class="dest-modal-desc-box">
+      <b>📝 دەربارەی شوێنەکە و تەواوی زانیاری:</b>
+      <p id="destinationModalDescription" class="muted" style="line-height:1.95;margin:6px 0 0;white-space:pre-line"></p>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn red" style="flex:1" onclick="requestPrivateTripForPlace()">👑 داواکاری گەشتی تایبەت بۆ ئەم شوێنە</button>
+      <button class="btn ghost" onclick="closeModal('destinationModal');go('booking')">🎟️ گەشتە گشتییەکان</button>
+    </div>
+  </div>
+</div>
 <div id="storyModal" class="story-modal"><div class="story-sheet"><div class="sectionhead"><div><div class="eyebrow">ستۆری</div><h2>ستۆری خۆت بنێرە</h2></div><button class="iconbtn" onclick="closeStoryModal()"><i data-lucide="x"></i></button></div><form class="form" onsubmit="submitStory(event)"><input id="stName" class="input" required placeholder="ناوی تۆ..."><input id="stCity" class="input" placeholder="شار..."><input id="stTrip" class="input" placeholder="ناوی گەشت..."><textarea id="stText" class="textarea" placeholder="چی بەسەر هات؟..."></textarea><input id="stMediaFile" class="input" type="file" accept="image/*" onchange="previewStoryImage(event)" required><input id="stMediaBase64" type="hidden"><div id="storyPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div><button class="btn red" type="submit">ناردنی ستۆری</button></form></div></div>
 <div id="storyViewerModal" class="story-viewer"><div class="story-viewer-card"><div class="story-progress"><i id="storyProgressBar"></i></div><img id="viewerImage"><div class="story-viewer-top"><div id="viewerAvatar" class="story-viewer-avatar">K</div><div class="story-viewer-info"><b id="viewerName">KURDIA</b><small id="viewerTime">کوردیا</small></div><button class="story-viewer-close" onclick="closeStoryViewer()"><i data-lucide="x"></i></button></div><div class="story-viewer-bottom"><div id="viewerText" style="flex:1;font-size:12px;line-height:1.8"></div><button class="story-viewer-like" onclick="likeCurrentStory()"><i data-lucide="heart"></i> <span id="viewerLikes">0</span></button><button class="story-viewer-like" onclick="shareStoryWhatsApp()"><i data-lucide="share-2"></i></button></div></div></div>
 <audio id="bgAudio" loop preload="none"><source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=nature-ambient-21865.mp3" type="audio/mpeg"></audio>
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v3.2.0';
+const SITE_CODE_RELEASE='v3.4.0';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -1211,18 +1499,101 @@ const DEFAULT={
     {id:'trip-2',title:'کەمپینگ و دەریاچەی دووکان',location:'دووکان · سلێمانی',date:'2026-10-31',time:'07:00 بەیانی',price:'45,000 دینار',capacity:35,booked:21,desc:'ڕۆژێکی ناوازە لە کەناری دەریاچەی دووکان لەگەڵ گەشتی بەلەم، ئاگرکردنەوەی ئێواران، مۆسیقا و ژەمی تایبەت لەناو سروشتدا.',imageUrl:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',published:true,status:'active'},
     {id:'trip-3',title:'ئاوشار و گەلی عەلی بەگ و ڕەواندز',location:'سۆران · ڕەواندز',date:'2026-11-07',time:'06:00 بەیانی',price:'30,000 دینار',capacity:45,booked:18,desc:'گەشتێکی خێزانی و هاوڕێیانە بۆ بینینی دیمەنە سەرسوڕهێنەرەکانی خەرەندی ڕەواندز و ئاوشاری گەلی عەلی بەگ لەگەڵ وێنەگرتنی پڕۆفیشناڵ.',imageUrl:'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1000&q=85',published:true,status:'active'}
   ],
-  destinations:[{name:'دەریاچەی دووکان',description:'یەکێکە لە شوێنە جوانەکانی ناوچەی دووکان؛ بۆ دیمەن، ئارامگرتن و گەشتی سروشتی گونجاوە.',type:'دریاچە',img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=80'},{name:'ئاوشاری گۆیژە',description:'شوێنێکی سروشتی بۆ بینینی ئاوی ڕووبار و دیمەنە سەوزەکان و ڕۆژێکی خۆش لەگەڵ سروشت.',type:'ئاوشار',img:'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=700&q=80'},{name:'هەڵگورد',description:'ناوچەیەکی شاخاویی بە دیمەنی فراوان و ڕێڕەوی سروشتی بۆ ئەو کەسانەی حەزی گەشت و سەرکێشییانە.',type:'شاخ',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80'},{name:'دارستان',description:'شوێنێکی ئارام بۆ پیاچوونەوە، هەناسەدان و تێکەڵبوون لەگەڵ سروشت.',type:'سروشت',img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&q=80'},{name:'شوێنە مێژووییەکان',description:'شوێنە مێژووییەکان کە چیرۆک و ناسنامەی ناوچەکە لەگەڵ گەشت و سەیران کۆدەکەنەوە.',type:'مێژوو',img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=700&q=80'},{name:'ڕێگای دۆکان',description:'ڕێگایەکی جوان بۆ Road Trip و گۆڕینی دیمەن لە نێوان سروشت و شوێنە جیاوازەکان.',type:'ڕێگای گەشت',img:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=700&q=80'}],stories:[{name:'Hawar',img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=200&q=80'},{name:'Dalan',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80'},{name:'Sara',img:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=200&q=80'},{name:'Rebin',img:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=200&q=80'}],safety:[
-['☀','گەرما و ئاودان','ئاو، پشوودان و نیشتەجێبوون لە شوێنی سێبەر.','https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85'],
-['❄','سەرما','جل و کەرەستەی گونجاو و پاراستنی دەست و پێ.','https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=85'],
-['☼','UV و خۆر','کریم، کڵاو، ئاو و کەمکردنەوەی ماوەی ڕاستەوخۆ لە خۆر.','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=85'],
-['△','سەلامەتی لە بەرزی','هەنگاو بە هێواشی، پشوودان و ئاگاداری لە نیشانەکانی نەخۆشی بەرزی.','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85'],
-['✚','یارمەتیی سەرەتایی','کیتێکی سەرەتایی و زانیاری پەیوەندییە فۆرییەکان.','https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=1200&q=85'],
-['ϟ','برووسکە و تۆفان','لە شوێنی کراوە دووربکەوە و ڕێنمایی ڕێبەر پەیڕەو بکە.','https://images.unsplash.com/photo-1461511669078-d46bf351cd6e?auto=format&fit=crop&w=1200&q=85'],
-['💧','ئاو و خواردن','ئاو و خواردنی بەس بۆ ماوەی گەشت هەڵبگرە.','https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=1200&q=85'],
-['✹','مێروو و حەشرات','دژە حەشرە و پۆشینی گونجاو بۆ شوێنە سروشتییەکان.','https://images.unsplash.com/photo-1473445361085-b9a07f55608b?auto=format&fit=crop&w=1200&q=85']
-],prep:[['Camping','کەمپینگ','🎒'],['Nature','سروشت','🌿'],['Waterfall','ئاوشار','💧'],['Road Trip','Road Trip','🚙'],['Family','خێزان','👨‍👩‍👧‍👦']]};
+  destinations:[
+    {
+      id:'place-1',
+      name:'لووتکەی چیای هەڵگورد',
+      region:'هەولێر · باڵەکایەتی (چۆمان)',
+      type:'شاخەوانی و لووتکە',
+      category:'mountain',
+      hasHiking:true,
+      hikingDuration:'٥ تا ٧ کاتژمێر پیادەڕەوی',
+      hikingLevel:'مامناوەند بۆ قورس',
+      bestSeason:'بەهار، هاوین و پاییز',
+      altitude:'3,607 مەتر',
+      description:'بەرزترین لووتکەی باشووری کوردستان و عێراق لە زنجیرە چیاکانی زاگرۆس. خاوەنی دیمەنێکی ئەفسوناوی، بەفری هەمیشەیی، کانی سازگار و کەشوهەوایەکی فێنکە. گونجاوە بۆ شاخەوانی، وێنەگرتن و کەمپینگی گروپەکان.',
+      highlights:'بەفری چیا · گۆماوی فێنک · دیمەنی زاگرۆس · ڕێبەری شارەزا',
+      img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85'
+    },
+    {
+      id:'place-2',
+      name:'دەریاچەی دووکان و قەشقۆڵی',
+      region:'سلێمانی · قەزای دووکان',
+      type:'دەریاچە و کەمپینگ',
+      category:'water',
+      hasHiking:false,
+      hikingDuration:'پێویستی بە پیادەڕەوی قورس نییە',
+      hikingLevel:'ئاسان (گونجاو بۆ هەمووان)',
+      bestSeason:'بەهار، هاوین و پاییز',
+      altitude:'510 مەتر',
+      description:'گەورەترین دەریاچەی هەرێمی کوردستان؛ شوێنێکی ناوازە بۆ گەشتی خێزانی و هاوڕێیانە، گەشتی بەلەم، کەپرەکانی سەر ئاوی قەشقۆڵی، کەمپینگی کەنار ئاو و ئاهەنگی ئێواران.',
+      highlights:'گەشتی بەلەم · کەپری سەر ئاو · ماسی برژاو · کەمپینگی شەوانە',
+      img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85'
+    },
+    {
+      id:'place-3',
+      name:'خەرەندی ڕەواندز و گەلی عەلی بەگ',
+      region:'هەولێر · سۆران و ڕەواندز',
+      type:'ئاوشار و سروشت',
+      category:'water',
+      hasHiking:true,
+      hikingDuration:'١ تا ٢ کاتژمێر پیادەڕەوی سووک',
+      hikingLevel:'ئاسان بۆ مامناوەند',
+      bestSeason:'بەهار و هاوین',
+      altitude:'950 مەتر',
+      description:'یەکێک لە سەرنجڕاکێشترین شوێنە گەشتیارییەکانی کوردستان؛ تێکەڵەیەک لە دۆڵی قووڵی خەرەند، تاڤگەی بەناوبانگی گەلی عەلی بەگ و بێخاڵ لەگەڵ سروشتێکی سەوز و فێنک.',
+      highlights:'ئاوشاری گەلی عەلی بەگ · تاڤگەی بێخاڵ · تەلەفریکی چیای کۆڕەک',
+      img:'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=900&q=85'
+    },
+    {
+      id:'place-4',
+      name:'ئامێدی و سەیرانگای سۆلاڤ',
+      region:'دهۆک · ئامێدی و سەرسەنگ',
+      type:'مێژوویی و سروشت',
+      category:'easy',
+      hasHiking:true,
+      hikingDuration:'١.٥ کاتژمێر گەڕان و پیادەڕەوی',
+      hikingLevel:'ئاسان',
+      bestSeason:'هەموو وەرزەکان',
+      altitude:'1,200 مەتر',
+      description:'شارۆچکەی دێرینی ئامێدی لەسەر لووتکەی شاخێکی بازنەیی لەگەڵ دەروازەی مێژوویی بەهدینان و ئاووهەوای فێنکی سۆلاڤ و سەرسەنگ. شوێنێکی بێوێنە بۆ گەشتی ڕۆشنبیری و خێزانی.',
+      highlights:'دەروازەی مێژوویی ئامێدی · ئاوشاری سۆلاڤ · باخەکانی سەرسەنگ',
+      img:'https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=900&q=85'
+    },
+    {
+      id:'place-5',
+      name:'هەورامان و باخەکانی تەوێڵە و بیارە',
+      region:'هەڵەبجە · هەورامان',
+      type:'سروشت و کەلەپوور',
+      category:'mountain',
+      hasHiking:true,
+      hikingDuration:'٢ تا ٣ کاتژمێر لەناو باخ و کوێستان',
+      hikingLevel:'مامناوەند',
+      bestSeason:'بەهار، هاوین و پاییز',
+      altitude:'1,450 مەتر',
+      description:'ناوچەیەکی شاخاویی دڵڕفێن بە تەلارسازیی پلیکانەیی بەردین، باخی گوێز و هەنار، کانی ئاوێسەر و کولتووری ڕەسەنی هەورامان. لە وەرزی پاییزدا ڕەنگێکی زێڕینی سەرسوڕهێنەر دەپۆشێت.',
+      highlights:'کانیاوی ئاوێسەر · باخەکانی تەوێڵە · بازاڕی بیارە · خواردنی کوردەواری',
+      img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85'
+    },
+    {
+      id:'place-6',
+      name:'گۆماوی فێڵاو و کەمپی باڵەکایەتی',
+      region:'هەولێر · چۆمان (باڵەکایەتی)',
+      type:'کەمپینگ و شاخەوانی',
+      category:'mountain',
+      hasHiking:true,
+      hikingDuration:'٢ کاتژمێر پیادەڕەوی سروشتی',
+      hikingLevel:'ئاسان بۆ مامناوەند',
+      bestSeason:'بەهار و زستان (بەفر)',
+      altitude:'1,850 مەتر',
+      description:'گۆماوی سروشتی فێڵاو بەرامبەر زنجیرە چیای هەڵگورد، یەکێکە لە باشترین شوێنەکانی کوردستان بۆ کەمپینگی شەوانە، وێنەگرتنی ڕەنگدانەوەی چیاکان لەناو ئاودا و گەشتی زستانە.',
+      highlights:'گۆماوی فێڵاو · دیمەنی پانۆرامای چۆمان · کەمپینگی ئەستێرەباران',
+      img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=85'
+    }
+  ],
+  stories:[{name:'Hawar',img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=200&q=80'},{name:'Dalan',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80'},{name:'Sara',img:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=200&q=80'},{name:'Rebin',img:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=200&q=80'}]
+};
 
-DEFAULT.gallery=[{url:'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=85',title:'کەمپی شەوانە'},{url:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85',title:'سروشتی کوردستان'},{url:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=85',title:'دیمەنێکی جوان'},{url:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85',title:'یادەوەریی گەشت'}];
 DEFAULT.reviews=[{name:'دەرباز سەعید',city:'هەولێر',text:'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.'},{name:'سارا',city:'سلێمانی',text:'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو.'}];
 DEFAULT.about={title:'گەشت، سروشت، هاوڕێیەتی.',text:'ئێمە باوەڕمان وایە گەشت تەنها گەیشتن بە شوێنێک نییە؛ ئەزموونێکە کە لەگەڵ خەڵک و سروشت دروست دەبێت.',imageUrl:'https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=1000&q=85',stats:[{num:'20K+',label:'بەشداربوو'},{num:'200+',label:'گەشت'},{num:'4.9',label:'هەڵسەنگاندن'}]};
 DEFAULT.contact={whatsapp:'+9647503130360',phone:'+9647503130360',city:'هەولێر — کوردستان',email:'',mapUrl:''};
@@ -1375,26 +1746,29 @@ function goBackHome(){
     }
 function route(){
   let id=location.hash.slice(1)||'home';
+  if(id==='safety'||id==='prep'||id==='gallery') id='destinations';
   const prevPage = document.querySelector('.page.active');
-  const targetPage = document.getElementById(id);
+  const targetPage = document.getElementById(id) || document.getElementById('home');
+  const activeId = targetPage ? targetPage.id : 'home';
   if(prevPage && targetPage && prevPage !== targetPage && window.gsap){
+    gsap.killTweensOf([prevPage, targetPage]);
     gsap.to(prevPage, {
       opacity: 0,
-      y: -8,
-      duration: 0.16,
-      ease: 'power2.in',
+      duration: 0.14,
+      ease: 'power2.out',
       onComplete: () => {
-        document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
-        document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
+        gsap.set(prevPage, { clearProps: 'all' });
+        document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===activeId));
+        document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===activeId));
         window.scrollTo(0,0);
-        renderPage(id);
+        renderPage(activeId);
         if(window.lucide)lucide.createIcons();
-        gsap.fromTo(targetPage, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out', onComplete: () => {
+        gsap.fromTo(targetPage, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out', clearProps: 'all', onComplete: () => {
           if(window.ScrollTrigger) ScrollTrigger.refresh();
-          if(id === 'weather'){
+          if(activeId === 'weather'){
             initWeatherMap();
             try{ weatherMap?.invalidateSize(true); }catch(e){}
-          } else if(id === 'private'){
+          } else if(activeId === 'private'){
             initPrivateMap();
             try{ privateMap?.invalidateSize(true); }catch(e){}
           }
@@ -1402,36 +1776,59 @@ function route(){
       }
     });
   } else {
-    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
-    document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
+    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===activeId));
+    document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===activeId));
     window.scrollTo(0,0);
-    renderPage(id);
+    renderPage(activeId);
     if(window.lucide)lucide.createIcons();
     if(window.ScrollTrigger) ScrollTrigger.refresh();
-    if(id === 'weather'){
+    if(activeId === 'weather'){
       initWeatherMap();
       try{ weatherMap?.invalidateSize(true); }catch(e){}
-    } else if(id === 'private'){
+    } else if(activeId === 'private'){
       initPrivateMap();
       try{ privateMap?.invalidateSize(true); }catch(e){}
     }
   }
 }
 window.addEventListener('hashchange',route);
+function normalizePlaceItem(p, idx){
+  if(!p || typeof p !== 'object') return null;
+  const def = DEFAULT.destinations[idx % DEFAULT.destinations.length] || DEFAULT.destinations[0];
+  const hasHiking = p.hasHiking !== undefined ? Boolean(p.hasHiking) : (String(p.hiking || '').includes('نەخێر') ? false : (def?.hasHiking ?? true));
+  return {
+    id: p.id || ('place-' + (idx + 1)),
+    name: p.name || p.title || def.name,
+    region: p.region || p.area || p.location || def.region || 'هەرێمی کوردستان',
+    type: p.type || p.tripType || def.type || 'سروشت و شاخەوانی',
+    category: p.category || (hasHiking ? 'hiking' : 'easy'),
+    hasHiking,
+    hikingDuration: p.hikingDuration || p.hikingInfo || (hasHiking ? '٢ تا ٣ کاتژمێر پیادەڕەوی' : 'پێویستی بە پیادەڕەوی نییە'),
+    hikingLevel: p.hikingLevel || p.difficulty || (hasHiking ? 'مامناوەند' : 'ئاسان'),
+    bestSeason: p.bestSeason || p.season || 'بەهار، هاوین و پاییز',
+    altitude: p.altitude || p.elevation || '',
+    description: p.description || p.desc || def.description || '',
+    highlights: p.highlights || p.features || '',
+    img: p.img || p.imageUrl || p.url || def.img
+  };
+}
 function normalizePublicData(){
-  if(!Array.isArray(data.gallery)) data.gallery=DEFAULT.gallery||[];
   if(!Array.isArray(data.reviews)) data.reviews=DEFAULT.reviews||[];
   if(!data.about) data.about=DEFAULT.about;
   if(!data.contact) data.contact=DEFAULT.contact;
   if(!data.social) data.social=DEFAULT.social;
-  if(!Array.isArray(data.destinations)) data.destinations=DEFAULT.destinations||[];
-  if(!Array.isArray(data.safety)) data.safety=DEFAULT.safety||[];
-  if(!Array.isArray(data.prep)) data.prep=DEFAULT.prep||[];
+  if(!Array.isArray(data.destinations) || !data.destinations.length){
+    data.destinations = DEFAULT.destinations;
+  } else {
+    data.destinations = data.destinations.map((p, i) => normalizePlaceItem(p, i)).filter(Boolean);
+    if(data.destinations.length < 2 && data.destinations[0]?.name === 'دەریاچەی دووکان' && !data.destinations[0]?.region){
+      data.destinations = DEFAULT.destinations;
+    }
+  }
   if(!data.navigation) data.navigation={home:'سەرەکی',weather:'کەشوهەوا',booking:'بەشداری',private:'تایبەت',more:'زیاتر'};
-  if(!data.privateTrip) data.privateTrip={title:'گەشتی تایبەت',description:'گەشتەکەت خۆت دیاری بکە، ئێمە بۆت ڕێکی دەخەین.',dateLabel:'بەرواری گەشت',destinationLabel:'شوێنی دڵخوازتان',types:[{value:'Hiking',label:'شاخەوانی',icon:'mountain'},{value:'Camping',label:'کەمپینگ',icon:'tent'},{value:'Nature',label:'سروشت',icon:'leaf'},{value:'Road Trip',label:'گەشتی ڕێگا',icon:'car'},{value:'Family',label:'گەشتی خێزانی',icon:'users'},{value:'Other',label:'هی تر',icon:'more-horizontal'}]};
-  if(!data.uiText) data.uiText={heroEyebrow:'سەلامەتی',tripEyebrow:'گەشتی ئەم هەفتەیە',destEyebrow:'شوێنەکان',destTitle:'شوێنەکان',safetyEyebrow:'سەلامەتی',safetyTitle:'سەلامەتی گەشت',safetyText:'زانیارییە هەمیشەییەکان بۆ گەشتێکی ئاگادارانە.',prepEyebrow:'ئامادەکاری',prepTitle:'ئامادەکاری گەشت',privateEyebrow:'گەشتی تایبەت',reviewTitle:'بیروڕا و هەڵسەنگاندن',galleryTitle:'گەلەری',footerTagline:'گەشت، سروشت و ژیانێکی جیاواز'};
+  if(!data.privateTrip) data.privateTrip={title:'گەشتی تایبەت',description:'گەشتەکەت خۆت دیاری بکە، ئێمە بۆت ڕێکی دەخەین.',dateLabel:'بەرواری گەشت',destinationLabel:'شوێنی دڵخوازتان'};
   if(!data.brand) data.brand={name:'KURDIA ADVENTURE',primary:'#a91d37',accent:'#d32f4e',background:'#05070b',heroOverlay:.72};
-  if(!data.search) data.search={enabled:true,destinations:true,trips:true,preparation:true,safety:true,stories:true,gallery:true};
+  if(!data.search) data.search={enabled:true,destinations:true,trips:true,stories:true};
   if(!data.ai) data.ai={enabled:true,name:'یاریدەدەری KURDIA',welcome:'سڵاو هاوڕێ 🌿'};
   if(!data.booking) data.booking={open:true,otpRequired:true};
   if(!data.system) data.system={status:'online',maintenance:false,defaultLanguage:'ku'};
@@ -1461,19 +1858,16 @@ function applyCMSPresentation(){
   if(brand.name) document.title=brand.name;
   if(brand.heroOverlay!=null) root.style.setProperty('--cms-hero-overlay',String(brand.heroOverlay));
   const nav=data.navigation||{};
-  const navMap={home:'home',weather:'weather',booking:'booking',private:'private',more:'more'};
   document.querySelectorAll('.bottom .navitem').forEach(el=>{
     const key=el.dataset.page, cfg=nav[key];
     if(cfg && typeof cfg==='object'){
       el.style.display=cfg.enabled===false?'none':'';
-      const txt=[...el.childNodes].find(n=>n.nodeType===3);
-      if(txt && cfg.label) txt.nodeValue=cfg.label;
       const span=el.querySelector('span'); if(span&&cfg.label) span.textContent=cfg.label;
     }else if(typeof cfg==='string'){
-      const txt=[...el.childNodes].find(n=>n.nodeType===3); if(txt) txt.nodeValue=cfg;
+      const span=el.querySelector('span'); if(span) span.textContent=cfg;
     }
   });
-  const sectionMap={destinations:'destinations',safety:'safety',preparation:'prep',gallery:'gallery',reviews:'reviews',about:'about',contact:'contact'};
+  const sectionMap={destinations:'destinations',reviews:'reviews',about:'about',contact:'contact'};
   Object.entries(sectionMap).forEach(([key,id])=>{
     const el=document.getElementById(id), cfg=data[key+'_settings']||data.home?.sections?.[key];
     if(el && cfg && cfg.enabled===false) el.style.display='none';
@@ -1483,9 +1877,11 @@ function applyCMSPresentation(){
   const ai=document.querySelector('.ai'); if(ai&&data.ai?.enabled===false) ai.style.display='none';
 }
 
+window.selectedBookingTripIndex = 0;
 window.selectTripForBooking = function(tripIdx){
   const trips = getActiveTripsList();
   const chosen = trips[tripIdx] || trips[0];
+  window.selectedBookingTripIndex = tripIdx;
   go('booking');
   setTimeout(()=>{
     const sel = $('bookingTrip');
@@ -1493,10 +1889,63 @@ window.selectTripForBooking = function(tripIdx){
       sel.value = chosen.title || '';
       if(sel.selectedIndex < 0 && sel.options.length > tripIdx) sel.selectedIndex = tripIdx;
     }
-    document.querySelectorAll('#tripList .article').forEach((el, idx)=>{
-      el.classList.toggle('trip-article-active', idx === tripIdx);
-    });
-  }, 60);
+    syncSelectedTripBanner();
+    const formWrap = document.getElementById('bookingFormCardWrap');
+    if(formWrap) formWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 80);
+};
+
+window.syncSelectedTripBanner = function(){
+  const trips = getActiveTripsList();
+  const sel = $('bookingTrip');
+  const selVal = sel ? sel.value : '';
+  let idx = trips.findIndex(t => t.title === selVal);
+  if(idx < 0) idx = window.selectedBookingTripIndex || 0;
+  window.selectedBookingTripIndex = idx;
+  const chosen = trips[idx] || trips[0] || {};
+  const nameEl = $('bookingSelectedTripName');
+  const metaEl = $('bookingSelectedTripMeta');
+  if(nameEl) nameEl.textContent = chosen.title || 'گەشتی داهاتوو';
+  if(metaEl) metaEl.textContent = `${chosen.location || 'کوردستان'} · ${formatTripDateKu(chosen.date)} · ${chosen.price || '—'}`;
+  document.querySelectorAll('#tripList .booking-trip-pick-card').forEach((el, i)=>{
+    el.classList.toggle('is-selected', i === idx);
+  });
+  updateBookingCalculatedTotal();
+};
+
+window.updateBookingCalculatedTotal = function(){
+  const trips = getActiveTripsList();
+  const chosen = trips[window.selectedBookingTripIndex || 0] || trips[0] || {};
+  const people = Math.max(1, parseInt($('bookingPeople')?.value || '1', 10) || 1);
+  const rawPrice = Number(String(chosen.price || '').replace(/[^0-9]/g, '')) || 0;
+  const totalEl = $('bookingCalculatedTotal');
+  if(!totalEl) return;
+  if(rawPrice > 0){
+    let total = rawPrice * people;
+    if(appliedDiscountPercent > 0) total = Math.round(total * (1 - appliedDiscountPercent / 100));
+    totalEl.textContent = `${total.toLocaleString()} دینار (${people} کەس)`;
+  } else {
+    totalEl.textContent = `${chosen.price || 'بەپێی گەشت'} (${people} کەس)`;
+  }
+};
+
+window.stepBookingPeople = function(delta){
+  const inp = $('bookingPeople');
+  if(!inp) return;
+  const cur = parseInt(inp.value || '1', 10) || 1;
+  const next = Math.max(1, Math.min(25, cur + delta));
+  inp.value = String(next);
+  handlePeopleCount(next);
+  updateBookingCalculatedTotal();
+};
+
+window.copyFibAccount = function(){
+  const num = ($('publicFibNumberDisplay')?.textContent || '07503130360').replace(/\s+/g, '');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(num).then(()=>toast('ژمارەی هەژماری FIB کۆپی کرا ✓')).catch(()=>toast(num));
+  } else {
+    toast('ژمارەی FIB: ' + num);
+  }
 };
 
 function getActiveTripsList(){
@@ -1623,25 +2072,227 @@ function render(){
  }
 
  const bookingSubmit=$('bookingSubmitBtn');if(bookingSubmit)bookingSubmit.disabled=!tripIsUpcoming;
- const bookingForm=$('bookingForm');if(bookingForm){let bookingNotice=document.getElementById('bookingTripNotice');if(!bookingNotice){bookingNotice=document.createElement('p');bookingNotice.id='bookingTripNotice';bookingNotice.className='muted';bookingNotice.style.cssText='line-height:1.9;margin:10px 0';bookingForm.prepend(bookingNotice)}bookingNotice.textContent=tripIsUpcoming?'تکایە گەشتی دڵخوازت هەڵبژێرە و زانیارییەکان پڕ بکەرەوە.':'تۆمارکردن بۆ ئەم گەشتە بەردەست نییە؛ کاتێک بەرواری ڕاستەقینە بڵاوکرایەوە دەتوانیت تۆمار بکەیت.';bookingNotice.style.display=tripIsUpcoming?'none':'';}
- const cards=data.destinations.map((x,i)=>`<button type="button" class="dest" style="background-image:url('${esc(x.img)}')" onclick="openDestination(${i})"><span>${esc(x.name)}${x.type?`<small style="display:block;font-size:9px;color:#c9ced6;margin-top:3px">${esc(x.type)}</small>`:''}</span></button>`).join('');$('homeDests').innerHTML=cards;$('destList').innerHTML=cards;
+ const bookingForm=$('bookingForm');if(bookingForm){let bookingNotice=document.getElementById('bookingTripNotice');if(!bookingNotice){bookingNotice=document.createElement('p');bookingNotice.id='bookingTripNotice';bookingNotice.className='muted';bookingNotice.style.cssText='line-height:1.9;margin:10px 0';bookingForm.prepend(bookingNotice)}bookingNotice.textContent=tripIsUpcoming?'':'تۆمارکردن لەم کاتەدا بەردەست نییە؛ کاتێک بەرواری گەشتی نوێ بڵاوکرایەوە دەتوانیت تۆمار بکەیت.';bookingNotice.style.display=tripIsUpcoming?'none':'';}
+
+ renderPlacesPublic();
+
  const addStoryBtn=`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,.05);border:1px dashed var(--muted)"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;
- $('homeStories').innerHTML=addStoryBtn+data.stories.map(st=>`<div class="story"><div class="ring"><img src="${esc(st.img)}"></div><small>${esc(st.name)}</small></div>`).join('');
- $('storyGrid').innerHTML=data.stories.map(st=>`<div class="tile" style="background:url('${esc(st.img)}') center/cover"><div><b>${esc(st.name)}</b><small>ئەزموونی KURDIA</small></div></div>`).join('');
- $('safetyList').innerHTML=data.safety.map(x=>{const title=x.title??x[1]??'';const desc=x.desc??x[2]??'';const icon=x.icon??x[0]??'🛡️';const img=x.imageUrl||x.image||x[3]||'';const imgUrl=safeImageUrl(img)||img;return `<article class="safety-card">${imgUrl?`<img src="${esc(imgUrl)}" alt="${esc(title)}" loading="lazy">`:''}<div class="safety-card-body"><div class="safety-icon">${esc(icon)}</div><div><b>${esc(title)}</b><p>${esc(desc)}</p>${x.source?`<small>سەرچاوە: ${esc(x.source)}</small>`:''}</div></div></article>`}).join('');
- $('prepTypes').innerHTML=data.prep.map((x,i)=>{const name=x.name??x[0]??'Camping';const title=x.title??x[1]??name;const icon=x.icon??x[2]??'🎒';return `<button class="article" style="text-align:right" onclick="prep(${i})"><div class="articleIcon">${esc(icon)}</div><div><b>${esc(title)}</b><small>${esc(name)}</small></div></button>`}).join('');prep(0);
- $('tripList').innerHTML=tripIsUpcoming?activeTrips.map((x,idx)=>`<div class="article trip-booking-item" style="cursor:pointer" onclick="selectTripForBooking(${idx})"><div class="articleIcon"><i data-lucide="compass"></i></div><div style="flex:1"><b>${esc(x.title)}</b><small>${esc(x.location)} · ${esc(formatTripDateKu(x.date))} · ${esc(x.price)}</small></div><span class="pill" style="position:static;font-size:10px">هەڵبژاردن</span></div>`).join(''):'<div class="article"><div style="flex:1"><b>هیچ گەشتێکی داهاتوو بۆ تۆمارکردن نییە</b><small>بەروار و زانیاریی گەشتی نوێ دوای بڵاوکردنەوە لێرە دەردەکەوێت.</small></div></div>';
- $('bookingTrip').innerHTML=tripIsUpcoming?activeTrips.map(x=>`<option value="${esc(x.title)}">${esc(x.title)} — (${esc(formatTripDateKu(x.date))} · ${esc(x.price)})</option>`).join(''):'<option value="">هیچ گەشتێکی بەردەست نییە</option>'; $('bookingTrip').disabled=!tripIsUpcoming;
- renderGalleryPublic();renderReviewsPublic();renderAboutPublic();renderContactPublic();
+ if($('homeStories')) $('homeStories').innerHTML=addStoryBtn+data.stories.map(st=>`<div class="story"><div class="ring"><img src="${esc(st.img)}"></div><small>${esc(st.name)}</small></div>`).join('');
+ if($('storyGrid')) $('storyGrid').innerHTML=data.stories.map(st=>`<div class="tile" style="background:url('${esc(st.img)}') center/cover"><div><b>${esc(st.name)}</b><small>ئەزموونی KURDIA</small></div></div>`).join('');
+
+ const availCountEl = $('bookingAvailableTripsCount');
+ if(availCountEl) availCountEl.textContent = tripIsUpcoming ? `${activeTrips.length} گەشتی چالاک بەردەستە` : 'هیچ گەشتێک بەردەست نییە';
+
+ if($('tripList')){
+   $('tripList').innerHTML = tripIsUpcoming ? activeTrips.map((x, idx) => {
+     const imgUrl = safeImageUrl(x.imageUrl) || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85';
+     const cap = Math.max(1, Number(x.capacity || 35));
+     const bkd = Math.min(cap, Math.max(0, Number(x.booked || 0)));
+     const rem = Math.max(0, cap - bkd);
+     const pct = Math.min(100, Math.round((bkd / cap) * 100));
+     const isSel = idx === (window.selectedBookingTripIndex || 0);
+     return `<article class="booking-trip-pick-card ${isSel ? 'is-selected' : ''}" onclick="selectTripForBooking(${idx})">
+       <div class="btp-thumb" style="background-image:url('${esc(imgUrl)}')">
+         <span class="btp-status">${rem > 0 ? `${rem} کورسی ماوە` : 'پڕبووە'}</span>
+       </div>
+       <div class="btp-body">
+         <div>
+           <div class="btp-top">
+             <span class="btp-loc">📍 ${esc(x.location || 'کوردستان')}</span>
+             <span class="btp-price">${esc(x.price || '—')}</span>
+           </div>
+           <h4 class="btp-title">${esc(x.title)}</h4>
+         </div>
+         <div>
+           <div class="btp-meta">
+             <span>📅 ${esc(formatTripDateKu(x.date))}</span>
+             ${x.time ? `<span>⏰ ${esc(x.time)}</span>` : ''}
+             <span>👥 گشتیی: ${cap} کەس</span>
+           </div>
+           <div class="btp-seat-bar"><i style="width:${pct}%"></i></div>
+         </div>
+         <div class="btp-select-indicator">
+           <span>${isSel ? '✓ ئەم گەشتە هەڵبژێردراوە بۆ تۆمارکردن' : 'کلیک بکە بۆ هەڵبژاردنی ئەم گەشتە'}</span>
+           <span>←</span>
+         </div>
+       </div>
+     </article>`;
+   }).join('') : '<div class="glass" style="padding:18px"><b>هیچ گەشتێکی داهاتوو بۆ تۆمارکردن نییە</b><p class="muted" style="margin:6px 0 0">بەروار و زانیاریی گەشتی نوێ دوای بڵاوکردنەوە لێرە دەردەکەوێت.</p></div>';
+ }
+
+ if($('bookingTrip')){
+   $('bookingTrip').innerHTML=tripIsUpcoming?activeTrips.map(x=>`<option value="${esc(x.title)}">${esc(x.title)} — (${esc(formatTripDateKu(x.date))} · ${esc(x.price)})</option>`).join(''):'<option value="">هیچ گەشتێکی بەردەست نییە</option>';
+   $('bookingTrip').disabled=!tripIsUpcoming;
+ }
+ syncSelectedTripBanner();
+ renderReviewsPublic();renderAboutPublic();renderContactPublic();
  renderWeather();renderPage(location.hash.slice(1)||'home');
  if(window.lucide)lucide.createIcons();
  setupReviewStars();
 }
-function renderGalleryPublic(){const c=$('galleryList');if(!c)return;c.innerHTML=(data.gallery||[]).map(x=>`<div class="public-photo"><img src="${esc(x.url||x)}" alt="${esc(x.title||'KURDIA')}" loading="lazy"><div>${esc(x.title||'KURDIA ADVENTURE')}</div></div>`).join('')}
+
+window.currentPlaceFilter = 'all';
+window.filterPlaces = function(filterKey, btn){
+  window.currentPlaceFilter = filterKey || 'all';
+  document.querySelectorAll('#placesFilterBar .pf-chip').forEach(b => b.classList.toggle('active', b === btn));
+  renderPlacesPublic();
+  if(window.gsap){
+    const cards = document.querySelectorAll('#destList .place-card');
+    if(cards.length){
+      gsap.killTweensOf(cards);
+      gsap.fromTo(cards, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.36, stagger: 0.045, ease: 'power3.out', clearProps: 'transform,opacity' });
+    }
+  }
+};
+
+function createPlaceCardHTML(x, i){
+  const imgUrl = safeImageUrl(x.img || x.imageUrl) || x.img || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80';
+  const hasHiking = x.hasHiking !== false;
+  const region = x.region || 'کوردستان';
+  const type = x.type || 'سروشت و گەشت';
+  const desc = x.description || x.desc || 'شوێنێکی گەشتیاری و سروشتی ناوازە لە هەرێمی کوردستان.';
+  return `<article class="place-card" onclick="openDestination(${i})">
+    <div class="place-card-media" style="background-image:url('${esc(imgUrl)}')">
+      <div class="place-card-badges">
+        <span class="place-region-pill">📍 ${esc(region)}</span>
+        <span class="place-hiking-pill ${hasHiking ? '' : 'no-hiking'}">${hasHiking ? '🥾 پیادەڕەوی تیایە' : '🚗 بێ پیادەڕەوی'}</span>
+      </div>
+      <span class="place-type-tag">${esc(type)}</span>
+    </div>
+    <div class="place-card-body">
+      <h3>${esc(x.name)}</h3>
+      <p>${esc(desc)}</p>
+      <div class="place-card-meta">
+        ${x.hikingDuration ? `<span>⏱️ ${esc(x.hikingDuration)}</span>` : ''}
+        ${x.hikingLevel ? `<span>⚡ ئاست: ${esc(x.hikingLevel)}</span>` : ''}
+        ${x.altitude ? `<span>🏔️ ${esc(x.altitude)}</span>` : ''}
+        ${x.bestSeason ? `<span>🌿 ${esc(x.bestSeason)}</span>` : ''}
+      </div>
+      <div class="place-card-footer">
+        <span>بینینی تەواوی زانیارییەکان</span>
+        <span>←</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderPlacesPublic(){
+  const places = Array.isArray(data.destinations) ? data.destinations : [];
+  const homeEl = $('homeDests');
+  if(homeEl){
+    homeEl.innerHTML = places.slice(0, 6).map((x, i) => createPlaceCardHTML(x, i)).join('');
+  }
+  const destListEl = $('destList');
+  if(destListEl){
+    const f = window.currentPlaceFilter || 'all';
+    const filtered = places.map((x, i) => ({ x, i })).filter(({ x }) => {
+      if(f === 'all') return true;
+      if(f === 'hiking') return x.hasHiking !== false;
+      if(f === 'easy') return x.hasHiking === false || String(x.hikingLevel || '').includes('ئاسان');
+      if(f === 'mountain') return x.category === 'mountain' || String(x.type || '').includes('شاخ') || String(x.name || '').includes('چیا') || String(x.name || '').includes('هەڵگورد');
+      if(f === 'water') return x.category === 'water' || String(x.type || '').includes('ئاو') || String(x.type || '').includes('دەریاچە') || String(x.name || '').includes('دووکان');
+      return true;
+    });
+    destListEl.innerHTML = filtered.length
+      ? filtered.map(({ x, i }) => createPlaceCardHTML(x, i)).join('')
+      : '<div class="glass" style="padding:20px;grid-column:1/-1;text-align:center">هیچ شوێنێک لەم بەشەدا نەدۆزرایەوە.</div>';
+  }
+}
+
+window.currentOpenedPlaceIndex = 0;
+function openDestination(i){
+  const x = data.destinations?.[i];
+  if(!x) return;
+  window.currentOpenedPlaceIndex = i;
+  const imgUrl = safeImageUrl(x.img || x.imageUrl) || x.img || '';
+  $('destinationModalImage').src = imgUrl;
+  $('destinationModalTitle').textContent = x.name || '';
+  $('destinationModalType').textContent = (x.type || 'شوێنی گەشتیاری') + (x.region ? ' · ' + x.region : '');
+  const regEl = $('destinationModalRegion');
+  if(regEl) regEl.textContent = '📍 ' + (x.region || 'کوردستان');
+  const hikEl = $('destinationModalHiking');
+  const hasHiking = x.hasHiking !== false;
+  if(hikEl){
+    hikEl.textContent = hasHiking ? '🥾 پیادەڕەوی تیایە' : '🚗 گەشتی ئاسان (بێ پیادەڕەوی)';
+  }
+  const specsEl = $('destinationModalSpecs');
+  if(specsEl){
+    specsEl.innerHTML = [
+      { label: 'ناوچە / مەنتیقە', val: x.region || 'کوردستان' },
+      { label: 'جۆری گەشت', val: x.type || 'سروشت و گەشت' },
+      { label: 'پیادەڕەوی (Hiking)', val: hasHiking ? (x.hikingDuration || 'بەڵێ، پیادەڕەوی تیایە') : 'نەخێر (گەشتی ئاسان)' },
+      { label: 'ئاستی قورسی', val: x.hikingLevel || (hasHiking ? 'مامناوەند' : 'ئاسان بۆ هەمووان') },
+      ...(x.bestSeason ? [{ label: 'باشترین وەرز', val: x.bestSeason }] : []),
+      ...(x.altitude ? [{ label: 'بەرزی لە ئاستی دەریا', val: x.altitude }] : []),
+      ...(x.highlights ? [{ label: 'تایبەتمەندییەکان', val: x.highlights }] : [])
+    ].map(s => `<div class="dest-spec-box"><small>${esc(s.label)}</small><b>${esc(s.val)}</b></div>`).join('');
+  }
+  $('destinationModalDescription').textContent = x.description || x.desc || 'زانیاریی زیاتر بەم زووانە زیاد دەکرێت.';
+  document.getElementById('destinationModal').classList.add('show');
+  if(window.lucide) lucide.createIcons();
+}
+
+window.requestPrivateTripForPlace = function(){
+  const x = data.destinations?.[window.currentOpenedPlaceIndex || 0];
+  closeModal('destinationModal');
+  go('private');
+  if(x){
+    setTimeout(()=>{
+      const destInp = $('privateDestInput') || document.querySelector('#privateTripForm input[name="destination"]');
+      if(destInp) destInp.value = `${x.name}${x.region ? ' (' + x.region + ')' : ''}`;
+      privateTripGo(1);
+    }, 100);
+  }
+};
+
+window.selectPrivatePreset = function(typeVal, destPlaceholder, peopleCount, btnEl){
+  const form = $('privateTripForm');
+  if(!form) return;
+  document.querySelectorAll('.private-preset-card').forEach(b => b.classList.remove('active'));
+  if(btnEl) btnEl.classList.add('active');
+  const radio = form.querySelector(`input[name="type"][value="${typeVal}"]`);
+  if(radio) radio.checked = true;
+  const pInp = $('privatePeopleInput');
+  if(pInp && peopleCount) pInp.value = String(peopleCount);
+  const dInp = $('privateDestInput');
+  if(dInp && !dInp.value) dInp.placeholder = destPlaceholder + '...';
+  if(window.gsap){
+    const card = document.querySelector('.private-trip-card');
+    if(card) gsap.fromTo(card, { boxShadow: '0 0 0px rgba(229,35,79,0)' }, { boxShadow: '0 0 38px rgba(229,35,79,0.35)', duration: 0.35, yoyo: true, repeat: 1, clearProps: 'boxShadow' });
+  }
+  toast('✨ پاکێجی ' + destPlaceholder + ' هەڵبژێردرا');
+};
+
+window.setPrivateDestination = function(placeName){
+  const inp = $('privateDestInput') || document.querySelector('#privateTripForm input[name="destination"]');
+  document.querySelectorAll('.private-quick-dests button').forEach(b => {
+    b.classList.toggle('active', placeName.includes(b.textContent.replace(/[^\u0600-\u06FF\s]/g,'').trim()));
+  });
+  if(inp){
+    inp.value = placeName;
+    if(window.gsap){
+      gsap.fromTo(inp, { borderColor: '#ff3e69', boxShadow: '0 0 20px rgba(229,35,79,0.4)' }, { borderColor: 'rgba(255,255,255,0.12)', boxShadow: '0 0 0px rgba(229,35,79,0)', duration: 0.7 });
+    }
+    toast('📍 شوێن دیاری کرا: ' + placeName);
+  }
+};
+
+window.stepPrivatePeople = function(delta){
+  const inp = $('privatePeopleInput');
+  if(!inp) return;
+  const cur = parseInt(inp.value || '4', 10) || 4;
+  inp.value = String(Math.max(1, Math.min(100, cur + delta)));
+};
+
+window.inquirePrivateWhatsApp = function(){
+  const rawPhone = String(data?.contact?.whatsapp || '+9647503130360').replace(/\D/g, '') || '9647503130360';
+  const msg = `سڵاو تیمی KURDIA ADVENTURE 👑\nدەمەوێت زانیاری و ڕاوێژ وەربگرم سەبارەت بە ڕێکخستنی گەشتێکی تایبەت (VIP / گروپ).`;
+  window.location.href = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
+};
+
 function renderReviewsPublic(){const c=$('reviewsListPublic');if(!c)return;c.innerHTML=(data.reviews||[]).map(x=>{const rating=Math.min(5,Math.max(1,Number(x.rating||5)));return `<article class="public-review"><div class="review-stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div><p>“${esc(x.text??x.comment??'')}”</p><b>${esc(x.name||'')}</b><small>${esc(x.city||'')}</small></article>`}).join('')}
 function setupReviewStars(){document.querySelectorAll('#starsInput button').forEach(btn=>btn.onclick=()=>{const r=Number(btn.dataset.rating);$('reviewRating').value=r;document.querySelectorAll('#starsInput button').forEach(b=>b.classList.toggle('selected',Number(b.dataset.rating)<=r))});document.querySelectorAll('#starsInput button').forEach(b=>b.classList.toggle('selected',Number(b.dataset.rating)<=Number($('reviewRating')?.value||5)))}
 async function submitReview(e){e.preventDefault();const form=e.target;const body=Object.fromEntries(new FormData(form).entries());body.rating=Number(body.rating||5);body.comment=String(body.comment||'').trim();if(!body.name||!body.comment)return toast('تکایە ناو و بیروڕاکەت بنووسە');const btn=$('reviewSubmitBtn');btn.disabled=true;btn.textContent='لە ناردندایە...';try{const r=await fetch(WORKER+'/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const x=await r.json().catch(()=>({}));if(x.ok){toast('بیروڕاکەت نێردرا ✓');form.reset();$('reviewRating').value=5;setupReviewStars();await loadRemote();render()}else{toast(x.error||'نەتوانرا بیروڕاکە بنێردرێت')}}catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}finally{btn.disabled=false;btn.textContent='ناردنی بیروڕا'}}
-function openDestination(i){const x=data.destinations?.[i];if(!x)return;$('destinationModalImage').src=x.img||'';$('destinationModalTitle').textContent=x.name||'';$('destinationModalType').textContent=x.type||'شوێن';$('destinationModalDescription').textContent=x.description||x.desc||'زانیاریی زیاتر بەم زووانە زیاد دەکرێت.';document.getElementById('destinationModal').classList.add('show');if(window.lucide)lucide.createIcons()}
 function renderAboutPublic(){const a=data.about||{};const img=$('aboutImagePublic');if(img)img.src=a.imageUrl||DEFAULT.about.imageUrl;const t=$('aboutTitlePublic');if(t)t.textContent=a.title||'';const p=$('aboutTextPublic');if(p)p.textContent=a.text||'';const st=$('aboutStatsPublic');if(st)st.innerHTML=(a.stats||[]).map(x=>`<div class="stat"><b>${esc(x.num)}</b><span>${esc(x.label)}</span></div>`).join('')}
 function renderContactPublic(){const c=data.contact||{},s=data.social||{};const wa=$('contactWhatsAppPublic');if(wa){wa.href=c.whatsapp?`https://wa.me/${String(c.whatsapp).replace(/\D/g,'')}`:'#';wa.querySelector('small').textContent=c.whatsapp||''}const ph=$('contactPhonePublic');if(ph){ph.href=c.phone?`tel:${c.phone}`:'#';ph.querySelector('small').textContent=c.phone||''}if($('contactCity'))$('contactCity').textContent=c.city||'';if($('contactEmailPublic'))$('contactEmailPublic').textContent=c.email||'';[['instagram',s.instagram],['tiktok',s.tiktok],['youtube',s.youtube],['facebook',s.facebook],['telegram',s.telegram]].forEach(([k,v])=>{const e=$('social_'+k);if(e){e.href=v||'#';e.style.display=v?'grid':'none'}})}
 
@@ -2565,15 +3216,22 @@ function initPrivateMap(){
     }, ms));
   });
 }
-function prep(i){const x=data.prep[i]||{};const name=x.name??x[0]??'Camping';const items=Array.isArray(x.items)?x.items:({Camping:['خێمە','کیسەی خەوتن','چرای سەر','ئاو','کەرەستەی پزیشکی'],Nature:['جل و پێڵاو','ئاو','کریم خۆر','نەخشە/GPS','Power Bank'],Waterfall:['پێڵاوی دژ بە ئاو','جل گۆڕین','ئاو','کریم خۆر','کیت یارمەتیدانی یەکەم'],'Road Trip':['شۆفێری','سووتەمەنی','چارەسەری پەنچر','شارژەر','نەخشە'],Family:['خواردن','ئاو','کەرەستەی منداڵ','First Aid','پلانێکی ئارام']}[name]||[]);$('prepChecklist').innerHTML=items.map(v=>`<label><input type="checkbox">${esc(v)}</label>`).join('')}
-function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }function filterSearch(){const q=($('siteSearch').value||'').toLowerCase();const tripItems=getActiveTripsList().map((tr,idx)=>({label:tr.title+' — '+tr.location,sub:formatTripDateKu(tr.date)+' · '+tr.price,action:`closeModal('searchModal');selectTripForBooking(${idx})`}));const otherItems=[...data.destinations.map(x=>({label:x.name,sub:x.type||'شوێن',action:`closeModal('searchModal');go('destinations')`})),...data.safety.map(x=>({label:x[1],sub:'سەلامەتی',action:`closeModal('searchModal');go('safety')`})),...data.prep.map(x=>({label:x[0],sub:'ئامادەکاری',action:`closeModal('searchModal');go('prep')`}))];const all=[...tripItems,...otherItems];$('searchResults').innerHTML=all.filter(x=>String(x.label||'').toLowerCase().includes(q)||String(x.sub||'').toLowerCase().includes(q)).slice(0,10).map(x=>`<div class="article" style="cursor:pointer" onclick="${x.action}"><div class="articleIcon"><i data-lucide="search"></i></div><div><b>${esc(x.label)}</b><small>${esc(x.sub||'KURDIA ADVENTURE')}</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';if(window.lucide)lucide.createIcons();}
+function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }
+function filterSearch(){
+  const q=($('siteSearch').value||'').toLowerCase();
+  const tripItems=getActiveTripsList().map((tr,idx)=>({label:tr.title+' — '+tr.location,sub:formatTripDateKu(tr.date)+' · '+tr.price,action:`closeModal('searchModal');selectTripForBooking(${idx})`}));
+  const placeItems=(data.destinations||[]).map((x,idx)=>({label:x.name+' — '+(x.region||'کوردستان'),sub:(x.type||'شوێن')+' · '+(x.hasHiking!==false?'پیادەڕەوی تیایە':'گەشتی ئاسان'),action:`closeModal('searchModal');openDestination(${idx})`}));
+  const all=[...tripItems,...placeItems];
+  $('searchResults').innerHTML=all.filter(x=>String(x.label||'').toLowerCase().includes(q)||String(x.sub||'').toLowerCase().includes(q)).slice(0,12).map(x=>`<div class="article" style="cursor:pointer" onclick="${x.action}"><div class="articleIcon"><i data-lucide="compass"></i></div><div><b>${esc(x.label)}</b><small>${esc(x.sub||'KURDIA ADVENTURE')}</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';
+  if(window.lucide)lucide.createIcons();
+}
 function openAI(){ $('aiModal').classList.add('show');setTimeout(()=>{const i=$('aiInput');if(i)i.focus();const m=$('aiMessages');if(m)m.scrollTop=m.scrollHeight;if(window.lucide)lucide.createIcons()},80)}
 function closeModal(id){$(id).classList.remove('show')}
 function addAIMessage(text,type){const m=$('aiMessages');if(!m)return;const d=document.createElement('div');d.className='ai-msg '+type;d.textContent=text;m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
 function aiQuick(q){const i=$('aiInput');if(i)i.value=q;const f=document.querySelector('.ai-chat-form');if(f)askAI({preventDefault:()=>{}})}
-function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',language:'کوردی سۆرانی',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت؛ تەنها شاخەوانی نییە.',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,type:x.type,description:x.description||x.desc})),safety:(data.safety||[]).map(x=>({title:x[1],text:x[2]})),preparation:(data.prep||[]).map(x=>({type:x.name||x[0],label:x.label||x[1]})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','سەلامەتی','ئامادەکاری','شوێنەکان','ستۆری','گەلەری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
+function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',language:'کوردی سۆرانی',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
 async function askAI(e){e.preventDefault();const i=$('aiInput');const q=(i?.value||'').trim();if(!q)return;addAIMessage(q,'user');i.value='';const loading=addAIMessage('خەریکم سەیری زانیارییەکانی KURDIA دەکەم... 🌿','bot loading');try{const r=await fetch(WORKER+'/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q,lang:'ku',siteState:aiSiteContext()})});const x=await r.json().catch(()=>({}));loading.remove();addAIMessage(x.text||'ببورە، ئێستا نەتوانیم وەڵام بدەم. تکایە دووبارە هەوڵ بدەوە.','bot')}catch(err){loading.remove();addAIMessage('پەیوەندی بە یاریدەدەری KURDIA نەکرا. تکایە دووبارە هەوڵ بدەوە.','bot')}}
-function bookingGo(step){const form=$('bookingForm');if(!form)return;form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on)});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function bookingGo(step){const form=$('bookingForm');if(!form)return;form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on);if(on&&window.gsap){gsap.fromTo(p,{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:'power3.out',clearProps:'transform'});}});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2&&$('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}bookingGo(step+1)}
 function syncOtpSlots(){const slots=[...document.querySelectorAll('.otp-slot')];const code=slots.map(x=>x.value).join('');$('bookingOtp').value=code;slots.forEach(x=>x.classList.toggle('filled',!!x.value));}
 document.querySelectorAll('.otp-slot').forEach((slot,index,all)=>{slot.addEventListener('input',()=>{slot.value=slot.value.replace(/\D/g,'').slice(-1);syncOtpSlots();if(slot.value&&all[index+1])all[index+1].focus();if(all.every(x=>x.value))$('bookingOtp').focus({preventScroll:true})});slot.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!slot.value&&all[index-1])all[index-1].focus();if(e.key==='ArrowLeft'&&all[index+1])all[index+1].focus();if(e.key==='ArrowRight'&&all[index-1])all[index-1].focus()});slot.addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,4);if(!t)return;e.preventDefault();[...t].forEach((v,i)=>{if(all[i])all[i].value=v});syncOtpSlots();all[Math.min(t.length,3)].focus()})});
@@ -2642,9 +3300,15 @@ function togglePrivateDate(){
 function privateTripGo(step){
   const form=document.getElementById('privateTripForm');if(!form)return;
   const n=Math.max(1,Math.min(3,Number(step)||1));
-  form.querySelectorAll('[data-private-step]').forEach(p=>{p.hidden=Number(p.dataset.privateStep)!==n;});
+  form.querySelectorAll('[data-private-step]').forEach(p=>{
+    const isTarget = Number(p.dataset.privateStep)===n;
+    p.hidden = !isTarget;
+    if(isTarget && window.gsap){
+      gsap.fromTo(p, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out', clearProps: 'transform' });
+    }
+  });
   form.querySelectorAll('[data-private-progress]').forEach(el=>{const i=Number(el.dataset.privateProgress);el.classList.toggle('active',i===n);el.classList.toggle('done',i<n);});
-  const titles={1:'هەنگاوی ١: زانیاریی کەسی',2:'هەنگاوی ٢: زانیاریی گەشت',3:'هەنگاوی ٣: پێداویستی و ناردن'};
+  const titles={1:'هەنگاوی ١: زانیاریی کەسی و پەیوەندی',2:'هەنگاوی ٢: شوێن و شێوازی گەشت',3:'هەنگاوی ٣: خزمەتگوزاری و ناردن'};
   const title=document.getElementById('privateWizardTitle'),count=document.getElementById('privateWizardCount');if(title)title.textContent=titles[n];if(count)count.textContent=n+' لە ٣';
   if(window.lucide)lucide.createIcons();
 }
@@ -2813,12 +3477,10 @@ loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_langua
     <div class="ka-menu-title">بەشە سەرەکییەکان</div>
 
     <a href="#home" class="ka-menu-item" data-ka-page="home" onclick="kaMenuNavigate('home');return false"><div class="ka-menu-icon">⌂</div><div><div class="ka-menu-text">سەرەکی</div><span class="ka-menu-desc">پەڕەی سەرەکی KURDIA</span></div><div class="ka-menu-arrow">‹</div></a>
-    <a href="#destinations" class="ka-menu-item" data-ka-page="destinations" onclick="kaMenuNavigate('destinations');return false"><div class="ka-menu-icon">⌖</div><div><div class="ka-menu-text">شوێنەکان</div><span class="ka-menu-desc">شوێنە جوانەکانی گەشت</span></div><div class="ka-menu-arrow">‹</div></a>
+    <a href="#destinations" class="ka-menu-item" data-ka-page="destinations" onclick="kaMenuNavigate('destinations');return false"><div class="ka-menu-icon">⌖</div><div><div class="ka-menu-text">شوێنەکان</div><span class="ka-menu-desc">شوێنە گەشتیاری و شاخەوانییەکان</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#booking" class="ka-menu-item" data-ka-page="booking" onclick="kaMenuNavigate('booking');return false"><div class="ka-menu-icon">🎟</div><div><div class="ka-menu-text">بەشداری گەشت</div><span class="ka-menu-desc">ناوی خۆت تۆمار بکە</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#private" class="ka-menu-item" data-ka-page="private" onclick="kaMenuNavigate('private');return false"><div class="ka-menu-icon">♛</div><div><div class="ka-menu-text">گەشتی تایبەت</div><span class="ka-menu-desc">گەشتێکی بەپێی داواکاریی خۆت</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#weather" class="ka-menu-item" data-ka-page="weather" onclick="kaMenuNavigate('weather');return false"><div class="ka-menu-icon">☀</div><div><div class="ka-menu-text">کەش و هەوا</div><span class="ka-menu-desc">پێشبینی کەشی هەر شوێنێک</span></div><div class="ka-menu-arrow">‹</div></a>
-    <a href="#safety" class="ka-menu-item" data-ka-page="safety" onclick="kaMenuNavigate('safety');return false"><div class="ka-menu-icon">♢</div><div><div class="ka-menu-text">سەلامەتی گەشت</div><span class="ka-menu-desc">ڕێنمایی سەلامەتی پێش گەشت</span></div><div class="ka-menu-arrow">‹</div></a>
-    <a href="#prep" class="ka-menu-item" data-ka-page="prep" onclick="kaMenuNavigate('prep');return false"><div class="ka-menu-icon">🎒</div><div><div class="ka-menu-text">ئامادەکاری و پێداویستی</div><span class="ka-menu-desc">چی لەگەڵ خۆت بهێنیت</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#reviews" class="ka-menu-item" data-ka-page="reviews" onclick="kaMenuNavigate('reviews');return false"><div class="ka-menu-icon">☆</div><div><div class="ka-menu-text">بیروڕا و هەڵسەنگاندن</div><span class="ka-menu-desc">ئەزموونی بەشداربووان</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#stories" class="ka-menu-item" data-ka-page="stories" onclick="kaMenuNavigate('stories');return false"><div class="ka-menu-icon">▤</div><div><div class="ka-menu-text">ستۆری</div><span class="ka-menu-desc">یادەوەری و ئەزموون</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#about" class="ka-menu-item" data-ka-page="about" onclick="kaMenuNavigate('about');return false"><div class="ka-menu-icon">ⓘ</div><div><div class="ka-menu-text">دەربارەی تیمەکە</div><span class="ka-menu-desc">ناساندنی KURDIA ADVENTURE</span></div><div class="ka-menu-arrow">‹</div></a>
@@ -3032,7 +3694,7 @@ document.addEventListener('click',function(e){
 }
 .top.scrolled{
   background:rgba(4,7,12,0.92);
-  border-bottom-color:rgba(229,35,79,0.25);
+  border-bottom-color:rgba(229,35,79,0.28);
   box-shadow:0 12px 30px rgba(0,0,0,0.65);
 }
 
@@ -3049,60 +3711,89 @@ document.addEventListener('click',function(e){
   transition:width .1s linear;
 }
 
-/* Spotlight Radial Glow on Cards */
-.featured, .dest, .tile, .glass, .safety-card, .public-review, .article, .stat, .privateHero{
+/* Shimmer Sweep Effect on Primary Red Buttons (Magic UI / Aceternity style) */
+.btn.red{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg, #e5234f 0%, #a91d37 100%);
+  box-shadow:0 12px 28px rgba(229,35,79,0.28), inset 0 1px 0 rgba(255,255,255,0.22);
+}
+.btn.red::after{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-60%;
+  width:40%;
+  height:200%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.24), transparent);
+  transform:rotate(25deg);
+  animation:kurdiaBtnShimmer 4.2s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes kurdiaBtnShimmer{
+  0%, 30%{left:-65%}
+  75%, 100%{left:140%}
+}
+.btn.green{
+  background:linear-gradient(135deg, #22c55e, #0c9b61);
+  color:#fff;
+  box-shadow:0 10px 24px rgba(12,155,97,0.3);
+}
+
+/* Spotlight Radial Glow on All Interactive Cards */
+.featured, .dest, .tile, .glass, .public-review, .article, .stat, .privateHero,
+.place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card,
+.private-trip-card, .private-vip-showcase, .booking-hero-banner, .private-page-hero{
   position:relative;
   overflow:hidden;
 }
-.featured::before, .dest::before, .tile::before, .glass::before, .safety-card::before, .public-review::before, .article::before, .stat::before, .privateHero::before{
+.featured::before, .dest::before, .tile::before, .glass::before, .public-review::before,
+.article::before, .stat::before, .place-card::before, .booking-trip-pick-card::before,
+.booking-form-card::before, .private-preset-card::before, .private-trip-card::before{
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(350px circle at var(--mx,50%) var(--my,50%), rgba(229,35,79,0.18), transparent 70%);
+  background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%), rgba(229,35,79,0.15), transparent 70%);
   opacity:0;
-  transition:opacity .25s ease;
+  transition:opacity .3s ease;
   pointer-events:none;
   z-index:1;
 }
-.featured:hover::before, .dest:hover::before, .tile:hover::before, .glass:hover::before, .safety-card:hover::before, .public-review:hover::before, .article:hover::before, .stat:hover::before, .privateHero:hover::before{
+.featured:hover::before, .place-card:hover::before, .booking-trip-pick-card:hover::before,
+.booking-form-card:hover::before, .private-preset-card:hover::before, .private-trip-card:hover::before{
   opacity:1;
 }
 
-/* Moving Border Beam on Hero Top & Featured Card */
-.top::after, .featured::after{
+/* Moving Border Beam on Key Containers */
+.top::after, .featured::after, .booking-form-card::after, .private-trip-card::after, .private-vip-showcase::after{
   content:"";
   position:absolute;
   top:0;
   left:-100%;
-  width:50%;
+  width:55%;
   height:1.5px;
-  background:linear-gradient(90deg, transparent, rgba(229,35,79,0.9), rgba(255,160,180,0.95), transparent);
-  animation:kurdiaBorderBeam 4s infinite linear;
+  background:linear-gradient(90deg, transparent, rgba(229,35,79,0.95), rgba(255,168,188,0.95), transparent);
+  animation:kurdiaBorderBeam 4.5s infinite linear;
   pointer-events:none;
   z-index:4;
 }
 @keyframes kurdiaBorderBeam{
-  0%{left:-60%}
-  100%{left:140%}
+  0%{left:-65%}
+  100%{left:145%}
 }
 
-/* Shiny Eyebrow Text */
+/* Crisp Non-Glitching Eyebrow Text */
 .eyebrow{
-  background:linear-gradient(110deg,#ff5c77 25%,#ffe4e8 50%,#ff5c77 75%);
-  background-size:200% auto;
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:kurdiaShinyEyebrow 4.5s linear infinite;
+  color:#ff6b86;
   display:inline-flex;
   align-items:center;
   gap:6px;
-}
-@keyframes kurdiaShinyEyebrow{
-  to{background-position:200% center}
+  text-shadow:0 0 18px rgba(229,35,79,0.28);
 }
 
-/* Multi-Trip Showcase Grid */
+/* =========================================================
+   1. MULTI-TRIP SHOWCASE GRID (HOMEPAGE)
+   ========================================================= */
 .home-trips-grid{
   display:grid;
   grid-template-columns:1fr;
@@ -3117,16 +3808,20 @@ document.addEventListener('click',function(e){
 .trip-showcase-card{
   display:flex;
   flex-direction:column;
-  transition:transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s cubic-bezier(.22,1,.36,1), border-color .3s ease;
+  transition:transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s cubic-bezier(.22,1,.36,1), border-color .28s ease;
   border:1px solid rgba(255,255,255,.12);
   background:linear-gradient(180deg, rgba(16,22,34,.95), rgba(8,11,18,.98));
   box-shadow:0 18px 42px rgba(0,0,0,.45);
-  transform-style:preserve-3d;
 }
-.trip-showcase-card:hover{
-  transform:translateY(-6px);
-  border-color:rgba(229,35,79,.52);
-  box-shadow:0 24px 55px rgba(0,0,0,.65), 0 0 30px rgba(229,35,79,.16);
+@media(hover:hover){
+  .trip-showcase-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(229,35,79,.52);
+    box-shadow:0 24px 55px rgba(0,0,0,.65), 0 0 30px rgba(229,35,79,.16);
+  }
+  .trip-showcase-card:hover .featureimg{
+    transform:scale(1.03);
+  }
 }
 .trip-showcase-card .featureimg{
   height:235px;
@@ -3134,10 +3829,7 @@ document.addEventListener('click',function(e){
   overflow:hidden;
   background-size:cover;
   background-position:center;
-  transition:transform .65s cubic-bezier(.22,1,.36,1);
-}
-.trip-showcase-card:hover .featureimg{
-  transform:scale(1.03);
+  transition:transform .55s cubic-bezier(.22,1,.36,1);
 }
 .trip-showcase-card .featureimg::after{
   content:"";
@@ -3147,7 +3839,7 @@ document.addEventListener('click',function(e){
 }
 .trip-status-pill{
   z-index:2;
-  background:rgba(8,13,20,.85);
+  background:rgba(8,13,20,.88);
   border:1px solid rgba(55,201,135,.55);
   color:#6bf0b3;
   font-weight:800;
@@ -3163,6 +3855,8 @@ document.addEventListener('click',function(e){
   flex-direction:column;
   flex:1;
   padding:20px;
+  position:relative;
+  z-index:2;
 }
 .trip-meta-top{
   display:flex;
@@ -3213,35 +3907,955 @@ document.addEventListener('click',function(e){
   white-space:nowrap;
   border-color:rgba(55,201,135,0.35)!important;
   color:#6bf0b3!important;
-  background:rgba(55,201,135,0.08)!important;
-}
-.trip-wa-btn:hover{
-  background:rgba(55,201,135,0.18)!important;
-  border-color:rgba(55,201,135,0.65)!important;
+  background:rgba(55,255,155,0.08)!important;
 }
 
-/* Micro-interaction on buttons */
-.btn{
+/* =========================================================
+   2. PLACES / DESTINATIONS (شوێنەکان) LUXURY CARDS & MODAL
+   ========================================================= */
+.places-filter-bar{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:4px 2px 16px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.places-filter-bar::-webkit-scrollbar{display:none}
+.pf-chip{
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,0.1);
+  background:linear-gradient(145deg, rgba(18,24,36,0.9), rgba(10,14,22,0.95));
+  color:#cbd5e1;
+  border-radius:14px;
+  padding:10px 16px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+}
+.pf-chip:hover{
+  border-color:rgba(229,35,79,0.45);
+  color:#fff;
+  transform:translateY(-1px);
+}
+.pf-chip.active{
+  background:linear-gradient(135deg, #e5234f, #a91d37);
+  border-color:#ff6b86;
+  color:#fff;
+  box-shadow:0 8px 24px rgba(229,35,79,0.32);
+}
+
+.places-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+@media(min-width:640px){
+  .places-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:18px;
+  }
+}
+@media(min-width:980px){
+  .places-grid{
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
+}
+
+.place-card{
+  border-radius:26px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:linear-gradient(170deg, rgba(16,22,33,0.96) 0%, rgba(8,11,18,0.99) 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,0.48);
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  transition:transform .32s cubic-bezier(.22,1,.36,1), border-color .32s ease, box-shadow .32s ease;
+}
+@media(hover:hover){
+  .place-card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(229,35,79,0.52);
+    box-shadow:0 24px 55px rgba(0,0,0,0.65), 0 0 28px rgba(229,35,79,0.16);
+  }
+  .place-card:hover .place-card-media{
+    transform:scale(1.04);
+  }
+}
+.place-card-media{
+  height:210px;
+  background-size:cover;
+  background-position:center;
   position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:14px;
+  transition:transform .55s cubic-bezier(.22,1,.36,1);
+}
+.place-card-media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(5,7,12,0.35) 0%, rgba(5,7,12,0.1) 45%, rgba(8,11,18,0.96) 100%);
+  pointer-events:none;
+}
+.place-card-badges{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.place-region-pill{
+  background:rgba(7,10,16,0.82);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.15);
+  color:#f1f5f9;
+  font-size:10.5px;
+  font-weight:800;
+  padding:5px 10px;
+  border-radius:10px;
+}
+.place-hiking-pill{
+  background:rgba(12,155,97,0.85);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(107,240,179,0.45);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+  padding:5px 10px;
+  border-radius:10px;
+}
+.place-hiking-pill.no-hiking{
+  background:rgba(37,99,235,0.82);
+  border-color:rgba(147,197,253,0.45);
+}
+.place-type-tag{
+  position:relative;
+  z-index:2;
+  align-self:flex-start;
+  color:#ff7a92;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.3px;
+}
+.place-card-body{
+  position:relative;
+  z-index:2;
+  padding:16px 18px 18px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+.place-card-body h3{
+  margin:0 0 6px;
+  font-size:19px;
+  font-weight:900;
+  color:#fff;
+}
+.place-card-body p{
+  margin:0 0 12px;
+  font-size:12px;
+  line-height:1.85;
+  color:#9da7b7;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
   overflow:hidden;
-  transition:transform .2s ease, box-shadow .2s ease;
 }
-.btn:hover{
+.place-card-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 10px;
+  font-size:11px;
+  color:#cbd5e1;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,0.07);
+  margin-top:auto;
+}
+.place-card-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  color:#ff6b86;
+  font-size:11.5px;
+  font-weight:800;
+}
+
+/* Destination Modal Sheet */
+.dest-modal-hero{
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+}
+.dest-modal-badges{
+  position:absolute;
+  bottom:12px;
+  right:12px;
+  left:12px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.dest-modal-region,.dest-modal-hiking{
+  background:rgba(7,10,16,0.86);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.16);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:11px;
+  font-size:11px;
+  font-weight:800;
+}
+.dest-modal-specs{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:8px;
+  margin:12px 0;
+}
+.dest-spec-box{
+  background:rgba(255,255,255,0.035);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  padding:10px 12px;
+}
+.dest-spec-box small{
+  display:block;
+  font-size:10px;
+  color:#94a3b8;
+  margin-bottom:3px;
+}
+.dest-spec-box b{
+  font-size:12px;
+  color:#fff;
+}
+.dest-modal-desc-box{
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  padding:14px;
+  margin-top:10px;
+}
+
+/* =========================================================
+   3. EXPEDITION REGISTRATION / BOOKING (#booking)
+   ========================================================= */
+.booking-hero-banner{
+  position:relative;
+  border-radius:28px;
+  padding:24px 22px;
+  background:linear-gradient(145deg, rgba(169,29,55,0.22) 0%, rgba(14,19,29,0.96) 55%, rgba(8,11,18,0.99) 100%);
+  border:1px solid rgba(229,35,79,0.28);
+  box-shadow:0 20px 50px rgba(0,0,0,0.45);
+  margin-bottom:20px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.booking-hero-banner h2{
+  margin:6px 0 6px;
+  font-size:clamp(22px, 5.5vw, 32px);
+  font-weight:900;
+}
+.booking-hero-banner p{
+  margin:0;
+  font-size:13px;
+  line-height:1.85;
+}
+.booking-trust-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  font-size:11.5px;
+  font-weight:800;
+  color:#e2e8f0;
+}
+.booking-trust-badges span{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+
+.booking-section-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:18px 2px 12px;
+}
+.booking-section-label span{
+  font-size:15px;
+  font-weight:900;
+  color:#fff;
+}
+.booking-section-label small{
+  font-size:11.5px;
+  font-weight:800;
+  color:#6bf0b3;
+}
+
+/* Booking Trip Pick Cards Grid */
+.booking-trips-cards-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-bottom:24px;
+}
+@media(min-width:720px){
+  .booking-trips-cards-grid{
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    gap:16px;
+  }
+}
+
+.booking-trip-pick-card{
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,0.11);
+  background:linear-gradient(165deg, rgba(17,23,35,0.96) 0%, rgba(9,12,20,0.99) 100%);
+  box-shadow:0 16px 40px rgba(0,0,0,0.45);
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  transition:transform .28s cubic-bezier(.22,1,.36,1), border-color .28s ease, box-shadow .28s ease;
+}
+.booking-trip-pick-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(229,35,79,0.45);
+}
+.booking-trip-pick-card.is-selected{
+  border-color:#e5234f;
+  background:linear-gradient(165deg, rgba(36,15,26,0.96) 0%, rgba(12,15,24,0.99) 100%);
+  box-shadow:0 18px 45px rgba(229,35,79,0.22), 0 0 0 1px rgba(229,35,79,0.4);
+}
+.btp-thumb{
+  height:175px;
+  width:100%;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:flex-end;
+  padding:12px;
+}
+.btp-thumb::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(5,7,11,0.15) 0%, rgba(9,12,20,0.92) 100%);
+  pointer-events:none;
+}
+.btp-status{
+  position:relative;
+  z-index:2;
+  background:rgba(7,11,18,0.86);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(55,201,135,0.5);
+  color:#6bf0b3;
+  font-size:10.5px;
+  font-weight:900;
+  padding:5px 11px;
+  border-radius:10px;
+}
+.btp-body{
+  position:relative;
+  z-index:2;
+  padding:16px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  flex:1;
+}
+.btp-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:4px;
+}
+.btp-loc{
+  font-size:11.5px;
+  color:#94a3b8;
+  font-weight:700;
+}
+.btp-price{
+  font-size:13px;
+  font-weight:900;
+  color:#ff6b86;
+  background:rgba(229,35,79,0.14);
+  border:1px solid rgba(229,35,79,0.3);
+  padding:3px 10px;
+  border-radius:9px;
+  direction:ltr;
+}
+.btp-title{
+  margin:0;
+  font-size:18px;
+  font-weight:900;
+  color:#fff;
+}
+.btp-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  font-size:11.5px;
+  color:#cbd5e1;
+  margin-bottom:10px;
+}
+.btp-seat-bar{
+  width:100%;
+  height:6px;
+  background:rgba(255,255,255,0.08);
+  border-radius:99px;
+  overflow:hidden;
+}
+.btp-seat-bar i{
+  display:block;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg, #37c987, #e5234f);
+  transition:width .6s cubic-bezier(.22,1,.36,1);
+}
+.btp-select-indicator{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 13px;
+  border-radius:13px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  font-size:11.5px;
+  font-weight:800;
+  color:#cbd5e1;
+  transition:all .25s ease;
+}
+.booking-trip-pick-card.is-selected .btp-select-indicator{
+  background:linear-gradient(135deg, rgba(229,35,79,0.24), rgba(169,29,55,0.16));
+  border-color:rgba(229,35,79,0.5);
+  color:#fff;
+}
+
+/* Booking Form Card */
+.booking-form-card{
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:linear-gradient(165deg, rgba(15,20,31,0.97) 0%, rgba(8,11,17,0.99) 100%);
+  box-shadow:0 24px 60px rgba(0,0,0,0.55);
+  padding:22px 18px;
+}
+@media(min-width:640px){
+  .booking-form-card{
+    padding:28px;
+  }
+}
+.booking-form-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  padding-bottom:16px;
+  margin-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.booking-form-kicker{
+  display:block;
+  font-size:11px;
+  font-weight:800;
+  color:#ff6b86;
+  margin-bottom:4px;
+}
+.booking-form-card-head h3{
+  margin:0;
+  font-size:21px;
+  font-weight:900;
+}
+.booking-selected-summary{
+  background:linear-gradient(145deg, rgba(229,35,79,0.14), rgba(15,20,31,0.9));
+  border:1px solid rgba(229,35,79,0.35);
+  border-radius:16px;
+  padding:10px 14px;
+  min-width:210px;
+}
+.booking-selected-summary small{
+  display:block;
+  font-size:10px;
+  color:#fda4af;
+}
+.booking-selected-summary b{
+  display:block;
+  font-size:14px;
+  color:#fff;
+  margin:2px 0;
+}
+.booking-selected-summary span{
+  display:block;
+  font-size:11px;
+  color:#cbd5e1;
+}
+
+.booking-field-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+@media(min-width:640px){
+  .booking-field-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+.booking-people-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  margin-top:4px;
+}
+.people-stepper{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:#080c13;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;
+  padding:4px;
+}
+.people-stepper .input{
+  width:56px;
+  text-align:center;
+  padding:6px 4px;
+  border:0;
+  background:transparent;
+  font-size:16px;
+  font-weight:900;
+}
+.stepper-btn{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  border:1px solid rgba(229,35,79,0.35);
+  background:rgba(229,35,79,0.16);
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  display:grid;
+  place-items:center;
+  transition:all .2s ease;
+}
+.stepper-btn:hover{
+  background:#e5234f;
+  transform:scale(1.05);
+}
+.stepper-btn:active{
+  transform:scale(0.94);
+}
+
+.booking-live-total{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-radius:16px;
+  background:linear-gradient(135deg, rgba(55,201,135,0.12), rgba(16,23,35,0.9));
+  border:1px solid rgba(55,201,135,0.32);
+  font-size:13px;
+}
+.booking-live-total strong{
+  font-size:16px;
+  font-weight:900;
+  color:#6bf0b3;
+}
+
+.fib-payment-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:16px;
+  border-radius:18px;
+  background:linear-gradient(145deg, rgba(16,185,129,0.12), rgba(11,16,24,0.96));
+  border:1px solid rgba(52,211,153,0.32);
+}
+.fib-badge{
+  display:inline-block;
+  font-size:11px;
+  font-weight:800;
+  color:#6bf0b3;
+  margin-bottom:4px;
+}
+.fib-payment-left strong{
+  display:block;
+  font-size:20px;
+  font-weight:900;
+  color:#fff;
+  letter-spacing:1px;
+}
+.fib-payment-left small{
+  display:block;
+  font-size:11px;
+  color:#94a3b8;
+  margin-top:3px;
+}
+.fib-copy-btn{
+  font-size:11.5px;
+  padding:10px 14px;
+  border-radius:12px;
+}
+
+/* =========================================================
+   4. BESPOKE PRIVATE EXPEDITIONS (#private & Homepage VIP)
+   ========================================================= */
+.private-vip-showcase{
+  border-radius:28px;
+  padding:26px 22px;
+  background:linear-gradient(145deg, rgba(42,14,27,0.94) 0%, rgba(13,17,27,0.98) 60%, rgba(7,10,16,0.99) 100%);
+  border:1px solid rgba(229,35,79,0.34);
+  box-shadow:0 24px 60px rgba(0,0,0,0.55);
+  cursor:pointer;
+  transition:transform .3s ease, border-color .3s ease;
+}
+.private-vip-showcase:hover{
+  transform:translateY(-3px);
+  border-color:rgba(229,35,79,0.6);
+}
+.private-vip-glow{
+  position:absolute;
+  top:-60px;
+  left:-60px;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(229,35,79,0.22), transparent 70%);
+  pointer-events:none;
+}
+.private-vip-content{
+  position:relative;
+  z-index:2;
+}
+.private-vip-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.private-vip-kicker{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  color:#fbbf24;
+}
+.private-vip-tag{
+  font-size:11px;
+  font-weight:800;
+  color:#fda4af;
+}
+.private-vip-content h2{
+  margin:0 0 8px;
+  font-size:clamp(22px, 5vw, 30px);
+  font-weight:900;
+}
+.private-vip-content p{
+  margin:0 0 16px;
+  font-size:13px;
+  line-height:1.9;
+  color:#cbd5e1;
+}
+.private-vip-features{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  margin-bottom:18px;
+  font-size:12px;
+  font-weight:700;
+  color:#e2e8f0;
+}
+.private-vip-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* Private Page Hero & Package Preset Cards */
+.private-page-hero{
+  border-radius:28px;
+  padding:24px 20px;
+  background:linear-gradient(155deg, rgba(35,14,25,0.92) 0%, rgba(12,16,25,0.97) 65%, rgba(8,11,17,0.99) 100%);
+  border:1px solid rgba(229,35,79,0.28);
+  box-shadow:0 20px 50px rgba(0,0,0,0.48);
+  margin-bottom:18px;
+}
+.private-page-hero h2{
+  margin:6px 0 8px;
+  font-size:clamp(22px, 5.5vw, 32px);
+  font-weight:900;
+}
+.private-page-hero p{
+  margin:0 0 18px;
+  font-size:13px;
+  line-height:1.85;
+}
+
+.private-presets-bar{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+@media(min-width:768px){
+  .private-presets-bar{
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:12px;
+  }
+}
+
+.private-preset-card{
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid rgba(255,255,255,0.11);
+  background:linear-gradient(155deg, rgba(19,25,38,0.95), rgba(10,14,22,0.98));
+  color:#fff;
+  border-radius:18px;
+  padding:13px 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-align:right;
+  cursor:pointer;
+  transition:transform .25s cubic-bezier(.22,1,.36,1), border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.private-preset-card:hover{
   transform:translateY(-2px);
+  border-color:rgba(229,35,79,0.5);
+  box-shadow:0 12px 28px rgba(0,0,0,0.45);
 }
-.btn:active{
-  transform:scale(0.97);
+.private-preset-card.active{
+  border-color:#e5234f;
+  background:linear-gradient(145deg, rgba(229,35,79,0.25), rgba(18,23,35,0.98));
+  box-shadow:0 10px 28px rgba(229,35,79,0.24), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.pp-ico{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  border-radius:13px;
+  background:rgba(229,35,79,0.15);
+  border:1px solid rgba(229,35,79,0.3);
+  display:grid;
+  place-items:center;
+  font-size:20px;
+}
+.private-preset-card.active .pp-ico{
+  background:linear-gradient(135deg, #e5234f, #a91d37);
+  border-color:#ff7a92;
+}
+.pp-text{
+  min-width:0;
+}
+.pp-text b{
+  display:block;
+  font-size:13px;
+  font-weight:900;
+  color:#fff;
+  margin-bottom:2px;
+}
+.pp-text small{
+  display:block;
+  font-size:10.5px;
+  color:#94a3b8;
+  line-height:1.4;
+}
+
+/* Private Wizard Container & Stepper Tabs */
+.private-trip-card{
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:linear-gradient(165deg, rgba(15,20,31,0.97) 0%, rgba(8,11,17,0.99) 100%);
+  box-shadow:0 24px 60px rgba(0,0,0,0.55);
+  padding:20px 16px;
+}
+@media(min-width:640px){
+  .private-trip-card{
+    padding:28px;
+  }
+}
+
+.private-wizard-steps-nav{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:6px;
+  padding:6px;
+  border-radius:18px;
+  background:#070a10;
+  border:1px solid rgba(255,255,255,0.09);
+  margin-bottom:16px;
+}
+.pw-step-pill{
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid transparent;
+  background:transparent;
+  color:#94a3b8;
+  border-radius:13px;
+  padding:10px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:11.5px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+  text-align:center;
+}
+.pw-step-pill:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.04);
+}
+.pw-step-pill.active{
+  background:linear-gradient(135deg, #e5234f, #a91d37);
+  border-color:rgba(255,255,255,0.2);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(229,35,79,0.32);
+}
+.pw-step-pill.done{
+  background:rgba(55,201,135,0.14);
+  border-color:rgba(55,201,135,0.35);
+  color:#6bf0b3;
+}
+.pw-num{
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  font-weight:900;
+}
+.pw-step-pill.active .pw-num{
+  background:rgba(0,0,0,0.28);
+  color:#fff;
+}
+@media(max-width:480px){
+  .pw-step-pill{
+    flex-direction:column;
+    gap:4px;
+    padding:8px 4px;
+    font-size:10.5px;
+  }
+}
+
+.private-field-group{
+  display:grid;
+  gap:6px;
+}
+
+.private-perks-strip{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin-top:6px;
+}
+@media(min-width:600px){
+  .private-perks-strip{
+    grid-template-columns:repeat(3, 1fr);
+  }
+}
+.private-perks-strip > div{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 13px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  font-size:11.5px;
+  font-weight:700;
+  color:#cbd5e1;
+}
+
+.private-dest-box{
+  display:grid;
+  gap:8px;
+}
+.private-quick-dests{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:2px;
+}
+.private-quick-dests button{
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid rgba(255,255,255,0.11);
+  background:rgba(255,255,255,0.04);
+  color:#e2e8f0;
+  border-radius:12px;
+  padding:8px 12px;
+  font-size:11.5px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.private-quick-dests button:hover,
+.private-quick-dests button.active{
+  background:rgba(229,35,79,0.22);
+  border-color:#e5234f;
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+.type-btn small{
+  font-size:9.5px;
+  color:#94a3b8;
+}
+.type-btn:has(input:checked){
+  background:linear-gradient(145deg, rgba(229,35,79,0.22), rgba(169,29,55,0.1));
+  border-color:#e5234f;
+  color:#fff;
+  box-shadow:0 8px 20px rgba(229,35,79,0.2);
+}
+.type-btn:has(input:checked) small{
+  color:#fda4af;
+}
+
+.toggle-info b{
+  display:block;
+  font-size:13px;
+  color:#fff;
+}
+.toggle-info small{
+  display:block;
+  font-size:11px;
+  color:#94a3b8;
+  margin-top:2px;
 }
 </style>
 
-<!-- KURDIA MASTER CINEMATIC MOTION ENGINE (GSAP + ScrollTrigger + Lenis + Three.js) -->
+<!-- KURDIA SMOOTH NON-GLITCHING MOTION & VISITOR TRACKER ENGINE -->
 <script id="kurdia-master-motion-engine">
 (function(){
   'use strict';
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const isDesktop = window.innerWidth > 900 && !('ontouchstart' in window);
 
-  // 1. Scroll Progress Bar
+  // 1. Scroll Progress Bar & Header Glass
   if(!document.querySelector('.kurdia-scroll-progress')){
     const bar = document.createElement('div');
     bar.className = 'kurdia-scroll-progress';
@@ -3255,285 +4869,85 @@ document.addEventListener('click',function(e){
     }, { passive: true });
   }
 
-  // 2. Lenis Smooth Scrolling Engine
-  let lenisInstance = null;
-  if(window.Lenis && !reduce){
-    try{
-      lenisInstance = new Lenis({
-        duration: isDesktop ? 1.15 : 0.85,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1.05,
-        touchMultiplier: 1.2
-      });
-      window.__kurdiaLenis = lenisInstance;
-      if(window.gsap && window.ScrollTrigger){
-        gsap.registerPlugin(ScrollTrigger);
-        lenisInstance.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => {
-          lenisInstance.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-      } else {
-        const raf = (time) => { lenisInstance.raf(time); requestAnimationFrame(raf); };
-        requestAnimationFrame(raf);
-      }
-    }catch(e){}
-  }
-
-  // 3. Hero Opening Cinematic
-  function playHeroEntrance(){
-    if(!window.gsap || reduce) return;
-    const hero = document.querySelector('.hero');
-    if(!hero) return;
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.fromTo('.top', { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.85 })
-      .fromTo('.hero .eyebrow', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7 }, '-=0.45')
-      .fromTo('#heroTitle', { y: 40, opacity: 0, scale: 0.98 }, { y: 0, opacity: 1, scale: 1, duration: 0.95, ease: 'power4.out' }, '-=0.5')
-      .fromTo('#heroText', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.55')
-      .fromTo('.hero .actions .btn', { y: 20, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.65, ease: 'back.out(1.5)' }, '-=0.5');
-
-    // Subtle parallax on hero background
-    if(window.ScrollTrigger){
-      gsap.to('.hero', {
-        backgroundPositionY: '35%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.hero',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.4
-        }
-      });
-    }
-  }
-
-  // 4. ScrollTrigger Reveals across every section and element
-  function initScrollTriggers(){
-    if(!window.gsap || !window.ScrollTrigger || reduce) return;
-
-    // A. Section Headers
-    document.querySelectorAll('.sectionhead').forEach(head => {
-      if(head.dataset.animated) return;
-      head.dataset.animated = '1';
-      gsap.fromTo(head,
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.75,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: head,
-            start: 'top 88%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    });
-
-    // B. Trip Showcase Cards
-    document.querySelectorAll('.trip-showcase-card, #homeTripsList .featured').forEach(card => {
-      if(card.dataset.animated) return;
-      card.dataset.animated = '1';
-      gsap.fromTo(card,
-        { y: 45, opacity: 0, scale: 0.97 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.85,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 86%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    });
-
-    // C. Destinations Grid - Staggered Waterfall
-    const destParent = document.getElementById('homeDests');
-    const destItems = destParent ? destParent.querySelectorAll('.dest') : [];
-    if(destItems.length && !destParent.dataset.animated){
-      destParent.dataset.animated = '1';
-      gsap.fromTo(destItems,
-        { y: 35, opacity: 0, scale: 0.95 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          stagger: 0.08,
-          duration: 0.65,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: destParent,
-            start: 'top 85%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    }
-
-    // D. Stories Rings - Bouncy Pop-In
-    const storiesParent = document.getElementById('homeStories');
-    const storyItems = storiesParent ? storiesParent.querySelectorAll('.story') : [];
-    if(storyItems.length && !storiesParent.dataset.animated){
-      storiesParent.dataset.animated = '1';
-      gsap.fromTo(storyItems,
-        { scale: 0.65, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          stagger: 0.05,
-          duration: 0.5,
-          ease: 'back.out(1.8)',
-          scrollTrigger: {
-            trigger: storiesParent,
-            start: 'top 88%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    }
-
-    // E. Private Experience Hero Banner
-    const priv = document.querySelector('.privateHero');
-    if(priv && !priv.dataset.animated){
-      priv.dataset.animated = '1';
-      gsap.fromTo(priv,
-        { y: 35, opacity: 0, scale: 0.98 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: priv,
-            start: 'top 86%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    }
-
-    // F. About Glass Card
-    const about = document.querySelector('.about .glass');
-    if(about && !about.dataset.animated){
-      about.dataset.animated = '1';
-      gsap.fromTo(about,
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.75,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: about,
-            start: 'top 85%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    }
-
-    // G. Safety Cards
-    const safety = document.querySelectorAll('.safety-card');
-    if(safety.length && !document.getElementById('safetyList')?.dataset.animated){
-      const sl = document.getElementById('safetyList');
-      if(sl) sl.dataset.animated = '1';
-      gsap.fromTo(safety,
-        { x: 30, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          stagger: 0.07,
-          duration: 0.6,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '#safetyList',
-            start: 'top 85%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    }
-
-    // H. Public Reviews
-    const reviews = document.querySelectorAll('.public-review');
-    if(reviews.length && !document.getElementById('reviewsListPublic')?.dataset.animated){
-      const rl = document.getElementById('reviewsListPublic');
-      if(rl) rl.dataset.animated = '1';
-      gsap.fromTo(reviews,
-        { y: 28, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.09,
-          duration: 0.65,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '#reviewsListPublic',
-            start: 'top 85%',
-            toggleActions: 'play none none none'
-          }
-        }
-      );
-    }
-  }
-
-  window.kurdiaRefreshMotion = function(){
-    setTimeout(() => {
-      if(window.ScrollTrigger) ScrollTrigger.refresh();
-      initScrollTriggers();
-    }, 120);
-  };
-
-  // 5. Aceternity Spotlight & 3D Tilt on Desktop
+  // 2. Interactive Spotlight Pointer Tracker (Aceternity / Magic UI effect)
   document.addEventListener('pointermove', e => {
-    const targets = document.querySelectorAll('.featured, .dest, .tile, .glass, .safety-card, .public-review, .article, .stat, .privateHero');
-    targets.forEach(card => {
+    const cards = document.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card');
+    cards.forEach(card => {
       const r = card.getBoundingClientRect();
       if(e.clientY >= r.top - 100 && e.clientY <= r.bottom + 100){
-        const x = e.clientX - r.left;
-        const y = e.clientY - r.top;
-        card.style.setProperty('--mx', x + 'px');
-        card.style.setProperty('--my', y + 'px');
-        if(isDesktop && card.classList.contains('tilt-3d-card') && e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom){
-          const rx = ((y / r.height) - 0.5) * -5;
-          const ry = ((x / r.width) - 0.5) * 5;
-          card.style.transform = `perspective(900px) translateY(-5px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
-        } else if(isDesktop && card.classList.contains('tilt-3d-card')){
-          card.style.transform = '';
-        }
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
       }
     });
   }, { passive: true });
 
-  // 6. Three.js Ambient Starfield & Kurdish Night Embers Canvas
+  // 3. Smooth Staggered Entrance Animations (GSAP + Anime.js, Glitch-Free with clearProps)
+  window.kurdiaAnimatePageCards = function(pageId){
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce || !window.gsap) return;
+    try{
+      const activePage = document.getElementById(pageId || (location.hash || '#home').slice(1) || 'home');
+      if(!activePage) return;
+      const targets = activePage.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .home-weather-strip');
+      if(targets.length){
+        gsap.killTweensOf(targets);
+        gsap.fromTo(targets,
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.44, stagger: 0.055, ease: 'power3.out', clearProps: 'transform,opacity' }
+        );
+      }
+      // Animate seat progress bars with Anime.js
+      if(window.anime){
+        const bars = activePage.querySelectorAll('.btp-seat-bar i');
+        bars.forEach(b => {
+          const targetW = b.style.width || '50%';
+          b.style.width = '0%';
+          anime({
+            targets: b,
+            width: targetW,
+            duration: 950,
+            easing: 'easeOutExpo',
+            delay: 180
+          });
+        });
+      }
+    }catch(e){}
+  };
+
+  window.kurdiaRefreshMotion = function(){
+    if(window.ScrollTrigger){
+      try{ ScrollTrigger.refresh(); }catch(e){}
+    }
+    window.kurdiaAnimatePageCards();
+  };
+
+  window.addEventListener('hashchange', () => {
+    setTimeout(() => window.kurdiaAnimatePageCards(), 80);
+  });
+
+  // 4. Subtle Ambient Background Canvas (Three.js Starfield)
   function initThreeAtmosphere(){
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!window.THREE || reduce) return;
     try{
       if(document.getElementById('kurdiaThreeAmbientCanvas')) return;
+      const isDesktop = window.innerWidth > 900;
       const bgCanvas = document.createElement('canvas');
       bgCanvas.id = 'kurdiaThreeAmbientCanvas';
       document.body.prepend(bgCanvas);
-      const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+      const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: false });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
       camera.position.z = 6;
 
-      const count = isDesktop ? 220 : 120;
+      const count = isDesktop ? 140 : 65;
       const geo = new THREE.BufferGeometry();
       const pts = new Float32Array(count * 3);
       for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 16;
       geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-      const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.046, transparent: true, opacity: 0.6 });
+      const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.042, transparent: true, opacity: 0.45 });
       const particles = new THREE.Points(geo, mat);
       scene.add(particles);
 
@@ -3541,19 +4955,70 @@ document.addEventListener('click',function(e){
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-      });
+      }, { passive: true });
 
       function animateThree(){
         requestAnimationFrame(animateThree);
-        particles.rotation.y += 0.0005;
-        particles.rotation.x += 0.00018;
+        particles.rotation.y += 0.00035;
         renderer.render(scene, camera);
       }
       animateThree();
     }catch(e){}
   }
 
-  // 7. Sync with Admin LocalStorage
+  // 5. Real-Time Website Visitor Tracking (Synced with Server + LocalStorage for Admin)
+  async function trackMainSiteVisit(){
+    try{
+      const todayKey = new Date().toISOString().slice(0, 10);
+      let vid = localStorage.getItem('kurdia_visitor_uid');
+      let isNewUnique = false;
+      if(!vid){
+        vid = 'v_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+        localStorage.setItem('kurdia_visitor_uid', vid);
+        isNewUnique = true;
+      }
+      const sessionCounted = sessionStorage.getItem('kurdia_visit_counted_' + todayKey);
+      const pageId = (location.hash || '#home').slice(1) || 'home';
+
+      const rawLocal = JSON.parse(localStorage.getItem('kurdia_visitor_stats_v1') || 'null') || {
+        totalVisits: 142,
+        uniqueVisitors: 98,
+        daily: {},
+        recent: []
+      };
+      if(!sessionCounted){
+        sessionStorage.setItem('kurdia_visit_counted_' + todayKey, '1');
+        rawLocal.totalVisits = (Number(rawLocal.totalVisits) || 0) + 1;
+        if(isNewUnique) rawLocal.uniqueVisitors = (Number(rawLocal.uniqueVisitors) || 0) + 1;
+        rawLocal.daily = rawLocal.daily || {};
+        rawLocal.daily[todayKey] = (Number(rawLocal.daily[todayKey]) || 0) + 1;
+        rawLocal.recent = Array.isArray(rawLocal.recent) ? rawLocal.recent : [];
+        rawLocal.recent.unshift({
+          id: vid,
+          page: pageId,
+          device: /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'مۆبایل 📱' : 'کۆمپیوتەر 💻',
+          time: new Date().toISOString()
+        });
+        rawLocal.recent = rawLocal.recent.slice(0, 30);
+        localStorage.setItem('kurdia_visitor_stats_v1', JSON.stringify(rawLocal));
+
+        fetch('/api/visitors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ visitorId: vid, page: pageId, userAgent: navigator.userAgent })
+        }).then(r => r.json()).then(srv => {
+          if(srv && srv.ok){
+            rawLocal.totalVisits = Math.max(rawLocal.totalVisits, Number(srv.totalVisits || 0));
+            rawLocal.uniqueVisitors = Math.max(rawLocal.uniqueVisitors, Number(srv.uniqueVisitors || 0));
+            rawLocal.daily[todayKey] = Math.max(rawLocal.daily[todayKey] || 0, Number(srv.todayVisits || 0));
+            localStorage.setItem('kurdia_visitor_stats_v1', JSON.stringify(rawLocal));
+          }
+        }).catch(()=>{});
+      }
+    }catch(e){}
+  }
+
+  // 6. Sync with Admin LocalStorage
   function syncAdminData(){
     try{
       const raw = localStorage.getItem('kurdia_admin_multitrip_v6');
@@ -3564,6 +5029,10 @@ document.addEventListener('click',function(e){
         localStorage.setItem('kurdia_live_version', adminState.appVersion);
         if(typeof updateSiteVersionUI === 'function') updateSiteVersionUI(adminState.appVersion);
       }
+      if(Array.isArray(adminState.places) && adminState.places.length){
+        data.destinations = adminState.places.map((p, i) => normalizePlaceItem(p, i)).filter(Boolean);
+        renderPlacesPublic();
+      }
     }catch(e){}
   }
   window.addEventListener('storage', e => {
@@ -3573,8 +5042,8 @@ document.addEventListener('click',function(e){
   function startAll(){
     syncAdminData();
     initThreeAtmosphere();
-    setTimeout(playHeroEntrance, 100);
-    setTimeout(initScrollTriggers, 250);
+    trackMainSiteVisit();
+    setTimeout(() => window.kurdiaAnimatePageCards(), 150);
   }
 
   if(document.readyState === 'loading'){
