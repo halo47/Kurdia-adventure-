@@ -44,10 +44,60 @@ function saveVisitors(v) {
   } catch (e) {}
 }
 
+const REGISTRATIONS_META_FILE = path.join(ROOT, 'registrations-meta.json');
+
+function loadRegMeta() {
+  try {
+    if (fs.existsSync(REGISTRATIONS_META_FILE)) {
+      return JSON.parse(fs.readFileSync(REGISTRATIONS_META_FILE, 'utf8'));
+    }
+  } catch (e) {}
+  return { items: [] };
+}
+
+function saveRegMeta(m) {
+  try {
+    fs.writeFileSync(REGISTRATIONS_META_FILE, JSON.stringify(m, null, 2), 'utf8');
+  } catch (e) {}
+}
+
 const server = http.createServer((req, res) => {
   try {
     const parsedUrl = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
     let pathname = decodeURIComponent(parsedUrl.pathname);
+
+    if (pathname === '/api/registrations-meta') {
+      if (req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+          const store = loadRegMeta();
+          let payload = {};
+          try { payload = JSON.parse(body || '{}'); } catch (_) {}
+          if (!Array.isArray(store.items)) store.items = [];
+          store.items.unshift({
+            id: payload.id || ('reg-' + Date.now()),
+            primaryName: String(payload.primaryName || '').trim(),
+            name: String(payload.name || '').trim(),
+            participants: Array.isArray(payload.participants) ? payload.participants : [],
+            phone: String(payload.phone || '').trim(),
+            people: Number(payload.people || 1),
+            trip: String(payload.trip || '').trim(),
+            time: payload.time || new Date().toISOString()
+          });
+          store.items = store.items.slice(0, 500);
+          saveRegMeta(store);
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({ ok: true, items: store.items }));
+        });
+        return;
+      } else {
+        const store = loadRegMeta();
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify({ ok: true, items: store.items || [] }));
+        return;
+      }
+    }
 
     if (pathname === '/api/visitors') {
       const todayKey = new Date().toISOString().slice(0, 10);

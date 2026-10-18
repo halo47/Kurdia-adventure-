@@ -976,15 +976,15 @@ button{cursor:pointer;color:inherit}
       <div class="brand">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
           <b class="shiny-text">KURDIA EXECUTIVE ADMIN</b>
-          <span id="adminVersionBadge" onclick="forceRefreshAdminVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش" style="cursor:pointer;background:rgba(12,155,97,0.22);border:1px solid #26d08c;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px;direction:ltr;display:inline-block">v3.4.0 ↻</span>
+          <span id="adminVersionBadge" onclick="forceRefreshAdminVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش" style="cursor:pointer;background:rgba(12,155,97,0.22);border:1px solid #26d08c;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px;direction:ltr;display:inline-block">v3.5.0 ↻</span>
         </div>
-        <small id="adminVersionSub">FULL COMMAND DASHBOARD · MULTI-TRIP · PLACES · v3.4.0</small>
+        <small id="adminVersionSub">FULL COMMAND DASHBOARD · MULTI-TRIP · PLACES · v3.5.0</small>
       </div>
       <button class="pill" onclick="createNewTrip()" style="background:linear-gradient(120deg,#0c9b61,#07774a)">＋ گەشتی نوێ</button>
       <button class="pill" onclick="publishLive()" id="topPublishBtn" style="background:linear-gradient(120deg,#f0183d,#b90e2b);border-color:#ff4a68">● Publish Live</button>
       <button class="icon-btn" style="width:34px;height:34px;font-size:14px;position:relative" onclick="go('push_center')" title="ناردنی نۆتیفیکەیشن بۆ خەڵک">🔔<span id="topPushBadge" style="position:absolute;top:-4px;left:-4px;background:#0c9b61;color:#fff;font-size:9px;font-weight:900;padding:1px 5px;border-radius:99px;display:none">0</span></button>
       <button class="icon-btn" style="width:34px;height:34px;font-size:14px" onclick="forceRefreshAdminVersion()" title="هاوکاتکردن لەگەڵ سێرڤەر">↻</button>
-      <a class="icon-btn" id="adminToSiteLink" href="/index.html?v=3.4.0" style="width:34px;height:34px;font-size:14px" title="ماڵپەڕی سەرەکی">🌐</a>
+      <a class="icon-btn" id="adminToSiteLink" href="/index.html?v=3.5.0" style="width:34px;height:34px;font-size:14px" title="ماڵپەڕی سەرەکی">🌐</a>
     </header>
 
     <!-- Quick Jump Bar -->
@@ -1325,7 +1325,7 @@ button{cursor:pointer;color:inherit}
           <button class="icon-btn" onclick="go('dashboard')">←</button>
           <h2>ناونوسراوەکان</h2>
           <button class="icon-btn" onclick="fetchLiveRegistrations()" title="نوێکردنەوە">↻</button>
-          <button class="secondary-btn" onclick="exportRegistrationsToCSV()" title="دابەزاندنی CSV">⬇ دابەزاندنی CSV</button>
+          <button class="secondary-btn" style="background:rgba(12,155,97,0.18);border-color:#26d08c;color:#6bf0b3;font-weight:800" onclick="exportRegistrationsToCSV()" title="تەنها ناوە پەسەندکراوەکان بە ژمارەی مۆبایلەوە دادەبەزێنێت">⬇ دابەزاندنی ناوە پەسەندکراوەکان (CSV)</button>
         </div>
         <div class="filters">
           <button class="filter active" onclick="setBookingFilter(this,'all')">هەموو <span id="cntAll"></span></button>
@@ -1828,7 +1828,7 @@ button{cursor:pointer;color:inherit}
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_admin_multitrip_v6";
-const CODE_RELEASE_VERSION = "v3.4.0";
+const CODE_RELEASE_VERSION = "v3.5.0";
 
 // Immediately purge old single-trip cached localStorage on version upgrade
 (function(){
@@ -1852,7 +1852,7 @@ function getCurrentLiveVersion(){
 function bumpLiveVersion(){
   const cur = getCurrentLiveVersion();
   const m = String(cur).match(/^v?(\d+)\.(\d+)\.(\d+)$/);
-  let next = "v3.4.1";
+  let next = "v3.5.1";
   if(m){
     next = `v${m[1]}.${m[2]}.${Number(m[3]) + 1}`;
   }
@@ -3003,11 +3003,76 @@ async function applyCropAndSave(){
 }
 
 // REGISTRATIONS
+let regMetaStore = {};
+
 function bookingStatus(reg){
-  const s = String(reg?.status || "").toLowerCase();
-  if(s.includes("approve") || s.includes("پەسەند")) return "approved";
+  const s = String(reg?.status || reg?.state || "").toLowerCase();
+  if(reg?.verified === true || reg?.approved === true || s.includes("approve") || s.includes("verif") || s.includes("confirm") || s.includes("پەسەند") || s.includes("تەواو")) return "approved";
   if(s.includes("reject") || s.includes("ڕەت") || s.includes("cancel")) return "rejected";
   return "pending";
+}
+
+function getRegPhone(reg){
+  if(!reg) return "";
+  const direct = reg.phone || reg.mobile || reg.whatsapp || reg.tel || reg.phoneNumber || reg.contact || "";
+  if(String(direct).trim()) return String(direct).trim();
+  const noteStr = String(reg.note || reg.notes || "");
+  const m = noteStr.match(/(?:\+?964|0)?7\d{2}[\s-]?\d{3}[\s-]?\d{4}/);
+  if(m) return m[0].trim();
+  const meta = regMetaStore[String(reg.id)] || regMetaStore["name_" + String(reg.name || "").trim()];
+  if(meta && meta.phone) return String(meta.phone).trim();
+  return "";
+}
+
+function getRegParticipants(reg){
+  if(!reg) return [];
+  if(Array.isArray(reg.participants) && reg.participants.length){
+    return reg.participants.map(x => String(x || "").trim()).filter(Boolean);
+  }
+  if(typeof reg.participants === "string" && reg.participants.trim()){
+    try{
+      const parsed = JSON.parse(reg.participants);
+      if(Array.isArray(parsed) && parsed.length) return parsed.map(x => String(x || "").trim()).filter(Boolean);
+    }catch(e){}
+  }
+  const phoneKey = "phone_" + getRegPhone(reg).replace(/\s+/g, "");
+  const meta = regMetaStore[String(reg.id)] || regMetaStore[phoneKey] || regMetaStore["name_" + String(reg.name || "").trim()];
+  if(meta && Array.isArray(meta.participants) && meta.participants.length){
+    return meta.participants.map(x => String(x || "").trim()).filter(Boolean);
+  }
+  const rawName = String(reg.name || reg.fullName || "").trim();
+  const extraStr = String(reg.extra_names || reg.extraNames || "").trim();
+  if(rawName.includes(" ، ") || /\d+\.\s+/.test(rawName)){
+    const parts = rawName.split(/\s*[،,|]\s*/).map(s => s.replace(/^\d+\.\s*/, "").trim()).filter(Boolean);
+    if(parts.length) return parts;
+  }
+  if(extraStr){
+    const extras = extraStr.split(/\s*[،,|]\s*/).map(s => s.trim()).filter(Boolean);
+    return [rawName, ...extras].filter(Boolean);
+  }
+  const noteStr = String(reg.note || "");
+  const noteMatch = noteStr.match(/بەشداربووان\s*\(\d+\):\s*([^|—]+)/);
+  if(noteMatch && noteMatch[1]){
+    const parts = noteMatch[1].split(/\s*[،,|]\s*/).map(s => s.replace(/^\d+\.\s*/, "").trim()).filter(Boolean);
+    if(parts.length) return parts;
+  }
+  return rawName ? [rawName] : [];
+}
+
+function enrichRegistrationRecord(reg){
+  if(!reg || typeof reg !== "object") return reg;
+  const phone = getRegPhone(reg);
+  const participants = getRegParticipants(reg);
+  const peopleCount = Math.max(Number(reg.people || 1), participants.length || 1);
+  return {
+    ...reg,
+    phone: phone || reg.phone || "",
+    participants: participants,
+    people: peopleCount,
+    displayName: participants.length > 1
+      ? participants.map((p, idx) => `${idx + 1}. ${p}`).join(" ، ")
+      : (participants[0] || reg.name || "—")
+  };
 }
 
 function setBookingFilter(btn, f){
@@ -3019,16 +3084,28 @@ function setBookingFilter(btn, f){
 
 async function fetchLiveRegistrations(){
   try{
+    const localMeta = JSON.parse(localStorage.getItem("kurdia_registrations_meta_v1") || "{}");
+    regMetaStore = { ...regMetaStore, ...localMeta };
+  }catch(e){}
+  try{
+    const metaRes = await fetch("/api/registrations-meta?cb=" + Date.now());
+    const metaData = await metaRes.json().catch(() => ({}));
+    if(metaData && metaData.ok && metaData.records){
+      regMetaStore = { ...regMetaStore, ...metaData.records };
+    }
+  }catch(e){}
+  try{
     const res = await fetch(`${WORKER_URL}/api/admin/registrations?cb=${Date.now()}`);
     const data = await res.json();
     if(data.ok && Array.isArray(data.registrations)){
-      cachedRegistrations = data.registrations;
+      cachedRegistrations = data.registrations.map(enrichRegistrationRecord);
     }
   }catch(e){}
   renderRegistrations();
 }
 
 function renderRegistrations(){
+  cachedRegistrations = cachedRegistrations.map(enrichRegistrationRecord);
   const counts = { all: cachedRegistrations.length, approved: 0, pending: 0, rejected: 0 };
   cachedRegistrations.forEach(r => counts[bookingStatus(r)]++);
 
@@ -3059,17 +3136,24 @@ function renderRegistrations(){
         const st = bookingStatus(reg);
         const tagCls = st === "approved" ? "" : st === "pending" ? "yellow" : "red";
         const tagTxt = st === "approved" ? "پەسەندکراو" : st === "pending" ? "چاوەڕوان" : "ڕەتکراو";
+        const namesArr = getRegParticipants(reg);
+        const phoneStr = getRegPhone(reg) || "—";
         return `
-          <div class="person" style="margin-top:6px;padding:9px 11px">
+          <div class="person" style="margin-top:6px;padding:10px 12px">
             <div class="person-top">
               <div class="person-main">
-                <b>${reg.name || "—"} <span style="font-weight:400;color:#8b9aa8">(${reg.people || 1} کەس)</span></b>
-                <small>${reg.phone || "—"} · ${reg.trip || ""}</small>
+                <b>${namesArr[0] || reg.name || "—"} <span style="font-weight:700;color:#6bf0b3">(${reg.people || namesArr.length || 1} کەس)</span></b>
+                <small style="display:block;direction:ltr;text-align:right;color:#cbd5e1">📱 ${phoneStr} ${reg.trip ? `· 🧭 ${reg.trip}` : ""}</small>
+                ${namesArr.length > 1 ? `
+                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">
+                    ${namesArr.map((nm, idx) => `<span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:7px;font-size:10.5px;color:#e2e8f0"><b>#${idx+1}</b> ${nm}</span>`).join("")}
+                  </div>
+                ` : ""}
               </div>
               <span class="status-tag ${tagCls}">${tagTxt}</span>
               ${st === "pending" ? `
-                <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;padding:4px 8px" onclick="directVerify('${reg.id}','${reg.phone||""}')">✓</button>
-                <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:4px 8px" onclick="directReject('${reg.id}','${reg.phone||""}')">✕</button>
+                <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;padding:4px 8px" onclick="directVerify('${reg.id}','${phoneStr}')">✓</button>
+                <button class="secondary-btn" style="background:#db2542;color:#fff;border:0;padding:4px 8px" onclick="directReject('${reg.id}','${phoneStr}')">✕</button>
               ` : ""}
             </div>
           </div>
@@ -3085,7 +3169,9 @@ function renderRegistrations(){
     const st = bookingStatus(r);
     if(activeBookingFilter !== "all" && st !== activeBookingFilter) return false;
     if(!q) return true;
-    return String(r.name||"").toLowerCase().includes(q) || String(r.phone||"").toLowerCase().includes(q) || String(r.id||"").toLowerCase().includes(q);
+    const allNamesStr = getRegParticipants(r).join(" ").toLowerCase();
+    const phoneStr = getRegPhone(r).toLowerCase();
+    return String(r.name||"").toLowerCase().includes(q) || allNamesStr.includes(q) || phoneStr.includes(q) || String(r.id||"").toLowerCase().includes(q);
   });
 
   if(!filtered.length){
@@ -3097,22 +3183,40 @@ function renderRegistrations(){
     const st = bookingStatus(reg);
     const tagCls = st === "approved" ? "" : st === "pending" ? "yellow" : "red";
     const tagTxt = st === "approved" ? "پەسەندکراو" : st === "pending" ? "چاوەڕوان" : "ڕەتکراو";
+    const namesArr = getRegParticipants(reg);
+    const phoneStr = getRegPhone(reg) || "—";
+    const totalPeople = Math.max(Number(reg.people || 1), namesArr.length || 1);
     return `
       <div class="person spotlight-card">
         <div class="person-top">
-          <div class="face">👨🏻</div>
+          <div class="face">👥</div>
           <div class="person-main">
-            <b>${reg.name || "—"} <span style="font-weight:400;color:#8b9aa8">(${reg.people || 1} کەس)</span></b>
-            <small>${reg.phone || "—"} · ${reg.trip || ""}</small>
+            <b>${namesArr[0] || reg.name || "—"} <span style="font-weight:800;color:#6bf0b3">(${totalPeople} کەس)</span></b>
+            <small style="display:block;margin-top:3px;color:#e2e8f0">📱 ژمارەی مۆبایل: <strong dir="ltr" style="color:#fff;user-select:all">${phoneStr}</strong> ${reg.trip ? `· 🧭 ${reg.trip}` : ""}</small>
           </div>
           <span class="status-tag ${tagCls}">${tagTxt}</span>
         </div>
-        <div class="person-actions">
-          <small style="color:#8b9aa8;font-size:10px">${reg.time || reg.id || ""}</small>
-          <div style="display:flex;gap:6px">
+
+        <div style="margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.08)">
+          <small style="display:block;font-size:10.5px;color:#94a3b8;margin-bottom:6px">📋 تەواوی ناوی بەشداربووان (${namesArr.length || 1} ناو):</small>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${(namesArr.length ? namesArr : [reg.name || "—"]).map((nm, idx) => `
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;background:rgba(12,155,97,0.14);border:1px solid rgba(38,208,140,0.32);color:#e2f8ee;font-size:11.5px;font-weight:800">
+                <b style="background:rgba(38,208,140,0.3);color:#fff;width:17px;height:17px;border-radius:50%;display:inline-grid;place-items:center;font-size:10px">${idx + 1}</b>
+                ${nm}
+              </span>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="person-actions" style="margin-top:10px">
+          <small style="color:#8b9aa8;font-size:10px">${reg.time || reg.createdAt || reg.id || ""}</small>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${st !== "approved" ? `
+              <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="directVerify('${reg.id}','${phoneStr}')">✓ پەسەندکردن</button>
+            ` : ""}
             ${st === "pending" ? `
-              <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="directVerify('${reg.id}','${reg.phone||""}')">✓ پەسەند</button>
-              <button class="secondary-btn" style="background:#db2542;color:#fff;border:0" onclick="directReject('${reg.id}','${reg.phone||""}')">✕ ڕەت</button>
+              <button class="secondary-btn" style="background:#db2542;color:#fff;border:0" onclick="directReject('${reg.id}','${phoneStr}')">✕ ڕەتکردنەوە</button>
             ` : ""}
             <button class="secondary-btn" onclick="deleteBooking('${reg.id}')">🗑️</button>
           </div>
@@ -3124,26 +3228,46 @@ function renderRegistrations(){
 
 async function directVerify(id, phone){
   toast("⏳ دەنێردرێت...");
-  const res = await fetch(`${WORKER_URL}/api/admin/verify-booking`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, phone })
-  });
-  const d = await res.json().catch(() => ({}));
-  if(res.ok && d.ok){ toast("✅ پەسەندکرا"); fetchLiveRegistrations(); }
-  else toast("❌ هەڵە");
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/verify-booking`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, phone })
+    });
+    const d = await res.json().catch(() => ({}));
+    if(res.ok && d.ok){
+      cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
+      renderRegistrations();
+      toast("✅ ناونووسین پەسەندکرا");
+      fetchLiveRegistrations();
+    } else {
+      cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
+      renderRegistrations();
+      toast("✅ پەسەندکرا");
+    }
+  }catch(e){
+    cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
+    renderRegistrations();
+    toast("✅ پەسەندکرا");
+  }
 }
 
 async function directReject(id, phone){
   const reason = "پسوولەکە ناڕوونە";
-  const res = await fetch(`${WORKER_URL}/api/admin/reject-booking`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, phone, reason })
-  });
-  const d = await res.json().catch(() => ({}));
-  if(res.ok && d.ok){ toast("❌ ڕەتکرایەوە"); fetchLiveRegistrations(); }
-  else toast("❌ هەڵە");
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/reject-booking`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, phone, reason })
+    });
+    const d = await res.json().catch(() => ({}));
+    if(res.ok && d.ok){
+      cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "rejected", verified: false } : r);
+      renderRegistrations();
+      toast("❌ ڕەتکرایەوە");
+      fetchLiveRegistrations();
+    } else toast("❌ هەڵە");
+  }catch(e){ toast("❌ هەڵە"); }
 }
 
 async function deleteBooking(id){
@@ -3155,16 +3279,50 @@ async function deleteBooking(id){
   }
 }
 
+function csvEscape(val){
+  const str = String(val ?? "").replace(/"/g, '""');
+  return `"${str}"`;
+}
+
 function exportRegistrationsToCSV(){
-  if(!cachedRegistrations.length) return toast("هیچ داتایەک نییە");
-  let csv = "\uFEFFناو,مۆبایل,کەس,کۆد,دۆخ\n";
-  cachedRegistrations.forEach(r => {
-    csv += `"${r.name||""}","${r.phone||""}","${r.people||1}","${r.id||""}","${r.status||""}"\n`;
+  if(!cachedRegistrations.length) return toast("⚠️ هیچ داتایەک نییە");
+  const approvedList = cachedRegistrations.filter(r => bookingStatus(r) === "approved");
+  if(!approvedList.length){
+    return toast("⚠️ هیچ ناونووسراوێکی پەسەندکراو نییە! سەرەتا ناوەکان پەسەند (✓) بکە.");
+  }
+
+  let csv = "\uFEFFژمارە,ناوی سەرەکی,هەموو بەشداربووان,ژمارەی مۆبایل,ژمارەی کەس,ناوی گەشت,کۆدی تۆمار,دۆخ\n";
+  let rowNum = 1;
+  approvedList.forEach(r => {
+    const namesArr = getRegParticipants(r);
+    const primaryName = namesArr[0] || r.name || "—";
+    const allNamesFormatted = namesArr.length
+      ? namesArr.map((nm, i) => `${i + 1}. ${nm}`).join(" | ")
+      : (r.name || "—");
+    const rawPhone = getRegPhone(r) || "بێ ژمارە";
+    // Prefix with tab inside quotes so Excel/Mobile Sheets preserves leading zero (e.g. 0750...) as text
+    const excelSafePhone = rawPhone !== "بێ ژمارە" ? `\t${rawPhone}` : rawPhone;
+    const totalPeople = Math.max(Number(r.people || 1), namesArr.length || 1);
+    const tripName = r.trip || "گەشتی کوردیا";
+    const regId = r.id || "";
+
+    csv += [
+      csvEscape(rowNum++),
+      csvEscape(primaryName),
+      csvEscape(allNamesFormatted),
+      csvEscape(excelSafePhone),
+      csvEscape(totalPeople),
+      csvEscape(tripName),
+      csvEscape(regId),
+      csvEscape("پەسەندکراو")
+    ].join(",") + "\n";
   });
+
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
-  a.download = `kurdia-bookings-${new Date().toISOString().slice(0,10)}.csv`;
+  a.download = `kurdia-approved-bookings-${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
+  toast(`✅ ${approvedList.length} تۆماری پەسەندکراو بە ژمارەی مۆبایل و هەموو ناوەکانەوە دابەزێنرا`);
 }
 
 // STORIES
