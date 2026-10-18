@@ -9,7 +9,7 @@
 <script>
 // Auto cache buster: upgrade stale cached versions immediately
 (function(){
-  var V = 'v3.5.0';
+  var V = 'v3.7.0';
   try {
     var stored = localStorage.getItem('kurdia_app_ver');
     if (stored !== V) {
@@ -676,7 +676,21 @@ main,section,.section,.page-section{background-color:transparent!important}
     <div style="display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
       <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
     </div>
-    <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.14);border:1px solid rgba(55,201,135,0.5);color:#6bf0b3;font-size:10px;font-weight:900;padding:5px 10px;border-radius:999px;direction:ltr;letter-spacing:.4px;flex-shrink:0;white-space:nowrap">v3.5.0 ↻</span>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <div class="top-lang-wrap" id="topLangWrap">
+        <button type="button" class="top-lang-btn" id="topLangBtn" onclick="toggleTopLangMenu(event)" title="گۆڕینی زمان / Change Language">
+          <span>🌐</span>
+          <span id="topLangCode">KU</span>
+          <span style="font-size:9px;opacity:.75">▾</span>
+        </button>
+        <div class="top-lang-dropdown" id="topLangDropdown">
+          <button type="button" class="top-lang-opt active" data-lang="ku" onclick="selectSiteLanguage('ku', event)"><span>☀️ کوردی</span><i class="tl-check">✓</i></button>
+          <button type="button" class="top-lang-opt" data-lang="ar" onclick="selectSiteLanguage('ar', event)"><span>🇮🇶 العربية</span><i class="tl-check">✓</i></button>
+          <button type="button" class="top-lang-opt" data-lang="en" onclick="selectSiteLanguage('en', event)"><span>🇬🇧 English</span><i class="tl-check">✓</i></button>
+        </div>
+      </div>
+      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.14);border:1px solid rgba(55,201,135,0.5);color:#6bf0b3;font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;direction:ltr;letter-spacing:.3px;flex-shrink:0;white-space:nowrap">v3.7.0 ↻</span>
+    </div>
   </div>
 </header>
 <main>
@@ -733,36 +747,21 @@ main,section,.section,.page-section{background-color:transparent!important}
       <div id="homeDests" class="places-grid"></div>
     </section>
 
-    <!-- LIVE HOMEPAGE WEATHER SECTION -->
-    <section class="section" id="homeWeatherSection">
+    <!-- ACTIVITIES & EXPERIENCES SECTION -->
+    <section class="section" id="homeExperiencesSection">
       <div class="sectionhead">
         <div>
-          <div class="eyebrow">LIVE EXPEDITION METEOROLOGY</div>
-          <h2>کەشوهەوای گەشت و شاخەوانی</h2>
-          <p>پلەی گەرمی و کەشوهەوای ناوچەکانی کوردستان پێش دەستپێکردنی گەشت</p>
+          <div class="eyebrow">ACTIVITIES &amp; EXPERIENCES</div>
+          <h2>چالاکی و ئەزموونەکان</h2>
+          <p>شاخەوانی، کەمپینگ، گەشتی سروشت و هاوڕێیەتی لەگەڵ تیمی KURDIA</p>
         </div>
-        <a class="link" href="#weather">نەخشەی تەواو ←</a>
+        <a class="link" href="#experiences">بینینی هەموو ←</a>
       </div>
-      <div class="home-weather-strip" onclick="go('weather')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
-          <div>
-            <span class="trip-loc-tag" style="background:rgba(211,47,78,0.18);color:#ff5b79;border-color:rgba(211,47,78,0.3);margin-bottom:8px">
-              <i data-lucide="map-pin" style="width:13px;height:13px"></i>
-              <span id="homeWeatherLoc">هەولێر · پایتەختی کوردستان</span>
-            </span>
-            <div style="display:flex;align-items:baseline;gap:14px;margin:8px 0 4px;flex-wrap:wrap">
-              <span id="homeWeatherTemp" style="font-size:42px;font-weight:900;line-height:1;color:#fff">--°C</span>
-              <span id="homeWeatherCond" style="font-size:14px;font-weight:700;color:#94a3b8">لە بارکردندایە...</span>
-            </div>
-            <div id="homeWeatherAdv" style="font-size:12px;color:#6bf0b3;margin-top:6px;font-weight:600">
-              🌿 کەشێکی گونجاوە بۆ شاخەوانی و گەشت
-            </div>
-          </div>
-          <div style="text-align:left;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-            <div id="homeWeatherIcon" style="font-size:44px;line-height:1">🌤️</div>
-            <span class="btn ghost" style="padding:7px 14px;font-size:11px;border-radius:12px">کردنەوەی نەخشە و پێشبینی ٧ ڕۆژ ←</span>
-          </div>
-        </div>
+      <div class="grid2 experiences">
+        <a class="tile" href="#experiences"><div><b>شاخەوانی و لووتکە</b><small>سەرکەوتن بۆ بەرزترین چیاکانی کوردستان</small></div></a>
+        <a class="tile" href="#experiences"><div><b>کەمپینگی شەوانە</b><small>مانەوە لەژێر ئاسمانی پڕ ئەستێرە و ئاگردان</small></div></a>
+        <a class="tile" href="#experiences"><div><b>گەشتی سروشت و ئاوشار</b><small>گەڕان لە دۆڵ، دارستان و تاڤگە فێنکەکان</small></div></a>
+        <a class="tile" href="#experiences"><div><b>فۆتۆگرافی و هاوڕێیەتی</b><small>تۆمارکردنی جوانترین یادەوەرییەکان</small></div></a>
       </div>
     </section>
 
@@ -1378,6 +1377,27 @@ main,section,.section,.page-section{background-color:transparent!important}
     </section>
   </div>
 </section>
+<section id="experiences" class="page">
+  <div class="container">
+    <section class="section">
+      <div class="sectionhead">
+        <div>
+          <div class="eyebrow">KURDIA EXPERIENCES · چالاکییەکان</div>
+          <h2>چالاکی و ئەزموونە جیاوازەکان</h2>
+          <p class="muted">جۆرەکانی گەشت و چالاکییە مەیدانییەکانی KURDIA ADVENTURE لە سەرانسەری کوردستان.</p>
+        </div>
+      </div>
+      <div class="experience-page-grid">
+        <a class="experience-card" href="#booking"><div><b>شاخەوانی و سەرکەوتنی لووتکە</b><small>گەشتی شاخەوانی ڕێکخراو بە هاوڕێیەتی ڕێبەری شارەزا بۆ چیاکانی هەڵگورد، سەفین، پیرەمەگروون و کۆڕەک.</small></div></a>
+        <a class="experience-card" href="#booking"><div><b>کەمپینگی شەوانە و ئاگردان</b><small>ئەزموونی مانەوەی شەوانە لەناو خێمە، شەوانی ئاگردان، چای سەر خەڵووز و کەشێکی ئارام لە سروشتدا.</small></div></a>
+        <a class="experience-card" href="#destinations"><div><b>گەشتی دەریاچە و ئاوشارەکان</b><small>سەردانیکردنی دەریاچەی دووکان، دەربەندیخان، گەلی عەلی بەگ و تاڤگە دڵڕفێنەکانی کوردستان.</small></div></a>
+        <a class="experience-card" href="#private"><div><b>گەشتی تایبەتی خێزانی و گروپ</b><small>ڕێکخستنی گەشتی تایبەت بەپێی کات و خواستی خێزان یان هاوڕێکانت بە تەواوی خزمەتگوزارییەکانەوە.</small></div></a>
+        <a class="experience-card" href="#destinations"><div><b>گەشتی کولتووری و مێژوویی</b><small>ئاشنابوون بە شارۆچکە دێرینەکانی وەک ئامێدی، ئاکرێ، هەورامان و قەڵا مێژووییەکان.</small></div></a>
+        <a class="experience-card" href="#stories"><div><b>وێنەگرتن و تۆمارکردنی یادەوەری</b><small>گرتنی وێنە و ڤیدیۆی سینەمایی لە جوانترین دیمەنە سروشتییەکانی کوردستان.</small></div></a>
+      </div>
+    </section>
+  </div>
+</section>
 <section id="stories" class="page"><div class="container"><section class="section"><div class="eyebrow">ستۆری</div><h2>ستۆرییەکان</h2><p class="muted">ئەزموونی بەشداربووان و هاوڕێکانی KURDIA.</p><div id="storyGrid" class="grid2"></div></section></div></section>
 
 <section id="reviews" class="page"><div class="container"><section class="section">
@@ -1402,7 +1422,11 @@ main,section,.section,.page-section{background-color:transparent!important}
 <section id="contact" class="page"><div class="container"><section class="section"><div class="eyebrow">CONTACT</div><h2>پەیوەندی</h2><div class="articleList"><a id="contactWhatsAppPublic" class="article" href="#"><div class="articleIcon"><i data-lucide="message-circle"></i></div><div><b>WhatsApp</b><small></small></div></a><a id="contactPhonePublic" class="article" href="#"><div class="articleIcon"><i data-lucide="phone"></i></div><div><b>تەلەفۆن</b><small></small></div></a><div class="article"><div class="articleIcon"><i data-lucide="map-pin"></i></div><div><b id="contactCity">هەولێر — کوردستان</b><small>شوێنی کار</small></div></div><div class="article"><div class="articleIcon"><i data-lucide="mail"></i></div><div><b>Email</b><small id="contactEmailPublic"></small></div></div></div><div class="social-public"><a id="social_instagram" href="#">IG</a><a id="social_tiktok" href="#">TT</a><a id="social_youtube" href="#">YT</a><a id="social_facebook" href="#">FB</a><a id="social_telegram" href="#">TG</a></div></section></div></section>
 </main>
 </div>
-<button class="ai" onclick="openAI()" aria-label="یاریدەدەر"><i data-lucide="bot"></i></button>
+<button class="ai" onclick="openAI()" aria-label="یاریدەدەری زیرەکی KURDIA">
+  <span class="ai-fab-pulse"></span>
+  <i data-lucide="sparkles"></i>
+  <span class="ai-fab-badge">AI</span>
+</button>
 
 <!-- Navigation مۆدێرنکراو بە ئایکۆنی Lucide -->
 <nav class="bottom">
@@ -1414,7 +1438,44 @@ main,section,.section,.page-section{background-color:transparent!important}
 </nav>
 
 <div id="searchModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('searchModal')"><i data-lucide="x"></i></button><h3>گەڕان لە KURDIA</h3><input id="siteSearch" class="input" placeholder="شوێن، ناوچە، گەشت..." oninput="filterSearch()"><div id="searchResults" class="articleList" style="margin-top:12px"></div></div></div>
-<div id="aiModal" class="modal"><div class="sheet ai-chat-sheet"><button class="iconbtn close" onclick="closeModal('aiModal')"><i data-lucide="x"></i></button><div class="ai-chat-head"><div class="ai-chat-avatar"><i data-lucide="bot"></i></div><div><h3 style="margin:0">یاریدەدەری KURDIA</h3><small class="muted">هاوڕێی گەشت و ماڵپەڕی KURDIA ADVENTURE</small></div></div><div id="aiMessages" class="ai-messages"><div class="ai-msg bot">سڵاو هاوڕێ 🌿<br>من یاریدەدەری KURDIA ADVENTURE ـم. دەتوانیت هەر پرسیارێک لەسەر گەشت، شاخەوانی، کەمپینگ، شوێنەکان، کەشوهەوا، نرخ و بەشداری لێم بکەیت. 🤍</div></div><div class="ai-quick"><button type="button" onclick="aiQuick('گەشتی ئەم هەفتەیە چییە؟')">گەشتی ئەم هەفتەیە؟</button><button type="button" onclick="aiQuick('چۆن بەشداری گەشت بکەم؟')">چۆن بەشداری بکەم؟</button><button type="button" onclick="aiQuick('چ شوێنێک پیادەڕەوی تیایە؟')">شوێنەکانی پیادەڕەوی؟</button></div><form class="ai-chat-form" onsubmit="askAI(event)"><input id="aiInput" class="input" autocomplete="off" placeholder="سڵاو... پرسیارەکەت بنووسە"><button class="btn red" aria-label="ناردن"><i data-lucide="send"></i></button></form></div></div>
+<div id="aiModal" class="modal">
+  <div class="sheet ai-chat-sheet">
+    <div class="ai-chat-topbar">
+      <div class="ai-chat-head">
+        <div class="ai-chat-avatar">
+          <i data-lucide="sparkles"></i>
+          <span class="ai-online-dot"></span>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <h3 style="margin:0;font-size:16px">یاریدەدەری زیرەکی KURDIA</h3>
+            <span class="ai-pro-tag">AI 2.0</span>
+          </div>
+          <small class="muted" style="display:block;margin-top:2px">ڕێبەری زیرەکی گەشت، شاخەوانی، کەشوهەوا و ناونووسین</small>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <button type="button" class="ai-clear-btn" onclick="resetAIChat()" title="پاککردنەوەی گفتوگۆ">↻</button>
+        <button class="iconbtn close" style="position:static;width:36px;height:36px" onclick="closeModal('aiModal')"><i data-lucide="x"></i></button>
+      </div>
+    </div>
+
+    <div id="aiMessages" class="ai-messages"></div>
+
+    <div class="ai-quick" id="aiQuickChips">
+      <button type="button" onclick="aiQuick('گەشتی داهاتوو چییە و نرخی چەندە؟')">🧭 گەشتی داهاتوو؟</button>
+      <button type="button" onclick="aiQuick('چۆن بەشداری گەشت بکەم و پارە بدەم؟')">🎟️ چۆن ناو تۆمار بکەم؟</button>
+      <button type="button" onclick="aiQuick('چ شوێنێک پیادەڕەوی تیایە؟')">🥾 شوێنەکانی پیادەڕەوی</button>
+      <button type="button" onclick="aiQuick('چۆن داواکاری گەشتی تایبەت (VIP) بکەم؟')">👑 گەشتی تایبەت VIP</button>
+      <button type="button" onclick="aiQuick('کەشوهەوای چیاکانی کوردستان چۆنە؟')">⛅ کەشوهەوای شاخەوانی</button>
+    </div>
+
+    <form class="ai-chat-form" onsubmit="askAI(event)">
+      <input id="aiInput" class="input" autocomplete="off" placeholder="هەر پرسیارێکت هەیە لێرە بنووسە...">
+      <button class="btn red ai-send-btn" type="submit" aria-label="ناردن"><i data-lucide="send"></i></button>
+    </form>
+  </div>
+</div>
 
 <div id="destinationModal" class="modal">
   <div class="sheet destination-sheet">
@@ -1463,7 +1524,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v3.5.0';
+const SITE_CODE_RELEASE='v3.7.0';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -1705,6 +1766,9 @@ window.setLanguage=function(lang){
     if(hi){
       if(hi.heroTitle!==undefined)data.heroTitle=hi.heroTitle;
       if(hi.heroSubtitle!==undefined)data.heroText=hi.heroSubtitle;
+    } else {
+      data.heroTitle = DEFAULT.heroTitle;
+      data.heroText = DEFAULT.heroText;
     }
     if(Array.isArray(data.trips) && data.trips.length){
       data.trips = data.trips.map((tr, idx) => normalizeTripItem(tr, tr, lang, data.cmsI18n, idx));
@@ -1714,7 +1778,9 @@ window.setLanguage=function(lang){
       data.trips = [data.trip];
     }
     render();
-    route();
+    if(typeof window.applyFullSiteTranslation === 'function'){
+      window.applyFullSiteTranslation(lang);
+    }
   }catch(e){}
 };
 
@@ -3241,12 +3307,197 @@ function filterSearch(){
   $('searchResults').innerHTML=all.filter(x=>String(x.label||'').toLowerCase().includes(q)||String(x.sub||'').toLowerCase().includes(q)).slice(0,12).map(x=>`<div class="article" style="cursor:pointer" onclick="${x.action}"><div class="articleIcon"><i data-lucide="compass"></i></div><div><b>${esc(x.label)}</b><small>${esc(x.sub||'KURDIA ADVENTURE')}</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';
   if(window.lucide)lucide.createIcons();
 }
-function openAI(){ $('aiModal').classList.add('show');setTimeout(()=>{const i=$('aiInput');if(i)i.focus();const m=$('aiMessages');if(m)m.scrollTop=m.scrollHeight;if(window.lucide)lucide.createIcons()},80)}
+window.kurdiaAiHistory = [];
+
+function formatAIMarkdown(rawText){
+  const safe = esc(String(rawText || '').trim());
+  return safe
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code class="ai-inline-code">$1</code>')
+    .replace(/\n/g, '<br>');
+}
+
+function handleAIActionClick(act){
+  closeModal('aiModal');
+  if(act === 'whatsapp'){
+    const rawPhone = String(data?.contact?.whatsapp || '+9647503130360').replace(/\D/g, '') || '9647503130360';
+    window.location.href = `https://wa.me/${rawPhone}?text=${encodeURIComponent('سڵاو تیمی KURDIA ADVENTURE 🌿')}`;
+    return;
+  }
+  go(act);
+}
+
+function addAIMessage(text, type, actions){
+  const m = $('aiMessages');
+  if(!m) return null;
+  const d = document.createElement('div');
+  d.className = 'ai-msg ' + type;
+  if(type.includes('bot')){
+    let html = `<div class="ai-msg-body">${formatAIMarkdown(text)}</div>`;
+    if(Array.isArray(actions) && actions.length){
+      html += `<div class="ai-msg-actions">` + actions.map(a =>
+        `<button type="button" class="ai-action-chip" onclick="handleAIActionClick('${esc(a.action)}')">${esc(a.label)}</button>`
+      ).join('') + `</div>`;
+    }
+    d.innerHTML = html;
+  } else {
+    d.textContent = text;
+  }
+  m.appendChild(d);
+  m.scrollTop = m.scrollHeight;
+  const curLang = localStorage.getItem('kurdia_language') || 'ku';
+  if(curLang !== 'ku' && typeof window.translateSubtree === 'function'){
+    window.translateSubtree(d, curLang);
+  }
+  return d;
+}
+
+function renderAIWelcomeMessage(){
+  const m = $('aiMessages');
+  if(!m) return;
+  const lang = localStorage.getItem('kurdia_language') || 'ku';
+  const trips = getActiveTripsList();
+  const mainTrip = trips[0] || data.trip || {};
+  let welcomeText = '';
+  let defaultActions = [];
+  if(lang === 'en'){
+    welcomeText = `Hello friend 🌿\nI am the **KURDIA ADVENTURE Smart AI Concierge**.\n\n• **Next Trip:** ${mainTrip.title || 'Kurdistan Expedition'} (${mainTrip.price || '35,000 IQD'})\n• Ask me anything about **upcoming trips, hiking trails, FIB payment, VIP private trips, or mountain weather**!`;
+    defaultActions = [
+      { label: '🎟️ Book a Trip', action: 'booking' },
+      { label: '🗺️ Destinations', action: 'destinations' },
+      { label: '👑 Private Trip', action: 'private' }
+    ];
+  } else if(lang === 'ar'){
+    welcomeText = `أهلاً بك يا صديقي 🌿\nأنا **المساعد الذكي لـ KURDIA ADVENTURE**.\n\n• **الرحلة القادمة:** ${mainTrip.title || 'رحلة كوردستان'} (${mainTrip.price || '35,000 دينار'})\n• اسألني عن **الرحلات القادمة، مسارات المشي الجبلي، طريقة الحجز والدفع عبر FIB، الرحلات الخاصة VIP، أو حالة الطقس**!`;
+    defaultActions = [
+      { label: '🎟️ حجز رحلة', action: 'booking' },
+      { label: '🗺️ الأماكن السياحية', action: 'destinations' },
+      { label: '👑 رحلة خاصة', action: 'private' }
+    ];
+  } else {
+    welcomeText = `سڵاو هاوڕێی ئازیز 🌿\nمن **یاریدەدەری زیرەکی KURDIA ADVENTURE** ـم.\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• دەتوانیت هەر پرسیارێک لەسەر **گەشتەکان، شوێنەکانی پیادەڕەوی، ناو تۆمارکردن و هەژماری FIB، گەشتی تایبەت و کەشوهەوا** لێم بکەیت!`;
+    defaultActions = [
+      { label: '🎟️ بەشداری گەشت', action: 'booking' },
+      { label: '🗺️ شوێنەکان', action: 'destinations' },
+      { label: '👑 گەشتی تایبەت', action: 'private' }
+    ];
+  }
+  m.innerHTML = '';
+  addAIMessage(welcomeText, 'bot', defaultActions);
+}
+
+function resetAIChat(){
+  window.kurdiaAiHistory = [];
+  renderAIWelcomeMessage();
+}
+
+function openAI(){
+  const modal = $('aiModal');
+  if(!modal) return;
+  const m = $('aiMessages');
+  if(m && !m.children.length){
+    renderAIWelcomeMessage();
+  }
+  modal.classList.add('show');
+  setTimeout(()=>{
+    const i=$('aiInput');
+    if(i) i.focus();
+    if(m) m.scrollTop = m.scrollHeight;
+    if(window.lucide) lucide.createIcons();
+  }, 80);
+}
+
 function closeModal(id){$(id).classList.remove('show')}
-function addAIMessage(text,type){const m=$('aiMessages');if(!m)return;const d=document.createElement('div');d.className='ai-msg '+type;d.textContent=text;m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
-function aiQuick(q){const i=$('aiInput');if(i)i.value=q;const f=document.querySelector('.ai-chat-form');if(f)askAI({preventDefault:()=>{}})}
-function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',language:'کوردی سۆرانی',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
-async function askAI(e){e.preventDefault();const i=$('aiInput');const q=(i?.value||'').trim();if(!q)return;addAIMessage(q,'user');i.value='';const loading=addAIMessage('خەریکم سەیری زانیارییەکانی KURDIA دەکەم... 🌿','bot loading');try{const r=await fetch(WORKER+'/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q,lang:'ku',siteState:aiSiteContext()})});const x=await r.json().catch(()=>({}));loading.remove();addAIMessage(x.text||'ببورە، ئێستا نەتوانیم وەڵام بدەم. تکایە دووبارە هەوڵ بدەوە.','bot')}catch(err){loading.remove();addAIMessage('پەیوەندی بە یاریدەدەری KURDIA نەکرا. تکایە دووبارە هەوڵ بدەوە.','bot')}}
+function aiQuick(q){const i=$('aiInput');if(i)i.value=q;askAI({preventDefault:()=>{}})}
+function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',language:localStorage.getItem('kurdia_language')||'ku',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',fibAccount:'0750 313 0360',whatsapp:data?.contact?.whatsapp||'+9647503130360',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,hikingLevel:x.hikingLevel,altitude:x.altitude,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','چالاکی و ئەزموونەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
+
+function buildClientFallbackAI(q, lang){
+  const ctx = aiSiteContext();
+  const trips = ctx.upcomingTrips || [];
+  const mainTrip = trips[0] || ctx.currentTrip || {};
+  const dests = ctx.destinations || [];
+  const ql = String(q || '').toLowerCase();
+
+  if(lang === 'en'){
+    if(ql.includes('trip') || ql.includes('next') || ql.includes('week') || ql.includes('گەشت')){
+      const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${t.date || 'Soon'} | 💰 ${t.price}`).join('\n');
+      return { text: `🌿 **Upcoming KURDIA Expeditions:**\n\n${list}\n\nIncludes VIP bus transport, expert mountain guides, and professional photography.`, actions: [{ label: '🎟️ Book Now', action: 'booking' }, { label: '📍 View Places', action: 'destinations' }] };
+    }
+    if(ql.includes('book') || ql.includes('pay') || ql.includes('fib') || ql.includes('register') || ql.includes('بەشداری') || ql.includes('ناو')){
+      return { text: `🎟️ **How to Register & Pay:**\n\n• **1. Select Trip & Participants:** Choose your trip on the Booking page and enter your full name (plus names of any friends joining you).\n• **2. WhatsApp OTP:** Verify your phone number with the 4-digit code.\n• **3. FIB Payment:** Send the fee (${mainTrip.price || '35,000 IQD'}) to **FIB: 0750 313 0360** and upload the receipt screenshot.`, actions: [{ label: '🎟️ Open Booking Form', action: 'booking' }] };
+    }
+    return { text: `🌿 **KURDIA ADVENTURE Smart Concierge:**\n\n• **Featured Trip:** ${mainTrip.title || 'Dukan Lake'} (${mainTrip.price || '35,000 IQD'})\n• **Official FIB Account:** \`0750 313 0360\`\n• **WhatsApp Support:** \`+964 750 313 0360\`\n\nTap any button below to explore!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }, { label: '🗺️ Destinations', action: 'destinations' }, { label: '👑 Private Trip', action: 'private' }, { label: '⛅ Weather', action: 'weather' }] };
+  }
+
+  if(lang === 'ar'){
+    if(ql.includes('رحل') || ql.includes('قادم') || ql.includes('گەشت')){
+      const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${t.date || 'قريباً'} | 💰 ${t.price}`).join('\n');
+      return { text: `🌿 **الرحلات القادمة مع KURDIA:**\n\n${list}\n\nتشمل النقل السياحي VIP، مرشدين جبليين، والتصوير الاحترافي.`, actions: [{ label: '🎟️ حجز مقعد', action: 'booking' }, { label: '📍 الأماكن', action: 'destinations' }] };
+    }
+    if(ql.includes('حجز') || ql.includes('دفع') || ql.includes('fib') || ql.includes('تسجيل') || ql.includes('بەشداری') || ql.includes('ناو')){
+      return { text: `🎟️ **خطوات التسجيل والدفع:**\n\n• **١. اختيار الرحلة والأسماء:** اختر الرحلة واكتب اسمك الكامل وأسماء المرافقين.\n• **٢. تأكيد واتساب:** أدخل رمز التحقق OTP المرسل لرقمك.\n• **٣. الدفع عبر FIB:** حوّل المبلغ (${mainTrip.price || '35,000 دينار'}) إلى حساب **FIB: 0750 313 0360** وارفع صورة الوصل.`, actions: [{ label: '🎟️ الذهاب لصفحة الحجز', action: 'booking' }] };
+    }
+    return { text: `🌿 **المساعد الذكي لـ KURDIA ADVENTURE:**\n\n• **الرحلة الحالية:** ${mainTrip.title || 'بحيرة دوكان'} (${mainTrip.price || '35,000 دينار'})\n• **حساب الدفع FIB:** \`0750 313 0360\`\n• **واتساب الفريق:** \`+964 750 313 0360\``, actions: [{ label: '🎟️ حجز رحلة', action: 'booking' }, { label: '🗺️ الأماكن', action: 'destinations' }, { label: '👑 رحلة خاصة', action: 'private' }, { label: '⛅ الطقس', action: 'weather' }] };
+  }
+
+  // Kurdish Sorani ('ku')
+  if(ql.includes('گەشت') && (ql.includes('هەفتە') || ql.includes('داهاتوو') || ql.includes('چییە') || ql.includes('نرخ'))){
+    const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${formatTripDateKu(t.date)} | 💰 ${t.price}`).join('\n');
+    return { text: `🌿 **گەشتەکانی داهاتووی KURDIA ADVENTURE:**\n\n${list}\n\nهەموو گەشتەکانمان پاسی VIP، ڕێبەری شاخەوانی و فۆتۆگرافەری تایبەتیان لەگەڵدایە.`, actions: [{ label: '🎟️ بەشداری لە گەشت بکە', action: 'booking' }, { label: '📍 بینینی شوێنەکان', action: 'destinations' }] };
+  }
+  if(ql.includes('بەشداری') || ql.includes('ناو') || ql.includes('تۆمار') || ql.includes('چۆن') || ql.includes('پارە') || ql.includes('fib')){
+    return { text: `🎟️ **چۆنیەتی ناو تۆمارکردن بە ٣ هەنگاوی ئاسان:**\n\n• **هەنگاوی ١:** لە بەشی «بەشداری» گەشتەکەت هەڵبژێرە، ناوی سیانی خۆت و ژمارەی کەسەکان بنووسە.\n• **هەنگاوی ٢:** ژمارەی مۆبایل (WhatsApp) بنووسە و کۆدی ٤ ژمارەیی OTP پشتڕاست بکەرەوە.\n• **هەنگاوی ٣:** بڕی بەشداری (${mainTrip.price || '35,000 دینار'}) بنێرە بۆ هەژماری فەرمی **FIB: 0750 313 0360** و وێنەی پسوڵەکە دابنێ.`, actions: [{ label: '🎟️ چوون بۆ فۆڕمی بەشداری', action: 'booking' }, { label: '💬 پرسیار لە وەتسئەپ', action: 'whatsapp' }] };
+  }
+  if(ql.includes('پیادە') || ql.includes('شاخ') || ql.includes('شوێن')){
+    const hList = dests.filter(d => d.hasHiking !== false).slice(0, 5).map(d => `• **${d.name}** (${d.region}) — 🥾 ${d.hikingDuration}`).join('\n');
+    return { text: `🏔️ **شوێنەکانی شاخەوانی و پیادەڕەوی لە کوردستان:**\n\n${hList}\n\nکرتە لە دوگمەی خوارەوە بکە بۆ بینینی تەواوی زانیاری و وێنەی شوێنەکان.`, actions: [{ label: '🗺️ بینینی هەموو شوێنەکان', action: 'destinations' }, { label: '👑 داواکاری گەشتی تایبەت', action: 'private' }] };
+  }
+  if(ql.includes('تایبەت') || ql.includes('vip') || ql.includes('خێزان') || ql.includes('گروپ')){
+    return { text: `👑 **گەشتی تایبەت (VIP & گروپ و خێزانی):**\n\nدەتوانیت شوێن، بەروار، ژمارەی کەس و هەموو خزمەتگوزارییەکان (گواستنەوەی تایبەت، کەپر و کەمپ، ڕێبەر و فۆتۆگرافەر) بە دڵی خۆت دیاری بکەیت.`, actions: [{ label: '👑 ڕێکخستنی گەشتی تایبەت', action: 'private' }, { label: '💬 ڕاوێژکاری وەتسئەپ', action: 'whatsapp' }] };
+  }
+  if(ql.includes('کەش') || ql.includes('باران') || ql.includes('با')){
+    return { text: `⛅ **وێستگەی کەشوهەوا و نەخشەی شاخەوانی:**\n\nلە بەشی کەشوهەوا دەتوانیت پێشبینی ٢٤ کاتژمێر و ٧ ڕۆژی داهاتوو لەگەڵ نەخشەی بای زیندوو بۆ هەموو چیا و شارەکانی کوردستان ببینیت.`, actions: [{ label: '⛅ کردنەوەی کەشوهەوا', action: 'weather' }] };
+  }
+  return { text: `🌿 **سڵاو لە KURDIA ADVENTURE!**\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• **هەژماری پارەدانی FIB:** \`0750 313 0360\`\n• **ژمارەی پەیوەندی و وەتسئەپ:** \`+964 750 313 0360\``, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
+}
+
+async function askAI(e){
+  if(e && typeof e.preventDefault === 'function') e.preventDefault();
+  const i = $('aiInput');
+  const q = (i?.value || '').trim();
+  if(!q) return;
+  const lang = localStorage.getItem('kurdia_language') || 'ku';
+  addAIMessage(q, 'user');
+  window.kurdiaAiHistory.push({ role: 'user', text: q });
+  if(i) i.value = '';
+  const loadingMsg = lang === 'en' ? 'Checking KURDIA ADVENTURE live data... 🌿' : (lang === 'ar' ? 'جاري البحث في بيانات KURDIA ADVENTURE... 🌿' : 'خەریکم زانیارییەکانی KURDIA دەپشکنم... 🌿');
+  const loading = addAIMessage(loadingMsg, 'bot loading');
+
+  try{
+    const r = await fetch('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: q,
+        lang: lang,
+        history: window.kurdiaAiHistory.slice(-6),
+        siteState: aiSiteContext()
+      })
+    });
+    const x = await r.json().catch(()=>({}));
+    loading?.remove();
+    if(x && x.text){
+      window.kurdiaAiHistory.push({ role: 'assistant', text: x.text });
+      addAIMessage(x.text, 'bot', x.actions || []);
+      return;
+    }
+  }catch(_){}
+
+  const fb = buildClientFallbackAI(q, lang);
+  loading?.remove();
+  window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text });
+  addAIMessage(fb.text, 'bot', fb.actions || []);
+}
 function bookingGo(step){const form=$('bookingForm');if(!form)return;form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on);if(on&&window.gsap){gsap.fromTo(p,{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:'power3.out',clearProps:'transform'});}});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2&&$('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}bookingGo(step+1)}
 function syncOtpSlots(){const slots=[...document.querySelectorAll('.otp-slot')];const code=slots.map(x=>x.value).join('');$('bookingOtp').value=code;slots.forEach(x=>x.classList.toggle('filled',!!x.value));}
@@ -3644,6 +3895,7 @@ loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_langua
 
     <a href="#home" class="ka-menu-item" data-ka-page="home" onclick="kaMenuNavigate('home');return false"><div class="ka-menu-icon">⌂</div><div><div class="ka-menu-text">سەرەکی</div><span class="ka-menu-desc">پەڕەی سەرەکی KURDIA</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#destinations" class="ka-menu-item" data-ka-page="destinations" onclick="kaMenuNavigate('destinations');return false"><div class="ka-menu-icon">⌖</div><div><div class="ka-menu-text">شوێنەکان</div><span class="ka-menu-desc">شوێنە گەشتیاری و شاخەوانییەکان</span></div><div class="ka-menu-arrow">‹</div></a>
+    <a href="#experiences" class="ka-menu-item" data-ka-page="experiences" onclick="kaMenuNavigate('experiences');return false"><div class="ka-menu-icon">✦</div><div><div class="ka-menu-text">چالاکی و ئەزموونەکان</div><span class="ka-menu-desc">شاخەوانی، کەمپینگ و گەشتی سروشت</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#booking" class="ka-menu-item" data-ka-page="booking" onclick="kaMenuNavigate('booking');return false"><div class="ka-menu-icon">🎟</div><div><div class="ka-menu-text">بەشداری گەشت</div><span class="ka-menu-desc">ناوی خۆت تۆمار بکە</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#private" class="ka-menu-item" data-ka-page="private" onclick="kaMenuNavigate('private');return false"><div class="ka-menu-icon">♛</div><div><div class="ka-menu-text">گەشتی تایبەت</div><span class="ka-menu-desc">گەشتێکی بەپێی داواکاریی خۆت</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#weather" class="ka-menu-item" data-ka-page="weather" onclick="kaMenuNavigate('weather');return false"><div class="ka-menu-icon">☀</div><div><div class="ka-menu-text">کەش و هەوا</div><span class="ka-menu-desc">پێشبینی کەشی هەر شوێنێک</span></div><div class="ka-menu-arrow">‹</div></a>
@@ -3877,75 +4129,42 @@ document.addEventListener('click',function(e){
   transition:width .1s linear;
 }
 
-/* Shimmer Sweep Effect on Primary Red Buttons (Magic UI / Aceternity style) */
+/* Shimmer Sweep Effect on Primary Red Buttons (Subtle hover/focus only, no distracting infinite loops) */
 .btn.red{
   position:relative;
   overflow:hidden;
-  background:linear-gradient(135deg, #e5234f 0%, #a91d37 100%);
-  box-shadow:0 12px 28px rgba(229,35,79,0.28), inset 0 1px 0 rgba(255,255,255,0.22);
-}
-.btn.red::after{
-  content:"";
-  position:absolute;
-  top:-50%;
-  left:-60%;
-  width:40%;
-  height:200%;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.24), transparent);
-  transform:rotate(25deg);
-  animation:kurdiaBtnShimmer 4.2s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes kurdiaBtnShimmer{
-  0%, 30%{left:-65%}
-  75%, 100%{left:140%}
+  background:linear-gradient(135deg, #d32f4e 0%, #a91d37 100%);
+  box-shadow:0 10px 26px rgba(169,29,55,0.32), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 .btn.green{
   background:linear-gradient(135deg, #22c55e, #0c9b61);
   color:#fff;
-  box-shadow:0 10px 24px rgba(12,155,97,0.3);
+  box-shadow:0 10px 24px rgba(12,155,97,0.28);
 }
 
-/* Spotlight Radial Glow on All Interactive Cards */
+/* Subtle Spotlight Radial Glow on Interactive Cards (Desktop hover only) */
 .featured, .dest, .tile, .glass, .public-review, .article, .stat, .privateHero,
 .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card,
 .private-trip-card, .private-vip-showcase, .booking-hero-banner, .private-page-hero{
   position:relative;
   overflow:hidden;
 }
-.featured::before, .dest::before, .tile::before, .glass::before, .public-review::before,
-.article::before, .stat::before, .place-card::before, .booking-trip-pick-card::before,
-.booking-form-card::before, .private-preset-card::before, .private-trip-card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%), rgba(229,35,79,0.15), transparent 70%);
-  opacity:0;
-  transition:opacity .3s ease;
-  pointer-events:none;
-  z-index:1;
-}
-.featured:hover::before, .place-card:hover::before, .booking-trip-pick-card:hover::before,
-.booking-form-card:hover::before, .private-preset-card:hover::before, .private-trip-card:hover::before{
-  opacity:1;
-}
-
-/* Moving Border Beam on Key Containers */
-.top::after, .featured::after, .booking-form-card::after, .private-trip-card::after, .private-vip-showcase::after{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:55%;
-  height:1.5px;
-  background:linear-gradient(90deg, transparent, rgba(229,35,79,0.95), rgba(255,168,188,0.95), transparent);
-  animation:kurdiaBorderBeam 4.5s infinite linear;
-  pointer-events:none;
-  z-index:4;
-}
-@keyframes kurdiaBorderBeam{
-  0%{left:-65%}
-  100%{left:145%}
+@media(hover:hover){
+  .featured::before, .place-card::before, .booking-trip-pick-card::before,
+  .booking-form-card::before, .private-preset-card::before, .private-trip-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%), rgba(211,47,78,0.11), transparent 70%);
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
+    z-index:1;
+  }
+  .featured:hover::before, .place-card:hover::before, .booking-trip-pick-card:hover::before,
+  .booking-form-card:hover::before, .private-preset-card:hover::before, .private-trip-card:hover::before{
+    opacity:1;
+  }
 }
 
 /* Crisp Non-Glitching Eyebrow Text */
@@ -3954,7 +4173,6 @@ document.addEventListener('click',function(e){
   display:inline-flex;
   align-items:center;
   gap:6px;
-  text-shadow:0 0 18px rgba(229,35,79,0.28);
 }
 
 /* =========================================================
@@ -5206,6 +5424,613 @@ document.addEventListener('click',function(e){
   min-height:50px;
   font-size:14px;
 }
+
+/* =========================================================
+   MOBILE-FIRST UI/UX & RESPONSIVE ARCHITECTURE (320px–1024px+)
+   ========================================================= */
+/* 1. Global RTL Typography, Spacing & Overflow Protection */
+html, body{
+  overflow-x:clip;
+  width:100%;
+  max-width:100%;
+  -webkit-text-size-adjust:100%;
+  text-rendering:optimizeLegibility;
+}
+body::before, body::after{
+  animation:none!important;
+}
+.app{
+  padding-bottom:calc(104px + env(safe-area-inset-bottom))!important;
+}
+.container{
+  width:min(1120px, 100%);
+  padding-inline:16px;
+}
+@media(max-width:360px){
+  .container{
+    padding-inline:12px;
+  }
+}
+@media(min-width:768px){
+  .container{
+    padding-inline:24px;
+  }
+}
+
+/* 2. Homepage Hero — Balanced Mobile-First Proportions & Contrast */
+.hero{
+  min-height:clamp(460px, 72svh, 660px)!important;
+  max-height:760px;
+  display:flex;
+  align-items:flex-end;
+  padding-top:24px;
+}
+.hero:before{
+  animation:none!important;
+  transform:none!important;
+  background-position:center 38%!important;
+  background-size:cover!important;
+}
+.hero:after{
+  animation:none!important;
+  background:
+    linear-gradient(180deg, rgba(5,7,11,0.22) 0%, rgba(5,7,11,0.48) 46%, rgba(7,9,14,0.92) 84%, #07070b 100%),
+    radial-gradient(ellipse at 50% 90%, rgba(169,29,55,0.22), transparent 65%)!important;
+}
+.hero .container{
+  padding-top:32px!important;
+  padding-bottom:clamp(24px, 5vw, 44px)!important;
+}
+.hero .eyebrow{
+  font-size:11px;
+  letter-spacing:1.4px;
+  padding:5px 11px;
+  border-radius:999px;
+  background:rgba(169,29,55,0.22);
+  border:1px solid rgba(211,47,78,0.38);
+  color:#ff8da3;
+  margin-bottom:6px;
+}
+.hero h1{
+  font-size:clamp(30px, 8.6vw, 62px)!important;
+  line-height:1.22!important;
+  letter-spacing:-0.5px!important;
+  margin:8px 0 12px!important;
+  color:#ffffff;
+  text-shadow:0 8px 28px rgba(0,0,0,0.65);
+}
+.hero p{
+  font-size:clamp(13.5px, 3.6vw, 16px)!important;
+  line-height:1.9!important;
+  color:#dbe2ec!important;
+  margin:0 0 20px!important;
+  max-width:560px;
+}
+.hero .actions{
+  display:grid!important;
+  grid-template-columns:1.15fr 1fr!important;
+  gap:10px!important;
+  max-width:440px;
+}
+.hero .actions .btn{
+  min-height:50px!important;
+  padding:12px 14px!important;
+  font-size:clamp(13px, 3.6vw, 15px)!important;
+  border-radius:16px!important;
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+}
+@media(max-width:340px){
+  .hero .actions{
+    grid-template-columns:1fr!important;
+  }
+}
+
+/* 3. Trip Cards — Consistent Image Proportions & Scannable Details */
+.trip-showcase-card{
+  border-radius:24px!important;
+  border:1px solid rgba(255,255,255,0.1)!important;
+  background:linear-gradient(175deg, #0e131d 0%, #080b11 100%)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,0.45)!important;
+}
+.trip-showcase-card .featureimg{
+  height:215px!important;
+  min-height:215px!important;
+}
+.trip-showcase-card .featurebody{
+  padding:18px!important;
+}
+.trip-card-title{
+  font-size:clamp(18px, 5vw, 22px)!important;
+  line-height:1.4!important;
+  margin:0 0 6px!important;
+  overflow-wrap:anywhere;
+}
+.trip-card-desc{
+  font-size:12.5px!important;
+  line-height:1.85!important;
+  color:#a6b0c0!important;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.trip-card-actions .btn{
+  min-height:48px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+@media(max-width:360px){
+  .trip-card-actions{
+    flex-direction:column;
+  }
+  .trip-wa-btn{
+    width:100%;
+    justify-content:center;
+  }
+}
+
+/* 4. Activities & Experiences Grid */
+.experiences.grid2{
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+.experiences .tile{
+  min-height:148px;
+  border-radius:20px;
+  display:block;
+  transition:transform .25s ease, border-color .25s ease;
+}
+.experiences .tile div{
+  bottom:12px;
+  right:12px;
+  left:12px;
+}
+.experiences .tile b{
+  display:block;
+  font-size:13.5px;
+  line-height:1.35;
+  color:#fff;
+}
+.experiences .tile small{
+  font-size:10.5px;
+  line-height:1.55;
+  color:#cbd5e1;
+  margin-top:3px;
+}
+@media(max-width:350px){
+  .experiences.grid2,
+  .experience-page-grid{
+    grid-template-columns:1fr!important;
+  }
+}
+@media(min-width:768px){
+  .experiences.grid2{
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:14px;
+  }
+  .experience-page-grid{
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:14px;
+  }
+}
+
+/* 5. Mobile Bottom Navigation & Floating AI Assistant */
+.bottom{
+  position:fixed!important;
+  z-index:80!important;
+  left:10px!important;
+  right:10px!important;
+  bottom:max(8px, env(safe-area-inset-bottom))!important;
+  height:68px!important;
+  padding:5px 6px!important;
+  border-radius:22px!important;
+  background:rgba(8,11,17,0.92)!important;
+  backdrop-filter:blur(20px)!important;
+  -webkit-backdrop-filter:blur(20px)!important;
+  border:1px solid rgba(255,255,255,0.11)!important;
+  box-shadow:0 16px 42px rgba(0,0,0,0.65)!important;
+  display:grid!important;
+  grid-template-columns:repeat(5, minmax(0, 1fr))!important;
+  align-items:center!important;
+  gap:4px!important;
+}
+@media(min-width:720px){
+  .bottom{
+    left:50%!important;
+    right:auto!important;
+    width:min(560px, calc(100vw - 32px))!important;
+    transform:translateX(-50%)!important;
+  }
+}
+.bottom .navitem{
+  height:56px!important;
+  margin:0!important;
+  padding:4px 2px!important;
+  border-radius:16px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  color:#94a3b8!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  line-height:1.15!important;
+  border:1px solid transparent;
+  background:transparent;
+}
+.bottom .navitem .ico{
+  width:20px!important;
+  height:20px!important;
+}
+.bottom .navitem.active{
+  color:#ffffff!important;
+  background:rgba(169,29,55,0.22)!important;
+  border-color:rgba(211,47,78,0.38)!important;
+}
+.bottom .navitem.navjoin{
+  background:linear-gradient(145deg, #d32f4e, #94162f)!important;
+  color:#ffffff!important;
+  border-color:rgba(255,255,255,0.22)!important;
+  box-shadow:0 8px 22px rgba(169,29,55,0.42)!important;
+}
+.bottom .navitem.navjoin.active{
+  box-shadow:0 0 0 2px rgba(255,255,255,0.35), 0 10px 26px rgba(211,47,78,0.55)!important;
+}
+@media(max-width:350px){
+  .bottom .navitem{
+    font-size:9px!important;
+  }
+}
+.ai{
+  left:14px!important;
+  right:auto!important;
+  bottom:calc(86px + env(safe-area-inset-bottom))!important;
+  width:46px!important;
+  height:46px!important;
+  font-size:19px!important;
+  z-index:75!important;
+  box-shadow:0 10px 26px rgba(0,0,0,0.55), 0 4px 14px rgba(169,29,55,0.35)!important;
+}
+
+/* 6. Dedicated Weather Page (#weather) Mobile Hierarchy & Map Responsiveness */
+#weather .searchbar{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:8px;
+  margin:10px 0 14px;
+}
+#weather .searchbar .btn{
+  min-width:46px;
+  min-height:46px;
+  padding:0 14px;
+  display:inline-grid;
+  place-items:center;
+}
+.weather-map-box{
+  min-height:330px;
+  border-radius:22px;
+  display:flex;
+  flex-direction:column;
+}
+.weather-map-element{
+  height:clamp(300px, 48vh, 410px)!important;
+  min-height:300px!important;
+}
+@media(max-width:600px){
+  .weather-map-overlay-top{
+    position:relative!important;
+    top:auto!important;
+    left:auto!important;
+    right:auto!important;
+    padding:8px 10px;
+    background:#090d15;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    justify-content:space-between;
+  }
+  .weather-map-layers{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    text-align:center;
+  }
+  .weather-layer-btn{
+    padding:6px 4px;
+    font-size:10.5px;
+  }
+  .weather-map-overlay-bottom{
+    position:relative!important;
+    bottom:auto!important;
+    left:auto!important;
+    right:auto!important;
+    padding:8px 10px;
+    background:#090d15;
+    border-top:1px solid rgba(255,255,255,0.08);
+  }
+  .weather-map-hint{
+    font-size:10px;
+    padding:4px 8px;
+  }
+}
+.weather-hero-card{
+  padding:18px 16px!important;
+  border-radius:24px!important;
+}
+@media(min-width:640px){
+  .weather-hero-card{
+    padding:24px!important;
+  }
+}
+.weather-metrics-grid{
+  grid-template-columns:repeat(2, minmax(0, 1fr))!important;
+  gap:10px!important;
+}
+@media(min-width:768px){
+  .weather-metrics-grid{
+    grid-template-columns:repeat(4, minmax(0, 1fr))!important;
+  }
+}
+.day-row-card{
+  grid-template-columns:minmax(78px, 1.05fr) minmax(80px, 1.3fr) auto!important;
+  gap:10px!important;
+  padding:12px 14px!important;
+}
+@media(max-width:360px){
+  .day-row-card{
+    grid-template-columns:1fr auto!important;
+  }
+  .day-temp-bar-wrap{
+    grid-column:1 / -1;
+    order:3;
+  }
+}
+
+/* ========================================================
+   TOP HEADER LANGUAGE SWITCHER & UPGRADED AI CONCIERGE CSS
+   ======================================================== */
+.topin{
+  grid-template-columns:44px minmax(0,1fr) auto!important;
+}
+.top-lang-wrap{
+  position:relative;
+}
+.top-lang-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  height:34px;
+  padding:0 11px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.14);
+  color:#f8fafc;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.top-lang-btn:hover{
+  border-color:rgba(229,35,79,0.55);
+  background:rgba(229,35,79,0.14);
+}
+.top-lang-dropdown{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  min-width:148px;
+  padding:6px;
+  border-radius:16px;
+  background:rgba(10,14,22,0.98);
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:0 18px 42px rgba(0,0,0,0.65);
+  backdrop-filter:blur(18px);
+  display:none;
+  z-index:9999;
+}
+html[dir="ltr"] .top-lang-dropdown{
+  left:auto;
+  right:0;
+}
+.top-lang-wrap.open .top-lang-dropdown{
+  display:grid;
+  gap:4px;
+}
+.top-lang-opt{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  width:100%;
+  padding:9px 12px;
+  border:0;
+  border-radius:11px;
+  background:transparent;
+  color:#cbd5e1;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  text-align:start;
+  transition:background .15s, color .15s;
+}
+.top-lang-opt:hover{
+  background:rgba(255,255,255,0.07);
+  color:#fff;
+}
+.top-lang-opt .tl-check{
+  font-style:normal;
+  opacity:0;
+  color:#4ef2a1;
+  font-weight:900;
+}
+.top-lang-opt.active{
+  background:rgba(229,35,79,0.18);
+  color:#fff;
+}
+.top-lang-opt.active .tl-check{
+  opacity:1;
+}
+
+/* LTR Adjustments when English is selected */
+html[dir="ltr"] body{
+  text-align:left;
+}
+html[dir="ltr"] .place-card-body,
+html[dir="ltr"] .featurebody,
+html[dir="ltr"] .btp-body,
+html[dir="ltr"] .ka-menu-item,
+html[dir="ltr"] .public-review{
+  text-align:left;
+}
+html[dir="ltr"] .ka-menu-arrow{
+  transform:rotate(180deg);
+}
+
+/* Upgraded Floating AI Button & Modal */
+.ai{
+  position:fixed;
+  bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 18px);
+  left:16px;
+  width:52px;
+  height:52px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#e5234f,#9e1534);
+  border:1px solid rgba(255,255,255,0.22);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  box-shadow:0 12px 28px rgba(229,35,79,0.42);
+  z-index:90;
+  cursor:pointer;
+}
+html[dir="ltr"] .ai{
+  left:auto;
+  right:16px;
+}
+.ai-fab-pulse{
+  position:absolute;
+  inset:-3px;
+  border-radius:20px;
+  border:1.5px solid rgba(229,35,79,0.55);
+  animation:aiPulseGlow 2.4s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes aiPulseGlow{
+  0%{transform:scale(0.96);opacity:0.85}
+  100%{transform:scale(1.18);opacity:0}
+}
+.ai-fab-badge{
+  position:absolute;
+  top:-5px;
+  right:-5px;
+  background:#10b981;
+  color:#042f2e;
+  font-size:9px;
+  font-weight:900;
+  padding:2px 5px;
+  border-radius:999px;
+  letter-spacing:.3px;
+  border:1.5px solid #05070b;
+}
+.ai-chat-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  margin-bottom:10px;
+}
+.ai-chat-avatar{
+  position:relative;
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(229,35,79,0.26),rgba(169,29,55,0.12));
+  border:1px solid rgba(229,35,79,0.45);
+  display:grid;
+  place-items:center;
+  color:#ff6b8b;
+  flex-shrink:0;
+}
+.ai-online-dot{
+  position:absolute;
+  bottom:-2px;
+  right:-2px;
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#37c987;
+  border:2px solid #0b0f17;
+}
+.ai-pro-tag{
+  font-size:9px;
+  font-weight:900;
+  padding:2px 7px;
+  border-radius:999px;
+  background:rgba(55,201,135,0.16);
+  border:1px solid rgba(55,201,135,0.4);
+  color:#6bf0b3;
+  letter-spacing:.4px;
+}
+.ai-clear-btn{
+  width:36px;
+  height:36px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);
+  color:#cbd5e1;
+  font-size:15px;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+}
+.ai-clear-btn:hover{
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+}
+.ai-msg{
+  line-height:1.85;
+  font-size:13px;
+}
+.ai-msg strong{
+  color:#fff;
+  font-weight:900;
+}
+.ai-inline-code{
+  background:rgba(255,255,255,0.1);
+  padding:2px 6px;
+  border-radius:6px;
+  font-family:monospace;
+  direction:ltr;
+  display:inline-block;
+  color:#6bf0b3;
+}
+.ai-msg-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+  padding-top:8px;
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+.ai-action-chip{
+  padding:6px 11px;
+  border-radius:999px;
+  background:rgba(229,35,79,0.16);
+  border:1px solid rgba(229,35,79,0.4);
+  color:#ffd0d9;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  transition:all .18s ease;
+}
+.ai-action-chip:hover{
+  background:#e5234f;
+  color:#fff;
+}
 </style>
 
 <!-- KURDIA SMOOTH NON-GLITCHING MOTION & VISITOR TRACKER ENGINE -->
@@ -5227,17 +6052,19 @@ document.addEventListener('click',function(e){
     }, { passive: true });
   }
 
-  // 2. Interactive Spotlight Pointer Tracker (Aceternity / Magic UI effect)
-  document.addEventListener('pointermove', e => {
-    const cards = document.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card');
-    cards.forEach(card => {
-      const r = card.getBoundingClientRect();
-      if(e.clientY >= r.top - 100 && e.clientY <= r.bottom + 100){
-        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-      }
-    });
-  }, { passive: true });
+  // 2. Interactive Spotlight Pointer Tracker (Desktop hover only)
+  if(window.matchMedia && window.matchMedia('(hover: hover)').matches){
+    document.addEventListener('pointermove', e => {
+      const cards = document.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card');
+      cards.forEach(card => {
+        const r = card.getBoundingClientRect();
+        if(e.clientY >= r.top - 100 && e.clientY <= r.bottom + 100){
+          card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+          card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        }
+      });
+    }, { passive: true });
+  }
 
   // 3. Smooth Staggered Entrance Animations (GSAP + Anime.js, Glitch-Free with clearProps)
   window.kurdiaAnimatePageCards = function(pageId){
@@ -5246,12 +6073,12 @@ document.addEventListener('click',function(e){
     try{
       const activePage = document.getElementById(pageId || (location.hash || '#home').slice(1) || 'home');
       if(!activePage) return;
-      const targets = activePage.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .home-weather-strip');
+      const targets = activePage.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .experience-card');
       if(targets.length){
         gsap.killTweensOf(targets);
         gsap.fromTo(targets,
-          { opacity: 0, y: 18 },
-          { opacity: 1, y: 0, duration: 0.44, stagger: 0.055, ease: 'power3.out', clearProps: 'transform,opacity' }
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.34, stagger: 0.04, ease: 'power2.out', clearProps: 'transform,opacity' }
         );
       }
       // Animate seat progress bars with Anime.js
@@ -5263,9 +6090,9 @@ document.addEventListener('click',function(e){
           anime({
             targets: b,
             width: targetW,
-            duration: 950,
-            easing: 'easeOutExpo',
-            delay: 180
+            duration: 750,
+            easing: 'easeOutQuart',
+            delay: 120
           });
         });
       }
@@ -5280,16 +6107,15 @@ document.addEventListener('click',function(e){
   };
 
   window.addEventListener('hashchange', () => {
-    setTimeout(() => window.kurdiaAnimatePageCards(), 80);
+    setTimeout(() => window.kurdiaAnimatePageCards(), 60);
   });
 
-  // 4. Subtle Ambient Background Canvas (Three.js Starfield)
+  // 4. Subtle Ambient Background Canvas (Three.js Starfield - Desktop only for mobile battery/FPS)
   function initThreeAtmosphere(){
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!window.THREE || reduce) return;
+    if(!window.THREE || reduce || window.innerWidth < 768) return;
     try{
       if(document.getElementById('kurdiaThreeAmbientCanvas')) return;
-      const isDesktop = window.innerWidth > 900;
       const bgCanvas = document.createElement('canvas');
       bgCanvas.id = 'kurdiaThreeAmbientCanvas';
       document.body.prepend(bgCanvas);
@@ -5300,12 +6126,12 @@ document.addEventListener('click',function(e){
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
       camera.position.z = 6;
 
-      const count = isDesktop ? 140 : 65;
+      const count = 90;
       const geo = new THREE.BufferGeometry();
       const pts = new Float32Array(count * 3);
       for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 16;
       geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-      const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.042, transparent: true, opacity: 0.45 });
+      const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.038, transparent: true, opacity: 0.35 });
       const particles = new THREE.Points(geo, mat);
       scene.add(particles);
 
@@ -5317,7 +6143,7 @@ document.addEventListener('click',function(e){
 
       function animateThree(){
         requestAnimationFrame(animateThree);
-        particles.rotation.y += 0.00035;
+        particles.rotation.y += 0.00025;
         renderer.render(scene, camera);
       }
       animateThree();
@@ -5408,6 +6234,1051 @@ document.addEventListener('click',function(e){
     document.addEventListener('DOMContentLoaded', startAll, { once: true });
   } else {
     startAll();
+  }
+})();
+</script>
+
+<!-- KURDIA FULL-WEBSITE MULTI-LANGUAGE TRANSLATION ENGINE (KU / AR / EN) -->
+<script id="kurdia-full-site-i18n-engine">
+(function(){
+  'use strict';
+
+  const CACHE_KEY = 'kurdia_i18n_cache_v3';
+  let dynamicCache = { ar: {}, en: {} };
+  try {
+    const saved = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if(saved && typeof saved === 'object'){
+      dynamicCache.ar = saved.ar || {};
+      dynamicCache.en = saved.en || {};
+    }
+  } catch(e){}
+
+  function saveDynamicCache(){
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(dynamicCache)); } catch(e){}
+  }
+
+  // Exact & Phrase Dictionary for Arabic (ar) and English (en)
+  const DICT = {
+    ar: {
+      // Navigation & Header
+      "سەرەکی": "الرئيسية",
+      "کەشوهەوا": "الطقس",
+      "کەش و هەوا": "الطقس",
+      "بەشداری": "الحجز",
+      "تایبەت": "رحلة خاصة",
+      "زیاتر": "المزيد",
+      "گەڕانەوە": "رجوع",
+      "گەشت، سروشت و ئەزموونی جیاواز": "رحلات، طبيعة وتجارب استثنائية",
+      "بەشە سەرەکییەکان": "الأقسام الرئيسية",
+      "پەڕەی سەرەکی KURDIA": "الصفحة الرئيسية لـ KURDIA",
+      "شوێنەکان": "الأماكن السياحية",
+      "شوێنە گەشتیاری و شاخەوانییەکان": "الأماكن السياحية ومسارات الجبال",
+      "چالاکی و ئەزموونەکان": "الأنشطة والتجارب",
+      "شاخەوانی، کەمپینگ و گەشتی سروشت": "تسلق الجبال، التخييم ورحلات الطبيعة",
+      "بەشداری گەشت": "المشاركة في الرحلة",
+      "بەشداری گەشت ←": "احجز رحلتك ←",
+      "ناوی خۆت تۆمار بکە": "سجّل اسمك واحجز مقعدك",
+      "گەشتی تایبەت": "رحلة خاصة VIP",
+      "گەشتێکی بەپێی داواکاریی خۆت": "رحلة مخصصة حسب طلبك",
+      "پێشبینی کەشی هەر شوێنێک": "توقعات الطقس لأي منطقة",
+      "بیروڕا و هەڵسەنگاندن": "الآراء والتقييمات",
+      "ئەزموونی بەشداربووان": "تجارب المشاركين معنا",
+      "ستۆری": "القصص (ستوري)",
+      "ستۆرییەکان": "قصص المغامرين",
+      "یادەوەری و ئەزموون": "ذكريات وتجارب",
+      "دەربارەی تیمەکە": "عن الفريق",
+      "ناساندنی KURDIA ADVENTURE": "تعرّف على KURDIA ADVENTURE",
+      "پەیوەندی": "اتصل بنا",
+      "پەیوەندیمان پێوە بکە": "تواصل معنا مباشرة",
+      "پەیوەندی بە تیمی KURDIA": "التواصل مع فريق KURDIA",
+      "ژمارەی تەلەفۆن": "رقم الهاتف",
+      "سۆشیال میدیا": "مواقع التواصل الاجتماعي",
+      "ADVENTURE\nگەشت، سروشت و ژیانێکی جیاواز": "ADVENTURE\nرحلات، طبيعة وحياة مختلفة",
+
+      // Hero & Home
+      "زیاتر لە گەشت.": "أكثر من مجرد رحلة.",
+      "ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.": "تجربة الطبيعة، الصداقة وأجمل مناطق كوردستان مع KURDIA.",
+      "گەشتەکانی داهاتوو": "الرحلات القادمة",
+      "گەشتی داهاتوو": "الرحلة القادمة",
+      "هەموو ئەو گەشتانەی ئێستا ناونووسینیان بۆ کراوەیە": "جميع الرحلات المتاحة للتسجيل والحجز حالياً",
+      "بەرواری گەشتی داهاتوو هێشتا بڵاونەکراوەتەوە. تکایە دواتر سەردانمان بکە.": "لم يتم الإعلان عن موعد الرحلة القادمة بعد. يرجى زيارتنا لاحقاً.",
+      "بەرواری گەشتی داهاتوو هێشتا دیاری نەکراوە": "لم يتم تحديد موعد الرحلة القادمة بعد",
+      "بینینی هەموو ←": "عرض الكل ←",
+      "بینینی هەموو": "عرض الكل",
+      "جوانترین شوێنە گەشتیاری و شاخەوانییەکانی کوردستان بە تەواوی زانیارییەوە": "أجمل الوجهات السياحية والجبلية في كوردستان مع كافة التفاصيل",
+      "شاخەوانی، کەمپینگ، گەشتی سروشت و هاوڕێیەتی لەگەڵ تیمی KURDIA": "تسلق الجبال، التخييم، رحلات الطبيعة والصداقة مع فريق KURDIA",
+      "شاخەوانی و لووتکە": "تسلق الجبال والقمم",
+      "سەرکەوتن بۆ بەرزترین چیاکانی کوردستان": "الصعود إلى أعلى قمم جبال كوردستان",
+      "کەمپینگی شەوانە": "التخييم الليلي",
+      "مانەوە لەژێر ئاسمانی پڕ ئەستێرە و ئاگردان": "المبيت تحت سماء النجوم وحول نار المخيم",
+      "گەشتی سروشت و ئاوشار": "رحلات الطبيعة والشلالات",
+      "گەڕان لە دۆڵ، دارستان و تاڤگە فێنکەکان": "استكشاف الوديان والغابات والشلالات الباردة",
+      "فۆتۆگرافی و هاوڕێیەتی": "التصوير والصداقة",
+      "تۆمارکردنی جوانترین یادەوەرییەکان": "توثيق أجمل الذكريات واللحظات",
+      "یادەوەری و ئەزموونی خەڵکی KURDIA": "ذكريات وتجارب عائلة KURDIA",
+      "زیادکردن": "إضافة",
+      "تایبەت بە خێزان و گروپەکان": "خاص بالعوائل والمجموعات",
+      "گەشتی تایبەت بە دڵی خۆت ڕێکبخە": "نظّم رحلتك الخاصة كما تحب",
+      "شوێن، بەروار، ژمارەی کەس و شێوازی گەشتەکەت دیاری بکە؛ تیمی KURDIA هەموو وردەکارییەکان لە گواستنەوە، مانەوە، ڕێبەر و وێنەگرتن بۆ تۆ و هاوڕێکانت یان خێزانەکەت ئامادە دەکات.": "حدد الوجهة، التاريخ، عدد الأشخاص ونوع الرحلة؛ فريق KURDIA يجهز كافة التفاصيل من النقل، الإقامة، المرشد والتصوير لك ولعائلتك أو أصدقائك.",
+      "🚌 پاس و ئۆتۆمبێلی تایبەت": "🚌 باصات وسيارات خاصة",
+      "🏕️ کەمپ و کەپری تایبەت": "🏕️ مخيمات وكابينات خاصة",
+      "🧭 ڕێبەری شارەزا و فۆتۆگرافەر": "🧭 مرشد خبير ومصور محترف",
+      "داواکاری گەشتی تایبەت ←": "طلب رحلة خاصة ←",
+      "💬 ڕاوێژکاری لە وەتسئەپ": "💬 استشارة عبر واتساب",
+      "گەشتێکی باش، یادەوەرییەکی باشتر.": "رحلة رائعة، وذكرى أجمل.",
+      "KURDIA ADVENTURE پلاتفۆرمێکە بۆ گەشت، سروشت، کەمپینگ، ڕێگاکان، شوێنە مێژووییەکان و ئەزموونی هاوبەش. ئامانجمان دروستکردنی گەشتێکی ڕێکخراو و خۆشە.": "KURDIA ADVENTURE منصة للرحلات، الطبيعة، التخييم، المسارات الجبلية، والمواقع التاريخية. هدفنا تنظيم رحلات آمنة وممتعة.",
+      "دەربارەی کوردیا": "عن كورديا",
+
+      // Trip Cards & Places
+      "کراوە": "متاح",
+      "پڕبووە": "مكتمل",
+      "ناونووسین کراوەیە ✓": "التسجيل متاح ✓",
+      "بەرواری گەشت": "تاريخ الرحلة",
+      "نرخی بەشداری": "سعر الاشتراك",
+      "بەروار": "التاريخ",
+      "نرخ": "السعر",
+      "بەشداری بکە ←": "اشترك الآن ←",
+      "شوێن نەماوە": "اكتمل العدد",
+      "💬 پرسیار": "💬 استفسار",
+      "🥾 پیادەڕەوی تیایە": "🥾 يتضمن مشي جبلي",
+      "🚗 بێ پیادەڕەوی": "🚗 بدون مشي جبلي",
+      "🚗 گەشتی ئاسان (بێ پیادەڕەوی)": "🚗 رحلة سهلة (بدون مشي)",
+      "بینینی تەواوی زانیارییەکان": "عرض كافة التفاصيل",
+      "هەموو شوێنەکان": "جميع الأماكن",
+      "🚗 گەشتی ئاسان / خێزانی": "🚗 رحلة سهلة / عائلية",
+      "🏔️ شاخ و لووتکە": "🏔️ جبال وقمم",
+      "🌊 دەریاچە و ئاوشار": "🌊 بحيرات وشلالات",
+      "📝 دەربارەی شوێنەکە و تەواوی زانیاری:": "📝 حول المكان وكافة المعلومات:",
+      "👑 داواکاری گەشتی تایبەت بۆ ئەم شوێنە": "👑 طلب رحلة خاصة لهذا المكان",
+      "🎟️ گەشتە گشتییەکان": "🎟️ الرحلات العامة",
+      "ناوچە / مەنتیقە": "المنطقة / المحافظة",
+      "جۆری گەشت": "نوع الرحلة",
+      "پیادەڕەوی (Hiking)": "المشي الجبلي (Hiking)",
+      "ئاستی قورسی": "مستوى الصعوبة",
+      "باشترین وەرز": "أفضل موسم للزيارة",
+      "بەرزی لە ئاستی دەریا": "الارتفاع عن سطح البحر",
+      "تایبەتمەندییەکان": "المميزات والأنشطة",
+
+      // Default Trips & Places Content
+      "دەریاچەی دووکان": "بحيرة دوكان",
+      "سلێمانی · دووکان": "السليمانية · دوكان",
+      "ڕۆژێکی تایبەت لە نێو سروشت، دەریاچە، گەشتی بەلەم و کاتێکی ئارام لەگەڵ تیمی KURDIA.": "يوم مميز وسط الطبيعة وبحيرة دوكان وجولة القارب وأجواء هادئة مع فريق KURDIA.",
+      "چیای هەڵگورد و دۆڵی باڵەکایەتی": "جبل هلكورد ووادي بالكايتي",
+      "هەولێر · چۆمان (باڵەکایەتی)": "أربيل · جومان (بالكايتي)",
+      "سەرکێشییەکی شاخەوانی ناوازە بۆ بناری بەرزترین لووتکەی کوردستان، گۆماوی فێڵاو و سروشتی سەرسوڕهێنەری باڵەکایەتی.": "مغامرة جبلية رائعة إلى سفوح أعلى قمة في كوردستان وبحيرة فيلاو وطبيعة بالكايتي الساحرة.",
+      "بەرزترین لووتکەی شاخەوانی لە هەرێمی کوردستان و عێراق. شوێنێکی نایاب بۆ شاخەوانی، کەمپینگ لە ناو سروشتی کوێستان، کانی و تاڤگە ساردەکان و دیمەنی بەفری سەر لووتکە.": "أعلى قمة جبلية في إقليم كوردستان والعراق. وجهة مثالية لتسلق الجبال والتخييم وسط الطبيعة الجبلية والينابيع الباردة والثلوج.",
+      "دەریاچەی دووکان و قەشقۆڵی": "بحيرة دوكان وقشقلي",
+      "سلێمانی · قەزای دووکان": "السليمانية · قضاء دوكان",
+      "گەورەترین دەریاچەی هەرێمی کوردستان؛ شوێنێکی ناوازە بۆ گەشتی خێزانی و هاوڕێیانە، گەشتی بەلەم، کەپرەکانی سەر ئاوی قەشقۆڵی، کەمپینگی کەنار ئاو و ئاهەنگی ئێواران.": "أكبر بحيرة في إقليم كوردستان؛ مكان رائع للرحلات العائلية والأصدقاء وجولات القوارب وكابينات قشقلي والتخييم على ضفاف البحيرة.",
+      "خەرەندی ڕەواندز و گەلی عەلی بەگ": "وادي رواندز وشلال كلي علي بك",
+      "هەولێر · سۆران و ڕەواندز": "أربيل · سوران ورواندز",
+      "یەکێک لە سەرنجڕاکێشترین شوێنە گەشتیارییەکانی کوردستان؛ تێکەڵەیەک لە دۆڵی قووڵی خەرەند، تاڤگەی بەناوبانگی گەلی عەلی بەگ و بێخاڵ لەگەڵ سروشتێکی سەوز و فێنک.": "من أشهر المعالم السياحية في كوردستان؛ يجمع بين وادي رواندز العميق وشلالات كلي علي بك وبيخال مع طبيعة خضراء وأجواء منعشة.",
+      "ئامێدی و سەیرانگای سۆلاڤ": "العمادية ومصيف سولاف",
+      "دهۆک · ئامێدی و سەرسەنگ": "دهوك · العمادية وسرسنك",
+      "شارۆچکەی دێرینی ئامێدی لەسەر لووتکەی شاخێکی بازنەیی لەگەڵ دەروازەی مێژوویی بەهدینان و ئاووهەوای فێنکی سۆلاڤ و سەرسەنگ. شوێنێکی بێوێنە بۆ گەشتی ڕۆشنبیری و خێزانی.": "مدينة العمادية التاريخية فوق قمة جبلية صخرية مع بوابة بهدينان الأثرية وشلالات سولاف وسرسنك المنعشة.",
+      "هەورامان و باخەکانی تەوێڵە و بیارە": "هورامان وبساتين طويلة وبيارة",
+      "هەڵەبجە · هەورامان": "حلبجة · هورامان",
+      "ناوچەیەکی شاخاویی دڵڕفێن بە تەلارسازیی پلیکانەیی بەردین، باخی گوێز و هەنار، کانی ئاوێسەر و کولتووری ڕەسەنی هەورامان. لە وەرزی پاییزدا ڕەنگێکی زێڕینی سەرسوڕهێنەر دەپۆشێت.": "منطقة جبلية خلابة تتميز بعمارتها الحجرية المتدرجة وبساتين الجوز والرمان وينابيع أويسر وثقافة هورامان الأصيلة.",
+      "گۆماوی فێڵاو و کەمپی باڵەکایەتی": "بحيرة فيلاو ومخيم بالكايتي",
+      "گۆماوی سروشتی فێڵاو بەرامبەر زنجیرە چیای هەڵگورد، یەکێکە لە باشترین شوێنەکانی کوردستان بۆ کەمپینگی شەوانە، وێنەگرتنی ڕەنگدانەوەی چیاکان لەناو ئاودا و گەشتی زستانە.": "بحيرة فيلاو الطبيعية مقابل سلسلة جبال هلكورد، من أفضل أماكن التخييم الليلي والتصوير الفوتوغرافي في كوردستان.",
+
+      // Weather Page
+      "کەشوهەوا و نەخشەی شاخەوانی": "حالة الطقس والخريطة الجبلية",
+      "پێشبینی وردی کەشوهەوای لووتکەکان، شارەکان و سەرجەم ناوچەکانی کوردستان": "توقعات دقيقة للطقس في القمم الجبلية والمدن وجميع مناطق كوردستان",
+      "نوێکردنەوە": "تحديث",
+      "مانگی دەستکرد": "قمر صناعي",
+      "تاریک": "داكن",
+      "تۆپۆگرافی": "طبوغرافي",
+      "شارەکان": "المدن",
+      "👆 کلیک لەسەر هەر شوێنێک بکە بۆ هێنانی کەشوهەواکەی": "👆 اضغط على أي موقع على الخريطة لعرض طقسه",
+      "💨 بای زیندوو": "💨 الرياح الحية",
+      "ناوەند": "المركز",
+      "ساماڵ و ڕوون": "صافي ومشمس",
+      "ڕەوتی بای کوردستان (زیندوو)": "تيارات الرياح في كوردستان (مباشر)",
+      "کەشوهەوای شاخەوانی و گەشت": "حالة الطقس للتخييم والمشي الجبلي",
+      "دۆخێکی نموونەییە بۆ کەمپینگ، شاخەوانی و گەڕان لە سروشتی کوردستاندا.": "أجواء مثالية للتخييم وتسلق الجبال والتجول في طبيعة كوردستان.",
+      "💧 شێی هەوا": "💧 الرطوبة",
+      "شێی گونجاو": "رطوبة معتدلة",
+      "💨 خێرایی با": "💨 سرعة الرياح",
+      "بای ئارام": "رياح هادئة",
+      "☀️ تیشکی خۆر UV": "☀️ مؤشر الأشعة UV",
+      "کەم": "منخفض",
+      "🌧️ ئەگەری باران": "🌧️ احتمالية الأمطار",
+      "👁️ بینین": "👁️ مدى الرؤية",
+      "مەودای ئاسۆ": "الرؤية الأفقية",
+      "🧭 پەستانی کەش": "🧭 الضغط الجوي",
+      "پەستانی سەرزەوی": "الضغط السطحي",
+      "🌅 هەڵاتنی خۆر": "🌅 شروق الشمس",
+      "بەیانی": "صباحاً",
+      "کاتی سپێدە": "وقت الفجر",
+      "🌇 ئاوابوونی خۆر": "🌇 غروب الشمس",
+      "ئێوارە": "مساءً",
+      "کاتی ئێوارە": "وقت الغروب",
+      "پێشبینی ٢٤ کاتژمێری داهاتوو": "توقعات الـ ٢٤ ساعة القادمة",
+      "پلەی گەرمی و ئەگەری باران بە کاتژمێر": "درجات الحرارة واحتمالية الأمطار لكل ساعة",
+      "پێشبینی ٧ ڕۆژی داهاتوو": "توقعات الـ ٧ أيام القادمة",
+      "ڕەوشی کەشوهەوای هەفتانەی ناوچەکە بۆ پلاندانانی گەشتەکان": "حالة الطقس الأسبوعية للمنطقة لتخطيط الرحلات",
+      "سەرچاوەی داتای مێتیۆلۆجی": "مصدر بيانات الأرصاد الجوية",
+      "نوێکردنەوەی ڕاستەوخۆ ↻": "تحديث مباشر ↻",
+
+      // Booking Page
+      "بەشداری گەشت و حیجزکردنی کورسی": "المشاركة في الرحلة وحجز المقاعد",
+      "گەشتی دڵخوازت لە خوارەوە هەڵبژێرە و بە ٣ هەنگاوی خێرا ناوی خۆت و هاوڕێکانت تۆمار بکە.": "اختر رحلتك المفضلة أدناه وسجّل اسمك وأسماء أصدقائك بـ ٣ خطوات سريعة.",
+      "✓ پشتڕاستکردنەوەی خێرا": "✓ تأكيد سريع",
+      "🚌 پاسی گەشتیاری VIP": "🚌 باصات سياحية VIP",
+      "🧭 ڕێبەری شارەزا": "🧭 مرشد جبلي خبير",
+      "١. گەشتی دڵخوازت هەڵبژێرە": "١. اختر رحلتك المفضلة",
+      "گەشتە بەردەستەکان": "الرحلات المتاحة",
+      "٢. فۆڕمی تۆمارکردنی بەشداربوو": "٢. استمارة تسجيل المشاركين",
+      "تۆمارکردنی ناو و زانیاری": "تسجيل الأسماء والمعلومات",
+      "گەشتی هەڵبژێردراو": "الرحلة المختارة",
+      "زانیاری": "المعلومات",
+      "مۆبایل": "الهاتف",
+      "تەواوکردن": "الإتمام",
+      "هەنگاوی ١ لە ٣": "الخطوة ١ من ٣",
+      "زانیارییە سەرەتاییەکان": "المعلومات الأساسية",
+      "ناوی تەواوت بنووسە و گەشت و ژمارەی بەشداربووان دیاری بکە.": "اكتب اسمك الكامل وحدد الرحلة وعدد المشاركين.",
+      "👤 ناوی سیانی / تەواو *": "👤 الاسم الثلاثي / الكامل *",
+      "🧭 گەشتی هەڵبژێردراو *": "🧭 الرحلة المختارة *",
+      "👥 ژمارەی بەشداربووان": "👥 عدد المشاركين",
+      "ژمارەی خۆت و ئەو کەسانەی لەگەڵتن": "عددك مع الأشخاص المرافقين لك",
+      "کۆی نرخی بەشداری:": "إجمالي مبلغ الاشتراك:",
+      "بەردەوامبوون بۆ هەنگاوی دووەم ←": "المتابعة إلى الخطوة الثانية ←",
+      "هەنگاوی ٢ لە ٣": "الخطوة ٢ من ٣",
+      "پشتڕاستکردنەوەی ژمارەی WhatsApp": "تأكيد رقم واتساب (WhatsApp)",
+      "کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.": "سيتم إرسال رمز من ٤ أرقام إلى واتساب الخاص بك للتأكيد.",
+      "📱 ژمارەی مۆبایل (WhatsApp) *": "📱 رقم الهاتف (WhatsApp) *",
+      "ناردنی کۆدی OTP": "إرسال رمز OTP",
+      "پشتڕاستکردنەوەی کۆد": "تأكيد الرمز",
+      "کۆدەکە بۆ WhatsApp ـت نێردراوە": "تم إرسال الرمز إلى واتساب الخاص بك",
+      "پشتڕاستکردنەوەی ژمارە ✓": "تأكيد الرقم ✓",
+      "→ گەڕانەوە": "→ رجوع",
+      "بەردەوامبوون ←": "متابعة ←",
+      "هەنگاوی ٣ لە ٣": "الخطوة ٣ من ٣",
+      "پارەدان و تەواوکردنی ناونووسین": "الدفع وإتمام التسجيل",
+      "بڕی بەشداری بنێرە بۆ هەژماری FIB و وێنەی پسوڵەکە باربکە.": "حوّل مبلغ الاشتراك إلى حساب FIB وارفع صورة وصل الدفع.",
+      "💳 هەژماری فەرمی پارەدان (FIB)": "💳 حساب الدفع الرسمي (FIB)",
+      "تکایە وێنەی شاشەی پسوڵەی ناردنی پارەکە لە خوارەوە دابنێ": "يرجى إرفاق لقطة شاشة لوصل تحويل المبلغ أدناه",
+      "📋 کۆپیکردنی ژمارە": "📋 نسخ الرقم",
+      "🎟️ کۆدی داشکاندن": "🎟️ كود الخصم",
+      "ئارەزوومەندانە": "اختياري",
+      "جێبەجێکردن": "تطبيق",
+      "📸 وێنەی پسوڵەی پارەدان *": "📸 صورة وصل الدفع *",
+      "وێنەی پسوڵەی FIB هەڵبژێرە بۆ ئەوەی داواکارییەکەت دەستبەجێ پەسەند بکرێت.": "اختر صورة وصل FIB ليتم قبول طلبك فوراً.",
+      "هیچ وێنەیەک هەڵنەبژێردراوە": "لم يتم اختيار أي صورة",
+      "✓ ناردنی داواکاری و تەواوکردن": "✓ إرسال الطلب وإتمام الحجز",
+      "ناو تۆمارکردنەکەت سەرکەوتوو بوو": "تم تسجيل اسمك بنجاح!",
+      "داواکاری و وێنەی پسوڵەکەت بە سەرکەوتوویی گەیشتە تیمی سەرپەرشتیاری گەشت.": "وصل طلبك وصورة الوصل بنجاح إلى فريق إدارة الرحلات.",
+      "زۆر باشە، تێگەیشتم ✓": "حسناً، تم ✓",
+
+      // Private Trip Page
+      "داواکاری گەشتی تایبەت (VIP & گروپ)": "طلب رحلة خاصة (VIP والمجموعات)",
+      "کات، شوێن و شێوازی گەشتەکەت بە دڵی خۆت دیاری بکە؛ تیمی KURDIA پلانی تەواو بۆ تۆ، خێزانەکەت یان هاوڕێکانت ڕێکدەخات.": "حدد الوقت والمكان ونوع الرحلة كما تحب؛ فريق KURDIA يضع خطة متكاملة لك ولعائلتك أو أصدقائك.",
+      "گەشتی خێزانی": "رحلة عائلية",
+      "ئارام و خۆشگوزەران": "هادئة ومريحة",
+      "شاخەوانی گروپ": "تسلق جبال للمجموعات",
+      "سەرکێشی و ڕێبەری شارەزا": "مغامرة مع مرشد خبير",
+      "خێمە و ئاگردان لە سروشت": "خيام ونار سمر في الطبيعة",
+      "سروشت و وێنەگرتن": "طبيعة وتصوير",
+      "شوێنە دڵڕفێنەکانی کوردستان": "أجمل مناطق كوردستان",
+      "زانیاری کەسی": "المعلومات الشخصية",
+      "شوێن و جۆری گەشت": "الوجهة ونوع الرحلة",
+      "خزمەتگوزاری و ناردن": "الخدمات والإرسال",
+      "هەنگاوی ١: زانیاریی کەسی و پەیوەندی": "الخطوة ١: المعلومات الشخصية والتواصل",
+      "هەنگاوی ٢: شوێن و شێوازی گەشت": "الخطوة ٢: الوجهة ونمط الرحلة",
+      "هەنگاوی ٣: خزمەتگوزاری و ناردن": "الخطوة ٣: الخدمات وإرسال الطلب",
+      "👤 ناوی تەواو *": "👤 الاسم الكامل *",
+      "سەلامەتی و ڕێکخستنی تەواو": "تنظيم متكامل وأمان تام",
+      "وەڵامدانەوە لە کەمتر لە ١ کاتژمێر": "رد سريع خلال أقل من ساعة",
+      "بەرنامەی تایبەت بە بودجەی خۆت": "برنامج مخصص يناسب ميزانيتك",
+      "بەردەوامبوون بۆ هەڵبژاردنی شوێن ←": "المتابعة لاختيار الوجهة ←",
+      "📍 شوێنی دڵخوازتان بۆ گەشت *": "📍 وجهتكم المفضلة للرحلة *",
+      "📅 بەرواری پێشنیارکراوی گەشت *": "📅 التاريخ المقترح للرحلة *",
+      "👥 ژمارەی بەشداربووان *": "👥 عدد المشاركين *",
+      "🧭 شێواز و جۆری گەشت هەڵبژێرە *": "🧭 اختر نمط ونوع الرحلة *",
+      "شاخەوانی": "تسلق الجبال",
+      "لووتکە و پیادەڕەوی": "قمم ومشي جبلي",
+      "کەمپینگ": "تخييم",
+      "مانەوەی شەوانە": "مبيت ليلي",
+      "گەشتی سروشت": "رحلة طبيعة",
+      "دیمەن و ئارامی": "مناظر خلابة وهدوء",
+      "گەشتی ڕێگا": "رحلة طريق",
+      "گەڕانی چەند ناوچەیەک": "جولة في عدة مناطق",
+      "تایبەت بە خێزان": "مخصصة للعوائل",
+      "VIP تایبەت": "VIP خاص",
+      "بەپێی داواکاری": "حسب الطلب",
+      "✨ چ خزمەتگوزارییەکتان پێویستە؟": "✨ ما هي الخدمات التي تحتاجونها؟",
+      "🚌 گواستنەوەی تایبەت": "🚌 نقل خاص VIP",
+      "پاس یان ئۆتۆمبێلی چوارپاڵەوانی تایبەت": "باص سياحي أو سيارات دفع رباعي خاصة",
+      "🏕️ هۆتێل / کەپر و کەمپ": "🏕️ فندق / كابينة ومخيم",
+      "ئامادەکردنی شوێنی مانەوە و خێمە": "تجهيز مكان الإقامة والخيام",
+      "📸 ڕێبەر و فۆتۆگرافەر": "📸 مرشد ومصور محترف",
+      "ڕێبەری شارەزای ناوچەکە و وێنەگرتنی پڕۆفیشناڵ": "مرشد خبير بالمنطقة وتصوير احترافي",
+      "💰 بودجەی نزیکەیی (ئارەزوومەندانە)": "💰 الميزانية التقريبية (اختياري)",
+      "🍽️ ژەمە خواردن و پێداویستی": "🍽️ الوجبات والمستلزمات",
+      "📝 تێبینی و داواکاری تایبەت": "📝 ملاحظات وطلبات خاصة",
+      "🔒 داواکارییەکەت ڕاستەوخۆ دەگاتە بەڕێوەبەرایەتی KURDIA ADVENTURE و لە ڕێگەی WhatsApp پەیوەندیت پێوە دەکەین.": "🔒 يصل طلبك مباشرة إلى إدارة KURDIA ADVENTURE وسنتواصل معك عبر واتساب.",
+      "ناردنی داواکاری گەشتی تایبەت": "إرسال طلب الرحلة الخاصة",
+
+      // Experiences, Stories, Reviews, About, Contact, AI
+      "چالاکی و ئەزموونە جیاوازەکان": "الأنشطة والتجارب المتنوعة",
+      "جۆرەکانی گەشت و چالاکییە مەیدانییەکانی KURDIA ADVENTURE لە سەرانسەری کوردستان.": "أنواع الرحلات والأنشطة الميدانية مع KURDIA ADVENTURE في كافة أنحاء كوردستان.",
+      "شاخەوانی و سەرکەوتنی لووتکە": "تسلق الجبال وصعود القمم",
+      "گەشتی شاخەوانی ڕێکخراو بە هاوڕێیەتی ڕێبەری شارەزا بۆ چیاکانی هەڵگورد، سەفین، پیرەمەگروون و کۆڕەک.": "رحلات جبلية منظمة برفقة مرشدين خبراء إلى جبال هلكورد، سفين، بيره مكرون وكورك.",
+      "کەمپینگی شەوانە و ئاگردان": "التخييم الليلي ونار السمر",
+      "ئەزموونی مانەوەی شەوانە لەناو خێمە، شەوانی ئاگردان، چای سەر خەڵووز و کەشێکی ئارام لە سروشتدا.": "تجربة المبيت الليلي في الخيام، أمسيات نار السمر، الشاي على الجمر وأجواء الطبيعة الهادئة.",
+      "گەشتی دەریاچە و ئاوشارەکان": "رحلات البحيرات والشلالات",
+      "سەردانیکردنی دەریاچەی دووکان، دەربەندیخان، گەلی عەلی بەگ و تاڤگە دڵڕفێنەکانی کوردستان.": "زيارة بحيرة دوكان، دربندخان، كلي علي بك وأجمل شلالات كوردستان.",
+      "گەشتی تایبەتی خێزانی و گروپ": "رحلات خاصة للعوائل والمجموعات",
+      "ڕێکخستنی گەشتی تایبەت بەپێی کات و خواستی خێزان یان هاوڕێکانت بە تەواوی خزمەتگوزارییەکانەوە.": "تنظيم رحلات خاصة حسب وقت ورغبة عائلتك أو أصدقائك مع كافة الخدمات.",
+      "گەشتی کولتووری و مێژوویی": "رحلات ثقافية وتاريخية",
+      "ئاشنابوون بە شارۆچکە دێرینەکانی وەک ئامێدی، ئاکرێ، هەورامان و قەڵا مێژووییەکان.": "التعرف على المدن العريقة مثل العمادية، عقرة، هورامان والقلاع التاريخية.",
+      "وێنەگرتن و تۆمارکردنی یادەوەری": "التصوير الفوتوغرافي وتوثيق الذكريات",
+      "گرتنی وێنە و ڤیدیۆی سینەمایی لە جوانترین دیمەنە سروشتییەکانی کوردستان.": "التقاط صور وفيديوهات سينمائية في أجمل المشاهد الطبيعية في كوردستان.",
+      "ئەزموونی بەشداربووان و هاوڕێکانی KURDIA.": "تجارب المشاركين وأصدقاء KURDIA.",
+      "بیروڕا": "الآراء",
+      "ئەزموونەکەت لەگەڵ KURDIA بنووسە و هەڵسەنگاندنەکەت دابنێ.": "اكتب تجربتك مع KURDIA وشاركنا تقييمك.",
+      "هەڵسەنگاندن:": "التقييم:",
+      "ناردنی بیروڕا": "إرسال الرأي",
+      "دەربارەی KURDIA": "عن KURDIA",
+      "گەشت، سروشت، هاوڕێیەتی.": "رحلات، طبيعة، صداقة.",
+      "ئێمە باوەڕمان وایە گەشت تەنها گەیشتن بە شوێنێک نییە؛ ئەزموونێکە کە لەگەڵ خەڵک و سروشت دروست دەبێت.": "نحن نؤمن أن الرحلة ليست مجرد الوصول إلى مكان؛ بل هي تجربة تُصنع مع الناس والطبيعة.",
+      "بەشداربوو": "مشارك",
+      "گەشت": "رحلة",
+      "هەڵسەنگاندن": "تقييم",
+      "تەلەفۆن": "الهاتف",
+      "هەولێر — کوردستان": "أربيل — كوردستان",
+      "شوێنی کار": "الموقع",
+      "یاریدەدەری زیرەکی KURDIA": "المساعد الذكي لـ KURDIA",
+      "ڕێبەری زیرەکی گەشت، شاخەوانی، کەشوهەوا و ناونووسین": "مرشدك الذكي للرحلات، الجبال، الطقس والحجز",
+      "🧭 گەشتی داهاتوو؟": "🧭 ما هي الرحلة القادمة؟",
+      "🎟️ چۆن ناو تۆمار بکەم؟": "🎟️ كيف أسجل وأحجز؟",
+      "🥾 شوێنەکانی پیادەڕەوی": "🥾 أماكن المشي الجبلي",
+      "👑 گەشتی تایبەت VIP": "👑 رحلة خاصة VIP",
+      "⛅ کەشوهەوای شاخەوانی": "⛅ طقس الجبال",
+      "ستۆری خۆت بنێرە": "أرسل قصتك (ستوري)",
+      "ناردنی ستۆری": "إرسال القصة",
+      "بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێکان و گەشتەکان لەدەست مەدە.": "لتجربة أسرع، ثبّت التطبيق ولا تفوّت إشعارات الرحلات الجديدة.",
+      "دابمەزرێنە": "تثبيت التطبيق",
+      "ئاگادارییەکان چالاک بکە": "تفعيل الإشعارات"
+    },
+    en: {
+      // Navigation & Header
+      "سەرەکی": "Home",
+      "کەشوهەوا": "Weather",
+      "کەش و هەوا": "Weather",
+      "بەشداری": "Book Trip",
+      "تایبەت": "Private VIP",
+      "زیاتر": "More",
+      "گەڕانەوە": "Back",
+      "گەشت، سروشت و ئەزموونی جیاواز": "Expeditions, Nature & Unique Experiences",
+      "بەشە سەرەکییەکان": "Main Sections",
+      "پەڕەی سەرەکی KURDIA": "KURDIA Main Homepage",
+      "شوێنەکان": "Destinations",
+      "شوێنە گەشتیاری و شاخەوانییەکان": "Mountain & Nature Destinations",
+      "چالاکی و ئەزموونەکان": "Activities & Experiences",
+      "شاخەوانی، کەمپینگ و گەشتی سروشت": "Hiking, Camping & Nature Tours",
+      "بەشداری گەشت": "Join a Trip",
+      "بەشداری گەشت ←": "Book a Trip ←",
+      "ناوی خۆت تۆمار بکە": "Register Your Seat",
+      "گەشتی تایبەت": "Private Trips",
+      "گەشتێکی بەپێی داواکاریی خۆت": "Tailor-made trips on demand",
+      "پێشبینی کەشی هەر شوێنێک": "Live mountain & city forecast",
+      "بیروڕا و هەڵسەنگاندن": "Reviews & Ratings",
+      "ئەزموونی بەشداربووان": "Participant Testimonials",
+      "ستۆری": "Stories",
+      "ستۆرییەکان": "Adventure Stories",
+      "یادەوەری و ئەزموون": "Memories & Moments",
+      "دەربارەی تیمەکە": "About the Team",
+      "ناساندنی KURDIA ADVENTURE": "Discover KURDIA ADVENTURE",
+      "پەیوەندی": "Contact Us",
+      "پەیوەندیمان پێوە بکە": "Get in touch with our team",
+      "پەیوەندی بە تیمی KURDIA": "Contact KURDIA Team",
+      "ژمارەی تەلەفۆن": "Phone Number",
+      "سۆشیال میدیا": "Social Media",
+      "ADVENTURE\nگەشت، سروشت و ژیانێکی جیاواز": "ADVENTURE\nNature, Expeditions & Outdoor Life",
+
+      // Hero & Home
+      "زیاتر لە گەشت.": "More Than a Trip.",
+      "ئەزموونی سروشت، هاوڕێیەتی و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA.": "Experience wild nature, true friendship, and Kurdistan's finest destinations with KURDIA.",
+      "گەشتەکانی داهاتوو": "Upcoming Expeditions",
+      "گەشتی داهاتوو": "Next Expedition",
+      "هەموو ئەو گەشتانەی ئێستا ناونووسینیان بۆ کراوەیە": "All upcoming trips currently open for seat registration",
+      "بەرواری گەشتی داهاتوو هێشتا بڵاونەکراوەتەوە. تکایە دواتر سەردانمان بکە.": "The next trip date has not been announced yet. Please check back soon.",
+      "بەرواری گەشتی داهاتوو هێشتا دیاری نەکراوە": "Next trip date to be announced soon",
+      "بینینی هەموو ←": "View All ←",
+      "بینینی هەموو": "View All",
+      "جوانترین شوێنە گەشتیاری و شاخەوانییەکانی کوردستان بە تەواوی زانیارییەوە": "Explore Kurdistan's most breathtaking hiking & nature destinations in full detail",
+      "شاخەوانی، کەمپینگ، گەشتی سروشت و هاوڕێیەتی لەگەڵ تیمی KURDIA": "Mountaineering, starlight camping, nature trails & camaraderie with KURDIA",
+      "شاخەوانی و لووتکە": "Mountaineering & Summits",
+      "سەرکەوتن بۆ بەرزترین چیاکانی کوردستان": "Guided ascents to Kurdistan's highest peaks",
+      "کەمپینگی شەوانە": "Overnight Camping",
+      "مانەوە لەژێر ئاسمانی پڕ ئەستێرە و ئاگردان": "Sleep under starry skies around the campfire",
+      "گەشتی سروشت و ئاوشار": "Nature & Waterfall Trails",
+      "گەڕان لە دۆڵ، دارستان و تاڤگە فێنکەکان": "Explore lush canyons, forests & cool waterfalls",
+      "فۆتۆگرافی و هاوڕێیەتی": "Photography & Community",
+      "تۆمارکردنی جوانترین یادەوەرییەکان": "Capture unforgettable cinematic memories",
+      "یادەوەری و ئەزموونی خەڵکی KURDIA": "Moments shared by the KURDIA community",
+      "زیادکردن": "Add Story",
+      "تایبەت بە خێزان و گروپەکان": "For Families & Private Groups",
+      "گەشتی تایبەت بە دڵی خۆت ڕێکبخە": "Design Your Own Private Expedition",
+      "شوێن، بەروار، ژمارەی کەس و شێوازی گەشتەکەت دیاری بکە؛ تیمی KURDIA هەموو وردەکارییەکان لە گواستنەوە، مانەوە، ڕێبەر و وێنەگرتن بۆ تۆ و هاوڕێکانت یان خێزانەکەت ئامادە دەکات.": "Choose your destination, date, group size, and travel style; the KURDIA team arranges transport, accommodation, expert guides, and photography for your family or group.",
+      "🚌 پاس و ئۆتۆمبێلی تایبەت": "🚌 Private VIP Bus & 4x4",
+      "🏕️ کەمپ و کەپری تایبەت": "🏕️ Private Camp & Cabins",
+      "🧭 ڕێبەری شارەزا و فۆتۆگرافەر": "🧭 Expert Guide & Photographer",
+      "داواکاری گەشتی تایبەت ←": "Request Private Trip ←",
+      "💬 ڕاوێژکاری لە وەتسئەپ": "💬 WhatsApp Consultation",
+      "گەشتێکی باش، یادەوەرییەکی باشتر.": "Better Trips, Unforgettable Memories.",
+      "KURDIA ADVENTURE پلاتفۆرمێکە بۆ گەشت، سروشت، کەمپینگ، ڕێگاکان، شوێنە مێژووییەکان و ئەزموونی هاوبەش. ئامانجمان دروستکردنی گەشتێکی ڕێکخراو و خۆشە.": "KURDIA ADVENTURE is Kurdistan's premier platform for outdoor expeditions, camping, mountain trails, heritage sites, and shared adventure.",
+      "دەربارەی کوردیا": "About KURDIA",
+
+      // Trip Cards & Places
+      "کراوە": "Open",
+      "پڕبووە": "Full",
+      "ناونووسین کراوەیە ✓": "Registration Open ✓",
+      "بەرواری گەشت": "Trip Date",
+      "نرخی بەشداری": "Price / Person",
+      "بەروار": "Date",
+      "نرخ": "Price",
+      "بەشداری بکە ←": "Join Trip ←",
+      "شوێن نەماوە": "Sold Out",
+      "💬 پرسیار": "💬 Inquire",
+      "🥾 پیادەڕەوی تیایە": "🥾 Includes Hiking",
+      "🚗 بێ پیادەڕەوی": "🚗 No Hiking Required",
+      "🚗 گەشتی ئاسان (بێ پیادەڕەوی)": "🚗 Easy Tour (No Hiking)",
+      "بینینی تەواوی زانیارییەکان": "View Full Specifications",
+      "هەموو شوێنەکان": "All Places",
+      "🚗 گەشتی ئاسان / خێزانی": "🚗 Easy / Family",
+      "🏔️ شاخ و لووتکە": "🏔️ Mountains & Peaks",
+      "🌊 دەریاچە و ئاوشار": "🌊 Lakes & Waterfalls",
+      "📝 دەربارەی شوێنەکە و تەواوی زانیاری:": "📝 About This Destination & Full Details:",
+      "👑 داواکاری گەشتی تایبەت بۆ ئەم شوێنە": "👑 Request Private Trip Here",
+      "🎟️ گەشتە گشتییەکان": "🎟️ Public Trips",
+      "ناوچە / مەنتیقە": "Region / Area",
+      "جۆری گەشت": "Trip Type",
+      "پیادەڕەوی (Hiking)": "Hiking Trail",
+      "ئاستی قورسی": "Difficulty Level",
+      "باشترین وەرز": "Best Season",
+      "بەرزی لە ئاستی دەریا": "Elevation",
+      "تایبەتمەندییەکان": "Highlights",
+
+      // Default Trips & Places Content
+      "دەریاچەی دووکان": "Dukan Lake",
+      "سلێمانی · دووکان": "Sulaymaniyah · Dukan",
+      "ڕۆژێکی تایبەت لە نێو سروشت، دەریاچە، گەشتی بەلەم و کاتێکی ئارام لەگەڵ تیمی KURDIA.": "A special day surrounded by nature, Dukan Lake boat tours, and relaxing moments with the KURDIA team.",
+      "چیای هەڵگورد و دۆڵی باڵەکایەتی": "Mount Halgurd & Balakayati Valley",
+      "هەولێر · چۆمان (باڵەکایەتی)": "Erbil · Choman (Balakayati)",
+      "سەرکێشییەکی شاخەوانی ناوازە بۆ بناری بەرزترین لووتکەی کوردستان، گۆماوی فێڵاو و سروشتی سەرسوڕهێنەری باڵەکایەتی.": "An extraordinary mountain expedition to the slopes of Kurdistan's highest peak, Felaw Lake, and the breathtaking nature of Balakayati.",
+      "بەرزترین لووتکەی شاخەوانی لە هەرێمی کوردستان و عێراق. شوێنێکی نایاب بۆ شاخەوانی، کەمپینگ لە ناو سروشتی کوێستان، کانی و تاڤگە ساردەکان و دیمەنی بەفری سەر لووتکە.": "The highest mountain summit in the Kurdistan Region and Iraq (3,607m). Ideal for alpine trekking, camping by cold mountain springs, and snow-capped vistas.",
+      "دەریاچەی دووکان و قەشقۆڵی": "Dukan Lake & Qashqoli",
+      "سلێمانی · قەزای دووکان": "Sulaymaniyah · Dukan District",
+      "گەورەترین دەریاچەی هەرێمی کوردستان؛ شوێنێکی ناوازە بۆ گەشتی خێزانی و هاوڕێیانە، گەشتی بەلەم، کەپرەکانی سەر ئاوی قەشقۆڵی، کەمپینگی کەنار ئاو و ئاهەنگی ئێواران.": "The largest lake in the Kurdistan Region; a wonderful spot for family & group trips, boat rides, riverside gazebos in Qashqoli, and lakeside camping.",
+      "خەرەندی ڕەواندز و گەلی عەلی بەگ": "Rawanduz Canyon & Gali Ali Beg Waterfall",
+      "هەولێر · سۆران و ڕەواندز": "Erbil · Soran & Rawanduz",
+      "یەکێک لە سەرنجڕاکێشترین شوێنە گەشتیارییەکانی کوردستان؛ تێکەڵەیەک لە دۆڵی قووڵی خەرەند، تاڤگەی بەناوبانگی گەلی عەلی بەگ و بێخاڵ لەگەڵ سروشتێکی سەوز و فێنک.": "One of Kurdistan's most iconic natural wonders; combining the dramatic Rawanduz gorge with the famous Gali Ali Beg and Bekhal waterfalls.",
+      "ئامێدی و سەیرانگای سۆلاڤ": "Amedi Citadel Town & Solav Resort",
+      "دهۆک · ئامێدی و سەرسەنگ": "Duhok · Amedi & Sarsing",
+      "شارۆچکەی دێرینی ئامێدی لەسەر لووتکەی شاخێکی بازنەیی لەگەڵ دەروازەی مێژوویی بەهدینان و ئاووهەوای فێنکی سۆلاڤ و سەرسەنگ. شوێنێکی بێوێنە بۆ گەشتی ڕۆشنبیری و خێزانی.": "The ancient mesa-top town of Amedi featuring the historic Bahdinan Gate and the cool mountain waterfalls of Solav and Sarsing.",
+      "هەورامان و باخەکانی تەوێڵە و بیارە": "Hawraman & Gardens of Tawela & Biyara",
+      "هەڵەبجە · هەورامان": "Halabja · Hawraman",
+      "ناوچەیەکی شاخاویی دڵڕفێن بە تەلارسازیی پلیکانەیی بەردین، باخی گوێز و هەنار، کانی ئاوێسەر و کولتووری ڕەسەنی هەورامان. لە وەرزی پاییزدا ڕەنگێکی زێڕینی سەرسوڕهێنەر دەپۆشێت.": "An enchanting mountainous region famed for its terraced stone architecture, walnut & pomegranate orchards, Awesar spring, and rich Hawrami heritage.",
+      "گۆماوی فێڵاو و کەمپی باڵەکایەتی": "Felaw Alpine Pond & Balakayati Camp",
+      "گۆماوی سروشتی فێڵاو بەرامبەر زنجیرە چیای هەڵگورد، یەکێکە لە باشترین شوێنەکانی کوردستان بۆ کەمپینگی شەوانە، وێنەگرتنی ڕەنگدانەوەی چیاکان لەناو ئاودا و گەشتی زستانە.": "Located opposite the Halgurd mountain range, Felaw Pond is one of Kurdistan's premier spots for overnight camping, mirror mountain photography, and winter treks.",
+
+      // Weather Page
+      "کەشوهەوا و نەخشەی شاخەوانی": "Mountain Weather & Topographic Map",
+      "پێشبینی وردی کەشوهەوای لووتکەکان، شارەکان و سەرجەم ناوچەکانی کوردستان": "High-precision forecasts for summits, valleys, and cities across Kurdistan",
+      "نوێکردنەوە": "Refresh",
+      "مانگی دەستکرد": "Satellite",
+      "تاریک": "Dark",
+      "تۆپۆگرافی": "Topo",
+      "شارەکان": "Streets",
+      "👆 کلیک لەسەر هەر شوێنێک بکە بۆ هێنانی کەشوهەواکەی": "👆 Tap anywhere on the map to fetch live local weather",
+      "💨 بای زیندوو": "💨 Live Wind",
+      "ناوەند": "Center",
+      "ساماڵ و ڕوون": "Clear Sky",
+      "ڕەوتی بای کوردستان (زیندوو)": "Kurdistan Live Wind Stream",
+      "کەشوهەوای شاخەوانی و گەشت": "Trekking & Expedition Advisory",
+      "دۆخێکی نموونەییە بۆ کەمپینگ، شاخەوانی و گەڕان لە سروشتی کوردستاندا.": "Ideal conditions for camping, hiking, and exploring Kurdistan's outdoors.",
+      "💧 شێی هەوا": "💧 Humidity",
+      "شێی گونجاو": "Optimal humidity",
+      "💨 خێرایی با": "💨 Wind Speed",
+      "بای ئارام": "Calm breeze",
+      "☀️ تیشکی خۆر UV": "☀️ UV Index",
+      "کەم": "Low",
+      "🌧️ ئەگەری باران": "🌧️ Rain Chance",
+      "👁️ بینین": "👁️ Visibility",
+      "مەودای ئاسۆ": "Horizon range",
+      "🧭 پەستانی کەش": "🧭 Pressure",
+      "پەستانی سەرزەوی": "Surface hPa",
+      "🌅 هەڵاتنی خۆر": "🌅 Sunrise",
+      "بەیانی": "AM",
+      "کاتی سپێدە": "Dawn time",
+      "🌇 ئاوابوونی خۆر": "🌇 Sunset",
+      "ئێوارە": "PM",
+      "کاتی ئێوارە": "Dusk time",
+      "پێشبینی ٢٤ کاتژمێری داهاتوو": "24-Hour Hourly Forecast",
+      "پلەی گەرمی و ئەگەری باران بە کاتژمێر": "Hourly temperature & precipitation probability",
+      "پێشبینی ٧ ڕۆژی داهاتوو": "7-Day Extended Forecast",
+      "ڕەوشی کەشوهەوای هەفتانەی ناوچەکە بۆ پلاندانانی گەشتەکان": "Weekly regional weather outlook for expedition planning",
+      "سەرچاوەی داتای مێتیۆلۆجی": "Meteorological Data Source",
+      "نوێکردنەوەی ڕاستەوخۆ ↻": "Live Refresh ↻",
+
+      // Booking Page
+      "بەشداری گەشت و حیجزکردنی کورسی": "Trip Registration & Seat Booking",
+      "گەشتی دڵخوازت لە خوارەوە هەڵبژێرە و بە ٣ هەنگاوی خێرا ناوی خۆت و هاوڕێکانت تۆمار بکە.": "Select your preferred trip below and register yourself and your friends in 3 quick steps.",
+      "✓ پشتڕاستکردنەوەی خێرا": "✓ Instant Confirmation",
+      "🚌 پاسی گەشتیاری VIP": "🚌 VIP Tourist Bus",
+      "🧭 ڕێبەری شارەزا": "🧭 Expert Mountain Guide",
+      "١. گەشتی دڵخوازت هەڵبژێرە": "1. Select Your Expedition",
+      "گەشتە بەردەستەکان": "Available Trips",
+      "٢. فۆڕمی تۆمارکردنی بەشداربوو": "2. Participant Registration Form",
+      "تۆمارکردنی ناو و زانیاری": "Attendee Details & Seat Reservation",
+      "گەشتی هەڵبژێردراو": "Selected Trip",
+      "زانیاری": "Details",
+      "مۆبایل": "Phone OTP",
+      "تەواوکردن": "Payment",
+      "هەنگاوی ١ لە ٣": "Step 1 of 3",
+      "زانیارییە سەرەتاییەکان": "Primary Participant Information",
+      "ناوی تەواوت بنووسە و گەشت و ژمارەی بەشداربووان دیاری بکە.": "Enter your full name, select the trip, and specify the number of participants.",
+      "👤 ناوی سیانی / تەواو *": "👤 Full Name *",
+      "🧭 گەشتی هەڵبژێردراو *": "🧭 Selected Trip *",
+      "👥 ژمارەی بەشداربووان": "👥 Number of Participants",
+      "ژمارەی خۆت و ئەو کەسانەی لەگەڵتن": "Total people including yourself and companions",
+      "کۆی نرخی بەشداری:": "Total Participation Fee:",
+      "بەردەوامبوون بۆ هەنگاوی دووەم ←": "Continue to Step 2 ←",
+      "هەنگاوی ٢ لە ٣": "Step 2 of 3",
+      "پشتڕاستکردنەوەی ژمارەی WhatsApp": "WhatsApp Phone Verification",
+      "کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.": "A 4-digit verification code will be sent to your WhatsApp number.",
+      "📱 ژمارەی مۆبایل (WhatsApp) *": "📱 Mobile Number (WhatsApp) *",
+      "ناردنی کۆدی OTP": "Send OTP Code",
+      "پشتڕاستکردنەوەی کۆد": "Verify OTP Code",
+      "کۆدەکە بۆ WhatsApp ـت نێردراوە": "Code sent to your WhatsApp",
+      "پشتڕاستکردنەوەی ژمارە ✓": "Verify Number ✓",
+      "→ گەڕانەوە": "→ Back",
+      "بەردەوامبوون ←": "Continue ←",
+      "هەنگاوی ٣ لە ٣": "Step 3 of 3",
+      "پارەدان و تەواوکردنی ناونووسین": "Payment & Finalize Registration",
+      "بڕی بەشداری بنێرە بۆ هەژماری FIB و وێنەی پسوڵەکە باربکە.": "Transfer the total fee to our official FIB account and upload the receipt image.",
+      "💳 هەژماری فەرمی پارەدان (FIB)": "💳 Official FIB Payment Account",
+      "تکایە وێنەی شاشەی پسوڵەی ناردنی پارەکە لە خوارەوە دابنێ": "Please upload a screenshot of your FIB transfer receipt below",
+      "📋 کۆپیکردنی ژمارە": "📋 Copy Number",
+      "🎟️ کۆدی داشکاندن": "🎟️ Discount Coupon Code",
+      "ئارەزوومەندانە": "Optional",
+      "جێبەجێکردن": "Apply",
+      "📸 وێنەی پسوڵەی پارەدان *": "📸 Payment Receipt Image *",
+      "وێنەی پسوڵەی FIB هەڵبژێرە بۆ ئەوەی داواکارییەکەت دەستبەجێ پەسەند بکرێت.": "Upload your FIB receipt screenshot for fast approval.",
+      "هیچ وێنەیەک هەڵنەبژێردراوە": "No image selected",
+      "✓ ناردنی داواکاری و تەواوکردن": "✓ Submit & Complete Registration",
+      "ناو تۆمارکردنەکەت سەرکەوتوو بوو": "Registration Confirmed Successfully!",
+      "داواکاری و وێنەی پسوڵەکەت بە سەرکەوتوویی گەیشتە تیمی سەرپەرشتیاری گەشت.": "Your booking details and payment receipt have been received by our expedition team.",
+      "زۆر باشە، تێگەیشتم ✓": "Awesome, Got It ✓",
+
+      // Private Trip Page
+      "داواکاری گەشتی تایبەت (VIP & گروپ)": "Request a Private Trip (VIP & Groups)",
+      "کات، شوێن و شێوازی گەشتەکەت بە دڵی خۆت دیاری بکە؛ تیمی KURDIA پلانی تەواو بۆ تۆ، خێزانەکەت یان هاوڕێکانت ڕێکدەخات.": "Choose your preferred date, destination, and style; the KURDIA team will craft a complete custom itinerary for you, your family, or your group.",
+      "گەشتی خێزانی": "Family Getaway",
+      "ئارام و خۆشگوزەران": "Relaxing & comfortable",
+      "شاخەوانی گروپ": "Group Mountain Trek",
+      "سەرکێشی و ڕێبەری شارەزا": "Adventure with expert guide",
+      "خێمە و ئاگردان لە سروشت": "Tents & campfire in nature",
+      "سروشت و وێنەگرتن": "Nature & Photography",
+      "شوێنە دڵڕفێنەکانی کوردستان": "Scenic spots of Kurdistan",
+      "زانیاری کەسی": "Personal Info",
+      "شوێن و جۆری گەشت": "Destination & Type",
+      "خزمەتگوزاری و ناردن": "Services & Submit",
+      "هەنگاوی ١: زانیاریی کەسی و پەیوەندی": "Step 1: Personal & Contact Details",
+      "هەنگاوی ٢: شوێن و شێوازی گەشت": "Step 2: Destination & Travel Style",
+      "هەنگاوی ٣: خزمەتگوزاری و ناردن": "Step 3: Services & Submission",
+      "👤 ناوی تەواو *": "👤 Full Name *",
+      "سەلامەتی و ڕێکخستنی تەواو": "Full safety & professional planning",
+      "وەڵامدانەوە لە کەمتر لە ١ کاتژمێر": "Response in under 1 hour",
+      "بەرنامەی تایبەت بە بودجەی خۆت": "Tailored to your budget",
+      "بەردەوامبوون بۆ هەڵبژاردنی شوێن ←": "Continue to Destination ←",
+      "📍 شوێنی دڵخوازتان بۆ گەشت *": "📍 Preferred Destination *",
+      "📅 بەرواری پێشنیارکراوی گەشت *": "📅 Preferred Trip Date *",
+      "👥 ژمارەی بەشداربووان *": "👥 Group Size (People) *",
+      "🧭 شێواز و جۆری گەشت هەڵبژێرە *": "🧭 Select Trip Style *",
+      "شاخەوانی": "Hiking",
+      "لووتکە و پیادەڕەوی": "Summits & trails",
+      "کەمپینگ": "Camping",
+      "مانەوەی شەوانە": "Overnight stay",
+      "گەشتی سروشت": "Nature Tour",
+      "دیمەن و ئارامی": "Scenery & peace",
+      "گەشتی ڕێگا": "Road Trip",
+      "گەڕانی چەند ناوچەیەک": "Multi-stop tour",
+      "تایبەت بە خێزان": "Family friendly",
+      "VIP تایبەت": "Custom VIP",
+      "بەپێی داواکاری": "Bespoke plan",
+      "✨ چ خزمەتگوزارییەکتان پێویستە؟": "✨ Which Services Do You Need?",
+      "🚌 گواستنەوەی تایبەت": "🚌 Private Transport",
+      "پاس یان ئۆتۆمبێلی چوارپاڵەوانی تایبەت": "Private VIP bus or 4x4 SUVs",
+      "🏕️ هۆتێل / کەپر و کەمپ": "🏕️ Hotel / Cabin & Camp",
+      "ئامادەکردنی شوێنی مانەوە و خێمە": "Accommodation & tent setup",
+      "📸 ڕێبەر و فۆتۆگرافەر": "📸 Guide & Photographer",
+      "ڕێبەری شارەزای ناوچەکە و وێنەگرتنی پڕۆفیشناڵ": "Local mountain guide & pro photography",
+      "💰 بودجەی نزیکەیی (ئارەزوومەندانە)": "💰 Estimated Budget (Optional)",
+      "🍽️ ژەمە خواردن و پێداویستی": "🍽️ Meals & Catering",
+      "📝 تێبینی و داواکاری تایبەت": "📝 Special Notes & Requests",
+      "🔒 داواکارییەکەت ڕاستەوخۆ دەگاتە بەڕێوەبەرایەتی KURDIA ADVENTURE و لە ڕێگەی WhatsApp پەیوەندیت پێوە دەکەین.": "🔒 Your request goes directly to KURDIA ADVENTURE management and we will contact you via WhatsApp.",
+      "ناردنی داواکاری گەشتی تایبەت": "Submit Private Trip Request",
+
+      // Experiences, Stories, Reviews, About, Contact, AI
+      "چالاکی و ئەزموونە جیاوازەکان": "Outdoor Activities & Experiences",
+      "جۆرەکانی گەشت و چالاکییە مەیدانییەکانی KURDIA ADVENTURE لە سەرانسەری کوردستان.": "Discover our guided field activities and mountain experiences across Kurdistan.",
+      "شاخەوانی و سەرکەوتنی لووتکە": "Mountaineering & Summit Ascents",
+      "گەشتی شاخەوانی ڕێکخراو بە هاوڕێیەتی ڕێبەری شارەزا بۆ چیاکانی هەڵگورد، سەفین، پیرەمەگروون و کۆڕەک.": "Guided mountain climbs to Halgurd, Safeen, Piramagrun, and Korek with certified local leaders.",
+      "کەمپینگی شەوانە و ئاگردان": "Overnight Camping & Campfires",
+      "ئەزموونی مانەوەی شەوانە لەناو خێمە، شەوانی ئاگردان، چای سەر خەڵووز و کەشێکی ئارام لە سروشتدا.": "Experience tent camping, campfire nights, charcoal-brewed tea, and peaceful mountain evenings.",
+      "گەشتی دەریاچە و ئاوشارەکان": "Lakes, Canyons & Waterfalls",
+      "سەردانیکردنی دەریاچەی دووکان، دەربەندیخان، گەلی عەلی بەگ و تاڤگە دڵڕفێنەکانی کوردستان.": "Visit Dukan Lake, Darbandikhan, Gali Ali Beg, and Kurdistan's refreshing waterfalls.",
+      "گەشتی تایبەتی خێزانی و گروپ": "Private Family & Group Tours",
+      "ڕێکخستنی گەشتی تایبەت بەپێی کات و خواستی خێزان یان هاوڕێکانت بە تەواوی خزمەتگوزارییەکانەوە.": "Custom-scheduled tours for your family or friends with full VIP transport and catering.",
+      "گەشتی کولتووری و مێژوویی": "Cultural & Heritage Expeditions",
+      "ئاشنابوون بە شارۆچکە دێرینەکانی وەک ئامێدی، ئاکرێ، هەورامان و قەڵا مێژووییەکان.": "Explore ancient towns like Amedi, Akre, Hawraman, and historic citadels.",
+      "وێنەگرتن و تۆمارکردنی یادەوەری": "Cinematic Outdoor Photography",
+      "گرتنی وێنە و ڤیدیۆی سینەمایی لە جوانترین دیمەنە سروشتییەکانی کوردستان.": "Capture professional photos and drone reels across Kurdistan's dramatic landscapes.",
+      "ئەزموونی بەشداربووان و هاوڕێکانی KURDIA.": "Real stories and moments from KURDIA adventurers.",
+      "بیروڕا": "REVIEWS",
+      "ئەزموونەکەت لەگەڵ KURDIA بنووسە و هەڵسەنگاندنەکەت دابنێ.": "Share your experience with KURDIA and leave a rating.",
+      "هەڵسەنگاندن:": "Rating:",
+      "ناردنی بیروڕا": "Submit Review",
+      "دەربارەی KURDIA": "About KURDIA",
+      "گەشت، سروشت، هاوڕێیەتی.": "Adventure, Nature, Friendship.",
+      "ئێمە باوەڕمان وایە گەشت تەنها گەیشتن بە شوێنێک نییە؛ ئەزموونێکە کە لەگەڵ خەڵک و سروشت دروست دەبێت.": "We believe travel is more than reaching a destination; it is a lasting bond forged with people and nature.",
+      "بەشداربوو": "Participants",
+      "گەشت": "Expeditions",
+      "هەڵسەنگاندن": "Rating",
+      "تەلەفۆن": "Phone",
+      "هەولێر — کوردستان": "Erbil — Kurdistan Region",
+      "شوێنی کار": "Location",
+      "یاریدەدەری زیرەکی KURDIA": "KURDIA Smart AI Concierge",
+      "ڕێبەری زیرەکی گەشت، شاخەوانی، کەشوهەوا و ناونووسین": "Your smart guide for trips, hiking trails, weather & booking",
+      "🧭 گەشتی داهاتوو؟": "🧭 Next Trip?",
+      "🎟️ چۆن ناو تۆمار بکەم؟": "🎟️ How to Book?",
+      "🥾 شوێنەکانی پیادەڕەوی": "🥾 Hiking Places",
+      "👑 گەشتی تایبەت VIP": "👑 Private VIP Trip",
+      "⛅ کەشوهەوای شاخەوانی": "⛅ Mountain Weather",
+      "ستۆری خۆت بنێرە": "Share Your Story",
+      "ناردنی ستۆری": "Post Story",
+      "بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێکان و گەشتەکان لەدەست مەدە.": "Install the KURDIA app for faster access and instant notifications on new expeditions.",
+      "دابمەزرێنە": "Install App",
+      "ئاگادارییەکان چالاک بکە": "Enable Alerts"
+    }
+  };
+
+  // Sub-phrase replacements for dynamic strings (like prices, durations, cities, weather metrics)
+  const PHRASE_MAP = {
+    ar: [
+      [/ئێستا (\d+) گەشتی جیاواز بەردەستە بۆ ناونووسین و بەشداریکردن/g, 'يتوفر حالياً $1 رحلات متاحة للتسجيل والمشاركة'],
+      [/(\d+) گەشتی چالاک بەردەستە/g, '$1 رحلات نشطة متاحة'],
+      [/تەنها (\d+) شوێن ماوە/g, 'بقي $1 مقاعد فقط'],
+      [/(\d+) کورسی ماوە/g, 'بقي $1 مقعد'],
+      [/گشتیی:\s*(\d+)\s*کەس/g, 'السعة: $1 شخص'],
+      [/(\d+)\s*کەس/g, '$1 أشخاص'],
+      [/(\d+)\s*لە\s*(\d+)/g, '$1 من $2'],
+      [/✓ ئەم گەشتە هەڵبژێردراوە بۆ تۆمارکردن/g, '✓ تم اختيار هذه الرحلة للتسجيل'],
+      [/کلیک بکە بۆ هەڵبژاردنی ئەم گەشتە/g, 'اضغط لاختيار هذه الرحلة'],
+      [/👤 ناوی سیانی بەشداربووی (\d+) \*/g, '👤 الاسم الثلاثي للمشارك $1 *'],
+      [/ناوی تەواوی کەسی (\d+) بنووسە\.\.\./g, 'اكتب الاسم الكامل للشخص $1...'],
+      [/دینار/g, 'دينار'],
+      [/بەپێی گەشت/g, 'حسب الرحلة'],
+      [/بەم زووانە/g, 'قريباً'],
+      [/کوردستان/g, 'كوردستان'],
+      [/هەرێمی کوردستان/g, 'إقليم كوردستان'],
+      [/هەولێر/g, 'أربيل'],
+      [/سلێمانی/g, 'السليمانية'],
+      [/دهۆک/g, 'دهوك'],
+      [/هەڵەبجە/g, 'حلبجة'],
+      [/سۆران/g, 'سوران'],
+      [/ڕەواندز/g, 'رواندز'],
+      [/چۆمان/g, 'جومان'],
+      [/باڵەکایەتی/g, 'بالكايتي'],
+      [/ئاکرێ/g, 'عقرة'],
+      [/ئامێدی/g, 'العمادية'],
+      [/زاخۆ/g, 'زاخو'],
+      [/پێنجوێن/g, 'بنجوين'],
+      [/ڕانیە/g, 'رانية'],
+      [/کۆیە/g, 'كويسنجق'],
+      [/دەربەندیخان/g, 'دربندخان'],
+      [/کەرکووک/g, 'كركوك'],
+      [/بارزان/g, 'بارزان'],
+      [/شەقڵاوە/g, 'شقلاوة'],
+      [/چیای هەڵگورد/g, 'جبل هلكورد'],
+      [/هەڵگورد/g, 'هلكورد'],
+      [/دووکان/g, 'دوكان'],
+      [/هەورامان/g, 'هورامان'],
+      [/گەلی عەلی بەگ/g, 'كلي علي بك'],
+      [/سەرسەنگ/g, 'سرسنك'],
+      [/تەوێڵە/g, 'طويلة'],
+      [/شاخەوانی و کەمپینگ/g, 'تسلق الجبال والتخييم'],
+      [/سروشت و دەریاچە/g, 'طبيعة وبحيرة'],
+      [/ئاوشار و سروشت/g, 'شلالات وطبيعة'],
+      [/مێژوویی و سروشت/g, 'تاريخ وطبيعة'],
+      [/سروشت و کەلەپوور/g, 'طبيعة وتراث'],
+      [/کەمپینگ و شاخەوانی/g, 'تخييم وتسلق جبال'],
+      [/پێویستی بە پیادەڕەوی نییە/g, 'لا يتطلب مشي جبلي'],
+      [/پیادەڕەوی سووک/g, 'مشي خفيف'],
+      [/پیادەڕەوی سروشتی/g, 'مشي في الطبيعة'],
+      [/پیادەڕەوی/g, 'مشي جبلي'],
+      [/ئاسان بۆ مامناوەند/g, 'سهل إلى متوسط'],
+      [/مامناوەند بۆ قورس/g, 'متوسط إلى صعب'],
+      [/مامناوەند/g, 'متوسط'],
+      [/ئاسان/g, 'سهل'],
+      [/بەهار، هاوین و پاییز/g, 'الربيع، الصيف والخريف'],
+      [/بەهار و هاوین/g, 'الربيع والصيف'],
+      [/هەموو وەرزەکان/g, 'جميع الفصول'],
+      [/مەتر/g, 'متر'],
+      [/کاتژمێر/g, 'ساعات'],
+      [/هەستپێکراو:/g, 'المحسوسة:'],
+      [/بەرزترین:/g, 'العظمى:'],
+      [/نزمترین:/g, 'الصغرى:'],
+      [/خێرایی:/g, 'السرعة:'],
+      [/ئاراستە:/g, 'الاتجاه:'],
+      [/تەوژمی با:/g, 'هبات الرياح:'],
+      [/بڕی دابارین:/g, 'كمية الهطول:'],
+      [/دوایین نوێکردنەوەی وێستگە:/g, 'آخر تحديث للمحطة:'],
+      [/ئێستا/g, 'الآن'],
+      [/ئەمڕۆ/g, 'اليوم'],
+      [/سبەینێ/g, 'غداً'],
+      [/یەکشەممە/g, 'الأحد'],
+      [/دووشەممە/g, 'الإثنين'],
+      [/سێشەممە/g, 'الثلاثاء'],
+      [/چوارشەممە/g, 'الأربعاء'],
+      [/پێنجشەممە/g, 'الخميس'],
+      [/هەینی/g, 'الجمعة'],
+      [/شەممە/g, 'السبت']
+    ],
+    en: [
+      [/ئێستا (\d+) گەشتی جیاواز بەردەستە بۆ ناونووسین و بەشداریکردن/g, '$1 active expeditions currently open for registration'],
+      [/(\d+) گەشتی چالاک بەردەستە/g, '$1 Active Trips Available'],
+      [/تەنها (\d+) شوێن ماوە/g, 'Only $1 spots left'],
+      [/(\d+) کورسی ماوە/g, '$1 seats left'],
+      [/گشتیی:\s*(\d+)\s*کەس/g, 'Capacity: $1 people'],
+      [/(\d+)\s*کەس/g, '$1 People'],
+      [/(\d+)\s*لە\s*(\d+)/g, '$1 of $2'],
+      [/✓ ئەم گەشتە هەڵبژێردراوە بۆ تۆمارکردن/g, '✓ Selected for registration'],
+      [/کلیک بکە بۆ هەڵبژاردنی ئەم گەشتە/g, 'Tap to select this trip'],
+      [/👤 ناوی سیانی بەشداربووی (\d+) \*/g, '👤 Full Name of Participant $1 *'],
+      [/ناوی تەواوی کەسی (\d+) بنووسە\.\.\./g, 'Enter full name of person $1...'],
+      [/دینار/g, 'IQD'],
+      [/بەپێی گەشت/g, 'Per Trip'],
+      [/بەم زووانە/g, 'Coming Soon'],
+      [/پایتەختی هەرێمی کوردستان/g, 'Capital of Kurdistan Region'],
+      [/پایتەختی ڕۆشنبیری/g, 'Cultural Capital'],
+      [/شاری نێوان چیاکان/g, 'City Between Mountains'],
+      [/لووتکەی کوردستان/g, 'Highest Peak of Kurdistan'],
+      [/هەرێمی کوردستان/g, 'Kurdistan Region'],
+      [/کوردستان/g, 'Kurdistan'],
+      [/هەولێر/g, 'Erbil'],
+      [/سلێمانی/g, 'Sulaymaniyah'],
+      [/دهۆک/g, 'Duhok'],
+      [/هەڵەبجە/g, 'Halabja'],
+      [/سۆران/g, 'Soran'],
+      [/ڕەواندز/g, 'Rawanduz'],
+      [/چۆمان/g, 'Choman'],
+      [/باڵەکایەتی/g, 'Balakayati'],
+      [/ئاکرێ/g, 'Akre'],
+      [/ئامێدی/g, 'Amedi'],
+      [/زاخۆ/g, 'Zakho'],
+      [/پێنجوێن/g, 'Penjwen'],
+      [/ڕانیە/g, 'Ranya'],
+      [/کۆیە/g, 'Koya'],
+      [/دەربەندیخان/g, 'Darbandikhan'],
+      [/کەرکووک/g, 'Kirkuk'],
+      [/بارزان/g, 'Barzan'],
+      [/شەقڵاوە/g, 'Shaqlawa'],
+      [/چیای هەڵگورد/g, 'Mount Halgurd'],
+      [/هەڵگورد/g, 'Halgurd'],
+      [/دووکان/g, 'Dukan'],
+      [/هەورامان/g, 'Hawraman'],
+      [/گەلی عەلی بەگ/g, 'Gali Ali Beg'],
+      [/سەرسەنگ/g, 'Sarsing'],
+      [/تەوێڵە/g, 'Tawela'],
+      [/شاخەوانی و کەمپینگ/g, 'Mountaineering & Camping'],
+      [/سروشت و دەریاچە/g, 'Nature & Lake'],
+      [/ئاوشار و سروشت/g, 'Waterfalls & Nature'],
+      [/مێژوویی و سروشت/g, 'Heritage & Nature'],
+      [/سروشت و کەلەپوور/g, 'Nature & Culture'],
+      [/کەمپینگ و شاخەوانی/g, 'Camping & Trekking'],
+      [/پێویستی بە پیادەڕەوی نییە/g, 'No hiking required'],
+      [/پیادەڕەوی سووک/g, 'light hiking'],
+      [/پیادەڕەوی سروشتی/g, 'nature walk'],
+      [/پیادەڕەوی/g, 'hiking'],
+      [/ئاسان بۆ مامناوەند/g, 'Easy to Moderate'],
+      [/مامناوەند بۆ قورس/g, 'Moderate to Challenging'],
+      [/مامناوەند/g, 'Moderate'],
+      [/ئاسان/g, 'Easy'],
+      [/بەهار، هاوین و پاییز/g, 'Spring, Summer & Autumn'],
+      [/بەهار و هاوین/g, 'Spring & Summer'],
+      [/بەهار و زستان \(بەفر\)/g, 'Spring & Winter (Snow)'],
+      [/هەموو وەرزەکان/g, 'All Seasons'],
+      [/مەتر/g, 'm'],
+      [/کاتژمێر/g, 'hrs'],
+      [/بەیانی/g, 'AM'],
+      [/ئێوارە/g, 'PM'],
+      [/هەستپێکراو:/g, 'Feels like:'],
+      [/بەرزترین:/g, 'High:'],
+      [/نزمترین:/g, 'Low:'],
+      [/خێرایی:/g, 'Speed:'],
+      [/ئاراستە:/g, 'Direction:'],
+      [/تەوژمی با:/g, 'Wind Gusts:'],
+      [/بڕی دابارین:/g, 'Precipitation:'],
+      [/دوایین نوێکردنەوەی وێستگە:/g, 'Last station update:'],
+      [/ئێستا/g, 'Just now'],
+      [/ئەمڕۆ/g, 'Today'],
+      [/سبەینێ/g, 'Tomorrow'],
+      [/یەکشەممە/g, 'Sunday'],
+      [/دووشەممە/g, 'Monday'],
+      [/سێشەممە/g, 'Tuesday'],
+      [/چوارشەممە/g, 'Wednesday'],
+      [/پێنجشەممە/g, 'Thursday'],
+      [/هەینی/g, 'Friday'],
+      [/شەممە/g, 'Saturday']
+    ]
+  };
+
+  const PLACEHOLDER_DICT = {
+    ar: {
+      "شوێن، ناوچە، گەشت...": "ابحث عن مكان، منطقة، رحلة...",
+      "هەر پرسیارێکت هەیە لێرە بنووسە...": "اكتب سؤالك هنا...",
+      "ناوی شار، دۆڵ یان شاخ بنووسە (هەولێر، هەڵگورد، سۆران...)": "اكتب اسم المدينة أو الجبل (أربيل، هلكورد، سوران...)",
+      "بۆ نموونە: ئارام محەمەد ئەحمەد": "مثال: آرام محمد أحمد",
+      "نموونە: KURDIA10": "مثال: KURDIA10",
+      "تێبینی یان داواکاری تایبەت (ئارەزوومەندانە)...": "ملاحظة أو طلب خاص (اختياري)...",
+      "ناوی خۆت یان سەرپەرشتیاری گروپ بنووسە...": "اكتب اسمك أو اسم مشرف المجموعة...",
+      "ناوی شوێن یان ناوچە بنووسە (نموونە: هەڵگورد، دووکان، ئامێدی...)": "اكتب اسم المكان أو المنطقة (مثال: هلكورد، دوكان، العمادية...)",
+      "بۆ نموونە: 250,000 دینار": "مثال: 250,000 دينار",
+      "بۆ نموونە: نانی بەیانی و نیوەڕۆ": "مثال: فطور وغداء",
+      "هەر داواکارییەکی تایبەتت هەیە لێرە بنووسە...": "اكتب أي طلبات خاصة هنا...",
+      "ناوی تۆ *": "اسمك الكامل *",
+      "شار": "المدينة",
+      "بیروڕاکەت بنووسە... *": "اكتب رأيك وتجربتك... *",
+      "ناوی تۆ...": "اسمك...",
+      "شار...": "المدينة...",
+      "ناوی گەشت...": "اسم الرحلة...",
+      "چی بەسەر هات؟...": "شاركنا قصتك في الرحلة..."
+    },
+    en: {
+      "شوێن، ناوچە، گەشت...": "Search places, regions, trips...",
+      "هەر پرسیارێکت هەیە لێرە بنووسە...": "Ask anything about trips, places, booking...",
+      "ناوی شار، دۆڵ یان شاخ بنووسە (هەولێر، هەڵگورد، سۆران...)": "Enter city, valley, or peak (Erbil, Halgurd, Soran...)",
+      "بۆ نموونە: ئارام محەمەد ئەحمەد": "e.g. Aram Mohammed Ahmed",
+      "نموونە: KURDIA10": "e.g. KURDIA10",
+      "تێبینی یان داواکاری تایبەت (ئارەزوومەندانە)...": "Special notes or requests (optional)...",
+      "ناوی خۆت یان سەرپەرشتیاری گروپ بنووسە...": "Enter your name or group leader's name...",
+      "ناوی شوێن یان ناوچە بنووسە (نموونە: هەڵگورد، دووکان، ئامێدی...)": "Enter destination (e.g. Halgurd, Dukan, Amedi...)",
+      "بۆ نموونە: 250,000 دینار": "e.g. 250,000 IQD",
+      "بۆ نموونە: نانی بەیانی و نیوەڕۆ": "e.g. Breakfast & Lunch",
+      "هەر داواکارییەکی تایبەتت هەیە لێرە بنووسە...": "Write any special requirements here...",
+      "ناوی تۆ *": "Your Name *",
+      "شار": "City",
+      "بیروڕاکەت بنووسە... *": "Write your review... *",
+      "ناوی تۆ...": "Your Name...",
+      "شار...": "City...",
+      "ناوی گەشت...": "Trip Name...",
+      "چی بەسەر هات؟...": "Tell us about your experience..."
+    }
+  };
+
+  function convertEasternDigits(str){
+    return String(str).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+  }
+
+  function translateSingleString(orig, lang){
+    if(!orig || lang === 'ku') return orig;
+    const trimmed = orig.trim();
+    if(!trimmed) return orig;
+
+    const dict = DICT[lang] || {};
+    if(dict[trimmed]){
+      return orig.replace(trimmed, dict[trimmed]);
+    }
+    if(dynamicCache[lang] && dynamicCache[lang][trimmed]){
+      return orig.replace(trimmed, dynamicCache[lang][trimmed]);
+    }
+
+    let out = trimmed;
+    if(lang === 'en'){
+      out = convertEasternDigits(out);
+    }
+    const rules = PHRASE_MAP[lang] || [];
+    for(const [regex, rep] of rules){
+      out = out.replace(regex, rep);
+    }
+    if(out !== trimmed){
+      return orig.replace(trimmed, out);
+    }
+    return null;
+  }
+
+  function hasKurdishOrArabicChars(str){
+    return /[\u0600-\u06FF]/.test(str);
+  }
+
+  function hasKurdishSpecificChars(str){
+    return /[ڕڵۆێەڤگچپژ]/.test(str);
+  }
+
+  let pendingApiQueue = new Set();
+  let apiTimer = null;
+
+  function queueForCloudTranslation(str, lang){
+    if(!str || str.length < 2 || str.length > 600) return;
+    if(dynamicCache[lang]?.[str]) return;
+    pendingApiQueue.add(str);
+    clearTimeout(apiTimer);
+    apiTimer = setTimeout(() => flushCloudTranslations(lang), 180);
+  }
+
+  async function flushCloudTranslations(lang){
+    if(lang === 'ku' || !pendingApiQueue.size) return;
+    const batch = Array.from(pendingApiQueue).slice(0, 45);
+    pendingApiQueue.clear();
+    try{
+      const r = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texts: batch, targetLang: lang })
+      });
+      const x = await r.json().catch(()=>({}));
+      if(x && x.ok && x.translations){
+        Object.assign(dynamicCache[lang], x.translations);
+        saveDynamicCache();
+        window.translateSubtree(document.body, lang, true);
+      }
+    }catch(_){}
+  }
+
+  window.translateSubtree = function(rootEl, lang, skipQueue){
+    if(!rootEl) return;
+    const activeLang = lang || localStorage.getItem('kurdia_language') || 'ku';
+
+    // 1. Translate input/textarea placeholders
+    const inputs = rootEl.querySelectorAll ? rootEl.querySelectorAll('input[placeholder], textarea[placeholder]') : [];
+    inputs.forEach(el => {
+      if(el.dataset.kuOrigPh === undefined){
+        el.dataset.kuOrigPh = el.getAttribute('placeholder') || '';
+      }
+      const origPh = el.dataset.kuOrigPh;
+      if(!origPh) return;
+      if(activeLang === 'ku'){
+        el.setAttribute('placeholder', origPh);
+      } else {
+        const pDict = PLACEHOLDER_DICT[activeLang] || {};
+        const tr = pDict[origPh.trim()] || translateSingleString(origPh, activeLang);
+        if(tr) el.setAttribute('placeholder', tr);
+      }
+    });
+
+    // 2. Walk all text nodes
+    const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        const p = node.parentElement;
+        if(!p) return NodeFilter.FILTER_REJECT;
+        const tag = p.tagName;
+        if(tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'CODE') return NodeFilter.FILTER_REJECT;
+        if(p.closest('#topLangDropdown, .ka-language-list')) return NodeFilter.FILTER_REJECT;
+        if(!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(node => {
+      if(node.__kuOrig === undefined){
+        node.__kuOrig = node.nodeValue;
+      }
+      const orig = node.__kuOrig;
+      if(activeLang === 'ku'){
+        if(node.nodeValue !== orig) node.nodeValue = orig;
+        return;
+      }
+
+      const translated = translateSingleString(orig, activeLang);
+      if(translated !== null){
+        if(node.nodeValue !== translated) node.nodeValue = translated;
+      } else if(!skipQueue){
+        const trimmed = orig.trim();
+        if((activeLang === 'en' && hasKurdishOrArabicChars(trimmed)) ||
+           (activeLang === 'ar' && hasKurdishSpecificChars(trimmed))){
+          queueForCloudTranslation(trimmed, activeLang);
+        }
+      }
+    });
+  };
+
+  function syncLanguageUIControls(lang){
+    const codeMap = { ku: 'KU', ar: 'AR', en: 'EN' };
+    const labelMap = { ku: '🌐 کوردی', ar: '🌐 العربية', en: '🌐 English' };
+    const topCode = document.getElementById('topLangCode');
+    if(topCode) topCode.textContent = codeMap[lang] || 'KU';
+
+    document.querySelectorAll('.top-lang-opt').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    const kaCur = document.getElementById('kaCurrentLanguage');
+    if(kaCur) kaCur.textContent = labelMap[lang] || labelMap.ku;
+    document.querySelectorAll('.ka-language-item').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+  }
+
+  window.toggleTopLangMenu = function(e){
+    if(e) e.stopPropagation();
+    const wrap = document.getElementById('topLangWrap');
+    if(wrap) wrap.classList.toggle('open');
+  };
+
+  window.selectSiteLanguage = function(lang, e){
+    if(e) e.stopPropagation();
+    const wrap = document.getElementById('topLangWrap');
+    if(wrap) wrap.classList.remove('open');
+    window.setLanguage(lang);
+    const toastMsg = lang === 'en' ? '🌐 Language changed to English' : (lang === 'ar' ? '🌐 تم تغيير اللغة إلى العربية' : '🌐 زمان گۆڕدرا بۆ کوردی');
+    if(typeof toast === 'function') toast(toastMsg);
+  };
+
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('topLangWrap');
+    if(wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+  });
+
+  window.applyFullSiteTranslation = function(lang){
+    const activeLang = ['ku','ar','en'].includes(lang) ? lang : (localStorage.getItem('kurdia_language') || 'ku');
+    document.documentElement.lang = activeLang;
+    document.documentElement.dir = activeLang === 'en' ? 'ltr' : 'rtl';
+    syncLanguageUIControls(activeLang);
+    window.translateSubtree(document.body, activeLang);
+    if(typeof renderAIWelcomeMessage === 'function' && (!window.kurdiaAiHistory || !window.kurdiaAiHistory.length)){
+      renderAIWelcomeMessage();
+    }
+  };
+
+  // Observe dynamic DOM updates (weather, modals, trip cards) and auto-apply active language
+  let moTimer = null;
+  const observer = new MutationObserver(() => {
+    const curLang = localStorage.getItem('kurdia_language') || 'ku';
+    if(curLang === 'ku') return;
+    clearTimeout(moTimer);
+    moTimer = setTimeout(() => {
+      window.translateSubtree(document.body, curLang);
+    }, 60);
+  });
+
+  function initI18n(){
+    const savedLang = localStorage.getItem('kurdia_language') || 'ku';
+    window.applyFullSiteTranslation(savedLang);
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initI18n, { once: true });
+  } else {
+    initI18n();
   }
 })();
 </script>
