@@ -9,7 +9,7 @@
 <script>
 // Auto cache buster: upgrade stale cached versions immediately
 (function(){
-  var V = 'v3.7.0';
+  var V = 'v3.8.0';
   try {
     var stored = localStorage.getItem('kurdia_app_ver');
     if (stored !== V) {
@@ -23,6 +23,8 @@
   } catch(e){}
 })();
 </script>
+<link rel="icon" href="/icons/kurdia-logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/Picsart_26-05-02_22-24-16-869.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Leaflet Map Engine (Local primary + CDN fallback) -->
@@ -632,40 +634,204 @@ main,section,.section,.page-section{background-color:transparent!important}
 <body>
 <div id="kurdia-intro" role="dialog" aria-label="KURDIA ADVENTURE intro" aria-modal="true">
   <div class="intro-stars"></div>
+  <div class="intro-aurora"></div>
+  <div class="intro-particles" id="introParticles"></div>
+  <button type="button" class="intro-sound-pill" id="kurdiaIntroSoundBtn" onclick="window.triggerKurdiaIntroAudio && window.triggerKurdiaIntroAudio(event)">
+    <span class="isp-wave"><i></i><i></i><i></i></span>
+    <span id="kurdiaIntroSoundLabel">🔊 دەنگی سینەمایی KURDIA</span>
+  </button>
   <div class="intro-inner">
     <div class="intro-kicker">DISCOVER THE WILD · KURDISTAN</div>
-    <svg class="intro-emblem" viewBox="0 0 320 190" aria-hidden="true">
-      <defs><linearGradient id="introMountainFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d32f4e"/><stop offset="1" stop-color="#d32f4e" stop-opacity="0"/></linearGradient></defs>
-      <path class="mountain-fill" d="M18 155 L79 83 L105 111 L157 36 L202 98 L224 76 L302 155 Z"/>
-      <path class="draw" d="M18 155 L79 83 L105 111 L157 36 L202 98 L224 76 L302 155"/>
-      <path class="draw" d="M56 155 L99 111 L119 130 L157 77 L184 119 L203 105 L250 155" style="stroke-width:1.25;opacity:.8"/>
-      <path class="draw" d="M142 55 L157 36 L171 57 M148 48 L158 53 L165 46" style="stroke:#f4c6ce;stroke-width:1.6"/>
-      <path class="draw" d="M20 165 H300" style="stroke-width:1;opacity:.55"/>
+    <div class="intro-logo-stage">
+      <div class="intro-logo-halo"></div>
+      <div class="intro-logo-ring"></div>
+      <img class="intro-official-logo" src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA ADVENTURE Official Logo">
+    </div>
+    <svg class="intro-emblem" viewBox="0 0 320 140" aria-hidden="true">
+      <defs><linearGradient id="introMountainFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e5234f"/><stop offset="1" stop-color="#e5234f" stop-opacity="0"/></linearGradient></defs>
+      <path class="mountain-fill" d="M18 125 L79 58 L105 84 L157 16 L202 72 L224 52 L302 125 Z"/>
+      <path class="draw" d="M18 125 L79 58 L105 84 L157 16 L202 72 L224 52 L302 125"/>
+      <path class="draw" d="M56 125 L99 84 L119 102 L157 52 L184 91 L203 78 L250 125" style="stroke-width:1.35;opacity:.85"/>
+      <path class="draw" d="M142 34 L157 16 L171 36 M148 27 L158 32 L165 25" style="stroke:#ffd2dc;stroke-width:1.8"/>
+      <path class="draw" d="M20 133 H300" style="stroke-width:1;opacity:.55"/>
     </svg>
     <div class="intro-title">KURDIA</div>
     <div class="intro-subtitle">A D V E N T U R E</div>
-    <div class="intro-tagline">هەر ڕێگایەک، چیرۆکێکی نوێیە.</div>
+    <div class="intro-tagline">هەر ڕێگایەک، چیرۆکێکی نوێیە لە دڵی سروشتی کوردستان</div>
     <div class="intro-loader"><span></span></div>
   </div>
-  <button class="intro-skip" id="kurdia-intro-skip" type="button">بازدان بۆ ماڵپەڕ ←</button>
+  <button class="intro-skip" id="kurdia-intro-skip" type="button">چوونە ناو ماڵپەڕ ←</button>
 </div>
 <script>
 (function(){
-  const overlay=document.getElementById('kurdia-intro');
-  if(!overlay)return;
-  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const seen=sessionStorage.getItem('kurdia_intro_seen')==='1';
-  if(seen||reduce){
-    overlay.remove();
-    document.documentElement.classList.remove('intro-lock');
-    return;
+  let introAudioCtx = null;
+  let introSoundPlayed = false;
+
+  window.playKurdiaIntroSound = function(force){
+    if(introSoundPlayed && !force) return true;
+    try{
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if(!AudioCtx) return false;
+      if(!introAudioCtx) introAudioCtx = new AudioCtx();
+      if(introAudioCtx.state === 'suspended'){
+        introAudioCtx.resume().catch(()=>{});
+      }
+      const now = introAudioCtx.currentTime;
+
+      // 1. Deep Cinematic Mountain Sub-Bass & Warm Pad Swell (D2 - A2 - D3 - F#3 - A3)
+      const freqs = [73.42, 110.0, 146.83, 185.0, 220.0, 293.66];
+      const masterGain = introAudioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.001, now);
+      masterGain.gain.exponentialRampToValueAtTime(0.24, now + 0.55);
+      masterGain.gain.exponentialRampToValueAtTime(0.16, now + 1.85);
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 3.1);
+
+      const filter = introAudioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(220, now);
+      filter.frequency.exponentialRampToValueAtTime(1650, now + 1.3);
+      filter.frequency.exponentialRampToValueAtTime(480, now + 3.0);
+
+      masterGain.connect(filter);
+      filter.connect(introAudioCtx.destination);
+
+      freqs.forEach((f, idx) => {
+        const osc = introAudioCtx.createOscillator();
+        const g = introAudioCtx.createGain();
+        osc.type = idx < 2 ? 'sawtooth' : (idx % 2 === 0 ? 'triangle' : 'sine');
+        osc.frequency.setValueAtTime(f * 0.996, now);
+        osc.frequency.exponentialRampToValueAtTime(f, now + 0.45);
+        g.gain.setValueAtTime(idx < 2 ? 0.18 : 0.11, now);
+        osc.connect(g);
+        g.connect(masterGain);
+        osc.start(now + idx * 0.06);
+        osc.stop(now + 3.15);
+      });
+
+      // 2. Crystalline Summit Chime Note (D5 + A5)
+      [587.33, 880.0].forEach((cf, i) => {
+        const chime = introAudioCtx.createOscillator();
+        const cg = introAudioCtx.createGain();
+        chime.type = 'sine';
+        chime.frequency.setValueAtTime(cf, now + 0.65 + i * 0.18);
+        cg.gain.setValueAtTime(0.0001, now + 0.65 + i * 0.18);
+        cg.gain.exponentialRampToValueAtTime(0.065, now + 0.75 + i * 0.18);
+        cg.gain.exponentialRampToValueAtTime(0.0001, now + 2.6 + i * 0.2);
+        chime.connect(cg);
+        cg.connect(introAudioCtx.destination);
+        chime.start(now + 0.65 + i * 0.18);
+        chime.stop(now + 2.85 + i * 0.2);
+      });
+
+      // 3. Soft Mountain Wind Whoosh (Filtered White Noise)
+      const bufferSize = introAudioCtx.sampleRate * 2.5;
+      const noiseBuffer = introAudioCtx.createBuffer(1, bufferSize, introAudioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+      const whiteNoise = introAudioCtx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+      const bandpass = introAudioCtx.createBiquadFilter();
+      bandpass.type = 'bandpass';
+      bandpass.frequency.setValueAtTime(320, now);
+      bandpass.frequency.exponentialRampToValueAtTime(980, now + 1.1);
+      bandpass.frequency.exponentialRampToValueAtTime(260, now + 2.4);
+      bandpass.Q.setValueAtTime(2.2, now);
+      const ng = introAudioCtx.createGain();
+      ng.gain.setValueAtTime(0.001, now);
+      ng.gain.exponentialRampToValueAtTime(0.055, now + 0.8);
+      ng.gain.exponentialRampToValueAtTime(0.0001, now + 2.45);
+      whiteNoise.connect(bandpass);
+      bandpass.connect(ng);
+      ng.connect(introAudioCtx.destination);
+      whiteNoise.start(now);
+      whiteNoise.stop(now + 2.5);
+
+      if(introAudioCtx.state === 'running'){
+        introSoundPlayed = true;
+        const lbl = document.getElementById('kurdiaIntroSoundLabel');
+        if(lbl) lbl.textContent = '🔊 دەنگی سینەمایی چالاکە ✓';
+      }
+      return introAudioCtx.state === 'running';
+    }catch(e){
+      return false;
+    }
+  };
+
+  window.triggerKurdiaIntroAudio = function(e){
+    if(e) e.stopPropagation();
+    window.playKurdiaIntroSound(true);
+  };
+
+  function setupIntroOverlay(forceReplay){
+    let overlay = document.getElementById('kurdia-intro');
+    if(!overlay && forceReplay && window.__kurdiaIntroHTML){
+      const temp = document.createElement('div');
+      temp.innerHTML = window.__kurdiaIntroHTML;
+      overlay = temp.firstElementChild;
+      document.body.prepend(overlay);
+    }
+    if(!overlay) return;
+    if(!window.__kurdiaIntroHTML) window.__kurdiaIntroHTML = overlay.outerHTML;
+
+    const pBox = overlay.querySelector('#introParticles');
+    if(pBox && !pBox.children.length){
+      pBox.innerHTML = Array.from({length: 18}).map((_, i) => {
+        const left = Math.round((i * 5.7) % 100);
+        const delay = (i * 0.14).toFixed(2);
+        const size = 2 + (i % 3);
+        return `<i style="left:${left}%;width:${size}px;height:${size}px;animation-delay:${delay}s"></i>`;
+      }).join('');
+    }
+
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const seen = sessionStorage.getItem('kurdia_intro_seen') === '1';
+    if(!forceReplay && (seen || reduce)){
+      overlay.remove();
+      document.documentElement.classList.remove('intro-lock');
+      return;
+    }
+
+    introSoundPlayed = false;
+    let done = false;
+    function closeIntro(){
+      if(done) return;
+      done = true;
+      sessionStorage.setItem('kurdia_intro_seen', '1');
+      overlay.classList.add('intro-out');
+      document.documentElement.classList.remove('intro-lock');
+      setTimeout(() => { overlay.remove(); }, 820);
+    }
+
+    document.documentElement.classList.add('intro-lock');
+    setTimeout(() => { window.playKurdiaIntroSound(forceReplay); }, 120);
+
+    const unlockAudioOnGesture = () => {
+      if(!introSoundPlayed) window.playKurdiaIntroSound(true);
+    };
+    overlay.addEventListener('pointerdown', unlockAudioOnGesture, { passive: true });
+    overlay.addEventListener('touchstart', unlockAudioOnGesture, { passive: true });
+
+    const skipBtn = overlay.querySelector('#kurdia-intro-skip');
+    if(skipBtn){
+      skipBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if(!introSoundPlayed) window.playKurdiaIntroSound(true);
+        closeIntro();
+      });
+    }
+    window.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !done) closeIntro(); });
+    window.setTimeout(closeIntro, 3100);
   }
-  let done=false;
-  function closeIntro(){if(done)return;done=true;sessionStorage.setItem('kurdia_intro_seen','1');overlay.classList.add('intro-out');document.documentElement.classList.remove('intro-lock');setTimeout(()=>{overlay.remove()},750);}
-  document.documentElement.classList.add('intro-lock');
-  document.getElementById('kurdia-intro-skip').addEventListener('click',closeIntro);
-  window.addEventListener('keydown',function(e){if(e.key==='Escape'&&!done)closeIntro()});
-  window.setTimeout(closeIntro,1850);
+
+  window.replayKurdiaIntro = function(){
+    if(typeof window.kaCloseMoreMenu === 'function') window.kaCloseMoreMenu();
+    sessionStorage.removeItem('kurdia_intro_seen');
+    setupIntroOverlay(true);
+  };
+
+  setupIntroOverlay(false);
 })();
 </script>
 
@@ -674,7 +840,10 @@ main,section,.section,.page-section{background-color:transparent!important}
   <div class="container topin">
     <button class="iconbtn" onclick="goBackHome()" aria-label="گەڕانەوە"><i data-lucide="chevron-right"></i></button>
     <div style="display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
-      <a class="brand" href="#home">KURDIA<small>ADVENTURE</small></a>
+      <a class="brand" href="#home">
+        <img class="brand-logo-img" src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA ADVENTURE">
+        <span class="brand-text-wrap">KURDIA<small>ADVENTURE</small></span>
+      </a>
     </div>
     <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
       <div class="top-lang-wrap" id="topLangWrap">
@@ -689,7 +858,6 @@ main,section,.section,.page-section{background-color:transparent!important}
           <button type="button" class="top-lang-opt" data-lang="en" onclick="selectSiteLanguage('en', event)"><span>🇬🇧 English</span><i class="tl-check">✓</i></button>
         </div>
       </div>
-      <span id="siteVersionBadge" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن" style="cursor:pointer;background:rgba(55,201,135,0.14);border:1px solid rgba(55,201,135,0.5);color:#6bf0b3;font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;direction:ltr;letter-spacing:.3px;flex-shrink:0;white-space:nowrap">v3.7.0 ↻</span>
     </div>
   </div>
 </header>
@@ -1424,7 +1592,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 </div>
 <button class="ai" onclick="openAI()" aria-label="یاریدەدەری زیرەکی KURDIA">
   <span class="ai-fab-pulse"></span>
-  <i data-lucide="sparkles"></i>
+  <img class="ai-fab-logo" src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA AI">
   <span class="ai-fab-badge">AI</span>
 </button>
 
@@ -1438,40 +1606,44 @@ main,section,.section,.page-section{background-color:transparent!important}
 </nav>
 
 <div id="searchModal" class="modal"><div class="sheet"><button class="iconbtn close" onclick="closeModal('searchModal')"><i data-lucide="x"></i></button><h3>گەڕان لە KURDIA</h3><input id="siteSearch" class="input" placeholder="شوێن، ناوچە، گەشت..." oninput="filterSearch()"><div id="searchResults" class="articleList" style="margin-top:12px"></div></div></div>
-<div id="aiModal" class="modal">
+<div id="aiModal" class="modal" onclick="if(event.target===this)closeModal('aiModal')">
   <div class="sheet ai-chat-sheet">
+    <div class="ai-sheet-handle"><span></span></div>
     <div class="ai-chat-topbar">
       <div class="ai-chat-head">
         <div class="ai-chat-avatar">
-          <i data-lucide="sparkles"></i>
+          <img src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA">
           <span class="ai-online-dot"></span>
         </div>
-        <div>
-          <div style="display:flex;align-items:center;gap:6px">
-            <h3 style="margin:0;font-size:16px">یاریدەدەری زیرەکی KURDIA</h3>
-            <span class="ai-pro-tag">AI 2.0</span>
+        <div class="ai-head-info">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <h3 style="margin:0;font-size:15px;line-height:1.25">یاریدەدەری زیرەکی KURDIA</h3>
+            <span class="ai-pro-tag">KURDIA AI</span>
           </div>
-          <small class="muted" style="display:block;margin-top:2px">ڕێبەری زیرەکی گەشت، شاخەوانی، کەشوهەوا و ناونووسین</small>
+          <small class="muted" style="display:block;margin-top:2px;font-size:11px">گفتوگۆی ڕاستەوخۆ و دەنگی لەگەڵ KURDIA ADVENTURE</small>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:6px">
+      <div class="ai-top-actions">
+        <button type="button" class="ai-voice-toggle-btn" id="aiVoiceToggleBtn" onclick="toggleAIVoice()" title="چالاککردن / ناچالاککردنی دەنگی AI">🔊</button>
         <button type="button" class="ai-clear-btn" onclick="resetAIChat()" title="پاککردنەوەی گفتوگۆ">↻</button>
-        <button class="iconbtn close" style="position:static;width:36px;height:36px" onclick="closeModal('aiModal')"><i data-lucide="x"></i></button>
+        <button type="button" class="ai-close-btn" onclick="closeModal('aiModal')" aria-label="داخستن">✕</button>
       </div>
     </div>
 
     <div id="aiMessages" class="ai-messages"></div>
 
     <div class="ai-quick" id="aiQuickChips">
+      <button type="button" onclick="aiQuick('سڵاو کوردیا، چۆنیت؟ گەشتی داهاتوو چییە؟')">👋 سڵاو کوردیا</button>
       <button type="button" onclick="aiQuick('گەشتی داهاتوو چییە و نرخی چەندە؟')">🧭 گەشتی داهاتوو؟</button>
       <button type="button" onclick="aiQuick('چۆن بەشداری گەشت بکەم و پارە بدەم؟')">🎟️ چۆن ناو تۆمار بکەم؟</button>
+      <button type="button" onclick="aiQuick('بۆ شاخەوانی چ جلوبەرگ و پێداویستییەک لەگەڵ خۆم بهێنم؟')">🎒 چی لەگەڵ خۆم بهێنم؟</button>
       <button type="button" onclick="aiQuick('چ شوێنێک پیادەڕەوی تیایە؟')">🥾 شوێنەکانی پیادەڕەوی</button>
       <button type="button" onclick="aiQuick('چۆن داواکاری گەشتی تایبەت (VIP) بکەم؟')">👑 گەشتی تایبەت VIP</button>
-      <button type="button" onclick="aiQuick('کەشوهەوای چیاکانی کوردستان چۆنە؟')">⛅ کەشوهەوای شاخەوانی</button>
     </div>
 
     <form class="ai-chat-form" onsubmit="askAI(event)">
-      <input id="aiInput" class="input" autocomplete="off" placeholder="هەر پرسیارێکت هەیە لێرە بنووسە...">
+      <button type="button" class="ai-mic-btn" id="aiMicBtn" onclick="startAIVoiceInput()" title="قسەکردن بە مایکرۆفۆن">🎤</button>
+      <input id="aiInput" class="input" autocomplete="off" placeholder="لەگەڵ KURDIA قسە بکە یان پرسیار بنووسە...">
       <button class="btn red ai-send-btn" type="submit" aria-label="ناردن"><i data-lucide="send"></i></button>
     </form>
   </div>
@@ -1524,7 +1696,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v3.7.0';
+const SITE_CODE_RELEASE='v3.8.0';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -1539,9 +1711,12 @@ const SITE_CODE_RELEASE='v3.7.0';
   }catch(e){}
 })();
 
-function updateSiteVersionUI(){
+function updateSiteVersionUI(ver){
+  const v = ver || SITE_CODE_RELEASE;
   const el = document.getElementById('siteVersionBadge');
-  if(el) el.textContent = SITE_CODE_RELEASE + ' ↻';
+  if(el) el.textContent = v + ' ↻';
+  const moreEl = document.getElementById('moreMenuVersionBadge');
+  if(moreEl) moreEl.textContent = v + ' ↻';
 }
 
 async function forceRefreshSiteVersion(){
@@ -3308,6 +3483,123 @@ function filterSearch(){
   if(window.lucide)lucide.createIcons();
 }
 window.kurdiaAiHistory = [];
+window.kurdiaAiVoiceEnabled = localStorage.getItem('kurdia_ai_voice') === '1';
+
+function playAIConversationChime(type){
+  try{
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    if(type === 'send'){
+      osc.frequency.setValueAtTime(520, now);
+      osc.frequency.exponentialRampToValueAtTime(680, now + 0.08);
+    } else {
+      osc.frequency.setValueAtTime(587.33, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.14);
+    }
+    g.gain.setValueAtTime(0.001, now);
+    g.gain.exponentialRampToValueAtTime(0.05, now + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    osc.connect(g);
+    g.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.19);
+  }catch(_){}
+}
+
+window.speakAIText = function(rawText, btnEl){
+  try{
+    if(!('speechSynthesis' in window)){
+      toast('ئەم وێبگەڕە خوێندنەوەی دەنگی پاڵپشتی ناکات');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const clean = String(rawText || '')
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/[•🌿🏔️🎟️👑⛅📍📅💰⏰🥾🚗💬👋🎒❤️😊]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if(!clean) return;
+    const utter = new SpeechSynthesisUtterance(clean);
+    const lang = localStorage.getItem('kurdia_language') || 'ku';
+    const voices = window.speechSynthesis.getVoices() || [];
+    if(lang === 'en'){
+      utter.lang = 'en-US';
+      const v = voices.find(x => x.lang && x.lang.toLowerCase().startsWith('en'));
+      if(v) utter.voice = v;
+    } else if(lang === 'ar'){
+      utter.lang = 'ar-SA';
+      const v = voices.find(x => x.lang && x.lang.toLowerCase().startsWith('ar'));
+      if(v) utter.voice = v;
+    } else {
+      utter.lang = 'ku-IQ';
+      const v = voices.find(x => x.lang && (x.lang.toLowerCase().startsWith('ku') || x.lang.toLowerCase().startsWith('ar') || x.lang.toLowerCase().startsWith('fa')));
+      if(v) utter.voice = v;
+    }
+    utter.rate = 1.0;
+    utter.pitch = 1.02;
+    if(btnEl){
+      btnEl.classList.add('speaking');
+      utter.onend = () => btnEl.classList.remove('speaking');
+      utter.onerror = () => btnEl.classList.remove('speaking');
+    }
+    window.speechSynthesis.speak(utter);
+  }catch(_){}
+};
+
+window.toggleAIVoice = function(){
+  window.kurdiaAiVoiceEnabled = !window.kurdiaAiVoiceEnabled;
+  localStorage.setItem('kurdia_ai_voice', window.kurdiaAiVoiceEnabled ? '1' : '0');
+  const btn = $('aiVoiceToggleBtn');
+  if(btn){
+    btn.classList.toggle('active', window.kurdiaAiVoiceEnabled);
+    btn.textContent = window.kurdiaAiVoiceEnabled ? '🔊' : '🔇';
+  }
+  if(!window.kurdiaAiVoiceEnabled && 'speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+  }
+  toast(window.kurdiaAiVoiceEnabled ? '🔊 خوێندنەوەی دەنگی AI چالاک کرا' : '🔇 دەنگی AI بێدەنگ کرا');
+};
+
+window.startAIVoiceInput = function(){
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const micBtn = $('aiMicBtn');
+  if(!SpeechRec){
+    toast('تکایە پرسیارەکەت لە خانەکەدا بنووسە ✍️');
+    $('aiInput')?.focus();
+    return;
+  }
+  try{
+    const rec = new SpeechRec();
+    const lang = localStorage.getItem('kurdia_language') || 'ku';
+    rec.lang = lang === 'en' ? 'en-US' : (lang === 'ar' ? 'ar-IQ' : 'ckb-IQ');
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    if(micBtn) micBtn.classList.add('listening');
+    toast('🎤 ئێستا قسە بکە لەگەڵ KURDIA...');
+    rec.onresult = function(event){
+      const transcript = event.results?.[0]?.[0]?.transcript || '';
+      if(transcript && $('aiInput')){
+        $('aiInput').value = transcript;
+        askAI({ preventDefault: ()=>{} });
+      }
+    };
+    rec.onerror = function(){
+      if(micBtn) micBtn.classList.remove('listening');
+    };
+    rec.onend = function(){
+      if(micBtn) micBtn.classList.remove('listening');
+    };
+    rec.start();
+  }catch(_){
+    if(micBtn) micBtn.classList.remove('listening');
+  }
+};
 
 function formatAIMarkdown(rawText){
   const safe = esc(String(rawText || '').trim());
@@ -3333,7 +3625,12 @@ function addAIMessage(text, type, actions){
   const d = document.createElement('div');
   d.className = 'ai-msg ' + type;
   if(type.includes('bot')){
+    const isLoading = type.includes('loading');
     let html = `<div class="ai-msg-body">${formatAIMarkdown(text)}</div>`;
+    if(!isLoading){
+      const encodedText = encodeURIComponent(String(text || ''));
+      html += `<div class="ai-msg-SpeakRow"><button type="button" class="ai-msg-speak-btn" onclick="window.speakAIText(decodeURIComponent('${encodedText}'), this)">🔊 گوێگرتن</button></div>`;
+    }
     if(Array.isArray(actions) && actions.length){
       html += `<div class="ai-msg-actions">` + actions.map(a =>
         `<button type="button" class="ai-action-chip" onclick="handleAIActionClick('${esc(a.action)}')">${esc(a.label)}</button>`
@@ -3361,21 +3658,21 @@ function renderAIWelcomeMessage(){
   let welcomeText = '';
   let defaultActions = [];
   if(lang === 'en'){
-    welcomeText = `Hello friend 🌿\nI am the **KURDIA ADVENTURE Smart AI Concierge**.\n\n• **Next Trip:** ${mainTrip.title || 'Kurdistan Expedition'} (${mainTrip.price || '35,000 IQD'})\n• Ask me anything about **upcoming trips, hiking trails, FIB payment, VIP private trips, or mountain weather**!`;
+    welcomeText = `Hello friend 🌿\nI am the official **KURDIA ADVENTURE Smart AI**.\n\n• **Next Trip:** ${mainTrip.title || 'Kurdistan Expedition'} (${mainTrip.price || '35,000 IQD'})\n• Chat with me about **KURDIA trips, hiking gear, mountain trails, FIB payment, VIP private trips, weather**, or general outdoor topics!`;
     defaultActions = [
       { label: '🎟️ Book a Trip', action: 'booking' },
       { label: '🗺️ Destinations', action: 'destinations' },
       { label: '👑 Private Trip', action: 'private' }
     ];
   } else if(lang === 'ar'){
-    welcomeText = `أهلاً بك يا صديقي 🌿\nأنا **المساعد الذكي لـ KURDIA ADVENTURE**.\n\n• **الرحلة القادمة:** ${mainTrip.title || 'رحلة كوردستان'} (${mainTrip.price || '35,000 دينار'})\n• اسألني عن **الرحلات القادمة، مسارات المشي الجبلي، طريقة الحجز والدفع عبر FIB، الرحلات الخاصة VIP، أو حالة الطقس**!`;
+    welcomeText = `أهلاً بك يا صديقي 🌿\nأنا **المساعد الذكي الرسمي لـ KURDIA ADVENTURE**.\n\n• **الرحلة القادمة:** ${mainTrip.title || 'رحلة كوردستان'} (${mainTrip.price || '35,000 دينار'})\n• تحدث معي عن **رحلات KURDIA، معدات الجبال، طريقة الحجز عبر FIB، الرحلات الخاصة VIP، الطقس** أو أي موضوع عام!`;
     defaultActions = [
       { label: '🎟️ حجز رحلة', action: 'booking' },
       { label: '🗺️ الأماكن السياحية', action: 'destinations' },
       { label: '👑 رحلة خاصة', action: 'private' }
     ];
   } else {
-    welcomeText = `سڵاو هاوڕێی ئازیز 🌿\nمن **یاریدەدەری زیرەکی KURDIA ADVENTURE** ـم.\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• دەتوانیت هەر پرسیارێک لەسەر **گەشتەکان، شوێنەکانی پیادەڕەوی، ناو تۆمارکردن و هەژماری FIB، گەشتی تایبەت و کەشوهەوا** لێم بکەیت!`;
+    welcomeText = `سڵاو هاوڕێی ئازیز 🌿\nمن **یاریدەدەری زیرەکی فەرمی KURDIA ADVENTURE** ـم.\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• دەتوانیت لەگەڵم قسە بکەیت لەسەر **گەشتەکانی کوردیا، شوێنەکان، پێداویستی شاخەوانی، ناو تۆمارکردن، کەشوهەوا و زانیاری گشتی**!`;
     defaultActions = [
       { label: '🎟️ بەشداری گەشت', action: 'booking' },
       { label: '🗺️ شوێنەکان', action: 'destinations' },
@@ -3388,37 +3685,63 @@ function renderAIWelcomeMessage(){
 
 function resetAIChat(){
   window.kurdiaAiHistory = [];
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
   renderAIWelcomeMessage();
 }
 
 function openAI(){
   const modal = $('aiModal');
   if(!modal) return;
+  const vBtn = $('aiVoiceToggleBtn');
+  if(vBtn){
+    vBtn.classList.toggle('active', window.kurdiaAiVoiceEnabled);
+    vBtn.textContent = window.kurdiaAiVoiceEnabled ? '🔊' : '🔇';
+  }
   const m = $('aiMessages');
   if(m && !m.children.length){
     renderAIWelcomeMessage();
   }
   modal.classList.add('show');
   setTimeout(()=>{
-    const i=$('aiInput');
-    if(i) i.focus();
     if(m) m.scrollTop = m.scrollHeight;
     if(window.lucide) lucide.createIcons();
   }, 80);
 }
 
-function closeModal(id){$(id).classList.remove('show')}
+function closeModal(id){
+  if(id === 'aiModal' && 'speechSynthesis' in window){
+    try{ window.speechSynthesis.cancel(); }catch(_){}
+  }
+  $(id)?.classList.remove('show');
+}
 function aiQuick(q){const i=$('aiInput');if(i)i.value=q;askAI({preventDefault:()=>{}})}
-function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',language:localStorage.getItem('kurdia_language')||'ku',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',fibAccount:'0750 313 0360',whatsapp:data?.contact?.whatsapp||'+9647503130360',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,hikingLevel:x.hikingLevel,altitude:x.altitude,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','چالاکی و ئەزموونەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
+function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',exclusiveGroupOnly:true,language:localStorage.getItem('kurdia_language')||'ku',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',fibAccount:'0750 313 0360',whatsapp:data?.contact?.whatsapp||'+9647503130360',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,hikingLevel:x.hikingLevel,altitude:x.altitude,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','چالاکی و ئەزموونەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
 
 function buildClientFallbackAI(q, lang){
   const ctx = aiSiteContext();
   const trips = ctx.upcomingTrips || [];
   const mainTrip = trips[0] || ctx.currentTrip || {};
   const dests = ctx.destinations || [];
-  const ql = String(q || '').toLowerCase();
+  const ql = String(q || '').toLowerCase().trim();
+
+  // Strict Guardrail: Never discuss or mention other groups
+  if(ql.includes('گرووپی تر') || ql.includes('گروپی تر') || ql.includes('کۆمپانیای تر') || ql.includes('گرووپەکانی تر') || ql.includes('other group') || ql.includes('شركات اخرى') || ql.includes('مجموعات اخرى')){
+    if(lang === 'en'){
+      return { text: `🏔️ I am the exclusive AI assistant of **KURDIA ADVENTURE**.\n\nI only speak about **KURDIA ADVENTURE** expeditions, Kurdistan's nature, mountain trails, weather, and general outdoor advice — I never discuss other travel groups.`, actions: [{ label: '🎟️ KURDIA Trips', action: 'booking' }, { label: '👑 VIP Private Trip', action: 'private' }] };
+    }
+    if(lang === 'ar'){
+      return { text: `🏔️ أنا المساعد الذكي الرسمي والوحيد لـ **KURDIA ADVENTURE**.\n\nأتحدث فقط عن رحلات **KURDIA ADVENTURE**، طبيعة كوردستان، مسارات الجبال، الطقس، والنصائح العامة — ولا أتحدث عن أي مجموعات أخرى.`, actions: [{ label: '🎟️ رحلات KURDIA', action: 'booking' }, { label: '👑 رحلة خاصة VIP', action: 'private' }] };
+    }
+    return { text: `🏔️ من تەنها یاریدەدەری زیرەکی فەرمی **KURDIA ADVENTURE** ـم و باسی هیچ گرووپ و لایەنێکی تر ناکەم.\n\nتەنها لەسەر گەشت و چالاکییەکانی **KURDIA ADVENTURE**، سروشتی کوردستان، ڕێنمایی شاخەوانی، کەشوهەوا و زانیاری گشتی قسە دەکەم! 🌿`, actions: [{ label: '🎟️ گەشتەکانی KURDIA', action: 'booking' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
+  }
 
   if(lang === 'en'){
+    if(ql.includes('hello') || ql.includes('hi') || ql.includes('how are you') || ql.includes('who are you')){
+      return { text: `Hello friend! 🌿 I'm doing great and ready to talk with you about **KURDIA ADVENTURE**, mountain hiking, gear tips, or Kurdistan's nature!\n\nOur next expedition is **${mainTrip.title || 'Mount Halgurd'}** (${mainTrip.price || '35,000 IQD'}). How can I help you today?`, actions: [{ label: '🎟️ Book Now', action: 'booking' }, { label: '📍 View Places', action: 'destinations' }] };
+    }
+    if(ql.includes('gear') || ql.includes('wear') || ql.includes('bring') || ql.includes('shoe') || ql.includes('جل') || ql.includes('پێڵاو')){
+      return { text: `🎒 **KURDIA Hiking & Trip Essentials:**\n\n• **Shoes:** Comfortable hiking boots or non-slip sneakers.\n• **Clothing:** Breathable layered clothes + a light jacket.\n• **Personal Items:** Water bottle, sunglasses, sunscreen, and a powerbank.\n• **Included by KURDIA:** VIP transport, mountain guides, mountain tea, and professional photography!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }] };
+    }
     if(ql.includes('trip') || ql.includes('next') || ql.includes('week') || ql.includes('گەشت')){
       const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${t.date || 'Soon'} | 💰 ${t.price}`).join('\n');
       return { text: `🌿 **Upcoming KURDIA Expeditions:**\n\n${list}\n\nIncludes VIP bus transport, expert mountain guides, and professional photography.`, actions: [{ label: '🎟️ Book Now', action: 'booking' }, { label: '📍 View Places', action: 'destinations' }] };
@@ -3426,39 +3749,48 @@ function buildClientFallbackAI(q, lang){
     if(ql.includes('book') || ql.includes('pay') || ql.includes('fib') || ql.includes('register') || ql.includes('بەشداری') || ql.includes('ناو')){
       return { text: `🎟️ **How to Register & Pay:**\n\n• **1. Select Trip & Participants:** Choose your trip on the Booking page and enter your full name (plus names of any friends joining you).\n• **2. WhatsApp OTP:** Verify your phone number with the 4-digit code.\n• **3. FIB Payment:** Send the fee (${mainTrip.price || '35,000 IQD'}) to **FIB: 0750 313 0360** and upload the receipt screenshot.`, actions: [{ label: '🎟️ Open Booking Form', action: 'booking' }] };
     }
-    return { text: `🌿 **KURDIA ADVENTURE Smart Concierge:**\n\n• **Featured Trip:** ${mainTrip.title || 'Dukan Lake'} (${mainTrip.price || '35,000 IQD'})\n• **Official FIB Account:** \`0750 313 0360\`\n• **WhatsApp Support:** \`+964 750 313 0360\`\n\nTap any button below to explore!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }, { label: '🗺️ Destinations', action: 'destinations' }, { label: '👑 Private Trip', action: 'private' }, { label: '⛅ Weather', action: 'weather' }] };
+    return { text: `🌿 **KURDIA ADVENTURE Smart AI:**\n\n• **Featured Trip:** ${mainTrip.title || 'Mount Halgurd'} (${mainTrip.price || '35,000 IQD'})\n• **Official FIB Account:** \`0750 313 0360\`\n• **WhatsApp Support:** \`+964 750 313 0360\`\n\nAsk me anything about KURDIA trips, hiking tips, or nature!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }, { label: '🗺️ Destinations', action: 'destinations' }, { label: '👑 Private Trip', action: 'private' }] };
   }
 
   if(lang === 'ar'){
+    if(ql.includes('مرحبا') || ql.includes('اهلا') || ql.includes('شلونك') || ql.includes('كيف حالك') || ql.includes('سلام')){
+      return { text: `أهلاً وسهلاً بك يا صديقي! 🌿 أنا بخير وسعيد بالتحدث معك في **KURDIA ADVENTURE**.\n\nرحلتنا القادمة هي **${mainTrip.title}** (${mainTrip.price || '35,000 دينار'}). يمكنك سؤالي عن الرحلات، معدات المشي الجبلي، الطقس، أو أي موضوع عام!`, actions: [{ label: '🎟️ حجز مقعد', action: 'booking' }, { label: '📍 الأماكن', action: 'destinations' }] };
+    }
     if(ql.includes('رحل') || ql.includes('قادم') || ql.includes('گەشت')){
       const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${t.date || 'قريباً'} | 💰 ${t.price}`).join('\n');
       return { text: `🌿 **الرحلات القادمة مع KURDIA:**\n\n${list}\n\nتشمل النقل السياحي VIP، مرشدين جبليين، والتصوير الاحترافي.`, actions: [{ label: '🎟️ حجز مقعد', action: 'booking' }, { label: '📍 الأماكن', action: 'destinations' }] };
     }
     if(ql.includes('حجز') || ql.includes('دفع') || ql.includes('fib') || ql.includes('تسجيل') || ql.includes('بەشداری') || ql.includes('ناو')){
-      return { text: `🎟️ **خطوات التسجيل والدفع:**\n\n• **١. اختيار الرحلة والأسماء:** اختر الرحلة واكتب اسمك الكامل وأسماء المرافقين.\n• **٢. تأكيد واتساب:** أدخل رمز التحقق OTP المرسل لرقمك.\n• **٣. الدفع عبر FIB:** حوّل المبلغ (${mainTrip.price || '35,000 دينار'}) إلى حساب **FIB: 0750 313 0360** وارفع صورة الوصل.`, actions: [{ label: '🎟️ الذهاب لصفحة الحجز', action: 'booking' }] };
+      return { text: `🎟️ **خطوات التسجيل والدفع مع KURDIA:**\n\n• **١. اختيار الرحلة والأسماء:** اختر الرحلة واكتب اسمك الكامل وأسماء المرافقين.\n• **٢. تأكيد واتساب:** أدخل رمز التحقق OTP المرسل لرقمك.\n• **٣. الدفع عبر FIB:** حوّل المبلغ (${mainTrip.price || '35,000 دينار'}) إلى حساب **FIB: 0750 313 0360** وارفع صورة الوصل.`, actions: [{ label: '🎟️ الذهاب لصفحة الحجز', action: 'booking' }] };
     }
-    return { text: `🌿 **المساعد الذكي لـ KURDIA ADVENTURE:**\n\n• **الرحلة الحالية:** ${mainTrip.title || 'بحيرة دوكان'} (${mainTrip.price || '35,000 دينار'})\n• **حساب الدفع FIB:** \`0750 313 0360\`\n• **واتساب الفريق:** \`+964 750 313 0360\``, actions: [{ label: '🎟️ حجز رحلة', action: 'booking' }, { label: '🗺️ الأماكن', action: 'destinations' }, { label: '👑 رحلة خاصة', action: 'private' }, { label: '⛅ الطقس', action: 'weather' }] };
+    return { text: `🌿 **المساعد الذكي لـ KURDIA ADVENTURE:**\n\n• **الرحلة الحالية:** ${mainTrip.title || 'جبل هلكورد'} (${mainTrip.price || '35,000 دينار'})\n• **حساب الدفع FIB:** \`0750 313 0360\`\n• **واتساب الفريق:** \`+964 750 313 0360\``, actions: [{ label: '🎟️ حجز رحلة', action: 'booking' }, { label: '🗺️ الأماكن', action: 'destinations' }, { label: '👑 رحلة خاصة', action: 'private' }] };
   }
 
   // Kurdish Sorani ('ku')
+  if(ql === 'سڵاو' || ql === 'سلاو' || ql.includes('چۆنیت') || ql.includes('چۆنی') || ql.includes('باشیت') || ql.includes('کێیت') || ql.includes('چ خەبەر')){
+    return { text: `سڵاو و ڕێز هاوڕێی ئازیز! 🌿 زۆر سوپاس، من زۆر باشم و خۆشحاڵم کە لەگەڵ **KURDIA ADVENTURE** قسە دەکەیت!\n\nدەتوانین پێکەوە قسە بکەین لەسەر:\n• **گەشتەکانی KURDIA:** گەشتی داهاتوومان بۆ **${mainTrip.title}** ـە (${mainTrip.price || '35,000 دینار'})\n• **پێداویستی و ڕێنمایی شاخەوانی و کەمپینگ**\n• **کەشوهەوا، سروشتی کوردستان و بابەتی گشتی**\n\nحەز دەکەیت لەسەر چی قسە بکەین؟ 😊`, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }] };
+  }
+  if(ql.includes('جل') || ql.includes('پێڵاو') || ql.includes('جانتا') || ql.includes('ئامادە') || ql.includes('چی بهێنم') || ql.includes('پێداویستی')){
+    return { text: `🎒 **پێداویستییەکانی گەشت و شاخەوانی لەگەڵ KURDIA:**\n\n• **پێڵاو:** پێڵاوی شاخەوانی یان وەرزشی نەرم و دژە خلیسک.\n• **جلوبەرگ:** جلی ئاسوودە + چاکەتی سووک بۆ فێنکی شاخ.\n• **کەلوپەلی کەسی:** ئاو، چاوێلکەی هەتاوی، دژەخۆر و پاوەربانک.\n• **لەسەر تیمی KURDIA:** پاسی گەشتیاری VIP، ڕێبەری شارەزا، چای سەر خەڵووز و وێنەگرتنی سینەمایی!`, actions: [{ label: '🎟️ ناو تۆمارکردن', action: 'booking' }, { label: '⛅ کەشوهەوا', action: 'weather' }] };
+  }
   if(ql.includes('گەشت') && (ql.includes('هەفتە') || ql.includes('داهاتوو') || ql.includes('چییە') || ql.includes('نرخ'))){
     const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${formatTripDateKu(t.date)} | 💰 ${t.price}`).join('\n');
     return { text: `🌿 **گەشتەکانی داهاتووی KURDIA ADVENTURE:**\n\n${list}\n\nهەموو گەشتەکانمان پاسی VIP، ڕێبەری شاخەوانی و فۆتۆگرافەری تایبەتیان لەگەڵدایە.`, actions: [{ label: '🎟️ بەشداری لە گەشت بکە', action: 'booking' }, { label: '📍 بینینی شوێنەکان', action: 'destinations' }] };
   }
   if(ql.includes('بەشداری') || ql.includes('ناو') || ql.includes('تۆمار') || ql.includes('چۆن') || ql.includes('پارە') || ql.includes('fib')){
-    return { text: `🎟️ **چۆنیەتی ناو تۆمارکردن بە ٣ هەنگاوی ئاسان:**\n\n• **هەنگاوی ١:** لە بەشی «بەشداری» گەشتەکەت هەڵبژێرە، ناوی سیانی خۆت و ژمارەی کەسەکان بنووسە.\n• **هەنگاوی ٢:** ژمارەی مۆبایل (WhatsApp) بنووسە و کۆدی ٤ ژمارەیی OTP پشتڕاست بکەرەوە.\n• **هەنگاوی ٣:** بڕی بەشداری (${mainTrip.price || '35,000 دینار'}) بنێرە بۆ هەژماری فەرمی **FIB: 0750 313 0360** و وێنەی پسوڵەکە دابنێ.`, actions: [{ label: '🎟️ چوون بۆ فۆڕمی بەشداری', action: 'booking' }, { label: '💬 پرسیار لە وەتسئەپ', action: 'whatsapp' }] };
+    return { text: `🎟️ **چۆنیەتی ناو تۆمارکردن لە KURDIA بە ٣ هەنگاوی ئاسان:**\n\n• **هەنگاوی ١:** لە بەشی «بەشداری» گەشتەکەت هەڵبژێرە، ناوی سیانی خۆت و ژمارەی کەسەکان بنووسە.\n• **هەنگاوی ٢:** ژمارەی مۆبایل (WhatsApp) بنووسە و کۆدی ٤ ژمارەیی OTP پشتڕاست بکەرەوە.\n• **هەنگاوی ٣:** بڕی بەشداری (${mainTrip.price || '35,000 دینار'}) بنێرە بۆ هەژماری فەرمی **FIB: 0750 313 0360** و وێنەی پسوڵەکە دابنێ.`, actions: [{ label: '🎟️ چوون بۆ فۆڕمی بەشداری', action: 'booking' }, { label: '💬 پرسیار لە وەتسئەپ', action: 'whatsapp' }] };
   }
   if(ql.includes('پیادە') || ql.includes('شاخ') || ql.includes('شوێن')){
     const hList = dests.filter(d => d.hasHiking !== false).slice(0, 5).map(d => `• **${d.name}** (${d.region}) — 🥾 ${d.hikingDuration}`).join('\n');
-    return { text: `🏔️ **شوێنەکانی شاخەوانی و پیادەڕەوی لە کوردستان:**\n\n${hList}\n\nکرتە لە دوگمەی خوارەوە بکە بۆ بینینی تەواوی زانیاری و وێنەی شوێنەکان.`, actions: [{ label: '🗺️ بینینی هەموو شوێنەکان', action: 'destinations' }, { label: '👑 داواکاری گەشتی تایبەت', action: 'private' }] };
+    return { text: `🏔️ **شوێنەکانی شاخەوانی و پیادەڕەوی لەگەڵ KURDIA:**\n\n${hList}\n\nکرتە لە دوگمەی خوارەوە بکە بۆ بینینی تەواوی زانیاری و وێنەی شوێنەکان.`, actions: [{ label: '🗺️ بینینی هەموو شوێنەکان', action: 'destinations' }, { label: '👑 داواکاری گەشتی تایبەت', action: 'private' }] };
   }
   if(ql.includes('تایبەت') || ql.includes('vip') || ql.includes('خێزان') || ql.includes('گروپ')){
-    return { text: `👑 **گەشتی تایبەت (VIP & گروپ و خێزانی):**\n\nدەتوانیت شوێن، بەروار، ژمارەی کەس و هەموو خزمەتگوزارییەکان (گواستنەوەی تایبەت، کەپر و کەمپ، ڕێبەر و فۆتۆگرافەر) بە دڵی خۆت دیاری بکەیت.`, actions: [{ label: '👑 ڕێکخستنی گەشتی تایبەت', action: 'private' }, { label: '💬 ڕاوێژکاری وەتسئەپ', action: 'whatsapp' }] };
+    return { text: `👑 **گەشتی تایبەت لەگەڵ KURDIA (VIP & گروپ و خێزانی):**\n\nدەتوانیت شوێن، بەروار، ژمارەی کەس و هەموو خزمەتگوزارییەکان (گواستنەوەی تایبەت، کەپر و کەمپ، ڕێبەر و فۆتۆگرافەر) بە دڵی خۆت دیاری بکەیت.`, actions: [{ label: '👑 ڕێکخستنی گەشتی تایبەت', action: 'private' }, { label: '💬 ڕاوێژکاری وەتسئەپ', action: 'whatsapp' }] };
   }
   if(ql.includes('کەش') || ql.includes('باران') || ql.includes('با')){
-    return { text: `⛅ **وێستگەی کەشوهەوا و نەخشەی شاخەوانی:**\n\nلە بەشی کەشوهەوا دەتوانیت پێشبینی ٢٤ کاتژمێر و ٧ ڕۆژی داهاتوو لەگەڵ نەخشەی بای زیندوو بۆ هەموو چیا و شارەکانی کوردستان ببینیت.`, actions: [{ label: '⛅ کردنەوەی کەشوهەوا', action: 'weather' }] };
+    return { text: `⛅ **وێستگەی کەشوهەوا و نەخشەی شاخەوانی KURDIA:**\n\nلە بەشی کەشوهەوا دەتوانیت پێشبینی ٢٤ کاتژمێر و ٧ ڕۆژی داهاتوو لەگەڵ نەخشەی بای زیندوو بۆ هەموو چیا و شارەکانی کوردستان ببینیت.`, actions: [{ label: '⛅ کردنەوەی کەشوهەوا', action: 'weather' }] };
   }
-  return { text: `🌿 **سڵاو لە KURDIA ADVENTURE!**\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• **هەژماری پارەدانی FIB:** \`0750 313 0360\`\n• **ژمارەی پەیوەندی و وەتسئەپ:** \`+964 750 313 0360\``, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
+  return { text: `🌿 **خۆشحاڵم بە قسەکردن لەگەڵت لە KURDIA ADVENTURE!**\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• **هەژماری پارەدانی FIB:** \`0750 313 0360\`\n• **ژمارەی پەیوەندی و وەتسئەپ:** \`+964 750 313 0360\`\n\nهەر پرسیارێکت هەیە لەسەر کوردیا، شاخەوانی، یان زانیاری گشتی بۆم بنووسە!`, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
 }
 
 async function askAI(e){
@@ -3467,10 +3799,11 @@ async function askAI(e){
   const q = (i?.value || '').trim();
   if(!q) return;
   const lang = localStorage.getItem('kurdia_language') || 'ku';
+  playAIConversationChime('send');
   addAIMessage(q, 'user');
   window.kurdiaAiHistory.push({ role: 'user', text: q });
   if(i) i.value = '';
-  const loadingMsg = lang === 'en' ? 'Checking KURDIA ADVENTURE live data... 🌿' : (lang === 'ar' ? 'جاري البحث في بيانات KURDIA ADVENTURE... 🌿' : 'خەریکم زانیارییەکانی KURDIA دەپشکنم... 🌿');
+  const loadingMsg = lang === 'en' ? 'KURDIA AI is thinking... 🌿' : (lang === 'ar' ? 'مساعد KURDIA يكتب الآن... 🌿' : 'KURDIA خەریکی وەڵامدانەوەیە... 🌿');
   const loading = addAIMessage(loadingMsg, 'bot loading');
 
   try{
@@ -3480,7 +3813,7 @@ async function askAI(e){
       body: JSON.stringify({
         prompt: q,
         lang: lang,
-        history: window.kurdiaAiHistory.slice(-6),
+        history: window.kurdiaAiHistory.slice(-8),
         siteState: aiSiteContext()
       })
     });
@@ -3489,6 +3822,8 @@ async function askAI(e){
     if(x && x.text){
       window.kurdiaAiHistory.push({ role: 'assistant', text: x.text });
       addAIMessage(x.text, 'bot', x.actions || []);
+      playAIConversationChime('reply');
+      if(window.kurdiaAiVoiceEnabled) window.speakAIText(x.text);
       return;
     }
   }catch(_){}
@@ -3497,6 +3832,8 @@ async function askAI(e){
   loading?.remove();
   window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text });
   addAIMessage(fb.text, 'bot', fb.actions || []);
+  playAIConversationChime('reply');
+  if(window.kurdiaAiVoiceEnabled) window.speakAIText(fb.text);
 }
 function bookingGo(step){const form=$('bookingForm');if(!form)return;form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on);if(on&&window.gsap){gsap.fromTo(p,{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:'power3.out',clearProps:'transform'});}});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2&&$('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}bookingGo(step+1)}
@@ -3886,8 +4223,13 @@ loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_langua
         <button type="button" class="ka-language-item" data-lang="en" onclick="kaSetLanguage('en',this)">🇬🇧 <span>English</span><span class="check">✓</span></button>
       </div>
     </div>
-    <div class="ka-menu-logo">KURDIA<span>ADVENTURE</span></div>
-    <div class="ka-menu-tagline">گەشت، سروشت و ئەزموونی جیاواز</div>
+    <div class="ka-menu-brand-row">
+      <img class="ka-menu-logo-img" src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA ADVENTURE">
+      <div>
+        <div class="ka-menu-logo">KURDIA<span>ADVENTURE</span></div>
+        <div class="ka-menu-tagline">گەشت، سروشت و ئەزموونی جیاواز</div>
+      </div>
+    </div>
   </header>
 
   <div class="ka-menu-content">
@@ -3904,6 +4246,15 @@ loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_langua
     <a href="#about" class="ka-menu-item" data-ka-page="about" onclick="kaMenuNavigate('about');return false"><div class="ka-menu-icon">ⓘ</div><div><div class="ka-menu-text">دەربارەی تیمەکە</div><span class="ka-menu-desc">ناساندنی KURDIA ADVENTURE</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#contact" class="ka-menu-item" data-ka-page="contact" onclick="kaMenuNavigate('contact');return false"><div class="ka-menu-icon">✉</div><div><div class="ka-menu-text">پەیوەندی</div><span class="ka-menu-desc">پەیوەندیمان پێوە بکە</span></div><div class="ka-menu-arrow">‹</div></a>
 
+    <button type="button" class="ka-menu-item" onclick="window.replayKurdiaIntro && window.replayKurdiaIntro()">
+      <div class="ka-menu-icon">🎬</div>
+      <div style="text-align:right">
+        <div class="ka-menu-text">ئەنیمەیشنی دەستپێک</div>
+        <span class="ka-menu-desc">بینینەوەی ئەنیمەیشن و دەنگی سینەمایی KURDIA</span>
+      </div>
+      <div class="ka-menu-arrow">🔊</div>
+    </button>
+
     <div class="ka-contact">
       <div class="ka-contact-title">پەیوەندی بە تیمی KURDIA</div>
       <a href="tel:+9647503130360" class="ka-phone"><div class="ka-phone-icon">☎</div><div><div style="font-size:10px;color:#858b98">ژمارەی تەلەفۆن</div><div class="ka-phone-number">+964 750 313 0360</div></div></a>
@@ -3916,9 +4267,18 @@ loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_langua
         <a class="ka-social" href="https://wa.me/9647503130360" target="_blank" rel="noopener">WA</a>
       </div>
     </div>
+
+    <div class="ka-version-card" onclick="forceRefreshSiteVersion()" title="کلیک بکە بۆ نوێکردنەوەی ڤێرژن و پاککردنەوەی کاش">
+      <div>
+        <b>ڤێرژنی وێبسایت</b>
+        <small>کلیک بکە بۆ نوێکردنەوەی کاش</small>
+      </div>
+      <span id="siteVersionBadge" class="ka-version-pill">v3.8.0 ↻</span>
+    </div>
   </div>
 
   <footer class="ka-menu-footer">
+    <img class="ka-footer-logo-img" src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA">
     <div class="ka-footer-logo">KURDIA</div>
     <div class="ka-footer-sub">ADVENTURE<br>گەشت، سروشت و ژیانێکی جیاواز</div>
     <div class="ka-footer-line"></div>
@@ -4000,7 +4360,7 @@ document.addEventListener('click',function(e){
 <!-- KURDIA PWA / PUSH — additive only -->
 <div id="kurdiaPwaPrompt" aria-live="polite">
   <div class="kp-row">
-    <div class="kp-icon">KA</div>
+    <div class="kp-icon" style="padding:0;overflow:hidden;background:#070a10"><img src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA" style="width:100%;height:100%;object-fit:cover"></div>
     <div style="min-width:0;flex:1">
       <div class="kp-title">KURDIA ADVENTURE</div>
       <div class="kp-text">بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێکان و گەشتەکان لەدەست مەدە.</div>
@@ -5789,11 +6149,223 @@ body::before, body::after{
 }
 
 /* ========================================================
-   TOP HEADER LANGUAGE SWITCHER & UPGRADED AI CONCIERGE CSS
+   OFFICIAL KURDIA LOGO, CINEMATIC INTRO & MOBILE-FIRST AI
    ======================================================== */
 .topin{
-  grid-template-columns:44px minmax(0,1fr) auto!important;
+  grid-template-columns:42px minmax(0,1fr) auto!important;
+  gap:8px!important;
 }
+.brand{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:9px!important;
+  min-width:0;
+}
+.brand-logo-img{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  object-fit:cover;
+  border:1px solid rgba(255,255,255,0.22);
+  box-shadow:0 4px 14px rgba(229,35,79,0.28);
+  flex-shrink:0;
+  background:#070a10;
+}
+.brand-text-wrap{
+  display:inline-block;
+  text-align:center;
+  line-height:1.05;
+}
+@media(max-width:380px){
+  .brand-logo-img{
+    width:32px;
+    height:32px;
+    border-radius:9px;
+  }
+}
+
+/* Enhanced Cinematic Entrance Intro (#kurdia-intro) */
+.intro-aurora{
+  position:absolute;
+  inset:-20%;
+  pointer-events:none;
+  z-index:-1;
+  background:
+    radial-gradient(ellipse 48% 36% at 50% 35%, rgba(229,35,79,0.28), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 30% 65%, rgba(169,29,55,0.2), transparent 72%),
+    radial-gradient(ellipse 42% 32% at 72% 60%, rgba(56,189,248,0.1), transparent 72%);
+  filter:blur(26px);
+  animation:introAuroraPulse 3.6s ease-in-out infinite alternate;
+}
+@keyframes introAuroraPulse{
+  0%{transform:scale(0.95) rotate(-2deg);opacity:0.75}
+  100%{transform:scale(1.08) rotate(2deg);opacity:1}
+}
+.intro-particles{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+.intro-particles i{
+  position:absolute;
+  bottom:-12px;
+  border-radius:50%;
+  background:#ff7a95;
+  box-shadow:0 0 10px #e5234f;
+  opacity:0;
+  animation:introParticleFloat 2.8s ease-out infinite;
+}
+@keyframes introParticleFloat{
+  0%{transform:translateY(0) scale(0.6);opacity:0}
+  30%{opacity:0.85}
+  100%{transform:translateY(-75vh) scale(1.2);opacity:0}
+}
+.intro-logo-stage{
+  position:relative;
+  width:92px;
+  height:92px;
+  margin:0 auto 10px;
+  display:grid;
+  place-items:center;
+  opacity:0;
+  animation:introLogoPop .85s cubic-bezier(.22,1,.36,1) .15s forwards;
+}
+@keyframes introLogoPop{
+  0%{opacity:0;transform:scale(0.65) translateY(14px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+.intro-logo-halo{
+  position:absolute;
+  inset:-14px;
+  border-radius:30px;
+  background:radial-gradient(circle, rgba(229,35,79,0.45) 0%, transparent 70%);
+  animation:bsPulse 2.2s ease-in-out infinite;
+}
+.intro-logo-ring{
+  position:absolute;
+  inset:-5px;
+  border-radius:26px;
+  border:1.5px solid rgba(229,35,79,0.55);
+  box-shadow:0 0 24px rgba(229,35,79,0.35);
+}
+.intro-official-logo{
+  position:relative;
+  width:84px;
+  height:84px;
+  border-radius:22px;
+  object-fit:cover;
+  border:2px solid rgba(255,255,255,0.85);
+  box-shadow:0 16px 40px rgba(0,0,0,0.75);
+  background:#070a10;
+}
+.intro-sound-pill{
+  position:absolute;
+  top:max(18px, env(safe-area-inset-top));
+  right:18px;
+  z-index:5;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(15,20,30,0.82);
+  border:1px solid rgba(229,35,79,0.45);
+  color:#f8fafc;
+  font-size:11px;
+  font-weight:800;
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 26px rgba(0,0,0,0.45);
+  cursor:pointer;
+}
+.isp-wave{
+  display:inline-flex;
+  align-items:flex-end;
+  gap:2px;
+  height:12px;
+}
+.isp-wave i{
+  width:2.5px;
+  background:#4ef2a1;
+  border-radius:2px;
+  animation:ispBar 0.8s ease-in-out infinite alternate;
+}
+.isp-wave i:nth-child(1){height:5px;animation-delay:0s}
+.isp-wave i:nth-child(2){height:11px;animation-delay:0.2s}
+.isp-wave i:nth-child(3){height:7px;animation-delay:0.4s}
+@keyframes ispBar{
+  from{transform:scaleY(0.45)}
+  to{transform:scaleY(1.15)}
+}
+
+/* More Menu Brand Logo & Version Card */
+.ka-menu-brand-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.ka-menu-logo-img{
+  width:58px;
+  height:58px;
+  border-radius:16px;
+  object-fit:cover;
+  border:1.5px solid rgba(255,255,255,0.3);
+  box-shadow:0 10px 28px rgba(0,0,0,0.55);
+  background:#070a10;
+  flex-shrink:0;
+}
+.ka-footer-logo-img{
+  width:46px;
+  height:46px;
+  border-radius:13px;
+  object-fit:cover;
+  border:1px solid rgba(255,255,255,0.25);
+  margin:0 auto 8px;
+  display:block;
+}
+.ka-version-card{
+  margin-top:12px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:linear-gradient(145deg, rgba(16,24,36,0.95), rgba(9,13,20,0.98));
+  border:1px solid rgba(55,201,135,0.28);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+  transition:transform .2s ease, border-color .2s ease;
+}
+.ka-version-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(55,201,135,0.55);
+}
+.ka-version-card b{
+  display:block;
+  font-size:13px;
+  color:#f8fafc;
+}
+.ka-version-card small{
+  display:block;
+  font-size:10.5px;
+  color:#94a3b8;
+  margin-top:2px;
+}
+.ka-version-pill{
+  background:rgba(55,201,135,0.16);
+  border:1px solid rgba(55,201,135,0.5);
+  color:#6bf0b3;
+  font-size:11px;
+  font-weight:900;
+  padding:6px 11px;
+  border-radius:999px;
+  direction:ltr;
+  white-space:nowrap;
+}
+
+/* Top Header Language Switcher */
 .top-lang-wrap{
   position:relative;
 }
@@ -5801,13 +6373,13 @@ body::before, body::after{
   display:inline-flex;
   align-items:center;
   gap:5px;
-  height:34px;
+  height:36px;
   padding:0 11px;
-  border-radius:999px;
+  border-radius:12px;
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.14);
   color:#f8fafc;
-  font-size:11px;
+  font-size:11.5px;
   font-weight:800;
   cursor:pointer;
   transition:all .2s ease;
@@ -5888,31 +6460,42 @@ html[dir="ltr"] .ka-menu-arrow{
   transform:rotate(180deg);
 }
 
-/* Upgraded Floating AI Button & Modal */
+/* ========================================================
+   MOBILE-FIRST AI ASSISTANT CARD (#aiModal & .ai-chat-sheet)
+   ======================================================== */
 .ai{
-  position:fixed;
-  bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 18px);
-  left:16px;
-  width:52px;
-  height:52px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#e5234f,#9e1534);
-  border:1px solid rgba(255,255,255,0.22);
+  position:fixed!important;
+  bottom:calc(82px + env(safe-area-inset-bottom))!important;
+  left:14px!important;
+  right:auto!important;
+  width:50px!important;
+  height:50px!important;
+  border-radius:16px!important;
+  background:#090d15!important;
+  border:1.5px solid rgba(229,35,79,0.65)!important;
   color:#fff;
   display:grid;
   place-items:center;
-  box-shadow:0 12px 28px rgba(229,35,79,0.42);
-  z-index:90;
+  box-shadow:0 12px 28px rgba(0,0,0,0.65), 0 0 18px rgba(229,35,79,0.32)!important;
+  z-index:90!important;
   cursor:pointer;
+  padding:0!important;
 }
 html[dir="ltr"] .ai{
-  left:auto;
-  right:16px;
+  left:auto!important;
+  right:14px!important;
+}
+.ai-fab-logo{
+  width:100%;
+  height:100%;
+  border-radius:14px;
+  object-fit:cover;
+  display:block;
 }
 .ai-fab-pulse{
   position:absolute;
   inset:-3px;
-  border-radius:20px;
+  border-radius:18px;
   border:1.5px solid rgba(229,35,79,0.55);
   animation:aiPulseGlow 2.4s ease-out infinite;
   pointer-events:none;
@@ -5934,26 +6517,103 @@ html[dir="ltr"] .ai{
   letter-spacing:.3px;
   border:1.5px solid #05070b;
 }
-.ai-chat-topbar{
+
+#aiModal{
+  z-index:10005!important;
+  padding:8px!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  background:rgba(3,5,10,0.78)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+}
+@media(min-width:680px){
+  #aiModal{
+    align-items:center!important;
+    padding:20px!important;
+  }
+}
+.ai-chat-sheet{
+  width:min(540px, 100%)!important;
+  height:min(610px, 82dvh)!important;
+  max-height:82dvh!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border-radius:24px!important;
+  background:linear-gradient(180deg, #0d131f 0%, #070a11 100%)!important;
+  border:1px solid rgba(255,255,255,0.14)!important;
+  box-shadow:0 24px 70px rgba(0,0,0,0.85)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+  position:relative!important;
+}
+@media(max-width:520px){
+  #aiModal{
+    padding:6px 6px max(6px, env(safe-area-inset-bottom))!important;
+  }
+  .ai-chat-sheet{
+    width:100%!important;
+    height:min(560px, 79dvh)!important;
+    max-height:79dvh!important;
+    border-radius:22px!important;
+  }
+}
+.ai-sheet-handle{
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding-bottom:12px;
-  border-bottom:1px solid rgba(255,255,255,0.08);
-  margin-bottom:10px;
+  justify-content:center;
+  padding:7px 0 2px;
+  background:rgba(255,255,255,0.02);
+  flex-shrink:0;
+}
+.ai-sheet-handle span{
+  width:38px;
+  height:4px;
+  border-radius:99px;
+  background:rgba(255,255,255,0.18);
+}
+.ai-chat-topbar{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  padding:10px 14px 12px!important;
+  margin:0!important;
+  border-bottom:1px solid rgba(255,255,255,0.09)!important;
+  background:rgba(255,255,255,0.02)!important;
+  flex-shrink:0!important;
+}
+.ai-chat-head{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  min-width:0!important;
+  flex:1!important;
+}
+.ai-head-info{
+  min-width:0;
+  flex:1;
 }
 .ai-chat-avatar{
   position:relative;
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  background:linear-gradient(135deg,rgba(229,35,79,0.26),rgba(169,29,55,0.12));
-  border:1px solid rgba(229,35,79,0.45);
-  display:grid;
-  place-items:center;
-  color:#ff6b8b;
+  width:40px!important;
+  height:40px!important;
+  border-radius:12px!important;
+  overflow:visible!important;
+  border:1px solid rgba(229,35,79,0.5)!important;
+  background:#070a10!important;
   flex-shrink:0;
+  padding:0!important;
+}
+.ai-chat-avatar img{
+  width:100%;
+  height:100%;
+  border-radius:11px;
+  object-fit:cover;
+  display:block;
 }
 .ai-online-dot{
   position:absolute;
@@ -5968,36 +6628,89 @@ html[dir="ltr"] .ai{
 .ai-pro-tag{
   font-size:9px;
   font-weight:900;
-  padding:2px 7px;
+  padding:2px 6px;
   border-radius:999px;
   background:rgba(55,201,135,0.16);
   border:1px solid rgba(55,201,135,0.4);
   color:#6bf0b3;
-  letter-spacing:.4px;
+  letter-spacing:.3px;
 }
-.ai-clear-btn{
-  width:36px;
-  height:36px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.04);
-  color:#cbd5e1;
-  font-size:15px;
+.ai-top-actions{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  flex-shrink:0;
+}
+.ai-voice-toggle-btn,
+.ai-clear-btn,
+.ai-close-btn{
+  width:34px!important;
+  height:34px!important;
+  border-radius:11px!important;
+  border:1px solid rgba(255,255,255,0.11)!important;
+  background:rgba(255,255,255,0.05)!important;
+  color:#e2e8f0!important;
+  font-size:14px!important;
+  font-weight:800;
   cursor:pointer;
-  display:grid;
-  place-items:center;
+  display:grid!important;
+  place-items:center!important;
+  position:static!important;
+  float:none!important;
+  padding:0!important;
 }
-.ai-clear-btn:hover{
-  background:rgba(255,255,255,0.1);
-  color:#fff;
+.ai-voice-toggle-btn.active{
+  background:rgba(55,201,135,0.2)!important;
+  border-color:rgba(55,201,135,0.55)!important;
+  color:#6bf0b3!important;
+}
+.ai-close-btn:hover{
+  background:rgba(229,35,79,0.25)!important;
+  border-color:#e5234f!important;
+  color:#fff!important;
+}
+.ai-messages{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  padding:12px 12px 8px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  -webkit-overflow-scrolling:touch;
 }
 .ai-msg{
-  line-height:1.85;
-  font-size:13px;
+  max-width:90%!important;
+  padding:10px 13px!important;
+  border-radius:16px!important;
+  line-height:1.8!important;
+  font-size:12.5px!important;
+  overflow-wrap:anywhere;
 }
 .ai-msg strong{
   color:#fff;
   font-weight:900;
+}
+.ai-msg-SpeakRow{
+  margin-top:6px;
+  display:flex;
+  justify-content:flex-end;
+}
+.ai-msg-speak-btn{
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);
+  color:#94a3b8;
+  border-radius:999px;
+  padding:3px 9px;
+  font-size:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.ai-msg-speak-btn.speaking,
+.ai-msg-speak-btn:hover{
+  background:rgba(55,201,135,0.18);
+  border-color:rgba(55,201,135,0.45);
+  color:#6bf0b3;
 }
 .ai-inline-code{
   background:rgba(255,255,255,0.1);
@@ -6012,12 +6725,12 @@ html[dir="ltr"] .ai{
   display:flex;
   flex-wrap:wrap;
   gap:6px;
-  margin-top:10px;
+  margin-top:8px;
   padding-top:8px;
   border-top:1px solid rgba(255,255,255,0.08);
 }
 .ai-action-chip{
-  padding:6px 11px;
+  padding:6px 10px;
   border-radius:999px;
   background:rgba(229,35,79,0.16);
   border:1px solid rgba(229,35,79,0.4);
@@ -6030,6 +6743,69 @@ html[dir="ltr"] .ai{
 .ai-action-chip:hover{
   background:#e5234f;
   color:#fff;
+}
+.ai-quick{
+  display:flex!important;
+  gap:6px!important;
+  overflow-x:auto!important;
+  padding:6px 12px 8px!important;
+  flex-shrink:0!important;
+  border-top:1px solid rgba(255,255,255,0.05);
+  background:rgba(8,12,20,0.75);
+}
+.ai-quick button{
+  flex:0 0 auto;
+  padding:7px 11px!important;
+  font-size:11px!important;
+  font-weight:700;
+  border-radius:999px!important;
+  background:rgba(255,255,255,0.05)!important;
+  border:1px solid rgba(255,255,255,0.11)!important;
+  color:#e2e8f0!important;
+}
+.ai-chat-form{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  padding:9px 10px calc(10px + env(safe-area-inset-bottom))!important;
+  border-top:1px solid rgba(255,255,255,0.09)!important;
+  background:#070a11!important;
+  flex-shrink:0!important;
+}
+.ai-chat-form .input{
+  flex:1!important;
+  min-width:0!important;
+  height:42px!important;
+  padding:8px 12px!important;
+  font-size:14px!important;
+  border-radius:13px!important;
+}
+.ai-mic-btn{
+  width:40px!important;
+  height:42px!important;
+  flex:0 0 40px!important;
+  border-radius:13px!important;
+  border:1px solid rgba(255,255,255,0.12)!important;
+  background:rgba(255,255,255,0.05)!important;
+  color:#fff!important;
+  font-size:16px!important;
+  display:grid!important;
+  place-items:center!important;
+  cursor:pointer;
+}
+.ai-mic-btn.listening{
+  background:rgba(229,35,79,0.28)!important;
+  border-color:#e5234f!important;
+  animation:bsPulse 1s infinite;
+}
+.ai-send-btn{
+  width:42px!important;
+  height:42px!important;
+  flex:0 0 42px!important;
+  border-radius:13px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
 }
 </style>
 
@@ -6551,11 +7327,21 @@ html[dir="ltr"] .ai{
       "شوێنی کار": "الموقع",
       "یاریدەدەری زیرەکی KURDIA": "المساعد الذكي لـ KURDIA",
       "ڕێبەری زیرەکی گەشت، شاخەوانی، کەشوهەوا و ناونووسین": "مرشدك الذكي للرحلات، الجبال، الطقس والحجز",
+      "ئامادەیە بۆ قسەکردن لەگەڵت بە دەنگ و نووسین": "جاهز للتحدث معك بالصوت والكتابة",
+      "🔊 دەنگ چالاکە": "🔊 الصوت مفعّل",
+      "🔇 دەنگ ناچالاکە": "🔇 الصوت مكتوم",
       "🧭 گەشتی داهاتوو؟": "🧭 ما هي الرحلة القادمة؟",
       "🎟️ چۆن ناو تۆمار بکەم؟": "🎟️ كيف أسجل وأحجز؟",
       "🥾 شوێنەکانی پیادەڕەوی": "🥾 أماكن المشي الجبلي",
       "👑 گەشتی تایبەت VIP": "👑 رحلة خاصة VIP",
       "⛅ کەشوهەوای شاخەوانی": "⛅ طقس الجبال",
+      "🎒 چی لەگەڵ خۆم بهێنم؟": "🎒 ماذا أحضر معي؟",
+      "👋 چۆنی کوردیا؟": "👋 كيف حالك كورديا؟",
+      "گوێگرتن بە دەنگ": "استماع بالصوت",
+      "🎬 ئەنیمەیشنی دەستپێک": "🎬 عرض البداية السينمائي",
+      "بینینەوەی ئەنیمەیشن و دەنگی فەرمی KURDIA": "إعادة تشغيل أنيميشن وصوت KURDIA الرسمي",
+      "ڤێرژنی سیستەم و ئەپ": "إصدار النظام والتطبيق",
+      "کلیک بکە بۆ نوێکردنەوەی خێرا و پاککردنەوەی کاش": "اضغط للتحديث السريع ومسح الذاكرة المؤقتة",
       "ستۆری خۆت بنێرە": "أرسل قصتك (ستوري)",
       "ناردنی ستۆری": "إرسال القصة",
       "بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێکان و گەشتەکان لەدەست مەدە.": "لتجربة أسرع، ثبّت التطبيق ولا تفوّت إشعارات الرحلات الجديدة.",
@@ -6854,11 +7640,21 @@ html[dir="ltr"] .ai{
       "شوێنی کار": "Location",
       "یاریدەدەری زیرەکی KURDIA": "KURDIA Smart AI Concierge",
       "ڕێبەری زیرەکی گەشت، شاخەوانی، کەشوهەوا و ناونووسین": "Your smart guide for trips, hiking trails, weather & booking",
+      "ئامادەیە بۆ قسەکردن لەگەڵت بە دەنگ و نووسین": "Ready to chat with you via voice & text",
+      "🔊 دەنگ چالاکە": "🔊 Voice On",
+      "🔇 دەنگ ناچالاکە": "🔇 Voice Muted",
       "🧭 گەشتی داهاتوو؟": "🧭 Next Trip?",
       "🎟️ چۆن ناو تۆمار بکەم؟": "🎟️ How to Book?",
       "🥾 شوێنەکانی پیادەڕەوی": "🥾 Hiking Places",
       "👑 گەشتی تایبەت VIP": "👑 Private VIP Trip",
       "⛅ کەشوهەوای شاخەوانی": "⛅ Mountain Weather",
+      "🎒 چی لەگەڵ خۆم بهێنم؟": "🎒 What to Pack?",
+      "👋 چۆنی کوردیا؟": "👋 Hello KURDIA!",
+      "گوێگرتن بە دەنگ": "Listen",
+      "🎬 ئەنیمەیشنی دەستپێک": "🎬 Cinematic Intro",
+      "بینینەوەی ئەنیمەیشن و دەنگی فەرمی KURDIA": "Replay official KURDIA entrance & soundscape",
+      "ڤێرژنی سیستەم و ئەپ": "System & App Version",
+      "کلیک بکە بۆ نوێکردنەوەی خێرا و پاککردنەوەی کاش": "Tap to refresh version & clear cache",
       "ستۆری خۆت بنێرە": "Share Your Story",
       "ناردنی ستۆری": "Post Story",
       "بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێکان و گەشتەکان لەدەست مەدە.": "Install the KURDIA app for faster access and instant notifications on new expeditions.",
@@ -7042,6 +7838,7 @@ html[dir="ltr"] .ai{
     ar: {
       "شوێن، ناوچە، گەشت...": "ابحث عن مكان، منطقة، رحلة...",
       "هەر پرسیارێکت هەیە لێرە بنووسە...": "اكتب سؤالك هنا...",
+      "پرسیار بکە یان قسە لەگەڵ کوردیا بکە...": "اسأل أو تحدّث مع كورديا...",
       "ناوی شار، دۆڵ یان شاخ بنووسە (هەولێر، هەڵگورد، سۆران...)": "اكتب اسم المدينة أو الجبل (أربيل، هلكورد، سوران...)",
       "بۆ نموونە: ئارام محەمەد ئەحمەد": "مثال: آرام محمد أحمد",
       "نموونە: KURDIA10": "مثال: KURDIA10",
@@ -7062,6 +7859,7 @@ html[dir="ltr"] .ai{
     en: {
       "شوێن، ناوچە، گەشت...": "Search places, regions, trips...",
       "هەر پرسیارێکت هەیە لێرە بنووسە...": "Ask anything about trips, places, booking...",
+      "پرسیار بکە یان قسە لەگەڵ کوردیا بکە...": "Ask a question or chat with KURDIA...",
       "ناوی شار، دۆڵ یان شاخ بنووسە (هەولێر، هەڵگورد، سۆران...)": "Enter city, valley, or peak (Erbil, Halgurd, Soran...)",
       "بۆ نموونە: ئارام محەمەد ئەحمەد": "e.g. Aram Mohammed Ahmed",
       "نموونە: KURDIA10": "e.g. KURDIA10",
