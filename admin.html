@@ -949,6 +949,7 @@ button{cursor:pointer;color:inherit}
 
     <div class="sidebar-nav-group">
       <div class="sidebar-group-label">دارایی و سیستەم</div>
+      <button class="side-btn" data-side="otp_manager" onclick="go('otp_manager')"><span class="s-ico">🔐</span><span>کۆنترۆڵی کۆدی OTP</span><span class="s-badge" id="sideOtpBadge">ON</span></button>
       <button class="side-btn" data-side="coupons" onclick="go('coupons')"><span class="s-ico">🎟️</span><span>کۆبۆنی داشکاندن</span></button>
       <button class="side-btn" data-side="finance" onclick="go('finance')"><span class="s-ico">💳</span><span>دارایی و هەژماری FIB</span></button>
       <button class="side-btn" data-side="weather_manager" onclick="go('weather_manager')"><span class="s-ico">⛅</span><span>کەشوهەوا و نەخشە</span></button>
@@ -998,6 +999,7 @@ button{cursor:pointer;color:inherit}
       <button class="q-chip" onclick="go('broadcast')">💬 WhatsApp</button>
       <button class="q-chip" onclick="go('coupons')">🎟️ کۆبۆنەکان</button>
       <button class="q-chip" onclick="go('places')">🏔️ شوێنەکان (<span id="qPlacesCount">6</span>)</button>
+      <button class="q-chip" id="qOtpQuickBtn" onclick="go('otp_manager')" style="border-color:#10b981;color:#6bf0b3">🔐 کۆدی OTP: چالاکە ✓</button>
       <button class="q-chip" onclick="go('settings')">⚙ هەموو بەشەکان</button>
     </div>
 
@@ -1061,6 +1063,26 @@ button{cursor:pointer;color:inherit}
             <div class="stat-head"><span>🏔️</span><strong id="dashPlacesCounter">6</strong></div>
             <p>شوێنە گەشتیارییەکان</p>
             <small>لە بەشی شوێنەکان دانراون</small>
+          </div>
+        </div>
+
+        <!-- QUICK OTP CONTROL BAR ON DASHBOARD -->
+        <div class="panel-card spotlight-card" id="dashOtpControlPanel" style="margin-bottom:14px;border-color:#10b981;background:linear-gradient(145deg,#07221b,#07111a)">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div id="dashOtpIconBox" style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.18);border:1px solid #10b981;display:grid;place-items:center;font-size:20px">🔐</div>
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <b style="font-size:14px;color:#fff">سیستەمی کۆدی پشتڕاستکردنەوەی WhatsApp OTP</b>
+                  <span id="dashOtpStatusPill" style="font-size:10.5px;font-weight:900;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.2);color:#6bf0b3;border:1px solid #10b981">✓ چالاکە (داوا دەکرێت)</span>
+                </div>
+                <small id="dashOtpSubDesc" style="color:#94a3b8;font-size:11.5px;display:block;margin-top:3px">لە کاتی ناونووسیندا کۆدی ٤ ژمارەیی OTP بۆ WhatsApp ـی بەشداربوو دەنێردرێت.</small>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <button type="button" id="dashOtpToggleBtn" class="primary" style="width:auto;margin:0;padding:9px 16px;font-size:12px;background:linear-gradient(120deg,#dc2626,#991b1b)" onclick="toggleGlobalOtpRequirement()">🔓 ناچالاککردنی OTP</button>
+              <button type="button" class="secondary-btn" style="padding:9px 12px;font-size:11.5px" onclick="go('otp_manager')">⚙️ ڕێکخستنی OTP</button>
+            </div>
           </div>
         </div>
 
@@ -1324,6 +1346,7 @@ button{cursor:pointer;color:inherit}
         <div class="toolbar">
           <button class="icon-btn" onclick="go('dashboard')">←</button>
           <h2>ناونوسراوەکان</h2>
+          <button type="button" class="secondary-btn" id="bookingsOtpQuickToggle" onclick="toggleGlobalOtpRequirement()" style="font-weight:800;font-size:11px">🔐 OTP: چالاکە</button>
           <button class="icon-btn" onclick="fetchLiveRegistrations()" title="نوێکردنەوە">↻</button>
           <button class="secondary-btn" style="background:rgba(12,155,97,0.18);border-color:#26d08c;color:#6bf0b3;font-weight:800" onclick="exportRegistrationsToCSV()" title="تەنها ناوە پەسەندکراوەکان بە ژمارەی مۆبایلەوە دادەبەزێنێت">⬇ دابەزاندنی ناوە پەسەندکراوەکان (CSV)</button>
         </div>
@@ -1437,6 +1460,7 @@ button{cursor:pointer;color:inherit}
           <button class="pill" onclick="publishLive()">● Publish</button>
         </div>
         <div class="service-list">
+          <div class="staff-setting spotlight-card" style="border-color:#10b981;background:linear-gradient(135deg,#07221b,#09131d)" onclick="go('otp_manager')"><div class="service-icon" style="color:#34d399">🔐</div><div class="service-text"><b>کۆنترۆڵی کۆدی پشتڕاستکردنەوەی OTP (چالاک / ناچالاک)</b><small id="settingsOtpRowDesc">چالاککردن یان ناچالاککردنی کۆدی WhatsApp OTP لە کاتی ناونووسینی گەشتەکان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" style="border-color:#7c2d12" onclick="go('push_center')"><div class="service-icon" style="color:#fb923c">🔔</div><div class="service-text"><b>ناردنی نۆتیفیکەیشن بۆ خەڵک (Web Push)</b><small>ناردنی ئاگاداری ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەری بەشداربووان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی بە ٣ زمان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('broadcast')"><div class="service-icon">💬</div><div class="service-text"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ شاخەوانان</small></div><span class="arrow">‹</span></div>
@@ -1449,6 +1473,53 @@ button{cursor:pointer;color:inherit}
           <div class="staff-setting spotlight-card" onclick="go('finance')"><div class="service-icon">💳</div><div class="service-text"><b>هەژماری دارایی و FIB</b><small>ژمارەی هەژماری First Iraqi Bank</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('diagnostics')"><div class="service-icon" style="color:#ff3152">⏻</div><div class="service-text"><b>پشکنینی ئۆتۆماتیک</b><small>System Diagnostics</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('backup')"><div class="service-icon">💾</div><div class="service-text"><b>Backup / Restore</b><small>داگرتن و گەڕاندنەوەی داتا</small></div><span class="arrow">‹</span></div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           6A. DEDICATED OTP MANAGER PAGE (#otp_manager)
+           ========================================================= -->
+      <section class="page" id="otp_manager">
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>🔐 کۆنترۆڵی کۆدی پشتڕاستکردنەوەی OTP</h2>
+          <button class="pill" onclick="publishLive()">● Publish</button>
+        </div>
+
+        <div class="lang-box spotlight-card" id="otpPageMainCard" style="border-color:#10b981;background:linear-gradient(150deg,#07221b,#07111a);padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:16px;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:14px">
+              <div id="otpPageBigIcon" style="width:58px;height:58px;border-radius:16px;background:rgba(16,185,129,0.2);border:1px solid #10b981;display:grid;place-items:center;font-size:28px">🔐</div>
+              <div>
+                <span style="font-size:11px;font-weight:900;color:#38bdf8;letter-spacing:1px">WHATSAPP OTP VERIFICATION</span>
+                <h3 id="otpPageStatusTitle" style="margin:4px 0;font-size:19px;color:#fff">کۆدی پشتڕاستکردنەوەی OTP چالاکە ✓</h3>
+                <p id="otpPageStatusDesc" style="margin:0;font-size:12.5px;color:#94a3b8;line-height:1.7">بەشداربووان لە هەنگاوی ٢ی ناونووسیندا دەبێت ژمارەی WhatsApp ـیان بە کۆدی ٤ ژمارەیی پشتڕاست بکەنەوە.</p>
+              </div>
+            </div>
+            <span id="otpPageBadge" style="font-size:12px;font-weight:900;padding:6px 14px;border-radius:999px;background:rgba(16,185,129,0.2);color:#6bf0b3;border:1px solid #10b981">● چالاکە (ACTIVE)</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+            <button type="button" id="btnEnableOtpCard" onclick="setGlobalOtpRequirement(true)" style="padding:16px;border-radius:14px;border:2px solid #10b981;background:rgba(16,185,129,0.15);color:#fff;cursor:pointer;text-align:right;transition:0.2s">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <b style="font-size:15px;color:#6bf0b3">🔐 چالاککردنی کۆدی OTP</b>
+                <span id="otpRadioOn" style="font-size:16px">●</span>
+              </div>
+              <small style="color:#cbd5e1;font-size:11.5px;line-height:1.6;display:block">داواکردنی کۆدی ٤ ژمارەیی WhatsApp لە کاتی ناونووسین بۆ دڵنیابوونەوە لە ڕاستی ژمارەی مۆبایل.</small>
+            </button>
+
+            <button type="button" id="btnDisableOtpCard" onclick="setGlobalOtpRequirement(false)" style="padding:16px;border-radius:14px;border:1px solid #263646;background:rgba(15,23,36,0.7);color:#fff;cursor:pointer;text-align:right;transition:0.2s">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <b style="font-size:15px;color:#fca5a5">🔓 ناچالاککردنی کۆدی OTP (بێ کۆد)</b>
+                <span id="otpRadioOff" style="font-size:16px">○</span>
+              </div>
+              <small style="color:#cbd5e1;font-size:11.5px;line-height:1.6;display:block">بەشداربوو تەنها ژمارەی مۆبایلەکەی دەنووسێت و ڕاستەوخۆ دەچێتە هەنگاوی پارەدان بەبێ چاوەڕوانیی کۆد.</small>
+            </button>
+          </div>
+
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:flex-end">
+            <button type="button" class="primary border-beam" style="margin:0;width:auto;padding:10px 24px" onclick="publishLive()">💾 پاشەکەوتکردن و بڵاوکردنەوە لە ماڵپەڕی سەرەکی</button>
+          </div>
         </div>
       </section>
 
@@ -2407,7 +2478,7 @@ function go(id, btn){
     const p = n.dataset.page;
     const match = p === id ||
       ((id === "tripdetail" || id === "newtrip") && p === "trips") ||
-      (["design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","places","reviews","backup"].includes(id) && p === "settings");
+      (["otp_manager","design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","places","reviews","backup"].includes(id) && p === "settings");
     n.classList.toggle("active", match);
   });
   document.querySelectorAll(".side-btn").forEach(s => {
@@ -2417,6 +2488,7 @@ function go(id, btn){
     document.querySelectorAll(".nav-btn").forEach(n => n.classList.remove("active"));
     btn.classList.add("active");
   }
+  syncOtpAdminUI();
   if(id === "dashboard"){
     animateCounters();
     renderTripsAndDetail();
@@ -2903,6 +2975,12 @@ function syncPublicWebsiteBridge(){
       destinations: Array.isArray(appState.places) && appState.places.length ? appState.places : (existing.destinations || []),
       fibAccount: appState.fibAccount || "07503130360",
       paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : [],
+      otpRequired: appState.otpRequired !== false,
+      booking: {
+        ...(existing.booking || {}),
+        open: appState.bookingOpen !== false,
+        otpRequired: appState.otpRequired !== false
+      },
       finance: {
         fibAccount: appState.fibAccount || "07503130360",
         paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : []
@@ -2917,6 +2995,119 @@ function syncPublicWebsiteBridge(){
     };
     localStorage.setItem("kurdia_premium_data", JSON.stringify(merged));
   }catch(e){}
+}
+
+function syncOtpAdminUI(){
+  const isOn = appState.otpRequired !== false;
+  const otpSw = document.getElementById("otpRequiredSwitch");
+  if(otpSw) otpSw.checked = isOn;
+
+  const sideBadge = document.getElementById("sideOtpBadge");
+  if(sideBadge){
+    sideBadge.textContent = isOn ? "ON" : "OFF";
+    sideBadge.style.background = isOn ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)";
+    sideBadge.style.color = isOn ? "#6bf0b3" : "#fca5a5";
+  }
+
+  const qChip = document.getElementById("qOtpQuickBtn");
+  if(qChip){
+    qChip.textContent = isOn ? "🔐 کۆدی OTP: چالاکە ✓" : "🔓 کۆدی OTP: ناچالاکە ✕";
+    qChip.style.borderColor = isOn ? "#10b981" : "#ef4444";
+    qChip.style.color = isOn ? "#6bf0b3" : "#fca5a5";
+  }
+
+  const dashPanel = document.getElementById("dashOtpControlPanel");
+  if(dashPanel){
+    dashPanel.style.borderColor = isOn ? "#10b981" : "#ef4444";
+    dashPanel.style.background = isOn ? "linear-gradient(145deg,#07221b,#07111a)" : "linear-gradient(145deg,#240b12,#07111a)";
+  }
+  const dashIcon = document.getElementById("dashOtpIconBox");
+  if(dashIcon){
+    dashIcon.textContent = isOn ? "🔐" : "🔓";
+    dashIcon.style.borderColor = isOn ? "#10b981" : "#ef4444";
+    dashIcon.style.background = isOn ? "rgba(16,185,129,0.18)" : "rgba(239,68,68,0.18)";
+  }
+  const dashPill = document.getElementById("dashOtpStatusPill");
+  if(dashPill){
+    dashPill.textContent = isOn ? "✓ چالاکە (داوا دەکرێت)" : "✕ ناچالاکە (بێ کۆدی OTP)";
+    dashPill.style.background = isOn ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)";
+    dashPill.style.color = isOn ? "#6bf0b3" : "#fca5a5";
+    dashPill.style.borderColor = isOn ? "#10b981" : "#ef4444";
+  }
+  const dashDesc = document.getElementById("dashOtpSubDesc");
+  if(dashDesc){
+    dashDesc.textContent = isOn
+      ? "لە کاتی ناونووسیندا کۆدی ٤ ژمارەیی OTP بۆ WhatsApp ـی بەشداربوو دەنێردرێت."
+      : "ئێستا بەشداربوو دەتوانێت ڕاستەوخۆ بەبێ کۆدی OTP ناوی خۆی تۆمار بکات.";
+  }
+  const dashBtn = document.getElementById("dashOtpToggleBtn");
+  if(dashBtn){
+    dashBtn.textContent = isOn ? "🔓 ناچالاککردنی OTP" : "🔐 چالاککردنی OTP";
+    dashBtn.style.background = isOn ? "linear-gradient(120deg,#dc2626,#991b1b)" : "linear-gradient(120deg,#0c9b61,#07774a)";
+  }
+
+  const bookingsBtn = document.getElementById("bookingsOtpQuickToggle");
+  if(bookingsBtn){
+    bookingsBtn.textContent = isOn ? "🔐 OTP: چالاکە ✓" : "🔓 OTP: ناچالاکە ✕";
+    bookingsBtn.style.color = isOn ? "#6bf0b3" : "#fca5a5";
+    bookingsBtn.style.borderColor = isOn ? "#10b981" : "#ef4444";
+  }
+
+  const pageCard = document.getElementById("otpPageMainCard");
+  if(pageCard){
+    pageCard.style.borderColor = isOn ? "#10b981" : "#ef4444";
+    pageCard.style.background = isOn ? "linear-gradient(150deg,#07221b,#07111a)" : "linear-gradient(150deg,#240b12,#07111a)";
+  }
+  const pageIcon = document.getElementById("otpPageBigIcon");
+  if(pageIcon){
+    pageIcon.textContent = isOn ? "🔐" : "🔓";
+    pageIcon.style.borderColor = isOn ? "#10b981" : "#ef4444";
+    pageIcon.style.background = isOn ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)";
+  }
+  const pageTitle = document.getElementById("otpPageStatusTitle");
+  if(pageTitle){
+    pageTitle.textContent = isOn ? "کۆدی پشتڕاستکردنەوەی OTP چالاکە ✓" : "کۆدی پشتڕاستکردنەوەی OTP ناچالاکە ✕";
+  }
+  const pageDesc = document.getElementById("otpPageStatusDesc");
+  if(pageDesc){
+    pageDesc.textContent = isOn
+      ? "بەشداربووان لە هەنگاوی ٢ی ناونووسیندا دەبێت ژمارەی WhatsApp ـیان بە کۆدی ٤ ژمارەیی پشتڕاست بکەنەوە."
+      : "کۆدی OTP ناچالاک کراوە؛ بەشداربووان تەنها ژمارەی مۆبایلەکەیان دەنووسن و ڕاستەوخۆ دەچنە هەنگاوی پارەدان.";
+  }
+  const pageBadge = document.getElementById("otpPageBadge");
+  if(pageBadge){
+    pageBadge.textContent = isOn ? "● چالاکە (ACTIVE)" : "○ ناچالاکە (DISABLED)";
+    pageBadge.style.background = isOn ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)";
+    pageBadge.style.color = isOn ? "#6bf0b3" : "#fca5a5";
+    pageBadge.style.borderColor = isOn ? "#10b981" : "#ef4444";
+  }
+  const btnOn = document.getElementById("btnEnableOtpCard");
+  const btnOff = document.getElementById("btnDisableOtpCard");
+  const radOn = document.getElementById("otpRadioOn");
+  const radOff = document.getElementById("otpRadioOff");
+  if(btnOn && btnOff){
+    btnOn.style.border = isOn ? "2px solid #10b981" : "1px solid #263646";
+    btnOn.style.background = isOn ? "rgba(16,185,129,0.18)" : "rgba(15,23,36,0.7)";
+    btnOff.style.border = !isOn ? "2px solid #ef4444" : "1px solid #263646";
+    btnOff.style.background = !isOn ? "rgba(239,68,68,0.18)" : "rgba(15,23,36,0.7)";
+  }
+  if(radOn) radOn.textContent = isOn ? "●" : "○";
+  if(radOff) radOff.textContent = !isOn ? "●" : "○";
+}
+
+async function setGlobalOtpRequirement(val){
+  appState.otpRequired = Boolean(val);
+  const otpSw = document.getElementById("otpRequiredSwitch");
+  if(otpSw) otpSw.checked = appState.otpRequired;
+  syncOtpAdminUI();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  syncPublicWebsiteBridge();
+  toast(appState.otpRequired ? "🔐 کۆدی OTP چالاک کرا — لە سێرڤەر پاشەکەوت دەکرێت..." : "🔓 کۆدی OTP ناچالاک کرا — لە سێرڤەر پاشەکەوت دەکرێت...");
+  await publishLive(true);
+}
+
+async function toggleGlobalOtpRequirement(){
+  await setGlobalOtpRequirement(!(appState.otpRequired !== false));
 }
 
 function autoSync(){
@@ -2951,6 +3142,7 @@ function autoSync(){
   animateCounters();
   renderTripsAndDetail();
   renderEditorTabs();
+  syncOtpAdminUI();
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   syncPublicWebsiteBridge();
@@ -3024,6 +3216,12 @@ async function publishLive(alreadySavedFromTripForm = false){
     data.destinations = Array.isArray(appState.places) ? appState.places : [];
     data.fibAccount = appState.fibAccount || "07503130360";
     data.paymentMethods = Array.isArray(appState.paymentMethods) ? appState.paymentMethods : [];
+    data.otpRequired = appState.otpRequired !== false;
+    data.booking = {
+      ...(data.booking || {}),
+      open: appState.bookingOpen !== false,
+      otpRequired: appState.otpRequired !== false
+    };
     data.finance = {
       fibAccount: appState.fibAccount || "07503130360",
       paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : []
@@ -4470,6 +4668,7 @@ function loadState(){
   renderCoupons();
   renderAdminPlaces();
   renderAdminPaymentMethods();
+  syncOtpAdminUI();
   renderReviews();
   renderTripsAndDetail();
   animateCounters();
@@ -4508,6 +4707,13 @@ async function fetchRemoteCMSIntoAdmin(){
         appState.fibAccount = cfg.fibAccount || cfg.finance?.fibAccount;
         const fibEl = document.getElementById("fibAccount");
         if(fibEl) fibEl.value = appState.fibAccount;
+      }
+      if(typeof cfg.otpRequired === "boolean"){
+        appState.otpRequired = cfg.otpRequired;
+        syncOtpAdminUI();
+      } else if(typeof cfg.booking?.otpRequired === "boolean"){
+        appState.otpRequired = cfg.booking.otpRequired;
+        syncOtpAdminUI();
       }
     }
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){

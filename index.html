@@ -915,24 +915,6 @@ main,section,.section,.page-section{background-color:transparent!important}
       <div id="homeDests" class="places-grid"></div>
     </section>
 
-    <!-- ACTIVITIES & EXPERIENCES SECTION -->
-    <section class="section" id="homeExperiencesSection">
-      <div class="sectionhead">
-        <div>
-          <div class="eyebrow">ACTIVITIES &amp; EXPERIENCES</div>
-          <h2>چالاکی و ئەزموونەکان</h2>
-          <p>شاخەوانی، کەمپینگ، گەشتی سروشت و هاوڕێیەتی لەگەڵ تیمی KURDIA</p>
-        </div>
-        <a class="link" href="#experiences">بینینی هەموو ←</a>
-      </div>
-      <div class="grid2 experiences">
-        <a class="tile" href="#experiences"><div><b>شاخەوانی و لووتکە</b><small>سەرکەوتن بۆ بەرزترین چیاکانی کوردستان</small></div></a>
-        <a class="tile" href="#experiences"><div><b>کەمپینگی شەوانە</b><small>مانەوە لەژێر ئاسمانی پڕ ئەستێرە و ئاگردان</small></div></a>
-        <a class="tile" href="#experiences"><div><b>گەشتی سروشت و ئاوشار</b><small>گەڕان لە دۆڵ، دارستان و تاڤگە فێنکەکان</small></div></a>
-        <a class="tile" href="#experiences"><div><b>فۆتۆگرافی و هاوڕێیەتی</b><small>تۆمارکردنی جوانترین یادەوەرییەکان</small></div></a>
-      </div>
-    </section>
-
     <section class="section">
       <div class="sectionhead"><div><h2>ستۆری</h2><p>یادەوەری و ئەزموونی خەڵکی KURDIA</p></div><a class="link" href="#stories">بینینی هەموو</a></div>
       <div id="homeStories" class="stories">
@@ -1281,13 +1263,16 @@ main,section,.section,.page-section{background-color:transparent!important}
           <div class="booking-step-panel" data-booking-step="2" hidden>
             <div class="booking-step-title">
               <span>هەنگاوی ٢ لە ٣</span>
-              <h4>پشتڕاستکردنەوەی ژمارەی WhatsApp</h4>
-              <p>کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.</p>
+              <h4 id="bookingStep2Heading">پشتڕاستکردنەوەی ژمارەی WhatsApp</h4>
+              <p id="bookingStep2Sub">کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.</p>
             </div>
             <label class="booking-label" for="bookingPhone">📱 ژمارەی مۆبایل (WhatsApp) *</label>
-            <div class="otp-row">
+            <div class="otp-row" id="bookingPhoneRow">
               <input class="input" id="bookingPhone" name="phone" inputmode="tel" autocomplete="tel" placeholder="0750 000 0000" required>
               <button type="button" class="btn red otp-btn" id="sendOtpBtn" onclick="sendBookingOTP()">ناردنی کۆدی OTP</button>
+            </div>
+            <div id="otpDisabledNotice" style="display:none;margin-top:8px;padding:10px 12px;border-radius:12px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;font-size:12px;font-weight:700;line-height:1.6">
+              ✓ پێویست بە کۆدی OTP ناکات — تەنها ژمارەی مۆبایلەکەت بنووسە و کرتە لە «بەردەوامبوون» بکە.
             </div>
             <div id="otpBox" class="otp-box" style="display:none">
               <div class="otp-head">
@@ -1554,27 +1539,6 @@ main,section,.section,.page-section{background-color:transparent!important}
         <button type="button" class="pf-chip" onclick="filterPlaces('water',this)">🌊 دەریاچە و ئاوشار</button>
       </div>
       <div id="destList" class="places-grid"></div>
-    </section>
-  </div>
-</section>
-<section id="experiences" class="page">
-  <div class="container">
-    <section class="section">
-      <div class="sectionhead">
-        <div>
-          <div class="eyebrow">KURDIA EXPERIENCES · چالاکییەکان</div>
-          <h2>چالاکی و ئەزموونە جیاوازەکان</h2>
-          <p class="muted">جۆرەکانی گەشت و چالاکییە مەیدانییەکانی KURDIA ADVENTURE لە سەرانسەری کوردستان.</p>
-        </div>
-      </div>
-      <div class="experience-page-grid">
-        <a class="experience-card" href="#booking"><div><b>شاخەوانی و سەرکەوتنی لووتکە</b><small>گەشتی شاخەوانی ڕێکخراو بە هاوڕێیەتی ڕێبەری شارەزا بۆ چیاکانی هەڵگورد، سەفین، پیرەمەگروون و کۆڕەک.</small></div></a>
-        <a class="experience-card" href="#booking"><div><b>کەمپینگی شەوانە و ئاگردان</b><small>ئەزموونی مانەوەی شەوانە لەناو خێمە، شەوانی ئاگردان، چای سەر خەڵووز و کەشێکی ئارام لە سروشتدا.</small></div></a>
-        <a class="experience-card" href="#destinations"><div><b>گەشتی دەریاچە و ئاوشارەکان</b><small>سەردانیکردنی دەریاچەی دووکان، دەربەندیخان، گەلی عەلی بەگ و تاڤگە دڵڕفێنەکانی کوردستان.</small></div></a>
-        <a class="experience-card" href="#private"><div><b>گەشتی تایبەتی خێزانی و گروپ</b><small>ڕێکخستنی گەشتی تایبەت بەپێی کات و خواستی خێزان یان هاوڕێکانت بە تەواوی خزمەتگوزارییەکانەوە.</small></div></a>
-        <a class="experience-card" href="#destinations"><div><b>گەشتی کولتووری و مێژوویی</b><small>ئاشنابوون بە شارۆچکە دێرینەکانی وەک ئامێدی، ئاکرێ، هەورامان و قەڵا مێژووییەکان.</small></div></a>
-        <a class="experience-card" href="#stories"><div><b>وێنەگرتن و تۆمارکردنی یادەوەری</b><small>گرتنی وێنە و ڤیدیۆی سینەمایی لە جوانترین دیمەنە سروشتییەکانی کوردستان.</small></div></a>
-      </div>
     </section>
   </div>
 </section>
@@ -2016,6 +1980,7 @@ function normalizeRemoteCMS(config){
   if(config.ai!==undefined) out.ai=config.ai;
   if(config.translations!==undefined) out.translations=config.translations;
   if(config.booking!==undefined) out.booking=config.booking;
+  if(config.otpRequired!==undefined) out.otpRequired=config.otpRequired;
   if(config.finance!==undefined) out.finance=config.finance;
   if(config.fibAccount!==undefined) out.fibAccount=config.fibAccount;
   if(config.paymentMethods!==undefined) out.paymentMethods=config.paymentMethods;
@@ -2099,7 +2064,7 @@ function goBackHome(){
     }
 function route(){
   let id=location.hash.slice(1)||'home';
-  if(id==='safety'||id==='prep'||id==='gallery') id='destinations';
+  if(id==='safety'||id==='prep'||id==='gallery'||id==='experiences') id='destinations';
   const prevPage = document.querySelector('.page.active');
   const targetPage = document.getElementById(id) || document.getElementById('home');
   const activeId = targetPage ? targetPage.id : 'home';
@@ -2184,6 +2149,9 @@ function normalizePublicData(){
   if(!data.search) data.search={enabled:true,destinations:true,trips:true,stories:true};
   if(!data.ai) data.ai={enabled:true,name:'یاریدەدەری KURDIA',welcome:'سڵاو هاوڕێ 🌿'};
   if(!data.booking) data.booking={open:true,otpRequired:true};
+  if(typeof data.otpRequired === 'boolean') data.booking.otpRequired = data.otpRequired;
+  else if(typeof data.booking?.otpRequired === 'boolean') data.otpRequired = data.booking.otpRequired;
+  else { data.otpRequired = true; data.booking.otpRequired = true; }
   if(!data.system) data.system={status:'online',maintenance:false,defaultLanguage:'ku'};
   if(!data.fibAccount) data.fibAccount = (data.finance?.fibAccount) || DEFAULT.fibAccount || '0750 313 0360';
   if(!Array.isArray(data.paymentMethods) || !data.paymentMethods.length){
@@ -2612,6 +2580,7 @@ function render(){
  const fibDisplay = $('publicFibNumberDisplay');
  if(fibDisplay && data.fibAccount) fibDisplay.textContent = data.fibAccount;
  if(typeof window.renderPaymentMethodsPublic === 'function') window.renderPaymentMethodsPublic();
+ if(typeof window.syncPublicOtpUI === 'function') window.syncPublicOtpUI();
  renderReviewsPublic();renderAboutPublic();renderContactPublic();
  renderWeather();renderPage(location.hash.slice(1)||'home');
  if(window.lucide)lucide.createIcons();
@@ -3945,7 +3914,7 @@ function closeModal(id){
   $(id)?.classList.remove('show');
 }
 function aiQuick(q){const i=$('aiInput');if(i)i.value=q;askAI({preventDefault:()=>{}})}
-function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',exclusiveGroupOnly:true,language:localStorage.getItem('kurdia_language')||'ku',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',fibAccount:'0750 313 0360',whatsapp:data?.contact?.whatsapp||'+9647503130360',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,hikingLevel:x.hikingLevel,altitude:x.altitude,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','چالاکی و ئەزموونەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
+function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',exclusiveGroupOnly:true,language:localStorage.getItem('kurdia_language')||'ku',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',fibAccount:'0750 313 0360',whatsapp:data?.contact?.whatsapp||'+9647503130360',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,hikingLevel:x.hikingLevel,altitude:x.altitude,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
 
 function buildClientFallbackAI(q, lang){
   const ctx = aiSiteContext();
@@ -4065,8 +4034,47 @@ async function askAI(e){
   playAIConversationChime('reply');
   if(window.kurdiaAiVoiceEnabled) window.speakAIText(fb.text);
 }
-function bookingGo(step){const form=$('bookingForm');if(!form)return;form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on);if(on&&window.gsap){gsap.fromTo(p,{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:'power3.out',clearProps:'transform'});}});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';if(step===3&&typeof window.renderPaymentMethodsPublic==='function')window.renderPaymentMethodsPublic();const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
-function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2&&$('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}bookingGo(step+1)}
+function isOtpRequired(){
+  if(typeof data?.otpRequired === 'boolean') return data.otpRequired;
+  if(typeof data?.booking?.otpRequired === 'boolean') return data.booking.otpRequired;
+  return true;
+}
+window.syncPublicOtpUI = function(){
+  const req = isOtpRequired();
+  const sendBtn = $('sendOtpBtn');
+  const otpBox = $('otpBox');
+  const notice = $('otpDisabledNotice');
+  const row = $('bookingPhoneRow');
+  const h4 = $('bookingStep2Heading');
+  const sub = $('bookingStep2Sub');
+  const otpVer = $('otpVerified');
+  const lang = localStorage.getItem('kurdia_language') || 'ku';
+
+  if(req){
+    if(sendBtn) sendBtn.style.display = '';
+    if(notice) notice.style.display = 'none';
+    if(row) row.style.gridTemplateColumns = '';
+    if(h4) h4.textContent = lang==='en' ? 'WhatsApp Phone Verification' : (lang==='ar' ? 'تأكيد رقم واتساب (WhatsApp)' : 'پشتڕاستکردنەوەی ژمارەی WhatsApp');
+    if(sub) sub.textContent = lang==='en' ? 'A 4-digit verification code will be sent to your WhatsApp number.' : (lang==='ar' ? 'سيتم إرسال رمز من ٤ أرقام إلى واتساب الخاص بك للتأكيد.' : 'کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.');
+  } else {
+    if(sendBtn) sendBtn.style.display = 'none';
+    if(otpBox) otpBox.style.display = 'none';
+    if(notice){
+      notice.style.display = 'block';
+      notice.textContent = lang==='en'
+        ? '✓ No OTP code required — simply enter your WhatsApp phone number and click Continue.'
+        : (lang==='ar'
+          ? '✓ لا حاجة لرمز التحقق OTP — فقط أدخل رقم هاتفك واضغط على متابعة.'
+          : '✓ پێویست بە کۆدی OTP ناکات — تەنها ژمارەی مۆبایلەکەت بنووسە و کرتە لە «بەردەوامبوون» بکە.');
+    }
+    if(row) row.style.gridTemplateColumns = '1fr';
+    if(h4) h4.textContent = lang==='en' ? 'Mobile Phone Number (WhatsApp)' : (lang==='ar' ? 'رقم الهاتف (WhatsApp)' : 'ژمارەی مۆبایل و پەیوەندی (WhatsApp)');
+    if(sub) sub.textContent = lang==='en' ? 'Enter your active phone number so our team can contact you regarding the trip.' : (lang==='ar' ? 'أدخل رقم هاتفك للتواصل معك بخصوص الرحلة.' : 'تکایە ژمارەی مۆبایلەکەت بنووسە بۆ پەیوەندیکردن لەسەر گەشتەکە.');
+    if(otpVer) otpVer.value = '1';
+  }
+};
+function bookingGo(step){const form=$('bookingForm');if(!form)return;if(typeof window.syncPublicOtpUI==='function')window.syncPublicOtpUI();form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on);if(on&&window.gsap){gsap.fromTo(p,{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:'power3.out',clearProps:'transform'});}});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';if(step===3&&typeof window.renderPaymentMethodsPublic==='function')window.renderPaymentMethodsPublic();const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2){if(!isOtpRequired()){if($('otpVerified'))$('otpVerified').value='1';}else if($('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}}bookingGo(step+1)}
 function syncOtpSlots(){const slots=[...document.querySelectorAll('.otp-slot')];const code=slots.map(x=>x.value).join('');$('bookingOtp').value=code;slots.forEach(x=>x.classList.toggle('filled',!!x.value));}
 document.querySelectorAll('.otp-slot').forEach((slot,index,all)=>{slot.addEventListener('input',()=>{slot.value=slot.value.replace(/\D/g,'').slice(-1);syncOtpSlots();if(slot.value&&all[index+1])all[index+1].focus();if(all.every(x=>x.value))$('bookingOtp').focus({preventScroll:true})});slot.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!slot.value&&all[index-1])all[index-1].focus();if(e.key==='ArrowLeft'&&all[index+1])all[index+1].focus();if(e.key==='ArrowRight'&&all[index-1])all[index-1].focus()});slot.addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,4);if(!t)return;e.preventDefault();[...t].forEach((v,i)=>{if(all[i])all[i].value=v});syncOtpSlots();all[Math.min(t.length,3)].focus()})});
 async function sendBookingOTP(){
@@ -4099,7 +4107,7 @@ async function verifyBookingOTP(){
 async function submitBooking(e){
   e.preventDefault();
   const form=e.target, phone=($('bookingPhone')?.value||'').trim();
-  if($('otpVerified')?.value!=='1'){toast('سەرەتا ژمارەکەت بە OTP پشتڕاست بکەرەوە');return}
+  if(isOtpRequired() && $('otpVerified')?.value!=='1'){toast('سەرەتا ژمارەکەت بە OTP پشتڕاست بکەرەوە');return}
   const receipt=$('receiptInput')?.files?.[0];
   if(!receipt){toast('تکایە وێنەی پسوڵە هەڵبژێرە');return}
   if(!receipt.type.startsWith('image/')){toast('تەنها وێنەی پسوڵە ڕێگەپێدراوە');return}
@@ -4168,7 +4176,7 @@ async function submitBooking(e){
       form.reset();
       $('extraNamesContainer').innerHTML='';
       $('otpBox').style.display='none';
-      $('otpVerified').value='0';
+      $('otpVerified').value = isOtpRequired() ? '0' : '1';
       document.querySelectorAll('.otp-slot').forEach(s=>{s.value='';s.classList.remove('filled')});
       $('bookingOtp').value='';
       $('receiptPreview').textContent='هیچ وێنەیەک هەڵنەبژێردراوە';
@@ -4179,7 +4187,7 @@ async function submitBooking(e){
   }catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}
   finally{btn.disabled=false;btn.textContent='✓ ناردنی داواکاری و تەواوکردن'}
 }
-$('bookingPhone')?.addEventListener('input',()=>{$('otpVerified').value='0';$('otpBox').style.display='none';document.querySelectorAll('.otp-slot').forEach(x=>{x.value='';x.classList.remove('filled')});if($('bookingOtp'))$('bookingOtp').value=''});$('receiptInput')?.addEventListener('change',function(){
+$('bookingPhone')?.addEventListener('input',()=>{$('otpVerified').value=isOtpRequired()?'0':'1';$('otpBox').style.display='none';document.querySelectorAll('.otp-slot').forEach(x=>{x.value='';x.classList.remove('filled')});if($('bookingOtp'))$('bookingOtp').value=''});$('receiptInput')?.addEventListener('change',function(){
   const f=this.files?.[0], box=$('receiptPreview'); if(!f){box.textContent='هیچ وێنەیەک هەڵنەبژێردراوە';return}
   const url=URL.createObjectURL(f);box.innerHTML=`<img src="${url}" alt="پسوڵە"><span style="display:block;margin-top:6px">${esc(f.name)}</span>`;
 });
@@ -4467,7 +4475,6 @@ loadRemote().finally(()=>{window.setLanguage(localStorage.getItem('kurdia_langua
 
     <a href="#home" class="ka-menu-item" data-ka-page="home" onclick="kaMenuNavigate('home');return false"><div class="ka-menu-icon">⌂</div><div><div class="ka-menu-text">سەرەکی</div><span class="ka-menu-desc">پەڕەی سەرەکی KURDIA</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#destinations" class="ka-menu-item" data-ka-page="destinations" onclick="kaMenuNavigate('destinations');return false"><div class="ka-menu-icon">⌖</div><div><div class="ka-menu-text">شوێنەکان</div><span class="ka-menu-desc">شوێنە گەشتیاری و شاخەوانییەکان</span></div><div class="ka-menu-arrow">‹</div></a>
-    <a href="#experiences" class="ka-menu-item" data-ka-page="experiences" onclick="kaMenuNavigate('experiences');return false"><div class="ka-menu-icon">✦</div><div><div class="ka-menu-text">چالاکی و ئەزموونەکان</div><span class="ka-menu-desc">شاخەوانی، کەمپینگ و گەشتی سروشت</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#booking" class="ka-menu-item" data-ka-page="booking" onclick="kaMenuNavigate('booking');return false"><div class="ka-menu-icon">🎟</div><div><div class="ka-menu-text">بەشداری گەشت</div><span class="ka-menu-desc">ناوی خۆت تۆمار بکە</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#private" class="ka-menu-item" data-ka-page="private" onclick="kaMenuNavigate('private');return false"><div class="ka-menu-icon">♛</div><div><div class="ka-menu-text">گەشتی تایبەت</div><span class="ka-menu-desc">گەشتێکی بەپێی داواکاریی خۆت</span></div><div class="ka-menu-arrow">‹</div></a>
     <a href="#weather" class="ka-menu-item" data-ka-page="weather" onclick="kaMenuNavigate('weather');return false"><div class="ka-menu-icon">☀</div><div><div class="ka-menu-text">کەش و هەوا</div><span class="ka-menu-desc">پێشبینی کەشی هەر شوێنێک</span></div><div class="ka-menu-arrow">‹</div></a>
