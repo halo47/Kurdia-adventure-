@@ -306,10 +306,67 @@ const server = http.createServer((req, res) => {
     if (req.method === 'OPTIONS') {
       res.writeHead(204, {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Key, x-admin-key'
       });
       res.end();
+      return;
+    }
+
+    if (pathname === '/api/admin/media' && req.method === 'POST') {
+      const adminKey = req.headers['x-admin-key'] || req.headers['X-Admin-Key'];
+      if (adminKey !== '2026') {
+        res.writeHead(401, {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Access-Control-Allow-Origin': '*'
+        });
+        res.end(JSON.stringify({ ok: false, error: 'Unauthorized: Missing or invalid X-Admin-Key header' }));
+        return;
+      }
+
+      let body = '';
+      req.on('data', chunk => { body += chunk.toString(); });
+      req.on('end', () => {
+        try {
+          const payload = JSON.parse(body || '{}');
+          let name = String(payload.name || ('kurdia-' + Date.now() + '.jpg')).trim();
+          name = name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          if (!path.extname(name)) name += '.jpg';
+
+          const base64Data = String(payload.base64 || '').replace(/^data:image\/[a-z0-9+.-]+;base64,/, '');
+          if (!base64Data) {
+            res.writeHead(400, {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Access-Control-Allow-Origin': '*'
+            });
+            res.end(JSON.stringify({ ok: false, error: 'No base64 data provided' }));
+            return;
+          }
+
+          const mediaDir = path.join(ROOT, 'media');
+          if (!fs.existsSync(mediaDir)) {
+            fs.mkdirSync(mediaDir, { recursive: true });
+          }
+
+          const targetPath = path.join(mediaDir, name);
+          fs.writeFileSync(targetPath, Buffer.from(base64Data, 'base64'));
+
+          res.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*'
+          });
+          res.end(JSON.stringify({
+            ok: true,
+            url: `/media/${name}`
+          }));
+        } catch (err) {
+          res.writeHead(500, {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*'
+          });
+          res.end(JSON.stringify({ ok: false, error: err.message || 'Failed to save media file' }));
+        }
+      });
       return;
     }
 

@@ -1622,16 +1622,38 @@ button{cursor:pointer;color:inherit}
       </section>
 
       <!-- =========================================================
-           13. FINANCE
+           13. FINANCE & PAYMENT GATEWAYS (شێوازەکانی پارەدان و باڕکۆد)
            ========================================================= -->
       <section class="page" id="finance">
-        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>هەژماری دارایی و FIB</h2></div>
-        <div class="lang-box spotlight-card">
-          <div class="field">
-            <label>ژمارەی هەژماری فەرمی First Iraqi Bank (FIB)</label>
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>دارایی و شێوازەکانی پارەدان (FIB، FastPay، زین کاش و باڕکۆد)</h2></div>
+
+        <!-- Official FIB Account Card -->
+        <div class="lang-box spotlight-card" style="margin-bottom:14px">
+          <div class="section-title">
+            <span>💳 هەژماری فەرمی First Iraqi Bank (FIB)</span>
+            <small style="color:#6bf0b3;font-size:11px">هەژماری سەرەکی ناونووسینی گەشتەکان</small>
+          </div>
+          <div class="field" style="margin-top:8px">
+            <label>ژمارەی هەژماری فەرمی FIB</label>
             <input id="fibAccount" placeholder="07503130360" oninput="autoSync()">
           </div>
-          <button class="primary" onclick="publishLive()">پاشەکەوتکردن</button>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="primary" style="margin:0" onclick="publishLive()">💾 پاشەکەوتکردن لە ماڵپەڕ</button>
+          </div>
+        </div>
+
+        <!-- Payment Gateways Manager ("پارە بدە لە ڕێگای") -->
+        <div class="lang-box spotlight-card" style="margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;border-bottom:1px solid #1a2c3d;padding-bottom:10px">
+            <div>
+              <b style="font-size:15px;color:#fff;display:block">🔘 دووگمەکانی «پارە بدە لە ڕێگای» لە فۆڕمی بەشداری</b>
+              <small style="color:#8b9aa8;font-size:11px">لێرە دووگمەکان زیاد بکە، وێنەی باڕکۆد باربکە بۆ Cloudflare R2، و لینکی ڕاستەوخۆ دیاری بکە</small>
+            </div>
+            <button type="button" class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="openAddPaymentMethodModal()">＋ زیادکردنی دووگمەی نوێی پارەدان</button>
+          </div>
+
+          <!-- Dynamic Methods Grid -->
+          <div id="adminPaymentMethodsList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:10px"></div>
         </div>
       </section>
 
@@ -1822,13 +1844,84 @@ button{cursor:pointer;color:inherit}
   </div>
 </div>
 
+<!-- PAYMENT METHOD MODAL (زیادکردن و دەستکاریکردنی شێوازی پارەدان) -->
+<div class="modal-wrapper" id="paymentMethodModalWrapper" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(10px)">
+  <div class="modal spotlight-card" style="max-width:540px;width:100%;max-height:92vh;overflow-y:auto;background:#08111d;border:1px solid #1f3448;border-radius:18px;padding:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;border-bottom:1px solid #182838;padding-bottom:10px">
+      <h3 style="margin:0;font-size:16px;color:#fff" id="pmModalTitle">＋ زیادکردنی شێوازی پارەدان</h3>
+      <button type="button" class="icon-btn" onclick="closePaymentMethodModal()">✕</button>
+    </div>
+
+    <input type="hidden" id="pmEditId" value="">
+
+    <div class="field">
+      <label>ناوی شێوازی پارەدان * (نموونە: FastPay یان First Iraqi Bank یان ZainCash)</label>
+      <input id="pmNameInput" placeholder="نموونە: FastPay (فاست پەی)">
+    </div>
+
+    <div class="field" style="margin-top:10px">
+      <label>ژمارەی هەژمار / مۆبایل / IBAN *</label>
+      <input id="pmAccountInput" dir="ltr" placeholder="0750 313 0360">
+    </div>
+
+    <div class="field" style="margin-top:10px">
+      <label>🔗 لینکی ڕاستەوخۆ بۆ پارەدان (ئارەزوومەندانە)</label>
+      <input id="pmLinkInput" dir="ltr" placeholder="https://fast-pay.cash/... یان بە بەتاڵی جێیبهێڵە">
+      <small style="color:#8b9aa8;font-size:10px;margin-top:3px;display:block">ئەگەر لینک دابنێیت، لەناو پۆپ ئاپەکە دوگمەی «⚡ کلیک بکە بۆ پارەدان» پشان دەدات بۆ کردنەوەی ئەپ یان ماڵپەڕ.</small>
+    </div>
+
+    <div class="field" style="margin-top:10px">
+      <label>🖼️ وێنەی باڕکۆد / QR Code (کۆگای Cloudflare R2)</label>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:4px">
+        <input id="pmBarcodeInput" dir="ltr" placeholder="/media/kurdia-qr.jpg یان لینک" style="flex:1" oninput="previewPmBarcode(this.value)">
+        <button type="button" class="secondary-btn" style="white-space:nowrap;padding:7px 12px;font-size:11px" onclick="triggerBarcodeUpload()">📁 بارکردن بۆ R2</button>
+      </div>
+      <div id="pmBarcodePreviewWrap" style="margin-top:8px;display:none;text-align:center;padding:10px;background:#050c14;border:1px dashed #213548;border-radius:10px">
+        <img id="pmBarcodePreview" src="" alt="Barcode Preview" style="max-height:160px;max-width:100%;object-fit:contain;border-radius:8px">
+        <button type="button" class="del-btn" style="margin:6px auto 0;display:block;font-size:11px" onclick="removePmBarcode()">سڕینەوەی وێنە</button>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:10px">
+      <label>تێبینی یان ڕێنمایی بۆ بەشداربوو (ئارەزوومەندانە)</label>
+      <input id="pmInstructionInput" placeholder="بۆ نموونە: باڕکۆدەکە سکان بکە و بڕی پارەکە بنێرە">
+    </div>
+
+    <div class="two-col" style="margin-top:10px">
+      <div class="field">
+        <label>ئایکۆن</label>
+        <select id="pmIconSelect">
+          <option value="💳">💳 کارتی بانکی</option>
+          <option value="⚡" selected>⚡ فاست پەی</option>
+          <option value="📱">📱 مۆبایل / زین کاش</option>
+          <option value="🏦">🏦 حەواڵە / بانک</option>
+          <option value="👑">👑 VIP تایبەت</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>دۆخی چالاکبوون</label>
+        <select id="pmActiveSelect">
+          <option value="true" selected>✅ چالاکە لە فۆڕمی بەشداری</option>
+          <option value="false">❌ ناچالاک (شاراوە)</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button type="button" class="primary border-beam" style="flex:1;margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="savePaymentMethodFromModal()">✓ پاشەکەوتکردن</button>
+      <button type="button" class="secondary-btn" style="margin:0" onclick="closePaymentMethodModal()">پاشگەزبوونەوە</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="hiddenUniversalInput" accept="image/*" style="display:none">
+<input type="file" id="directBarcodeFileInput" accept="image/*" style="display:none" onchange="handleDirectBarcodeSelected(event)">
 <div class="toast" id="toast"></div>
 
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_admin_multitrip_v6";
-const CODE_RELEASE_VERSION = "v3.7.0";
+const CODE_RELEASE_VERSION = "v3.8.0";
 
 // Immediately purge old single-trip cached localStorage on version upgrade
 (function(){
@@ -2016,6 +2109,38 @@ let appState = {
   trips: JSON.parse(JSON.stringify(DEFAULT_TRIPS)),
   coupons: [],
   fibAccount: "07503130360",
+  paymentMethods: [
+    {
+      id: "pm-fib",
+      name: "First Iraqi Bank (FIB)",
+      account: "07503130360",
+      barcodeUrl: "",
+      link: "",
+      icon: "💳",
+      active: true,
+      instruction: "پارە بنێرە بۆ هەژماری فەرمی FIB و وێنەی پسوڵەکە بگرە"
+    },
+    {
+      id: "pm-fastpay",
+      name: "FastPay (فاست پەی)",
+      account: "07503130360",
+      barcodeUrl: "",
+      link: "",
+      icon: "⚡",
+      active: true,
+      instruction: "لە ڕێگەی ئەپی FastPay پارەکە بنێرە یان باڕکۆدەکە سکان بکە"
+    },
+    {
+      id: "pm-zaincash",
+      name: "ZainCash (زین کاش)",
+      account: "07503130360",
+      barcodeUrl: "",
+      link: "",
+      icon: "📱",
+      active: false,
+      instruction: "لە ڕێگەی زین کاش باڕکۆد سکان بکە یان ژمارەکە بەکاربهێنە"
+    }
+  ],
   i18n: {
     ku: {
       heroTitle: "زیاتر لە گەشت.",
@@ -2300,6 +2425,7 @@ function go(id, btn){
   }
   if(id === "trips" || id === "tripdetail") renderTripsAndDetail();
   if(id === "places") renderAdminPlaces();
+  if(id === "finance") renderAdminPaymentMethods();
   if(id === "push_center") loadPushCenterStats();
   if(id === "bookings") fetchLiveRegistrations();
   if(id === "stories") fetchAdminStories();
@@ -2775,6 +2901,12 @@ function syncPublicWebsiteBridge(){
       coupons: appState.coupons || [],
       reviews: appState.reviews || existing.reviews || [],
       destinations: Array.isArray(appState.places) && appState.places.length ? appState.places : (existing.destinations || []),
+      fibAccount: appState.fibAccount || "07503130360",
+      paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : [],
+      finance: {
+        fibAccount: appState.fibAccount || "07503130360",
+        paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : []
+      },
       brand: {
         ...(existing.brand || {}),
         primary: appState.gradColor1 || "#a91d37",
@@ -2890,6 +3022,12 @@ async function publishLive(alreadySavedFromTripForm = false){
     data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
     data.reviews = Array.isArray(appState.reviews) ? appState.reviews : [];
     data.destinations = Array.isArray(appState.places) ? appState.places : [];
+    data.fibAccount = appState.fibAccount || "07503130360";
+    data.paymentMethods = Array.isArray(appState.paymentMethods) ? appState.paymentMethods : [];
+    data.finance = {
+      fibAccount: appState.fibAccount || "07503130360",
+      paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : []
+    };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
     syncPublicWebsiteBridge();
@@ -2944,24 +3082,104 @@ function closeCropModal(){
   if(cropperInstance){ cropperInstance.destroy(); cropperInstance = null; }
 }
 
+function resolveMediaUrl(url){
+  if(!url) return "";
+  const u = String(url).trim();
+  if(u.startsWith("http://") || u.startsWith("https://") || u.startsWith("data:")) return u;
+  if(u.startsWith("/media/") || u.startsWith("/api/media/")){
+    return (typeof WORKER_URL !== "undefined" && WORKER_URL) ? (WORKER_URL.replace(/\/+$/, "") + u) : u;
+  }
+  return u;
+}
+
+// Universal Cloudflare R2 Upload Function
+async function uploadToR2Storage(fileOrData, defaultName = "kurdia-image.jpg"){
+  let name = defaultName;
+  let contentType = "image/jpeg";
+  let base64 = "";
+
+  if(fileOrData instanceof File || fileOrData instanceof Blob){
+    name = fileOrData.name || defaultName;
+    contentType = fileOrData.type || "image/jpeg";
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(fileOrData);
+    });
+    base64 = String(dataUrl).split(",")[1];
+  } else if(typeof fileOrData === "object" && fileOrData.base64){
+    name = fileOrData.name || defaultName;
+    contentType = fileOrData.contentType || fileOrData.type || "image/jpeg";
+    base64 = String(fileOrData.base64).replace(/^data:image\/[a-z0-9+.-]+;base64,/, "");
+  } else if(typeof fileOrData === "string"){
+    if(fileOrData.startsWith("data:")){
+      const match = fileOrData.match(/^data:([^;]+);base64,(.+)$/);
+      if(match){
+        contentType = match[1];
+        base64 = match[2];
+      } else {
+        base64 = fileOrData.split(",")[1] || fileOrData;
+      }
+    } else {
+      base64 = fileOrData;
+    }
+  }
+
+  name = (name || `kurdia-${Date.now()}.jpg`).replace(/[^a-zA-Z0-9._-]/g, "_");
+  if(!/\.(jpe?g|png|webp|gif|svg)$/i.test(name)) name += ".jpg";
+
+  toast("⏳ وێنەکە بۆ کۆگای Cloudflare R2 باردەکرێت...");
+
+  const endpoints = [];
+  if(typeof WORKER_URL !== "undefined" && WORKER_URL){
+    endpoints.push(`${WORKER_URL.replace(/\/+$/, "")}/api/admin/media`);
+  }
+  endpoints.push("/api/admin/media");
+
+  let lastError = null;
+  for(const ep of [...new Set(endpoints)]){
+    try{
+      const res = await fetch(ep, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Admin-Key": "2026"
+        },
+        body: JSON.stringify({
+          name: name,
+          contentType: contentType,
+          base64: base64
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if(res.ok && data.ok && data.url){
+        return data.url;
+      }
+      lastError = data.error || `HTTP ${res.status}`;
+    }catch(e){
+      lastError = e.message || "پەیوەندی نەکرا";
+    }
+  }
+  throw new Error(lastError || "نەتوانرا وێنەکە لە Cloudflare R2 پاشەکەوت بکرێت");
+}
+
 async function applyCropAndSave(){
   if(!cropperInstance) return;
   try{
     const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1600, maxHeight: 1600 });
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.84);
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
     const base64 = dataUrl.split(",")[1];
     const name = `kurdia-${Date.now()}.jpg`;
-    toast("⏳ وێنەکە بۆ Cloud دەنێردرێت...");
-    let url = dataUrl;
+
+    let url = "";
     try{
-      const r = await fetch(`${WORKER_URL}/api/admin/media`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, contentType: "image/jpeg", base64 })
-      });
-      const j = await r.json().catch(() => ({}));
-      if(r.ok && j.ok && j.url) url = j.url;
-    }catch(err){}
+      url = await uploadToR2Storage({ name, contentType: "image/jpeg", base64 });
+    }catch(uploadErr){
+      console.error("R2 Upload failed:", uploadErr);
+      toast("❌ بارکردنی وێنە بۆ R2 سەرکەوتوو نەبوو: " + uploadErr.message);
+      return;
+    }
 
     if(cropTarget.prop === "placeImageUrl"){
       draftPlaceImageUrl = url;
@@ -2969,13 +3187,13 @@ async function applyCropAndSave(){
       if(inp) inp.value = url;
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
-        if(p){ p.src = url; p.style.display = "block"; }
+        if(p){ p.src = resolveMediaUrl(url); p.style.display = "block"; }
       }
     } else if(cropTarget.prop === "quickTripImage"){
       quickDashboardTripImageUrl = url;
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
-        if(p){ p.src = url; p.style.display = "block"; }
+        if(p){ p.src = resolveMediaUrl(url); p.style.display = "block"; }
       }
     } else if(cropTarget.prop === "tripImageUrl"){
       draftTripImageUrl = url;
@@ -2984,21 +3202,25 @@ async function applyCropAndSave(){
       }
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
-        if(p){ p.src = url; p.style.display = "block"; }
+        if(p){ p.src = resolveMediaUrl(url); p.style.display = "block"; }
       }
       autoSync();
+    } else if(cropTarget.prop === "paymentBarcode"){
+      const inp = document.getElementById("pmBarcodeInput");
+      if(inp) inp.value = url;
+      previewPmBarcode(url);
     } else {
       appState[cropTarget.prop] = url;
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
-        if(p){ p.src = url; p.style.display = "block"; }
+        if(p){ p.src = resolveMediaUrl(url); p.style.display = "block"; }
       }
       autoSync();
     }
     closeCropModal();
-    toast("✅ وێنەکە هەڵگیرا");
+    toast("✅ وێنەکە لە Cloudflare R2 پاشەکەوت کرا: " + url);
   }catch(e){
-    toast("❌ کێشە لە بارکردنی وێنە: " + (e.message || e));
+    toast("❌ کێشە لە پرۆسەی وێنە: " + (e.message || e));
   }
 }
 
@@ -3662,6 +3884,257 @@ function renderAdminPlaces(){
   `).join("");
 }
 
+// =========================================================
+// PAYMENT METHODS & BARCODE MANAGER ("پارە بدە لە ڕێگای")
+// =========================================================
+function ensurePaymentMethodsArray(){
+  if(!Array.isArray(appState.paymentMethods) || !appState.paymentMethods.length){
+    appState.paymentMethods = [
+      {
+        id: "pm-fib",
+        name: "First Iraqi Bank (FIB)",
+        account: appState.fibAccount || "07503130360",
+        barcodeUrl: "",
+        link: "",
+        icon: "💳",
+        active: true,
+        instruction: "پارە بنێرە بۆ هەژماری فەرمی FIB و وێنەی پسوڵەکە بگرە"
+      },
+      {
+        id: "pm-fastpay",
+        name: "FastPay (فاست پەی)",
+        account: "07503130360",
+        barcodeUrl: "",
+        link: "",
+        icon: "⚡",
+        active: true,
+        instruction: "لە ڕێگەی ئەپی FastPay پارەکە بنێرە یان باڕکۆدەکە سکان بکە"
+      },
+      {
+        id: "pm-zaincash",
+        name: "ZainCash (زین کاش)",
+        account: "07503130360",
+        barcodeUrl: "",
+        link: "",
+        icon: "📱",
+        active: false,
+        instruction: "لە ڕێگەی زین کاش باڕکۆد سکان بکە یان ژمارەکە بەکاربهێنە"
+      }
+    ];
+  }
+}
+
+function renderAdminPaymentMethods(){
+  ensurePaymentMethodsArray();
+  const listEl = document.getElementById("adminPaymentMethodsList");
+  if(!listEl) return;
+
+  if(!appState.paymentMethods.length){
+    listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:#8b9aa8;background:#060e18;border:1px dashed #1e3346;border-radius:12px;font-size:12px">هیچ شێوازێکی پارەدان دانەنراوە. لە سەرەوە کلیک لە دوگمەی «زیادکردن» بکە.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = appState.paymentMethods.map((pm, idx) => {
+    const isActive = pm.active !== false;
+    const barcodeSrc = pm.barcodeUrl ? resolveMediaUrl(pm.barcodeUrl) : "";
+    return `
+      <div class="spotlight-card" style="background:#081320;border:1px solid ${isActive ? '#1e3852' : '#142230'};border-radius:14px;padding:14px;position:relative;opacity:${isActive ? '1' : '0.6'}">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:24px;width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.06);display:grid;place-items:center">${esc(pm.icon || '💳')}</span>
+            <div>
+              <b style="font-size:14px;color:#fff;display:block">${esc(pm.name || 'شێوازی پارەدان')}</b>
+              <small style="color:#7dd3fc;direction:ltr;display:inline-block;font-weight:700">${esc(pm.account || '—')}</small>
+            </div>
+          </div>
+          <button type="button" class="s-badge" style="cursor:pointer;background:${isActive ? 'rgba(12,155,97,0.2)' : 'rgba(239,68,68,0.2)'};color:${isActive ? '#6bf0b3' : '#fca5a5'};border:1px solid ${isActive ? '#0c9b61' : '#dc2626'}" onclick="togglePaymentMethodActive(${idx})">
+            ${isActive ? '✓ چالاکە' : '✕ ناچالاک'}
+          </button>
+        </div>
+
+        ${barcodeSrc ? `
+          <div style="text-align:center;background:#03070d;border:1px solid #192736;border-radius:10px;padding:8px;margin:8px 0">
+            <img src="${barcodeSrc}" alt="Barcode" style="max-height:100px;max-width:100%;object-fit:contain;border-radius:6px;display:block;margin:0 auto">
+            <small style="display:block;color:#6bf0b3;font-size:10px;margin-top:4px">✓ وێنەی باڕکۆد لە R2 دانراوە</small>
+          </div>
+        ` : `
+          <div style="text-align:center;background:#050d17;border:1px dashed #1c2e42;border-radius:8px;padding:8px;margin:8px 0;color:#64748b;font-size:11px">
+            هیچ باڕکۆدێک دانەنراوە
+          </div>
+        `}
+
+        ${pm.link ? `
+          <div style="margin:6px 0;font-size:11px;color:#38bdf8;direction:ltr;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(pm.link)}">
+            🔗 <strong>لینک:</strong> <a href="${esc(pm.link)}" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">${esc(pm.link)}</a>
+          </div>
+        ` : `
+          <div style="margin:6px 0;font-size:11px;color:#64748b">
+            🔗 لینکی ڕاستەوخۆ دیاری نەکراوە
+          </div>
+        `}
+
+        ${pm.instruction ? `<div style="font-size:11px;color:#94a3b8;margin-bottom:8px;line-height:1.4">${esc(pm.instruction)}</div>` : ''}
+
+        <div style="display:flex;gap:6px;margin-top:10px;border-top:1px solid #132232;padding-top:10px">
+          <button type="button" class="secondary-btn" style="flex:1;padding:6px 10px;font-size:11px;margin:0" onclick="openEditPaymentMethodModal(${idx})">✏️ دەستکاریکردن</button>
+          <button type="button" class="del-btn" style="padding:6px 10px;font-size:11px;margin:0" onclick="deletePaymentMethod(${idx})">🗑️ سڕینەوە</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+let activeEditPmIndex = -1;
+
+function openAddPaymentMethodModal(){
+  activeEditPmIndex = -1;
+  document.getElementById("pmModalTitle").textContent = "＋ زیادکردنی دووگمەی نوێی پارەدان";
+  document.getElementById("pmEditId").value = "pm-" + Date.now();
+  document.getElementById("pmNameInput").value = "";
+  document.getElementById("pmAccountInput").value = "";
+  document.getElementById("pmLinkInput").value = "";
+  document.getElementById("pmBarcodeInput").value = "";
+  document.getElementById("pmInstructionInput").value = "باڕکۆدەکە سکان بکە و وێنەی پسوڵەکە بگرە";
+  document.getElementById("pmIconSelect").value = "💳";
+  document.getElementById("pmActiveSelect").value = "true";
+  previewPmBarcode("");
+  document.getElementById("paymentMethodModalWrapper").style.display = "flex";
+}
+
+function openEditPaymentMethodModal(idx){
+  ensurePaymentMethodsArray();
+  const pm = appState.paymentMethods[idx];
+  if(!pm) return;
+  activeEditPmIndex = idx;
+  document.getElementById("pmModalTitle").textContent = "✎ دەستکاریکردنی شێوازی پارەدان: " + (pm.name || "");
+  document.getElementById("pmEditId").value = pm.id || ("pm-" + idx);
+  document.getElementById("pmNameInput").value = pm.name || "";
+  document.getElementById("pmAccountInput").value = pm.account || "";
+  document.getElementById("pmLinkInput").value = pm.link || "";
+  document.getElementById("pmBarcodeInput").value = pm.barcodeUrl || "";
+  document.getElementById("pmInstructionInput").value = pm.instruction || "";
+  document.getElementById("pmIconSelect").value = pm.icon || "💳";
+  document.getElementById("pmActiveSelect").value = pm.active !== false ? "true" : "false";
+  previewPmBarcode(pm.barcodeUrl || "");
+  document.getElementById("paymentMethodModalWrapper").style.display = "flex";
+}
+
+function closePaymentMethodModal(){
+  document.getElementById("paymentMethodModalWrapper").style.display = "none";
+}
+
+function previewPmBarcode(val){
+  const url = String(val || "").trim();
+  const wrap = document.getElementById("pmBarcodePreviewWrap");
+  const img = document.getElementById("pmBarcodePreview");
+  if(url && wrap && img){
+    img.src = resolveMediaUrl(url);
+    wrap.style.display = "block";
+  } else if(wrap){
+    wrap.style.display = "none";
+  }
+}
+
+function removePmBarcode(){
+  const inp = document.getElementById("pmBarcodeInput");
+  if(inp) inp.value = "";
+  previewPmBarcode("");
+}
+
+function triggerBarcodeUpload(){
+  const inp = document.getElementById("directBarcodeFileInput");
+  if(inp){
+    inp.value = "";
+    inp.click();
+  }
+}
+
+async function handleDirectBarcodeSelected(e){
+  const file = e.target.files?.[0];
+  if(!file) return;
+  try{
+    toast("⏳ باڕکۆدەکە بۆ Cloudflare R2 باردەکرێت...");
+    const url = await uploadToR2Storage(file, `kurdia-barcode-${Date.now()}-${file.name}`);
+    const inp = document.getElementById("pmBarcodeInput");
+    if(inp) inp.value = url;
+    previewPmBarcode(url);
+    toast("✅ وێنەی باڕکۆد بەسەرکەوتوویی لە Cloudflare R2 پاشەکەوت کرا!");
+  }catch(err){
+    toast("❌ کێشە لە بارکردنی باڕکۆد: " + err.message);
+  }
+}
+
+async function savePaymentMethodFromModal(){
+  const name = (document.getElementById("pmNameInput")?.value || "").trim();
+  const account = (document.getElementById("pmAccountInput")?.value || "").trim();
+  const link = (document.getElementById("pmLinkInput")?.value || "").trim();
+  const barcodeUrl = (document.getElementById("pmBarcodeInput")?.value || "").trim();
+  const instruction = (document.getElementById("pmInstructionInput")?.value || "").trim();
+  const icon = document.getElementById("pmIconSelect")?.value || "💳";
+  const active = document.getElementById("pmActiveSelect")?.value === "true";
+
+  if(!name){
+    toast("⚠️ تکایە ناوی شێوازی پارەدان بنووسە");
+    document.getElementById("pmNameInput")?.focus();
+    return;
+  }
+  if(!account){
+    toast("⚠️ تکایە ژمارەی هەژمار یان مۆبایل بنووسە");
+    document.getElementById("pmAccountInput")?.focus();
+    return;
+  }
+
+  ensurePaymentMethodsArray();
+
+  const id = document.getElementById("pmEditId")?.value || ("pm-" + Date.now());
+  const methodObj = {
+    id,
+    name,
+    account,
+    link,
+    barcodeUrl,
+    instruction,
+    icon,
+    active
+  };
+
+  if(activeEditPmIndex >= 0 && activeEditPmIndex < appState.paymentMethods.length){
+    appState.paymentMethods[activeEditPmIndex] = methodObj;
+    toast(`✅ شێوازی (${name}) نوێکرایەوە!`);
+  } else {
+    appState.paymentMethods.push(methodObj);
+    toast(`✅ دووگمەی نوێی پارەدانی (${name}) زیاد کرا!`);
+  }
+
+  closePaymentMethodModal();
+  renderAdminPaymentMethods();
+  autoSync();
+  await publishLive(true);
+}
+
+async function deletePaymentMethod(idx){
+  ensurePaymentMethodsArray();
+  if(!appState.paymentMethods[idx]) return;
+  const removed = appState.paymentMethods[idx];
+  if(appState.paymentMethods.length <= 1){
+    return toast("⚠️ لایەنی کەم دەبێت یەک شێوازی پارەدان هەبێت");
+  }
+  appState.paymentMethods.splice(idx, 1);
+  renderAdminPaymentMethods();
+  autoSync();
+  toast(`🗑️ شێوازی (${removed.name}) سڕایەوە`);
+  await publishLive(true);
+}
+
+async function togglePaymentMethodActive(idx){
+  ensurePaymentMethodsArray();
+  if(!appState.paymentMethods[idx]) return;
+  appState.paymentMethods[idx].active = !appState.paymentMethods[idx].active;
+  renderAdminPaymentMethods();
+  autoSync();
+  await publishLive(true);
+}
+
 // WEBSITE VISITOR ANALYTICS LOADER
 async function loadVisitorAnalytics(showToastMsg = false){
   try{
@@ -3996,6 +4469,7 @@ function loadState(){
   fillDashboardPushTemplate("new_trip");
   renderCoupons();
   renderAdminPlaces();
+  renderAdminPaymentMethods();
   renderReviews();
   renderTripsAndDetail();
   animateCounters();
@@ -4025,6 +4499,15 @@ async function fetchRemoteCMSIntoAdmin(){
       if(Array.isArray(cfg.destinations) && cfg.destinations.length && cfg.destinations[0]?.region){
         appState.places = cfg.destinations;
         renderAdminPlaces();
+      }
+      if(Array.isArray(cfg.paymentMethods) && cfg.paymentMethods.length){
+        appState.paymentMethods = cfg.paymentMethods;
+        renderAdminPaymentMethods();
+      }
+      if(cfg.fibAccount || cfg.finance?.fibAccount){
+        appState.fibAccount = cfg.fibAccount || cfg.finance?.fibAccount;
+        const fibEl = document.getElementById("fibAccount");
+        if(fibEl) fibEl.value = appState.fibAccount;
       }
     }
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){
