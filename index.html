@@ -9,7 +9,7 @@
 <script>
 // Auto cache buster: upgrade stale cached versions immediately
 (function(){
-  var V = 'v3.8.0';
+  var V = 'v3.8.2';
   try {
     var stored = localStorage.getItem('kurdia_app_ver');
     if (stored !== V) {
@@ -1731,7 +1731,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v3.8.0';
+const SITE_CODE_RELEASE='v3.8.2';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -1886,6 +1886,8 @@ DEFAULT.about={title:'گەشت، سروشت، هاوڕێیەتی.',text:'ئێم�
 DEFAULT.contact={whatsapp:'+9647503130360',phone:'+9647503130360',city:'هەولێر — کوردستان',email:'',mapUrl:''};
 DEFAULT.social={instagram:'',tiktok:'',youtube:'',facebook:'',telegram:''};
 DEFAULT.fibAccount='0750 313 0360';
+DEFAULT.otpRequired=false;
+DEFAULT.booking={open:true,otpRequired:false};
 DEFAULT.paymentMethods=[
   {
     id: 'pm-fib',
@@ -1980,7 +1982,16 @@ function normalizeRemoteCMS(config){
   if(config.ai!==undefined) out.ai=config.ai;
   if(config.translations!==undefined) out.translations=config.translations;
   if(config.booking!==undefined) out.booking=config.booking;
-  if(config.otpRequired!==undefined) out.otpRequired=config.otpRequired;
+  const remoteOtp = typeof config.otpRequired === 'boolean'
+    ? config.otpRequired
+    : (typeof config.booking?.otpRequired === 'boolean'
+      ? config.booking.otpRequired
+      : (typeof config.config?.otpRequired === 'boolean' ? config.config.otpRequired : undefined));
+  if(typeof remoteOtp === 'boolean'){
+    out.otpRequired = remoteOtp;
+    out.booking = { ...(out.booking || { open: true }), otpRequired: remoteOtp };
+    try{ localStorage.setItem('kurdia_otp_required', String(remoteOtp)); }catch(_){}
+  }
   if(config.finance!==undefined) out.finance=config.finance;
   if(config.fibAccount!==undefined) out.fibAccount=config.fibAccount;
   if(config.paymentMethods!==undefined) out.paymentMethods=config.paymentMethods;
@@ -2058,10 +2069,12 @@ async function loadRemote(){
         data.otpRequired = ov.otpRequired;
         if(!data.booking) data.booking = { open: true };
         data.booking.otpRequired = ov.otpRequired;
+        try{ localStorage.setItem('kurdia_otp_required', String(ov.otpRequired)); }catch(_){}
       }
       localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
     }
   }catch(_){}
+  if(typeof window.syncPublicOtpUI === 'function') window.syncPublicOtpUI();
 }
 function save(){localStorage.setItem('kurdia_premium_data',JSON.stringify(data))}
 function $(id){return document.getElementById(id)}
@@ -2167,10 +2180,20 @@ function normalizePublicData(){
   if(!data.brand) data.brand={name:'KURDIA ADVENTURE',primary:'#a91d37',accent:'#d32f4e',background:'#05070b',heroOverlay:.72};
   if(!data.search) data.search={enabled:true,destinations:true,trips:true,stories:true};
   if(!data.ai) data.ai={enabled:true,name:'یاریدەدەری KURDIA',welcome:'سڵاو هاوڕێ 🌿'};
-  if(!data.booking) data.booking={open:true,otpRequired:true};
-  if(typeof data.otpRequired === 'boolean') data.booking.otpRequired = data.otpRequired;
-  else if(typeof data.booking?.otpRequired === 'boolean') data.otpRequired = data.booking.otpRequired;
-  else { data.otpRequired = true; data.booking.otpRequired = true; }
+  if(!data.booking) data.booking={open:true,otpRequired:false};
+  const savedOtpStr = localStorage.getItem('kurdia_otp_required');
+  if(savedOtpStr === 'false' || savedOtpStr === 'true'){
+    const flag = savedOtpStr === 'true';
+    data.otpRequired = flag;
+    data.booking.otpRequired = flag;
+  } else if(typeof data.otpRequired === 'boolean') {
+    data.booking.otpRequired = data.otpRequired;
+  } else if(typeof data.booking?.otpRequired === 'boolean') {
+    data.otpRequired = data.booking.otpRequired;
+  } else {
+    data.otpRequired = false;
+    data.booking.otpRequired = false;
+  }
   if(!data.system) data.system={status:'online',maintenance:false,defaultLanguage:'ku'};
   if(!data.fibAccount) data.fibAccount = (data.finance?.fibAccount) || DEFAULT.fibAccount || '0750 313 0360';
   if(!Array.isArray(data.paymentMethods) || !data.paymentMethods.length){
@@ -4054,9 +4077,19 @@ async function askAI(e){
   if(window.kurdiaAiVoiceEnabled) window.speakAIText(fb.text);
 }
 function isOtpRequired(){
+  try{
+    const directFlag = localStorage.getItem('kurdia_otp_required');
+    if(directFlag === 'false') return false;
+    if(directFlag === 'true') return true;
+    const adminRaw = localStorage.getItem('kurdia_admin_multitrip_v6');
+    if(adminRaw){
+      const adm = JSON.parse(adminRaw);
+      if(typeof adm?.otpRequired === 'boolean') return adm.otpRequired;
+    }
+  }catch(_){}
   if(typeof data?.otpRequired === 'boolean') return data.otpRequired;
   if(typeof data?.booking?.otpRequired === 'boolean') return data.booking.otpRequired;
-  return true;
+  return false;
 }
 window.syncPublicOtpUI = function(){
   const req = isOtpRequired();
@@ -4075,6 +4108,7 @@ window.syncPublicOtpUI = function(){
     if(row) row.style.gridTemplateColumns = '';
     if(h4) h4.textContent = lang==='en' ? 'WhatsApp Phone Verification' : (lang==='ar' ? 'تأكيد رقم واتساب (WhatsApp)' : 'پشتڕاستکردنەوەی ژمارەی WhatsApp');
     if(sub) sub.textContent = lang==='en' ? 'A 4-digit verification code will be sent to your WhatsApp number.' : (lang==='ar' ? 'سيتم إرسال رمز من ٤ أرقام إلى واتساب الخاص بك للتأكيد.' : 'کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.');
+    if(otpVer && !(($('bookingOtp')?.value || '').trim())) otpVer.value = '0';
   } else {
     if(sendBtn) sendBtn.style.display = 'none';
     if(otpBox) otpBox.style.display = 'none';
@@ -4093,7 +4127,7 @@ window.syncPublicOtpUI = function(){
   }
 };
 function bookingGo(step){const form=$('bookingForm');if(!form)return;if(typeof window.syncPublicOtpUI==='function')window.syncPublicOtpUI();form.querySelectorAll('[data-booking-step]').forEach(p=>{const on=Number(p.dataset.bookingStep)===step;p.hidden=!on;p.classList.toggle('active',on);if(on&&window.gsap){gsap.fromTo(p,{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:'power3.out',clearProps:'transform'});}});form.querySelectorAll('[data-step-dot]').forEach(d=>{const n=Number(d.dataset.stepDot);d.classList.toggle('active',n===step);d.classList.toggle('done',n<step)});const fill=$('bookingProgressFill');if(fill)fill.style.width=((step-1)/2*100)+'%';if(step===3&&typeof window.renderPaymentMethodsPublic==='function')window.renderPaymentMethodsPublic();const panel=form.querySelector(`[data-booking-step="${step}"]`);panel?.querySelector('input:not([type="hidden"]),select,textarea')?.focus({preventScroll:true});panel?.scrollIntoView({behavior:'smooth',block:'nearest'});}
-function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2){if(!isOtpRequired()){if($('otpVerified'))$('otpVerified').value='1';}else if($('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}}bookingGo(step+1)}
+function bookingNext(step){const panel=document.querySelector(`[data-booking-step="${step}"]`);if(!panel)return;const fields=[...panel.querySelectorAll('input,select,textarea')].filter(el=>el.type!=='hidden'&&el.type!=='button'&&el.type!=='submit'&&el.type!=='file');for(const field of fields){if(!field.checkValidity()){field.reportValidity();field.focus();return}}if(step===2){const otpBypassed=!isOtpRequired()||($('otpDisabledNotice')?.style.display==='block')||($('sendOtpBtn')?.style.display==='none');if(otpBypassed){if($('otpVerified'))$('otpVerified').value='1';}else if($('otpVerified')?.value!=='1'){toast('تکایە سەرەتا ژمارەی WhatsApp بە OTP پشتڕاست بکەرەوە');return}}bookingGo(step+1)}
 function syncOtpSlots(){const slots=[...document.querySelectorAll('.otp-slot')];const code=slots.map(x=>x.value).join('');$('bookingOtp').value=code;slots.forEach(x=>x.classList.toggle('filled',!!x.value));}
 document.querySelectorAll('.otp-slot').forEach((slot,index,all)=>{slot.addEventListener('input',()=>{slot.value=slot.value.replace(/\D/g,'').slice(-1);syncOtpSlots();if(slot.value&&all[index+1])all[index+1].focus();if(all.every(x=>x.value))$('bookingOtp').focus({preventScroll:true})});slot.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!slot.value&&all[index-1])all[index-1].focus();if(e.key==='ArrowLeft'&&all[index+1])all[index+1].focus();if(e.key==='ArrowRight'&&all[index-1])all[index-1].focus()});slot.addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,4);if(!t)return;e.preventDefault();[...t].forEach((v,i)=>{if(all[i])all[i].value=v});syncOtpSlots();all[Math.min(t.length,3)].focus()})});
 async function sendBookingOTP(){
@@ -4123,16 +4157,80 @@ async function verifyBookingOTP(){
     }else{$('otpVerified').value='0';toast(x.error||'کۆدی OTP هەڵەیە')}
   }catch(e){toast('پەیوەندی بە سێرڤەر نەکرا')}
 }
+async function uploadReceiptToR2(file){
+  try{
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = ev => resolve(String(ev.target.result || ''));
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    const base64 = dataUrl.includes(',') ? dataUrl.split(',')[1] : dataUrl;
+    const ext = (file.name && file.name.includes('.')) ? file.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g,'') : 'jpg';
+    const safeName = `receipt-${Date.now()}-${Math.random().toString(36).slice(2,6)}.${ext || 'jpg'}`;
+    const endpoints = [WORKER + '/api/admin/media', '/api/admin/media'];
+    for(const ep of endpoints){
+      try{
+        const r = await fetch(ep, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Key': '2026' },
+          body: JSON.stringify({ name: safeName, contentType: file.type || 'image/jpeg', base64 })
+        });
+        const j = await r.json().catch(()=>({}));
+        if(r.ok && j.ok && j.url){
+          if(j.url.startsWith('http')) return j.url;
+          return ep.startsWith('http') ? (WORKER + j.url) : j.url;
+        }
+      }catch(_){}
+    }
+  }catch(_){}
+  return '';
+}
+
+async function saveDirectRegistrationToCloud(metaRecord){
+  try{
+    const curRes = await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, { cache: 'no-store' });
+    const curJson = await curRes.json().catch(()=>({}));
+    const cmsData = curJson.data || {};
+    const existingList = Array.isArray(cmsData.directRegistrations) ? cmsData.directRegistrations : [];
+    cmsData.directRegistrations = [metaRecord, ...existingList.filter(x => x && String(x.id) !== String(metaRecord.id))].slice(0, 300);
+    if(cmsData.config && typeof cmsData.config === 'object'){
+      cmsData.config.directRegistrations = cmsData.directRegistrations;
+    }
+    await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cmsData)
+    });
+  }catch(_){}
+}
+
 async function submitBooking(e){
   e.preventDefault();
   const form=e.target, phone=($('bookingPhone')?.value||'').trim();
-  if(isOtpRequired() && $('otpVerified')?.value!=='1'){toast('سەرەتا ژمارەکەت بە OTP پشتڕاست بکەرەوە');return}
+  if(!phone){
+    toast('تکایە ژمارەی مۆبایل (WhatsApp) بنووسە');
+    bookingGo(2);
+    return;
+  }
+  const otpCodeEntered = ($('bookingOtp')?.value || '').trim();
+  const otpBypassed = !isOtpRequired() || ($('otpDisabledNotice')?.style.display === 'block') || ($('sendOtpBtn')?.style.display === 'none') || ($('otpVerified')?.value === '1' && !otpCodeEntered);
+  if(!otpBypassed && $('otpVerified')?.value!=='1'){
+    toast('سەرەتا ژمارەکەت بە OTP پشتڕاست بکەرەوە');
+    bookingGo(2);
+    return;
+  }
   const receipt=$('receiptInput')?.files?.[0];
   if(!receipt){toast('تکایە وێنەی پسوڵە هەڵبژێرە');return}
   if(!receipt.type.startsWith('image/')){toast('تەنها وێنەی پسوڵە ڕێگەپێدراوە');return}
   if(receipt.size>5*1024*1024){toast('قەبارەی پسوڵە نابێت لە 5MB زیاتر بێت');return}
 
   const primaryName = ($('bookingName')?.value || '').trim();
+  if(!primaryName){
+    toast('تکایە ناوی سیانی بنووسە');
+    bookingGo(1);
+    return;
+  }
   const extraInputs = [...document.querySelectorAll('#extraNamesContainer .extra-person-name')];
   const extraNames = extraInputs.map(inp => (inp.value || '').trim()).filter(Boolean);
   const peopleCount = Math.max(1, parseInt($('bookingPeople')?.value || '1', 10));
@@ -4149,6 +4247,7 @@ async function submitBooking(e){
 
   const btn=$('bookingSubmitBtn');btn.disabled=true;btn.textContent='لە ناردندایە...';
   try{
+    const uploadedReceiptUrl = await uploadReceiptToR2(receipt);
     const fd=new FormData(form);
     fd.set('name', combinedNames);
     fd.set('fullName', combinedNames);
@@ -4160,24 +4259,53 @@ async function submitBooking(e){
     fd.set('people', String(allParticipants.length || peopleCount));
     const userNote = String(fd.get('note') || '').trim();
     const participantsSummary = `بەشداربووان (${allParticipants.length}): ${combinedNames} | مۆبایل: ${phone}`;
-    fd.set('note', userNote ? `${participantsSummary} — تێبینی: ${userNote}` : participantsSummary);
+    const finalNote = userNote ? `${participantsSummary} — تێبینی: ${userNote}` : participantsSummary;
+    fd.set('note', finalNote);
     fd.set('otp_verified','1');
-    fd.set('coupon_code', window.appliedCouponCode || $('couponInput')?.value?.trim().toUpperCase() || '');
+    const appliedCoupon = window.appliedCouponCode || $('couponInput')?.value?.trim().toUpperCase() || '';
+    fd.set('coupon_code', appliedCoupon);
     fd.set('coupon_discount', String(window.appliedCouponFixed || 0));
     fd.set('coupon_discount_percent', String(appliedDiscountPercent || 0));
-    const r=await fetch(WORKER+'/api/register',{method:'POST',body:fd});
-    const x=await r.json().catch(()=>({}));
-    if(x.ok){
-      const regId = x.id || x.registration?.id || ('reg_' + Date.now());
+
+    let workerOk = false;
+    let workerId = '';
+    let workerErr = '';
+
+    if(!otpBypassed && otpCodeEntered){
+      try{
+        const r = await fetch(WORKER+'/api/register',{method:'POST',body:fd});
+        const x = await r.json().catch(()=>({}));
+        if(x.ok){
+          workerOk = true;
+          workerId = x.id || x.registration?.id || '';
+        } else {
+          workerErr = x.error || '';
+        }
+      }catch(_){}
+    }
+
+    if(otpBypassed || workerOk || !isOtpRequired()){
+      const regId = workerId || ('reg_' + Date.now() + '_' + Math.random().toString(36).slice(2,6));
       const metaRecord = {
         id: String(regId),
         name: combinedNames,
+        fullName: combinedNames,
         primaryName: primaryName,
         participants: allParticipants,
+        extra_names: extraNames.join(' ، '),
         phone: phone,
+        mobile: phone,
+        whatsapp: phone,
         people: allParticipants.length || peopleCount,
         trip: selectedTrip,
-        createdAt: new Date().toISOString()
+        note: finalNote,
+        receiptUrl: uploadedReceiptUrl,
+        receipt: uploadedReceiptUrl,
+        coupon_code: appliedCoupon,
+        status: 'pending',
+        verified: false,
+        createdAt: new Date().toISOString(),
+        time: new Date().toISOString()
       };
       try{
         const localMeta = JSON.parse(localStorage.getItem('kurdia_registrations_meta_v1') || '{}');
@@ -4185,12 +4313,19 @@ async function submitBooking(e){
         if(phone) localMeta['phone_' + phone.replace(/\s+/g,'')] = metaRecord;
         if(primaryName) localMeta['name_' + primaryName] = metaRecord;
         localStorage.setItem('kurdia_registrations_meta_v1', JSON.stringify(localMeta));
+
+        const localDirect = JSON.parse(localStorage.getItem('kurdia_direct_registrations_v1') || '[]');
+        localStorage.setItem('kurdia_direct_registrations_v1', JSON.stringify([metaRecord, ...(Array.isArray(localDirect)?localDirect:[])].slice(0, 200)));
       }catch(e){}
-      fetch('/api/registrations-meta', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(metaRecord)
-      }).catch(()=>{});
+
+      await Promise.allSettled([
+        fetch('/api/registrations-meta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(metaRecord)
+        }),
+        saveDirectRegistrationToCloud(metaRecord)
+      ]);
 
       form.reset();
       $('extraNamesContainer').innerHTML='';
@@ -4201,8 +4336,9 @@ async function submitBooking(e){
       $('receiptPreview').textContent='هیچ وێنەیەک هەڵنەبژێردراوە';
       bookingGo(1);
       showBookingSuccessModal(metaRecord);
+    } else {
+      toast(workerErr || 'هەڵە ڕوویدا');
     }
-    else toast(x.error||'هەڵە ڕوویدا');
   }catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}
   finally{btn.disabled=false;btn.textContent='✓ ناردنی داواکاری و تەواوکردن'}
 }
@@ -7464,6 +7600,20 @@ html[dir="ltr"] .ai{
         localStorage.setItem('kurdia_live_version', adminState.appVersion);
         if(typeof updateSiteVersionUI === 'function') updateSiteVersionUI(adminState.appVersion);
       }
+      if(typeof adminState.otpRequired === 'boolean'){
+        data.otpRequired = adminState.otpRequired;
+        if(!data.booking) data.booking = { open: true };
+        data.booking.otpRequired = adminState.otpRequired;
+        localStorage.setItem('kurdia_otp_required', String(adminState.otpRequired));
+        if(typeof window.syncPublicOtpUI === 'function') window.syncPublicOtpUI();
+      }
+      if(Array.isArray(adminState.paymentMethods) && adminState.paymentMethods.length){
+        data.paymentMethods = adminState.paymentMethods;
+        if(typeof window.renderPaymentMethodsPublic === 'function') window.renderPaymentMethodsPublic();
+      }
+      if(adminState.fibAccount){
+        data.fibAccount = adminState.fibAccount;
+      }
       if(Array.isArray(adminState.places) && adminState.places.length){
         data.destinations = adminState.places.map((p, i) => normalizePlaceItem(p, i)).filter(Boolean);
         renderPlacesPublic();
@@ -7471,8 +7621,10 @@ html[dir="ltr"] .ai{
     }catch(e){}
   }
   window.addEventListener('storage', e => {
-    if(e.key === 'kurdia_admin_multitrip_v6' || e.key === 'kurdia_live_version') syncAdminData();
+    if(e.key === 'kurdia_admin_multitrip_v6' || e.key === 'kurdia_live_version' || e.key === 'kurdia_otp_required' || e.key === 'kurdia_premium_data') syncAdminData();
   });
+  window.addEventListener('focus', syncAdminData);
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) syncAdminData(); });
 
   function startAll(){
     syncAdminData();

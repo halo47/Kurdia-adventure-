@@ -1413,7 +1413,7 @@ button{cursor:pointer;color:inherit}
             <input type="checkbox" id="bookingOpen" checked style="width:16px;height:16px"> ناونووسین کراوەیە
           </label>
           <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:8px;cursor:pointer">
-            <input type="checkbox" id="otpRequiredSwitch" onchange="autoSync()" style="width:16px;height:16px"> OTP پێویستە
+            <input type="checkbox" id="otpRequiredSwitch" onchange="setGlobalOtpRequirement(this.checked)" style="width:16px;height:16px"> OTP پێویستە
           </label>
         </div>
 
@@ -2033,7 +2033,7 @@ button{cursor:pointer;color:inherit}
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_admin_multitrip_v6";
-const CODE_RELEASE_VERSION = "v3.8.0";
+const CODE_RELEASE_VERSION = "v3.8.2";
 
 // Immediately purge old single-trip cached localStorage on version upgrade
 (function(){
@@ -2215,7 +2215,7 @@ let appState = {
   weatherTemp: "25°C",
   weatherCondition: "ساماڵ ☀️",
   bookingOpen: true,
-  otpRequired: true,
+  otpRequired: false,
   capacity: 40,
   booked: 29,
   trips: JSON.parse(JSON.stringify(DEFAULT_TRIPS)),
@@ -3039,6 +3039,7 @@ function syncPublicWebsiteBridge(){
       trips: formattedTrips
     };
     localStorage.setItem("kurdia_premium_data", JSON.stringify(merged));
+    localStorage.setItem("kurdia_otp_required", String(Boolean(appState.otpRequired !== false)));
   }catch(e){}
 }
 
@@ -3146,7 +3147,13 @@ async function setGlobalOtpRequirement(val){
   if(otpSw) otpSw.checked = appState.otpRequired;
   syncOtpAdminUI();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  localStorage.setItem("kurdia_otp_required", String(appState.otpRequired));
   syncPublicWebsiteBridge();
+  fetch("/api/cms-overrides", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ otpRequired: appState.otpRequired })
+  }).catch(() => {});
   toast(appState.otpRequired ? "🔐 کۆدی OTP چالاک کرا — لە سێرڤەر پاشەکەوت دەکرێت..." : "🔓 کۆدی OTP ناچالاک کرا — لە سێرڤەر پاشەکەوت دەکرێت...");
   await publishLive(true);
 }
@@ -3271,8 +3278,15 @@ async function publishLive(alreadySavedFromTripForm = false){
       fibAccount: appState.fibAccount || "07503130360",
       paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : []
     };
+    if(data.config && typeof data.config === "object"){
+      data.config.otpRequired = data.otpRequired;
+      data.config.booking = data.booking;
+      data.config.paymentMethods = data.paymentMethods;
+      data.config.fibAccount = data.fibAccount;
+    }
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    localStorage.setItem("kurdia_otp_required", String(data.otpRequired));
     syncPublicWebsiteBridge();
     renderTripsAndDetail();
     renderEditorTabs();
@@ -3281,7 +3295,7 @@ async function publishLive(alreadySavedFromTripForm = false){
     syncOtpAdminUI();
     animateCounters();
 
-    fetch("/api/cms-overrides", {
+    await fetch("/api/cms-overrides", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -3560,25 +3574,99 @@ function setBookingFilter(btn, f){
   renderRegistrations();
 }
 
+async function syncDirectRegistrationsInCloud(updaterFn){
+  try{
+    const curRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store" });
+    const curJson = await curRes.json().catch(() => ({}));
+    const cmsData = curJson.data || {};
+    const list = Array.isArray(cmsData.directRegistrations) ? cmsData.directRegistrations : [];
+    cmsData.directRegistrations = updaterFn(list);
+    if(cmsData.config && typeof cmsData.config === "object"){
+      cmsData.config.directRegistrations = cmsData.directRegistrations;
+    }
+    await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cmsData)
+    });
+  }catch(_){}
+}
+
 async function fetchLiveRegistrations(){
+  const mergedMap = new Map();
+  const deletedIds = new Set(JSON.parse(localStorage.getItem("kurdia_deleted_reg_ids_v1") || "[]"));
+
   try{
     const localMeta = JSON.parse(localStorage.getItem("kurdia_registrations_meta_v1") || "{}");
     regMetaStore = { ...regMetaStore, ...localMeta };
   }catch(e){}
+
+  // 1. Local direct registrations
   try{
-    const metaRes = await fetch("/api/registrations-meta?cb=" + Date.now());
-    const metaData = await metaRes.json().catch(() => ({}));
-    if(metaData && metaData.ok && metaData.records){
-      regMetaStore = { ...regMetaStore, ...metaData.records };
+    const localDirect = JSON.parse(localStorage.getItem("kurdia_direct_registrations_v1") || "[]");
+    if(Array.isArray(localDirect)){
+      localDirect.forEach(item => {
+        if(item && item.id && !deletedIds.has(String(item.id))){
+          mergedMap.set(String(item.id), enrichRegistrationRecord(item));
+        }
+      });
     }
   }catch(e){}
+
+  // 2. Server /api/registrations-meta
   try{
-    const res = await fetch(`${WORKER_URL}/api/admin/registrations?cb=${Date.now()}`);
+    const metaRes = await fetch("/api/registrations-meta?cb=" + Date.now(), { cache: "no-store" });
+    const metaData = await metaRes.json().catch(() => ({}));
+    if(metaData && metaData.ok){
+      if(metaData.records) regMetaStore = { ...regMetaStore, ...metaData.records };
+      if(Array.isArray(metaData.items)){
+        metaData.items.forEach(item => {
+          if(item && item.id){
+            regMetaStore[String(item.id)] = item;
+            if(item.phone) regMetaStore["phone_" + String(item.phone).replace(/\s+/g, "")] = item;
+            if(!deletedIds.has(String(item.id))){
+              mergedMap.set(String(item.id), enrichRegistrationRecord(item));
+            }
+          }
+        });
+      }
+    }
+  }catch(e){}
+
+  // 3. Cloud CMS directRegistrations
+  try{
+    const cmsRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store" });
+    const cmsJson = await cmsRes.json().catch(() => ({}));
+    const cmsList = cmsJson?.data?.directRegistrations || cmsJson?.data?.config?.directRegistrations || [];
+    if(Array.isArray(cmsList)){
+      cmsList.forEach(item => {
+        if(item && item.id && !deletedIds.has(String(item.id))){
+          regMetaStore[String(item.id)] = item;
+          mergedMap.set(String(item.id), enrichRegistrationRecord(item));
+        }
+      });
+    }
+  }catch(e){}
+
+  // 4. Worker /api/admin/registrations
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/registrations?cb=${Date.now()}`, { cache: "no-store" });
     const data = await res.json();
     if(data.ok && Array.isArray(data.registrations)){
-      cachedRegistrations = data.registrations.map(enrichRegistrationRecord);
+      data.registrations.forEach(item => {
+        if(item && item.id && !deletedIds.has(String(item.id))){
+          const existing = mergedMap.get(String(item.id)) || {};
+          mergedMap.set(String(item.id), enrichRegistrationRecord({ ...existing, ...item }));
+        }
+      });
     }
   }catch(e){}
+
+  cachedRegistrations = Array.from(mergedMap.values()).sort((a, b) => {
+    const ta = new Date(a.createdAt || a.time || 0).getTime() || 0;
+    const tb = new Date(b.createdAt || b.time || 0).getTime() || 0;
+    return tb - ta;
+  });
   renderRegistrations();
 }
 
@@ -3664,6 +3752,7 @@ function renderRegistrations(){
     const namesArr = getRegParticipants(reg);
     const phoneStr = getRegPhone(reg) || "—";
     const totalPeople = Math.max(Number(reg.people || 1), namesArr.length || 1);
+    const receiptImg = resolveMediaUrl(reg.receiptUrl || reg.receipt || reg.imageUrl || "");
     return `
       <div class="person spotlight-card">
         <div class="person-top">
@@ -3687,6 +3776,16 @@ function renderRegistrations(){
           </div>
         </div>
 
+        ${receiptImg ? `
+          <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:10px;background:#050d17;border:1px solid #1b3148">
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="${receiptImg}" alt="پسوڵە" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid #38bdf8">
+              <span style="font-size:11.5px;color:#7dd3fc;font-weight:700">🧾 وێنەی پسوڵەی پارەدان هاوپێچ کراوە</span>
+            </div>
+            <a href="${receiptImg}" target="_blank" rel="noopener" class="secondary-btn" style="padding:5px 10px;font-size:11px;text-decoration:none;margin:0">🖼️ بینینی پسوڵە</a>
+          </div>
+        ` : ""}
+
         <div class="person-actions" style="margin-top:10px">
           <small style="color:#8b9aa8;font-size:10px">${reg.time || reg.createdAt || reg.id || ""}</small>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -3705,56 +3804,79 @@ function renderRegistrations(){
 }
 
 async function directVerify(id, phone){
-  toast("⏳ دەنێردرێت...");
+  toast("⏳ پەسەند دەکرێت...");
+  cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
+  renderRegistrations();
   try{
-    const res = await fetch(`${WORKER_URL}/api/admin/verify-booking`, {
+    const localDirect = JSON.parse(localStorage.getItem("kurdia_direct_registrations_v1") || "[]");
+    if(Array.isArray(localDirect)){
+      localStorage.setItem("kurdia_direct_registrations_v1", JSON.stringify(localDirect.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r)));
+    }
+  }catch(_){}
+  await Promise.allSettled([
+    fetch("/api/registrations-meta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "update_status", id, status: "approved" })
+    }),
+    syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r)),
+    fetch(`${WORKER_URL}/api/admin/verify-booking`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, phone })
-    });
-    const d = await res.json().catch(() => ({}));
-    if(res.ok && d.ok){
-      cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
-      renderRegistrations();
-      toast("✅ ناونووسین پەسەندکرا");
-      fetchLiveRegistrations();
-    } else {
-      cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
-      renderRegistrations();
-      toast("✅ پەسەندکرا");
-    }
-  }catch(e){
-    cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
-    renderRegistrations();
-    toast("✅ پەسەندکرا");
-  }
+    })
+  ]);
+  toast("✅ ناونووسین پەسەندکرا");
 }
 
 async function directReject(id, phone){
   const reason = "پسوولەکە ناڕوونە";
+  cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "rejected", verified: false } : r);
+  renderRegistrations();
   try{
-    const res = await fetch(`${WORKER_URL}/api/admin/reject-booking`, {
+    const localDirect = JSON.parse(localStorage.getItem("kurdia_direct_registrations_v1") || "[]");
+    if(Array.isArray(localDirect)){
+      localStorage.setItem("kurdia_direct_registrations_v1", JSON.stringify(localDirect.map(r => String(r.id) === String(id) ? { ...r, status: "rejected", verified: false } : r)));
+    }
+  }catch(_){}
+  await Promise.allSettled([
+    fetch("/api/registrations-meta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "update_status", id, status: "rejected" })
+    }),
+    syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "rejected", verified: false } : r)),
+    fetch(`${WORKER_URL}/api/admin/reject-booking`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, phone, reason })
-    });
-    const d = await res.json().catch(() => ({}));
-    if(res.ok && d.ok){
-      cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "rejected", verified: false } : r);
-      renderRegistrations();
-      toast("❌ ڕەتکرایەوە");
-      fetchLiveRegistrations();
-    } else toast("❌ هەڵە");
-  }catch(e){ toast("❌ هەڵە"); }
+    })
+  ]);
+  toast("❌ ڕەتکرایەوە");
 }
 
 async function deleteBooking(id){
-  const res = await fetch(`${WORKER_URL}/api/admin/bookings/${encodeURIComponent(id)}`, { method: "DELETE" });
-  if(res.ok){
-    cachedRegistrations = cachedRegistrations.filter(r => String(r.id) !== String(id));
-    renderRegistrations();
-    toast("🗑️ سڕایەوە");
-  }
+  cachedRegistrations = cachedRegistrations.filter(r => String(r.id) !== String(id));
+  renderRegistrations();
+  try{
+    const delIds = JSON.parse(localStorage.getItem("kurdia_deleted_reg_ids_v1") || "[]");
+    if(!delIds.includes(String(id))) delIds.push(String(id));
+    localStorage.setItem("kurdia_deleted_reg_ids_v1", JSON.stringify(delIds));
+    const localDirect = JSON.parse(localStorage.getItem("kurdia_direct_registrations_v1") || "[]");
+    if(Array.isArray(localDirect)){
+      localStorage.setItem("kurdia_direct_registrations_v1", JSON.stringify(localDirect.filter(r => String(r.id) !== String(id))));
+    }
+  }catch(_){}
+  await Promise.allSettled([
+    fetch("/api/registrations-meta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete", id })
+    }),
+    syncDirectRegistrationsInCloud(list => list.filter(r => String(r.id) !== String(id))),
+    fetch(`${WORKER_URL}/api/admin/bookings/${encodeURIComponent(id)}`, { method: "DELETE" })
+  ]);
+  toast("🗑️ سڕایەوە");
 }
 
 function csvEscape(val){
@@ -4910,6 +5032,9 @@ async function fetchRemoteCMSIntoAdmin(){
         }
       }
     }catch(_){}
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    localStorage.setItem("kurdia_otp_required", String(Boolean(appState.otpRequired !== false)));
+    syncPublicWebsiteBridge();
     renderAdminPaymentMethods();
     syncOtpAdminUI();
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){

@@ -539,17 +539,45 @@ const server = http.createServer((req, res) => {
           let payload = {};
           try { payload = JSON.parse(body || '{}'); } catch (_) {}
           if (!Array.isArray(store.items)) store.items = [];
-          store.items.unshift({
-            id: payload.id || ('reg-' + Date.now()),
+
+          if (payload.action === 'update_status' && payload.id) {
+            store.items = store.items.map(item =>
+              String(item.id) === String(payload.id)
+                ? { ...item, status: payload.status || 'approved', verified: payload.status === 'approved' }
+                : item
+            );
+            saveRegMeta(store);
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({ ok: true, items: store.items }));
+            return;
+          }
+
+          if (payload.action === 'delete' && payload.id) {
+            store.items = store.items.filter(item => String(item.id) !== String(payload.id));
+            saveRegMeta(store);
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({ ok: true, items: store.items }));
+            return;
+          }
+
+          const newId = String(payload.id || ('reg_' + Date.now()));
+          const rec = {
+            id: newId,
             primaryName: String(payload.primaryName || '').trim(),
             name: String(payload.name || '').trim(),
             participants: Array.isArray(payload.participants) ? payload.participants : [],
             phone: String(payload.phone || '').trim(),
             people: Number(payload.people || 1),
             trip: String(payload.trip || '').trim(),
+            note: String(payload.note || '').trim(),
+            receiptUrl: String(payload.receiptUrl || payload.receipt || '').trim(),
+            coupon_code: String(payload.coupon_code || '').trim(),
+            status: String(payload.status || 'pending'),
+            verified: Boolean(payload.verified),
+            createdAt: payload.createdAt || new Date().toISOString(),
             time: payload.time || new Date().toISOString()
-          });
-          store.items = store.items.slice(0, 500);
+          };
+          store.items = [rec, ...store.items.filter(x => String(x.id) !== newId)].slice(0, 500);
           saveRegMeta(store);
           res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
           res.end(JSON.stringify({ ok: true, items: store.items }));
