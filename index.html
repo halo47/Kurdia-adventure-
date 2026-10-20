@@ -2043,6 +2043,25 @@ async function loadRemote(){
   }catch(e){
     console.warn('KURDIA CMS load failed:',e);
   }
+  try{
+    const ovRes = await fetch('/api/cms-overrides?cb=' + Date.now(), { cache: 'no-store' });
+    if(ovRes.ok){
+      const ovJson = await ovRes.json();
+      const ov = ovJson.data || {};
+      if(Array.isArray(ov.paymentMethods) && ov.paymentMethods.length){
+        data.paymentMethods = ov.paymentMethods;
+      }
+      if(ov.fibAccount){
+        data.fibAccount = ov.fibAccount;
+      }
+      if(typeof ov.otpRequired === 'boolean'){
+        data.otpRequired = ov.otpRequired;
+        if(!data.booking) data.booking = { open: true };
+        data.booking.otpRequired = ov.otpRequired;
+      }
+      localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
+    }
+  }catch(_){}
 }
 function save(){localStorage.setItem('kurdia_premium_data',JSON.stringify(data))}
 function $(id){return document.getElementById(id)}

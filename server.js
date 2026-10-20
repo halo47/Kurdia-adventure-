@@ -46,6 +46,22 @@ function saveVisitors(v) {
 
 const REGISTRATIONS_META_FILE = path.join(ROOT, 'registrations-meta.json');
 const TRANSLATIONS_CACHE_FILE = path.join(ROOT, 'translations-cache.json');
+const CMS_OVERRIDES_FILE = path.join(ROOT, 'cms-overrides.json');
+
+function loadCmsOverrides() {
+  try {
+    if (fs.existsSync(CMS_OVERRIDES_FILE)) {
+      return JSON.parse(fs.readFileSync(CMS_OVERRIDES_FILE, 'utf8'));
+    }
+  } catch (e) {}
+  return {};
+}
+
+function saveCmsOverrides(data) {
+  try {
+    fs.writeFileSync(CMS_OVERRIDES_FILE, JSON.stringify(data, null, 2), 'utf8');
+  } catch (e) {}
+}
 
 let GoogleGenAI = null;
 try {
@@ -543,6 +559,32 @@ const server = http.createServer((req, res) => {
         const store = loadRegMeta();
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
         res.end(JSON.stringify({ ok: true, items: store.items || [] }));
+        return;
+      }
+    }
+
+    if (pathname === '/api/cms-overrides') {
+      if (req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+          const current = loadCmsOverrides();
+          let payload = {};
+          try { payload = JSON.parse(body || '{}'); } catch (_) {}
+          const updated = {
+            ...current,
+            ...payload,
+            updatedAt: new Date().toISOString()
+          };
+          saveCmsOverrides(updated);
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({ ok: true, data: updated }));
+        });
+        return;
+      } else {
+        const current = loadCmsOverrides();
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify({ ok: true, data: current }));
         return;
       }
     }

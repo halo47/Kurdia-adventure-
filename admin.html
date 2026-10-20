@@ -951,7 +951,7 @@ button{cursor:pointer;color:inherit}
       <div class="sidebar-group-label">دارایی و سیستەم</div>
       <button class="side-btn" data-side="otp_manager" onclick="go('otp_manager')"><span class="s-ico">🔐</span><span>کۆنترۆڵی کۆدی OTP</span><span class="s-badge" id="sideOtpBadge">ON</span></button>
       <button class="side-btn" data-side="coupons" onclick="go('coupons')"><span class="s-ico">🎟️</span><span>کۆبۆنی داشکاندن</span></button>
-      <button class="side-btn" data-side="finance" onclick="go('finance')"><span class="s-ico">💳</span><span>دارایی و هەژماری FIB</span></button>
+      <button class="side-btn" data-side="finance" onclick="go('finance')"><span class="s-ico">💳</span><span>دووگمەکانی پارەدان و FIB</span><span class="s-badge" id="sideFinanceBadge" style="background:rgba(16,185,129,0.2);color:#6bf0b3">2 چالاک</span></button>
       <button class="side-btn" data-side="weather_manager" onclick="go('weather_manager')"><span class="s-ico">⛅</span><span>کەشوهەوا و نەخشە</span></button>
       <button class="side-btn" data-side="diagnostics" onclick="go('diagnostics')"><span class="s-ico">⏻</span><span>پشکنینی سیستەم</span></button>
       <button class="side-btn" data-side="backup" onclick="go('backup')"><span class="s-ico">💾</span><span>Backup & Restore</span></button>
@@ -999,6 +999,7 @@ button{cursor:pointer;color:inherit}
       <button class="q-chip" onclick="go('broadcast')">💬 WhatsApp</button>
       <button class="q-chip" onclick="go('coupons')">🎟️ کۆبۆنەکان</button>
       <button class="q-chip" onclick="go('places')">🏔️ شوێنەکان (<span id="qPlacesCount">6</span>)</button>
+      <button class="q-chip" id="qFinanceQuickBtn" onclick="go('finance')" style="border-color:#0ea5e9;color:#7dd3fc">💳 دووگمەکانی پارەدان (2 چالاک)</button>
       <button class="q-chip" id="qOtpQuickBtn" onclick="go('otp_manager')" style="border-color:#10b981;color:#6bf0b3">🔐 کۆدی OTP: چالاکە ✓</button>
       <button class="q-chip" onclick="go('settings')">⚙ هەموو بەشەکان</button>
     </div>
@@ -1084,6 +1085,27 @@ button{cursor:pointer;color:inherit}
               <button type="button" class="secondary-btn" style="padding:9px 12px;font-size:11.5px" onclick="go('otp_manager')">⚙️ ڕێکخستنی OTP</button>
             </div>
           </div>
+        </div>
+
+        <!-- ACTIVE & ADDED PAYMENT BUTTONS PANEL ON DASHBOARD -->
+        <div class="panel-card spotlight-card" id="dashPaymentMethodsPanel" style="margin-bottom:14px;border-color:#0284c7;background:linear-gradient(145deg,#071a2c,#07111a)">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(56,189,248,0.18)">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:44px;height:44px;border-radius:12px;background:rgba(14,165,233,0.18);border:1px solid #0ea5e9;display:grid;place-items:center;font-size:20px">💳</div>
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <b style="font-size:14px;color:#fff">دووگمەکانی «پارە بدە لە ڕێگای» (چالاک و زیادکراوەکان)</b>
+                  <span id="dashPmStatsBadge" style="font-size:10.5px;font-weight:900;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.2);color:#6bf0b3;border:1px solid #10b981">2 چالاک لە کۆی 3 دووگمە</span>
+                </div>
+                <small style="color:#94a3b8;font-size:11.5px;display:block;margin-top:3px">ئەو دووگمانەی پارەدان کە زیادت کردوون یان چالاکت کردوون بۆ فۆڕمی بەشداری گەشتەکان (لەگەڵ باڕکۆد و لینک)</small>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <button type="button" class="primary" style="width:auto;margin:0;padding:9px 14px;font-size:12px;background:linear-gradient(120deg,#0c9b61,#07774a)" onclick="openAddPaymentMethodModal()">＋ زیادکردنی دووگمەی نوێ</button>
+              <button type="button" class="secondary-btn" style="padding:9px 12px;font-size:11.5px" onclick="go('finance')">💳 بینینی تەواو و باڕکۆدەکان</button>
+            </div>
+          </div>
+          <div id="dashPaymentMethodsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px"></div>
         </div>
 
         <!-- LIVE WEBSITE VISITOR ANALYTICS PANEL -->
@@ -1717,10 +1739,29 @@ button{cursor:pointer;color:inherit}
         <div class="lang-box spotlight-card" style="margin-bottom:14px">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;border-bottom:1px solid #1a2c3d;padding-bottom:10px">
             <div>
-              <b style="font-size:15px;color:#fff;display:block">🔘 دووگمەکانی «پارە بدە لە ڕێگای» لە فۆڕمی بەشداری</b>
-              <small style="color:#8b9aa8;font-size:11px">لێرە دووگمەکان زیاد بکە، وێنەی باڕکۆد باربکە بۆ Cloudflare R2، و لینکی ڕاستەوخۆ دیاری بکە</small>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <b style="font-size:15px;color:#fff">🔘 دووگمەکانی «پارە بدە لە ڕێگای» (چالاک و زیادکراو)</b>
+                <span id="financePmSummaryBadge" style="font-size:11px;font-weight:900;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.2);color:#6bf0b3;border:1px solid #10b981">2 چالاک</span>
+              </div>
+              <small style="color:#8b9aa8;font-size:11px;display:block;margin-top:3px">لێرە هەموو دووگمە چالاک و زیادکراوەکان دەردەکەون — دەتوانیت دووگمەی نوێ زیاد بکەیت، چالاک یان ناچالاکی بکەیت، و باڕکۆد دابنێیت</small>
             </div>
-            <button type="button" class="primary border-beam" style="margin:0;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="openAddPaymentMethodModal()">＋ زیادکردنی دووگمەی نوێی پارەدان</button>
+            <button type="button" class="primary border-beam" style="width:auto;margin:0;padding:10px 16px;background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="openAddPaymentMethodModal()">＋ زیادکردنی دووگمەی نوێی پارەدان</button>
+          </div>
+
+          <!-- Filter Tabs for All / Active / Inactive Payment Buttons -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="pmFilterTabs">
+            <button type="button" class="q-chip active" data-pm-filter="all" onclick="setPmAdminFilter('all')" style="border-color:#38bdf8;color:#fff;background:rgba(14,165,233,0.18)">هەموو دووگمەکان (<span id="pmCountAll">0</span>)</button>
+            <button type="button" class="q-chip" data-pm-filter="active" onclick="setPmAdminFilter('active')" style="border-color:#10b981;color:#6bf0b3">✓ تەنها چالاکەکان (<span id="pmCountActive">0</span>)</button>
+            <button type="button" class="q-chip" data-pm-filter="inactive" onclick="setPmAdminFilter('inactive')" style="border-color:#ef4444;color:#fca5a5">✕ ناچالاکەکان (<span id="pmCountInactive">0</span>)</button>
+          </div>
+
+          <!-- Live Preview of Active Website Buttons -->
+          <div style="background:#050d17;border:1px solid #172a3c;border-radius:12px;padding:12px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+              <span style="font-size:11.5px;font-weight:800;color:#38bdf8">👁️ پێشبینینی ڕاستەوخۆ: ئەو دووگمانەی ئێستا لە فۆڕمی بەشداری چالاکن و پیشان دەدرێن:</span>
+              <small style="color:#6bf0b3;font-size:10.5px">کلیک لە هەر دووگمەیەک بکە بۆ دەستکاریکردنی</small>
+            </div>
+            <div id="adminPaymentPublicPreview" style="display:flex;flex-wrap:wrap;gap:8px"></div>
           </div>
 
           <!-- Dynamic Methods Grid -->
@@ -2347,6 +2388,10 @@ let editorMode = "new";
 let draftTripImageUrl = "";
 let draftPlaceImageUrl = "";
 let quickDashboardTripImageUrl = "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85";
+
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[m]));
+}
 
 function parsePriceNumber(priceStr){
   const digits = String(priceStr || "25000").replace(/[^\d]/g, "");
@@ -3232,7 +3277,20 @@ async function publishLive(alreadySavedFromTripForm = false){
     renderTripsAndDetail();
     renderEditorTabs();
     renderAdminPlaces();
+    renderAdminPaymentMethods();
+    syncOtpAdminUI();
     animateCounters();
+
+    fetch("/api/cms-overrides", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fibAccount: data.fibAccount,
+        paymentMethods: data.paymentMethods,
+        deletedPaymentMethodIds: Array.isArray(appState.deletedPaymentMethodIds) ? appState.deletedPaymentMethodIds : [],
+        otpRequired: data.otpRequired
+      })
+    }).catch(() => {});
 
     const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
       method: "POST",
@@ -4122,42 +4180,143 @@ function ensurePaymentMethodsArray(){
   }
 }
 
+let currentPmAdminFilter = "all";
+
+function setPmAdminFilter(filter){
+  currentPmAdminFilter = filter || "all";
+  document.querySelectorAll("#pmFilterTabs [data-pm-filter]").forEach(btn => {
+    const on = btn.getAttribute("data-pm-filter") === currentPmAdminFilter;
+    btn.classList.toggle("active", on);
+    btn.style.background = on ? "rgba(14,165,233,0.22)" : "transparent";
+  });
+  renderAdminPaymentMethods();
+}
+
 function renderAdminPaymentMethods(){
   ensurePaymentMethodsArray();
+  const allMethods = appState.paymentMethods || [];
+  const activeCount = allMethods.filter(m => m && m.active !== false).length;
+  const inactiveCount = allMethods.length - activeCount;
+
+  const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = String(v); };
+  setTxt("pmCountAll", allMethods.length);
+  setTxt("pmCountActive", activeCount);
+  setTxt("pmCountInactive", inactiveCount);
+
+  const sideBadge = document.getElementById("sideFinanceBadge");
+  if(sideBadge){
+    sideBadge.textContent = `${activeCount} چالاک`;
+    sideBadge.style.background = activeCount > 0 ? "rgba(16,185,129,0.2)" : "rgba(239,68,68,0.2)";
+    sideBadge.style.color = activeCount > 0 ? "#6bf0b3" : "#fca5a5";
+  }
+  const qFinBtn = document.getElementById("qFinanceQuickBtn");
+  if(qFinBtn){
+    qFinBtn.textContent = `💳 دووگمەکانی پارەدان (${activeCount} چالاک / ${allMethods.length} گشتی)`;
+  }
+  const dashBadge = document.getElementById("dashPmStatsBadge");
+  if(dashBadge){
+    dashBadge.textContent = `${activeCount} چالاک لە کۆی ${allMethods.length} دووگمە`;
+  }
+  const finBadge = document.getElementById("financePmSummaryBadge");
+  if(finBadge){
+    finBadge.textContent = `${activeCount} چالاک · ${allMethods.length} زیادکراو`;
+  }
+
+  // Render Live Website Preview of Active Buttons
+  const previewEl = document.getElementById("adminPaymentPublicPreview");
+  if(previewEl){
+    const activeItems = allMethods.map((pm, idx) => ({ pm, idx })).filter(x => x.pm && x.pm.active !== false);
+    if(!activeItems.length){
+      previewEl.innerHTML = `<div style="color:#fca5a5;font-size:11.5px;padding:6px">⚠️ هیچ دووگمەیەکی پارەدان چالاک نییە. تکایە لایەنی کەم یەک دووگمە چالاک بکە.</div>`;
+    } else {
+      previewEl.innerHTML = activeItems.map(({ pm, idx }) => `
+        <button type="button" onclick="openEditPaymentMethodModal(${idx})" style="display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:11px;border:1px solid #10b981;background:linear-gradient(135deg,rgba(16,185,129,0.16),rgba(14,165,233,0.12));color:#fff;cursor:pointer;font-family:inherit">
+          <span style="font-size:18px">${esc(pm.icon || '💳')}</span>
+          <span style="text-align:right">
+            <b style="display:block;font-size:12px;color:#fff">${esc(pm.name || 'پارەدان')}</b>
+            <small style="display:block;font-size:10px;color:#6bf0b3;direction:ltr">${esc(pm.account || '')}</small>
+          </span>
+          <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(16,185,129,0.25);color:#6bf0b3;font-weight:800">${pm.barcodeUrl ? '📷 باڕکۆد' : '✓ چالاک'}</span>
+        </button>
+      `).join("");
+    }
+  }
+
+  // Render Dashboard Payment Methods Grid
+  const dashGrid = document.getElementById("dashPaymentMethodsGrid");
+  if(dashGrid){
+    dashGrid.innerHTML = allMethods.map((pm, idx) => {
+      const isActive = pm.active !== false;
+      const hasBarcode = Boolean(pm.barcodeUrl);
+      return `
+        <div style="background:#081320;border:1px solid ${isActive ? '#10b981' : '#334155'};border-radius:12px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;gap:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="display:flex;align-items:center;gap:9px">
+              <span style="font-size:21px;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.06);display:grid;place-items:center">${esc(pm.icon || '💳')}</span>
+              <div>
+                <b style="font-size:13px;color:#fff;display:block">${esc(pm.name || 'شێوازی پارەدان')}</b>
+                <small style="color:#7dd3fc;direction:ltr;display:inline-block;font-weight:700;font-size:11px">${esc(pm.account || '—')}</small>
+              </div>
+            </div>
+            <button type="button" onclick="togglePaymentMethodActive(${idx})" style="cursor:pointer;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:900;background:${isActive ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'};color:${isActive ? '#6bf0b3' : '#fca5a5'};border:1px solid ${isActive ? '#10b981' : '#ef4444'}">
+              ${isActive ? '✓ چالاکە' : '✕ ناچالاکە'}
+            </button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;border-top:1px solid #132232;padding-top:8px">
+            <small style="font-size:10.5px;color:${hasBarcode ? '#6bf0b3' : '#94a3b8'}">${hasBarcode ? '📷 باڕکۆد دانراوە' : '📄 بێ وێنەی باڕکۆد'}</small>
+            <div style="display:flex;gap:5px">
+              <button type="button" class="secondary-btn" style="padding:4px 9px;font-size:10.5px;margin:0" onclick="openEditPaymentMethodModal(${idx})">✏️ دەستکاری</button>
+              <button type="button" class="del-btn" style="padding:4px 8px;font-size:10.5px;margin:0" onclick="deletePaymentMethod(${idx})">🗑️</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
   const listEl = document.getElementById("adminPaymentMethodsList");
   if(!listEl) return;
 
-  if(!appState.paymentMethods.length){
-    listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:#8b9aa8;background:#060e18;border:1px dashed #1e3346;border-radius:12px;font-size:12px">هیچ شێوازێکی پارەدان دانەنراوە. لە سەرەوە کلیک لە دوگمەی «زیادکردن» بکە.</div>`;
+  const filtered = allMethods
+    .map((pm, idx) => ({ pm, idx }))
+    .filter(({ pm }) => {
+      if(!pm) return false;
+      if(currentPmAdminFilter === "active") return pm.active !== false;
+      if(currentPmAdminFilter === "inactive") return pm.active === false;
+      return true;
+    });
+
+  if(!filtered.length){
+    listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:#8b9aa8;background:#060e18;border:1px dashed #1e3346;border-radius:12px;font-size:12px">هیچ دووگمەیەکی پارەدان لەم فلتەرەدا نییە. لە سەرەوە کلیک لە دوگمەی «＋ زیادکردنی دووگمەی نوێی پارەدان» بکە.</div>`;
     return;
   }
 
-  listEl.innerHTML = appState.paymentMethods.map((pm, idx) => {
+  listEl.innerHTML = filtered.map(({ pm, idx }) => {
     const isActive = pm.active !== false;
     const barcodeSrc = pm.barcodeUrl ? resolveMediaUrl(pm.barcodeUrl) : "";
     return `
-      <div class="spotlight-card" style="background:#081320;border:1px solid ${isActive ? '#1e3852' : '#142230'};border-radius:14px;padding:14px;position:relative;opacity:${isActive ? '1' : '0.6'}">
+      <div class="spotlight-card" style="background:#081320;border:2px solid ${isActive ? '#10b981' : '#263646'};border-radius:14px;padding:14px;position:relative">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px">
           <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:24px;width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.06);display:grid;place-items:center">${esc(pm.icon || '💳')}</span>
+            <span style="font-size:24px;width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.06);display:grid;place-items:center">${esc(pm.icon || '💳')}</span>
             <div>
               <b style="font-size:14px;color:#fff;display:block">${esc(pm.name || 'شێوازی پارەدان')}</b>
               <small style="color:#7dd3fc;direction:ltr;display:inline-block;font-weight:700">${esc(pm.account || '—')}</small>
             </div>
           </div>
-          <button type="button" class="s-badge" style="cursor:pointer;background:${isActive ? 'rgba(12,155,97,0.2)' : 'rgba(239,68,68,0.2)'};color:${isActive ? '#6bf0b3' : '#fca5a5'};border:1px solid ${isActive ? '#0c9b61' : '#dc2626'}" onclick="togglePaymentMethodActive(${idx})">
-            ${isActive ? '✓ چالاکە' : '✕ ناچالاک'}
+          <button type="button" class="s-badge" style="cursor:pointer;padding:5px 10px;font-size:11px;background:${isActive ? 'rgba(12,155,97,0.22)' : 'rgba(239,68,68,0.22)'};color:${isActive ? '#6bf0b3' : '#fca5a5'};border:1px solid ${isActive ? '#0c9b61' : '#dc2626'}" onclick="togglePaymentMethodActive(${idx})">
+            ${isActive ? '✓ چالاکە لە ماڵپەڕ' : '✕ ناچالاکە'}
           </button>
         </div>
 
         ${barcodeSrc ? `
           <div style="text-align:center;background:#03070d;border:1px solid #192736;border-radius:10px;padding:8px;margin:8px 0">
-            <img src="${barcodeSrc}" alt="Barcode" style="max-height:100px;max-width:100%;object-fit:contain;border-radius:6px;display:block;margin:0 auto">
-            <small style="display:block;color:#6bf0b3;font-size:10px;margin-top:4px">✓ وێنەی باڕکۆد لە R2 دانراوە</small>
+            <img src="${barcodeSrc}" alt="Barcode" style="max-height:110px;max-width:100%;object-fit:contain;border-radius:6px;display:block;margin:0 auto">
+            <small style="display:block;color:#6bf0b3;font-size:10px;margin-top:4px">✓ وێنەی باڕکۆد دانراوە</small>
           </div>
         ` : `
           <div style="text-align:center;background:#050d17;border:1px dashed #1c2e42;border-radius:8px;padding:8px;margin:8px 0;color:#64748b;font-size:11px">
-            هیچ باڕکۆدێک دانەنراوە
+            هیچ باڕکۆدێک دانەنراوە (تەنها ژمارەی هەژمار پیشان دەدرێت)
           </div>
         `}
 
@@ -4174,8 +4333,9 @@ function renderAdminPaymentMethods(){
         ${pm.instruction ? `<div style="font-size:11px;color:#94a3b8;margin-bottom:8px;line-height:1.4">${esc(pm.instruction)}</div>` : ''}
 
         <div style="display:flex;gap:6px;margin-top:10px;border-top:1px solid #132232;padding-top:10px">
-          <button type="button" class="secondary-btn" style="flex:1;padding:6px 10px;font-size:11px;margin:0" onclick="openEditPaymentMethodModal(${idx})">✏️ دەستکاریکردن</button>
-          <button type="button" class="del-btn" style="padding:6px 10px;font-size:11px;margin:0" onclick="deletePaymentMethod(${idx})">🗑️ سڕینەوە</button>
+          <button type="button" class="secondary-btn" style="flex:1;padding:7px 10px;font-size:11.5px;margin:0;border-color:${isActive ? '#ef4444' : '#10b981'};color:${isActive ? '#fca5a5' : '#6bf0b3'}" onclick="togglePaymentMethodActive(${idx})">${isActive ? '🔓 ناچالاککردن' : '🔐 چالاککردن'}</button>
+          <button type="button" class="secondary-btn" style="flex:1;padding:7px 10px;font-size:11.5px;margin:0" onclick="openEditPaymentMethodModal(${idx})">✏️ دەستکاریکردن</button>
+          <button type="button" class="del-btn" style="padding:7px 10px;font-size:11.5px;margin:0" onclick="deletePaymentMethod(${idx})">🗑️</button>
         </div>
       </div>
     `;
@@ -4317,6 +4477,8 @@ async function deletePaymentMethod(idx){
   if(appState.paymentMethods.length <= 1){
     return toast("⚠️ لایەنی کەم دەبێت یەک شێوازی پارەدان هەبێت");
   }
+  if(!Array.isArray(appState.deletedPaymentMethodIds)) appState.deletedPaymentMethodIds = [];
+  if(removed.id) appState.deletedPaymentMethodIds.push(removed.id);
   appState.paymentMethods.splice(idx, 1);
   renderAdminPaymentMethods();
   autoSync();
@@ -4327,7 +4489,7 @@ async function deletePaymentMethod(idx){
 async function togglePaymentMethodActive(idx){
   ensurePaymentMethodsArray();
   if(!appState.paymentMethods[idx]) return;
-  appState.paymentMethods[idx].active = !appState.paymentMethods[idx].active;
+  appState.paymentMethods[idx].active = !(appState.paymentMethods[idx].active !== false);
   renderAdminPaymentMethods();
   autoSync();
   await publishLive(true);
@@ -4699,9 +4861,22 @@ async function fetchRemoteCMSIntoAdmin(){
         appState.places = cfg.destinations;
         renderAdminPlaces();
       }
-      if(Array.isArray(cfg.paymentMethods) && cfg.paymentMethods.length){
-        appState.paymentMethods = cfg.paymentMethods;
-        renderAdminPaymentMethods();
+      const remotePms = Array.isArray(cfg.paymentMethods) && cfg.paymentMethods.length
+        ? cfg.paymentMethods
+        : (Array.isArray(cfg.finance?.paymentMethods) ? cfg.finance.paymentMethods : []);
+      if(remotePms.length){
+        const delPmIds = new Set(Array.isArray(appState.deletedPaymentMethodIds) ? appState.deletedPaymentMethodIds : []);
+        const mergedPms = remotePms.filter(p => p && !delPmIds.has(p.id));
+        (appState.paymentMethods || []).forEach(localPm => {
+          if(!localPm || delPmIds.has(localPm.id)) return;
+          const existsIdx = mergedPms.findIndex(rp => rp.id === localPm.id || (rp.name && rp.name === localPm.name));
+          if(existsIdx === -1){
+            mergedPms.push(localPm);
+          } else {
+            mergedPms[existsIdx] = localPm;
+          }
+        });
+        if(mergedPms.length) appState.paymentMethods = mergedPms;
       }
       if(cfg.fibAccount || cfg.finance?.fibAccount){
         appState.fibAccount = cfg.fibAccount || cfg.finance?.fibAccount;
@@ -4710,12 +4885,33 @@ async function fetchRemoteCMSIntoAdmin(){
       }
       if(typeof cfg.otpRequired === "boolean"){
         appState.otpRequired = cfg.otpRequired;
-        syncOtpAdminUI();
       } else if(typeof cfg.booking?.otpRequired === "boolean"){
         appState.otpRequired = cfg.booking.otpRequired;
-        syncOtpAdminUI();
       }
     }
+    try{
+      const ovRes = await fetch(`/api/cms-overrides?cb=${Date.now()}`, { cache: "no-store" });
+      if(ovRes.ok){
+        const ovJson = await ovRes.json();
+        const ov = ovJson.data || {};
+        if(Array.isArray(ov.deletedPaymentMethodIds)){
+          appState.deletedPaymentMethodIds = ov.deletedPaymentMethodIds;
+        }
+        if(Array.isArray(ov.paymentMethods) && ov.paymentMethods.length){
+          appState.paymentMethods = ov.paymentMethods;
+        }
+        if(ov.fibAccount){
+          appState.fibAccount = ov.fibAccount;
+          const fibEl = document.getElementById("fibAccount");
+          if(fibEl) fibEl.value = appState.fibAccount;
+        }
+        if(typeof ov.otpRequired === "boolean"){
+          appState.otpRequired = ov.otpRequired;
+        }
+      }
+    }catch(_){}
+    renderAdminPaymentMethods();
+    syncOtpAdminUI();
     if(cfg && Array.isArray(cfg.trips) && cfg.trips.length){
       const deletedIds = new Set(Array.isArray(appState.deletedTripIds) ? appState.deletedTripIds : []);
       const remoteNormalized = cfg.trips.map((t, i) => normalizeAdminTrip(t, i)).filter(t => !deletedIds.has(t.id));
