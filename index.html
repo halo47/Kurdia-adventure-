@@ -9,7 +9,7 @@
 <script>
 // Auto cache buster: upgrade stale cached versions immediately
 (function(){
-  var V = 'v3.8.2';
+  var V = 'v3.8.3';
   try {
     var stored = localStorage.getItem('kurdia_app_ver');
     if (stored !== V) {
@@ -1182,32 +1182,51 @@ main,section,.section,.page-section{background-color:transparent!important}
   <div class="container">
     <section class="section">
       <div class="booking-hero-banner">
-        <div>
-          <div class="eyebrow">EXPEDITION REGISTRATION · بەشداری لە گەشت</div>
-          <h2>بەشداری گەشت و حیجزکردنی کورسی</h2>
-          <p class="muted">گەشتی دڵخوازت لە خوارەوە هەڵبژێرە و بە ٣ هەنگاوی خێرا ناوی خۆت و هاوڕێکانت تۆمار بکە.</p>
+        <div class="booking-hero-top">
+          <div>
+            <div class="eyebrow">EXPEDITION REGISTRATION · بەشداری لە گەشت</div>
+            <h2>بەشداری گەشت و حیجزکردنی کورسی</h2>
+            <p class="muted">گەشتی دڵخوازت لە خوارەوە هەڵبژێرە و بە ٣ هەنگاوی ڕێکخراو و خێرا ناوی خۆت و هاوڕێکانت تۆمار بکە.</p>
+          </div>
+          <div class="booking-QuickStepsPills">
+            <span><b>١</b> هەڵبژاردنی گەشت</span>
+            <i>←</i>
+            <span><b>٢</b> زانیاری و مۆبایل</span>
+            <i>←</i>
+            <span><b>٣</b> پسوڵە و تەواوکردن</span>
+          </div>
         </div>
         <div class="booking-trust-badges">
           <span>✓ پشتڕاستکردنەوەی خێرا</span>
           <span>🚌 پاسی گەشتیاری VIP</span>
-          <span>🧭 ڕێبەری شارەزا</span>
+          <span>🧭 ڕێبەری شارەزای شاخەوانی</span>
+          <span>🔒 پاراستنی زانیاری بەشداربووان</span>
         </div>
       </div>
 
       <div class="booking-section-label">
-        <span>١. گەشتی دڵخوازت هەڵبژێرە</span>
-        <small id="bookingAvailableTripsCount">گەشتە بەردەستەکان</small>
+        <div class="bsl-right">
+          <span class="bsl-num">١</span>
+          <div>
+            <span>گەشتی دڵخوازت هەڵبژێرە</span>
+            <small class="bsl-sub">کلیک لەسەر کارتی هەر گەشتێک بکە بۆ دیاریکردنی</small>
+          </div>
+        </div>
+        <small id="bookingAvailableTripsCount" class="bsl-badge">گەشتە بەردەستەکان</small>
       </div>
       <div id="tripList" class="booking-trips-cards-grid"></div>
 
       <div class="booking-form-card" id="bookingFormCardWrap">
         <div class="booking-form-card-head">
-          <div>
+          <div class="bfh-title-wrap">
             <span class="booking-form-kicker">٢. فۆڕمی تۆمارکردنی بەشداربوو</span>
             <h3>تۆمارکردنی ناو و زانیاری</h3>
           </div>
           <div class="booking-selected-summary" id="bookingSelectedSummaryBox">
-            <small>گەشتی هەڵبژێردراو</small>
+            <div class="bss-head">
+              <small>🧭 گەشتی هەڵبژێردراو</small>
+              <span class="bss-live-dot">چالاک</span>
+            </div>
             <b id="bookingSelectedTripName">گەشتی داهاتوو</b>
             <span id="bookingSelectedTripMeta">—</span>
           </div>
@@ -1217,134 +1236,169 @@ main,section,.section,.page-section{background-color:transparent!important}
           <div class="booking-progress" aria-label="هەنگاوەکانی تۆمارکردن">
             <span class="booking-progress-line"><i id="bookingProgressFill"></i></span>
             <div class="booking-step-dot active" data-step-dot="1" onclick="bookingGo(1)" style="cursor:pointer"><b>١</b><small>زانیاری</small></div>
-            <div class="booking-step-dot" data-step-dot="2"><b>٢</b><small>مۆبایل</small></div>
-            <div class="booking-step-dot" data-step-dot="3"><b>٣</b><small>تەواوکردن</small></div>
+            <div class="booking-step-dot" data-step-dot="2" onclick="bookingNext(1)" style="cursor:pointer"><b>٢</b><small>مۆبایل</small></div>
+            <div class="booking-step-dot" data-step-dot="3" onclick="bookingNext(2)" style="cursor:pointer"><b>٣</b><small>پارەدان</small></div>
           </div>
 
+          <!-- هەنگاوی ١: زانیاری بەشداربوو -->
           <div class="booking-step-panel active" data-booking-step="1">
             <div class="booking-step-title">
               <span>هەنگاوی ١ لە ٣</span>
               <h4>زانیارییە سەرەتاییەکان</h4>
               <p>ناوی تەواوت بنووسە و گەشت و ژمارەی بەشداربووان دیاری بکە.</p>
             </div>
-            <div class="booking-field-grid">
-              <div>
-                <label class="booking-label" for="bookingName">👤 ناوی سیانی / تەواو *</label>
-                <input class="input" id="bookingName" name="name" placeholder="بۆ نموونە: ئارام محەمەد ئەحمەد" autocomplete="name" required>
-              </div>
-              <div>
-                <label class="booking-label" for="bookingTrip">🧭 گەشتی هەڵبژێردراو *</label>
-                <select class="select" name="trip" id="bookingTrip" onchange="syncSelectedTripBanner()" required></select>
-              </div>
-            </div>
 
-            <div class="booking-people-row">
-              <div>
-                <label class="booking-label" for="bookingPeople" style="margin:0">👥 ژمارەی بەشداربووان</label>
-                <small style="display:block;font-size:11px;color:var(--muted);margin-top:2px">ژمارەی خۆت و ئەو کەسانەی لەگەڵتن</small>
+            <div class="booking-subcard">
+              <div class="booking-field-grid">
+                <div>
+                  <label class="booking-label" for="bookingName">👤 ناوی سیانی / تەواو *</label>
+                  <input class="input" id="bookingName" name="name" placeholder="بۆ نموونە: ئارام محەمەد ئەحمەد" autocomplete="name" required>
+                </div>
+                <div>
+                  <label class="booking-label" for="bookingTrip">🧭 گەشتی هەڵبژێردراو *</label>
+                  <select class="select" name="trip" id="bookingTrip" onchange="syncSelectedTripBanner()" required></select>
+                </div>
               </div>
-              <div class="people-stepper">
-                <button type="button" class="stepper-btn" onclick="stepBookingPeople(-1)" aria-label="کەمکردنەوە">−</button>
-                <input class="input" id="bookingPeople" name="people" type="number" min="1" max="25" value="1" onchange="handlePeopleCount(this.value)" required>
-                <button type="button" class="stepper-btn" onclick="stepBookingPeople(1)" aria-label="زیادکردن">＋</button>
-              </div>
-            </div>
 
-            <div id="extraNamesContainer" class="extra-names"></div>
+              <div class="booking-people-row">
+                <div>
+                  <label class="booking-label" for="bookingPeople" style="margin:0">👥 ژمارەی بەشداربووان</label>
+                  <small style="display:block;font-size:11px;color:var(--muted);margin-top:2px">ژمارەی خۆت و ئەو کەسانەی لەگەڵتن دیاری بکە</small>
+                </div>
+                <div class="people-stepper">
+                  <button type="button" class="stepper-btn" onclick="stepBookingPeople(-1)" aria-label="کەمکردنەوە">−</button>
+                  <input class="input" id="bookingPeople" name="people" type="number" min="1" max="25" value="1" onchange="handlePeopleCount(this.value)" required>
+                  <button type="button" class="stepper-btn" onclick="stepBookingPeople(1)" aria-label="زیادکردن">＋</button>
+                </div>
+              </div>
+
+              <div id="extraNamesContainer" class="extra-names"></div>
+            </div>
 
             <div class="booking-live-total" id="bookingLivePriceBar">
-              <span>کۆی نرخی بەشداری:</span>
+              <div class="blt-left">
+                <span>💰 کۆی گشتی نرخی بەشداری:</span>
+                <small>نرخی هەژمارکراو بەپێی ژمارەی کەس</small>
+              </div>
               <strong id="bookingCalculatedTotal">—</strong>
             </div>
 
             <button type="button" class="btn red wizard-next" onclick="bookingNext(1)">بەردەوامبوون بۆ هەنگاوی دووەم ←</button>
           </div>
 
+          <!-- هەنگاوی ٢: ژمارەی مۆبایل و پەیوەندی -->
           <div class="booking-step-panel" data-booking-step="2" hidden>
             <div class="booking-step-title">
               <span>هەنگاوی ٢ لە ٣</span>
               <h4 id="bookingStep2Heading">پشتڕاستکردنەوەی ژمارەی WhatsApp</h4>
               <p id="bookingStep2Sub">کۆدێکی ٤ ژمارەیی بۆ ژمارەی WhatsApp ـت دەنێردرێت بۆ دڵنیابوونەوە.</p>
             </div>
-            <label class="booking-label" for="bookingPhone">📱 ژمارەی مۆبایل (WhatsApp) *</label>
-            <div class="otp-row" id="bookingPhoneRow">
-              <input class="input" id="bookingPhone" name="phone" inputmode="tel" autocomplete="tel" placeholder="0750 000 0000" required>
-              <button type="button" class="btn red otp-btn" id="sendOtpBtn" onclick="sendBookingOTP()">ناردنی کۆدی OTP</button>
-            </div>
-            <div id="otpDisabledNotice" style="display:none;margin-top:8px;padding:10px 12px;border-radius:12px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;font-size:12px;font-weight:700;line-height:1.6">
-              ✓ پێویست بە کۆدی OTP ناکات — تەنها ژمارەی مۆبایلەکەت بنووسە و کرتە لە «بەردەوامبوون» بکە.
-            </div>
-            <div id="otpBox" class="otp-box" style="display:none">
-              <div class="otp-head">
-                <b>پشتڕاستکردنەوەی کۆد</b>
-                <span id="otpStatus" class="muted">کۆدەکە بۆ WhatsApp ـت نێردراوە</span>
+
+            <div class="booking-subcard">
+              <label class="booking-label" for="bookingPhone">📱 ژمارەی مۆبایل (WhatsApp) *</label>
+              <div class="otp-row" id="bookingPhoneRow">
+                <input class="input" id="bookingPhone" name="phone" inputmode="tel" autocomplete="tel" placeholder="0750 000 0000" dir="ltr" style="text-align:right;font-weight:800;letter-spacing:0.5px" required>
+                <button type="button" class="btn red otp-btn" id="sendOtpBtn" onclick="sendBookingOTP()">ناردنی کۆدی OTP</button>
               </div>
-              <div class="otp-slots" dir="ltr" aria-label="کۆدی چوار ژمارەیی">
-                <input class="otp-slot" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="ژمارەی یەکەم">
-                <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی دووەم">
-                <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی سێیەم">
-                <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی چوارەم">
+              <div id="otpDisabledNotice" style="display:none;margin-top:10px;padding:12px 14px;border-radius:14px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.32);color:#6ee7b7;font-size:12px;font-weight:700;line-height:1.65">
+                ✓ پێویست بە کۆدی OTP ناکات — تەنها ژمارەی مۆبایلەکەت بنووسە و کرتە لە «بەردەوامبوون» بکە.
               </div>
-              <input type="hidden" id="bookingOtp" value="">
-              <button type="button" class="btn green" onclick="verifyBookingOTP()">پشتڕاستکردنەوەی ژمارە ✓</button>
+              <div id="otpBox" class="otp-box" style="display:none;margin-top:10px">
+                <div class="otp-head">
+                  <b>پشتڕاستکردنەوەی کۆد</b>
+                  <span id="otpStatus" class="muted">کۆدەکە بۆ WhatsApp ـت نێردراوە</span>
+                </div>
+                <div class="otp-slots" dir="ltr" aria-label="کۆدی چوار ژمارەیی">
+                  <input class="otp-slot" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="ژمارەی یەکەم">
+                  <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی دووەم">
+                  <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی سێیەم">
+                  <input class="otp-slot" inputmode="numeric" maxlength="1" aria-label="ژمارەی چوارەم">
+                </div>
+                <input type="hidden" id="bookingOtp" value="">
+                <button type="button" class="btn green" onclick="verifyBookingOTP()">پشتڕاستکردنەوەی ژمارە ✓</button>
+              </div>
             </div>
+
             <input type="hidden" name="otp_verified" id="otpVerified" value="0">
             <div class="wizard-actions">
               <button type="button" class="btn ghost" onclick="bookingGo(1)">→ گەڕانەوە</button>
-              <button type="button" class="btn red" onclick="bookingNext(2)">بەردەوامبوون ←</button>
+              <button type="button" class="btn red" onclick="bookingNext(2)">بەردەوامبوون بۆ پارەدان ←</button>
             </div>
           </div>
 
+          <!-- هەنگاوی ٣: پارەدان و بارکردنی پسوڵە (ڕێکخراو) -->
           <div class="booking-step-panel" data-booking-step="3" hidden>
             <div class="booking-step-title">
               <span>هەنگاوی ٣ لە ٣</span>
               <h4>پارەدان و تەواوکردنی ناونووسین</h4>
-              <p>بڕی بەشداری بنێرە بۆ هەژماری FIB و وێنەی پسوڵەکە باربکە.</p>
+              <p>بڕی بەشداری بنێرە لە ڕێگای یەکێک لە هەژمارەکان و وێنەی پسوڵەکە باربکە.</p>
             </div>
 
-            <div class="fib-payment-card">
-              <div class="fib-payment-left">
-                <span class="fib-badge">💳 هەژماری فەرمی پارەدان (FIB)</span>
-                <strong id="publicFibNumberDisplay" dir="ltr">0750 313 0360</strong>
-                <small>تکایە وێنەی شاشەی پسوڵەی ناردنی پارەکە لە خوارەوە دابنێ</small>
+            <!-- ١. پوختەی بڕی پارە و کۆدی داشکاندن -->
+            <div class="booking-step3-summary-card">
+              <div class="bs3-total-row">
+                <div>
+                  <span class="bs3-kicker">پوختەی بەشداری</span>
+                  <strong id="bookingStep3TripLabel">گەشتی داهاتوو</strong>
+                </div>
+                <div class="bs3-amount-box">
+                  <small>بڕی پارەی پێویست</small>
+                  <b id="bookingStep3TotalDisplay">—</b>
+                </div>
               </div>
-              <button type="button" class="btn ghost fib-copy-btn" onclick="copyFibAccount()">📋 کۆپیکردنی ژمارە</button>
+              <div class="bs3-coupon-wrap">
+                <div class="coupon-row">
+                  <input class="input" id="couponInput" name="coupon" placeholder="🎟️ کۆدی داشکاندنت هەیە؟ (نموونە: KURDIA10)" autocomplete="off">
+                  <button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button>
+                </div>
+                <div id="couponStatus" class="coupon-status"></div>
+                <input type="hidden" name="coupon_code" id="appliedCouponCode" value="">
+                <input type="hidden" name="coupon_discount" id="appliedCouponDiscount" value="0">
+              </div>
             </div>
 
-            <div class="glass coupon-box" style="padding:14px;margin:4px 0 8px">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">
-                <b>🎟️ کۆدی داشکاندن</b>
-                <span class="muted" style="font-size:10px">ئارەزوومەندانە</span>
-              </div>
-              <div class="coupon-row">
-                <input class="input" id="couponInput" name="coupon" placeholder="نموونە: KURDIA10" autocomplete="off">
-                <button type="button" class="btn ghost" onclick="applyCoupon()">جێبەجێکردن</button>
-              </div>
-              <div id="couponStatus" class="coupon-status"></div>
-              <input type="hidden" name="coupon_code" id="appliedCouponCode" value="">
-              <input type="hidden" name="coupon_discount" id="appliedCouponDiscount" value="0">
-            </div>
-
-            <!-- بەشی پارە بدە لە ڕێگای (Payment Gateways & Barcodes) -->
+            <!-- ٢. شێوازەکانی پارەدان و هەژماری فەرمی (یەکخراو و ڕێکخراو) -->
             <div class="payment-gateways-container" id="bookingPaymentGatewaysBlock">
               <div class="payment-gateways-header">
-                <span class="pay-kicker">💳 شێوازی پارەدان</span>
-                <h4 style="margin:4px 0 2px;font-size:15px;color:#fff;font-weight:800">پارە بدە لە ڕێگای</h4>
-                <p class="muted" style="font-size:11.5px;margin:0">کلیک لە هەر کام لەم دووگمانە بکە بۆ بینینی باڕکۆد یان ناردنی پارە:</p>
+                <div>
+                  <span class="pay-kicker">💳 هەنگاوی یەکەم لە پارەدان</span>
+                  <h4 style="margin:3px 0 2px;font-size:15.5px;color:#fff;font-weight:900">پارە بدە لە ڕێگای</h4>
+                  <p class="muted" style="font-size:11.5px;margin:0">کلیک لە شێوازی پارەدان بکە بۆ بینینی باڕکۆد (QR) یان کۆپیکردنی ژمارە:</p>
+                </div>
+                <div class="fib-quick-pill" onclick="copyFibAccount()" title="کلیک بکە بۆ کۆپیکردن">
+                  <small>ژمارەی فەرمی FIB:</small>
+                  <strong id="publicFibNumberDisplay" dir="ltr">0750 313 0360</strong>
+                  <span class="fqp-copy">📋 کۆپی</span>
+                </div>
               </div>
               <div class="pay-methods-buttons-row" id="publicPaymentMethodsRow">
                 <!-- Dynamically rendered payment buttons -->
               </div>
             </div>
 
-            <div class="receipt-box">
-              <b>📸 وێنەی پسوڵەی پارەدان *</b>
-              <small>وێنەی پسوڵەی FIB هەڵبژێرە بۆ ئەوەی داواکارییەکەت دەستبەجێ پەسەند بکرێت.</small>
-              <input class="input" id="receiptInput" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required>
+            <!-- ٣. بارکردنی وێنەی پسوڵە و تێبینی -->
+            <div class="receipt-box" id="receiptUploadCard">
+              <div class="receipt-box-head">
+                <div>
+                  <span class="pay-kicker" style="color:#6ee7b7">📸 هەنگاوی دووەم لە پارەدان</span>
+                  <b style="display:block;font-size:15px;color:#fff;margin-top:2px">وێنەی پسوڵەی پارەدان باربکە *</b>
+                  <small>دوای ناردنی پارەکە، وێنەی شاشەی پسوڵەکە لێرە دابنێ بۆ پەسەندکردنی دەستبەجێ.</small>
+                </div>
+              </div>
+              <label class="receipt-dropzone" for="receiptInput">
+                <input class="input receipt-file-input" id="receiptInput" name="receipt" type="file" accept="image/jpeg,image/png,image/webp" required>
+                <div class="rdz-prompt">
+                  <span class="rdz-icon">📤</span>
+                  <div>
+                    <b>کلیک بکە بۆ هەڵبژاردنی وێنەی پسوڵە</b>
+                    <small>PNG, JPG یان WEBP — وێنەی شاشەی مۆبایل</small>
+                  </div>
+                </div>
+              </label>
               <div id="receiptPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div>
             </div>
 
-            <textarea class="textarea" name="note" placeholder="تێبینی یان داواکاری تایبەت (ئارەزوومەندانە)..."></textarea>
+            <textarea class="textarea" name="note" placeholder="📝 تێبینی یان داواکاری تایبەت (ئارەزوومەندانە)..." style="min-height:84px"></textarea>
             <div class="wizard-actions">
               <button type="button" class="btn ghost" onclick="bookingGo(2)">→ گەڕانەوە</button>
               <button class="btn red" id="bookingSubmitBtn">✓ ناردنی داواکاری و تەواوکردن</button>
@@ -1731,7 +1785,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v3.8.2';
+const SITE_CODE_RELEASE='v3.8.3';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -2293,14 +2347,19 @@ window.updateBookingCalculatedTotal = function(){
   const people = Math.max(1, parseInt($('bookingPeople')?.value || '1', 10) || 1);
   const rawPrice = Number(String(chosen.price || '').replace(/[^0-9]/g, '')) || 0;
   const totalEl = $('bookingCalculatedTotal');
-  if(!totalEl) return;
+  const step3TotalEl = $('bookingStep3TotalDisplay');
+  const step3TripEl = $('bookingStep3TripLabel');
+  if(step3TripEl) step3TripEl.textContent = `${chosen.title || 'گەشتی داهاتوو'} · (${people} کەس)`;
+  let formatted = '';
   if(rawPrice > 0){
     let total = rawPrice * people;
     if(appliedDiscountPercent > 0) total = Math.round(total * (1 - appliedDiscountPercent / 100));
-    totalEl.textContent = `${total.toLocaleString()} دینار (${people} کەس)`;
+    formatted = `${total.toLocaleString()} دینار (${people} کەس)`;
   } else {
-    totalEl.textContent = `${chosen.price || 'بەپێی گەشت'} (${people} کەس)`;
+    formatted = `${chosen.price || 'بەپێی گەشت'} (${people} کەس)`;
   }
+  if(totalEl) totalEl.textContent = formatted;
+  if(step3TotalEl) step3TotalEl.textContent = formatted;
 };
 
 window.stepBookingPeople = function(delta){
@@ -2678,7 +2737,7 @@ function renderPlacesPublic(){
   const places = Array.isArray(data.destinations) ? data.destinations : [];
   const homeEl = $('homeDests');
   if(homeEl){
-    homeEl.innerHTML = places.slice(0, 1).map((x, i) => createPlaceCardHTML(x, i)).join('');
+    homeEl.innerHTML = places.slice(0, 3).map((x, i) => createPlaceCardHTML(x, i)).join('');
   }
   const destListEl = $('destList');
   if(destListEl){
@@ -4343,8 +4402,10 @@ async function submitBooking(e){
   finally{btn.disabled=false;btn.textContent='✓ ناردنی داواکاری و تەواوکردن'}
 }
 $('bookingPhone')?.addEventListener('input',()=>{$('otpVerified').value=isOtpRequired()?'0':'1';$('otpBox').style.display='none';document.querySelectorAll('.otp-slot').forEach(x=>{x.value='';x.classList.remove('filled')});if($('bookingOtp'))$('bookingOtp').value=''});$('receiptInput')?.addEventListener('change',function(){
-  const f=this.files?.[0], box=$('receiptPreview'); if(!f){box.textContent='هیچ وێنەیەک هەڵنەبژێردراوە';return}
-  const url=URL.createObjectURL(f);box.innerHTML=`<img src="${url}" alt="پسوڵە"><span style="display:block;margin-top:6px">${esc(f.name)}</span>`;
+  const f=this.files?.[0], box=$('receiptPreview'); if(!f){box.textContent='هیچ وێنەیەک هەڵنەبژێردراوە';box.classList.remove('has-file');return}
+  const url=URL.createObjectURL(f);
+  box.classList.add('has-file');
+  box.innerHTML=`<div class="rp-preview-inner"><img src="${url}" alt="پسوڵە"><div class="rp-meta"><span class="rp-badge">✓ وێنەی پسوڵە ئامادەیە</span><small>${esc(f.name)}</small></div></div>`;
 });
 function togglePrivateDate(){
   const box=$('privateDateBox');
@@ -4527,6 +4588,7 @@ function applyCoupon(){
  window.appliedCouponFixed=type==='fixed'?val:0;
  if($('appliedCouponCode'))$('appliedCouponCode').value=c.code;
  if($('appliedCouponDiscount'))$('appliedCouponDiscount').value=String(type==='fixed'?val:val);
+ updateBookingCalculatedTotal();
  toast(type==='fixed'?`🎉 ${val.toLocaleString()} IQD داشکاندن چالاک کرا`:`🎉 ${val}% داشکاندن چالاک کرا`);
 }
 function previewStoryImage(e){const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/'))return toast('تەنها وێنە ڕێگەپێدراوە');if(f.size>5*1024*1024)return toast('قەبارەی وێنە نابێت لە 5MB زیاتر بێت');const r=new FileReader();r.onload=x=>{const im=new Image();im.onload=()=>{let w=im.width,h=im.height,m=900;if(w>h&&w>m){h=Math.round(h*m/w);w=m}else if(h>m){w=Math.round(w*m/h);h=m}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);const u=c.toDataURL('image/jpeg',.78);$('stMediaBase64').value=u;$('storyPreview').innerHTML=`<img src="${u}" style="width:100%;max-height:220px;object-fit:contain;border-radius:10px">`};im.src=x.target.result};r.readAsDataURL(f)}
@@ -5281,19 +5343,26 @@ document.addEventListener('click',function(e){
 }
 
 /* =========================================================
-   3. EXPEDITION REGISTRATION / BOOKING (#booking)
+   3. EXPEDITION REGISTRATION / BOOKING (#booking) — ORGANIZED LUXURY UI
    ========================================================= */
 .booking-hero-banner{
   position:relative;
   border-radius:28px;
   padding:24px 22px;
-  background:linear-gradient(145deg, rgba(169,29,55,0.22) 0%, rgba(14,19,29,0.96) 55%, rgba(8,11,18,0.99) 100%);
-  border:1px solid rgba(229,35,79,0.28);
-  box-shadow:0 20px 50px rgba(0,0,0,0.45);
-  margin-bottom:20px;
+  background:linear-gradient(145deg, rgba(169,29,55,0.24) 0%, rgba(14,19,29,0.96) 55%, rgba(8,11,18,0.99) 100%);
+  border:1px solid rgba(229,35,79,0.32);
+  box-shadow:0 20px 50px rgba(0,0,0,0.48);
+  margin-bottom:22px;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:16px;
+}
+.booking-hero-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
 }
 .booking-hero-banner h2{
   margin:6px 0 6px;
@@ -5304,11 +5373,45 @@ document.addEventListener('click',function(e){
   margin:0;
   font-size:13px;
   line-height:1.85;
+  max-width:600px;
+}
+.booking-QuickStepsPills{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+  background:rgba(7,10,16,0.75);
+  border:1px solid rgba(255,255,255,0.1);
+  padding:10px 14px;
+  border-radius:16px;
+  font-size:11.5px;
+  font-weight:800;
+  color:#e2e8f0;
+}
+.booking-QuickStepsPills span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.booking-QuickStepsPills b{
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  background:linear-gradient(135deg, #e5234f, #a91d37);
+  color:#fff;
+  display:inline-grid;
+  place-items:center;
+  font-size:10.5px;
+}
+.booking-QuickStepsPills i{
+  font-style:normal;
+  color:#64748b;
+  font-size:11px;
 }
 .booking-trust-badges{
   display:flex;
   flex-wrap:wrap;
-  gap:8px 14px;
+  gap:8px 16px;
   padding-top:12px;
   border-top:1px solid rgba(255,255,255,0.08);
   font-size:11.5px;
@@ -5326,17 +5429,52 @@ document.addEventListener('click',function(e){
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  margin:18px 2px 12px;
+  flex-wrap:wrap;
+  margin:18px 2px 14px;
+  padding:12px 16px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.08);
+}
+.bsl-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.bsl-num{
+  width:32px;
+  height:32px;
+  border-radius:11px;
+  background:linear-gradient(135deg, #e5234f, #a91d37);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:14px;
+  font-weight:900;
+  flex-shrink:0;
+  box-shadow:0 6px 18px rgba(229,35,79,0.3);
 }
 .booking-section-label span{
   font-size:15px;
   font-weight:900;
   color:#fff;
+  display:block;
 }
-.booking-section-label small{
+.booking-section-label .bsl-sub{
+  font-size:11px;
+  color:#94a3b8;
+  font-weight:600;
+  display:block;
+  margin-top:2px;
+}
+.booking-section-label .bsl-badge{
   font-size:11.5px;
   font-weight:800;
   color:#6bf0b3;
+  background:rgba(55,201,135,0.12);
+  border:1px solid rgba(55,201,135,0.3);
+  padding:5px 12px;
+  border-radius:999px;
 }
 
 /* Booking Trip Pick Cards Grid */
@@ -5365,13 +5503,13 @@ document.addEventListener('click',function(e){
   transition:transform .28s cubic-bezier(.22,1,.36,1), border-color .28s ease, box-shadow .28s ease;
 }
 .booking-trip-pick-card:hover{
-  transform:translateY(-3px);
-  border-color:rgba(229,35,79,0.45);
+  transform:translateY(-4px);
+  border-color:rgba(229,35,79,0.5);
 }
 .booking-trip-pick-card.is-selected{
   border-color:#e5234f;
-  background:linear-gradient(165deg, rgba(36,15,26,0.96) 0%, rgba(12,15,24,0.99) 100%);
-  box-shadow:0 18px 45px rgba(229,35,79,0.22), 0 0 0 1px rgba(229,35,79,0.4);
+  background:linear-gradient(165deg, rgba(38,15,27,0.96) 0%, rgba(12,15,24,0.99) 100%);
+  box-shadow:0 18px 45px rgba(229,35,79,0.24), 0 0 0 1.5px rgba(229,35,79,0.45);
 }
 .btp-thumb{
   height:175px;
@@ -5484,24 +5622,24 @@ document.addEventListener('click',function(e){
 /* Booking Form Card */
 .booking-form-card{
   border-radius:28px;
-  border:1px solid rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.13);
   background:linear-gradient(165deg, rgba(15,20,31,0.97) 0%, rgba(8,11,17,0.99) 100%);
-  box-shadow:0 24px 60px rgba(0,0,0,0.55);
+  box-shadow:0 24px 60px rgba(0,0,0,0.58);
   padding:22px 18px;
 }
 @media(min-width:640px){
   .booking-form-card{
-    padding:28px;
+    padding:30px;
   }
 }
 .booking-form-card-head{
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:space-between;
   gap:14px;
   flex-wrap:wrap;
-  padding-bottom:16px;
-  margin-bottom:16px;
+  padding-bottom:18px;
+  margin-bottom:18px;
   border-bottom:1px solid rgba(255,255,255,0.08);
 }
 .booking-form-kicker{
@@ -5513,31 +5651,57 @@ document.addEventListener('click',function(e){
 }
 .booking-form-card-head h3{
   margin:0;
-  font-size:21px;
+  font-size:clamp(19px, 4.5vw, 23px);
   font-weight:900;
 }
 .booking-selected-summary{
-  background:linear-gradient(145deg, rgba(229,35,79,0.14), rgba(15,20,31,0.9));
-  border:1px solid rgba(229,35,79,0.35);
-  border-radius:16px;
-  padding:10px 14px;
-  min-width:210px;
+  background:linear-gradient(145deg, rgba(229,35,79,0.15), rgba(15,20,31,0.92));
+  border:1px solid rgba(229,35,79,0.38);
+  border-radius:18px;
+  padding:11px 15px;
+  min-width:225px;
+  box-shadow:0 10px 26px rgba(0,0,0,0.35);
+}
+.bss-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:3px;
 }
 .booking-selected-summary small{
-  display:block;
-  font-size:10px;
+  font-size:10.5px;
+  font-weight:700;
   color:#fda4af;
+}
+.bss-live-dot{
+  font-size:9.5px;
+  font-weight:900;
+  color:#6bf0b3;
+  background:rgba(55,201,135,0.16);
+  border:1px solid rgba(55,201,135,0.35);
+  padding:2px 7px;
+  border-radius:999px;
 }
 .booking-selected-summary b{
   display:block;
-  font-size:14px;
+  font-size:14.5px;
   color:#fff;
   margin:2px 0;
 }
-.booking-selected-summary span{
+.booking-selected-summary > span{
   display:block;
   font-size:11px;
   color:#cbd5e1;
+}
+
+.booking-subcard{
+  padding:16px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.08);
+  display:grid;
+  gap:14px;
 }
 
 .booking-field-grid{
@@ -5558,9 +5722,8 @@ document.addEventListener('click',function(e){
   gap:12px;
   padding:14px 16px;
   border-radius:18px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.08);
-  margin-top:4px;
+  background:rgba(9,13,21,0.75);
+  border:1px solid rgba(255,255,255,0.09);
 }
 .people-stepper{
   display:inline-flex;
@@ -5605,67 +5768,132 @@ document.addEventListener('click',function(e){
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:14px 16px;
-  border-radius:16px;
-  background:linear-gradient(135deg, rgba(55,201,135,0.12), rgba(16,23,35,0.9));
-  border:1px solid rgba(55,201,135,0.32);
+  gap:12px;
+  flex-wrap:wrap;
+  padding:15px 18px;
+  border-radius:18px;
+  background:linear-gradient(135deg, rgba(55,201,135,0.14), rgba(13,20,31,0.95));
+  border:1px solid rgba(55,201,135,0.35);
   font-size:13px;
 }
+.blt-left span{
+  display:block;
+  font-weight:800;
+  color:#f8fafc;
+}
+.blt-left small{
+  display:block;
+  font-size:10.5px;
+  color:#94a3b8;
+  margin-top:2px;
+}
 .booking-live-total strong{
-  font-size:16px;
+  font-size:17px;
   font-weight:900;
   color:#6bf0b3;
 }
 
-.fib-payment-card{
+/* Step 3 Organized Summary + Coupon Card */
+.booking-step3-summary-card{
+  border-radius:20px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.09);
+  padding:16px;
+  display:grid;
+  gap:12px;
+}
+.bs3-total-row{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
   flex-wrap:wrap;
-  padding:16px;
-  border-radius:18px;
-  background:linear-gradient(145deg, rgba(16,185,129,0.12), rgba(11,16,24,0.96));
-  border:1px solid rgba(52,211,153,0.32);
+  padding-bottom:12px;
+  border-bottom:1px dashed rgba(255,255,255,0.1);
 }
-.fib-badge{
-  display:inline-block;
-  font-size:11px;
+.bs3-kicker{
+  display:block;
+  font-size:10.5px;
   font-weight:800;
-  color:#6bf0b3;
-  margin-bottom:4px;
-}
-.fib-payment-left strong{
-  display:block;
-  font-size:20px;
-  font-weight:900;
-  color:#fff;
-  letter-spacing:1px;
-}
-.fib-payment-left small{
-  display:block;
-  font-size:11px;
   color:#94a3b8;
-  margin-top:3px;
+  margin-bottom:2px;
 }
-.fib-copy-btn{
-  font-size:11.5px;
-  padding:10px 14px;
-  border-radius:12px;
+.bs3-total-row strong{
+  font-size:14.5px;
+  color:#fff;
+  font-weight:900;
+}
+.bs3-amount-box{
+  text-align:left;
+  background:rgba(55,201,135,0.12);
+  border:1px solid rgba(55,201,135,0.32);
+  padding:8px 13px;
+  border-radius:13px;
+}
+.bs3-amount-box small{
+  display:block;
+  font-size:9.5px;
+  color:#a7f3d0;
+}
+.bs3-amount-box b{
+  font-size:15px;
+  font-weight:900;
+  color:#6bf0b3;
 }
 
 /* =========================================================
    3.5 PAYMENT GATEWAYS & BARCODE MODAL (شێوازەکانی پارەدان)
    ========================================================= */
 .payment-gateways-container{
-  margin: 12px 0 16px;
-  padding: 16px;
-  border-radius: 20px;
-  background: linear-gradient(145deg, rgba(169,29,55,0.08) 0%, rgba(13,17,25,0.92) 100%);
-  border: 1px solid rgba(229,35,79,0.22);
+  margin: 4px 0;
+  padding: 18px 16px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(169,29,55,0.1) 0%, rgba(11,15,24,0.96) 100%);
+  border: 1px solid rgba(229,35,79,0.28);
 }
 .payment-gateways-header{
-  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.fib-quick-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 13px;
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(52,211,153,0.35);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.fib-quick-pill:hover{
+  background: rgba(16,185,129,0.2);
+  transform: translateY(-1px);
+}
+.fib-quick-pill small{
+  font-size: 10.5px;
+  color: #a7f3d0;
+  font-weight: 700;
+}
+.fib-quick-pill strong{
+  font-size: 13.5px;
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+}
+.fqp-copy{
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.1);
+  color: #6ee7b7;
 }
 .pay-kicker{
   display: inline-block;
@@ -5673,6 +5901,107 @@ document.addEventListener('click',function(e){
   font-weight: 800;
   color: #fb7185;
   letter-spacing: 0.5px;
+}
+
+/* Interactive Receipt Upload Dropzone */
+.receipt-box{
+  padding: 18px 16px;
+  border-radius: 22px;
+  background: linear-gradient(155deg, rgba(16,24,36,0.92), rgba(9,13,20,0.98));
+  border: 1px solid rgba(55,201,135,0.26);
+  display: grid;
+  gap: 12px;
+}
+.receipt-dropzone{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 16px;
+  border-radius: 16px;
+  border: 1.5px dashed rgba(55,201,135,0.45);
+  background: rgba(55,201,135,0.05);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+.receipt-dropzone:hover{
+  background: rgba(55,201,135,0.11);
+  border-color: #37c987;
+  transform: translateY(-1px);
+}
+.receipt-file-input{
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.rdz-prompt{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.rdz-icon{
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: rgba(55,201,135,0.16);
+  border: 1px solid rgba(55,201,135,0.35);
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  flex-shrink: 0;
+}
+.rdz-prompt b{
+  display: block;
+  font-size: 13px;
+  color: #fff;
+}
+.rdz-prompt small{
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+.receipt-preview.has-file{
+  border-style: solid;
+  border-color: rgba(55,201,135,0.45);
+  background: rgba(16,185,129,0.08);
+}
+.rp-preview-inner{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.rp-preview-inner img{
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  flex-shrink: 0;
+}
+.rp-meta{
+  flex: 1;
+  min-width: 0;
+}
+.rp-badge{
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 900;
+  color: #6ee7b7;
+  margin-bottom: 4px;
+}
+.rp-meta small{
+  display: block;
+  font-size: 11px;
+  color: #cbd5e1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .pay-methods-buttons-row{
   display: grid;
@@ -6407,9 +6736,6 @@ html, body{
   -webkit-text-size-adjust:100%;
   text-rendering:optimizeLegibility;
 }
-body::before, body::after{
-  animation:none!important;
-}
 .app{
   padding-bottom:calc(104px + env(safe-area-inset-bottom))!important;
 }
@@ -6428,7 +6754,7 @@ body::before, body::after{
   }
 }
 
-/* 2. Homepage Hero — Balanced Mobile-First Proportions & Contrast */
+/* 2. Homepage Hero — Balanced Mobile-First Proportions & Contrast + Smooth Breathing Motion */
 .hero{
   min-height:clamp(460px, 72svh, 660px)!important;
   max-height:760px;
@@ -6437,16 +6763,15 @@ body::before, body::after{
   padding-top:24px;
 }
 .hero:before{
-  animation:none!important;
-  transform:none!important;
   background-position:center 38%!important;
   background-size:cover!important;
+  animation:heroMountainDrift 20s ease-in-out infinite alternate!important;
 }
 .hero:after{
-  animation:none!important;
   background:
-    linear-gradient(180deg, rgba(5,7,11,0.22) 0%, rgba(5,7,11,0.48) 46%, rgba(7,9,14,0.92) 84%, #07070b 100%),
-    radial-gradient(ellipse at 50% 90%, rgba(169,29,55,0.22), transparent 65%)!important;
+    linear-gradient(180deg, rgba(5,7,11,0.18) 0%, rgba(5,7,11,0.44) 46%, rgba(7,9,14,0.92) 84%, #07070b 100%),
+    radial-gradient(ellipse at 50% 90%, rgba(229,35,79,0.24), transparent 65%)!important;
+  animation:heroAtmosphere 8s ease-in-out infinite alternate!important;
 }
 .hero .container{
   padding-top:32px!important;
@@ -7420,26 +7745,167 @@ html[dir="ltr"] .ai{
 }
 </style>
 
-<!-- KURDIA SMOOTH NON-GLITCHING MOTION & VISITOR TRACKER ENGINE -->
+<!-- KURDIA LIVING BACKGROUND, BUTTON RIPPLE & SCROLL ANIMATION ENGINE -->
+<style id="kurdia-interactive-motion-styles">
+/* 1. Living Aurora & Topographic Background Layer */
+#kurdiaLivingBg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.klbg-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(65px);
+  opacity:0.42;
+  will-change:transform;
+}
+.klbg-orb.orb-1{
+  width:min(520px, 85vw);
+  height:min(520px, 85vw);
+  top:-12%;
+  right:-10%;
+  background:radial-gradient(circle, rgba(229,35,79,0.34) 0%, rgba(169,29,55,0.08) 55%, transparent 75%);
+  animation:klbgFloat1 16s ease-in-out infinite alternate;
+}
+.klbg-orb.orb-2{
+  width:min(460px, 80vw);
+  height:min(460px, 80vw);
+  bottom:8%;
+  left:-12%;
+  background:radial-gradient(circle, rgba(55,201,135,0.18) 0%, rgba(14,116,144,0.07) 55%, transparent 75%);
+  animation:klbgFloat2 20s ease-in-out infinite alternate;
+}
+.klbg-orb.orb-3{
+  width:min(420px, 75vw);
+  height:min(420px, 75vw);
+  top:42%;
+  left:25%;
+  background:radial-gradient(circle, rgba(211,47,78,0.16) 0%, rgba(88,28,135,0.06) 55%, transparent 75%);
+  animation:klbgFloat3 22s ease-in-out infinite alternate;
+}
+@keyframes klbgFloat1{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  100%{transform:translate3d(-35px, 45px, 0) scale(1.12)}
+}
+@keyframes klbgFloat2{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  100%{transform:translate3d(40px, -35px, 0) scale(1.1)}
+}
+@keyframes klbgFloat3{
+  0%{transform:translate3d(-20px,-15px,0) scale(0.94)}
+  100%{transform:translate3d(25px, 30px, 0) scale(1.08)}
+}
+
+/* 2. Tactile Button Click Ripple & Spring Micro-Interaction */
+.btn, .navitem, .pf-chip, .weather-chip, .pay-method-btn, .private-preset-card, .stepper-btn, .iconbtn, .fib-quick-pill, .ka-menu-item{
+  position:relative;
+  overflow:hidden;
+  transition:transform .24s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .24s ease, border-color .24s ease, background .24s ease;
+}
+.kurdia-btn-pressed{
+  transform:scale(0.95) !important;
+}
+.kurdia-click-ripple{
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle, rgba(255,255,255,0.48) 0%, rgba(255,140,163,0.22) 55%, transparent 75%);
+  transform:translate(-50%, -50%) scale(0);
+  animation:kurdiaRippleWave .62s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  z-index:5;
+}
+@keyframes kurdiaRippleWave{
+  0%{transform:translate(-50%, -50%) scale(0);opacity:0.9}
+  100%{transform:translate(-50%, -50%) scale(3.4);opacity:0}
+}
+
+/* 3. Scroll-Reveal Classes */
+.kurdia-scroll-item{
+  will-change:transform, opacity;
+  transition:opacity .55s cubic-bezier(0.22, 1, 0.36, 1), transform .55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.kurdia-scroll-item.scroll-hidden{
+  opacity:0;
+  transform:translateY(24px) scale(0.985);
+}
+.kurdia-scroll-item.scroll-visible{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+@media(prefers-reduced-motion:reduce){
+  .klbg-orb, .kurdia-click-ripple{animation:none!important}
+  .kurdia-scroll-item.scroll-hidden{opacity:1!important;transform:none!important}
+}
+</style>
+
 <script id="kurdia-master-motion-engine">
 (function(){
   'use strict';
 
-  // 1. Scroll Progress Bar & Header Glass
-  if(!document.querySelector('.kurdia-scroll-progress')){
-    const bar = document.createElement('div');
-    bar.className = 'kurdia-scroll-progress';
-    document.body.appendChild(bar);
-    window.addEventListener('scroll', () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
-      bar.style.width = pct + '%';
-      const topNav = document.querySelector('.top');
-      if(topNav) topNav.classList.toggle('scrolled', window.scrollY > 40);
-    }, { passive: true });
+  // 0. Inject Living Aurora Background Layer
+  if(!document.getElementById('kurdiaLivingBg')){
+    const bgWrap = document.createElement('div');
+    bgWrap.id = 'kurdiaLivingBg';
+    bgWrap.setAttribute('aria-hidden', 'true');
+    bgWrap.innerHTML = '<div class="klbg-orb orb-1"></div><div class="klbg-orb orb-2"></div><div class="klbg-orb orb-3"></div>';
+    document.body.prepend(bgWrap);
   }
 
-  // 2. Interactive Spotlight Pointer Tracker (Desktop hover only)
+  // 1. Scroll Progress Bar, Header Glass & Hero Parallax
+  let scrollBar = document.querySelector('.kurdia-scroll-progress');
+  if(!scrollBar){
+    scrollBar = document.createElement('div');
+    scrollBar.className = 'kurdia-scroll-progress';
+    document.body.appendChild(scrollBar);
+  }
+  window.addEventListener('scroll', () => {
+    const sy = window.scrollY || 0;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? (sy / total) * 100 : 0;
+    if(scrollBar) scrollBar.style.width = pct + '%';
+    const topNav = document.querySelector('.top');
+    if(topNav) topNav.classList.toggle('scrolled', sy > 36);
+
+    // Subtle parallax shift on background orbs during scroll
+    const bgOrbs = document.querySelectorAll('#kurdiaLivingBg .klbg-orb');
+    if(bgOrbs.length === 3){
+      bgOrbs[0].style.marginTop = (sy * -0.05) + 'px';
+      bgOrbs[1].style.marginTop = (sy * 0.04) + 'px';
+    }
+  }, { passive: true });
+
+  // 2. Interactive Button Click Ripple & Tactile Spring Feedback
+  const CLICKABLE_SEL = '.btn, .navitem, .pf-chip, .weather-chip, .pay-method-btn, .private-preset-card, .stepper-btn, .iconbtn, .fib-quick-pill, .ka-menu-item, .booking-trip-pick-card';
+  document.addEventListener('pointerdown', e => {
+    const target = e.target.closest(CLICKABLE_SEL);
+    if(!target || target.disabled) return;
+    target.classList.add('kurdia-btn-pressed');
+    setTimeout(() => target.classList.remove('kurdia-btn-pressed'), 190);
+
+    try{
+      const rect = target.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height, 48);
+      const ripple = document.createElement('span');
+      ripple.className = 'kurdia-click-ripple';
+      ripple.style.width = size + 'px';
+      ripple.style.height = size + 'px';
+      ripple.style.left = ((e.clientX || (rect.left + rect.width / 2)) - rect.left) + 'px';
+      ripple.style.top = ((e.clientY || (rect.top + rect.height / 2)) - rect.top) + 'px';
+      target.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 640);
+    }catch(_){}
+  }, { passive: true });
+
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(evName => {
+    document.addEventListener(evName, () => {
+      document.querySelectorAll('.kurdia-btn-pressed').forEach(el => el.classList.remove('kurdia-btn-pressed'));
+    }, { passive: true });
+  });
+
+  // 3. Interactive Spotlight Pointer Tracker (Desktop hover)
   if(window.matchMedia && window.matchMedia('(hover: hover)').matches){
     document.addEventListener('pointermove', e => {
       const cards = document.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card');
@@ -7453,22 +7919,53 @@ html[dir="ltr"] .ai{
     }, { passive: true });
   }
 
-  // 3. Smooth Staggered Entrance Animations (GSAP + Anime.js, Glitch-Free with clearProps)
+  // 4. Scroll-Triggered Reveal Observer + Page Transition Entrance Animations
+  let scrollObserver = null;
+  if('IntersectionObserver' in window){
+    scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.remove('scroll-hidden');
+          entry.target.classList.add('scroll-visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  }
+
+  window.kurdiaBindScrollReveals = function(rootEl){
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce || !scrollObserver) return;
+    const scope = rootEl || document;
+    const items = scope.querySelectorAll('.sectionhead, .featured, .place-card, .booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-page-hero, .private-trip-card, .private-vip-showcase, .weather-hero-card, .weather-map-box, .public-review, .article, .glass');
+    items.forEach(el => {
+      if(!el.classList.contains('kurdia-scroll-item')){
+        el.classList.add('kurdia-scroll-item');
+        const r = el.getBoundingClientRect();
+        if(r.top > window.innerHeight * 0.92){
+          el.classList.add('scroll-hidden');
+        } else {
+          el.classList.add('scroll-visible');
+        }
+        scrollObserver.observe(el);
+      }
+    });
+  };
+
   window.kurdiaAnimatePageCards = function(pageId){
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const activePage = document.getElementById(pageId || (location.hash || '#home').slice(1) || 'home');
+    if(!activePage) return;
+    window.kurdiaBindScrollReveals(activePage);
     if(reduce || !window.gsap) return;
     try{
-      const activePage = document.getElementById(pageId || (location.hash || '#home').slice(1) || 'home');
-      if(!activePage) return;
-      const targets = activePage.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .experience-card');
+      const targets = activePage.querySelectorAll('.featured, .place-card, .booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .experience-card');
       if(targets.length){
         gsap.killTweensOf(targets);
         gsap.fromTo(targets,
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.34, stagger: 0.04, ease: 'power2.out', clearProps: 'transform,opacity' }
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.42, stagger: 0.05, ease: 'power2.out', clearProps: 'transform,opacity' }
         );
       }
-      // Animate seat progress bars with Anime.js
       if(window.anime){
         const bars = activePage.querySelectorAll('.btp-seat-bar i');
         bars.forEach(b => {
@@ -7477,9 +7974,9 @@ html[dir="ltr"] .ai{
           anime({
             targets: b,
             width: targetW,
-            duration: 750,
+            duration: 800,
             easing: 'easeOutQuart',
-            delay: 120
+            delay: 140
           });
         });
       }
@@ -7497,15 +7994,16 @@ html[dir="ltr"] .ai{
     setTimeout(() => window.kurdiaAnimatePageCards(), 60);
   });
 
-  // 4. Subtle Ambient Background Canvas (Three.js Starfield - Desktop only for mobile battery/FPS)
+  // 5. Ambient Floating Mountain Starlight / Embers Canvas (Mobile + Desktop)
   function initThreeAtmosphere(){
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!window.THREE || reduce || window.innerWidth < 768) return;
+    if(!window.THREE || reduce) return;
     try{
       if(document.getElementById('kurdiaThreeAmbientCanvas')) return;
       const bgCanvas = document.createElement('canvas');
       bgCanvas.id = 'kurdiaThreeAmbientCanvas';
       document.body.prepend(bgCanvas);
+      const isMobile = window.innerWidth < 768;
       const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: false });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -7513,12 +8011,12 @@ html[dir="ltr"] .ai{
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
       camera.position.z = 6;
 
-      const count = 90;
+      const count = isMobile ? 48 : 95;
       const geo = new THREE.BufferGeometry();
       const pts = new Float32Array(count * 3);
       for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 16;
       geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-      const mat = new THREE.PointsMaterial({ color: 0xe5234f, size: 0.038, transparent: true, opacity: 0.35 });
+      const mat = new THREE.PointsMaterial({ color: 0xff4d73, size: isMobile ? 0.048 : 0.04, transparent: true, opacity: 0.42 });
       const particles = new THREE.Points(geo, mat);
       scene.add(particles);
 
@@ -7530,7 +8028,8 @@ html[dir="ltr"] .ai{
 
       function animateThree(){
         requestAnimationFrame(animateThree);
-        particles.rotation.y += 0.00025;
+        particles.rotation.y += 0.00035;
+        particles.rotation.x += 0.00012;
         renderer.render(scene, camera);
       }
       animateThree();
