@@ -576,6 +576,7 @@ const server = http.createServer((req, res) => {
             note: String(payload.note || '').trim(),
             receiptUrl: String(payload.receiptUrl || payload.receipt || '').trim(),
             coupon_code: String(payload.coupon_code || '').trim(),
+            coupon_discount: String(payload.coupon_discount || '').trim(),
             status: String(payload.status || 'pending'),
             verified: Boolean(payload.verified),
             createdAt: payload.createdAt || new Date().toISOString(),

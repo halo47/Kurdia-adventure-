@@ -3534,16 +3534,88 @@ function getRegParticipants(reg){
   return rawName ? [rawName] : [];
 }
 
+function getRegCoupon(reg){
+  if(!reg || typeof reg !== "object") return { used: false, code: "", discount: "", textLabel: "بەکارنەهاتووە" };
+  const phone = getRegPhone(reg).replace(/\s+/g, "");
+  const metaById = reg.id && regMetaStore[String(reg.id)] ? regMetaStore[String(reg.id)] : null;
+  const metaByPhone = phone && regMetaStore["phone_" + phone] ? regMetaStore["phone_" + phone] : null;
+  const noteStr = String(reg.note || metaById?.note || metaByPhone?.note || "");
+
+  let rawCode = String(
+    reg.coupon_code ||
+    reg.couponCode ||
+    reg.coupon ||
+    metaById?.coupon_code ||
+    metaByPhone?.coupon_code ||
+    ""
+  ).trim().toUpperCase();
+
+  let rawDiscount = String(
+    reg.coupon_discount ||
+    reg.couponDiscount ||
+    metaById?.coupon_discount ||
+    metaByPhone?.coupon_discount ||
+    ""
+  ).trim();
+
+  if(!rawCode && noteStr){
+    const m = noteStr.match(/کۆدی داشکاندن:\s*([A-Za-z0-9_-]+)(?:\s*\(([^)]+)\))?/i);
+    if(m && m[1] && m[1] !== "بەکارنەهاتووە"){
+      rawCode = m[1].trim().toUpperCase();
+      if(m[2] && !rawDiscount) rawDiscount = m[2].trim();
+    }
+  }
+
+  if(rawCode === "0" || rawCode === "NONE" || rawCode === "NULL" || rawCode === "UNDEFINED" || rawCode === "بەکارنەهاتووە"){
+    rawCode = "";
+  }
+  if(rawDiscount === "0" || rawDiscount === "NONE" || rawDiscount === "NULL" || rawDiscount === "UNDEFINED"){
+    rawDiscount = "";
+  }
+
+  if(rawCode && !rawDiscount){
+    const list = Array.isArray(appState?.coupons) ? appState.coupons : [];
+    const found = list.find(c => String(c.code || "").trim().toUpperCase() === rawCode);
+    if(found){
+      rawDiscount = found.type === "fixed"
+        ? `${Number(found.value || 0).toLocaleString()} IQD`
+        : `${Number(found.value || 0)}%`;
+    } else if(reg.coupon_discount_percent && Number(reg.coupon_discount_percent) > 0){
+      rawDiscount = `${Number(reg.coupon_discount_percent)}%`;
+    }
+  }
+
+  if(!rawCode){
+    return {
+      used: false,
+      code: "",
+      discount: "",
+      textLabel: "بەکارنەهاتووە"
+    };
+  }
+
+  const textLabel = rawDiscount ? `${rawCode} (${rawDiscount} داشکاندن)` : rawCode;
+  return {
+    used: true,
+    code: rawCode,
+    discount: rawDiscount,
+    textLabel
+  };
+}
+
 function enrichRegistrationRecord(reg){
   if(!reg || typeof reg !== "object") return reg;
   const phone = getRegPhone(reg);
   const participants = getRegParticipants(reg);
   const peopleCount = Math.max(Number(reg.people || 1), participants.length || 1);
+  const couponInfo = getRegCoupon(reg);
   return {
     ...reg,
     phone: phone || reg.phone || "",
     participants: participants,
     people: peopleCount,
+    coupon_code: couponInfo.code || reg.coupon_code || "",
+    coupon_discount: couponInfo.discount || reg.coupon_discount || "",
     displayName: participants.length > 1
       ? participants.map((p, idx) => `${idx + 1}. ${p}`).join(" ، ")
       : (participants[0] || reg.name || "—")
@@ -3685,19 +3757,22 @@ function renderRegistrations(){
         const st = bookingStatus(reg);
         const tagCls = st === "approved" ? "" : st === "pending" ? "yellow" : "red";
         const tagTxt = st === "approved" ? "پەسەندکراو" : st === "pending" ? "چاوەڕوان" : "ڕەتکراو";
-        const namesArr = getRegParticipants(reg);
+        const rawNames = getRegParticipants(reg);
+        const namesArr = rawNames.length ? rawNames : [reg.name || "—"];
+        const primaryName = namesArr[0] || "—";
         const phoneStr = getRegPhone(reg) || "—";
-        return `
+        const coupon = getRegCoupon(reg);
+        const couponPill = coupon.used
+          ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:6px;background:rgba(245,158,11,0.16);border:1px solid rgba(251,191,36,0.45);color:#fde68a;font-size:10px;font-weight:800">🎟️ کۆدی داشکاندن: ${coupon.textLabel}</span>`
+          : `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:6px;background:rgba(148,163,184,0.1);border:1px solid rgba(148,163,184,0.22);color:#94a3b8;font-size:10px">🎟️ کۆدی داشکاندن: بەکارنەهاتووە</span>`;
+
+        const primaryCard = `
           <div class="person" style="margin-top:6px;padding:10px 12px">
             <div class="person-top">
               <div class="person-main">
-                <b>${namesArr[0] || reg.name || "—"} <span style="font-weight:700;color:#6bf0b3">(${reg.people || namesArr.length || 1} کەس)</span></b>
-                <small style="display:block;direction:ltr;text-align:right;color:#cbd5e1">📱 ${phoneStr} ${reg.trip ? `· 🧭 ${reg.trip}` : ""}</small>
-                ${namesArr.length > 1 ? `
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">
-                    ${namesArr.map((nm, idx) => `<span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);padding:2px 7px;border-radius:7px;font-size:10.5px;color:#e2e8f0"><b>#${idx+1}</b> ${nm}</span>`).join("")}
-                  </div>
-                ` : ""}
+                <b>١. ${primaryName} ${namesArr.length > 1 ? `<span style="font-weight:800;color:#38bdf8;font-size:11px">(سەرپەرشتیاری گروپ · ١ لە ${namesArr.length} کەس)</span>` : `<span style="font-weight:700;color:#6bf0b3">(١ کەس)</span>`}</b>
+                <small style="display:block;direction:ltr;text-align:right;color:#cbd5e1;margin-top:2px">📱 ${phoneStr} ${reg.trip ? `· 🧭 ${reg.trip}` : ""}</small>
+                <div style="margin-top:5px">${couponPill}</div>
               </div>
               <span class="status-tag ${tagCls}">${tagTxt}</span>
               ${st === "pending" ? `
@@ -3707,6 +3782,20 @@ function renderRegistrations(){
             </div>
           </div>
         `;
+
+        const companionCards = namesArr.slice(1).map((compName, idx) => `
+          <div class="person" style="margin-top:4px;margin-right:14px;padding:8px 12px;border-right:3px solid #38bdf8;background:rgba(14,29,47,0.78)">
+            <div class="person-top">
+              <div class="person-main">
+                <b>${idx + 2}. ${compName}</b>
+                <small style="display:block;color:#7dd3fc;margin-top:2px">🔗 لەگەڵ گروپی: <strong>${primaryName}</strong> (کەسی ${idx + 2} لە ${namesArr.length}) · 📱 <span dir="ltr">${phoneStr}</span></small>
+              </div>
+              <span class="status-tag ${tagCls}">${tagTxt}</span>
+            </div>
+          </div>
+        `).join("");
+
+        return primaryCard + companionCards;
       }).join("");
     }
   }
@@ -3720,7 +3809,8 @@ function renderRegistrations(){
     if(!q) return true;
     const allNamesStr = getRegParticipants(r).join(" ").toLowerCase();
     const phoneStr = getRegPhone(r).toLowerCase();
-    return String(r.name||"").toLowerCase().includes(q) || allNamesStr.includes(q) || phoneStr.includes(q) || String(r.id||"").toLowerCase().includes(q);
+    const couponStr = getRegCoupon(r).textLabel.toLowerCase();
+    return String(r.name||"").toLowerCase().includes(q) || allNamesStr.includes(q) || phoneStr.includes(q) || couponStr.includes(q) || String(r.id||"").toLowerCase().includes(q);
   });
 
   if(!filtered.length){
@@ -3732,35 +3822,42 @@ function renderRegistrations(){
     const st = bookingStatus(reg);
     const tagCls = st === "approved" ? "" : st === "pending" ? "yellow" : "red";
     const tagTxt = st === "approved" ? "پەسەندکراو" : st === "pending" ? "چاوەڕوان" : "ڕەتکراو";
-    const namesArr = getRegParticipants(reg);
+    const rawNames = getRegParticipants(reg);
+    const namesArr = rawNames.length ? rawNames : [reg.name || "—"];
+    const primaryName = namesArr[0] || "—";
     const phoneStr = getRegPhone(reg) || "—";
     const totalPeople = Math.max(Number(reg.people || 1), namesArr.length || 1);
+    const isGroup = namesArr.length > 1 || totalPeople > 1;
     const receiptImg = resolveMediaUrl(reg.receiptUrl || reg.receipt || reg.imageUrl || "");
-    return `
-      <div class="person spotlight-card">
+    const coupon = getRegCoupon(reg);
+
+    const couponBadgeHtml = coupon.used
+      ? `<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(245,158,11,0.16);border:1px solid rgba(251,191,36,0.48);color:#fde68a;font-size:11px;font-weight:800">🎟️ کۆدی داشکاندن: <b>${coupon.textLabel}</b> ✓</span>`
+      : `<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(148,163,184,0.09);border:1px solid rgba(148,163,184,0.22);color:#94a3b8;font-size:11px;font-weight:700">🎟️ کۆدی داشکاندن: بەکارنەهاتووە</span>`;
+
+    // Box 1: Primary Registrant
+    const primaryBoxHtml = `
+      <div class="person spotlight-card" style="${isGroup ? 'border-right:4px solid #1dd1a1;' : ''}">
         <div class="person-top">
-          <div class="face">👥</div>
+          <div class="face">${isGroup ? '👥' : '👤'}</div>
           <div class="person-main">
-            <b>${namesArr[0] || reg.name || "—"} <span style="font-weight:800;color:#6bf0b3">(${totalPeople} کەس)</span></b>
-            <small style="display:block;margin-top:3px;color:#e2e8f0">📱 ژمارەی مۆبایل: <strong dir="ltr" style="color:#fff;user-select:all">${phoneStr}</strong> ${reg.trip ? `· 🧭 ${reg.trip}` : ""}</small>
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              <b style="font-size:14px">١. ${primaryName}</b>
+              ${isGroup
+                ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:7px;background:rgba(29,209,161,0.15);border:1px solid rgba(29,209,161,0.4);color:#6bf0b3;font-size:11px;font-weight:800">👑 سەرپەرشتیاری گروپ (کەسی ١ لە ${totalPeople})</span>`
+                : `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:7px;background:rgba(255,255,255,0.06);color:#cbd5e1;font-size:10.5px;font-weight:700">تاکە کەس (١ کەس)</span>`
+              }
+            </div>
+            <small style="display:block;margin-top:5px;color:#e2e8f0">📱 ژمارەی مۆبایل: <strong dir="ltr" style="color:#fff;user-select:all">${phoneStr}</strong> ${reg.trip ? `· 🧭 ${reg.trip}` : ""}</small>
+            <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+              ${couponBadgeHtml}
+            </div>
           </div>
           <span class="status-tag ${tagCls}">${tagTxt}</span>
         </div>
 
-        <div style="margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.08)">
-          <small style="display:block;font-size:10.5px;color:#94a3b8;margin-bottom:6px">📋 تەواوی ناوی بەشداربووان (${namesArr.length || 1} ناو):</small>
-          <div style="display:flex;flex-wrap:wrap;gap:6px">
-            ${(namesArr.length ? namesArr : [reg.name || "—"]).map((nm, idx) => `
-              <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;background:rgba(12,155,97,0.14);border:1px solid rgba(38,208,140,0.32);color:#e2f8ee;font-size:11.5px;font-weight:800">
-                <b style="background:rgba(38,208,140,0.3);color:#fff;width:17px;height:17px;border-radius:50%;display:inline-grid;place-items:center;font-size:10px">${idx + 1}</b>
-                ${nm}
-              </span>
-            `).join("")}
-          </div>
-        </div>
-
         ${receiptImg ? `
-          <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:10px;background:#050d17;border:1px solid #1b3148">
+          <div style="margin-top:9px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:10px;background:#050d17;border:1px solid #1b3148">
             <div style="display:flex;align-items:center;gap:10px">
               <img src="${receiptImg}" alt="پسوڵە" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid #38bdf8">
               <span style="font-size:11.5px;color:#7dd3fc;font-weight:700">🧾 وێنەی پسوڵەی پارەدان هاوپێچ کراوە</span>
@@ -3783,6 +3880,31 @@ function renderRegistrations(){
         </div>
       </div>
     `;
+
+    // Subsequent Boxes: Each companion in their own separate box one after another
+    const companionBoxesHtml = namesArr.slice(1).map((compName, idx) => {
+      const personNum = idx + 2;
+      return `
+        <div class="person spotlight-card" style="margin-top:6px;margin-right:18px;border-right:4px solid #38bdf8;background:linear-gradient(145deg, rgba(13,28,46,0.94), rgba(8,18,32,0.96))">
+          <div class="person-top">
+            <div class="face" style="background:rgba(56,189,248,0.14);border-color:rgba(56,189,248,0.35);color:#7dd3fc;font-weight:900;font-size:13px">${personNum}</div>
+            <div class="person-main">
+              <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+                <b style="font-size:13.5px;color:#f1f5f9">${personNum}. ${compName}</b>
+                <span style="display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:7px;background:rgba(56,189,248,0.16);border:1px solid rgba(56,189,248,0.38);color:#7dd3fc;font-size:11px;font-weight:800">
+                  🔗 لەگەڵ گروپی: ${primaryName} (کەسی ${personNum} لە ${namesArr.length})
+                </span>
+              </div>
+              <small style="display:block;margin-top:4px;color:#cbd5e1">📱 ژمارەی سەرپەرشتیار: <strong dir="ltr" style="color:#e2e8f0">${phoneStr}</strong> ${reg.trip ? `· 🧭 ${reg.trip}` : ""}</small>
+              <div style="margin-top:5px">${couponBadgeHtml}</div>
+            </div>
+            <span class="status-tag ${tagCls}">${tagTxt}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return primaryBoxHtml + companionBoxesHtml;
   }).join("");
 }
 
@@ -3874,38 +3996,44 @@ function exportRegistrationsToCSV(){
     return toast("⚠️ هیچ ناونووسراوێکی پەسەندکراو نییە! سەرەتا ناوەکان پەسەند (✓) بکە.");
   }
 
-  let csv = "\uFEFFژمارە,ناوی سەرەکی,هەموو بەشداربووان,ژمارەی مۆبایل,ژمارەی کەس,ناوی گەشت,کۆدی تۆمار,دۆخ\n";
+  let csv = "\uFEFFژمارە,ناوی بەشداربوو,پەیوەندی بە گروپ (لەگەڵ کێیە),ژمارەی مۆبایل,کۆدی داشکاندن,ناوی گەشت,کۆدی تۆمار,دۆخ\n";
   let rowNum = 1;
   approvedList.forEach(r => {
-    const namesArr = getRegParticipants(r);
-    const primaryName = namesArr[0] || r.name || "—";
-    const allNamesFormatted = namesArr.length
-      ? namesArr.map((nm, i) => `${i + 1}. ${nm}`).join(" | ")
-      : (r.name || "—");
+    const rawNames = getRegParticipants(r);
+    const namesArr = rawNames.length ? rawNames : [r.name || "—"];
+    const primaryName = namesArr[0] || "—";
     const rawPhone = getRegPhone(r) || "بێ ژمارە";
-    // Prefix with tab inside quotes so Excel/Mobile Sheets preserves leading zero (e.g. 0750...) as text
     const excelSafePhone = rawPhone !== "بێ ژمارە" ? `\t${rawPhone}` : rawPhone;
     const totalPeople = Math.max(Number(r.people || 1), namesArr.length || 1);
     const tripName = r.trip || "گەشتی کوردیا";
     const regId = r.id || "";
+    const coupon = getRegCoupon(r);
 
-    csv += [
-      csvEscape(rowNum++),
-      csvEscape(primaryName),
-      csvEscape(allNamesFormatted),
-      csvEscape(excelSafePhone),
-      csvEscape(totalPeople),
-      csvEscape(tripName),
-      csvEscape(regId),
-      csvEscape("پەسەندکراو")
-    ].join(",") + "\n";
+    namesArr.forEach((personName, idx) => {
+      const groupRole = namesArr.length > 1
+        ? (idx === 0
+            ? `سەرپەرشتیاری گروپ (١ لە ${totalPeople} کەس)`
+            : `لەگەڵ گروپی: ${primaryName} (کەسی ${idx + 1} لە ${totalPeople})`)
+        : "تاکە کەس (١ کەس)";
+
+      csv += [
+        csvEscape(rowNum++),
+        csvEscape(personName),
+        csvEscape(groupRole),
+        csvEscape(excelSafePhone),
+        csvEscape(coupon.textLabel),
+        csvEscape(tripName),
+        csvEscape(regId),
+        csvEscape("پەسەندکراو")
+      ].join(",") + "\n";
+    });
   });
 
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
   a.download = `kurdia-approved-bookings-${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
-  toast(`✅ ${approvedList.length} تۆماری پەسەندکراو بە ژمارەی مۆبایل و هەموو ناوەکانەوە دابەزێنرا`);
+  toast(`✅ ${rowNum - 1} ناوی پەسەندکراو یەک لەدوای یەک بە کۆدی داشکاندن و ژمارەی مۆبایلەوە دابەزێنرا`);
 }
 
 // STORIES

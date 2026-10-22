@@ -4334,13 +4334,30 @@ async function submitBooking(e){
     fd.set('whatsapp', phone);
     fd.set('people', String(allParticipants.length || peopleCount));
     const userNote = String(fd.get('note') || '').trim();
-    const participantsSummary = `بەشداربووان (${allParticipants.length}): ${combinedNames} | مۆبایل: ${phone}`;
+    const rawCouponInput = ($('couponInput')?.value || '').trim().toUpperCase();
+    const appliedCoupon = (window.appliedCouponCode || rawCouponInput || '').trim().toUpperCase();
+    let couponDiscountLabel = '';
+    if(appliedCoupon){
+      if(Number(window.appliedCouponFixed) > 0){
+        couponDiscountLabel = `${Number(window.appliedCouponFixed).toLocaleString()} IQD`;
+      } else if(Number(appliedDiscountPercent) > 0){
+        couponDiscountLabel = `${Math.round(Number(appliedDiscountPercent))}%`;
+      } else {
+        const matchedC = (Array.isArray(data?.coupons) ? data.coupons : []).find(x => String(x.code || '').trim().toUpperCase() === appliedCoupon);
+        if(matchedC){
+          couponDiscountLabel = matchedC.type === 'fixed' ? `${Number(matchedC.value || 0).toLocaleString()} IQD` : `${Number(matchedC.value || 0)}%`;
+        }
+      }
+    }
+    const couponSummaryPart = appliedCoupon
+      ? ` | کۆدی داشکاندن: ${appliedCoupon}${couponDiscountLabel ? ` (${couponDiscountLabel})` : ''}`
+      : '';
+    const participantsSummary = `بەشداربووان (${allParticipants.length}): ${combinedNames} | مۆبایل: ${phone}${couponSummaryPart}`;
     const finalNote = userNote ? `${participantsSummary} — تێبینی: ${userNote}` : participantsSummary;
     fd.set('note', finalNote);
     fd.set('otp_verified','1');
-    const appliedCoupon = window.appliedCouponCode || $('couponInput')?.value?.trim().toUpperCase() || '';
     fd.set('coupon_code', appliedCoupon);
-    fd.set('coupon_discount', String(window.appliedCouponFixed || 0));
+    fd.set('coupon_discount', couponDiscountLabel || String(window.appliedCouponFixed || appliedDiscountPercent || 0));
     fd.set('coupon_discount_percent', String(appliedDiscountPercent || 0));
 
     let workerOk = false;
@@ -4378,6 +4395,7 @@ async function submitBooking(e){
         receiptUrl: uploadedReceiptUrl,
         receipt: uploadedReceiptUrl,
         coupon_code: appliedCoupon,
+        coupon_discount: couponDiscountLabel,
         status: 'pending',
         verified: false,
         createdAt: new Date().toISOString(),
@@ -4404,6 +4422,12 @@ async function submitBooking(e){
       ]);
 
       form.reset();
+      window.appliedCouponCode = '';
+      window.appliedCouponFixed = 0;
+      appliedDiscountPercent = 0;
+      if($('couponStatus')) $('couponStatus').textContent = '';
+      if($('appliedCouponCode')) $('appliedCouponCode').value = '';
+      if($('appliedCouponDiscount')) $('appliedCouponDiscount').value = '0';
       $('extraNamesContainer').innerHTML='';
       $('otpBox').style.display='none';
       $('otpVerified').value = isOtpRequired() ? '0' : '1';
