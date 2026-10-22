@@ -507,18 +507,22 @@ const server = http.createServer((req, res) => {
 
           if (!translatedByGemini) {
             await Promise.all(missing.map(async (orig) => {
-              try {
-                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(orig)}`;
-                const r = await fetch(url);
-                const d = await r.json();
-                if (Array.isArray(d) && Array.isArray(d[0])) {
-                  const joined = d[0].map(part => (Array.isArray(part) ? part[0] : '')).join('').trim();
-                  if (joined) {
-                    cache[targetLang][orig] = joined;
-                    result[orig] = joined;
+              for (const sl of ['ckb', 'auto']) {
+                try {
+                  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(orig)}`;
+                  const r = await fetch(url);
+                  if (!r.ok) continue;
+                  const d = await r.json();
+                  if (Array.isArray(d) && Array.isArray(d[0])) {
+                    const joined = d[0].map(part => (Array.isArray(part) ? part[0] : '')).join('').trim();
+                    if (joined && joined !== orig) {
+                      cache[targetLang][orig] = joined;
+                      result[orig] = joined;
+                      break;
+                    }
                   }
-                }
-              } catch (_) {}
+                } catch (_) {}
+              }
             }));
           }
           saveTranslationCache(cache);

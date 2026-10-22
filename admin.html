@@ -1159,7 +1159,7 @@ button{cursor:pointer;color:inherit}
                 <h3 style="color:#6bf0b3">⚡ زیادکردنی خێرای گەشتی نوێ</h3>
                 <small>ڕاستەوخۆ گەشتی نوێ زیاد بکە بەبێ دەستکاریکردن یان سڕینەوەی کۆنەکان</small>
               </div>
-              <button class="secondary-btn" onclick="createNewTrip()">فۆڕمی ٣ زمان ←</button>
+              <button class="secondary-btn" onclick="createNewTrip()">فۆڕمی تەواو ←</button>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
               <div class="field" style="margin:4px 0"><label>ناوی گەشت (کوردی)</label><input id="quickTripTitle" placeholder="بۆ نموونە: گەشتی سەرسەنگ و ئامێدی"></div>
@@ -1251,7 +1251,7 @@ button{cursor:pointer;color:inherit}
         <div class="module-grid">
           <button class="module-card spotlight-card" onclick="createNewTrip()">
             <div class="m-ico" style="color:#43d6a0;border-color:#157a56">＋</div>
-            <div class="m-txt"><b>زیادکردنی گەشتی نوێ</b><small>بە ٣ زمان + وێنە و کورسی</small></div>
+            <div class="m-txt"><b>زیادکردنی گەشتی نوێ</b><small>تەنها بە کوردی + وەرگێڕانی خۆکار</small></div>
           </button>
           <button class="module-card spotlight-card" onclick="go('trips')">
             <div class="m-ico" style="color:#ff4a68">🧭</div>
@@ -1383,7 +1383,7 @@ button{cursor:pointer;color:inherit}
       </section>
 
       <!-- =========================================================
-           5. NEW / EDIT TRIP (MULTI-TRIP + 3 LANGUAGES + CAPACITY)
+           5. NEW / EDIT TRIP (KURDISH ONLY + AUTO GOOGLE TRANSLATE)
            ========================================================= -->
       <section class="page" id="newtrip">
         <div class="toolbar">
@@ -1417,33 +1417,21 @@ button{cursor:pointer;color:inherit}
           </label>
         </div>
 
-        <div class="lang-3col">
-          <div class="lang-box spotlight-card">
-            <h4>☀️ زمانی کوردی (KU)</h4>
-            <div class="field"><label>ناوی گەشت</label><input id="tripTitle_ku" placeholder="بۆ نموونە: گەشتی چەمانکێ و دهۆک"></div>
-            <div class="field"><label>شوێن و ناوچە</label><input id="tripLocation_ku" placeholder="بۆ نموونە: دهۆک · چەمانکێ"></div>
-            <div class="field"><label>نرخ</label><input id="tripPrice_ku" placeholder="بۆ نموونە: 25,000 دینار"></div>
+        <div class="lang-box spotlight-card" style="border-color:#0ea5e9;background:linear-gradient(145deg,#071d2e,#09141e)">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(56,189,248,0.18)">
+            <h4 style="margin:0;color:#38bdf8;font-size:13.5px">☀️ زانیارییەکانی گەشت (تەنها بە کوردی بنووسە)</h4>
+            <span style="font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.18);color:#6bf0b3;border:1px solid rgba(16,185,129,0.4)">🌐 Google Translate چالاکە — خۆکارانە دەکرێتە ئینگلیزی و عەرەبی</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+            <div class="field"><label>ناوی گەشت *</label><input id="tripTitle_ku" placeholder="بۆ نموونە: گەشتی چەمانکێ و دهۆک"></div>
+            <div class="field"><label>شوێن و ناوچە *</label><input id="tripLocation_ku" placeholder="بۆ نموونە: دهۆک · چەمانکێ"></div>
+            <div class="field"><label>نرخی بەشداری *</label><input id="tripPrice_ku" placeholder="بۆ نموونە: 25,000 دینار"></div>
             <div class="field"><label>کات و بەروار (دەق)</label><input id="tripTime_ku" placeholder="بۆ نموونە: بەیانی 06:00"></div>
-            <div class="field"><label>تەواوی بەرنامە و وردەکاری</label><textarea id="tripDesc_ku" placeholder="وردەکاری و بەرنامەی گەشتەکە بنووسە..."></textarea></div>
           </div>
-
-          <div class="lang-box spotlight-card">
-            <h4>🌴 باللغة العربية (AR — ئارەزوومەندانە)</h4>
-            <div class="field"><label>اسم الرحلة</label><input id="tripTitle_ar" placeholder="اسم الرحلة بالعربية"></div>
-            <div class="field"><label>المكان والمنطقة</label><input id="tripLocation_ar" placeholder="المكان والمنطقة"></div>
-            <div class="field"><label>السعر</label><input id="tripPrice_ar" placeholder="25,000 دينار"></div>
-            <div class="field"><label>الوقت والتاريخ</label><input id="tripTime_ar" placeholder="صباحاً 06:00"></div>
-            <div class="field"><label>تفاصيل وبرنامج الرحلة</label><textarea id="tripDesc_ar" placeholder="تفاصيل الرحلة..."></textarea></div>
-          </div>
-
-          <div class="lang-box spotlight-card">
-            <h4>🌐 In English (EN — Optional)</h4>
-            <div class="field"><label>Trip Title</label><input id="tripTitle_en" dir="ltr" placeholder="Trip Title in English"></div>
-            <div class="field"><label>Location</label><input id="tripLocation_en" dir="ltr" placeholder="Location"></div>
-            <div class="field"><label>Price</label><input id="tripPrice_en" dir="ltr" placeholder="25,000 IQD"></div>
-            <div class="field"><label>Time & Date</label><input id="tripTime_en" dir="ltr" placeholder="06:00 AM"></div>
-            <div class="field"><label>Full Details & Itinerary</label><textarea id="tripDesc_en" dir="ltr" placeholder="Full trip itinerary..."></textarea></div>
-          </div>
+          <div class="field" style="margin-top:8px"><label>تەواوی بەرنامە و وردەکاری گەشت</label><textarea id="tripDesc_ku" style="min-height:95px" placeholder="وردەکاری و بەرنامەی گەشتەکە بە کوردی بنووسە؛ لە ماڵپەڕی سەرەکی هەر زمانێک هەڵبژێردرێت خۆکارانە وەردەگێڕدرێت..."></textarea></div>
+          <!-- Hidden legacy language fields auto-populated from Kurdish -->
+          <input type="hidden" id="tripTitle_ar"><input type="hidden" id="tripLocation_ar"><input type="hidden" id="tripPrice_ar"><input type="hidden" id="tripTime_ar"><input type="hidden" id="tripDesc_ar">
+          <input type="hidden" id="tripTitle_en"><input type="hidden" id="tripLocation_en"><input type="hidden" id="tripPrice_en"><input type="hidden" id="tripTime_en"><input type="hidden" id="tripDesc_en">
         </div>
 
         <div class="lang-box spotlight-card">
@@ -1484,7 +1472,7 @@ button{cursor:pointer;color:inherit}
         <div class="service-list">
           <div class="staff-setting spotlight-card" style="border-color:#10b981;background:linear-gradient(135deg,#07221b,#09131d)" onclick="go('otp_manager')"><div class="service-icon" style="color:#34d399">🔐</div><div class="service-text"><b>کۆنترۆڵی کۆدی پشتڕاستکردنەوەی OTP (چالاک / ناچالاک)</b><small id="settingsOtpRowDesc">چالاککردن یان ناچالاککردنی کۆدی WhatsApp OTP لە کاتی ناونووسینی گەشتەکان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" style="border-color:#7c2d12" onclick="go('push_center')"><div class="service-icon" style="color:#fb923c">🔔</div><div class="service-text"><b>ناردنی نۆتیفیکەیشن بۆ خەڵک (Web Push)</b><small>ناردنی ئاگاداری ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەری بەشداربووان</small></div><span class="arrow">‹</span></div>
-          <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی بە ٣ زمان</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی (تەنها بە کوردی + وەرگێڕانی خۆکار)</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('broadcast')"><div class="service-icon">💬</div><div class="service-text"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ شاخەوانان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('stories')"><div class="service-icon">✨</div><div class="service-text"><b>ستۆرییەکان (Stories)</b><small>پەسەندکردن و سڕینەوەی ستۆری بەشداربووان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('private_requests')"><div class="service-icon">👑</div><div class="service-text"><b>گەشتی تایبەت (Private Trips)</b><small>داواکارییەکانی گەشتی خێزانی و تایبەت</small></div><span class="arrow">‹</span></div>
@@ -1594,7 +1582,7 @@ button{cursor:pointer;color:inherit}
       </section>
 
       <!-- =========================================================
-           7. HERO & BRAND DESIGN
+           7. HERO & BRAND DESIGN (KURDISH ONLY + AUTO GOOGLE TRANSLATE)
            ========================================================= -->
       <section class="page" id="design">
         <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>Hero و Brand</h2></div>
@@ -1609,22 +1597,15 @@ button{cursor:pointer;color:inherit}
           <div>🖼️<br><b>وێنەی کاڤەری سەرەکی (Hero)</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
           <img id="heroPreviewImg" style="display:none;width:100%;max-height:150px;object-fit:cover;border-radius:9px;margin-top:8px">
         </div>
-        <div class="lang-3col">
-          <div class="lang-box spotlight-card">
-            <h4>☀️ بە کوردی</h4>
-            <div class="field"><label>ناونیشانی سەرەکی</label><input id="heroTitle_ku" oninput="autoSync()"></div>
-            <div class="field"><label>پێناسەی کورت</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
+        <div class="lang-box spotlight-card" style="border-color:#0ea5e9;background:linear-gradient(145deg,#071d2e,#09141e)">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(56,189,248,0.18)">
+            <h4 style="margin:0;color:#38bdf8;font-size:13.5px">☀️ ناونیشان و پێناسەی سەرەکی (تەنها بە کوردی بنووسە)</h4>
+            <span style="font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.18);color:#6bf0b3;border:1px solid rgba(16,185,129,0.4)">🌐 Google Translate چالاکە — خۆکارانە وەردەگێڕدرێت</span>
           </div>
-          <div class="lang-box spotlight-card">
-            <h4>🌴 بالعربية</h4>
-            <div class="field"><label>العنوان الرئيسي</label><input id="heroTitle_ar" oninput="autoSync()"></div>
-            <div class="field"><label>الوصف القصير</label><textarea id="heroSubtitle_ar" oninput="autoSync()"></textarea></div>
-          </div>
-          <div class="lang-box spotlight-card">
-            <h4>🌐 In English</h4>
-            <div class="field"><label>Hero Title</label><input id="heroTitle_en" dir="ltr" oninput="autoSync()"></div>
-            <div class="field"><label>Hero Subtitle</label><textarea id="heroSubtitle_en" dir="ltr" oninput="autoSync()"></textarea></div>
-          </div>
+          <div class="field"><label>ناونیشانی سەرەکی (Hero Title)</label><input id="heroTitle_ku" oninput="autoSync()"></div>
+          <div class="field"><label>پێناسەی کورت (Hero Subtitle)</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
+          <input type="hidden" id="heroTitle_ar"><input type="hidden" id="heroSubtitle_ar">
+          <input type="hidden" id="heroTitle_en"><input type="hidden" id="heroSubtitle_en">
         </div>
         <button class="primary border-beam" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە</button>
       </section>
@@ -2720,18 +2701,18 @@ function readTripFromForm(existingId){
         tripDesc: kuDesc
       },
       ar: {
-        tripTitle: getVal("tripTitle_ar") || kuTitle,
-        tripLocation: getVal("tripLocation_ar") || kuLoc,
-        tripPrice: getVal("tripPrice_ar") || kuPrice,
-        tripTime: getVal("tripTime_ar") || kuTime,
-        tripDesc: getVal("tripDesc_ar") || kuDesc
+        tripTitle: kuTitle,
+        tripLocation: kuLoc,
+        tripPrice: kuPrice,
+        tripTime: kuTime,
+        tripDesc: kuDesc
       },
       en: {
-        tripTitle: getVal("tripTitle_en") || kuTitle,
-        tripLocation: getVal("tripLocation_en") || kuLoc,
-        tripPrice: getVal("tripPrice_en") || kuPrice,
-        tripTime: getVal("tripTime_en") || kuTime,
-        tripDesc: getVal("tripDesc_en") || kuDesc
+        tripTitle: kuTitle,
+        tripLocation: kuLoc,
+        tripPrice: kuPrice,
+        tripTime: kuTime,
+        tripDesc: kuDesc
       }
     }
   };
@@ -3168,10 +3149,12 @@ function autoSync(){
   appState.gradColor1 = getVal("gradColor1", appState.gradColor1);
   appState.gradColor2 = getVal("gradColor2", appState.gradColor2);
 
+  const kuHeroTitle = getVal("heroTitle_ku", appState.i18n?.ku?.heroTitle || "زیاتر لە گەشت.");
+  const kuHeroSub = getVal("heroSubtitle_ku", appState.i18n?.ku?.heroSubtitle || "");
   ["ku","ar","en"].forEach(lang => {
     if(!appState.i18n[lang]) appState.i18n[lang] = {};
-    appState.i18n[lang].heroTitle = getVal(`heroTitle_${lang}`, appState.i18n[lang].heroTitle);
-    appState.i18n[lang].heroSubtitle = getVal(`heroSubtitle_${lang}`, appState.i18n[lang].heroSubtitle);
+    appState.i18n[lang].heroTitle = kuHeroTitle;
+    appState.i18n[lang].heroSubtitle = kuHeroSub;
   });
 
   const otpSw = document.getElementById("otpRequiredSwitch");

@@ -1969,17 +1969,28 @@ let data=JSON.parse(localStorage.getItem('kurdia_premium_data')||'null')||DEFAUL
 function normalizeTripItem(tr, fallbackTrip, lang, globalI18n, idx){
   if(!tr || typeof tr !== 'object') return null;
   const ti = (tr.i18n && typeof tr.i18n === 'object') ? tr.i18n : {};
-  const lti = ti[lang] || ti.ku || {};
+  const ku = ti.ku || {};
+  let rawTitle = ku.tripTitle || tr.title || fallbackTrip?.title || 'گەشتی KURDIA';
+  let rawLoc = ku.tripLocation || tr.location || fallbackTrip?.location || 'کوردستان';
+  let rawPrice = ku.tripPrice || tr.price || fallbackTrip?.price || '—';
+  let rawTime = ku.tripTime || tr.time || fallbackTrip?.time || '';
+  if(rawTitle === 'Experience Kurdistan Nature Differently With Us'){
+    rawTitle = 'گەشتی چەمانکێ';
+    rawLoc = 'دهۆک · چەمانکێ';
+    rawPrice = '23,000 دینار';
+    rawTime = '06:00 بەیانی';
+  }
+  const rawDesc = ku.tripDesc || tr.description || tr.desc || fallbackTrip?.desc || '';
   return {
     id: tr.id || ('trip-' + (idx + 1)),
-    title: lti.tripTitle || tr.title || fallbackTrip?.title || 'گەشتی KURDIA',
-    location: lti.tripLocation || tr.location || fallbackTrip?.location || 'کوردستان',
+    title: rawTitle,
+    location: rawLoc,
     date: tr.date || (tr.targetDate ? String(tr.targetDate).slice(0, 10) : '') || (tr.tripTargetDate ? String(tr.tripTargetDate).slice(0, 10) : '') || fallbackTrip?.date || '',
-    price: lti.tripPrice || tr.price || fallbackTrip?.price || '—',
-    time: lti.tripTime || tr.time || fallbackTrip?.time || '',
+    price: rawPrice,
+    time: rawTime,
     capacity: Number(tr.capacity ?? fallbackTrip?.capacity ?? 35),
     booked: Number(tr.booked ?? fallbackTrip?.booked ?? 0),
-    desc: lti.tripDesc || tr.description || tr.desc || fallbackTrip?.desc || '',
+    desc: rawDesc,
     imageUrl: tr.heroImageUrl || tr.tripImageUrl || tr.imageUrl || tr.img || fallbackTrip?.imageUrl || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
     published: tr.published !== false,
     status: tr.status || 'active',
@@ -1988,7 +1999,7 @@ function normalizeTripItem(tr, fallbackTrip, lang, globalI18n, idx){
 }
 
 function normalizeRemoteCMS(config){
-  // Cloud CMS is stored by Admin in a structured shape. Normalize ALL posted trips!
+  // Cloud CMS is stored by Admin in Kurdish. Normalize ALL posted trips from Kurdish source!
   if(!config || typeof config!=='object') return data;
   const home=config.home||{};
   const hero=home.hero||{};
@@ -1996,25 +2007,24 @@ function normalizeRemoteCMS(config){
   const t=rawTrips.find(x=>x && (x.published!==false)) || rawTrips[0] || {};
   const out={...data};
   out.cmsI18n=config.i18n||hero.i18n||t.i18n||out.cmsI18n||{};
-  const lang=localStorage.getItem('kurdia_language')||'ku';
-  const hi=out.cmsI18n?.[lang]||out.cmsI18n?.ku||{};
-  if(hi.heroTitle!==undefined) out.heroTitle=hi.heroTitle;
-  if(hi.heroSubtitle!==undefined) out.heroText=hi.heroSubtitle;
-  if(hero.title!==undefined && hi.heroTitle===undefined) out.heroTitle=hero.title;
-  if(hero.subtitle!==undefined && hi.heroSubtitle===undefined) out.heroText=hero.subtitle;
-  if(hero.text!==undefined && hero.subtitle===undefined && hi.heroSubtitle===undefined) out.heroText=hero.text;
+  const hi=out.cmsI18n?.ku||{};
+  if(hi.heroTitle!==undefined && hi.heroTitle) out.heroTitle=hi.heroTitle;
+  else if(hero.title!==undefined && hero.title) out.heroTitle=hero.title;
+  if(hi.heroSubtitle!==undefined && hi.heroSubtitle) out.heroText=hi.heroSubtitle;
+  else if(hero.subtitle!==undefined && hero.subtitle) out.heroText=hero.subtitle;
+  else if(hero.text!==undefined && hero.text) out.heroText=hero.text;
   if(hero.imageUrl!==undefined) out.heroImageUrl=hero.imageUrl;
 
   if(rawTrips.length){
     const normalizedList = rawTrips
-      .map((item, idx) => normalizeTripItem(item, out.trip, lang, out.cmsI18n, idx))
+      .map((item, idx) => normalizeTripItem(item, out.trip, 'ku', out.cmsI18n, idx))
       .filter(Boolean);
     if(normalizedList.length){
       out.trips = normalizedList;
       out.trip = normalizedList[0];
     }
   } else if(Object.keys(t).length){
-    const single = normalizeTripItem(t, out.trip, lang, out.cmsI18n, 0);
+    const single = normalizeTripItem(t, out.trip, 'ku', out.cmsI18n, 0);
     if(single){
       out.trip = single;
       out.trips = [single];
@@ -2063,22 +2073,18 @@ window.setLanguage=function(lang){
   document.documentElement.lang=lang==='en'?'en':(lang==='ar'?'ar':'ku');
   document.documentElement.dir=lang==='en'?'ltr':'rtl';
   try{
-    const hi=data.cmsI18n?.[lang]||data.cmsI18n?.ku;
+    const hi=data.cmsI18n?.ku;
     if(hi){
-      if(hi.heroTitle!==undefined)data.heroTitle=hi.heroTitle;
-      if(hi.heroSubtitle!==undefined)data.heroText=hi.heroSubtitle;
-    } else {
-      data.heroTitle = DEFAULT.heroTitle;
-      data.heroText = DEFAULT.heroText;
+      if(hi.heroTitle) data.heroTitle=hi.heroTitle;
+      if(hi.heroSubtitle) data.heroText=hi.heroSubtitle;
     }
     if(Array.isArray(data.trips) && data.trips.length){
-      data.trips = data.trips.map((tr, idx) => normalizeTripItem(tr, tr, lang, data.cmsI18n, idx));
+      data.trips = data.trips.map((tr, idx) => normalizeTripItem(tr, tr, 'ku', data.cmsI18n, idx));
       data.trip = data.trips[0];
     } else if(data.trip){
-      data.trip = normalizeTripItem(data.trip, data.trip, lang, data.cmsI18n, 0);
+      data.trip = normalizeTripItem(data.trip, data.trip, 'ku', data.cmsI18n, 0);
       data.trips = [data.trip];
     }
-    render();
     if(typeof window.applyFullSiteTranslation === 'function'){
       window.applyFullSiteTranslation(lang);
     }
@@ -2686,6 +2692,10 @@ function render(){
  renderWeather();renderPage(location.hash.slice(1)||'home');
  if(window.lucide)lucide.createIcons();
  setupReviewStars();
+ const activeLangNow = localStorage.getItem('kurdia_language') || 'ku';
+ if(activeLangNow !== 'ku' && typeof window.applyFullSiteTranslation === 'function'){
+   window.applyFullSiteTranslation(activeLangNow);
+ }
 }
 
 window.currentPlaceFilter = 'all';
@@ -2785,7 +2795,14 @@ function openDestination(i){
     ].map(s => `<div class="dest-spec-box"><small>${esc(s.label)}</small><b>${esc(s.val)}</b></div>`).join('');
   }
   $('destinationModalDescription').textContent = x.description || x.desc || 'زانیاریی زیاتر بەم زووانە زیاد دەکرێت.';
-  document.getElementById('destinationModal').classList.add('show');
+  const dModal = document.getElementById('destinationModal');
+  if(dModal){
+    dModal.classList.add('show');
+    const curLang = localStorage.getItem('kurdia_language') || 'ku';
+    if(curLang !== 'ku' && typeof window.translateSubtree === 'function'){
+      window.translateSubtree(dModal, curLang);
+    }
+  }
   if(window.lucide) lucide.createIcons();
 }
 
@@ -8115,8 +8132,15 @@ html[dir="ltr"] .ai{
       }
       if(Array.isArray(adminState.places) && adminState.places.length){
         data.destinations = adminState.places.map((p, i) => normalizePlaceItem(p, i)).filter(Boolean);
-        renderPlacesPublic();
       }
+      if(Array.isArray(adminState.trips) && adminState.trips.length){
+        data.trips = adminState.trips.map((tr, idx) => normalizeTripItem(tr, data.trip, 'ku', adminState.i18n, idx)).filter(Boolean);
+        data.trip = data.trips.find(t => t.published !== false) || data.trips[0];
+      }
+      if(adminState.i18n?.ku?.heroTitle) data.heroTitle = adminState.i18n.ku.heroTitle;
+      if(adminState.i18n?.ku?.heroSubtitle) data.heroText = adminState.i18n.ku.heroSubtitle;
+      if(adminState.heroImageUrl) data.heroImageUrl = adminState.heroImageUrl;
+      render();
     }catch(e){}
   }
   window.addEventListener('storage', e => {
@@ -8145,7 +8169,7 @@ html[dir="ltr"] .ai{
 (function(){
   'use strict';
 
-  const CACHE_KEY = 'kurdia_i18n_cache_v3';
+  const CACHE_KEY = 'kurdia_i18n_cache_v4';
   let dynamicCache = { ar: {}, en: {} };
   try {
     const saved = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
@@ -9031,17 +9055,36 @@ html[dir="ltr"] .ai{
     return String(str).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
   }
 
-  function translateSingleString(orig, lang){
-    if(!orig || lang === 'ku') return orig;
+  function hasKurdishOrArabicChars(str){
+    return /[\u0600-\u06FF]/.test(str);
+  }
+
+  function hasKurdishSpecificChars(str){
+    return /[ڕڵۆێەڤگچپژ]/.test(str);
+  }
+
+  function isStillUntranslatedKurdish(str, lang){
+    if(!str) return false;
+    if(lang === 'en'){
+      return /[\u0600-\u06FF]/.test(str);
+    }
+    if(lang === 'ar'){
+      return /[ڕڵۆێەڤگچپژ]/.test(str);
+    }
+    return false;
+  }
+
+  function translateSingleStringResult(orig, lang){
+    if(!orig || lang === 'ku') return { text: orig, complete: true };
     const trimmed = orig.trim();
-    if(!trimmed) return orig;
+    if(!trimmed) return { text: orig, complete: true };
 
     const dict = DICT[lang] || {};
     if(dict[trimmed]){
-      return orig.replace(trimmed, dict[trimmed]);
+      return { text: orig.replace(trimmed, dict[trimmed]), complete: true };
     }
     if(dynamicCache[lang] && dynamicCache[lang][trimmed]){
-      return orig.replace(trimmed, dynamicCache[lang][trimmed]);
+      return { text: orig.replace(trimmed, dynamicCache[lang][trimmed]), complete: true };
     }
 
     let out = trimmed;
@@ -9052,48 +9095,109 @@ html[dir="ltr"] .ai{
     for(const [regex, rep] of rules){
       out = out.replace(regex, rep);
     }
+
+    const stillKurdish = isStillUntranslatedKurdish(out, lang) || (out === trimmed && hasKurdishOrArabicChars(trimmed));
     if(out !== trimmed){
-      return orig.replace(trimmed, out);
+      return { text: orig.replace(trimmed, out), complete: !stillKurdish };
+    }
+    return { text: null, complete: !stillKurdish };
+  }
+
+  function translateSingleString(orig, lang){
+    const res = translateSingleStringResult(orig, lang);
+    return res.text;
+  }
+
+  let pendingApiQueue = new Set();
+  let inFlightStrings = new Set();
+  let apiTimer = null;
+
+  function queueForCloudTranslation(str, lang){
+    if(!str || str.length < 2 || str.length > 1200) return;
+    if(dynamicCache[lang]?.[str]) return;
+    const key = lang + '::' + str;
+    if(inFlightStrings.has(key)) return;
+    pendingApiQueue.add(str);
+    clearTimeout(apiTimer);
+    apiTimer = setTimeout(() => flushCloudTranslations(lang), 90);
+  }
+
+  async function translateViaGoogleDirect(text, targetLang){
+    // Primary: Google Translate official GTX endpoint with Sorani Kurdish (ckb) -> targetLang
+    const slList = ['ckb', 'auto'];
+    for(const sl of slList){
+      try{
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
+        const r = await fetch(url);
+        if(!r.ok) continue;
+        const d = await r.json();
+        if(Array.isArray(d) && Array.isArray(d[0])){
+          const joined = d[0].map(part => (Array.isArray(part) ? part[0] : '')).join('').trim();
+          if(joined && joined !== text){
+            return joined;
+          }
+        }
+      }catch(_){}
     }
     return null;
   }
 
-  function hasKurdishOrArabicChars(str){
-    return /[\u0600-\u06FF]/.test(str);
-  }
-
-  function hasKurdishSpecificChars(str){
-    return /[ڕڵۆێەڤگچپژ]/.test(str);
-  }
-
-  let pendingApiQueue = new Set();
-  let apiTimer = null;
-
-  function queueForCloudTranslation(str, lang){
-    if(!str || str.length < 2 || str.length > 600) return;
-    if(dynamicCache[lang]?.[str]) return;
-    pendingApiQueue.add(str);
-    clearTimeout(apiTimer);
-    apiTimer = setTimeout(() => flushCloudTranslations(lang), 180);
-  }
-
   async function flushCloudTranslations(lang){
     if(lang === 'ku' || !pendingApiQueue.size) return;
-    const batch = Array.from(pendingApiQueue).slice(0, 45);
-    pendingApiQueue.clear();
-    try{
-      const r = await fetch('/api/translate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ texts: batch, targetLang: lang })
-      });
-      const x = await r.json().catch(()=>({}));
-      if(x && x.ok && x.translations){
-        Object.assign(dynamicCache[lang], x.translations);
-        saveDynamicCache();
+    const batch = Array.from(pendingApiQueue).slice(0, 50);
+    batch.forEach(s => {
+      pendingApiQueue.delete(s);
+      inFlightStrings.add(lang + '::' + s);
+    });
+
+    let anyUpdated = false;
+    const remainingForServer = [];
+
+    // 1. Fast Direct Browser Google Translate (works everywhere: static, Cloudflare, Vercel, local)
+    await Promise.all(batch.map(async (orig) => {
+      try{
+        const tr = await translateViaGoogleDirect(orig, lang);
+        if(tr){
+          dynamicCache[lang][orig] = tr;
+          anyUpdated = true;
+        } else {
+          remainingForServer.push(orig);
+        }
+      }catch(_){
+        remainingForServer.push(orig);
+      }
+    }));
+
+    // 2. Fallback to /api/translate on server if any string needed server fallback
+    if(remainingForServer.length > 0){
+      try{
+        const r = await fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texts: remainingForServer, targetLang: lang })
+        });
+        const x = await r.json().catch(()=>({}));
+        if(x && x.ok && x.translations){
+          Object.assign(dynamicCache[lang], x.translations);
+          anyUpdated = true;
+        }
+      }catch(_){}
+    }
+
+    batch.forEach(s => inFlightStrings.delete(lang + '::' + s));
+
+    if(anyUpdated){
+      saveDynamicCache();
+      const curLang = localStorage.getItem('kurdia_language') || 'ku';
+      if(curLang === lang){
         window.translateSubtree(document.body, lang, true);
       }
-    }catch(_){}
+    }
+
+    if(pendingApiQueue.size > 0){
+      clearTimeout(apiTimer);
+      apiTimer = setTimeout(() => flushCloudTranslations(localStorage.getItem('kurdia_language') || lang), 120);
+    }
   }
 
   window.translateSubtree = function(rootEl, lang, skipQueue){
@@ -9103,8 +9207,9 @@ html[dir="ltr"] .ai{
     // 1. Translate input/textarea placeholders
     const inputs = rootEl.querySelectorAll ? rootEl.querySelectorAll('input[placeholder], textarea[placeholder]') : [];
     inputs.forEach(el => {
-      if(el.dataset.kuOrigPh === undefined){
-        el.dataset.kuOrigPh = el.getAttribute('placeholder') || '';
+      const curPh = el.getAttribute('placeholder') || '';
+      if(el.dataset.kuOrigPh === undefined || (curPh !== el.dataset.kuOrigPh && curPh !== el.dataset.lastTrPh && hasKurdishOrArabicChars(curPh))){
+        el.dataset.kuOrigPh = curPh;
       }
       const origPh = el.dataset.kuOrigPh;
       if(!origPh) return;
@@ -9112,12 +9217,47 @@ html[dir="ltr"] .ai{
         el.setAttribute('placeholder', origPh);
       } else {
         const pDict = PLACEHOLDER_DICT[activeLang] || {};
-        const tr = pDict[origPh.trim()] || translateSingleString(origPh, activeLang);
-        if(tr) el.setAttribute('placeholder', tr);
+        const trimmedPh = origPh.trim();
+        if(pDict[trimmedPh]){
+          el.dataset.lastTrPh = pDict[trimmedPh];
+          el.setAttribute('placeholder', pDict[trimmedPh]);
+        } else {
+          const res = translateSingleStringResult(origPh, activeLang);
+          if(res.text){
+            el.dataset.lastTrPh = res.text;
+            el.setAttribute('placeholder', res.text);
+          }
+          if(!res.complete && !skipQueue){
+            queueForCloudTranslation(trimmedPh, activeLang);
+          }
+        }
       }
     });
 
-    // 2. Walk all text nodes
+    // 2. Translate [title] attributes
+    const titledEls = rootEl.querySelectorAll ? rootEl.querySelectorAll('[title]') : [];
+    titledEls.forEach(el => {
+      const curTitle = el.getAttribute('title') || '';
+      if(el.dataset.kuOrigTitle === undefined || (curTitle !== el.dataset.kuOrigTitle && curTitle !== el.dataset.lastTrTitle && hasKurdishOrArabicChars(curTitle))){
+        el.dataset.kuOrigTitle = curTitle;
+      }
+      const origTitle = el.dataset.kuOrigTitle;
+      if(!origTitle) return;
+      if(activeLang === 'ku'){
+        el.setAttribute('title', origTitle);
+      } else {
+        const res = translateSingleStringResult(origTitle, activeLang);
+        if(res.text){
+          el.dataset.lastTrTitle = res.text;
+          el.setAttribute('title', res.text);
+        }
+        if(!res.complete && !skipQueue){
+          queueForCloudTranslation(origTitle.trim(), activeLang);
+        }
+      }
+    });
+
+    // 3. Walk all text nodes (including inside <option>, <button>, cards, modals, etc.)
     const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, {
       acceptNode(node){
         const p = node.parentElement;
@@ -9134,27 +9274,57 @@ html[dir="ltr"] .ai{
     while(walker.nextNode()) nodes.push(walker.currentNode);
 
     nodes.forEach(node => {
-      if(node.__kuOrig === undefined){
-        node.__kuOrig = node.nodeValue;
+      // Detect if JS dynamically wrote new Kurdish content to an existing text node
+      if(node.__kuOrig === undefined || (node.nodeValue !== node.__kuOrig && node.nodeValue !== node.__lastTranslated)){
+        if(activeLang === 'ku' || hasKurdishOrArabicChars(node.nodeValue)){
+          node.__kuOrig = node.nodeValue;
+        }
       }
-      const orig = node.__kuOrig;
+      const orig = node.__kuOrig !== undefined ? node.__kuOrig : node.nodeValue;
       if(activeLang === 'ku'){
         if(node.nodeValue !== orig) node.nodeValue = orig;
         return;
       }
 
-      const translated = translateSingleString(orig, activeLang);
-      if(translated !== null){
-        if(node.nodeValue !== translated) node.nodeValue = translated;
-      } else if(!skipQueue){
+      const res = translateSingleStringResult(orig, activeLang);
+      if(res.text !== null){
+        node.__lastTranslated = res.text;
+        if(node.nodeValue !== res.text) node.nodeValue = res.text;
+      }
+      if(!res.complete && !skipQueue){
         const trimmed = orig.trim();
         if((activeLang === 'en' && hasKurdishOrArabicChars(trimmed)) ||
-           (activeLang === 'ar' && hasKurdishSpecificChars(trimmed))){
+           (activeLang === 'ar' && (hasKurdishSpecificChars(trimmed) || hasKurdishOrArabicChars(trimmed)))){
           queueForCloudTranslation(trimmed, activeLang);
         }
       }
     });
   };
+
+  // Wrap window.toast so toast notifications also translate automatically when language !== 'ku'
+  if(typeof window.toast === 'function' && !window.toast.__i18nWrapped){
+    const origToast = window.toast;
+    window.toast = function(msg){
+      const activeLang = localStorage.getItem('kurdia_language') || 'ku';
+      if(activeLang === 'ku' || !msg){
+        return origToast(msg);
+      }
+      const res = translateSingleStringResult(String(msg), activeLang);
+      if(res.text){
+        return origToast(res.text);
+      }
+      translateViaGoogleDirect(String(msg).trim(), activeLang).then(tr => {
+        if(tr){
+          dynamicCache[activeLang][String(msg).trim()] = tr;
+          saveDynamicCache();
+          const tEl = document.getElementById('toast');
+          if(tEl && tEl.classList.contains('show')) tEl.textContent = tr;
+        }
+      }).catch(()=>{});
+      return origToast(msg);
+    };
+    window.toast.__i18nWrapped = true;
+  }
 
   function syncLanguageUIControls(lang){
     const codeMap = { ku: 'KU', ar: 'AR', en: 'EN' };
@@ -9212,13 +9382,13 @@ html[dir="ltr"] .ai{
     clearTimeout(moTimer);
     moTimer = setTimeout(() => {
       window.translateSubtree(document.body, curLang);
-    }, 60);
+    }, 50);
   });
 
   function initI18n(){
     const savedLang = localStorage.getItem('kurdia_language') || 'ku';
     window.applyFullSiteTranslation(savedLang);
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
   }
 
   if(document.readyState === 'loading'){
