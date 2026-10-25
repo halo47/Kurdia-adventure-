@@ -1429,6 +1429,13 @@ button{cursor:pointer;color:inherit}
             <div class="field"><label>کات و بەروار (دەق)</label><input id="tripTime_ku" placeholder="بۆ نموونە: بەیانی 06:00"></div>
           </div>
           <div class="field" style="margin-top:8px"><label>تەواوی بەرنامە و وردەکاری گەشت</label><textarea id="tripDesc_ku" style="min-height:95px" placeholder="وردەکاری و بەرنامەی گەشتەکە بە کوردی بنووسە؛ لە ماڵپەڕی سەرەکی هەر زمانێک هەڵبژێردرێت خۆکارانە وەردەگێڕدرێت..."></textarea></div>
+          <div class="field" style="margin-top:8px">
+            <label style="display:flex;align-items:center;justify-content:space-between">
+              <span>📍 لینکی شوێنی کۆبوونەوە (Variable 4 بۆ نامەی پشتڕاستکردنەوە) *</span>
+              <small style="color:#38bdf8;font-size:11px">لینکی Google Maps یان شوێنی وەستان بۆ بەشداربووان</small>
+            </label>
+            <input id="tripMeetingLink" placeholder="https://maps.app.goo.gl/... یان ناونیشانی شوێنی کۆبوونەوە" dir="ltr" oninput="autoSync()">
+          </div>
           <!-- Hidden legacy language fields auto-populated from Kurdish -->
           <input type="hidden" id="tripTitle_ar"><input type="hidden" id="tripLocation_ar"><input type="hidden" id="tripPrice_ar"><input type="hidden" id="tripTime_ar"><input type="hidden" id="tripDesc_ar">
           <input type="hidden" id="tripTitle_en"><input type="hidden" id="tripLocation_en"><input type="hidden" id="tripPrice_en"><input type="hidden" id="tripTime_en"><input type="hidden" id="tripDesc_en">
@@ -1614,9 +1621,50 @@ button{cursor:pointer;color:inherit}
            8. WHATSAPP BROADCAST
            ========================================================= -->
       <section class="page" id="broadcast">
-        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>ناوەندی WhatsApp</h2></div>
+        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>ناوەندی WhatsApp و نامەی پشتڕاستکردنەوە</h2></div>
+
+        <!-- Variable 4 (Meeting Location Link) Manager -->
+        <div class="lang-box spotlight-card" style="border-color:#38bdf8;background:linear-gradient(145deg,#071e33,#081522);margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(56,189,248,0.22)">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:20px">📍</span>
+              <div>
+                <h4 style="margin:0;color:#38bdf8;font-size:14px">لینکی شوێنی کۆبوونەوە (Variable 4 لە نامەی پشتڕاستکردنەوە)</h4>
+                <small style="color:#94a3b8;font-size:11px">ئەم لینکە (Google Maps یان شوێنی وەستان) دەچێتە ناو نامەی پشتڕاستکردنەوەی WhatsApp لە کاتی پەسەندکردنی بەشداربوو</small>
+              </div>
+            </div>
+            <span style="background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.4);color:#7dd3fc;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800">{{4}} Variable 4</span>
+          </div>
+
+          <div class="field">
+            <label style="display:flex;align-items:center;justify-content:space-between">
+              <span>لینکی شوێنی کۆبوونەوە (Meeting Point Link)</span>
+              <small style="color:#38bdf8">دەتوانیت لە خوارەوە ڕاستەوخۆ دەستکاری بکەیت</small>
+            </label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input id="whatsappMeetingLocationLink" dir="ltr" placeholder="https://maps.app.goo.gl/... یان لینکی نەخشەی شوێنی وەستان" style="flex:1;min-width:240px;font-weight:700" oninput="updateMeetingLinkPreview(this.value)">
+              <button type="button" class="primary" style="margin:0;width:auto;padding:8px 16px;white-space:nowrap;background:#0ea5e9" onclick="saveGlobalMeetingLinkBtn()">💾 پاشەکەوتکردن</button>
+            </div>
+          </div>
+
+          <!-- Live WhatsApp Template Preview with Variables 1, 2, 3, 4 -->
+          <div style="margin-top:12px;padding:12px 14px;border-radius:12px;background:#050d17;border:1px solid #172a3d">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
+              <b style="color:#7dd3fc;font-size:12px">💬 پێشبینی نامەی فەرمی WhatsApp بۆ بەشداربوو:</b>
+              <span style="font-size:10px;color:#8fa1b3">Template: Confirmation Message</span>
+            </div>
+            <div style="background:#091421;padding:10px 12px;border-radius:9px;border:1px dashed #23415e;line-height:1.75;color:#e2e8f0;font-size:12px;white-space:pre-wrap">سڵاو <span style="color:#6bf0b3;font-weight:800">{ناوی بەشداربوو - {{1}}}</span> گیان 🌿
+ناونووسینەکەت بۆ گەشتی <span style="color:#38bdf8;font-weight:800">{ناوی گەشت - {{2}}}</span> بە سەرکەوتوویی پەسەندکرا ✓
+👥 ژمارەی کەسەکان: <span style="color:#fde68a;font-weight:800">{ژمارە - {{3}}}</span>
+📍 لینکی شوێنی کۆبوونەوە و بەڕێکەوتن:
+<strong id="previewVar4Display" dir="ltr" style="color:#ff7a95;user-select:all;display:inline-block">https://maps.app.goo.gl/...</strong>
+
+تیمی KURDIA ADVENTURE بەپەرۆشەوە چاوەڕێتان دەکات! ✨</div>
+          </div>
+        </div>
+
         <div class="lang-box spotlight-card">
-          <h4>١. دەقی پەیام</h4>
+          <h4>١. ناردنی پەیامی گشتی بۆ چەند کەس (Broadcast)</h4>
           <textarea id="broadcastMessage" placeholder="سڵاو، پەیامەکەت لێرە بنووسە..." style="width:100%;min-height:110px;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:10px"></textarea>
         </div>
         <div class="lang-box spotlight-card">
@@ -1668,7 +1716,17 @@ button{cursor:pointer;color:inherit}
             <div class="field"><label>دەستپێک</label><input id="couponNewStart" type="datetime-local"></div>
             <div class="field"><label>کۆتایی</label><input id="couponNewEnd" type="datetime-local"></div>
           </div>
-          <div class="field"><label>سنووری بەکارهێنان</label><input id="couponNewLimit" type="number" placeholder="بێ سنوور بەتاڵ بهێڵەوە"></div>
+          <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:8px;margin-top:6px">
+            <div class="field">
+              <label style="display:flex;align-items:center;justify-content:space-between">
+                <span>🧭 گەشتی دیاریکراو (بۆ کام گەشت کار بکات؟) *</span>
+              </label>
+              <select id="couponNewTrip" style="width:100%;background:#0b1621;color:#fff;border:1px solid #263644;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700">
+                <option value="all">🌐 هەموو گەشتەکان (بۆ هەموو گەشتێک کاردەکات)</option>
+              </select>
+            </div>
+            <div class="field"><label>سنووری بەکارهێنان</label><input id="couponNewLimit" type="number" placeholder="بێ سنوور بەتاڵ بهێڵەوە"></div>
+          </div>
           <button class="primary" onclick="addCoupon()">زیادکردنی کۆبۆن ＋</button>
         </div>
         <div id="couponsList"></div>
@@ -2408,6 +2466,8 @@ function normalizeAdminTrip(tr, idx = 0){
     booked: Number(tr.booked ?? 0),
     weatherTemp: tr.weatherTemp || "22°C",
     weatherCondition: tr.weatherCondition || "ساماڵ ☀️",
+    meetingLink: tr.meetingLink || tr.meetingLocation || tr.variable4 || "https://maps.app.goo.gl/",
+    variable4: tr.meetingLink || tr.meetingLocation || tr.variable4 || "https://maps.app.goo.gl/",
     i18n: {
       ku: {
         tripTitle: rawTitle,
@@ -2588,6 +2648,7 @@ function createNewTrip(silentInit = false){
   setEl("bookedInput", 0);
   setEl("weatherTemp", "22°C");
   setEl("weatherCondition", "ساماڵ ☀️");
+  setEl("tripMeetingLink", appState.variable4 || appState.meetingLink || "");
 
   const prev = document.getElementById("tripPreviewImg");
   if(prev){
@@ -2692,6 +2753,8 @@ function readTripFromForm(existingId){
     booked: Number(getVal("bookedInput", "0") || 0),
     weatherTemp: getVal("weatherTemp", "22°C"),
     weatherCondition: getVal("weatherCondition", "ساماڵ ☀️"),
+    meetingLink: getVal("tripMeetingLink") || "https://maps.app.goo.gl/",
+    variable4: getVal("tripMeetingLink") || "https://maps.app.goo.gl/",
     i18n: {
       ku: {
         tripTitle: kuTitle,
@@ -2829,6 +2892,7 @@ function populateTripEditor(idx){
   setEl("bookedInput", tr.booked ?? 0);
   setEl("weatherTemp", tr.weatherTemp || "24°C");
   setEl("weatherCondition", tr.weatherCondition || "ساماڵ ☀️");
+  setEl("tripMeetingLink", tr.meetingLink || tr.meetingLocation || tr.variable4 || "");
 
   const prev = document.getElementById("tripPreviewImg");
   if(prev && draftTripImageUrl){
@@ -2976,9 +3040,10 @@ function formatTripForPublic(tr, idx){
     desc: ku.tripDesc || tr.description || tr.desc || "",
     description: ku.tripDesc || tr.description || tr.desc || "",
     imageUrl: tr.tripImageUrl || tr.heroImageUrl || tr.imageUrl || "",
-    heroImageUrl: tr.tripImageUrl || tr.heroImageUrl || tr.imageUrl || "",
     published: tr.published !== false,
     status: tr.bookingOpen === false ? "closed" : "active",
+    meetingLink: tr.meetingLink || tr.meetingLocation || tr.variable4 || "https://maps.app.goo.gl/",
+    variable4: tr.meetingLink || tr.meetingLocation || tr.variable4 || "https://maps.app.goo.gl/",
     i18n: tr.i18n || null
   };
 }
@@ -3261,11 +3326,24 @@ async function publishLive(alreadySavedFromTripForm = false){
       fibAccount: appState.fibAccount || "07503130360",
       paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : []
     };
+    data.variable4 = appState.variable4 || appState.meetingLink || "https://maps.app.goo.gl/";
+    data.meetingLink = data.variable4;
+    data.meetingLocation = data.variable4;
+    if(data.trip){
+      data.trip.meetingLink = data.variable4;
+      data.trip.variable4 = data.variable4;
+    }
     if(data.config && typeof data.config === "object"){
       data.config.otpRequired = data.otpRequired;
       data.config.booking = data.booking;
       data.config.paymentMethods = data.paymentMethods;
       data.config.fibAccount = data.fibAccount;
+      data.config.variable4 = data.variable4;
+      data.config.meetingLink = data.variable4;
+      if(data.config.trip){
+        data.config.trip.meetingLink = data.variable4;
+        data.config.trip.variable4 = data.variable4;
+      }
     }
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
@@ -3868,10 +3946,24 @@ function renderRegistrations(){
 
         <div class="person-actions" style="margin-top:10px">
           <small style="color:#8b9aa8;font-size:10px">${reg.time || reg.createdAt || reg.id || ""}</small>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
             ${st !== "approved" ? `
               <button class="secondary-btn" style="background:#0c9b61;color:#fff;border:0" onclick="directVerify('${reg.id}','${phoneStr}')">✓ پەسەندکردن</button>
             ` : ""}
+            ${(()=>{
+              const tripTitle = reg.trip || (appState.trips && appState.trips[0]?.i18n?.ku?.tripTitle) || "گەشتی کوردیا";
+              const matchedTr = (appState.trips || []).find(t => (t.i18n?.ku?.tripTitle || t.title) === tripTitle) || appState.trips?.[0] || {};
+              const mLink = (matchedTr.meetingLink || appState.meetingLink || appState.variable4 || localStorage.getItem("kurdia_meeting_link_v1") || "https://maps.app.goo.gl/").trim();
+              const pDigits = phoneStr.replace(/[^0-9]/g, "");
+              const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
+              const waConfirmText = `سڵاو ${primaryName} گیان 🌿\nناونووسینەکەت بۆ گەشتی «${tripTitle}» بە سەرکەوتوویی پەسەندکرا ✓\n👥 ژمارەی کەسەکان: ${totalPeople}\n📍 لینکی شوێنی کۆبوونەوە و بەڕێکەوتن:\n${mLink}\n\nتیمی KURDIA ADVENTURE بەپەرۆشەوە چاوەڕێتان دەکات! ✨`;
+              const waConfirmUrl = `https://wa.me/${intlPhone}?text=${encodeURIComponent(waConfirmText)}`;
+              return `
+                <a href="${waConfirmUrl}" target="_blank" rel="noopener" class="secondary-btn" style="background:#15803d;color:#fff;border:0;display:inline-flex;align-items:center;gap:4px;font-size:11px" title="ناردنی نامەی پشتڕاستکردنەوە لەگەڵ لینکی شوێنی کۆبوونەوە (Variable 4)">
+                  💬 نامەی WhatsApp (کۆبوونەوە)
+                </a>
+              `;
+            })()}
             ${st === "pending" ? `
               <button class="secondary-btn" style="background:#db2542;color:#fff;border:0" onclick="directReject('${reg.id}','${phoneStr}')">✕ ڕەتکردنەوە</button>
             ` : ""}
@@ -3910,25 +4002,42 @@ function renderRegistrations(){
 
 async function directVerify(id, phone){
   toast("⏳ پەسەند دەکرێت...");
-  cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r);
+  const targetReg = cachedRegistrations.find(r => String(r.id) === String(id));
+  const tripTitle = targetReg?.trip || (appState.trips && appState.trips[0]?.i18n?.ku?.tripTitle) || "گەشتی کوردیا";
+  const matchedTr = (appState.trips || []).find(t => (t.i18n?.ku?.tripTitle || t.title) === tripTitle) || appState.trips?.[0] || {};
+  const meetingLinkVal = (matchedTr.meetingLink || appState.meetingLink || appState.variable4 || localStorage.getItem("kurdia_meeting_link_v1") || "https://maps.app.goo.gl/").trim();
+
+  cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true, meetingLink: meetingLinkVal, variable4: meetingLinkVal } : r);
   renderRegistrations();
   try{
     const localDirect = JSON.parse(localStorage.getItem("kurdia_direct_registrations_v1") || "[]");
     if(Array.isArray(localDirect)){
-      localStorage.setItem("kurdia_direct_registrations_v1", JSON.stringify(localDirect.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r)));
+      localStorage.setItem("kurdia_direct_registrations_v1", JSON.stringify(localDirect.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true, meetingLink: meetingLinkVal, variable4: meetingLinkVal } : r)));
     }
   }catch(_){}
   await Promise.allSettled([
     fetch("/api/registrations-meta", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "update_status", id, status: "approved" })
+      body: JSON.stringify({ action: "update_status", id, status: "approved", meetingLink: meetingLinkVal, variable4: meetingLinkVal })
     }),
-    syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true } : r)),
+    syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true, meetingLink: meetingLinkVal, variable4: meetingLinkVal } : r)),
     fetch(`${WORKER_URL}/api/admin/verify-booking`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, phone })
+      body: JSON.stringify({
+        id,
+        phone,
+        variable4: meetingLinkVal,
+        var4: meetingLinkVal,
+        variable_4: meetingLinkVal,
+        meetingLocation: meetingLinkVal,
+        meetingLink: meetingLinkVal,
+        meetingPoint: meetingLinkVal,
+        locationLink: meetingLinkVal,
+        location: meetingLinkVal,
+        link: meetingLinkVal
+      })
     })
   ]);
   toast("✅ ناونووسین پەسەندکرا");
@@ -4099,25 +4208,127 @@ async function deletePrivateRequest(id){
   loadPrivateRequests();
 }
 
-// COUPONS
+// VARIABLE 4 (MEETING LOCATION LINK) HELPERS
+function updateMeetingLinkPreview(val){
+  const link = String(val || "").trim() || "https://maps.app.goo.gl/...";
+  const preview = document.getElementById("previewVar4Display");
+  if(preview) preview.textContent = link;
+}
+
+function saveGlobalMeetingLink(val){
+  const link = String(val || "").trim();
+  appState.variable4 = link;
+  appState.meetingLink = link;
+  appState.meetingLocation = link;
+  localStorage.setItem("kurdia_meeting_link_v1", link);
+  updateMeetingLinkPreview(link);
+}
+
+async function saveGlobalMeetingLinkBtn(){
+  const val = (document.getElementById("whatsappMeetingLocationLink")?.value || "").trim();
+  if(!val) return toast("⚠️ تکایە لینکی شوێنی کۆبوونەوە بنووسە");
+  saveGlobalMeetingLink(val);
+  ensureTripsArray();
+  if(appState.trips && appState.trips.length){
+    appState.trips.forEach(t => {
+      if(!t.meetingLink || t.meetingLink === "https://maps.app.goo.gl/") {
+        t.meetingLink = val;
+        t.variable4 = val;
+      }
+    });
+  }
+  await publishLive(true);
+  toast("✅ لینکی شوێنی کۆبوونەوە (Variable 4) لە سێرڤەر و نامەی WhatsApp پاشەکەوتکرا");
+}
+
+function initMeetingLinkFromState(){
+  const saved = appState.variable4 || appState.meetingLink || appState.trip?.meetingLink || localStorage.getItem("kurdia_meeting_link_v1") || "https://maps.app.goo.gl/";
+  const inp = document.getElementById("whatsappMeetingLocationLink");
+  if(inp && !inp.value) inp.value = saved;
+  updateMeetingLinkPreview(saved);
+}
+
+// COUPONS (With Trip Selector)
+function populateCouponTripDropdown(){
+  const sel = document.getElementById("couponNewTrip");
+  if(!sel) return;
+  const cur = sel.value || "all";
+  ensureTripsArray();
+  const trips = Array.isArray(appState.trips) ? appState.trips : [];
+  let html = `<option value="all">🌐 هەموو گەشتەکان (بۆ هەموو گەشتێک کاردەکات)</option>`;
+  trips.forEach(t => {
+    const title = t.i18n?.ku?.tripTitle || t.title || "گەشتی کوردیا";
+    html += `<option value="${esc(title)}">🧭 ${esc(title)}</option>`;
+  });
+  sel.innerHTML = html;
+  if(cur) sel.value = cur;
+}
+
 function renderCoupons(){
+  populateCouponTripDropdown();
   const box = document.getElementById("couponsList"); if(!box) return;
   const list = Array.isArray(appState.coupons) ? appState.coupons : [];
-  box.innerHTML = list.map((c,i) => `
-    <div class="service spotlight-card" style="margin-bottom:7px">
-      <div class="service-text">
-        <b>${c.code} (${c.discount}% داشکاندن)</b>
-        <small>${c.active===false ? '🔴 ناچالاک' : '🟢 چالاک'}</small>
+  ensureTripsArray();
+  const trips = Array.isArray(appState.trips) ? appState.trips : [];
+
+  if(!list.length){
+    box.innerHTML = `<div style="text-align:center;padding:24px;font-size:12px;color:#8fa1b3">هیچ کۆبۆنێک دیاری نەکراوە. دەتوانیت لە سەرەوە کۆبۆنی نوێ بۆ هەر گەشتێک زیاد بکەیت.</div>`;
+    return;
+  }
+
+  box.innerHTML = list.map((c,i) => {
+    const isAll = !c.trip || c.trip === "all" || c.trip === "هەموو گەشتەکان";
+    const tripBadge = isAll
+      ? `<span style="background:rgba(255,255,255,0.08);color:#cbd5e1;padding:2px 8px;border-radius:6px;font-size:10.5px">🌐 بۆ هەموو گەشتەکان</span>`
+      : `<span style="background:rgba(56,189,248,0.18);color:#7dd3fc;border:1px solid rgba(56,189,248,0.4);padding:2px 8px;border-radius:6px;font-size:10.5px;font-weight:800">🧭 تایبەت بە: ${c.trip}</span>`;
+
+    let tripOptions = `<option value="all" ${isAll ? 'selected' : ''}>🌐 هەموو گەشتەکان</option>`;
+    trips.forEach(t => {
+      const tName = t.i18n?.ku?.tripTitle || t.title || "گەشتی کوردیا";
+      const sel = (!isAll && (c.trip === tName || c.trip === t.id)) ? 'selected' : '';
+      tripOptions += `<option value="${esc(tName)}" ${sel}>🧭 ${esc(tName)}</option>`;
+    });
+
+    return `
+      <div class="service spotlight-card" style="margin-bottom:8px;padding:12px 14px;border-radius:12px">
+        <div class="service-text">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+            <b style="font-size:14px;color:#fff">${c.code}</b>
+            <span style="background:rgba(16,185,129,0.18);color:#6bf0b3;border:1px solid rgba(16,185,129,0.4);padding:1px 7px;border-radius:6px;font-size:11px;font-weight:800">${c.discount || c.value || 10}% داشکاندن</span>
+            ${tripBadge}
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap">
+            <small style="color:${c.active===false ? '#f87171' : '#4ade80'}">${c.active===false ? '🔴 ناچالاک' : '🟢 چالاک'}</small>
+            <div style="display:inline-flex;align-items:center;gap:4px">
+              <span style="font-size:10.5px;color:#94a3b8">گەشت:</span>
+              <select style="background:#091421;color:#7dd3fc;border:1px solid #1f374e;border-radius:6px;padding:2px 6px;font-size:10.5px" onchange="updateCouponTrip(${i}, this.value)">
+                ${tripOptions}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="secondary-btn" style="padding:4px 9px;font-size:11px" onclick="appState.coupons[${i}].active=appState.coupons[${i}].active===false;renderCoupons();autoSync()">${c.active===false ? 'چالاککردن' : 'ناچالاککردن'}</button>
+          <button class="secondary-btn" style="color:#ff4a62;padding:4px 9px;font-size:11px" onclick="appState.coupons.splice(${i},1);renderCoupons();autoSync()">✕</button>
+        </div>
       </div>
-      <button class="secondary-btn" onclick="appState.coupons[${i}].active=appState.coupons[${i}].active===false;renderCoupons();autoSync()">گۆڕین</button>
-      <button class="secondary-btn" style="color:#ff4a62" onclick="appState.coupons.splice(${i},1);renderCoupons();autoSync()">✕</button>
-    </div>
-  `).join("");
+    `;
+  }).join("");
+}
+
+function updateCouponTrip(idx, tripVal){
+  if(appState.coupons && appState.coupons[idx]){
+    appState.coupons[idx].trip = tripVal;
+    renderCoupons();
+    autoSync();
+    toast(`✅ کۆبۆن دیاریکرا بۆ: ${tripVal === 'all' ? 'هەموو گەشتەکان' : tripVal}`);
+  }
 }
 
 function addCoupon(){
   const code = document.getElementById("couponNewCode").value.trim().toUpperCase();
   const discount = Number(document.getElementById("couponNewDiscount").value);
+  const trip = (document.getElementById("couponNewTrip")?.value || "all").trim();
   if(!code || !discount) return toast("کۆد و ڕێژە بنووسە");
   appState.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
   appState.coupons.push({
@@ -4125,6 +4336,8 @@ function addCoupon(){
     code,
     discount,
     value: discount,
+    trip,
+    applicableTrip: trip,
     type: "percent",
     start: document.getElementById("couponNewStart").value,
     end: document.getElementById("couponNewEnd").value,
@@ -4133,11 +4346,13 @@ function addCoupon(){
   });
   renderCoupons();
   autoSync();
-  toast("✅ کۆبۆن زیاد کرا");
+  toast(`✅ کۆبۆنی «${code}» زیاد کرا بۆ ${trip === 'all' ? 'هەموو گەشتەکان' : trip}`);
+  document.getElementById("couponNewCode").value = "";
 }
 
 async function saveCoupons(){
   await publishLive();
+  toast("✅ کۆبۆنەکان لە Cloud پاشەکەوتکران");
 }
 
 // WEATHER
@@ -5061,6 +5276,7 @@ function loadState(){
   fillPushTemplate("new_trip");
   fillDashboardPushTemplate("new_trip");
   renderCoupons();
+  initMeetingLinkFromState();
   renderAdminPlaces();
   renderAdminPaymentMethods();
   syncOtpAdminUI();
@@ -5120,6 +5336,17 @@ async function fetchRemoteCMSIntoAdmin(){
         appState.otpRequired = cfg.otpRequired;
       } else if(typeof cfg.booking?.otpRequired === "boolean"){
         appState.otpRequired = cfg.booking.otpRequired;
+      }
+      if(cfg.variable4 || cfg.meetingLink || cfg.meetingLocation || cfg.trip?.meetingLink){
+        const v4 = cfg.variable4 || cfg.meetingLink || cfg.meetingLocation || cfg.trip?.meetingLink;
+        appState.variable4 = v4;
+        appState.meetingLink = v4;
+        appState.meetingLocation = v4;
+        initMeetingLinkFromState();
+      }
+      if(Array.isArray(cfg.coupons) && cfg.coupons.length){
+        appState.coupons = cfg.coupons;
+        renderCoupons();
       }
     }
     try{
