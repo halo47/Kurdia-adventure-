@@ -4371,6 +4371,8 @@ window.syncPublicOtpUI = function(){
     if(sub) sub.textContent = lang==='en' ? 'Enter your active phone number so our team can contact you regarding the trip.' : (lang==='ar' ? 'أدخل رقم هاتفك للتواصل معك بخصوص الرحلة.' : 'تکایە ژمارەی مۆبایلەکەت بنووسە بۆ پەیوەندیکردن لەسەر گەشتەکە.');
     if(otpVer) otpVer.value = '1';
   }
+};
+
 function bookingGo(step){
   const form=$('bookingForm');if(!form)return;
   if(typeof window.syncPublicOtpUI==='function')window.syncPublicOtpUI();
