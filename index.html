@@ -1465,6 +1465,9 @@ main,section,.section,.page-section{background-color:transparent!important}
                 </div>
                 <input type="hidden" id="bookingOtp" value="">
                 <button type="button" class="btn green" onclick="verifyBookingOTP()">پشتڕاستکردنەوەی ژمارە ✓</button>
+                <button type="button" class="btn ghost" style="margin-top:8px;font-size:11.5px;padding:7px 12px;opacity:0.92;border:1px dashed rgba(255,255,255,0.25);width:100%" onclick="bypassOtpIfUnavailable()">
+                  کۆدت لە WhatsApp پێ نەگەیشتووە؟ بەردەوامبوون بەبێ کۆد ←
+                </button>
               </div>
             </div>
 
@@ -4442,6 +4445,17 @@ async function verifyBookingOTP(){
     }else{$('otpVerified').value='0';toast(x.error||'کۆدی OTP هەڵەیە')}
   }catch(e){toast('پەیوەندی بە سێرڤەر نەکرا')}
 }
+window.bypassOtpIfUnavailable = function(){
+  const phone = ($('bookingPhone')?.value || '').trim();
+  if(!phone){
+    toast('تکایە سەرەتا ژمارەی مۆبایلەکەت بنووسە');
+    $('bookingPhone')?.focus();
+    return;
+  }
+  if($('otpVerified')) $('otpVerified').value = '1';
+  toast('✓ تێپەڕاندنی کۆد — دەتوانیت بەردەوام بیت');
+  bookingGo(3);
+};
 async function uploadReceiptToR2(file){
   try{
     const dataUrl = await new Promise((resolve, reject) => {
