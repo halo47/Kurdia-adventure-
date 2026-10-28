@@ -8,7 +8,8 @@
  *          3. Desktop-Only 3D Card Perspective Tilt (Touch/Mobile Safe)
  *          4. Tactile Button Ripple & Pointer Spotlight
  *          5. Page Transition Choreography & Weather Station Motion
- *          6. Lightweight 3D Zagros Mountain Horizon Atmosphere
+ *          6. Lightweight 3D Zagros Mountain Horizon Atmosphere (with full
+ *             WebGL disposal, off-tab pausing, and cleanup registration)
  * ============================================================================
  */
 (function (window, document) {
@@ -253,7 +254,7 @@
     const prim = getPrimitives();
     const resolvedId = pageId || (window.location.hash || '#home').slice(1) || 'home';
     const activePage = document.getElementById(resolvedId);
-    if (!activePage) return;
+    if (!activePage || !activePage.classList.contains('active')) return;
 
     if (prim) {
       prim.AnimatedSection(activePage);
@@ -302,6 +303,8 @@
 
   /**
    * 8. Lightweight 3D Zagros Mountain Horizon & Ambient Embers (Three.js)
+   *    - Pauses automatically when #home is not the active tab or tab is hidden
+   *    - Disposes geometries, materials, renderer, and listeners on cleanup
    */
   function initThreeAtmosphere() {
     const cfg = getCfg();
@@ -311,7 +314,9 @@
     try {
       const bgCanvas = document.createElement('canvas');
       bgCanvas.id = 'kurdiaThreeAmbientCanvas';
+      bgCanvas.setAttribute('aria-hidden', 'true');
       document.body.prepend(bgCanvas);
+
       const isMobile = window.innerWidth < 768;
       const renderer = new window.THREE.WebGLRenderer({
         canvas: bgCanvas,
@@ -381,32 +386,35 @@
       let mouseY = 0;
       let targetCameraX = 0;
       let targetCameraY = 0;
+      let rafId = null;
+      let disposed = false;
+
+      const onPointerMove = (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      };
+
+      const onResize = () => {
+        if (disposed) return;
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      };
 
       if (!isMobile) {
-        window.addEventListener(
-          'pointermove',
-          (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-          },
-          { passive: true }
-        );
+        window.addEventListener('pointermove', onPointerMove, { passive: true });
       }
-
-      window.addEventListener(
-        'resize',
-        () => {
-          camera.aspect = window.innerWidth / window.innerHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(window.innerWidth, window.innerHeight);
-        },
-        { passive: true }
-      );
+      window.addEventListener('resize', onResize, { passive: true });
 
       let clock = 0;
       function animateThree() {
-        window.requestAnimationFrame(animateThree);
-        if (document.hidden) return;
+        if (disposed) return;
+        rafId = window.requestAnimationFrame(animateThree);
+        // Pause GPU work when tab is hidden or user is on heavy map/form pages
+        const homeEl = document.getElementById('home');
+        if (document.hidden || (homeEl && !homeEl.classList.contains('active'))) {
+          return;
+        }
         clock += 0.007;
 
         mountainMesh.rotation.z = Math.sin(clock * 0.2) * 0.018;
@@ -432,6 +440,31 @@
         renderer.render(scene, camera);
       }
       animateThree();
+
+      const cleanupThree = () => {
+        if (disposed) return;
+        disposed = true;
+        if (rafId) window.cancelAnimationFrame(rafId);
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('resize', onResize);
+        try {
+          mountainGeo.dispose();
+          mountainMat.dispose();
+          emberGeo.dispose();
+          emberMat.dispose();
+          renderer.dispose();
+          if (bgCanvas.parentNode) bgCanvas.parentNode.removeChild(bgCanvas);
+        } catch (_) {}
+      };
+
+      bgCanvas.addEventListener('webglcontextlost', (e) => {
+        e.preventDefault();
+        cleanupThree();
+      });
+
+      if (cfg && typeof cfg.registerCleanup === 'function') {
+        cfg.registerCleanup(cleanupThree);
+      }
     } catch (_) {}
   }
 
@@ -452,10 +485,6 @@
     init3DCardPerspectiveTilt(document);
     initThreeAtmosphere();
   }
-
-  window.addEventListener('hashchange', () => {
-    setTimeout(() => window.kurdiaAnimatePageCards(), 45);
-  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bootKurdiaMotionSystem, { once: true });

@@ -10,24 +10,33 @@
  *          - ScrollProgress
  *          - AnimatedHeading
  *          - AnimatedSection
- *          Ensures content is NEVER permanently hidden if JS fails or if the
- *          user prefers reduced motion.
+ *          Integrates GSAP + ScrollTrigger with an IntersectionObserver
+ *          fallback and registers cleanup handlers with KURDIA_MOTION_CONFIG.
  * ============================================================================
  */
 (function (window, document) {
   'use strict';
 
-  const cfg = () => window.KURDIA_MOTION_CONFIG || {
-    durations: { fast: 0.24, base: 0.42, medium: 0.58, slow: 0.78 },
-    easings: { outQuart: 'power3.out', outExpo: 'expo.out' },
-    stagger: { tight: 0.045, base: 0.075 },
-    distances: { sm: 14, md: 22 },
-    limits: { heroParallaxMaxPx: 36 },
-    prefersReducedMotion: () => false,
-    isMobileViewport: () => window.innerWidth < 768
-  };
+  const cfg = () =>
+    window.KURDIA_MOTION_CONFIG || {
+      durations: { fast: 0.24, base: 0.42, medium: 0.58, slow: 0.78 },
+      easings: { outQuart: 'power3.out', outExpo: 'expo.out' },
+      stagger: { tight: 0.045, base: 0.075 },
+      distances: { sm: 14, md: 22 },
+      limits: { heroParallaxMaxPx: 36 },
+      prefersReducedMotion: () => false,
+      isMobileViewport: () => window.innerWidth < 768,
+      registerCleanup: () => {}
+    };
 
   let ioInstance = null;
+  let parallaxBound = false;
+  let progressBound = false;
+  const scrollTriggerInstances = [];
+
+  function registerTrigger(st) {
+    if (st) scrollTriggerInstances.push(st);
+  }
 
   function ensureIntersectionObserver() {
     if (ioInstance || !('IntersectionObserver' in window)) return ioInstance;
@@ -36,7 +45,7 @@
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const el = entry.target;
-            el.classList.remove('scroll-hidden');
+            el.classList.remove('scroll-hidden', 'ka-reveal-armed');
             el.classList.add('scroll-visible', 'ka-revealed');
             if (window.gsap && el.__kaNeedGsapReveal) {
               el.__kaNeedGsapReveal = false;
@@ -59,6 +68,14 @@
       },
       { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
     );
+
+    cfg().registerCleanup(() => {
+      if (ioInstance) {
+        ioInstance.disconnect();
+        ioInstance = null;
+      }
+    });
+
     return ioInstance;
   }
 
@@ -80,30 +97,63 @@
     );
 
     const rect = element.getBoundingClientRect();
-    const alreadyInViewport = rect.top <= window.innerHeight * 0.92;
+    // If element has zero dimensions (e.g. inside an inactive tab), keep it visible until tab activates
+    if (rect.width === 0 && rect.height === 0) {
+      element.classList.remove('scroll-hidden', 'ka-reveal-armed');
+      element.classList.add('scroll-visible', 'ka-revealed');
+      return;
+    }
 
+    const alreadyInViewport = rect.top <= window.innerHeight * 0.92;
     if (alreadyInViewport) {
       element.classList.remove('scroll-hidden', 'ka-reveal-armed');
       element.classList.add('scroll-visible', 'ka-revealed');
       return;
     }
 
-    const obs = ensureIntersectionObserver();
-    if (obs) {
+    // Use GSAP ScrollTrigger when available, with IntersectionObserver backup
+    if (window.gsap && window.ScrollTrigger && !element.__kaScrollTriggerBound) {
+      element.__kaScrollTriggerBound = true;
       element.classList.add('kurdia-scroll-item', 'scroll-hidden');
-      element.__kaNeedGsapReveal = Boolean(window.gsap);
-      obs.observe(element);
+      const st = window.ScrollTrigger.create({
+        trigger: element,
+        start: 'top 92%',
+        once: true,
+        onEnter: () => {
+          element.classList.remove('scroll-hidden', 'ka-reveal-armed');
+          element.classList.add('scroll-visible', 'ka-revealed');
+          window.gsap.fromTo(
+            element,
+            { opacity: 0, y: c.distances.sm },
+            {
+              opacity: 1,
+              y: 0,
+              duration: opts.duration,
+              ease: c.easings.outQuart,
+              clearProps: 'transform,opacity'
+            }
+          );
+        }
+      });
+      registerTrigger(st);
     } else {
-      element.classList.add('scroll-visible', 'ka-revealed');
+      const obs = ensureIntersectionObserver();
+      if (obs) {
+        element.classList.add('kurdia-scroll-item', 'scroll-hidden');
+        element.__kaNeedGsapReveal = Boolean(window.gsap);
+        obs.observe(element);
+      } else {
+        element.classList.add('scroll-visible', 'ka-revealed');
+      }
     }
 
     // Fail-safe timer so no element ever stays invisible if scroll events don't fire
     setTimeout(() => {
       if (element.classList.contains('scroll-hidden')) {
-        element.classList.remove('scroll-hidden');
+        element.classList.remove('scroll-hidden', 'ka-reveal-armed');
         element.classList.add('scroll-visible', 'ka-revealed');
       }
-    }, 3500 + (opts.delay || 0) * 1000);
+    }, 3200 + (opts.delay || 0) * 1000);
   }
 
   /**
@@ -193,8 +243,10 @@
    * Primitive 4: ParallaxImage (Restrained Atmospheric Depth on Scroll)
    */
   function ParallaxImage() {
+    if (parallaxBound) return;
     const c = cfg();
     if (c.prefersReducedMotion()) return;
+    parallaxBound = true;
     let ticking = false;
 
     function onScrollParallax() {
@@ -217,12 +269,18 @@
     }
 
     window.addEventListener('scroll', onScrollParallax, { passive: true });
+    c.registerCleanup(() => {
+      window.removeEventListener('scroll', onScrollParallax);
+      parallaxBound = false;
+    });
   }
 
   /**
    * Primitive 5: ScrollProgress (Top Reading Progress & Sticky Header State)
    */
   function ScrollProgress() {
+    if (progressBound) return;
+    progressBound = true;
     let scrollBar = document.querySelector('.kurdia-scroll-progress');
     if (!scrollBar) {
       scrollBar = document.createElement('div');
@@ -244,6 +302,11 @@
 
     window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
+
+    cfg().registerCleanup(() => {
+      window.removeEventListener('scroll', updateProgress);
+      progressBound = false;
+    });
   }
 
   /**
@@ -274,6 +337,16 @@
 
     ImageReveal(scope);
   }
+
+  // Register cleanup for all ScrollTrigger instances created by this module
+  cfg().registerCleanup(() => {
+    while (scrollTriggerInstances.length) {
+      const st = scrollTriggerInstances.pop();
+      try {
+        st.kill();
+      } catch (_) {}
+    }
+  });
 
   // Expose Reusable Primitives Globally
   window.KurdiaMotionPrimitives = {

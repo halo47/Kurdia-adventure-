@@ -1,10 +1,86 @@
 /* ==========================================================================
    KURDIA ADVENTURE — CINEMATIC ANIMATION & INTERACTION STYLESHEET
    File: /assets/css/animations.css
-   Purpose: Modular styles for Hero choreography, Scroll reveals, Image reveals,
-            Card hover/elevation, Micro-interactions, Weather station motion,
-            and Accessibility focus states.
+   Purpose: Authoritative modular styles for Living Aurora background,
+            Three.js ambient canvas, Hero choreography, Scroll reveals,
+            Image reveals, Card hover/elevation, Micro-interactions,
+            Weather station motion, RTL overflow safety, and Accessibility.
    ========================================================================== */
+
+/* 0. RTL & Viewport Horizontal Overflow Safeguards */
+html,
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+#kurdiaThreeAmbientCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.62;
+}
+
+#kurdiaLivingBg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.klbg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(65px);
+  opacity: 0.38;
+  will-change: transform;
+}
+
+.klbg-orb.orb-1 {
+  width: min(520px, 85vw);
+  height: min(520px, 85vw);
+  top: -12%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(229, 35, 79, 0.32) 0%, rgba(169, 29, 55, 0.08) 55%, transparent 75%);
+  animation: klbgFloat1 16s ease-in-out infinite alternate;
+}
+
+.klbg-orb.orb-2 {
+  width: min(460px, 80vw);
+  height: min(460px, 80vw);
+  bottom: 8%;
+  left: -12%;
+  background: radial-gradient(circle, rgba(55, 201, 135, 0.16) 0%, rgba(14, 116, 144, 0.06) 55%, transparent 75%);
+  animation: klbgFloat2 20s ease-in-out infinite alternate;
+}
+
+.klbg-orb.orb-3 {
+  width: min(420px, 75vw);
+  height: min(420px, 75vw);
+  top: 42%;
+  left: 25%;
+  background: radial-gradient(circle, rgba(211, 47, 78, 0.14) 0%, rgba(88, 28, 135, 0.05) 55%, transparent 75%);
+  animation: klbgFloat3 22s ease-in-out infinite alternate;
+}
+
+@keyframes klbgFloat1 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-32px, 40px, 0) scale(1.1); }
+}
+
+@keyframes klbgFloat2 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(36px, -30px, 0) scale(1.08); }
+}
+
+@keyframes klbgFloat3 {
+  0% { transform: translate3d(-18px, -12px, 0) scale(0.95); }
+  100% { transform: translate3d(22px, 26px, 0) scale(1.06); }
+}
 
 /* 1. Top Scroll Progress Indicator */
 .kurdia-scroll-progress {
@@ -35,8 +111,8 @@ header.top.scrolled {
   background: var(--ka-surface-glass-strong) !important;
   backdrop-filter: blur(var(--blur-glass)) saturate(160%);
   -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
-  border-bottom-color: rgba(211, 47, 78, 0.24) !important;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6);
+  border-bottom-color: rgba(211, 47, 78, 0.28) !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.65);
 }
 
 .brand {
@@ -138,21 +214,21 @@ header.top.scrolled {
 }
 
 /* 4. Reusable Scroll-Reveal Primitives (Safe Progressive Enhancement)
-      Note: Content remains visible by default if JS fails or hasn't run.
-      Only elements explicitly armed with .ka-reveal-armed start hidden. */
-.ka-reveal-armed {
-  opacity: 0;
-  transform: translate3d(0, var(--reveal-distance-md), 0);
+      Content remains visible by default if JS fails or hasn't run. */
+.kurdia-scroll-item {
+  will-change: transform, opacity;
   transition:
     opacity var(--motion-medium) var(--ease-out-quint),
     transform var(--motion-medium) var(--ease-out-quint);
-  will-change: opacity, transform;
 }
 
-.ka-reveal-armed.ka-reveal-scale {
-  transform: translate3d(0, var(--reveal-distance-sm), 0) scale(0.975);
+.kurdia-scroll-item.scroll-hidden,
+.ka-reveal-armed {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-distance-md), 0) scale(0.985);
 }
 
+.kurdia-scroll-item.scroll-visible,
 .ka-reveal-armed.ka-revealed {
   opacity: 1;
   transform: translate3d(0, 0, 0) scale(1);
@@ -335,6 +411,21 @@ header.top.scrolled {
   transform: scale(0.96) !important;
 }
 
+.kurdia-click-ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.48) 0%, rgba(255, 140, 163, 0.22) 55%, transparent 75%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: kurdiaRippleWave 0.62s var(--ease-out-expo) forwards;
+  z-index: 5;
+}
+
+@keyframes kurdiaRippleWave {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
+  100% { transform: translate(-50%, -50%) scale(3.4); opacity: 0; }
+}
+
 /* Bottom Navigation Active Indicator Polish */
 nav.bottom .navitem {
   transition:
@@ -390,15 +481,17 @@ nav.bottom .navitem.active .ico {
     scroll-behavior: auto !important;
   }
 
-  .ka-reveal-armed,
-  .kurdia-scroll-item.scroll-hidden {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
+  .klbg-orb,
+  .kurdia-click-ripple,
   .hero.ka-hero-loaded::before,
   .weather-hero-card #wBigIcon,
   .ka-hero-scroll-dot {
     animation: none !important;
+  }
+
+  .ka-reveal-armed,
+  .kurdia-scroll-item.scroll-hidden {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
