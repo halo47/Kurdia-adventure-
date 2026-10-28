@@ -1835,17 +1835,19 @@ button{cursor:pointer;color:inherit}
           <!-- Live WhatsApp Template Preview with Variables 1, 2, 3, 4 -->
           <div style="margin-top:12px;padding:12px 14px;border-radius:12px;background:#050d17;border:1px solid #172a3d">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
-              <b style="color:#7dd3fc;font-size:12px">💬 پێکهاتەی وردی ٤ گۆڕاوەکە کە Cloudflare Worker دەینێرێت بۆ Meta:</b>
-              <span style="font-size:10px;color:#8fa1b3">Header: None · Buttons: None · Body: 4 Variables</span>
+              <b style="color:#7dd3fc;font-size:12px">💬 پێشبینی تێمپلێتی فەرمی (trip_confirmation • Arabic):</b>
+              <span style="font-size:10px;color:#8fa1b3">Media sample: None · Body: 4 Variables</span>
             </div>
-            <div style="background:#091421;padding:10px 12px;border-radius:9px;border:1px dashed #23415e;line-height:1.75;color:#e2e8f0;font-size:12px;white-space:pre-wrap">سڵاو <span style="color:#6bf0b3;font-weight:800">{{1}} (ناوی بەشداربوو - name)</span> گیان 🌿
-ناونووسینەکەت بە سەرکەوتوویی پەسەندکرا ✓
-👥 ژمارەی کەسەکان: <span style="color:#38bdf8;font-weight:800">{{2}} (ژمارەی کەس - people)</span>
-🆔 کۆدی تۆمار: <span style="color:#fde68a;font-weight:800">{{3}} (کۆدی داواکاری - id)</span>
-📍 لینکی شوێنی کۆبوونەوە و بەڕێکەوتن:
+            <div style="background:#091421;padding:10px 12px;border-radius:9px;border:1px dashed #23415e;line-height:1.75;color:#e2e8f0;font-size:12px;white-space:pre-wrap">🌿 سڵاو بەڕێزم Hello
+پیرۆزە! ناونووسینەکەت لە لایەن KURDIA ADVENTURE پشتڕاستکرایەوە ✅
+
+ژمارەی داواکاری: <span style="color:#fde68a;font-weight:800">{{1}} (کۆدی داواکاری - id)</span>
+ناوی بەشداربوو: <span style="color:#6bf0b3;font-weight:800">{{2}} (ناوی بەشداربوو - name)</span>
+ژمارەی کەس: <span style="color:#38bdf8;font-weight:800">{{3}} (ژمارەی کەس - people)</span>
+نەخشەی شوێنی کۆبوونەوە:
 <strong id="previewVar4Display" dir="ltr" style="color:#ff7a95;user-select:all;display:inline-block">{{4}} (https://maps.app.goo.gl/...)</strong>
 
-تیمی KURDIA ADVENTURE بەپەرۆشەوە چاوەڕێتان دەکات! ✨</div>
+🏔️ تکایە ناسنامە لەگەڵ خۆت بهێنە. زۆر بەخێربێن ✨</div>
           </div>
         </div>
 
@@ -5132,20 +5134,16 @@ function decodeWhatsAppError(status, data, testType){
   let decodedBody = "";
 
   if(str.includes("132012")){
-    decodedTitle = "🚨 هۆکاری نەڕۆشتنی نامەی پەسەندکردن لە Meta: Code #132012";
+    decodedTitle = "🚨 هۆکاری تەواوی هەڵەی #132012 لە تێمپلێتی trip_confirmation دۆزرایەوە!";
     decodedBody = `
-      <p style="margin:0 0 8px"><strong>بۆچی نامەی OTP و ڕەتکردنەوە دەڕوات بەڵام نامەی پەسەندکردن ناڕوات؟</strong><br>
-      کۆدی ناو سێرڤەری <code>kurdia.alwandssalh.workers.dev</code> لە کاتی پەسەندکردندا تەنها بەشی <b>Body</b> بە <b>٤ گۆڕاوی ژمارەیی</b> دەنێرێت بەم ڕیزبەندییە وردە:<br>
-      • <code>{{1}}</code>: ناوی بەشداربوو (<code>name</code>)<br>
-      • <code>{{2}}</code>: ژمارەی کەسەکان (<code>people</code>)<br>
-      • <code>{{3}}</code>: کۆدی تۆمار / داواکاری (<code>id</code>)<br>
-      • <code>{{4}}</code>: لینکی شوێنی کۆبوونەوە (<code>mapsUrl</code>)</p>
+      <p style="margin:0 0 8px"><strong>کێشەکە لە کوێدایە؟</strong><br>
+      لە ناو تێمپلێتی <code>trip_confirmation</code> لە Meta WhatsApp Manager، بەشی <b>Media sample</b> کراوە بە <b><code>Location 📍</code></b> (کە لە سەرەوەی نامەکە چوارگۆشەیەکی خۆڵەمێشی نەخشە و <code>{{Location name}} {{Address}}</code>ی زیاد کردووە).<br>
+      بەشی <b>Body</b> و هەر ٤ گۆڕاوەکەت (<code>{{1}}</code> تا <code>{{4}}</code>) ١٠٠٪ تەواو و دروستن، تەنها ئەو <b>Location 📍</b>ـەی سەرەوە کێشەکەی دروست کردووە!</p>
       <div style="background:rgba(0,0,0,0.4);padding:10px;border-radius:8px;margin-top:6px;border:1px solid rgba(56,189,248,0.3)">
-        <strong style="color:#38bdf8">🛠️ چارەسەری بنەڕەتی لە ناو Meta WhatsApp Manager (بە ١ خولەک):</strong><br>
-        ١. بڕۆ بۆ <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Meta WhatsApp Manager &gt; Message Templates</a> و تێمپلێتی پەسەندکردن بکەرەوە.<br>
-        ٢. دڵنیابە <b>Header = None</b> بێت (هیچ وێنە یان ناونیشانێک لە Header نەبێت) و <b>Buttons = None</b> بێت (هیچ دووگمەیەکی لینک لە خوارەوە نەبێت، چونکە Worker تەنها Body دەنێرێت).<br>
-        ٣. دڵنیابە جۆری گۆڕاوەکان (Variable type) لەسەر <b>Number</b> بێت نەک Name.<br>
-        ٤. لە بەشی <b>Body</b> ڕێک ٤ گۆڕاو دابنێ: <code>{{1}}</code>، <code>{{2}}</code>، <code>{{3}}</code>، <code>{{4}}</code>.
+        <strong style="color:#38bdf8">🛠️ چارەسەر بە ١ کلیک لە Meta WhatsApp Manager:</strong><br>
+        ١. لە پەڕەی <b>Edit template</b>ی <code>trip_confirmation</code>، بڕۆ سەر بەشی <b>Media sample (ئارەزوومەندانە)</b> کە ئێستا لەسەر <b><code>Location 📍</code></b> دانراوە.<br>
+        ٢. بیکە بە <b><code>None</code></b> (تا چوارگۆشە خۆڵەمێشییەکەی <code>{{Location name}}</code> لە سەرەوەی نامەکە نەمێنێت).<br>
+        ٣. دووگمەی <b>Submit</b> دابگرە — دەستبەجێ نامەی پەسەندکردن بێ هیچ کێشەیەک دەگات بە وەتسئەپ!
       </div>
     `;
   } else if(str.includes("132001")){
@@ -5394,18 +5392,14 @@ function decodeMasterMetaError(errStr){
   let body = "";
 
   if(str.includes("132012")){
-    title = "هەڵەی کۆدی #132012: ناگونجانی تێمپلێتی پەسەندکردن لە Meta WhatsApp Manager";
-    sub = "سێرڤەری Worker تەنها Body بە ٤ گۆڕاو دەنێرێت، بەڵام تێمپلێتەکەی ناو Meta جیاوازە";
+    title = "هەڵەی کۆدی #132012: لە ناو تێمپلێتی trip_confirmation بەشی Media sample لەسەر Location دانراوە";
+    sub = "بەشی Body و هەر ٤ گۆڕاوەکەت ١٠٠٪ دروستن — تەنها Media sample بکە بە None";
     body = `
-      • <b>بۆچی نامەی پەسەندکردن ناڕوات؟</b> سێرڤەری <code>kurdia.alwandssalh.workers.dev</code> لە کاتی پەسەندکردندا تەنها بەشی <b>Body</b> (بەبێ Header و بەبێ Button) لەگەڵ ئەم ٤ گۆڕاوە دەنێرێت بۆ Meta:<br>
-      &nbsp;&nbsp;١. <code>{{1}}</code> = ناوی بەشداربوو (<code>name</code>)<br>
-      &nbsp;&nbsp;٢. <code>{{2}}</code> = ژمارەی کەسەکان (<code>people</code>)<br>
-      &nbsp;&nbsp;٣. <code>{{3}}</code> = کۆدی داواکاری (<code>id</code>)<br>
-      &nbsp;&nbsp;٤. <code>{{4}}</code> = لینکی شوێنی کۆبوونەوە (<code>mapsUrl</code>)<br>
-      • <b>چۆن لە Meta چاکی بکەیت تا نامەکە ڕاستەوخۆ بڕوات؟</b><br>
-      &nbsp;&nbsp;١. لە <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Meta WhatsApp Manager</a> تێمپلێتی پەسەندکردن بکەرەوە.<br>
-      &nbsp;&nbsp;٢. دڵنیابە <b>Header = None</b> بێت (هیچ وێنە یان دەقێک لە Header نەبێت) و <b>Buttons = None</b> بێت (هیچ دووگمەیەک لە خوارەوە نەبێت).<br>
-      &nbsp;&nbsp;٣. دڵنیابە لە ناو دەقی <b>Body</b> ڕێک ٤ گۆڕاوی ژمارەیی (<code>{{1}}</code>، <code>{{2}}</code>، <code>{{3}}</code>، <code>{{4}}</code>) هەبێت.
+      • <b>هۆکاری تەواوی کێشەکە:</b> لە ناو تێمپلێتی <code>trip_confirmation</code> لە Meta WhatsApp Manager، بەشی <b>Media sample</b> کراوە بە <b><code>Location 📍</code></b> (کە لە سەرەوەی نامەکە داوای پۆوتانی نەخشە <code>{{Location name}} {{Address}}</code> دەکات).<br>
+      • <b>چۆن بە ١ کلیک چاکی بکەیت؟</b><br>
+      &nbsp;&nbsp;١. لە پەڕەی <b>Edit template</b>ی <code>trip_confirmation</code>، لە ژێر Type of variable، کلیک لە <b>Media sample (ئارەزوومەندانە)</b> بکە کە ئێستا نوسراوە <b><code>Location 📍</code></b>.<br>
+      &nbsp;&nbsp;٢. بیکە بە <b><code>None</code></b> (تا چوارگۆشە خۆڵەمێشییەکەی سەرەوەی نامەکە لابچێت، و دەسکاری هیچ شتێکی تری Body مەکە چونکە هەر ٤ گۆڕاوەکەت ١٠٠٪ تەواون).<br>
+      &nbsp;&nbsp;٣. دووگمەی <b>Submit</b> دابگرە و ڕاستەوخۆ نامەکە دەگات بە وەتسئەپ!
     `;
   } else if(str.includes("132001")){
     title = "هەڵەی کۆدی #132001: تێمپلێت نەدۆزرایەوە (Template Does Not Exist)";
