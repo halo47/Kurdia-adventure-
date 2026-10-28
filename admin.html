@@ -996,6 +996,7 @@ button{cursor:pointer;color:inherit}
       <button class="q-chip orange" onclick="go('push_center')">🔔 ناردنی نۆتیفیکەیشن</button>
       <button class="q-chip blue" onclick="go('bookings')">👥 ناونوسراوەکان (<span id="qBookingsCount">0</span>)</button>
       <button class="q-chip" onclick="go('design')">🎨 دیزاین و براند</button>
+      <button class="q-chip" onclick="go('broadcast');scrollToWhatsAppTesting();" style="border-color:#38bdf8;color:#7dd3fc;background:rgba(56,189,248,0.14);font-weight:800">🧪 تاقیکردنەوەی WhatsApp و ئیرۆری کامڵ</button>
       <button class="q-chip" onclick="go('broadcast')">💬 WhatsApp</button>
       <button class="q-chip" onclick="go('coupons')">🎟️ کۆبۆنەکان</button>
       <button class="q-chip" onclick="go('places')">🏔️ شوێنەکان (<span id="qPlacesCount">6</span>)</button>
@@ -1661,6 +1662,149 @@ button{cursor:pointer;color:inherit}
                 <button type="button" class="secondary-btn" style="padding:5px 12px;font-size:11px;background:#0284c7;color:#fff;border:0" onclick="go('registrations')">👥 چوون بۆ بەشی ناونووسینەکان</button>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+             WHATSAPP & OTP LIVE TESTING SUITE (بەشی تاقیکردنەوەی تەواوی وەتسئاپ و پیشاندانی ئیرۆری کامڵ)
+             ========================================================= -->
+        <div class="lang-box spotlight-card" id="whatsappTestingSuite" style="border-color:#38bdf8;background:linear-gradient(155deg,#0a1b2d 0%,#050e18 100%);margin-bottom:16px;padding:18px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(56,189,248,0.2)">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.38);font-size:20px">🧪</span>
+              <div>
+                <h3 style="margin:0;color:#38bdf8;font-size:16px">بەشی تاقیکردنەوەی ڕاستەوخۆی WhatsApp و دۆزینەوەی ئیرۆری کامڵ</h3>
+                <small style="color:#94a3b8;font-size:11.5px">لێرە ڕاستەوخۆ دەتوانیت تێستی OTP، پەسەندکردن، ڕەتکردنەوە و بڕۆدکاست بکەیت و هەموو کۆد و وەڵامی فەرمی Meta ببینی</small>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="secondary-btn" style="padding:6px 14px;font-size:11px;background:#0284c7;color:#fff;border:0" onclick="runAllWhatsAppTests()">⚡ تاقیکردنەوەی هەمووی پێکەوە</button>
+              <button type="button" class="secondary-btn" style="padding:6px 12px;font-size:11px" onclick="clearWhatsAppTestConsole()">پاککردنەوە ✕</button>
+            </div>
+          </div>
+
+          <!-- Test Tabs / Selector -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <button type="button" class="filter active" id="tabBtn_test_otp" onclick="switchWhatsAppTestTab('otp')">🔐 ١. تاقیکردنەوەی OTP</button>
+            <button type="button" class="filter" id="tabBtn_test_verify" onclick="switchWhatsAppTestTab('verify')">✓ ٢. نامەی پەسەندکردن (Verify)</button>
+            <button type="button" class="filter" id="tabBtn_test_reject" onclick="switchWhatsAppTestTab('reject')">✕ ٣. نامەی ڕەتکردنەوە (Reject)</button>
+            <button type="button" class="filter" id="tabBtn_test_broadcast" onclick="switchWhatsAppTestTab('broadcast')">📢 ٤. پەیامی گشتی (Broadcast)</button>
+            <button type="button" class="filter" id="tabBtn_test_diagnostics" onclick="switchWhatsAppTestTab('diagnostics')">🩺 ٥. دۆخی هێڵ و کلیلی Meta</button>
+          </div>
+
+          <!-- PANEL 1: OTP TEST -->
+          <div id="testPanel_otp" class="test-panel" style="display:block">
+            <div style="padding:14px;border-radius:14px;background:rgba(0,0,0,0.35);border:1px solid rgba(56,189,248,0.18)">
+              <b style="color:#7dd3fc;font-size:13px;display:block;margin-bottom:6px">تاقیکردنەوەی ناردنی کۆدی OTP بۆ مۆبایل:</b>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <input id="testOtpPhoneInput" dir="ltr" placeholder="0750 313 0360 یان 9647511804767" value="07503130360" style="flex:1;min-width:220px;font-weight:700">
+                <button type="button" class="primary" style="margin:0;width:auto;padding:10px 18px;background:#0284c7" onclick="executeTestOtpSend()">
+                  🚀 ناردنی OTP و پشکنینی ئیرۆر
+                </button>
+              </div>
+              <small style="display:block;color:#94a3b8;font-size:11px;margin-top:6px">سیستەم داواکاری دەنێرێت بۆ <code>/api/otp/send</code> و وەڵامی ڕاستەقینەی سێرڤەر و Meta دەردەخات.</small>
+            </div>
+          </div>
+
+          <!-- PANEL 2: VERIFY TEST -->
+          <div id="testPanel_verify" class="test-panel" style="display:none">
+            <div style="padding:14px;border-radius:14px;background:rgba(0,0,0,0.35);border:1px solid rgba(56,189,248,0.18)">
+              <b style="color:#7dd3fc;font-size:13px;display:block;margin-bottom:8px">تاقیکردنەوەی نامەی پەسەندکردن (Confirmation Template لەگەڵ Variable 1, 2, 3, 4):</b>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:10px">
+                <div class="field">
+                  <label style="font-size:11px">ژمارەی وەرگر</label>
+                  <input id="testVerifyPhoneInput" dir="ltr" value="07503130360">
+                </div>
+                <div class="field">
+                  <label style="font-size:11px">ناوی بەشداربوو {{1}}</label>
+                  <input id="testVerifyNameInput" value="ئارام محەمەد">
+                </div>
+                <div class="field">
+                  <label style="font-size:11px">ناوی گەشت {{2}}</label>
+                  <input id="testVerifyTripInput" value="لووتکەی هەڵگورد">
+                </div>
+                <div class="field">
+                  <label style="font-size:11px">ژمارەی کەس {{3}}</label>
+                  <input id="testVerifySeatsInput" type="number" value="1">
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:10px">
+                <label style="font-size:11px">لینکی شوێنی کۆبوونەوە (Variable 4)</label>
+                <input id="testVerifyLinkInput" dir="ltr" value="https://maps.app.goo.gl/RogiS6pr3QVeWi6z7">
+              </div>
+              <button type="button" class="primary" style="margin:0;width:auto;padding:10px 18px;background:#059669" onclick="executeTestVerifyBooking()">
+                🚀 تاقیکردنەوەی Verify و پشکنینی ئیرۆری Meta
+              </button>
+            </div>
+          </div>
+
+          <!-- PANEL 3: REJECT TEST -->
+          <div id="testPanel_reject" class="test-panel" style="display:none">
+            <div style="padding:14px;border-radius:14px;background:rgba(0,0,0,0.35);border:1px solid rgba(56,189,248,0.18)">
+              <b style="color:#7dd3fc;font-size:13px;display:block;margin-bottom:8px">تاقیکردنەوەی نامەی ڕەتکردنەوە (Rejection Message):</b>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+                <div class="field">
+                  <label style="font-size:11px">ژمارەی وەرگر</label>
+                  <input id="testRejectPhoneInput" dir="ltr" value="07503130360">
+                </div>
+                <div class="field">
+                  <label style="font-size:11px">هۆکاری ڕەتکردنەوە</label>
+                  <input id="testRejectReasonInput" value="پسوولەی پارەدان ناڕوونە یان بڕەکە هەڵەیە">
+                </div>
+              </div>
+              <button type="button" class="primary" style="margin:0;width:auto;padding:10px 18px;background:#dc2626" onclick="executeTestRejectBooking()">
+                🚀 تاقیکردنەوەی ڕەتکردنەوە
+              </button>
+            </div>
+          </div>
+
+          <!-- PANEL 4: BROADCAST TEST -->
+          <div id="testPanel_broadcast" class="test-panel" style="display:none">
+            <div style="padding:14px;border-radius:14px;background:rgba(0,0,0,0.35);border:1px solid rgba(56,189,248,0.18)">
+              <b style="color:#7dd3fc;font-size:13px;display:block;margin-bottom:8px">تاقیکردنەوەی پەیامی بەکۆمەڵ (Broadcast Message):</b>
+              <div class="field" style="margin-bottom:8px">
+                <label style="font-size:11px">ژمارەی تێست</label>
+                <input id="testBroadcastPhoneInput" dir="ltr" value="07503130360">
+              </div>
+              <div class="field" style="margin-bottom:10px">
+                <label style="font-size:11px">دەقی نامەی تێست</label>
+                <input id="testBroadcastMsgInput" value="ئەمە نامەیەکی تاقیکارییە لە سیستەمی KURDIA">
+              </div>
+              <button type="button" class="primary" style="margin:0;width:auto;padding:10px 18px;background:#7c3aed" onclick="executeTestBroadcast()">
+                🚀 ناردنی Broadcast تێست
+              </button>
+            </div>
+          </div>
+
+          <!-- PANEL 5: DIAGNOSTICS TEST -->
+          <div id="testPanel_diagnostics" class="test-panel" style="display:none">
+            <div style="padding:14px;border-radius:14px;background:rgba(0,0,0,0.35);border:1px solid rgba(56,189,248,0.18)">
+              <b style="color:#7dd3fc;font-size:13px;display:block;margin-bottom:8px">پشکنینی هەموو بەستەرەکانی Cloudflare Worker و Meta:</b>
+              <button type="button" class="primary" style="margin:0;width:auto;padding:10px 18px;background:#0ea5e9" onclick="executeTestDiagnostics()">
+                🩺 دەستپێکردنی پشکنینی سەرانسەری (Full Diagnostics)
+              </button>
+            </div>
+          </div>
+
+          <!-- COMPLETE RAW ERROR CONSOLE OUTPUT (ئیرۆری کامڵ) -->
+          <div style="margin-top:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+              <b style="font-size:12.5px;color:#fca5a5;display:flex;align-items:center;gap:6px">
+                <span>📟</span> ئەنجامی ڕاستەوخۆ و دەقی ئیرۆری کامڵ (Full Error & Raw API Response):
+              </b>
+              <button type="button" class="secondary-btn" style="padding:3px 10px;font-size:11px" onclick="copyWhatsAppTestConsole()">📋 کۆپیکردنی هەمووی</button>
+            </div>
+            <div id="whatsappTestConsoleStatus" style="font-size:12px;margin-bottom:6px;font-weight:700;color:#94a3b8">ئامادەیە بۆ تاقیکردنەوە — کرتە لە یەکێک لە دوگمەکانی سەرەوە بکە.</div>
+            <pre id="whatsappTestFullOutput" dir="ltr" style="background:#030712;color:#4ade80;font-family:ui-monospace,Menlo,Monaco,Consolas,monospace;font-size:12px;padding:14px;border-radius:12px;border:1px solid #1f2937;max-height:280px;overflow-y:auto;white-space:pre-wrap;text-align:left;line-height:1.6">// ئەنجامی تاقیکردنەوە لێرە بە شێوازی تەواو (JSON & HTTP Headers) دەردەکەوێت...</pre>
+          </div>
+
+          <!-- AUTOMATIC ERROR DECODER AND SOLUTION GUIDE -->
+          <div id="whatsappErrorDecoderCard" style="display:none;margin-top:14px;padding:14px 16px;border-radius:14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:20px">💡</span>
+              <b style="color:#f87171;font-size:13px" id="waDecodedErrorTitle">شیکردنەوەی هەڵەکە:</b>
+            </div>
+            <div id="waDecodedErrorBody" style="font-size:12px;line-height:1.75;color:#fecaca"></div>
           </div>
         </div>
 
@@ -4563,6 +4707,283 @@ async function sendBroadcastReminder(){
     dbgEl.textContent = JSON.stringify(d, null, 2);
     resEl.textContent = r.ok && d.ok ? "✅ بە سەرکەوتوویی نێردرا" : "❌ ناردن پشتڕاست نەکرایەوە";
   }catch(e){ resEl.textContent = "❌ هەڵە لە پەیوەندی"; }
+}
+
+// =========================================================
+// WHATSAPP & OTP LIVE TESTING SUITE JAVASCRIPT LOGIC
+// =========================================================
+let lastWhatsAppConsoleOutput = "";
+
+function scrollToWhatsAppTesting(){
+  setTimeout(() => {
+    const el = document.getElementById("whatsappTestingSuite");
+    if(el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 100);
+}
+
+function switchWhatsAppTestTab(tabKey){
+  const tabs = ["otp", "verify", "reject", "broadcast", "diagnostics"];
+  tabs.forEach(t => {
+    const btn = document.getElementById("tabBtn_test_" + t);
+    const panel = document.getElementById("testPanel_" + t);
+    if(btn) btn.classList.toggle("active", t === tabKey);
+    if(panel) panel.style.display = (t === tabKey) ? "block" : "none";
+  });
+}
+
+function clearWhatsAppTestConsole(){
+  const out = document.getElementById("whatsappTestFullOutput");
+  const stat = document.getElementById("whatsappTestConsoleStatus");
+  const dec = document.getElementById("whatsappErrorDecoderCard");
+  if(out) out.textContent = "// کۆنسۆڵ پاککرایەوە — ئامادەیە بۆ تێستی نوێ.";
+  if(stat) stat.textContent = "ئامادەیە.";
+  if(dec) dec.style.display = "none";
+  lastWhatsAppConsoleOutput = "";
+}
+
+function copyWhatsAppTestConsole(){
+  const t = document.getElementById("whatsappTestFullOutput")?.textContent || "";
+  if(!t) return toast("⚠️ هیچ دەقێک نییە");
+  navigator.clipboard.writeText(t).then(() => toast("📋 دەقی تەواوی ئیرۆر کۆپی کرا")).catch(() => toast("کۆپی نەکرا"));
+}
+
+function logToWhatsAppConsole(testName, endpoint, method, reqData, status, resData, durationMs){
+  const out = document.getElementById("whatsappTestFullOutput");
+  const stat = document.getElementById("whatsappTestConsoleStatus");
+  const now = new Date().toISOString();
+
+  const formattedLog = [
+    `=============================================================`,
+    `[${now}] TEST: ${testName}`,
+    `ENDPOINT: ${method} ${endpoint}`,
+    `STATUS: HTTP ${status} (Response time: ${durationMs}ms)`,
+    `-------------------------------------------------------------`,
+    `>>> REQUEST PAYLOAD:`,
+    JSON.stringify(reqData, null, 2),
+    `-------------------------------------------------------------`,
+    `<<< RAW RESPONSE BODY:`,
+    JSON.stringify(resData, null, 2),
+    `=============================================================\n`
+  ].join("\n");
+
+  lastWhatsAppConsoleOutput = formattedLog + "\n" + (lastWhatsAppConsoleOutput || "");
+  if(out) out.textContent = lastWhatsAppConsoleOutput;
+
+  const isOk = (status >= 200 && status < 300) && (resData?.ok === true || resData?.whatsapp?.ok === true);
+  if(stat){
+    if(isOk){
+      stat.innerHTML = `<span style="color:#4ade80">✅ سەرکەوتوو بوو (HTTP ${status}) — ئەنجام لە خوارەوە تۆمارکرا.</span>`;
+    } else {
+      stat.innerHTML = `<span style="color:#f87171">❌ هەڵە دۆزرایەوە (HTTP ${status}) — سەیری شیکردنەوەی خوارەوە بکە.</span>`;
+    }
+  }
+
+  decodeWhatsAppError(status, resData, testName);
+}
+
+function decodeWhatsAppError(status, data, testType){
+  const card = document.getElementById("whatsappErrorDecoderCard");
+  const titleEl = document.getElementById("waDecodedErrorTitle");
+  const bodyEl = document.getElementById("waDecodedErrorBody");
+  if(!card || !titleEl || !bodyEl) return;
+
+  const str = JSON.stringify(data || "");
+  let decodedTitle = "";
+  let decodedBody = "";
+
+  if(str.includes("132012")){
+    decodedTitle = "🚨 هەڵەی فەرمی Meta: Code #132012 (Parameter format does not match format in the created template)";
+    decodedBody = `
+      <p style="margin:0 0 6px"><strong>هۆکاری تەواوی هەڵەکە:</strong><br>
+      لەناو Meta WhatsApp Manager، ئەو تێمپلەیتەی دروستت کردووە ژمارەی گۆڕاوەکان (Variables) یان فۆرماتەکەیان لەگەڵ ئەو داتایەی لە وۆرکەر دەنێردرێت یەکناگرێتەوە.
+      وۆرکەر بۆ نامەی پەسەندکردن پێویستی بە ٤ گۆڕاوە:
+      <code>{{1}}</code>: ناوی بەشداربوو | <code>{{2}}</code>: ناوی گەشت | <code>{{3}}</code>: ژمارەی کورسی | <code>{{4}}</code>: لینکی شوێنی کۆبوونەوە (Google Maps).</p>
+      <div style="background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;margin-top:6px">
+        <strong>چۆن لە Meta چاکی بکەیت؟</strong><br>
+        ١. بڕۆ بۆ <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Meta WhatsApp Manager > Message Templates</a>.<br>
+        ٢. تێمپلەیتی پەسەندکردن بکەرەوە و دڵنیابە لە بەشی Body ڕێک ٤ گۆڕاو دانراوە ({{1}}, {{2}}, {{3}}, {{4}}).<br>
+        ٣. دڵنیابە هەموو گۆڕاوەکان لە جۆری Text بن.
+      </div>
+    `;
+  } else if(str.includes("132001")){
+    decodedTitle = "🚨 هەڵەی فەرمی Meta: Code #132001 (Template name does not exist in the translation)";
+    decodedBody = `
+      <p style="margin:0 0 6px"><strong>هۆکاری تەواوی هەڵەکە:</strong><br>
+      ناوی تێمپلەیت لەناو هەژماری Meta بوونی نییە بەو زمانەی کە داواکراوە. چونکە زمانی کوردی (ku) بە فەرمی لەلایەن هەندێک بەشی Meta پشتگیری ناکرێت، تێمپلەیتەکان دەبێت بە زمانی عەرەبی (<code>ar</code>) یان ئینگلیزی (<code>en_US</code>) پەسەند بکرێن لەگەڵ نووسینی دەقی کوردی لە ناویاندا.</p>
+    `;
+  } else if(str.includes("190") || str.includes("OAuthException") || str.includes("token")){
+    decodedTitle = "🚨 هەڵەی ڕێگەپێدان: Meta Access Token بەسەرچووە یان نادروستە";
+    decodedBody = `
+      <p style="margin:0">کلیلی دەستپێڕاگەیشتن (Access Token)ی Meta بەسەرچووە. پێویستە لە Meta Business Suite کلیلی هەمیشەیی بە ناوی <strong>System User Access Token</strong> دروست بکەیت بە ڕێگەپێدانی <code>whatsapp_business_messaging</code> و <code>whatsapp_business_management</code>.</p>
+    `;
+  } else if(testType.includes("OTP")){
+    decodedTitle = "ℹ️ زانیاری لەسەر گەیشتنی کۆدی OTP";
+    decodedBody = `
+      <p style="margin:0 0 6px">وەڵامی سێرڤەر: <code>${esc(data?.message || JSON.stringify(data))}</code>.<br>
+      ئەگەر کۆدەکە بۆ مۆبایلەکەت نایەت، لەبەر ئەوەیە کە Meta ناردنی کۆدی OTP دەبەستێتەوە بە هەبوونی باڵانس و ڕێکخستنی تێمپلەیتی Authentication لە Meta Business Suite.</p>
+    `;
+  }
+
+  if(decodedTitle){
+    titleEl.innerHTML = decodedTitle;
+    bodyEl.innerHTML = decodedBody;
+    card.style.display = "block";
+  } else {
+    card.style.display = "none";
+  }
+}
+
+async function executeTestOtpSend(){
+  const phone = (document.getElementById("testOtpPhoneInput")?.value || "").trim();
+  if(!phone) return toast("⚠️ تکایە ژمارەی مۆبایل بنووسە");
+  const stat = document.getElementById("whatsappTestConsoleStatus");
+  if(stat) stat.textContent = "⏳ لە ناردنی داواکاری بۆ /api/otp/send...";
+
+  const t0 = performance.now();
+  try{
+    const res = await fetch(`${WORKER_URL}/api/otp/send`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone, test: true })
+    });
+    const duration = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
+    logToWhatsAppConsole("ناردنی کۆدی OTP (Test OTP Send)", "/api/otp/send", "POST", { phone }, res.status, data, duration);
+    toast("✓ تاقیکردنەوە تەواو بوو");
+  }catch(err){
+    const duration = Math.round(performance.now() - t0);
+    logToWhatsAppConsole("ناردنی کۆدی OTP (Test OTP Send)", "/api/otp/send", "POST", { phone }, 0, { error: err.message }, duration);
+    toast("❌ هەڵە لە پەیوەندی بە سێرڤەر");
+  }
+}
+
+async function executeTestVerifyBooking(){
+  const phone = (document.getElementById("testVerifyPhoneInput")?.value || "").trim();
+  const name = (document.getElementById("testVerifyNameInput")?.value || "ئارام").trim();
+  const tripTitle = (document.getElementById("testVerifyTripInput")?.value || "لووتکەی هەڵگورد").trim();
+  const seats = Number(document.getElementById("testVerifySeatsInput")?.value || 1);
+  const link = (document.getElementById("testVerifyLinkInput")?.value || "https://maps.app.goo.gl/").trim();
+
+  if(!phone) return toast("⚠️ تکایە ژمارەی مۆبایل بنووسە");
+  const stat = document.getElementById("whatsappTestConsoleStatus");
+  if(stat) stat.textContent = "⏳ لە ناردنی داواکاری بۆ /api/admin/verify-booking...";
+
+  const pDigits = phone.replace(/[^0-9]/g, "");
+  const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
+
+  const payload = {
+    id: "test_" + Date.now(),
+    phone: intlPhone,
+    name: name,
+    fullName: name,
+    tripTitle: tripTitle,
+    trip: tripTitle,
+    people: seats,
+    seats: seats,
+    variable1: name,
+    variable2: tripTitle,
+    variable3: String(seats),
+    variable4: link,
+    var1: name,
+    var2: tripTitle,
+    var3: String(seats),
+    var4: link,
+    meetingLocation: link,
+    meetingLink: link
+  };
+
+  const t0 = performance.now();
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/verify-booking`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Admin-Key": "2026" },
+      body: JSON.stringify(payload)
+    });
+    const duration = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
+    logToWhatsAppConsole("پەسەندکردنی ناونووسین (Test Verify Booking)", "/api/admin/verify-booking", "POST", payload, res.status, data, duration);
+    toast("✓ تاقیکردنەوەی Verify تەواو بوو");
+  }catch(err){
+    const duration = Math.round(performance.now() - t0);
+    logToWhatsAppConsole("پەسەندکردنی ناونووسین (Test Verify Booking)", "/api/admin/verify-booking", "POST", payload, 0, { error: err.message }, duration);
+    toast("❌ هەڵە لە پەیوەندی");
+  }
+}
+
+async function executeTestRejectBooking(){
+  const phone = (document.getElementById("testRejectPhoneInput")?.value || "").trim();
+  const reason = (document.getElementById("testRejectReasonInput")?.value || "پسوولە ڕوون نییە").trim();
+
+  if(!phone) return toast("⚠️ تکایە ژمارەی مۆبایل بنووسە");
+  const pDigits = phone.replace(/[^0-9]/g, "");
+  const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
+
+  const payload = { id: "test_rej_" + Date.now(), phone: intlPhone, reason };
+  const t0 = performance.now();
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/reject-booking`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Admin-Key": "2026" },
+      body: JSON.stringify(payload)
+    });
+    const duration = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
+    logToWhatsAppConsole("ڕەتکردنەوەی ناونووسین (Test Reject Booking)", "/api/admin/reject-booking", "POST", payload, res.status, data, duration);
+    toast("✓ تاقیکردنەوەی Reject تەواو بوو");
+  }catch(err){
+    const duration = Math.round(performance.now() - t0);
+    logToWhatsAppConsole("ڕەتکردنەوەی ناونووسین (Test Reject Booking)", "/api/admin/reject-booking", "POST", payload, 0, { error: err.message }, duration);
+  }
+}
+
+async function executeTestBroadcast(){
+  const phone = (document.getElementById("testBroadcastPhoneInput")?.value || "").trim();
+  const msg = (document.getElementById("testBroadcastMsgInput")?.value || "تێست").trim();
+
+  if(!phone || !msg) return toast("⚠️ دەق و ژمارە بنووسە");
+  const pDigits = phone.replace(/[^0-9]/g, "");
+  const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
+
+  const payload = { message: msg, phones: [intlPhone] };
+  const t0 = performance.now();
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/send-broadcast`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Admin-Key": "2026" },
+      body: JSON.stringify(payload)
+    });
+    const duration = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
+    logToWhatsAppConsole("پەیامی بەکۆمەڵ (Test Broadcast)", "/api/admin/send-broadcast", "POST", payload, res.status, data, duration);
+    toast("✓ تاقیکردنەوەی Broadcast تەواو بوو");
+  }catch(err){
+    const duration = Math.round(performance.now() - t0);
+    logToWhatsAppConsole("پەیامی بەکۆمەڵ (Test Broadcast)", "/api/admin/send-broadcast", "POST", payload, 0, { error: err.message }, duration);
+  }
+}
+
+async function executeTestDiagnostics(){
+  const t0 = performance.now();
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`);
+    const duration = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({}));
+    logToWhatsAppConsole("پشکنینی دۆخی هێڵ و کلیلی Meta (Worker Diagnostics)", "/api/admin/diagnostics", "GET", {}, res.status, data, duration);
+    toast("✓ پشکنینی هێڵ تەواو بوو");
+  }catch(err){
+    const duration = Math.round(performance.now() - t0);
+    logToWhatsAppConsole("پشکنینی دۆخی هێڵ (Worker Diagnostics)", "/api/admin/diagnostics", "GET", {}, 0, { error: err.message }, duration);
+  }
+}
+
+async function runAllWhatsAppTests(){
+  toast("⚡ دەستکرا بە تاقیکردنەوەی گشت بەشەکان...");
+  clearWhatsAppTestConsole();
+  await executeTestDiagnostics();
+  await executeTestOtpSend();
+  await executeTestVerifyBooking();
+  await executeTestRejectBooking();
+  toast("🎉 هەموو تاقیکردنەوەکان تەواو بوون — سەیری ئیرۆرەکان بکە");
 }
 
 // DIAGNOSTICS
