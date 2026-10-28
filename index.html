@@ -2847,8 +2847,9 @@ window.syncSelectedTripBanner = function(){
   // Re-verify applied coupon if user switched trip
   if(window.appliedCouponCode){
     const coupons = Array.isArray(data.coupons) ? data.coupons : [];
-    const c = coupons.find(x => String(x.code || '').trim().toUpperCase() === window.appliedCouponCode);
-    const cTrip = c ? (c.trip || c.applicableTrip || c.tripTitle || 'all').trim() : 'all';
+    const curApplied = String(window.appliedCouponCode || '').trim().toUpperCase();
+    const c = coupons.find(x => String(x.code || '').trim().toUpperCase() === curApplied);
+    const cTrip = c ? String(c.trip || c.applicableTrip || c.tripTitle || 'all').trim() : 'all';
     if(c && cTrip && cTrip !== 'all' && cTrip !== 'هەموو گەشتەکان'){
       const curTripTitle = chosen.title || '';
       const matches = curTripTitle.toLowerCase().includes(cTrip.toLowerCase()) || cTrip.toLowerCase().includes(curTripTitle.toLowerCase());
@@ -4916,8 +4917,8 @@ async function submitBooking(e){
     fd.set('whatsapp', phone);
     fd.set('people', String(allParticipants.length || peopleCount));
     const userNote = String(fd.get('note') || '').trim();
-    const rawCouponInput = ($('couponInput')?.value || '').trim().toUpperCase();
-    const appliedCoupon = (window.appliedCouponCode || rawCouponInput || '').trim().toUpperCase();
+    const rawCouponInput = String($('couponInput')?.value || '').trim().toUpperCase();
+    const appliedCoupon = String(window.appliedCouponCode || rawCouponInput || '').trim().toUpperCase();
     let couponDiscountLabel = '';
     if(appliedCoupon){
       if(Number(window.appliedCouponFixed) > 0){
@@ -5266,8 +5267,8 @@ function applyCoupon(){
  if(!c || c.active===false){appliedDiscountPercent=0;window.appliedCouponFixed=0;$('couponStatus').textContent='کۆدی داشکاندن هەڵەیە یان ناچالاکە';toast('کۆدی داشکاندن هەڵەیە');return}
 
  // Check trip restriction
- const cTrip = (c.trip || c.applicableTrip || c.tripTitle || 'all').trim();
- const selectedTrip = ($('bookingTrip')?.value || '').trim();
+ const cTrip = String(c.trip || c.applicableTrip || c.tripTitle || 'all').trim();
+ const selectedTrip = String($('bookingTrip')?.value || '').trim();
  if(cTrip && cTrip !== 'all' && cTrip !== 'هەموو گەشتەکان' && cTrip !== 'گشت گەشتەکان'){
    const matches = selectedTrip && (selectedTrip.toLowerCase().includes(cTrip.toLowerCase()) || cTrip.toLowerCase().includes(selectedTrip.toLowerCase()));
    if(!matches){
@@ -5295,9 +5296,9 @@ function applyCoupon(){
    appliedDiscountPercent=Math.min(100,Math.max(0,val)); window.appliedCouponFixed=0;
    $('couponStatus').innerHTML=`<span style="color:#49d18d">✓ داشکاندن چالاک کرا (${val}%${cTrip && cTrip!=='all'?` بۆ «${cTrip}»`:''})</span>`;
  }
- window.appliedCouponCode=c.code;
+ window.appliedCouponCode=String(c.code || '').trim().toUpperCase();
  window.appliedCouponFixed=type==='fixed'?val:0;
- if($('appliedCouponCode'))$('appliedCouponCode').value=c.code;
+ if($('appliedCouponCode'))$('appliedCouponCode').value=String(c.code || '');
  if($('appliedCouponDiscount'))$('appliedCouponDiscount').value=String(val);
  updateBookingCalculatedTotal();
  toast(type==='fixed'?`🎉 ${val.toLocaleString()} IQD داشکاندن چالاک کرا`:`🎉 ${val}% داشکاندن چالاک کرا`);
