@@ -1,10 +1,14 @@
 /* ==========================================================================
-   KURDIA ADVENTURE — CINEMATIC ANIMATION & INTERACTION STYLESHEET
+   KURDIA ADVENTURE — CINEMATIC ANIMATION & DARK GLASSMORPHISM STYLESHEET
    File: /assets/css/animations.css
-   Purpose: Authoritative modular styles for Living Aurora background,
-            Three.js ambient canvas, Hero choreography, Scroll reveals,
-            Image reveals, Card hover/elevation, Micro-interactions,
-            Weather station motion, RTL overflow safety, and Accessibility.
+   Purpose: Authoritative modular styles for:
+            1. Living Aurora & 3D Ambient Horizon Layer
+            2. Authentic Dark Glassmorphism (Nav, Mobile Drawer, Trip Cards,
+               Destination Cards, Floating Controls, Modals, Weather & Info Panels)
+            3. Hero Ken-Burns Drift, Atmospheric Breathing & Scroll Cue
+            4. Scroll-Reveal Primitives & Image Reveal Masks
+            5. Card Hover Elevation, Media Zoom, Badge Glow & RTL Arrow Shift
+            6. Tactile Micro-Interactions, Weather Station Motion & Reduced Motion
    ========================================================================== */
 
 /* 0. RTL & Viewport Horizontal Overflow Safeguards */
@@ -21,7 +25,7 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.62;
+  opacity: 0.65;
 }
 
 #kurdiaLivingBg {
@@ -35,51 +39,51 @@ body {
 .klbg-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(65px);
-  opacity: 0.38;
+  filter: blur(68px);
+  opacity: 0.42;
   will-change: transform;
 }
 
 .klbg-orb.orb-1 {
-  width: min(520px, 85vw);
-  height: min(520px, 85vw);
-  top: -12%;
-  right: -10%;
-  background: radial-gradient(circle, rgba(229, 35, 79, 0.32) 0%, rgba(169, 29, 55, 0.08) 55%, transparent 75%);
+  width: min(540px, 85vw);
+  height: min(540px, 85vw);
+  top: -10%;
+  right: -8%;
+  background: radial-gradient(circle, rgba(229, 35, 79, 0.34) 0%, rgba(169, 29, 55, 0.09) 55%, transparent 75%);
   animation: klbgFloat1 16s ease-in-out infinite alternate;
 }
 
 .klbg-orb.orb-2 {
-  width: min(460px, 80vw);
-  height: min(460px, 80vw);
+  width: min(480px, 80vw);
+  height: min(480px, 80vw);
   bottom: 8%;
-  left: -12%;
-  background: radial-gradient(circle, rgba(55, 201, 135, 0.16) 0%, rgba(14, 116, 144, 0.06) 55%, transparent 75%);
+  left: -10%;
+  background: radial-gradient(circle, rgba(55, 201, 135, 0.18) 0%, rgba(14, 116, 144, 0.07) 55%, transparent 75%);
   animation: klbgFloat2 20s ease-in-out infinite alternate;
 }
 
 .klbg-orb.orb-3 {
-  width: min(420px, 75vw);
-  height: min(420px, 75vw);
-  top: 42%;
-  left: 25%;
-  background: radial-gradient(circle, rgba(211, 47, 78, 0.14) 0%, rgba(88, 28, 135, 0.05) 55%, transparent 75%);
+  width: min(430px, 75vw);
+  height: min(430px, 75vw);
+  top: 40%;
+  left: 24%;
+  background: radial-gradient(circle, rgba(211, 47, 78, 0.16) 0%, rgba(56, 189, 248, 0.06) 55%, transparent 75%);
   animation: klbgFloat3 22s ease-in-out infinite alternate;
 }
 
 @keyframes klbgFloat1 {
   0% { transform: translate3d(0, 0, 0) scale(1); }
-  100% { transform: translate3d(-32px, 40px, 0) scale(1.1); }
+  100% { transform: translate3d(-34px, 42px, 0) scale(1.1); }
 }
 
 @keyframes klbgFloat2 {
   0% { transform: translate3d(0, 0, 0) scale(1); }
-  100% { transform: translate3d(36px, -30px, 0) scale(1.08); }
+  100% { transform: translate3d(38px, -32px, 0) scale(1.09); }
 }
 
 @keyframes klbgFloat3 {
   0% { transform: translate3d(-18px, -12px, 0) scale(0.95); }
-  100% { transform: translate3d(22px, 26px, 0) scale(1.06); }
+  100% { transform: translate3d(24px, 28px, 0) scale(1.07); }
 }
 
 /* 1. Top Scroll Progress Indicator */
@@ -97,8 +101,25 @@ body {
   transition: width 80ms linear;
 }
 
-/* 2. Header & Brand Logo Precision Motion */
+/* ==========================================================================
+   2. AUTHENTIC PREMIUM DARK GLASSMORPHISM SYSTEM
+   Applied selectively to:
+   - Navigation bar (header.top) & Mobile navigation (nav.bottom, #kaMoreMenu)
+   - Trip cards (.featured, .trip-showcase-card, .booking-trip-pick-card)
+   - Destination cards (.place-card) & Floating pills
+   - Floating controls (.ka-hero-scroll-cue, .weather-map-badge, .weather-map-layers)
+   - Modal dialogs (.modal .sheet, .story-sheet, .booking-success-card)
+   - Secondary info panels (.glass, .weather-hero-card, .metric-box, .private-vip-showcase,
+     .booking-hero-banner, .booking-form-card, .private-trip-card, .public-review, .article)
+   ========================================================================== */
+
+/* 2A. Sticky Header & Mobile Navigation Glassmorphism */
 header.top {
+  background: var(--ka-glass-bg-nav) !important;
+  backdrop-filter: blur(var(--ka-blur-md)) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(var(--ka-blur-md)) saturate(145%) !important;
+  border-bottom: 1px solid var(--ka-glass-border) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38), var(--ka-glass-highlight-inset);
   transition:
     background-color var(--motion-base) var(--ease-out-quart),
     backdrop-filter var(--motion-base) var(--ease-out-quart),
@@ -108,20 +129,134 @@ header.top {
 }
 
 header.top.scrolled {
-  background: var(--ka-surface-glass-strong) !important;
-  backdrop-filter: blur(var(--blur-glass)) saturate(160%);
-  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
-  border-bottom-color: rgba(211, 47, 78, 0.28) !important;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.65);
+  background: rgba(7, 10, 16, 0.86) !important;
+  backdrop-filter: blur(var(--ka-blur-lg)) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(var(--ka-blur-lg)) saturate(165%) !important;
+  border-bottom-color: rgba(211, 47, 78, 0.34) !important;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.68), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
+nav.bottom {
+  background: rgba(8, 12, 19, 0.82) !important;
+  backdrop-filter: blur(20px) saturate(155%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(155%) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 -10px 34px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+aside#kaMoreMenu.ka-more-menu {
+  background: rgba(10, 15, 23, 0.86) !important;
+  backdrop-filter: blur(22px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 2B. Trip Cards, Destination Cards & Secondary Info Panels Dark Glassmorphism */
+.featured,
+.trip-showcase-card,
+.place-card,
+.booking-trip-pick-card,
+.booking-hero-banner,
+.booking-form-card,
+.booking-subcard,
+.booking-step3-summary-card,
+.private-vip-showcase,
+.private-page-hero,
+.private-trip-card,
+.private-preset-card,
+.weather-hero-card,
+.weather-metrics-grid .metric-box,
+.hourly-card,
+.day-row-card,
+.public-review,
+.article,
+.glass,
+.dest-spec-box,
+.dest-modal-desc-box {
+  background: linear-gradient(
+    165deg,
+    rgba(19, 26, 38, 0.72) 0%,
+    rgba(10, 14, 22, 0.66) 100%
+  ) !important;
+  backdrop-filter: blur(var(--ka-blur-md)) saturate(135%);
+  -webkit-backdrop-filter: blur(var(--ka-blur-md)) saturate(135%);
+  border: 1px solid var(--ka-glass-border) !important;
+  box-shadow: var(--shadow-glass);
+}
+
+/* Selected / Active Glass States */
+.booking-trip-pick-card.is-selected,
+.private-preset-card.active {
+  background: linear-gradient(
+    165deg,
+    rgba(169, 29, 55, 0.24) 0%,
+    rgba(14, 19, 29, 0.78) 100%
+  ) !important;
+  border-color: rgba(229, 35, 79, 0.65) !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.6), 0 0 24px rgba(211, 47, 78, 0.24), var(--ka-glass-highlight-inset);
+}
+
+/* 2C. Floating Controls & Overlays Glassmorphism */
+.ka-hero-scroll-cue,
+.weather-map-badge,
+.weather-map-layers,
+.weather-map-hint,
+.place-region-pill,
+.place-type-tag,
+.trip-status-pill,
+.btp-status,
+.top-lang-trigger,
+.top-lang-dropdown {
+  background: var(--ka-glass-bg-pill) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* 2D. Modal Dialogs Glassmorphism */
+.modal .sheet,
+.story-sheet,
+.booking-success-card,
+.payment-barcode-sheet {
+  background: var(--ka-glass-bg-modal) !important;
+  backdrop-filter: blur(22px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(150%) !important;
+  border: 1px solid var(--ka-glass-border-strong) !important;
+  box-shadow: 0 28px 68px rgba(0, 0, 0, 0.78), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Graceful Fallback When backdrop-filter Is Unsupported */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  header.top,
+  nav.bottom,
+  aside#kaMoreMenu.ka-more-menu,
+  .featured,
+  .trip-showcase-card,
+  .place-card,
+  .booking-trip-pick-card,
+  .booking-hero-banner,
+  .booking-form-card,
+  .private-vip-showcase,
+  .private-trip-card,
+  .weather-hero-card,
+  .modal .sheet,
+  .glass {
+    background: var(--ka-glass-fallback-solid) !important;
+  }
+}
+
+/* ==========================================================================
+   3. BRAND LOGO & HERO CINEMATIC CHOREOGRAPHY
+   ========================================================================== */
 .brand {
   position: relative;
   transition: transform var(--motion-fast) var(--ease-spring-gentle);
 }
 
 .brand:hover {
-  transform: translateY(-1px);
+  transform: translateY(-1.5px);
 }
 
 .brand-logo-img {
@@ -132,32 +267,51 @@ header.top.scrolled {
 }
 
 .brand:hover .brand-logo-img {
-  transform: scale(1.06) rotate(-2deg);
-  box-shadow: 0 0 18px rgba(211, 47, 78, 0.48);
+  transform: scale(1.07) rotate(-2deg);
+  box-shadow: 0 0 20px rgba(211, 47, 78, 0.52);
 }
 
-/* 3. Cinematic Hero Layering, Background Zoom & Scroll Cue */
 .hero {
   position: relative;
   overflow: hidden;
   isolation: isolate;
 }
 
-.hero::before {
-  transition: transform 9s var(--ease-out-quart), filter 1.2s var(--ease-out-quart);
+.hero::before,
+.hero:before {
   will-change: transform;
+  animation: heroMountainDrift 20s ease-in-out infinite alternate !important;
 }
 
-.hero.ka-hero-loaded::before {
-  animation: kaHeroKenBurns 22s ease-in-out infinite alternate;
+.hero::after,
+.hero:after {
+  animation: heroAtmosphere 8s ease-in-out infinite alternate !important;
+}
+
+@keyframes heroMountainDrift {
+  0% {
+    transform: scale(1) translate3d(0, var(--hero-parallax-y, 0px), 0);
+  }
+  100% {
+    transform: scale(1.075) translate3d(-1%, calc(-1.5% + var(--hero-parallax-y, 0px)), 0);
+  }
 }
 
 @keyframes kaHeroKenBurns {
   0% {
-    transform: scale(1) translate3d(0, 0, 0);
+    transform: scale(1) translate3d(0, var(--hero-parallax-y, 0px), 0);
   }
   100% {
-    transform: scale(1.065) translate3d(0, -1.5%, 0);
+    transform: scale(1.075) translate3d(-1%, calc(-1.5% + var(--hero-parallax-y, 0px)), 0);
+  }
+}
+
+@keyframes heroAtmosphere {
+  0% {
+    opacity: 0.88;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
@@ -167,38 +321,36 @@ header.top.scrolled {
   align-items: center;
   gap: 8px;
   margin-top: 18px;
-  padding: 6px 14px;
+  padding: 7px 15px;
   border-radius: 999px;
-  background: rgba(11, 16, 24, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--ka-text-secondary);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.3px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
   user-select: none;
   transition:
     border-color var(--motion-fast) var(--ease-out-quart),
     color var(--motion-fast) var(--ease-out-quart),
-    transform var(--motion-fast) var(--ease-out-quart),
-    background-color var(--motion-fast) var(--ease-out-quart);
+    transform var(--motion-fast) var(--ease-spring-gentle),
+    background-color var(--motion-fast) var(--ease-out-quart),
+    box-shadow var(--motion-fast) var(--ease-out-quart);
 }
 
 .ka-hero-scroll-cue:hover {
-  border-color: var(--ka-border-hover);
+  border-color: var(--ka-glass-border-hover) !important;
   color: #fff;
-  background: rgba(169, 29, 55, 0.22);
+  background: rgba(169, 29, 55, 0.28) !important;
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(211, 47, 78, 0.28);
 }
 
 .ka-hero-scroll-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--ka-brand-rose);
-  box-shadow: 0 0 8px var(--ka-brand-rose);
+  box-shadow: 0 0 10px var(--ka-brand-rose);
   animation: kaScrollCuePulse 2s ease-in-out infinite;
 }
 
@@ -213,8 +365,10 @@ header.top.scrolled {
   }
 }
 
-/* 4. Reusable Scroll-Reveal Primitives (Safe Progressive Enhancement)
-      Content remains visible by default if JS fails or hasn't run. */
+/* ==========================================================================
+   4. SCROLL-REVEAL PRIMITIVES & IMAGE REVEAL CONTAINERS
+   Content remains visible by default if JS fails or hasn't run.
+   ========================================================================== */
 .kurdia-scroll-item {
   will-change: transform, opacity;
   transition:
@@ -225,7 +379,7 @@ header.top.scrolled {
 .kurdia-scroll-item.scroll-hidden,
 .ka-reveal-armed {
   opacity: 0;
-  transform: translate3d(0, var(--reveal-distance-md), 0) scale(0.985);
+  transform: translate3d(0, var(--reveal-distance-md), 0) scale(0.975);
 }
 
 .kurdia-scroll-item.scroll-visible,
@@ -238,7 +392,8 @@ header.top.scrolled {
 .featureimg,
 .place-card-media,
 .btp-thumb,
-.dest-modal-hero {
+.dest-modal-hero,
+.about img {
   position: relative;
   overflow: hidden;
 }
@@ -249,20 +404,27 @@ header.top.scrolled {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(5, 7, 11, 0) 40%, rgba(5, 7, 11, 0.72) 100%);
+  background: linear-gradient(180deg, rgba(5, 7, 11, 0) 38%, rgba(5, 7, 11, 0.72) 100%);
   pointer-events: none;
   transition: opacity var(--motion-base) var(--ease-out-quart);
 }
 
-/* 5. Premium Trip, Destination & Experience Card Hover Architecture */
+/* ==========================================================================
+   5. TRIP, DESTINATION, STORY & EXPERIENCE CARD HOVER ARCHITECTURE
+   ========================================================================== */
 .featured,
+.trip-showcase-card,
 .place-card,
 .booking-trip-pick-card,
 .private-vip-showcase,
 .private-trip-card,
+.private-preset-card,
 .weather-hero-card,
 .public-review,
-.article {
+.article,
+.experiences .tile,
+.experience-card,
+#homeStories .story {
   position: relative;
   transition:
     transform var(--motion-base) var(--ease-out-quart),
@@ -271,41 +433,73 @@ header.top.scrolled {
     background-color var(--motion-base) var(--ease-out-quart);
 }
 
-/* Desktop Hover Enhancements (Only on devices with true pointer hover) */
+/* Smooth Image Zoom Inside Cards */
+.featured .featureimg,
+.trip-showcase-card .featureimg,
+.place-card .place-card-media,
+.booking-trip-pick-card .btp-thumb,
+.about img {
+  transition:
+    transform var(--motion-slow) var(--ease-out-expo),
+    filter var(--motion-base) var(--ease-out-quart);
+}
+
+/* Desktop Hover Enhancements */
 @media (hover: hover) and (pointer: fine) {
   .featured:hover,
+  .trip-showcase-card:hover,
   .place-card:hover,
-  .booking-trip-pick-card:hover {
-    border-color: var(--ka-border-hover);
-    box-shadow: var(--shadow-elevated);
-  }
-
-  /* Smooth Image Zoom Inside Cards on Hover */
-  .featured .featureimg,
-  .place-card .place-card-media,
-  .booking-trip-pick-card .btp-thumb {
-    transition: transform var(--motion-slow) var(--ease-out-expo), filter var(--motion-base) var(--ease-out-quart);
+  .booking-trip-pick-card:hover,
+  .private-preset-card:hover,
+  .public-review:hover,
+  .article:hover {
+    transform: translateY(-6px);
+    border-color: var(--ka-glass-border-hover) !important;
+    box-shadow: var(--shadow-elevated) !important;
   }
 
   .featured:hover .featureimg,
+  .trip-showcase-card:hover .featureimg,
   .place-card:hover .place-card-media,
   .booking-trip-pick-card:hover .btp-thumb {
-    transform: scale(1.055);
+    transform: scale(1.065);
+    filter: saturate(1.1) contrast(1.04);
+  }
+
+  /* Badge Highlight on Card Hover */
+  .featured:hover .trip-status-pill,
+  .place-card:hover .place-region-pill,
+  .booking-trip-pick-card:hover .btp-status {
+    border-color: rgba(255, 141, 163, 0.5) !important;
+    transform: translateY(-1px);
+  }
+
+  /* Stories Ring Hover Lift */
+  #homeStories .story:hover {
+    transform: translateY(-4px) scale(1.04);
+  }
+
+  /* Experiences Tile Hover */
+  .experiences .tile:hover,
+  .experience-card:hover {
+    transform: translateY(-5px) scale(1.015);
+    box-shadow: var(--shadow-elevated);
   }
 
   /* Subtle CTA Arrow Shift on Card Hover (RTL-aware: shifts left in RTL) */
   [dir="rtl"] .place-card:hover .place-card-footer span:last-child,
   [dir="rtl"] .booking-trip-pick-card:hover .btp-select-indicator span:last-child {
-    transform: translateX(-5px);
+    transform: translateX(-6px);
   }
 
   [dir="ltr"] .place-card:hover .place-card-footer span:last-child,
   [dir="ltr"] .booking-trip-pick-card:hover .btp-select-indicator span:last-child {
-    transform: translateX(5px);
+    transform: translateX(6px);
   }
 
   /* Dynamic Pointer Spotlight Overlay */
   .featured::before,
+  .trip-showcase-card::before,
   .place-card::before,
   .booking-trip-pick-card::before {
     content: "";
@@ -313,8 +507,8 @@ header.top.scrolled {
     inset: 0;
     border-radius: inherit;
     background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(211, 47, 78, 0.11),
+      440px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(211, 47, 78, 0.14),
       transparent 65%
     );
     opacity: 0;
@@ -324,6 +518,7 @@ header.top.scrolled {
   }
 
   .featured:hover::before,
+  .trip-showcase-card:hover::before,
   .place-card:hover::before,
   .booking-trip-pick-card:hover::before {
     opacity: 1;
@@ -331,15 +526,22 @@ header.top.scrolled {
 }
 
 .place-card-footer span:last-child,
-.btp-select-indicator span:last-child {
+.btp-select-indicator span:last-child,
+.trip-status-pill,
+.place-region-pill,
+.btp-status {
   display: inline-block;
-  transition: transform var(--motion-fast) var(--ease-spring-gentle);
+  transition:
+    transform var(--motion-fast) var(--ease-spring-gentle),
+    border-color var(--motion-fast) var(--ease-out-quart);
 }
 
-/* 6. Weather Station Subtle Living Motion (Data-Safe) */
+/* ==========================================================================
+   6. WEATHER STATION SUBTLE LIVING MOTION (DATA-SAFE)
+   ========================================================================== */
 .weather-hero-card #wBigIcon {
   display: inline-block;
-  animation: kaWeatherIconFloat 5.5s ease-in-out infinite alternate;
+  animation: kaWeatherIconFloat 5.2s ease-in-out infinite alternate;
 }
 
 @keyframes kaWeatherIconFloat {
@@ -347,11 +549,13 @@ header.top.scrolled {
     transform: translateY(0) scale(1);
   }
   100% {
-    transform: translateY(-5px) scale(1.04);
+    transform: translateY(-6px) scale(1.05);
   }
 }
 
-.weather-metrics-grid .metric-box {
+.weather-metrics-grid .metric-box,
+.hourly-card,
+.day-row-card {
   transition:
     transform var(--motion-fast) var(--ease-out-quart),
     border-color var(--motion-fast) var(--ease-out-quart),
@@ -360,22 +564,18 @@ header.top.scrolled {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .weather-metrics-grid .metric-box:hover {
-    transform: translateY(-3px);
-    border-color: rgba(56, 189, 248, 0.35);
-    box-shadow: 0 12px 26px -8px rgba(0, 0, 0, 0.55);
+  .weather-metrics-grid .metric-box:hover,
+  .hourly-card:hover,
+  .day-row-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(56, 189, 248, 0.4) !important;
+    box-shadow: 0 14px 28px -8px rgba(0, 0, 0, 0.6);
   }
 }
 
-.hourly-timeline > *,
-.days-container > * {
-  transition:
-    transform var(--motion-fast) var(--ease-out-quart),
-    border-color var(--motion-fast) var(--ease-out-quart),
-    background-color var(--motion-fast) var(--ease-out-quart);
-}
-
-/* 7. Tactile Buttons, Navigation & Micro-Interactions */
+/* ==========================================================================
+   7. TACTILE BUTTONS, NAVIGATION & MICRO-INTERACTIONS
+   ========================================================================== */
 .btn,
 .navitem,
 .pf-chip,
@@ -398,13 +598,13 @@ header.top.scrolled {
 
 .btn.red:hover:not(:disabled) {
   box-shadow: var(--shadow-crimson-glow);
-  transform: translateY(-1.5px);
+  transform: translateY(-2px);
 }
 
 .btn.ghost:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.26);
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-1.5px);
 }
 
 .kurdia-btn-pressed {
@@ -415,7 +615,7 @@ header.top.scrolled {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.48) 0%, rgba(255, 140, 163, 0.22) 55%, transparent 75%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 140, 163, 0.24) 55%, transparent 75%);
   transform: translate(-50%, -50%) scale(0);
   animation: kurdiaRippleWave 0.62s var(--ease-out-expo) forwards;
   z-index: 5;
@@ -435,8 +635,8 @@ nav.bottom .navitem {
 }
 
 nav.bottom .navitem.active .ico {
-  transform: translateY(-1px) scale(1.08);
-  filter: drop-shadow(0 4px 10px rgba(229, 35, 79, 0.45));
+  transform: translateY(-2px) scale(1.1);
+  filter: drop-shadow(0 4px 10px rgba(229, 35, 79, 0.5));
 }
 
 /* 8. Keyboard Accessibility Focus States */
@@ -462,7 +662,7 @@ nav.bottom .navitem.active .ico {
 @keyframes kaPageEnter {
   0% {
     opacity: 0.01;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   100% {
     opacity: 1;
@@ -483,7 +683,10 @@ nav.bottom .navitem.active .ico {
 
   .klbg-orb,
   .kurdia-click-ripple,
-  .hero.ka-hero-loaded::before,
+  .hero::before,
+  .hero:before,
+  .hero::after,
+  .hero:after,
   .weather-hero-card #wBigIcon,
   .ka-hero-scroll-dot {
     animation: none !important;

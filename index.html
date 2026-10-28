@@ -50,8 +50,8 @@ if(!window.L || typeof window.L.map !== 'function'){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 <!-- Modular KURDIA Motion Design System Stylesheets -->
-<link rel="stylesheet" href="/assets/css/motion-tokens.css">
-<link rel="stylesheet" href="/assets/css/animations.css">
+<link rel="stylesheet" href="/assets/css/motion-tokens.css?v=4.1.0">
+<link rel="stylesheet" href="/assets/css/animations.css?v=4.1.0">
 <style>
 :root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -2284,7 +2284,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v3.8.3';
+const SITE_CODE_RELEASE='v4.1.0';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -3219,6 +3219,9 @@ function render(){
  const activeLangNow = localStorage.getItem('kurdia_language') || 'ku';
  if(activeLangNow !== 'ku' && typeof window.applyFullSiteTranslation === 'function'){
    window.applyFullSiteTranslation(activeLangNow);
+ }
+ if(typeof window.kurdiaRefreshMotion === 'function'){
+   window.kurdiaRefreshMotion();
  }
 }
 
@@ -5310,7 +5313,7 @@ function previewStoryImage(e){const f=e.target.files?.[0];if(!f)return;if(!f.typ
 function openStoryUploadModal(){$('storyModal')?.classList.add('show')}function closeStoryModal(){$('storyModal')?.classList.remove('show')}
 async function fetchStories(refresh=false){try{const r=await fetch(WORKER+'/api/stories');const x=await r.json();if(x.ok&&Array.isArray(x.stories)){activeStoriesList=x.stories;renderStoriesBar();renderStoryGrid()}else if(refresh)toast('ستۆرییەکان نوێ نەکرانەوە')}catch(e){if(refresh)toast('نەتوانرا ستۆرییەکان نوێ بکرێنەوە')}}
 function storyList(){return activeStoriesList.length?activeStoriesList:data.stories.map((s,i)=>({id:'local-'+i,name:s.name,mediaUrl:s.img,text:'ئەزموونی KURDIA',tripName:'KURDIA',likes:0}))}
-function renderStoriesBar(){const l=storyList();if(!$('homeStories'))return;const addStoryBtn = `<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,0.05);border:1px dashed var(--muted);"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;$('homeStories').innerHTML= addStoryBtn + l.slice(0,12).map((s,i)=>`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryViewer(${i})"><div class="ring"><img src="${esc(s.mediaUrl||s.img||'')}" alt="${esc(s.name||'KURDIA')}"></div><small>${esc(s.name||'KURDIA')}</small></button>`).join('');if(window.lucide)lucide.createIcons();}
+function renderStoriesBar(){const l=storyList();if(!$('homeStories'))return;const addStoryBtn = `<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,0.05);border:1px dashed var(--muted);"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;$('homeStories').innerHTML= addStoryBtn + l.slice(0,12).map((s,i)=>`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryViewer(${i})"><div class="ring"><img src="${esc(s.mediaUrl||s.img||'')}" alt="${esc(s.name||'KURDIA')}"></div><small>${esc(s.name||'KURDIA')}</small></button>`).join('');if(window.lucide)lucide.createIcons();if(typeof window.kurdiaRefreshMotion==='function')window.kurdiaRefreshMotion();}
 function renderStoryGrid(){const l=storyList();if(!$('storyGrid'))return;$('storyGrid').innerHTML=l.map((s,i)=>`<button class="tile" style="background:url('${esc(s.mediaUrl||s.img||'')}') center/cover;border:0;color:#fff;text-align:right" onclick="openStoryViewer(${i})"><div><b>${esc(s.name||'KURDIA')}</b><small>${esc(s.text||'ئەزموونی KURDIA')}</small></div></button>`).join('')}
 function openStoryViewer(i){const l=storyList(),s=l[i];if(!s)return;activeStoriesList=l;currentStoryIdx=i;$('viewerAvatar').textContent=(s.name||'K')[0];$('viewerName').textContent=s.name||'KURDIA';$('viewerTime').textContent=s.tripName||'KURDIA';$('viewerImage').src=s.mediaUrl||s.img||'';$('viewerText').textContent=s.text||'';$('viewerLikes').textContent=s.likes||0;$('storyViewerModal').classList.add('show');const p=$('storyProgressBar');p.style.width='0%';setTimeout(()=>p.style.width='100%',30);if(s.id&&!String(s.id).startsWith('local-'))fetch(WORKER+`/api/stories/${encodeURIComponent(s.id)}/view`,{method:'POST'}).catch(()=>{});clearTimeout(storyTimer);storyTimer=setTimeout(()=>i+1<l.length?openStoryViewer(i+1):closeStoryViewer(),6000)}
 function closeStoryViewer(){clearTimeout(storyTimer);$('storyViewerModal')?.classList.remove('show')}
@@ -7689,9 +7692,9 @@ html, body{
 /* 3. Trip Cards — Consistent Image Proportions & Scannable Details */
 .trip-showcase-card{
   border-radius:24px!important;
-  border:1px solid rgba(255,255,255,0.1)!important;
-  background:linear-gradient(175deg, #0e131d 0%, #080b11 100%)!important;
-  box-shadow:0 16px 38px rgba(0,0,0,0.45)!important;
+  border:1px solid rgba(255,255,255,0.11);
+  background:linear-gradient(165deg, rgba(19, 26, 38, 0.72) 0%, rgba(10, 14, 22, 0.66) 100%);
+  box-shadow:0 16px 38px rgba(0,0,0,0.45);
 }
 .trip-showcase-card .featureimg{
   height:215px!important;
@@ -8600,10 +8603,11 @@ html[dir="ltr"] .ai{
 }
 </style>
 
-<!-- Modular KURDIA Motion Design System Scripts -->
-<script src="/assets/js/motion-config.js"></script>
-<script src="/assets/js/scroll-reveal.js"></script>
-<script src="/assets/js/animations.js"></script>
+<!-- Authoritative Late-Cascade Motion & Glassmorphism Stylesheet + Modular Scripts -->
+<link rel="stylesheet" href="/assets/css/animations.css?v=4.1.0">
+<script src="/assets/js/motion-config.js?v=4.1.0"></script>
+<script src="/assets/js/scroll-reveal.js?v=4.1.0"></script>
+<script src="/assets/js/animations.js?v=4.1.0"></script>
 
 <script id="kurdia-master-motion-engine">
 (function(){

@@ -39,29 +39,44 @@
     if (!window.gsap || (cfg && cfg.prefersReducedMotion())) return;
     const brand = document.querySelector('.top .brand');
     const logoImg = document.querySelector('.top .brand-logo-img');
+    const topActions = document.querySelectorAll('.top .top-actions > *');
     if (!brand || brand.__kaLogoAnimated) return;
     brand.__kaLogoAnimated = true;
 
     try {
       window.gsap.fromTo(
         brand,
-        { opacity: 0, y: -8, scale: 0.96 },
+        { opacity: 0, y: -10, scale: 0.96 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.55,
+          duration: 0.6,
           ease: 'power3.out',
           clearProps: 'transform,opacity'
         }
       );
+      if (topActions && topActions.length) {
+        window.gsap.fromTo(
+          topActions,
+          { opacity: 0, y: -8 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.06,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity'
+          }
+        );
+      }
       if (logoImg) {
         window.gsap.fromTo(
           logoImg,
           { boxShadow: '0 0 0px rgba(211,47,78,0)' },
           {
-            boxShadow: '0 0 18px rgba(211,47,78,0.42)',
-            duration: 0.9,
+            boxShadow: '0 0 22px rgba(211,47,78,0.48)',
+            duration: 0.95,
             yoyo: true,
             repeat: 1,
             ease: 'sine.inOut'
@@ -113,20 +128,22 @@
     const eyebrow = hero.querySelector('.eyebrow');
     const title = hero.querySelector('#heroTitle, h1');
     const text = hero.querySelector('#heroText, p');
-    const actions = hero.querySelector('.actions');
+    const ctaBtns = Array.from(hero.querySelectorAll('.actions .btn'));
     const cueEl = hero.querySelector('.ka-hero-scroll-cue');
-    const sequence = [eyebrow, title, text, actions, cueEl].filter(Boolean);
+    const sequence = [eyebrow, title, text, ...ctaBtns, cueEl].filter(Boolean);
 
     if (sequence.length) {
       try {
+        window.gsap.killTweensOf(sequence);
         window.gsap.fromTo(
           sequence,
-          { opacity: 0, y: 18 },
+          { opacity: 0, y: 24, scale: 0.98 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.62,
-            stagger: 0.085,
+            scale: 1,
+            duration: 0.72,
+            stagger: 0.095,
             ease: 'power3.out',
             clearProps: 'transform,opacity'
           }
@@ -145,7 +162,7 @@
     }
     const scope = rootScope || document;
     const cards = scope.querySelectorAll(
-      '.featured, .place-card, .booking-trip-pick-card, .private-preset-card'
+      '.featured, .trip-showcase-card, .place-card, .booking-trip-pick-card, .private-preset-card'
     );
     const maxDeg = (cfg && cfg.limits && cfg.limits.cardTiltMaxDeg) || 5.5;
     const perspective = (cfg && cfg.limits && cfg.limits.cardTiltPerspectivePx) || 950;
@@ -165,7 +182,7 @@
           const yRel = (e.clientY - rect.top) / rect.height - 0.5;
           const rx = (-yRel * maxDeg).toFixed(2);
           const ry = (xRel * maxDeg).toFixed(2);
-          card.style.transform = `perspective(${perspective}px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(3px)`;
+          card.style.transform = `perspective(${perspective}px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px) translateZ(3px)`;
           card.style.setProperty('--mx', (e.clientX - rect.left).toFixed(0) + 'px');
           card.style.setProperty('--my', (e.clientY - rect.top).toFixed(0) + 'px');
         },
@@ -175,7 +192,7 @@
       card.addEventListener(
         'pointerleave',
         () => {
-          card.style.transform = `perspective(${perspective}px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+          card.style.transform = '';
         },
         { passive: true }
       );
@@ -242,7 +259,15 @@
 
     const metrics = weatherRoot.querySelectorAll('.weather-metrics-grid .metric-box');
     if (prim && metrics.length) {
-      prim.StaggerReveal(metrics, { y: 12, duration: 0.38, stagger: 0.035 });
+      prim.StaggerReveal(metrics, { y: 16, duration: 0.46, stagger: 0.045 });
+    }
+    const hourly = weatherRoot.querySelectorAll('#hourlyTimeline .hourly-card');
+    if (prim && hourly.length) {
+      prim.StaggerReveal(hourly, { y: 14, duration: 0.42, stagger: 0.03 });
+    }
+    const days = weatherRoot.querySelectorAll('#daysForecast .day-row-card');
+    if (prim && days.length) {
+      prim.StaggerReveal(days, { y: 16, duration: 0.46, stagger: 0.045 });
     }
   }
 
@@ -256,6 +281,10 @@
     const activePage = document.getElementById(resolvedId);
     if (!activePage || !activePage.classList.contains('active')) return;
 
+    if (resolvedId === 'home') {
+      initCinematicHero();
+    }
+
     if (prim) {
       prim.AnimatedSection(activePage);
     }
@@ -267,23 +296,27 @@
 
     if (cfg && cfg.prefersReducedMotion()) return;
 
-    const targets = activePage.querySelectorAll(
-      '.featured, .place-card, .booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .experience-card'
-    );
-    if (prim && targets.length) {
-      prim.StaggerReveal(targets, { y: 15, duration: 0.42, stagger: 0.048 });
+    // For non-home subpages, stagger their top-level cards immediately on tab switch
+    if (resolvedId !== 'home' && prim) {
+      const subpageTargets = activePage.querySelectorAll(
+        '.booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-page-hero, .private-preset-card, .private-trip-card, .place-card, .experience-card'
+      );
+      if (subpageTargets.length) {
+        prim.StaggerReveal(subpageTargets, { y: 18, duration: 0.48, stagger: 0.055 });
+      }
     }
 
     if (window.anime) {
       try {
         const bars = activePage.querySelectorAll('.btp-seat-bar i');
         bars.forEach((b) => {
-          const targetW = b.style.width || '50%';
+          const targetW = b.getAttribute('data-target-w') || b.style.width || '50%';
+          b.setAttribute('data-target-w', targetW);
           b.style.width = '0%';
           window.anime({
             targets: b,
             width: targetW,
-            duration: 760,
+            duration: 780,
             easing: 'easeOutQuart',
             delay: 120
           });
@@ -293,12 +326,16 @@
   };
 
   window.kurdiaRefreshMotion = function () {
+    const prim = getPrimitives();
+    if (prim) {
+      prim.AnimatedSection(document);
+    }
+    init3DCardPerspectiveTilt(document);
     if (window.ScrollTrigger) {
       try {
         window.ScrollTrigger.refresh();
       } catch (_) {}
     }
-    window.kurdiaAnimatePageCards();
   };
 
   /**
