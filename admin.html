@@ -3859,7 +3859,8 @@ async function publishLive(alreadySavedFromTripForm = false){
         fibAccount: data.fibAccount,
         paymentMethods: data.paymentMethods,
         deletedPaymentMethodIds: Array.isArray(appState.deletedPaymentMethodIds) ? appState.deletedPaymentMethodIds : [],
-        otpRequired: data.otpRequired
+        otpRequired: data.otpRequired,
+        reviews: data.reviews
       })
     }).catch(() => {});
 
@@ -6337,29 +6338,53 @@ async function loadVisitorAnalytics(showToastMsg = false){
 
 function renderReviews(){
   const c = document.getElementById("reviewsList"); if(!c) return;
-  c.innerHTML = (appState.reviews || []).map((r,i) => `
+  c.innerHTML = (appState.reviews || []).map((r,i) => {
+    const starsCount = Math.min(5, Math.max(1, Number(r.rating || 5)));
+    const starsStr = "★".repeat(starsCount) + "☆".repeat(5 - starsCount);
+    const txt = r.text || r.comment || "";
+    return `
     <div class="review spotlight-card">
       <div class="review-head">
-        <b>${r.name} (${r.city || ""})</b>
-        <span class="stars">★★★★★</span>
-        <button class="secondary-btn" style="padding:3px 7px;color:#ff4a62" onclick="appState.reviews.splice(${i},1);renderReviews();autoSync()">✕</button>
+        <b>${r.name || "بەشداربوو"} (${r.city || "کوردستان"})</b>
+        <span class="stars">${starsStr}</span>
+        <button class="secondary-btn" style="padding:3px 7px;color:#ff4a62" onclick="deleteAdminReviewItem(${i})">✕</button>
       </div>
-      <p>${r.text}</p>
+      <p>${txt}</p>
     </div>
-  `).join("");
+  `;
+  }).join("");
+}
+
+function deleteAdminReviewItem(idx){
+  if(!Array.isArray(appState.reviews)) return;
+  appState.reviews.splice(idx, 1);
+  renderReviews();
+  autoSync();
+  if(typeof syncWebsite === "function") syncWebsite(true);
 }
 
 function addReviewItem(){
   const n = document.getElementById("newReviewName").value.trim();
-  const c = document.getElementById("newReviewCity").value.trim();
+  const c = document.getElementById("newReviewCity").value.trim() || "کوردستان";
   const t = document.getElementById("newReviewText").value.trim();
-  if(!n || !t) return;
-  appState.reviews.push({ name: n, city: c, text: t });
+  if(!n || !t) return toast("⚠️ تکایە ناو و دەقی فیدباک بنووسە");
+  if(!Array.isArray(appState.reviews)) appState.reviews = [];
+  appState.reviews.unshift({
+    id: "rev_" + Date.now(),
+    name: n,
+    city: c,
+    rating: 5,
+    text: t,
+    comment: t,
+    createdAt: new Date().toISOString()
+  });
   document.getElementById("newReviewName").value = "";
   document.getElementById("newReviewCity").value = "";
   document.getElementById("newReviewText").value = "";
   renderReviews();
   autoSync();
+  if(typeof syncWebsite === "function") syncWebsite(true);
+  toast("✅ فیدباک زیادکرا و لە وێبسایت بڵاوکرایەوە");
 }
 
 function exportBackup(){

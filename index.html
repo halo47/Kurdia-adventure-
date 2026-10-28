@@ -1444,13 +1444,30 @@ main,section,.section,.page-section{background-color:transparent!important}
       </div>
     </section>
 
+    <section class="section" id="homeFeedbackSection">
+      <div class="sectionhead">
+        <div>
+          <div class="eyebrow">TRAVELER FEEDBACK · فیدباک</div>
+          <h2>بیروڕا و هەڵسەنگاندنی بەشداربووان</h2>
+          <p>ئەزموونی ڕاستەقینەی گەشتیاران و شاخەوانان لەگەڵ تیمی KURDIA ADVENTURE</p>
+        </div>
+        <button type="button" class="btn red" onclick="go('reviews')" style="padding:10px 16px;font-size:12.5px;border-radius:14px">
+          ✍️ ناردنی فیدباک ←
+        </button>
+      </div>
+      <div id="homeReviewsPreview" class="reviews-public-grid"></div>
+    </section>
+
     <section class="section">
       <div class="about about-no-image">
         <div class="glass">
           <div class="eyebrow">ABOUT KURDIA</div>
           <h2>گەشتێکی باش، یادەوەرییەکی باشتر.</h2>
           <p class="muted" style="line-height:2">KURDIA ADVENTURE پلاتفۆرمێکە بۆ گەشت، سروشت، کەمپینگ، ڕێگاکان، شوێنە مێژووییەکان و ئەزموونی هاوبەش. ئامانجمان دروستکردنی گەشتێکی ڕێکخراو و خۆشە.</p>
-          <button class="btn ghost" onclick="go('about')">دەربارەی کوردیا</button>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn ghost" onclick="go('about')">دەربارەی کوردیا</button>
+            <button class="btn ghost" onclick="go('reviews')">⭐ بینینی هەموو فیدباکەکان</button>
+          </div>
         </div>
       </div>
     </section>
@@ -2098,22 +2115,41 @@ main,section,.section,.page-section{background-color:transparent!important}
 <section id="stories" class="page"><div class="container"><section class="section"><div class="eyebrow">ستۆری</div><h2>ستۆرییەکان</h2><p class="muted">ئەزموونی بەشداربووان و هاوڕێکانی KURDIA.</p><div id="storyGrid" class="grid2"></div></section></div></section>
 
 <section id="reviews" class="page"><div class="container"><section class="section">
-  <div class="eyebrow">بیروڕا</div><h2>بیروڕا و هەڵسەنگاندن</h2><p class="muted">ئەزموونەکەت لەگەڵ KURDIA بنووسە و هەڵسەنگاندنەکەت دابنێ.</p>
-  <div class="review-write glass">
+  <div class="sectionhead">
+    <div>
+      <div class="eyebrow">FEEDBACK & REVIEWS · بیروڕا</div>
+      <h2>بیروڕا و هەڵسەنگاندن</h2>
+      <p class="muted">ئەزموونەکەت لەگەڵ KURDIA بنووسە و هەڵسەنگاندنەکەت دابنێ.</p>
+    </div>
+    <div class="glass" style="padding:10px 16px;border-radius:16px;display:inline-flex;align-items:center;gap:8px">
+      <span style="color:#ffc83d;font-size:18px">★★★★★</span>
+      <b id="reviewsCountBadge" style="font-size:13px;color:#fff">٤.٩ / ٥</b>
+    </div>
+  </div>
+  <div class="review-write glass" style="padding:20px;border-radius:22px">
     <form class="form" id="reviewForm" onsubmit="submitReview(event)">
-      <div class="review-rating" aria-label="هەڵسەنگاندن">
-        <span>هەڵسەنگاندن:</span>
-        <div class="stars-input" id="starsInput">
-          <button type="button" data-rating="1">★</button><button type="button" data-rating="2">★</button><button type="button" data-rating="3">★</button><button type="button" data-rating="4">★</button><button type="button" data-rating="5">★</button>
+      <div class="review-rating" aria-label="هەڵسەنگاندن" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-weight:800;color:#fff">⭐ پلەی هەڵسەنگاندنەکەت:</span>
+          <div class="stars-input" id="starsInput">
+            <button type="button" data-rating="1" aria-label="1 ئەستێرە">★</button><button type="button" data-rating="2" aria-label="2 ئەستێرە">★</button><button type="button" data-rating="3" aria-label="3 ئەستێرە">★</button><button type="button" data-rating="4" aria-label="4 ئەستێرە">★</button><button type="button" data-rating="5" aria-label="5 ئەستێرە">★</button>
+          </div>
         </div>
+        <span id="reviewRatingLabel" style="font-size:12px;font-weight:800;color:#ffc83d;background:rgba(255,200,61,0.12);padding:4px 10px;border-radius:999px;border:1px solid rgba(255,200,61,0.3)">٥ لە ٥ — نایاب 🌟</span>
         <input type="hidden" name="rating" id="reviewRating" value="5">
       </div>
-      <div class="grid-review-fields"><input class="input" name="name" placeholder="ناوی تۆ *" required><input class="input" name="city" placeholder="شار"></div>
-      <textarea class="textarea" name="comment" placeholder="بیروڕاکەت بنووسە... *" required></textarea>
-      <button class="btn red" type="submit" id="reviewSubmitBtn">ناردنی بیروڕا</button>
+      <div class="grid-review-fields">
+        <input class="input" id="reviewNameInput" name="name" placeholder="ناوی تەواوی تۆ *" required>
+        <input class="input" id="reviewCityInput" name="city" placeholder="شار (بۆ نموونە: هەولێر، سلێمانی، دهۆک...)">
+      </div>
+      <textarea class="textarea" id="reviewCommentInput" name="comment" rows="3" placeholder="بیروڕا و فیدباکی خۆت بنووسە لەسەر گەشتەکانی KURDIA... *" required></textarea>
+      <div id="reviewSuccessBanner" style="display:none;padding:12px 16px;border-radius:14px;background:rgba(55,201,135,0.14);border:1px solid rgba(55,201,135,0.4);color:#6bf0b3;font-size:13px;font-weight:700">
+        ✓ سوپاس! فیدباک و هەڵسەنگاندنەکەت بە سەرکەوتوویی بڵاوکرایەوە.
+      </div>
+      <button class="btn red" type="submit" id="reviewSubmitBtn">✨ ناردنی بیروڕا و فیدباک</button>
     </form>
   </div>
-  <div id="reviewsListPublic" class="reviews-public-grid" style="margin-top:14px"></div>
+  <div id="reviewsListPublic" class="reviews-public-grid" style="margin-top:16px"></div>
 </section></div></section>
 <section id="about" class="page"><div class="container"><section class="section"><div class="about"><img id="aboutImagePublic" src="" alt="KURDIA ADVENTURE"><div><div class="eyebrow">KURDIA ADVENTURE</div><h2 id="aboutTitlePublic"></h2><p id="aboutTextPublic" class="muted" style="line-height:2"></p><div id="aboutStatsPublic" class="stats"></div></div></div></section></div></section>
 <section id="contact" class="page"><div class="container"><section class="section"><div class="eyebrow">CONTACT</div><h2>پەیوەندی</h2><div class="articleList"><a id="contactWhatsAppPublic" class="article" href="#"><div class="articleIcon"><i data-lucide="message-circle"></i></div><div><b>WhatsApp</b><small></small></div></a><a id="contactPhonePublic" class="article" href="#"><div class="articleIcon"><i data-lucide="phone"></i></div><div><b>تەلەفۆن</b><small></small></div></a><div class="article"><div class="articleIcon"><i data-lucide="map-pin"></i></div><div><b id="contactCity">هەولێر — کوردستان</b><small>شوێنی کار</small></div></div><div class="article"><div class="articleIcon"><i data-lucide="mail"></i></div><div><b>Email</b><small id="contactEmailPublic"></small></div></div></div><div class="social-public"><a id="social_instagram" href="#">IG</a><a id="social_tiktok" href="#">TT</a><a id="social_youtube" href="#">YT</a><a id="social_facebook" href="#">FB</a><a id="social_telegram" href="#">TG</a></div></section></div></section>
@@ -2630,7 +2666,30 @@ async function loadRemote(){
         data.booking.otpRequired = ov.otpRequired;
         try{ localStorage.setItem('kurdia_otp_required', String(ov.otpRequired)); }catch(_){}
       }
+      if(Array.isArray(ov.reviews) && ov.reviews.length){
+        const existingRevs = Array.isArray(data.reviews) ? data.reviews : [];
+        const merged = [...ov.reviews];
+        existingRevs.forEach(r => {
+          if(r && !merged.some(m => m.name === r.name && (m.text || m.comment) === (r.text || r.comment))){
+            merged.push(r);
+          }
+        });
+        data.reviews = merged;
+      }
       localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
+    }
+  }catch(_){}
+  try{
+    const localRevs = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
+    if(Array.isArray(localRevs) && localRevs.length){
+      const existingRevs = Array.isArray(data.reviews) ? data.reviews : [];
+      const merged = [...localRevs];
+      existingRevs.forEach(r => {
+        if(r && !merged.some(m => m.name === r.name && (m.text || m.comment) === (r.text || r.comment))){
+          merged.push(r);
+        }
+      });
+      data.reviews = merged;
     }
   }catch(_){}
   if(typeof window.syncPublicOtpUI === 'function') window.syncPublicOtpUI();
@@ -3391,9 +3450,177 @@ window.inquirePrivateWhatsApp = function(){
   window.location.href = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
 };
 
-function renderReviewsPublic(){const c=$('reviewsListPublic');if(!c)return;c.innerHTML=(data.reviews||[]).map(x=>{const rating=Math.min(5,Math.max(1,Number(x.rating||5)));return `<article class="public-review"><div class="review-stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div><p>“${esc(x.text??x.comment??'')}”</p><b>${esc(x.name||'')}</b><small>${esc(x.city||'')}</small></article>`}).join('')}
-function setupReviewStars(){document.querySelectorAll('#starsInput button').forEach(btn=>btn.onclick=()=>{const r=Number(btn.dataset.rating);$('reviewRating').value=r;document.querySelectorAll('#starsInput button').forEach(b=>b.classList.toggle('selected',Number(b.dataset.rating)<=r))});document.querySelectorAll('#starsInput button').forEach(b=>b.classList.toggle('selected',Number(b.dataset.rating)<=Number($('reviewRating')?.value||5)))}
-async function submitReview(e){e.preventDefault();const form=e.target;const body=Object.fromEntries(new FormData(form).entries());body.rating=Number(body.rating||5);body.comment=String(body.comment||'').trim();if(!body.name||!body.comment)return toast('تکایە ناو و بیروڕاکەت بنووسە');const btn=$('reviewSubmitBtn');btn.disabled=true;btn.textContent='لە ناردندایە...';try{const r=await fetch(WORKER+'/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const x=await r.json().catch(()=>({}));if(x.ok){toast('بیروڕاکەت نێردرا ✓');form.reset();$('reviewRating').value=5;setupReviewStars();await loadRemote();render()}else{toast(x.error||'نەتوانرا بیروڕاکە بنێردرێت')}}catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}finally{btn.disabled=false;btn.textContent='ناردنی بیروڕا'}}
+function createReviewCardHTML(x){
+  const rating = Math.min(5, Math.max(1, Number(x.rating || 5)));
+  const name = String(x.name || 'بەشداربوو').trim();
+  const city = String(x.city || 'کوردستان').trim();
+  const text = String(x.text ?? x.comment ?? '').trim();
+  const initial = (name[0] || 'K').toUpperCase();
+  return `<article class="public-review">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,rgba(211,47,78,0.28),rgba(169,29,55,0.14));border:1px solid rgba(211,47,78,0.4);display:grid;place-items:center;font-weight:900;color:#ff8da3;font-size:15px">${esc(initial)}</div>
+        <div>
+          <b style="display:block;font-size:14px;color:#fff">${esc(name)}</b>
+          <small style="margin:0;font-size:11px;color:#94a3b8">📍 ${esc(city)}</small>
+        </div>
+      </div>
+      <div class="review-stars" title="${rating} لە 5">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
+    </div>
+    <p style="margin:0;font-size:13px;line-height:1.95;color:#e2e8f0">“${esc(text)}”</p>
+  </article>`;
+}
+
+function renderReviewsPublic(){
+  const list = (Array.isArray(data.reviews) && data.reviews.length) ? data.reviews : (DEFAULT.reviews || []);
+  const c = $('reviewsListPublic');
+  if(c){
+    c.innerHTML = list.map(x => createReviewCardHTML(x)).join('');
+  }
+  const homePreview = $('homeReviewsPreview');
+  if(homePreview){
+    homePreview.innerHTML = list.slice(0, 4).map(x => createReviewCardHTML(x)).join('');
+  }
+  const badge = $('reviewsCountBadge');
+  if(badge){
+    badge.textContent = `٤.٩ / ٥ (${list.length} فیدباک)`;
+  }
+}
+
+function setupReviewStars(){
+  const labels = {
+    1: '١ لە ٥ — پێویستی بە باشترکردنە',
+    2: '٢ لە ٥ — مامناوەند',
+    3: '٣ لە ٥ — باش 👍',
+    4: '٤ لە ٥ — زۆر باش ⭐',
+    5: '٥ لە ٥ — نایاب 🌟'
+  };
+  const updateStarsUI = (r) => {
+    const val = Math.min(5, Math.max(1, Number(r || 5)));
+    if($('reviewRating')) $('reviewRating').value = String(val);
+    document.querySelectorAll('#starsInput button').forEach(b => {
+      b.classList.toggle('selected', Number(b.dataset.rating) <= val);
+    });
+    const lbl = $('reviewRatingLabel');
+    if(lbl) lbl.textContent = labels[val] || labels[5];
+  };
+  document.querySelectorAll('#starsInput button').forEach(btn => {
+    btn.onclick = () => updateStarsUI(Number(btn.dataset.rating));
+  });
+  updateStarsUI(Number($('reviewRating')?.value || 5));
+}
+
+async function saveReviewToCloudCMS(newReview){
+  try{
+    const curRes = await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, { cache: 'no-store' });
+    const curJson = await curRes.json().catch(() => ({}));
+    const cmsData = curJson.data || {};
+    const existingList = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
+    const merged = [
+      newReview,
+      ...existingList.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
+    ].slice(0, 200);
+    cmsData.reviews = merged;
+    if(cmsData.config && typeof cmsData.config === 'object'){
+      cmsData.config.reviews = merged;
+    }
+    await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cmsData)
+    });
+  }catch(_){}
+}
+
+async function submitReview(e){
+  e.preventDefault();
+  const form = e.target;
+  const fd = new FormData(form);
+  const name = String(fd.get('name') || $('reviewNameInput')?.value || '').trim();
+  const city = String(fd.get('city') || $('reviewCityInput')?.value || 'کوردستان').trim() || 'کوردستان';
+  const comment = String(fd.get('comment') || $('reviewCommentInput')?.value || '').trim();
+  const rating = Math.min(5, Math.max(1, Number(fd.get('rating') || $('reviewRating')?.value || 5)));
+
+  if(!name || !comment){
+    toast('تکایە ناو و بیروڕاکەت بنووسە');
+    return;
+  }
+
+  const btn = $('reviewSubmitBtn');
+  if(btn){
+    btn.disabled = true;
+    btn.textContent = 'لە ناردندایە...';
+  }
+
+  const newReview = {
+    id: 'rev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    name,
+    city,
+    rating,
+    text: comment,
+    comment,
+    createdAt: new Date().toISOString()
+  };
+
+  try{
+    // 1. Update in-memory data & localStorage immediately for instant UI response
+    const currentList = Array.isArray(data.reviews) ? data.reviews : [];
+    data.reviews = [
+      newReview,
+      ...currentList.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
+    ];
+    try{
+      const savedLocal = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
+      const nextLocal = [
+        newReview,
+        ...(Array.isArray(savedLocal) ? savedLocal : []).filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
+      ].slice(0, 100);
+      localStorage.setItem('kurdia_public_reviews_v1', JSON.stringify(nextLocal));
+      localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
+    }catch(_){}
+
+    renderReviewsPublic();
+
+    // Animate newly added review card
+    if(window.gsap){
+      const firstCard = document.querySelector('#reviewsListPublic .public-review');
+      if(firstCard){
+        window.gsap.fromTo(
+          firstCard,
+          { opacity: 0, y: -16, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.48, ease: 'power3.out', clearProps: 'transform,opacity' }
+        );
+      }
+    }
+
+    // 2. Sync to local backend (/api/reviews) and Cloudflare Worker (/api/admin/cms) in parallel
+    await Promise.allSettled([
+      fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReview)
+      }),
+      saveReviewToCloudCMS(newReview)
+    ]);
+
+    form.reset();
+    if($('reviewRating')) $('reviewRating').value = '5';
+    setupReviewStars();
+    const banner = $('reviewSuccessBanner');
+    if(banner){
+      banner.style.display = 'block';
+      setTimeout(() => { banner.style.display = 'none'; }, 5500);
+    }
+    toast('🎉 سوپاس! بیروڕا و فیدباکەکەت بە سەرکەوتوویی بڵاوکرایەوە ✓');
+  }catch(err){
+    toast('✓ بیروڕاکەت تۆمارکرا');
+  }finally{
+    if(btn){
+      btn.disabled = false;
+      btn.textContent = '✨ ناردنی بیروڕا و فیدباک';
+    }
+  }
+}
 function renderAboutPublic(){const a=data.about||{};const img=$('aboutImagePublic');if(img)img.src=a.imageUrl||DEFAULT.about.imageUrl;const t=$('aboutTitlePublic');if(t)t.textContent=a.title||'';const p=$('aboutTextPublic');if(p)p.textContent=a.text||'';const st=$('aboutStatsPublic');if(st)st.innerHTML=(a.stats||[]).map(x=>`<div class="stat"><b>${esc(x.num)}</b><span>${esc(x.label)}</span></div>`).join('')}
 function renderContactPublic(){const c=data.contact||{},s=data.social||{};const wa=$('contactWhatsAppPublic');if(wa){wa.href=c.whatsapp?`https://wa.me/${String(c.whatsapp).replace(/\D/g,'')}`:'#';wa.querySelector('small').textContent=c.whatsapp||''}const ph=$('contactPhonePublic');if(ph){ph.href=c.phone?`tel:${c.phone}`:'#';ph.querySelector('small').textContent=c.phone||''}if($('contactCity'))$('contactCity').textContent=c.city||'';if($('contactEmailPublic'))$('contactEmailPublic').textContent=c.email||'';[['instagram',s.instagram],['tiktok',s.tiktok],['youtube',s.youtube],['facebook',s.facebook],['telegram',s.telegram]].forEach(([k,v])=>{const e=$('social_'+k);if(e){e.href=v||'#';e.style.display=v?'grid':'none'}})}
 

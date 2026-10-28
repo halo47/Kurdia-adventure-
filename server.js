@@ -622,6 +622,83 @@ const server = http.createServer((req, res) => {
       }
     }
 
+    if (pathname === '/api/reviews') {
+      const WORKER_CMS_URL = 'https://kurdia.alwandssalh.workers.dev/api/admin/cms';
+      if (req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', async () => {
+          let payload = {};
+          try { payload = JSON.parse(body || '{}'); } catch (_) {}
+          const name = String(payload.name || '').trim();
+          const city = String(payload.city || 'کوردستان').trim() || 'کوردستان';
+          const text = String(payload.text || payload.comment || '').trim();
+          const rating = Math.min(5, Math.max(1, Number(payload.rating || 5)));
+
+          if (!name || !text) {
+            res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({ ok: false, error: 'تکایە ناو و بیروڕاکەت بنووسە' }));
+            return;
+          }
+
+          const newReview = {
+            id: String(payload.id || ('rev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6))),
+            name,
+            city,
+            rating,
+            text,
+            comment: text,
+            createdAt: payload.createdAt || new Date().toISOString()
+          };
+
+          const current = loadCmsOverrides();
+          const existingReviews = Array.isArray(current.reviews) ? current.reviews : [
+            { id: 'seed-rev-1', name: 'دەرباز سەعید', city: 'هەولێر', rating: 5, text: 'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.', comment: 'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.' },
+            { id: 'seed-rev-2', name: 'سارا ئەحمەد', city: 'سلێمانی', rating: 5, text: 'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.', comment: 'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.' }
+          ];
+
+          const updatedReviews = [
+            newReview,
+            ...existingReviews.filter(r => r && String(r.id || '') !== newReview.id && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
+          ].slice(0, 200);
+
+          current.reviews = updatedReviews;
+          current.updatedAt = new Date().toISOString();
+          saveCmsOverrides(current);
+
+          // Best-effort sync to Cloudflare Worker CMS
+          try {
+            const curRes = await fetch(`${WORKER_CMS_URL}?cb=${Date.now()}`, { cache: 'no-store' });
+            const curJson = await curRes.json().catch(() => ({}));
+            const cmsData = curJson.data || {};
+            const cloudReviews = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
+            const mergedCloud = [
+              newReview,
+              ...cloudReviews.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
+            ].slice(0, 200);
+            cmsData.reviews = mergedCloud;
+            if (cmsData.config && typeof cmsData.config === 'object') {
+              cmsData.config.reviews = mergedCloud;
+            }
+            await fetch(`${WORKER_CMS_URL}?cb=${Date.now()}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(cmsData)
+            });
+          } catch (_) {}
+
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({ ok: true, review: newReview, reviews: updatedReviews }));
+        });
+        return;
+      } else {
+        const current = loadCmsOverrides();
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify({ ok: true, reviews: Array.isArray(current.reviews) ? current.reviews : [] }));
+        return;
+      }
+    }
+
     if (pathname === '/api/visitors') {
       const todayKey = new Date().toISOString().slice(0, 10);
       if (req.method === 'POST') {
