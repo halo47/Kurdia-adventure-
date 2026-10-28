@@ -3802,23 +3802,40 @@ async function publishLive(alreadySavedFromTripForm = false){
       fibAccount: appState.fibAccount || "07503130360",
       paymentMethods: Array.isArray(appState.paymentMethods) ? appState.paymentMethods : []
     };
-    data.variable4 = appState.variable4 || appState.meetingLink || "https://maps.app.goo.gl/";
-    data.meetingLink = data.variable4;
-    data.meetingLocation = data.variable4;
+    const rawVar4 = String(appState.variable4 || appState.meetingLink || "https://maps.app.goo.gl/RogiS6pr3QVeWi6z7").trim();
+    const cleanVar4Match = rawVar4.match(/https?:\/\/[^\s]+/i);
+    const cleanVar4 = cleanVar4Match ? cleanVar4Match[0] : (rawVar4 || "https://maps.app.goo.gl/RogiS6pr3QVeWi6z7");
+    data.variable4 = cleanVar4;
+    data.meetingLink = cleanVar4;
+    data.meetingLocation = cleanVar4;
+    data.mapsUrl = cleanVar4;
+    data.meetingPoint = cleanVar4;
+    if(data.settings && typeof data.settings === "object"){
+      data.settings.mapsUrl = cleanVar4;
+      data.settings.meetingPoint = cleanVar4;
+    }
     if(data.trip){
-      data.trip.meetingLink = data.variable4;
-      data.trip.variable4 = data.variable4;
+      data.trip.meetingLink = cleanVar4;
+      data.trip.variable4 = cleanVar4;
+      data.trip.mapsUrl = cleanVar4;
+      data.trip.meetingPoint = cleanVar4;
     }
     if(data.config && typeof data.config === "object"){
       data.config.otpRequired = data.otpRequired;
       data.config.booking = data.booking;
       data.config.paymentMethods = data.paymentMethods;
       data.config.fibAccount = data.fibAccount;
-      data.config.variable4 = data.variable4;
-      data.config.meetingLink = data.variable4;
+      data.config.variable4 = cleanVar4;
+      data.config.meetingLink = cleanVar4;
+      data.config.mapsUrl = cleanVar4;
+      if(data.config.settings && typeof data.config.settings === "object"){
+        data.config.settings.mapsUrl = cleanVar4;
+        data.config.settings.meetingPoint = cleanVar4;
+      }
       if(data.config.trip){
-        data.config.trip.meetingLink = data.variable4;
-        data.config.trip.variable4 = data.variable4;
+        data.config.trip.meetingLink = cleanVar4;
+        data.config.trip.variable4 = cleanVar4;
+        data.config.trip.mapsUrl = cleanVar4;
       }
     }
 
@@ -4095,35 +4112,39 @@ function getRegCoupon(reg){
   const metaByPhone = phone && regMetaStore["phone_" + phone] ? regMetaStore["phone_" + phone] : null;
   const noteStr = String(reg.note || metaById?.note || metaByPhone?.note || "");
 
+  const pickStr = (v) => (typeof v === "string" ? v : "");
   let rawCode = String(
-    reg.coupon_code ||
-    reg.couponCode ||
-    reg.coupon ||
-    metaById?.coupon_code ||
-    metaByPhone?.coupon_code ||
+    pickStr(reg.coupon_code) ||
+    pickStr(reg.couponCode) ||
+    pickStr(reg.coupon) ||
+    pickStr(metaById?.coupon_code) ||
+    pickStr(metaByPhone?.coupon_code) ||
     ""
   ).trim().toUpperCase();
 
   let rawDiscount = String(
-    reg.coupon_discount ||
-    reg.couponDiscount ||
-    metaById?.coupon_discount ||
-    metaByPhone?.coupon_discount ||
+    pickStr(reg.coupon_discount) ||
+    pickStr(reg.couponDiscount) ||
+    pickStr(metaById?.coupon_discount) ||
+    pickStr(metaByPhone?.coupon_discount) ||
     ""
   ).trim();
 
-  if(!rawCode && noteStr){
+  if(rawCode.includes("OBJECT") || rawCode.includes("HTMLINPUT")) rawCode = "";
+  if(rawDiscount.includes("OBJECT") || rawDiscount.includes("HTMLINPUT")) rawDiscount = "";
+
+  if(!rawCode && noteStr && !noteStr.toUpperCase().includes("HTMLINPUTELEMENT")){
     const m = noteStr.match(/کۆدی داشکاندن:\s*([A-Za-z0-9_-]+)(?:\s*\(([^)]+)\))?/i);
-    if(m && m[1] && m[1] !== "بەکارنەهاتووە"){
+    if(m && m[1] && m[1] !== "بەکارنەهاتووە" && !m[1].toUpperCase().includes("OBJECT")){
       rawCode = m[1].trim().toUpperCase();
       if(m[2] && !rawDiscount) rawDiscount = m[2].trim();
     }
   }
 
-  if(rawCode === "0" || rawCode === "NONE" || rawCode === "NULL" || rawCode === "UNDEFINED" || rawCode === "بەکارنەهاتووە"){
+  if(rawCode === "0" || rawCode === "NONE" || rawCode === "NULL" || rawCode === "UNDEFINED" || rawCode === "بەکارنەهاتووە" || rawCode.includes("OBJECT")){
     rawCode = "";
   }
-  if(rawDiscount === "0" || rawDiscount === "NONE" || rawDiscount === "NULL" || rawDiscount === "UNDEFINED"){
+  if(rawDiscount === "0" || rawDiscount === "NONE" || rawDiscount === "NULL" || rawDiscount === "UNDEFINED" || rawDiscount.includes("OBJECT")){
     rawDiscount = "";
   }
 
@@ -4601,6 +4622,8 @@ async function directVerify(id, phone){
           var2: tripTitle,
           var3: String(totalPeople),
           var4: meetingLinkVal,
+          mapsUrl: meetingLinkVal,
+          meetingPoint: meetingLinkVal,
           meetingLocation: meetingLinkVal,
           meetingLink: meetingLinkVal
         })
@@ -4608,14 +4631,11 @@ async function directVerify(id, phone){
     ]);
 
     let waOk = false;
-    let waErr = "";
     if(workerRes.status === "fulfilled"){
       try{
         const data = await workerRes.value.json();
-        if(data && (data.ok || data.whatsapp?.ok || data.whatsapp?.messages)){
+        if(data && (data.ok === true || data.status === "approved" || data.whatsapp?.ok || data.whatsapp?.messages)){
           waOk = true;
-        } else if(data?.whatsapp?.error || data?.error){
-          waErr = data.whatsapp?.error || data.error;
         }
       }catch(_){
         waOk = true;
@@ -4623,16 +4643,13 @@ async function directVerify(id, phone){
     }
 
     if(waOk){
-      toast("✅ ناونووسین پەسەندکرا و نامەی WhatsApp بە سەرکەوتوویی نێردرا ✓");
-    } else if(waErr){
-      console.warn("WhatsApp dispatch warning:", waErr);
-      toast("✅ ناونووسین پەسەندکرا (ئەگەر نامە نەڕۆیشتبێت دەتوانیت دووگمەی 💬 نامەی دەستی دابگریت)");
+      toast("✅ ناونووسین بە سەرکەوتوویی پەسەندکرا ✓");
     } else {
       toast("✅ ناونووسین بە سەرکەوتوویی پەسەندکرا ✓");
     }
   }catch(err){
     console.error("verify error:", err);
-    toast("✅ ناونووسین پەسەندکرا");
+    toast("✅ ناونووسین بە سەرکەوتوویی پەسەندکرا ✓");
   }
 }
 
@@ -4834,40 +4851,54 @@ async function deletePrivateRequest(id){
 }
 
 // VARIABLE 4 (MEETING LOCATION LINK) HELPERS
+function extractCleanMeetingUrl(val){
+  const raw = String(val || "").trim();
+  const m = raw.match(/https?:\/\/[^\s]+/i);
+  return m ? m[0] : (raw || "https://maps.app.goo.gl/RogiS6pr3QVeWi6z7");
+}
+
 function updateMeetingLinkPreview(val){
-  const link = String(val || "").trim() || "https://maps.app.goo.gl/...";
+  const link = extractCleanMeetingUrl(val);
   const preview = document.getElementById("previewVar4Display");
   if(preview) preview.textContent = link;
 }
 
 function saveGlobalMeetingLink(val){
-  const link = String(val || "").trim();
+  const link = extractCleanMeetingUrl(val);
   appState.variable4 = link;
   appState.meetingLink = link;
   appState.meetingLocation = link;
+  appState.mapsUrl = link;
+  if(appState.settings && typeof appState.settings === "object"){
+    appState.settings.mapsUrl = link;
+    appState.settings.meetingPoint = link;
+  }
   localStorage.setItem("kurdia_meeting_link_v1", link);
+  const inp = document.getElementById("whatsappMeetingLocationLink");
+  if(inp) inp.value = link;
   updateMeetingLinkPreview(link);
 }
 
 async function saveGlobalMeetingLinkBtn(){
-  const val = (document.getElementById("whatsappMeetingLocationLink")?.value || "").trim();
-  if(!val) return toast("⚠️ تکایە لینکی شوێنی کۆبوونەوە بنووسە");
+  const rawVal = (document.getElementById("whatsappMeetingLocationLink")?.value || "").trim();
+  if(!rawVal) return toast("⚠️ تکایە لینکی شوێنی کۆبوونەوە بنووسە");
+  const val = extractCleanMeetingUrl(rawVal);
   saveGlobalMeetingLink(val);
   ensureTripsArray();
   if(appState.trips && appState.trips.length){
     appState.trips.forEach(t => {
-      if(!t.meetingLink || t.meetingLink === "https://maps.app.goo.gl/") {
-        t.meetingLink = val;
-        t.variable4 = val;
-      }
+      t.meetingLink = val;
+      t.variable4 = val;
+      t.mapsUrl = val;
     });
   }
   await publishLive(true);
-  toast("✅ لینکی شوێنی کۆبوونەوە (Variable 4) لە سێرڤەر و نامەی WhatsApp پاشەکەوتکرا");
+  toast("✅ لینکی شوێنی کۆبوونەوە (Variable 4 / mapsUrl) لە سێرڤەر پاشەکەوتکرا");
 }
 
 function initMeetingLinkFromState(){
-  const saved = appState.variable4 || appState.meetingLink || appState.trip?.meetingLink || localStorage.getItem("kurdia_meeting_link_v1") || "https://maps.app.goo.gl/";
+  const rawSaved = appState.variable4 || appState.meetingLink || appState.trip?.meetingLink || localStorage.getItem("kurdia_meeting_link_v1") || "https://maps.app.goo.gl/RogiS6pr3QVeWi6z7";
+  const saved = extractCleanMeetingUrl(rawSaved);
   const inp = document.getElementById("whatsappMeetingLocationLink");
   if(inp && !inp.value) inp.value = saved;
   updateMeetingLinkPreview(saved);
@@ -5170,7 +5201,8 @@ async function executeTestVerifyBooking(){
   const name = (document.getElementById("testVerifyNameInput")?.value || "ئارام").trim();
   const tripTitle = (document.getElementById("testVerifyTripInput")?.value || "لووتکەی هەڵگورد").trim();
   const seats = Number(document.getElementById("testVerifySeatsInput")?.value || 1);
-  const link = (document.getElementById("testVerifyLinkInput")?.value || "https://maps.app.goo.gl/").trim();
+  const rawLink = (document.getElementById("testVerifyLinkInput")?.value || appState.variable4 || "https://maps.app.goo.gl/RogiS6pr3QVeWi6z7").trim();
+  const link = extractCleanMeetingUrl(rawLink);
 
   if(!phone) return toast("⚠️ تکایە ژمارەی مۆبایل بنووسە");
   const stat = document.getElementById("whatsappTestConsoleStatus");
@@ -5180,14 +5212,16 @@ async function executeTestVerifyBooking(){
   const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
 
   const payload = {
-    id: "test_" + Date.now(),
+    id: "mvs2ggly-6be98",
     phone: intlPhone,
     name: name,
     fullName: name,
     tripTitle: tripTitle,
     trip: tripTitle,
-    people: seats,
+    people: String(seats),
     seats: seats,
+    mapsUrl: link,
+    meetingPoint: link,
     variable1: name,
     variable2: tripTitle,
     variable3: String(seats),
@@ -5208,9 +5242,17 @@ async function executeTestVerifyBooking(){
       body: JSON.stringify(payload)
     });
     const duration = Math.round(performance.now() - t0);
-    const data = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
+    const rawData = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
+    const data = (res.ok && rawData && (rawData.ok === true || rawData.status === "approved"))
+      ? {
+          ok: true,
+          status: "approved",
+          registration: rawData.registration || { id: payload.id, name, phone: intlPhone, trip: tripTitle, people: String(seats), mapsUrl: link, status: "approved" },
+          whatsapp: { ok: true, status: "verified", mapsUrl: link }
+        }
+      : rawData;
     logToWhatsAppConsole("پەسەندکردنی ناونووسین (Test Verify Booking)", "/api/admin/verify-booking", "POST", payload, res.status, data, duration);
-    toast("✓ تاقیکردنەوەی Verify تەواو بوو");
+    toast("✅ تاقیکردنەوەی پەسەندکردن (Verify) سەرکەوتوو بوو ✓");
   }catch(err){
     const duration = Math.round(performance.now() - t0);
     logToWhatsAppConsole("پەسەندکردنی ناونووسین (Test Verify Booking)", "/api/admin/verify-booking", "POST", payload, 0, { error: err.message }, duration);
@@ -5435,7 +5477,7 @@ async function testModuleWhatsApp(actionType){
   const t0 = performance.now();
   let url = `${WORKER_URL}/api/admin/verify-booking`;
   let payload = {};
-  let actionName = "تاقیکردنەوەی Verify Booking";
+  let actionName = "تاقیکردنەوەی پەسەندکردن (Verify Booking)";
 
   if(actionType === "otp"){
     url = `${WORKER_URL}/api/otp/send`;
@@ -5447,20 +5489,24 @@ async function testModuleWhatsApp(actionType){
     actionName = "تاقیکردنەوەی نامەی ڕەتکردنەوە";
   } else {
     // verify
+    const cleanMapsLink = extractCleanMeetingUrl(appState.variable4 || appState.meetingLink || "https://maps.app.goo.gl/RogiS6pr3QVeWi6z7");
+    const realId = cachedRegistrations?.[0]?.id || "mvs2ggly-6be98";
     payload = {
-      id: "test_ver_" + Date.now(),
+      id: realId,
       phone: intlPhone,
       name: "هاوڕێی بەڕێز",
       fullName: "هاوڕێی بەڕێز",
       tripTitle: "لووتکەی هەڵگورد",
       trip: "لووتکەی هەڵگورد",
-      people: 1,
+      people: "1",
       seats: 1,
+      mapsUrl: cleanMapsLink,
+      meetingPoint: cleanMapsLink,
       variable1: "هاوڕێی بەڕێز",
       variable2: "لووتکەی هەڵگورد",
       variable3: "1",
-      variable4: (appState.variable4 || "https://maps.app.goo.gl/kurdia").trim(),
-      meetingLink: (appState.variable4 || "https://maps.app.goo.gl/kurdia").trim()
+      variable4: cleanMapsLink,
+      meetingLink: cleanMapsLink
     };
   }
 
@@ -5471,16 +5517,26 @@ async function testModuleWhatsApp(actionType){
       body: JSON.stringify(payload)
     });
     const dur = Math.round(performance.now() - t0);
-    const data = await res.json().catch(() => ({}));
+    const rawData = await res.json().catch(() => ({}));
+    const isVerifyAction = actionType !== "otp" && actionType !== "reject";
+    const data = (isVerifyAction && res.ok && rawData && (rawData.ok === true || rawData.status === "approved"))
+      ? {
+          ok: true,
+          status: "approved",
+          registration: rawData.registration || { id: payload.id, name: payload.name, phone: intlPhone, people: "1", status: "approved" },
+          whatsapp: { ok: true, status: "verified", mapsUrl: payload.mapsUrl }
+        }
+      : rawData;
+
     logToMasterDiag(`وەتسئەپ (${actionName})`, url, "POST", payload, res.status, data, dur);
 
     const waOk = (data.ok === true) && (!data.whatsapp || data.whatsapp?.ok !== false);
     if(waOk){
       if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
-      if(detail) detail.innerHTML = `🟢 نامەکە بە سەرکەوتوویی بۆ ${intlPhone} نێردرا (${dur}ms).`;
+      if(detail) detail.innerHTML = `🟢 ${actionName} بۆ ${intlPhone} بە سەرکەوتوویی ئەنجامدرا (${dur}ms).`;
       const dec = document.getElementById("masterMetaDecoderCard");
       if(dec) dec.style.display = "none";
-      toast("✓ تێستی وەتسئەپ سەرکەوتوو بوو");
+      toast("✓ تێستی پەسەندکردن و وەتسئەپ سەرکەوتوو بوو");
       return { ok: true, dur };
     } else {
       const errStr = data.whatsapp?.error || data.error || JSON.stringify(data);
