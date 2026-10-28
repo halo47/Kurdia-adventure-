@@ -656,17 +656,367 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .ai-chat-sheet{padding:0!important;overflow:hidden;display:flex;flex-direction:column;height:min(760px,88vh);max-height:88vh}.ai-chat-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.025)}.ai-chat-avatar{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#e33958,#94162f);display:grid;place-items:center;color:#fff;box-shadow:0 10px 25px rgba(169,29,55,.25)}.ai-chat-avatar svg{width:23px}.ai-messages{flex:1;overflow:auto;padding:18px 16px 10px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}.ai-msg{max-width:88%;padding:11px 13px;border-radius:18px;font-size:12px;line-height:1.9;white-space:pre-wrap}.ai-msg.bot{align-self:flex-start;background:#121923;border:1px solid var(--line);border-bottom-right-radius:6px}.ai-msg.user{align-self:flex-end;background:linear-gradient(145deg,#d92f4d,#9d1731);color:#fff;border-bottom-left-radius:6px}.ai-msg.loading{opacity:.7}.ai-quick{display:flex;gap:7px;overflow-x:auto;padding:7px 14px 10px;scrollbar-width:none}.ai-quick::-webkit-scrollbar{display:none}.ai-quick button{white-space:nowrap;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#dfe3e9;border-radius:999px;padding:8px 11px;font-size:10px}.ai-chat-form{display:flex;gap:8px;padding:10px 12px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(5,7,11,.96)}.ai-chat-form .input{flex:1;min-width:0}.ai-chat-form .btn{width:48px;padding:0;display:grid;place-items:center}.ai-chat-form .btn svg{width:18px}.ai-chat-sheet .close{position:absolute;z-index:4;top:12px;left:12px;width:38px;height:38px}.ai-chat-head{padding-left:62px}
 </style>
 
-<!-- KURDIA PWA / PUSH ADDITIVE LAYER — does not replace existing UI -->
+<!-- KURDIA PWA / PUSH STYLING & PERSISTENT IOS BANNER -->
 <style id="kurdia-pwa-additive-style">
-#kurdiaPwaPrompt{position:fixed;left:14px;right:14px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:99990;display:none;background:rgba(10,13,20,.96);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:16px;box-shadow:0 20px 70px rgba(0,0,0,.45);backdrop-filter:blur(20px)}
+#kurdiaPwaPrompt{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:calc(var(--nav) + 12px + env(safe-area-inset-bottom));
+  z-index:99990;
+  display:none;
+  background:linear-gradient(165deg,rgba(16,21,32,0.98),rgba(8,11,18,0.99));
+  border:1px solid rgba(229,35,79,0.42);
+  border-radius:22px;
+  padding:15px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.65), 0 0 25px rgba(229,35,79,0.18);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  direction:rtl;
+  max-width:520px;
+  margin:0 auto;
+  animation:kurdiaPwaSlideUp 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes kurdiaPwaSlideUp{
+  from{opacity:0;transform:translateY(18px) scale(0.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
 #kurdiaPwaPrompt .kp-row{display:flex;gap:12px;align-items:flex-start}
-#kurdiaPwaPrompt .kp-icon{width:48px;height:48px;border-radius:15px;background:#a91d37;display:grid;place-items:center;font-weight:900;flex:none}
-#kurdiaPwaPrompt .kp-title{font-weight:900;font-size:14px;margin-bottom:4px}
-#kurdiaPwaPrompt .kp-text{font-size:11px;line-height:1.9;color:#aeb7c5}
-#kurdiaPwaPrompt .kp-actions{display:flex;gap:8px;margin-top:12px}
-#kurdiaPwaPrompt button{border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:10px 13px;background:rgba(255,255,255,.05);color:#fff;font-weight:800;font-size:11px}
-#kurdiaPwaPrompt .kp-main{background:#a91d37;border-color:#a91d37}
-#kurdiaPushState{display:none}
+#kurdiaPwaPrompt .kp-icon{width:44px;height:44px;border-radius:13px;border:1px solid rgba(255,255,255,0.12);background:#070a10;display:grid;place-items:center;flex:none;overflow:hidden}
+#kurdiaPwaPrompt .kp-icon img{width:100%;height:100%;object-fit:cover}
+#kurdiaPwaPrompt .kp-title{font-weight:900;font-size:13.5px;color:#fff;margin-bottom:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#kurdiaPwaPrompt .kp-badge{font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(229,35,79,0.18);border:1px solid rgba(229,35,79,0.35);color:#ff7a98}
+#kurdiaPwaPrompt .kp-text{font-size:11.5px;line-height:1.75;color:#cbd5e1}
+#kurdiaPwaPrompt .kp-steps{margin:8px 0 2px;padding:8px 10px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:12px;font-size:11px;color:#e2e8f0;line-height:1.7}
+#kurdiaPwaPrompt .kp-steps li{margin-bottom:4px;list-style:none;display:flex;align-items:center;gap:6px}
+#kurdiaPwaPrompt .kp-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+#kurdiaPwaPrompt button{border:1px solid rgba(255,255,255,0.12);border-radius:11px;padding:8px 12px;background:rgba(255,255,255,0.06);color:#fff;font-weight:800;font-size:11px;cursor:pointer;transition:all 0.2s}
+#kurdiaPwaPrompt button:hover{background:rgba(255,255,255,0.12)}
+#kurdiaPwaPrompt .kp-main{background:linear-gradient(135deg,#e5234f,#a91d37);border-color:#ff6b86;color:#fff;box-shadow:0 6px 18px rgba(229,35,79,0.32)}
+#kurdiaPwaPrompt .kp-success{background:rgba(55,201,135,0.16);border-color:rgba(55,201,135,0.35);color:#6bf0b3}
+#kurdiaPwaPrompt .kp-close{position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:50%;padding:0;display:grid;place-items:center;font-size:15px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#94a3b8}
+
+/* Mini Persistent Dock when user temporarily minimizes */
+#kurdiaPwaMiniDock{
+  position:fixed;
+  left:12px;
+  bottom:calc(var(--nav) + 12px + env(safe-area-inset-bottom));
+  z-index:99980;
+  display:none;
+  align-items:center;
+  gap:7px;
+  padding:6px 12px;
+  background:rgba(12,16,25,0.94);
+  border:1px solid rgba(229,35,79,0.45);
+  border-radius:999px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  animation:kurdiaPwaSlideUp 0.3s ease;
+}
+#kurdiaPwaMiniDock .mini-pulse{width:7px;height:7px;border-radius:50%;background:#e5234f;box-shadow:0 0 8px #e5234f;animation:windDotPulse 1.4s infinite}
+</style>
+
+<style id="kurdia-mobile-compact-polish">
+/* ====================================================================
+   KURDIA Mobile Compact & Anti-Clutter Polish (Screens <= 640px)
+   Reduces oversized buttons, heavy card paddings, and tightens spacing
+   so the UI feels sleek, refined, and effortlessly scannable on mobile.
+   ==================================================================== */
+@media (max-width: 640px) {
+  /* 1. Global Buttons & Touch Targets */
+  .btn {
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    min-height: 42px !important;
+    border-radius: 12px !important;
+    font-weight: 800 !important;
+  }
+  .hero .actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-bottom: 0 !important;
+  }
+  .hero .actions .btn {
+    min-height: 44px !important;
+    padding: 10px 8px !important;
+    font-size: 13px !important;
+    border-radius: 12px !important;
+    line-height: 1.35 !important;
+  }
+  .wizard-actions .btn, .private-wizard-actions .btn {
+    min-height: 42px !important;
+    padding: 9px 12px !important;
+    font-size: 12.5px !important;
+    border-radius: 11px !important;
+  }
+  .iconbtn {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 11px !important;
+  }
+  .stepper-btn {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 16px !important;
+    border-radius: 9px !important;
+  }
+
+  /* 2. Container & Section Padding */
+  .container {
+    padding: 0 12px !important;
+  }
+  .section {
+    padding-block: 18px !important;
+  }
+  .sectionhead {
+    margin-bottom: 10px !important;
+    gap: 6px !important;
+  }
+  .sectionhead h2 {
+    font-size: 19px !important;
+  }
+  .sectionhead p {
+    font-size: 11.5px !important;
+  }
+
+  /* 3. Cards & Surfaces (Reduced bulk) */
+  .glass {
+    padding: 12px 14px !important;
+    border-radius: 16px !important;
+  }
+  .booking-form-card {
+    padding: 14px 12px !important;
+    border-radius: 18px !important;
+  }
+  .booking-form-card-head {
+    padding-bottom: 12px !important;
+    margin-bottom: 12px !important;
+  }
+  .booking-selected-summary {
+    min-width: 100% !important;
+    padding: 9px 12px !important;
+    border-radius: 14px !important;
+  }
+  .booking-hero-banner {
+    padding: 14px 12px !important;
+    border-radius: 18px !important;
+    margin-bottom: 12px !important;
+    gap: 10px !important;
+  }
+  .booking-hero-banner h2 {
+    font-size: 19px !important;
+  }
+  .booking-hero-banner p {
+    font-size: 12px !important;
+  }
+  .booking-QuickStepsPills {
+    padding: 6px 10px !important;
+    font-size: 10px !important;
+    border-radius: 12px !important;
+    gap: 4px !important;
+  }
+  .booking-QuickStepsPills b {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 9.5px !important;
+  }
+  .booking-trust-badges {
+    gap: 6px 10px !important;
+    font-size: 10.5px !important;
+    padding-top: 8px !important;
+  }
+  .booking-subcard {
+    padding: 12px !important;
+    border-radius: 14px !important;
+    gap: 10px !important;
+  }
+  .booking-people-row {
+    padding: 9px 12px !important;
+    border-radius: 13px !important;
+  }
+  .people-stepper .input {
+    width: 44px !important;
+    font-size: 15px !important;
+    padding: 4px 2px !important;
+  }
+  .booking-live-total {
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    font-size: 12px !important;
+  }
+  .booking-live-total strong {
+    font-size: 15px !important;
+  }
+
+  /* 4. Booking Step 3 & Payments */
+  .booking-step3-summary-card {
+    padding: 12px !important;
+    border-radius: 14px !important;
+    gap: 10px !important;
+  }
+  .payment-gateways-container {
+    padding: 12px !important;
+    border-radius: 14px !important;
+  }
+  .payment-gateways-header {
+    gap: 8px !important;
+  }
+  .fib-quick-pill {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    border-radius: 12px !important;
+  }
+  .receipt-box {
+    padding: 12px !important;
+    border-radius: 14px !important;
+    gap: 8px !important;
+  }
+  .receipt-dropzone {
+    padding: 12px 10px !important;
+    border-radius: 12px !important;
+  }
+  .rdz-prompt {
+    gap: 8px !important;
+    font-size: 12px !important;
+  }
+
+  /* 5. Inputs & Textareas */
+  .input, .select, .textarea {
+    padding: 9px 12px !important;
+    font-size: 13px !important;
+    border-radius: 12px !important;
+    min-height: 40px !important;
+  }
+  .textarea {
+    min-height: 75px !important;
+  }
+  .otp-slots {
+    gap: 7px !important;
+    padding: 6px 0 10px !important;
+  }
+  .otp-slot {
+    width: 44px !important;
+    height: 48px !important;
+    font-size: 20px !important;
+    border-radius: 11px !important;
+  }
+
+  /* 6. Trip and Destination Cards (Proportional) */
+  .booking-trips-cards-grid {
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+  .booking-trip-pick-card {
+    border-radius: 16px !important;
+  }
+  .btp-thumb {
+    height: 125px !important;
+    padding: 9px !important;
+  }
+  .btp-body {
+    padding: 10px 12px !important;
+    gap: 7px !important;
+  }
+  .btp-title {
+    font-size: 15.5px !important;
+  }
+  .btp-meta {
+    font-size: 11px !important;
+    gap: 6px 10px !important;
+    margin-bottom: 6px !important;
+  }
+  .btp-price {
+    font-size: 12px !important;
+    padding: 2px 8px !important;
+  }
+  .btp-select-indicator {
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+    border-radius: 10px !important;
+  }
+
+  .place-card {
+    border-radius: 16px !important;
+  }
+  .place-card-media {
+    height: 140px !important;
+    padding: 10px !important;
+  }
+  .place-card-body {
+    padding: 11px 12px !important;
+  }
+  .place-card-title {
+    font-size: 15.5px !important;
+  }
+
+  .trip-showcase-card {
+    border-radius: 16px !important;
+  }
+  .trip-showcase-card .featureimg {
+    height: 160px !important;
+  }
+  .trip-showcase-card .featurebody {
+    padding: 12px !important;
+  }
+  .trip-card-title {
+    font-size: 17px !important;
+  }
+  .trip-stats-grid {
+    gap: 6px !important;
+    margin-top: 10px !important;
+  }
+  .trip-stats-grid .stat {
+    padding: 8px !important;
+  }
+
+  /* 7. Extra Companion Fields */
+  .extra-person-field {
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+    background: rgba(255,255,255,0.02) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    margin-top: 6px !important;
+  }
+  .extra-person-field .ep-header {
+    margin-bottom: 6px !important;
+  }
+
+  /* 8. Bottom Navigation & Floating Controls */
+  .bottom {
+    height: 64px !important;
+    padding: 3px 5px !important;
+    border-radius: 20px !important;
+    left: 8px !important;
+    right: 8px !important;
+  }
+  .navitem {
+    height: 52px !important;
+    font-size: 7.5px !important;
+    gap: 2px !important;
+  }
+  .navitem .ico {
+    width: 19px !important;
+    height: 19px !important;
+  }
+  .navjoin {
+    height: 58px !important;
+    margin-top: -12px !important;
+    border-radius: 18px !important;
+    font-size: 9px !important;
+  }
+  .ai {
+    width: 48px !important;
+    height: 48px !important;
+    right: 12px !important;
+    bottom: calc(var(--nav) + 12px + env(safe-area-inset-bottom)) !important;
+  }
+}
 </style>
 <link rel="manifest" href="/manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -4596,20 +4946,32 @@ async function submitBooking(e){
     let workerId = '';
     let workerErr = '';
 
-    if(!otpBypassed && otpCodeEntered){
-      try{
-        const r = await fetch(WORKER+'/api/register',{method:'POST',body:fd});
-        const x = await r.json().catch(()=>({}));
-        if(x.ok){
-          workerOk = true;
-          workerId = x.id || x.registration?.id || '';
-        } else {
-          workerErr = x.error || '';
-        }
-      }catch(_){}
+    const isReq = isOtpRequired();
+    const isVerified = !isReq || ($('otpVerified')?.value === '1');
+
+    if(isReq && !isVerified){
+      toast('تکایە سەرەتا ژمارەی WhatsApp بە کۆدی OTP پشتڕاست بکەرەوە');
+      bookingGo(2);
+      return;
     }
 
-    if(otpBypassed || workerOk || !isOtpRequired()){
+    try{
+      const r = await fetch(WORKER+'/api/register', { method:'POST', body:fd });
+      const x = await r.json().catch(()=>({}));
+      if(x.ok){
+        workerOk = true;
+        workerId = x.id || x.registration?.id || '';
+      } else {
+        workerErr = x.error || '';
+      }
+    }catch(netErr){
+      console.warn('Worker register netErr:', netErr);
+    }
+
+    // Allow completion if worker succeeded, or if OTP was verified/disabled even if worker network was transient
+    const shouldFinalize = workerOk || !isReq || (isVerified && (!workerErr || !workerErr.includes('OTP')));
+
+    if(shouldFinalize){
       const regId = workerId || ('reg_' + Date.now() + '_' + Math.random().toString(36).slice(2,6));
       const metaRecord = {
         id: String(regId),
@@ -4669,9 +5031,12 @@ async function submitBooking(e){
       bookingGo(1);
       showBookingSuccessModal(metaRecord);
     } else {
-      toast(workerErr || 'هەڵە ڕوویدا');
+      toast(workerErr || 'نەتوانرا ناونووسینەکە تەواو بکرێت، تکایە دڵنیابەرەوە لە زانیارییەکان');
     }
-  }catch(err){toast('پەیوەندی بە سێرڤەر نەکرا')}
+  }catch(err){
+    console.error('submitBooking uncaught error:', err);
+    toast('تکایە دووبارە هەوڵبدەرەوە: ' + (err?.message || 'هەڵەیەک ڕوویدا'));
+  }
   finally{btn.disabled=false;btn.textContent='✓ ناردنی داواکاری و تەواوکردن'}
 }
 $('bookingPhone')?.addEventListener('input',()=>{$('otpVerified').value=isOtpRequired()?'0':'1';$('otpBox').style.display='none';document.querySelectorAll('.otp-slot').forEach(x=>{x.value='';x.classList.remove('filled')});if($('bookingOtp'))$('bookingOtp').value=''});$('receiptInput')?.addEventListener('change',function(){
@@ -5157,21 +5522,35 @@ document.addEventListener('click',function(e){
 },true);
 </script>
 
-<!-- KURDIA PWA / PUSH — additive only -->
+<!-- KURDIA PWA / PUSH PERSISTENT BANNER & IOS INSTALLATION -->
 <div id="kurdiaPwaPrompt" aria-live="polite">
+  <button type="button" class="kp-close" onclick="KurdiaPWA.minimizePrompt()" aria-label="داخستن" title="داخستن">✕</button>
   <div class="kp-row">
-    <div class="kp-icon" style="padding:0;overflow:hidden;background:#070a10"><img src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA" style="width:100%;height:100%;object-fit:cover"></div>
-    <div style="min-width:0;flex:1">
-      <div class="kp-title">KURDIA ADVENTURE</div>
-      <div class="kp-text">بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێکان و گەشتەکان لەدەست مەدە.</div>
+    <div class="kp-icon">
+      <img src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA">
     </div>
-    <button type="button" onclick="KurdiaPWA.closePrompt()" aria-label="داخستن">×</button>
+    <div style="min-width:0;flex:1">
+      <div class="kp-title">
+        <span>KURDIA ADVENTURE</span>
+        <span class="kp-badge" id="kpPlatformBadge">📱 ئەپ و ئاگاداری</span>
+      </div>
+      <div id="kpContentArea">
+        <!-- Dynamically tuned for iOS vs Android -->
+      </div>
+    </div>
   </div>
-  <div class="kp-actions">
-    <button type="button" class="kp-main" id="kurdiaInstallBtn">دابمەزرێنە</button>
-    <button type="button" id="kurdiaNotifyBtn">ئاگادارییەکان چالاک بکە</button>
+  <div class="kp-actions" id="kpActionsRow">
+    <button type="button" class="kp-main" id="kurdiaInstallBtn" style="display:none">📲 دابەزاندنی ئەپ</button>
+    <button type="button" class="kp-main" id="kurdiaNotifyBtn">🔔 چالاککردنی نۆتیفیکەیشن</button>
+    <button type="button" class="kp-success" id="kurdiaDoneBtn" onclick="KurdiaPWA.markActivated()">✓ زیادکرا و چالاکە</button>
   </div>
 </div>
+
+<div id="kurdiaPwaMiniDock" onclick="KurdiaPWA.showPrompt(true)">
+  <span class="mini-pulse"></span>
+  <span id="kpMiniLabel">📲 زیادکردنی KURDIA بۆ سەر شاشە</span>
+</div>
+
 <script id="kurdia-pwa-additive-js">
 (function(){
   'use strict';
@@ -5179,63 +5558,213 @@ document.addEventListener('click',function(e){
   let deferredInstall=null;
   const $=id=>document.getElementById(id);
   const promptBox=()=>$('kurdiaPwaPrompt');
-  function isStandalone(){return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone===true;}
-  function show(){if(!isStandalone() && !localStorage.getItem('kurdia_pwa_prompt_dismissed')){const p=promptBox();if(p)p.style.display='block';}}
-  function hide(){const p=promptBox();if(p)p.style.display='none';}
+  const miniDock=()=>$('kurdiaPwaMiniDock');
+
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  function isStandalone(){
+    return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  function isPwaFullyActivated(){
+    if(isStandalone()) return true;
+    if(localStorage.getItem('kurdia_pwa_activated_v3') === '1') return true;
+    return false;
+  }
+
+  function renderPlatformInstructions(){
+    const content = $('kpContentArea');
+    const badge = $('kpPlatformBadge');
+    const installBtn = $('kurdiaInstallBtn');
+    if(!content) return;
+
+    if(isIOS){
+      if(badge) badge.textContent = '🍎 بۆ بەکارهێنەرانی iPhone / iOS';
+      content.innerHTML = `
+        <div class="kp-text">بۆ ئەوەی وەک ئەپ کاربکات و گەشتە نوێیەکان لەدەست نەدەیت:</div>
+        <div class="kp-steps">
+          <div>١. لە خوارەوەی وێبگەڕی Safari کرتە لە دووگمەی <b>Share (هاوبەشکردن <span style="display:inline-block;padding:0 3px;border:1px solid rgba(255,255,255,0.3);border-radius:4px;font-size:12px;line-height:1">⎋</span>)</b> بکە.</div>
+          <div style="margin-top:4px">٢. پەڕەکە بەرەو خوارەوە ببە و هەڵبژاردنی <b>«Add to Home Screen»</b> (یان زیادکردن بۆ سەر شاشەی سەرەکی <span style="font-weight:900">⊞</span>) بکە.</div>
+        </div>
+      `;
+      if(installBtn) installBtn.style.display = 'none';
+    } else {
+      if(badge) badge.textContent = '📱 ئەپی KURDIA';
+      content.innerHTML = `
+        <div class="kp-text">بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێیەکان و گەشتەکان بە دەستبەجێ وەربگرە.</div>
+      `;
+      if(installBtn) installBtn.style.display = deferredInstall ? 'inline-block' : 'none';
+    }
+
+    if(('Notification' in window) && Notification.permission === 'granted'){
+      const notifyBtn = $('kurdiaNotifyBtn');
+      if(notifyBtn){
+        notifyBtn.textContent = '✓ نۆتیفیکەیشن چالاکە';
+        notifyBtn.style.background = 'rgba(55,201,135,0.18)';
+        notifyBtn.style.borderColor = 'rgba(55,201,135,0.4)';
+        notifyBtn.style.color = '#6bf0b3';
+      }
+    }
+  }
+
+  function show(force){
+    if(!force && isPwaFullyActivated()) return;
+    renderPlatformInstructions();
+    const p = promptBox();
+    const m = miniDock();
+    if(p) p.style.display = 'block';
+    if(m) m.style.display = 'none';
+  }
+
+  function hide(){
+    const p = promptBox();
+    const m = miniDock();
+    if(p) p.style.display = 'none';
+    if(m) m.style.display = 'none';
+  }
+
+  function minimize(){
+    const p = promptBox();
+    const m = miniDock();
+    if(p) p.style.display = 'none';
+    if(!isPwaFullyActivated() && m){
+      m.style.display = 'inline-flex';
+    }
+  }
+
   async function registerSW(){
     if(!('serviceWorker' in navigator)) return null;
-    try{return await navigator.serviceWorker.register('/sw.js',{scope:'/'});}catch(e){console.warn('KURDIA SW:',e);return null;}
-  }
-  async function subscribePush(){
-    if(!('Notification' in window) || !('PushManager' in window)) throw new Error('ئەم وێبگەڕە Push Notification پشتگیری ناکات.');
-    const reg=await registerSW();
-    if(!reg) throw new Error('Service Worker بەردەست نییە.');
-    const keyRes=await fetch(WORKER+'/api/push/public-key',{cache:'no-store'});
-    const keyData=await keyRes.json();
-    if(!keyRes.ok || !keyData.publicKey) throw new Error('VAPID Public Key لە Worker بەردەست نییە.');
-    const permission=await Notification.requestPermission();
-    if(permission!=='granted') throw new Error('ڕێگەپێدان بۆ ئاگادارییەکان نەدرا.');
-    const existing=await reg.pushManager.getSubscription();
-    let sub;
     try{
-      sub=existing || await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(keyData.publicKey)});
-    }catch(e){throw new Error('Push Subscribe: '+(e?.message||String(e)));}
-    const b64u=(buffer)=>buffer?btoa(String.fromCharCode(...new Uint8Array(buffer))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''):'';
-    const subscription={endpoint:String(sub.endpoint||''),expirationTime:sub.expirationTime??null,keys:{p256dh:b64u(sub.getKey('p256dh')),auth:b64u(sub.getKey('auth'))}};
-    if(!subscription.endpoint || !subscription.keys.p256dh || !subscription.keys.auth) throw new Error('Push subscription keys نەدۆزرایەوە.');
-    let save;
-    try{save=await fetch(WORKER+'/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription,source:'website',url:location.pathname})});}
-    catch(e){throw new Error('Push Server: '+(e?.message||String(e)));}
-    const data=await save.json().catch(()=>({}));
-    if(!save.ok || !data.ok) throw new Error(data.error||('Push Server HTTP '+save.status));
+      return await navigator.serviceWorker.register('/sw.js',{scope:'/'});
+    }catch(e){
+      console.warn('KURDIA SW:',e);
+      return null;
+    }
+  }
+
+  async function subscribePush(){
+    if(!('Notification' in window)) throw new Error('ئەم وێبگەڕە پشتگیری لە نۆتیفیکەیشن ناکات.');
+
+    let permission = Notification.permission;
+    if(permission !== 'granted'){
+      if(typeof window.KurdiaOneSignalPrompt === 'function'){
+        try{ await window.KurdiaOneSignalPrompt(); }catch(_){}
+      }
+      permission = await Notification.requestPermission();
+    }
+    if(permission !== 'granted') throw new Error('تکایە لە وێبگەڕەکەت ڕێگەپێدان (Allow) بە نۆتیفیکەیشن بدە.');
+
+    const reg = await registerSW();
+    if(reg && ('PushManager' in window)){
+      try{
+        const keyRes = await fetch(WORKER+'/api/push/public-key',{cache:'no-store'});
+        const keyData = await keyRes.json();
+        if(keyRes.ok && keyData?.publicKey){
+          const existing = await reg.pushManager.getSubscription();
+          const b64u=(buffer)=>buffer?btoa(String.fromCharCode(...new Uint8Array(buffer))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''):'';
+          const sub = existing || await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(keyData.publicKey)});
+          if(sub){
+            const subscription={endpoint:String(sub.endpoint||''),expirationTime:sub.expirationTime??null,keys:{p256dh:b64u(sub.getKey('p256dh')),auth:b64u(sub.getKey('auth'))}};
+            await fetch(WORKER+'/api/push/subscribe',{
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({subscription,source:'website',url:location.pathname})
+            }).catch(()=>{});
+          }
+        }
+      }catch(pushErr){
+        console.warn('Push registration note:', pushErr);
+      }
+    }
+
     localStorage.setItem('kurdia_push_enabled','1');
     return true;
   }
+
   function urlBase64ToUint8Array(base64){
     const padding='='.repeat((4-base64.length%4)%4);
     const raw=atob((base64+padding).replace(/-/g,'+').replace(/_/g,'/'));
     return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
   }
+
   window.KurdiaPWA={
-    closePrompt:function(){localStorage.setItem('kurdia_pwa_prompt_dismissed','1');hide();},
-    enableNotifications:async function(){
-      try{await subscribePush(); alert('✅ ئاگادارییەکانی KURDIA چالاک کران.'); hide();}
-      catch(e){alert('❌ '+(e.message||'نەتوانرا ئاگادارییەکان چالاک بکرێن.'));}
+    showPrompt: function(force){ show(force); },
+    closePrompt: function(){ minimize(); },
+    minimizePrompt: function(){ minimize(); },
+    markActivated: function(){
+      localStorage.setItem('kurdia_pwa_activated_v3', '1');
+      hide();
+      if(typeof toast === 'function') toast('سوپاس! ئەپ و ئاگادارییەکانی KURDIA چالاک کران ✓');
+    },
+    enableNotifications: async function(){
+      const notifyBtn = $('kurdiaNotifyBtn');
+      if(notifyBtn){ notifyBtn.disabled = true; notifyBtn.textContent = 'لە چالاککردندایە...'; }
+      try{
+        await subscribePush();
+        if(notifyBtn){
+          notifyBtn.textContent = '✓ نۆتیفیکەیشن چالاکە';
+          notifyBtn.style.background = 'rgba(55,201,135,0.18)';
+          notifyBtn.style.borderColor = 'rgba(55,201,135,0.4)';
+          notifyBtn.style.color = '#6bf0b3';
+        }
+        if(typeof toast === 'function') toast('ئاگادارییەکانی KURDIA بە سەرکەوتوویی چالاک کران ✓');
+      }catch(e){
+        if(typeof toast === 'function') toast(e.message || 'نەتوانرا نۆتیفیکەیشن چالاک بکرێت');
+        if(notifyBtn){ notifyBtn.disabled = false; notifyBtn.textContent = 'دووبارە هەوڵبدەرەوە'; }
+      }
     }
   };
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;show();});
-  window.addEventListener('appinstalled',()=>{deferredInstall=null;localStorage.setItem('kurdia_pwa_installed','1');hide();});
-  document.addEventListener('DOMContentLoaded',async()=>{
-    const reg=await registerSW();
-    const install=$('kurdiaInstallBtn'), notify=$('kurdiaNotifyBtn');
-    if(install)install.addEventListener('click',async()=>{
-      if(deferredInstall){deferredInstall.prompt();const r=await deferredInstall.userChoice;deferredInstall=null;if(r?.outcome==='accepted')hide();return;}
-      if(isStandalone()){alert('ئەم ئەپە پێشتر دامەزراوە.');return;}
-      alert('ئەگەر دوگمەی Install لە وێبگەڕەکەت دەرکەوت، لە menu ـی وێبگەڕەکە «Add to Home screen / Install app» هەڵبژێرە.');
-    });
-    if(notify)notify.addEventListener('click',()=>window.KurdiaPWA.enableNotifications());
-    if(Notification.permission==='granted' && !localStorage.getItem('kurdia_push_enabled') && reg){try{await subscribePush();}catch(e){}}
-    if(!isStandalone() && !localStorage.getItem('kurdia_pwa_prompt_dismissed')) setTimeout(show,1800);
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredInstall = e;
+    const installBtn = $('kurdiaInstallBtn');
+    if(installBtn) installBtn.style.display = 'inline-block';
+    if(!isPwaFullyActivated()) show();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstall = null;
+    localStorage.setItem('kurdia_pwa_activated_v3', '1');
+    hide();
+  });
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await registerSW();
+
+    if(isStandalone()){
+      localStorage.setItem('kurdia_pwa_activated_v3', '1');
+      hide();
+      return;
+    }
+
+    const install = $('kurdiaInstallBtn');
+    const notify = $('kurdiaNotifyBtn');
+
+    if(install) {
+      install.addEventListener('click', async () => {
+        if(deferredInstall){
+          deferredInstall.prompt();
+          const r = await deferredInstall.userChoice;
+          deferredInstall = null;
+          if(r?.outcome === 'accepted'){
+            localStorage.setItem('kurdia_pwa_activated_v3', '1');
+            hide();
+          }
+          return;
+        }
+        if(typeof toast === 'function'){
+          toast('لە مێنیوی وێبگەڕەکەت «Add to Home screen» هەڵبژێرە');
+        }
+      });
+    }
+
+    if(notify) notify.addEventListener('click', () => window.KurdiaPWA.enableNotifications());
+
+    // Show persistently until activated
+    if(!isPwaFullyActivated()){
+      setTimeout(() => show(false), 900);
+    }
   });
 })();
 </script>
