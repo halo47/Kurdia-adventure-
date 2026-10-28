@@ -1835,14 +1835,15 @@ button{cursor:pointer;color:inherit}
           <!-- Live WhatsApp Template Preview with Variables 1, 2, 3, 4 -->
           <div style="margin-top:12px;padding:12px 14px;border-radius:12px;background:#050d17;border:1px solid #172a3d">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px">
-              <b style="color:#7dd3fc;font-size:12px">💬 پێشبینی نامەی فەرمی WhatsApp بۆ بەشداربوو:</b>
-              <span style="font-size:10px;color:#8fa1b3">Template: Confirmation Message</span>
+              <b style="color:#7dd3fc;font-size:12px">💬 پێکهاتەی وردی ٤ گۆڕاوەکە کە Cloudflare Worker دەینێرێت بۆ Meta:</b>
+              <span style="font-size:10px;color:#8fa1b3">Header: None · Buttons: None · Body: 4 Variables</span>
             </div>
-            <div style="background:#091421;padding:10px 12px;border-radius:9px;border:1px dashed #23415e;line-height:1.75;color:#e2e8f0;font-size:12px;white-space:pre-wrap">سڵاو <span style="color:#6bf0b3;font-weight:800">{ناوی بەشداربوو - {{1}}}</span> گیان 🌿
-ناونووسینەکەت بۆ گەشتی <span style="color:#38bdf8;font-weight:800">{ناوی گەشت - {{2}}}</span> بە سەرکەوتوویی پەسەندکرا ✓
-👥 ژمارەی کەسەکان: <span style="color:#fde68a;font-weight:800">{ژمارە - {{3}}}</span>
+            <div style="background:#091421;padding:10px 12px;border-radius:9px;border:1px dashed #23415e;line-height:1.75;color:#e2e8f0;font-size:12px;white-space:pre-wrap">سڵاو <span style="color:#6bf0b3;font-weight:800">{{1}} (ناوی بەشداربوو - name)</span> گیان 🌿
+ناونووسینەکەت بە سەرکەوتوویی پەسەندکرا ✓
+👥 ژمارەی کەسەکان: <span style="color:#38bdf8;font-weight:800">{{2}} (ژمارەی کەس - people)</span>
+🆔 کۆدی تۆمار: <span style="color:#fde68a;font-weight:800">{{3}} (کۆدی داواکاری - id)</span>
 📍 لینکی شوێنی کۆبوونەوە و بەڕێکەوتن:
-<strong id="previewVar4Display" dir="ltr" style="color:#ff7a95;user-select:all;display:inline-block">https://maps.app.goo.gl/...</strong>
+<strong id="previewVar4Display" dir="ltr" style="color:#ff7a95;user-select:all;display:inline-block">{{4}} (https://maps.app.goo.gl/...)</strong>
 
 تیمی KURDIA ADVENTURE بەپەرۆشەوە چاوەڕێتان دەکات! ✨</div>
           </div>
@@ -5108,12 +5109,12 @@ function logToWhatsAppConsole(testName, endpoint, method, reqData, status, resDa
   lastWhatsAppConsoleOutput = formattedLog + "\n" + (lastWhatsAppConsoleOutput || "");
   if(out) out.textContent = lastWhatsAppConsoleOutput;
 
-  const isOk = (status >= 200 && status < 300) && (resData?.ok === true || resData?.whatsapp?.ok === true);
+  const isOk = (status >= 200 && status < 300) && (resData?.ok === true) && (!resData?.whatsapp || resData?.whatsapp?.ok === true);
   if(stat){
     if(isOk){
-      stat.innerHTML = `<span style="color:#4ade80">✅ سەرکەوتوو بوو (HTTP ${status}) — ئەنجام لە خوارەوە تۆمارکرا.</span>`;
+      stat.innerHTML = `<span style="color:#4ade80">✅ سەرکەوتوو بوو (HTTP ${status}) — نامەی WhatsApp بە فەرمی نێردرا.</span>`;
     } else {
-      stat.innerHTML = `<span style="color:#f87171">❌ هەڵە دۆزرایەوە (HTTP ${status}) — سەیری شیکردنەوەی خوارەوە بکە.</span>`;
+      stat.innerHTML = `<span style="color:#f87171">❌ نامەی WhatsApp لەلایەن Meta ڕەتکرایەوە (HTTP ${status}) — سەیری شیکردنەوەی خوارەوە بکە.</span>`;
     }
   }
 
@@ -5131,17 +5132,20 @@ function decodeWhatsAppError(status, data, testType){
   let decodedBody = "";
 
   if(str.includes("132012")){
-    decodedTitle = "🚨 هەڵەی فەرمی Meta: Code #132012 (Parameter format does not match format in the created template)";
+    decodedTitle = "🚨 هۆکاری نەڕۆشتنی نامەی پەسەندکردن لە Meta: Code #132012";
     decodedBody = `
-      <p style="margin:0 0 6px"><strong>هۆکاری تەواوی هەڵەکە:</strong><br>
-      لەناو Meta WhatsApp Manager، ئەو تێمپلەیتەی دروستت کردووە ژمارەی گۆڕاوەکان (Variables) یان فۆرماتەکەیان لەگەڵ ئەو داتایەی لە وۆرکەر دەنێردرێت یەکناگرێتەوە.
-      وۆرکەر بۆ نامەی پەسەندکردن پێویستی بە ٤ گۆڕاوە:
-      <code>{{1}}</code>: ناوی بەشداربوو | <code>{{2}}</code>: ناوی گەشت | <code>{{3}}</code>: ژمارەی کورسی | <code>{{4}}</code>: لینکی شوێنی کۆبوونەوە (Google Maps).</p>
-      <div style="background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;margin-top:6px">
-        <strong>چۆن لە Meta چاکی بکەیت؟</strong><br>
-        ١. بڕۆ بۆ <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Meta WhatsApp Manager > Message Templates</a>.<br>
-        ٢. تێمپلەیتی پەسەندکردن بکەرەوە و دڵنیابە لە بەشی Body ڕێک ٤ گۆڕاو دانراوە ({{1}}, {{2}}, {{3}}, {{4}}).<br>
-        ٣. دڵنیابە هەموو گۆڕاوەکان لە جۆری Text بن.
+      <p style="margin:0 0 8px"><strong>بۆچی نامەی OTP و ڕەتکردنەوە دەڕوات بەڵام نامەی پەسەندکردن ناڕوات؟</strong><br>
+      کۆدی ناو سێرڤەری <code>kurdia.alwandssalh.workers.dev</code> لە کاتی پەسەندکردندا تەنها بەشی <b>Body</b> بە <b>٤ گۆڕاوی ژمارەیی</b> دەنێرێت بەم ڕیزبەندییە وردە:<br>
+      • <code>{{1}}</code>: ناوی بەشداربوو (<code>name</code>)<br>
+      • <code>{{2}}</code>: ژمارەی کەسەکان (<code>people</code>)<br>
+      • <code>{{3}}</code>: کۆدی تۆمار / داواکاری (<code>id</code>)<br>
+      • <code>{{4}}</code>: لینکی شوێنی کۆبوونەوە (<code>mapsUrl</code>)</p>
+      <div style="background:rgba(0,0,0,0.4);padding:10px;border-radius:8px;margin-top:6px;border:1px solid rgba(56,189,248,0.3)">
+        <strong style="color:#38bdf8">🛠️ چارەسەری بنەڕەتی لە ناو Meta WhatsApp Manager (بە ١ خولەک):</strong><br>
+        ١. بڕۆ بۆ <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Meta WhatsApp Manager &gt; Message Templates</a> و تێمپلێتی پەسەندکردن بکەرەوە.<br>
+        ٢. دڵنیابە <b>Header = None</b> بێت (هیچ وێنە یان ناونیشانێک لە Header نەبێت) و <b>Buttons = None</b> بێت (هیچ دووگمەیەکی لینک لە خوارەوە نەبێت، چونکە Worker تەنها Body دەنێرێت).<br>
+        ٣. دڵنیابە جۆری گۆڕاوەکان (Variable type) لەسەر <b>Number</b> بێت نەک Name.<br>
+        ٤. لە بەشی <b>Body</b> ڕێک ٤ گۆڕاو دابنێ: <code>{{1}}</code>، <code>{{2}}</code>، <code>{{3}}</code>، <code>{{4}}</code>.
       </div>
     `;
   } else if(str.includes("132001")){
@@ -5212,7 +5216,7 @@ async function executeTestVerifyBooking(){
   const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
 
   const payload = {
-    id: "mvs2ggly-6be98",
+    id: "ver_" + Date.now().toString(36),
     phone: intlPhone,
     name: name,
     fullName: name,
@@ -5242,17 +5246,13 @@ async function executeTestVerifyBooking(){
       body: JSON.stringify(payload)
     });
     const duration = Math.round(performance.now() - t0);
-    const rawData = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
-    const data = (res.ok && rawData && (rawData.ok === true || rawData.status === "approved"))
-      ? {
-          ok: true,
-          status: "approved",
-          registration: rawData.registration || { id: payload.id, name, phone: intlPhone, trip: tripTitle, people: String(seats), mapsUrl: link, status: "approved" },
-          whatsapp: { ok: true, status: "verified", mapsUrl: link }
-        }
-      : rawData;
+    const data = await res.json().catch(() => ({ raw: "ناتوانرا JSON بخوێنرێتەوە" }));
     logToWhatsAppConsole("پەسەندکردنی ناونووسین (Test Verify Booking)", "/api/admin/verify-booking", "POST", payload, res.status, data, duration);
-    toast("✅ تاقیکردنەوەی پەسەندکردن (Verify) سەرکەوتوو بوو ✓");
+    if(data?.whatsapp?.ok === true){
+      toast("✅ نامەی پەسەندکردن بە سەرکەوتوویی بۆ WhatsApp نێردرا ✓");
+    } else {
+      toast("⚠️ مێتا هەڵەی #132012ـی گەڕاندەوە — سەیری ڕێنمایی چاککردنی تێمپلێت بکە لە خوارەوە");
+    }
   }catch(err){
     const duration = Math.round(performance.now() - t0);
     logToWhatsAppConsole("پەسەندکردنی ناونووسین (Test Verify Booking)", "/api/admin/verify-booking", "POST", payload, 0, { error: err.message }, duration);
@@ -5394,12 +5394,18 @@ function decodeMasterMetaError(errStr){
   let body = "";
 
   if(str.includes("132012")){
-    title = "هەڵەی کۆدی #132012: ناگونجانی گۆڕاوەکان (Parameter Format Mismatch)";
-    sub = "ژمارە یان فۆرماتی گۆڕاوەکان لەگەڵ تێمپلێتی فەرمی WhatsApp لە Meta ڕێک ناکەوێت";
+    title = "هەڵەی کۆدی #132012: ناگونجانی تێمپلێتی پەسەندکردن لە Meta WhatsApp Manager";
+    sub = "سێرڤەری Worker تەنها Body بە ٤ گۆڕاو دەنێرێت، بەڵام تێمپلێتەکەی ناو Meta جیاوازە";
     body = `
-      • <b>هۆکاری سەرەکی:</b> تێمپلێتی نێردراو لە Meta پێویستی بە گۆڕاوێک هەیە کە ڕەنگە جۆری دەق (Text) بێت بەڵام بە شێوازێکی تر دانرابێت، یان تێمپلێتی پەسەندکردن لە ناو پەنێڵی Meta ژمارەی گۆڕاوەکانی ٤ گۆڕاو نییە (کە بریتین لە: ناو، ناوی گەشت، ژمارەی کورسی، لینکی کۆبوونەوە).<br>
-      • <b>چارەسەر:</b> تکایە لە پەنێڵی Meta WhatsApp Manager سەیری ناوی Template و ژمارەی {{1}}, {{2}}, {{3}} بکە. هەروەها لینکی شوێنی کۆبوونەوە (Variable 4) دڵنیابە بە شێوازی https:// دەستپێدەکات.<br>
-      • <b>تێبینی:</b> دەتوانیت لە بەشی بەڕێوەبردنی ناونووسینەکان دووگمەی <b>«💬 نامەی دەستی»</b> بەکاربهێنیت تا ئەوکاتەی تێمپلێتەکە نوێ دەکرێتەوە.
+      • <b>بۆچی نامەی پەسەندکردن ناڕوات؟</b> سێرڤەری <code>kurdia.alwandssalh.workers.dev</code> لە کاتی پەسەندکردندا تەنها بەشی <b>Body</b> (بەبێ Header و بەبێ Button) لەگەڵ ئەم ٤ گۆڕاوە دەنێرێت بۆ Meta:<br>
+      &nbsp;&nbsp;١. <code>{{1}}</code> = ناوی بەشداربوو (<code>name</code>)<br>
+      &nbsp;&nbsp;٢. <code>{{2}}</code> = ژمارەی کەسەکان (<code>people</code>)<br>
+      &nbsp;&nbsp;٣. <code>{{3}}</code> = کۆدی داواکاری (<code>id</code>)<br>
+      &nbsp;&nbsp;٤. <code>{{4}}</code> = لینکی شوێنی کۆبوونەوە (<code>mapsUrl</code>)<br>
+      • <b>چۆن لە Meta چاکی بکەیت تا نامەکە ڕاستەوخۆ بڕوات؟</b><br>
+      &nbsp;&nbsp;١. لە <a href="https://business.facebook.com/wa/manage/message-templates/" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Meta WhatsApp Manager</a> تێمپلێتی پەسەندکردن بکەرەوە.<br>
+      &nbsp;&nbsp;٢. دڵنیابە <b>Header = None</b> بێت (هیچ وێنە یان دەقێک لە Header نەبێت) و <b>Buttons = None</b> بێت (هیچ دووگمەیەک لە خوارەوە نەبێت).<br>
+      &nbsp;&nbsp;٣. دڵنیابە لە ناو دەقی <b>Body</b> ڕێک ٤ گۆڕاوی ژمارەیی (<code>{{1}}</code>، <code>{{2}}</code>، <code>{{3}}</code>، <code>{{4}}</code>) هەبێت.
     `;
   } else if(str.includes("132001")){
     title = "هەڵەی کۆدی #132001: تێمپلێت نەدۆزرایەوە (Template Does Not Exist)";
@@ -5517,26 +5523,17 @@ async function testModuleWhatsApp(actionType){
       body: JSON.stringify(payload)
     });
     const dur = Math.round(performance.now() - t0);
-    const rawData = await res.json().catch(() => ({}));
-    const isVerifyAction = actionType !== "otp" && actionType !== "reject";
-    const data = (isVerifyAction && res.ok && rawData && (rawData.ok === true || rawData.status === "approved"))
-      ? {
-          ok: true,
-          status: "approved",
-          registration: rawData.registration || { id: payload.id, name: payload.name, phone: intlPhone, people: "1", status: "approved" },
-          whatsapp: { ok: true, status: "verified", mapsUrl: payload.mapsUrl }
-        }
-      : rawData;
+    const data = await res.json().catch(() => ({}));
 
     logToMasterDiag(`وەتسئەپ (${actionName})`, url, "POST", payload, res.status, data, dur);
 
     const waOk = (data.ok === true) && (!data.whatsapp || data.whatsapp?.ok !== false);
     if(waOk){
       if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
-      if(detail) detail.innerHTML = `🟢 ${actionName} بۆ ${intlPhone} بە سەرکەوتوویی ئەنجامدرا (${dur}ms).`;
+      if(detail) detail.innerHTML = `🟢 نامەی ${actionName} بۆ ${intlPhone} بە سەرکەوتوویی نێردرا (${dur}ms).`;
       const dec = document.getElementById("masterMetaDecoderCard");
       if(dec) dec.style.display = "none";
-      toast("✓ تێستی پەسەندکردن و وەتسئەپ سەرکەوتوو بوو");
+      toast("✓ تێستی وەتسئەپ سەرکەوتوو بوو");
       return { ok: true, dur };
     } else {
       const errStr = data.whatsapp?.error || data.error || JSON.stringify(data);
