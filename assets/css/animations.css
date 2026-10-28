@@ -1,0 +1,404 @@
+/* ==========================================================================
+   KURDIA ADVENTURE — CINEMATIC ANIMATION & INTERACTION STYLESHEET
+   File: /assets/css/animations.css
+   Purpose: Modular styles for Hero choreography, Scroll reveals, Image reveals,
+            Card hover/elevation, Micro-interactions, Weather station motion,
+            and Accessibility focus states.
+   ========================================================================== */
+
+/* 1. Top Scroll Progress Indicator */
+.kurdia-scroll-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--ka-brand-maroon), var(--ka-brand-crimson), var(--ka-brand-rose));
+  box-shadow: 0 0 14px var(--ka-brand-glow);
+  z-index: 9999;
+  pointer-events: none;
+  transition: width 80ms linear;
+}
+
+/* 2. Header & Brand Logo Precision Motion */
+header.top {
+  transition:
+    background-color var(--motion-base) var(--ease-out-quart),
+    backdrop-filter var(--motion-base) var(--ease-out-quart),
+    border-color var(--motion-base) var(--ease-out-quart),
+    box-shadow var(--motion-base) var(--ease-out-quart),
+    transform var(--motion-base) var(--ease-out-quart);
+}
+
+header.top.scrolled {
+  background: var(--ka-surface-glass-strong) !important;
+  backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+  border-bottom-color: rgba(211, 47, 78, 0.24) !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6);
+}
+
+.brand {
+  position: relative;
+  transition: transform var(--motion-fast) var(--ease-spring-gentle);
+}
+
+.brand:hover {
+  transform: translateY(-1px);
+}
+
+.brand-logo-img {
+  transition:
+    transform var(--motion-base) var(--ease-spring-gentle),
+    box-shadow var(--motion-base) var(--ease-out-quart),
+    filter var(--motion-base) var(--ease-out-quart);
+}
+
+.brand:hover .brand-logo-img {
+  transform: scale(1.06) rotate(-2deg);
+  box-shadow: 0 0 18px rgba(211, 47, 78, 0.48);
+}
+
+/* 3. Cinematic Hero Layering, Background Zoom & Scroll Cue */
+.hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero::before {
+  transition: transform 9s var(--ease-out-quart), filter 1.2s var(--ease-out-quart);
+  will-change: transform;
+}
+
+.hero.ka-hero-loaded::before {
+  animation: kaHeroKenBurns 22s ease-in-out infinite alternate;
+}
+
+@keyframes kaHeroKenBurns {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.065) translate3d(0, -1.5%, 0);
+  }
+}
+
+/* Subtle Hero Scroll Indicator */
+.ka-hero-scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(11, 16, 24, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--ka-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    border-color var(--motion-fast) var(--ease-out-quart),
+    color var(--motion-fast) var(--ease-out-quart),
+    transform var(--motion-fast) var(--ease-out-quart),
+    background-color var(--motion-fast) var(--ease-out-quart);
+}
+
+.ka-hero-scroll-cue:hover {
+  border-color: var(--ka-border-hover);
+  color: #fff;
+  background: rgba(169, 29, 55, 0.22);
+  transform: translateY(-2px);
+}
+
+.ka-hero-scroll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ka-brand-rose);
+  box-shadow: 0 0 8px var(--ka-brand-rose);
+  animation: kaScrollCuePulse 2s ease-in-out infinite;
+}
+
+@keyframes kaScrollCuePulse {
+  0%, 100% {
+    transform: translateY(-2px);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateY(3px);
+    opacity: 1;
+  }
+}
+
+/* 4. Reusable Scroll-Reveal Primitives (Safe Progressive Enhancement)
+      Note: Content remains visible by default if JS fails or hasn't run.
+      Only elements explicitly armed with .ka-reveal-armed start hidden. */
+.ka-reveal-armed {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-distance-md), 0);
+  transition:
+    opacity var(--motion-medium) var(--ease-out-quint),
+    transform var(--motion-medium) var(--ease-out-quint);
+  will-change: opacity, transform;
+}
+
+.ka-reveal-armed.ka-reveal-scale {
+  transform: translate3d(0, var(--reveal-distance-sm), 0) scale(0.975);
+}
+
+.ka-reveal-armed.ka-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Image Reveal Container Enhancement */
+.featureimg,
+.place-card-media,
+.btp-thumb,
+.dest-modal-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.featureimg::after,
+.place-card-media::after,
+.btp-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 7, 11, 0) 40%, rgba(5, 7, 11, 0.72) 100%);
+  pointer-events: none;
+  transition: opacity var(--motion-base) var(--ease-out-quart);
+}
+
+/* 5. Premium Trip, Destination & Experience Card Hover Architecture */
+.featured,
+.place-card,
+.booking-trip-pick-card,
+.private-vip-showcase,
+.private-trip-card,
+.weather-hero-card,
+.public-review,
+.article {
+  position: relative;
+  transition:
+    transform var(--motion-base) var(--ease-out-quart),
+    box-shadow var(--motion-base) var(--ease-out-quart),
+    border-color var(--motion-base) var(--ease-out-quart),
+    background-color var(--motion-base) var(--ease-out-quart);
+}
+
+/* Desktop Hover Enhancements (Only on devices with true pointer hover) */
+@media (hover: hover) and (pointer: fine) {
+  .featured:hover,
+  .place-card:hover,
+  .booking-trip-pick-card:hover {
+    border-color: var(--ka-border-hover);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  /* Smooth Image Zoom Inside Cards on Hover */
+  .featured .featureimg,
+  .place-card .place-card-media,
+  .booking-trip-pick-card .btp-thumb {
+    transition: transform var(--motion-slow) var(--ease-out-expo), filter var(--motion-base) var(--ease-out-quart);
+  }
+
+  .featured:hover .featureimg,
+  .place-card:hover .place-card-media,
+  .booking-trip-pick-card:hover .btp-thumb {
+    transform: scale(1.055);
+  }
+
+  /* Subtle CTA Arrow Shift on Card Hover (RTL-aware: shifts left in RTL) */
+  [dir="rtl"] .place-card:hover .place-card-footer span:last-child,
+  [dir="rtl"] .booking-trip-pick-card:hover .btp-select-indicator span:last-child {
+    transform: translateX(-5px);
+  }
+
+  [dir="ltr"] .place-card:hover .place-card-footer span:last-child,
+  [dir="ltr"] .booking-trip-pick-card:hover .btp-select-indicator span:last-child {
+    transform: translateX(5px);
+  }
+
+  /* Dynamic Pointer Spotlight Overlay */
+  .featured::before,
+  .place-card::before,
+  .booking-trip-pick-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(211, 47, 78, 0.11),
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity var(--motion-base) var(--ease-out-quart);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .featured:hover::before,
+  .place-card:hover::before,
+  .booking-trip-pick-card:hover::before {
+    opacity: 1;
+  }
+}
+
+.place-card-footer span:last-child,
+.btp-select-indicator span:last-child {
+  display: inline-block;
+  transition: transform var(--motion-fast) var(--ease-spring-gentle);
+}
+
+/* 6. Weather Station Subtle Living Motion (Data-Safe) */
+.weather-hero-card #wBigIcon {
+  display: inline-block;
+  animation: kaWeatherIconFloat 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes kaWeatherIconFloat {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-5px) scale(1.04);
+  }
+}
+
+.weather-metrics-grid .metric-box {
+  transition:
+    transform var(--motion-fast) var(--ease-out-quart),
+    border-color var(--motion-fast) var(--ease-out-quart),
+    background-color var(--motion-fast) var(--ease-out-quart),
+    box-shadow var(--motion-fast) var(--ease-out-quart);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .weather-metrics-grid .metric-box:hover {
+    transform: translateY(-3px);
+    border-color: rgba(56, 189, 248, 0.35);
+    box-shadow: 0 12px 26px -8px rgba(0, 0, 0, 0.55);
+  }
+}
+
+.hourly-timeline > *,
+.days-container > * {
+  transition:
+    transform var(--motion-fast) var(--ease-out-quart),
+    border-color var(--motion-fast) var(--ease-out-quart),
+    background-color var(--motion-fast) var(--ease-out-quart);
+}
+
+/* 7. Tactile Buttons, Navigation & Micro-Interactions */
+.btn,
+.navitem,
+.pf-chip,
+.weather-chip,
+.pay-method-btn,
+.private-preset-card,
+.stepper-btn,
+.iconbtn,
+.fib-quick-pill,
+.ka-menu-item {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--motion-fast) var(--ease-spring-snappy),
+    box-shadow var(--motion-fast) var(--ease-out-quart),
+    border-color var(--motion-fast) var(--ease-out-quart),
+    background-color var(--motion-fast) var(--ease-out-quart),
+    color var(--motion-fast) var(--ease-out-quart);
+}
+
+.btn.red:hover:not(:disabled) {
+  box-shadow: var(--shadow-crimson-glow);
+  transform: translateY(-1.5px);
+}
+
+.btn.ghost:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.kurdia-btn-pressed {
+  transform: scale(0.96) !important;
+}
+
+/* Bottom Navigation Active Indicator Polish */
+nav.bottom .navitem {
+  transition:
+    color var(--motion-fast) var(--ease-out-quart),
+    transform var(--motion-fast) var(--ease-spring-gentle),
+    background-color var(--motion-fast) var(--ease-out-quart);
+}
+
+nav.bottom .navitem.active .ico {
+  transform: translateY(-1px) scale(1.08);
+  filter: drop-shadow(0 4px 10px rgba(229, 35, 79, 0.45));
+}
+
+/* 8. Keyboard Accessibility Focus States */
+.btn:focus-visible,
+.input:focus-visible,
+.select:focus-visible,
+.textarea:focus-visible,
+.navitem:focus-visible,
+.pf-chip:focus-visible,
+.iconbtn:focus-visible,
+.private-preset-card:focus-visible,
+.booking-trip-pick-card:focus-visible {
+  outline: 2px solid var(--ka-brand-rose);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(211, 47, 78, 0.22);
+}
+
+/* 9. Page Switching Smooth Transition */
+.page.active {
+  animation: kaPageEnter var(--motion-base) var(--ease-out-quint);
+}
+
+@keyframes kaPageEnter {
+  0% {
+    opacity: 0.01;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 10. Strict Reduced Motion & Mobile Safeguards */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ka-reveal-armed,
+  .kurdia-scroll-item.scroll-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero.ka-hero-loaded::before,
+  .weather-hero-card #wBigIcon,
+  .ka-hero-scroll-dot {
+    animation: none !important;
+  }
+}

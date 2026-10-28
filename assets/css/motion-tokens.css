@@ -1,0 +1,83 @@
+/* ==========================================================================
+   KURDIA ADVENTURE — CENTRALIZED MOTION & VISUAL DESIGN TOKENS
+   File: /assets/css/motion-tokens.css
+   Purpose: Reusable CSS custom properties for durations, easing curves,
+            stagger intervals, distances, atmospheric depth, and elevation.
+   ========================================================================== */
+
+:root {
+  /* 1. Brand & Atmospheric Palette Tokens */
+  --ka-bg-void: #05070b;
+  --ka-bg-obsidian: #080c13;
+  --ka-surface-navy: #0b1018;
+  --ka-surface-elevated: #101722;
+  --ka-surface-glass: rgba(16, 23, 34, 0.72);
+  --ka-surface-glass-strong: rgba(11, 16, 24, 0.86);
+
+  --ka-brand-maroon: #a91d37;
+  --ka-brand-crimson: #d32f4e;
+  --ka-brand-rose: #ff5b79;
+  --ka-brand-glow: rgba(211, 47, 78, 0.34);
+
+  --ka-accent-gold: #f59e0b;
+  --ka-accent-emerald: #10b981;
+  --ka-accent-sky: #38bdf8;
+
+  --ka-text-primary: #f8fafc;
+  --ka-text-secondary: #cbd5e1;
+  --ka-text-muted: #94a3b8;
+
+  --ka-border-subtle: rgba(255, 255, 255, 0.08);
+  --ka-border-hover: rgba(211, 47, 78, 0.42);
+  --ka-border-highlight: rgba(255, 255, 255, 0.16);
+
+  /* 2. Motion Duration Tokens */
+  --motion-instant: 120ms;
+  --motion-fast: 220ms;
+  --motion-base: 380ms;
+  --motion-medium: 520ms;
+  --motion-slow: 720ms;
+  --motion-cinematic: 1100ms;
+  --motion-ambient: 14000ms;
+
+  /* 3. Precision Easing Curves (Cinematic & Organic) */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring-gentle: cubic-bezier(0.34, 1.42, 0.64, 1);
+  --ease-spring-snappy: cubic-bezier(0.28, 1.35, 0.58, 1);
+
+  /* 4. Stagger & Distance Tokens */
+  --stagger-tight: 45ms;
+  --stagger-base: 75ms;
+  --stagger-relaxed: 110ms;
+
+  --reveal-distance-sm: 14px;
+  --reveal-distance-md: 24px;
+  --reveal-distance-lg: 36px;
+
+  /* 5. Card Elevation & Blur Tokens */
+  --blur-subtle: 10px;
+  --blur-glass: 16px;
+  --blur-deep: 24px;
+
+  --shadow-resting: 0 10px 30px -10px rgba(0, 0, 0, 0.55);
+  --shadow-elevated: 0 20px 44px -12px rgba(0, 0, 0, 0.72), 0 0 28px -6px rgba(211, 47, 78, 0.22);
+  --shadow-crimson-glow: 0 12px 32px -6px rgba(211, 47, 78, 0.42);
+}
+
+/* Reduced Motion Accessibility Overrides */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-instant: 1ms;
+    --motion-fast: 1ms;
+    --motion-base: 1ms;
+    --motion-medium: 1ms;
+    --motion-slow: 1ms;
+    --motion-cinematic: 1ms;
+    --reveal-distance-sm: 0px;
+    --reveal-distance-md: 0px;
+    --reveal-distance-lg: 0px;
+  }
+}

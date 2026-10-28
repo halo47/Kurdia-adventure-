@@ -51,6 +51,9 @@ if(!window.L || typeof window.L.map !== 'function'){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<!-- Modular KURDIA Motion Design System Stylesheets -->
+<link rel="stylesheet" href="/assets/css/motion-tokens.css">
+<link rel="stylesheet" href="/assets/css/animations.css">
 <style>
 :root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -1280,8 +1283,7 @@ main,section,.section,.page-section{background-color:transparent!important}
     }
 
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const seen = sessionStorage.getItem('kurdia_intro_seen') === '1';
-    if(!forceReplay && (seen || reduce)){
+    if(!forceReplay || reduce){
       overlay.remove();
       document.documentElement.classList.remove('intro-lock');
       return;
@@ -8725,301 +8727,16 @@ html[dir="ltr"] .ai{
 }
 </style>
 
+<!-- Modular KURDIA Motion Design System Scripts -->
+<script src="/assets/js/motion-config.js"></script>
+<script src="/assets/js/scroll-reveal.js"></script>
+<script src="/assets/js/animations.js"></script>
+
 <script id="kurdia-master-motion-engine">
 (function(){
   'use strict';
 
-  // 0. Inject Living Aurora Background Layer
-  if(!document.getElementById('kurdiaLivingBg')){
-    const bgWrap = document.createElement('div');
-    bgWrap.id = 'kurdiaLivingBg';
-    bgWrap.setAttribute('aria-hidden', 'true');
-    bgWrap.innerHTML = '<div class="klbg-orb orb-1"></div><div class="klbg-orb orb-2"></div><div class="klbg-orb orb-3"></div>';
-    document.body.prepend(bgWrap);
-  }
-
-  // 1. Scroll Progress Bar, Header Glass & Hero Parallax
-  let scrollBar = document.querySelector('.kurdia-scroll-progress');
-  if(!scrollBar){
-    scrollBar = document.createElement('div');
-    scrollBar.className = 'kurdia-scroll-progress';
-    document.body.appendChild(scrollBar);
-  }
-  window.addEventListener('scroll', () => {
-    const sy = window.scrollY || 0;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = total > 0 ? (sy / total) * 100 : 0;
-    if(scrollBar) scrollBar.style.width = pct + '%';
-    const topNav = document.querySelector('.top');
-    if(topNav) topNav.classList.toggle('scrolled', sy > 36);
-
-    // Subtle parallax shift on background orbs during scroll
-    const bgOrbs = document.querySelectorAll('#kurdiaLivingBg .klbg-orb');
-    if(bgOrbs.length === 3){
-      bgOrbs[0].style.marginTop = (sy * -0.05) + 'px';
-      bgOrbs[1].style.marginTop = (sy * 0.04) + 'px';
-    }
-  }, { passive: true });
-
-  // 2. Interactive Button Click Ripple & Tactile Spring Feedback
-  const CLICKABLE_SEL = '.btn, .navitem, .pf-chip, .weather-chip, .pay-method-btn, .private-preset-card, .stepper-btn, .iconbtn, .fib-quick-pill, .ka-menu-item, .booking-trip-pick-card';
-  document.addEventListener('pointerdown', e => {
-    const target = e.target.closest(CLICKABLE_SEL);
-    if(!target || target.disabled) return;
-    target.classList.add('kurdia-btn-pressed');
-    setTimeout(() => target.classList.remove('kurdia-btn-pressed'), 190);
-
-    try{
-      const rect = target.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height, 48);
-      const ripple = document.createElement('span');
-      ripple.className = 'kurdia-click-ripple';
-      ripple.style.width = size + 'px';
-      ripple.style.height = size + 'px';
-      ripple.style.left = ((e.clientX || (rect.left + rect.width / 2)) - rect.left) + 'px';
-      ripple.style.top = ((e.clientY || (rect.top + rect.height / 2)) - rect.top) + 'px';
-      target.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 640);
-    }catch(_){}
-  }, { passive: true });
-
-  ['pointerup', 'pointerleave', 'pointercancel'].forEach(evName => {
-    document.addEventListener(evName, () => {
-      document.querySelectorAll('.kurdia-btn-pressed').forEach(el => el.classList.remove('kurdia-btn-pressed'));
-    }, { passive: true });
-  });
-
-  // 3. Interactive Spotlight Pointer Tracker (Desktop hover)
-  if(window.matchMedia && window.matchMedia('(hover: hover)').matches){
-    document.addEventListener('pointermove', e => {
-      const cards = document.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card');
-      cards.forEach(card => {
-        const r = card.getBoundingClientRect();
-        if(e.clientY >= r.top - 100 && e.clientY <= r.bottom + 100){
-          card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-          card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-        }
-      });
-    }, { passive: true });
-  }
-
-  // 4. Scroll-Triggered Reveal Observer + Page Transition Entrance Animations
-  let scrollObserver = null;
-  if('IntersectionObserver' in window){
-    scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          entry.target.classList.remove('scroll-hidden');
-          entry.target.classList.add('scroll-visible');
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-  }
-
-  window.kurdiaBindScrollReveals = function(rootEl){
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduce || !scrollObserver) return;
-    const scope = rootEl || document;
-    const items = scope.querySelectorAll('.sectionhead, .featured, .place-card, .booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-page-hero, .private-trip-card, .private-vip-showcase, .weather-hero-card, .weather-map-box, .public-review, .article, .glass');
-    items.forEach(el => {
-      if(!el.classList.contains('kurdia-scroll-item')){
-        el.classList.add('kurdia-scroll-item');
-        const r = el.getBoundingClientRect();
-        if(r.top > window.innerHeight * 0.92){
-          el.classList.add('scroll-hidden');
-        } else {
-          el.classList.add('scroll-visible');
-        }
-        scrollObserver.observe(el);
-      }
-    });
-  };
-
-  window.kurdiaAnimatePageCards = function(pageId){
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const activePage = document.getElementById(pageId || (location.hash || '#home').slice(1) || 'home');
-    if(!activePage) return;
-    window.kurdiaBindScrollReveals(activePage);
-    if(typeof init3DCardPerspectiveTilt === 'function') init3DCardPerspectiveTilt();
-    if(reduce || !window.gsap) return;
-    try{
-      const targets = activePage.querySelectorAll('.featured, .place-card, .booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .experience-card');
-      if(targets.length){
-        gsap.killTweensOf(targets);
-        gsap.fromTo(targets,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.42, stagger: 0.05, ease: 'power2.out', clearProps: 'transform,opacity' }
-        );
-      }
-      if(window.anime){
-        const bars = activePage.querySelectorAll('.btp-seat-bar i');
-        bars.forEach(b => {
-          const targetW = b.style.width || '50%';
-          b.style.width = '0%';
-          anime({
-            targets: b,
-            width: targetW,
-            duration: 800,
-            easing: 'easeOutQuart',
-            delay: 140
-          });
-        });
-      }
-    }catch(e){}
-  };
-
-  window.kurdiaRefreshMotion = function(){
-    if(window.ScrollTrigger){
-      try{ ScrollTrigger.refresh(); }catch(e){}
-    }
-    window.kurdiaAnimatePageCards();
-  };
-
-  window.addEventListener('hashchange', () => {
-    setTimeout(() => window.kurdiaAnimatePageCards(), 60);
-  });
-
-  // 5. Lightweight 3D Mountain Horizon Depth & Ambient Embers Scene (Three.js)
-  function initThreeAtmosphere(){
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!window.THREE || reduce) return;
-    try{
-      if(document.getElementById('kurdiaThreeAmbientCanvas')) return;
-      const bgCanvas = document.createElement('canvas');
-      bgCanvas.id = 'kurdiaThreeAmbientCanvas';
-      document.body.prepend(bgCanvas);
-      const isMobile = window.innerWidth < 768;
-      const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: false, powerPreference: 'low-power' });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.set(0, 0, 7);
-
-      // A. Geometric 3D Mountain Horizon Wireframe (Ultra lightweight, Zagros ridges)
-      const gridX = isMobile ? 14 : 22;
-      const gridY = isMobile ? 8 : 12;
-      const mountainGeo = new THREE.PlaneGeometry(32, 16, gridX, gridY);
-      const posAttr = mountainGeo.attributes.position;
-      for(let i = 0; i < posAttr.count; i++){
-        const vx = posAttr.getX(i);
-        const vy = posAttr.getY(i);
-        // Realistic mountain ridge wave formula
-        const elevation = Math.sin(vx * 0.35) * Math.cos(vy * 0.4) * 2.2 +
-                          Math.sin(vx * 0.75 + 1.2) * 1.1 +
-                          Math.sin(vx * 1.4) * 0.45;
-        posAttr.setZ(i, Math.max(0, elevation));
-      }
-      mountainGeo.computeVertexNormals();
-
-      const mountainMat = new THREE.MeshBasicMaterial({
-        color: 0x38bdf8,
-        wireframe: true,
-        transparent: true,
-        opacity: isMobile ? 0.08 : 0.12
-      });
-      const mountainMesh = new THREE.Mesh(mountainGeo, mountainMat);
-      mountainMesh.rotation.x = -Math.PI / 2.3;
-      mountainMesh.position.set(0, -4.6, -2);
-      scene.add(mountainMesh);
-
-      // B. Ambient Floating Starlight & Warm Sunset Embers
-      const emberCount = isMobile ? 36 : 75;
-      const emberGeo = new THREE.BufferGeometry();
-      const emberPositions = new Float32Array(emberCount * 3);
-      const emberVelocities = new Float32Array(emberCount);
-      for(let i = 0; i < emberCount; i++){
-        emberPositions[i * 3] = (Math.random() - 0.5) * 18;
-        emberPositions[i * 3 + 1] = (Math.random() - 0.5) * 12;
-        emberPositions[i * 3 + 2] = (Math.random() - 0.5) * 8;
-        emberVelocities[i] = 0.003 + Math.random() * 0.007;
-      }
-      emberGeo.setAttribute('position', new THREE.BufferAttribute(emberPositions, 3));
-      const emberMat = new THREE.PointsMaterial({
-        color: 0xff5e7e,
-        size: isMobile ? 0.046 : 0.042,
-        transparent: true,
-        opacity: 0.48
-      });
-      const emberPoints = new THREE.Points(emberGeo, emberMat);
-      scene.add(emberPoints);
-
-      // Mouse Parallax Driver
-      let mouseX = 0, mouseY = 0;
-      let targetCameraX = 0, targetCameraY = 0;
-      window.addEventListener('pointermove', e => {
-        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-      }, { passive: true });
-
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      }, { passive: true });
-
-      let clock = 0;
-      function animateThree(){
-        requestAnimationFrame(animateThree);
-        clock += 0.008;
-
-        // Subtle mountain ridge breath
-        mountainMesh.rotation.z = Math.sin(clock * 0.2) * 0.02;
-        mountainMesh.position.y = -4.6 + Math.sin(clock * 0.4) * 0.12;
-
-        // Rise embers
-        const pArr = emberGeo.attributes.position.array;
-        for(let i = 0; i < emberCount; i++){
-          pArr[i * 3 + 1] += emberVelocities[i];
-          pArr[i * 3] += Math.sin(clock + i) * 0.002;
-          if(pArr[i * 3 + 1] > 6){
-            pArr[i * 3 + 1] = -6;
-            pArr[i * 3] = (Math.random() - 0.5) * 18;
-          }
-        }
-        emberGeo.attributes.position.needsUpdate = true;
-
-        // Smooth camera damping
-        targetCameraX += (mouseX * 0.35 - targetCameraX) * 0.04;
-        targetCameraY += (-mouseY * 0.25 - targetCameraY) * 0.04;
-        camera.position.x = targetCameraX;
-        camera.position.y = targetCameraY;
-        camera.lookAt(0, -1, 0);
-
-        renderer.render(scene, camera);
-      }
-      animateThree();
-    }catch(e){}
-  }
-
-  // 6. Interactive 3D Perspective Tilt on Interactive Cards (Smooth & Lightweight)
-  function init3DCardPerspectiveTilt(){
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduce) return;
-    const cards = document.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card');
-    cards.forEach(card => {
-      if(card._has3dTilt) return;
-      card._has3dTilt = true;
-      card.style.transformStyle = 'preserve-3d';
-      card.style.transition = 'transform 0.18s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.25s ease';
-
-      card.addEventListener('pointermove', e => {
-        const rect = card.getBoundingClientRect();
-        if(rect.width === 0 || rect.height === 0) return;
-        const px = (e.clientX - rect.left) / rect.width - 0.5;
-        const py = (e.clientY - rect.top) / rect.height - 0.5;
-        const rx = (-py * 6.5).toFixed(2);
-        const ry = (px * 6.5).toFixed(2);
-        card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(4px)`;
-      }, { passive: true });
-
-      card.addEventListener('pointerleave', () => {
-        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
-      }, { passive: true });
-    });
-  }
-
-  // 5. Real-Time Website Visitor Tracking (Synced with Server + LocalStorage for Admin)
+  // Real-Time Website Visitor Tracking (Synced with Server + LocalStorage for Admin)
   async function trackMainSiteVisit(){
     try{
       const todayKey = new Date().toISOString().slice(0, 10);
@@ -9071,7 +8788,7 @@ html[dir="ltr"] .ai{
     }catch(e){}
   }
 
-  // 6. Sync with Admin LocalStorage
+  // Sync with Admin LocalStorage
   function syncAdminData(){
     try{
       const raw = localStorage.getItem('kurdia_admin_multitrip_v6');
@@ -9117,9 +8834,10 @@ html[dir="ltr"] .ai{
 
   function startAll(){
     syncAdminData();
-    initThreeAtmosphere();
     trackMainSiteVisit();
-    setTimeout(() => window.kurdiaAnimatePageCards(), 150);
+    setTimeout(() => {
+      if(typeof window.kurdiaAnimatePageCards === 'function') window.kurdiaAnimatePageCards();
+    }, 150);
   }
 
   if(document.readyState === 'loading'){
