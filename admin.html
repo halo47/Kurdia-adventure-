@@ -995,7 +995,8 @@ button{cursor:pointer;color:inherit}
       <button class="q-chip" onclick="go('trips')">🧭 هەموو گەشتەکان (<span id="qTripsCount">3</span>)</button>
       <button class="q-chip orange" onclick="go('push_center')">🔔 ناردنی نۆتیفیکەیشن</button>
       <button class="q-chip blue" onclick="go('bookings')">👥 ناونوسراوەکان (<span id="qBookingsCount">0</span>)</button>
-      <button class="q-chip" onclick="go('design')">🎨 دیزاین و براند</button>
+      <button class="q-chip" onclick="go('design')" style="border-color:#c084fc;color:#e9d5ff;background:rgba(192,132,252,0.14);font-weight:800">🌐 دەستکاری هەموو بەشەکان و دەربارە</button>
+      <button class="q-chip" onclick="go('design');setTimeout(()=>document.getElementById('adminAboutSectionEditor')?.scrollIntoView({behavior:'smooth'}),120);" style="border-color:#10b981;color:#6bf0b3">📖 بەشی دەربارە (About)</button>
       <button class="q-chip" onclick="go('broadcast');scrollToWhatsAppTesting();" style="border-color:#38bdf8;color:#7dd3fc;background:rgba(56,189,248,0.14);font-weight:800">🧪 تاقیکردنەوەی WhatsApp و ئیرۆری کامڵ</button>
       <button class="q-chip" onclick="go('broadcast')">💬 WhatsApp</button>
       <button class="q-chip" onclick="go('coupons')">🎟️ کۆبۆنەکان</button>
@@ -1267,8 +1268,8 @@ button{cursor:pointer;color:inherit}
             <div class="m-txt"><b>ناونوسراوەکان و پسوولە</b><small>پەسەندکردن و دابەزاندنی Excel/CSV</small></div>
           </button>
           <button class="module-card spotlight-card" onclick="go('design')">
-            <div class="m-ico" style="color:#c084fc">🎨</div>
-            <div class="m-txt"><b>دیزاینی Hero و Brand</b><small>وێنەی کاڤەر، ڕەنگەکان و تێکست</small></div>
+            <div class="m-ico" style="color:#c084fc">🌐</div>
+            <div class="m-txt"><b>دەستکاری ماڵپەڕ و بەشی دەربارە</b><small>دەربارە، Hero، پەیوەندی، سۆشیال و هەموو بەشەکان</small></div>
           </button>
           <button class="module-card spotlight-card" onclick="go('broadcast')">
             <div class="m-ico" style="color:#22c55e">💬</div>
@@ -1480,7 +1481,8 @@ button{cursor:pointer;color:inherit}
         <div class="service-list">
           <div class="staff-setting spotlight-card" style="border-color:#10b981;background:linear-gradient(135deg,#07221b,#09131d)" onclick="go('otp_manager')"><div class="service-icon" style="color:#34d399">🔐</div><div class="service-text"><b>کۆنترۆڵی کۆدی پشتڕاستکردنەوەی OTP (چالاک / ناچالاک)</b><small id="settingsOtpRowDesc">چالاککردن یان ناچالاککردنی کۆدی WhatsApp OTP لە کاتی ناونووسینی گەشتەکان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" style="border-color:#7c2d12" onclick="go('push_center')"><div class="service-icon" style="color:#fb923c">🔔</div><div class="service-text"><b>ناردنی نۆتیفیکەیشن بۆ خەڵک (Web Push)</b><small>ناردنی ئاگاداری ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەری بەشداربووان</small></div><span class="arrow">‹</span></div>
-          <div class="staff-setting spotlight-card" onclick="go('design')"><div class="service-icon">🎨</div><div class="service-text"><b>Hero و Brand</b><small>ڕەنگەکان و پەیامی سەرەکی (تەنها بە کوردی + وەرگێڕانی خۆکار)</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" style="border-color:#c084fc;background:linear-gradient(135deg,#1d102a,#09131d)" onclick="go('design')"><div class="service-icon" style="color:#e879f9">🌐</div><div class="service-text"><b>دەستکاریکردنی هەموو بەشەکانی وێبسایتی سەرەکی (Website CMS)</b><small>Hero، بەشی دەربارە، گەشتی تایبەت، پەیوەندی، سۆشیال میدیا و مێنوی خوارەوە</small></div><span class="arrow">‹</span></div>
+          <div class="staff-setting spotlight-card" style="border-color:#0ea5e9;background:linear-gradient(135deg,#071c2c,#09131d)" onclick="go('design');setTimeout(()=>document.getElementById('adminAboutSectionEditor')?.scrollIntoView({behavior:'smooth'}),120);"><div class="service-icon" style="color:#38bdf8">📖</div><div class="service-text"><b>دەستکاریکردنی بەشی دەربارە (About KURDIA)</b><small>وێنە، ناونیشان، چیرۆکی کوردیا و ئامارەکانی بەشی دەربارە</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('broadcast')"><div class="service-icon">💬</div><div class="service-text"><b>ناوەندی WhatsApp</b><small>ناردنی پەیامی بەکۆمەڵ بۆ شاخەوانان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('stories')"><div class="service-icon">✨</div><div class="service-text"><b>ستۆرییەکان (Stories)</b><small>پەسەندکردن و سڕینەوەی ستۆری بەشداربووان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" onclick="go('private_requests')"><div class="service-icon">👑</div><div class="service-text"><b>گەشتی تایبەت (Private Trips)</b><small>داواکارییەکانی گەشتی خێزانی و تایبەت</small></div><span class="arrow">‹</span></div>
@@ -1590,32 +1592,189 @@ button{cursor:pointer;color:inherit}
       </section>
 
       <!-- =========================================================
-           7. HERO & BRAND DESIGN (KURDISH ONLY + AUTO GOOGLE TRANSLATE)
+           7. FULL WEBSITE & ABOUT SECTION CMS EDITOR (#design)
            ========================================================= -->
       <section class="page" id="design">
-        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>Hero و Brand</h2></div>
-        <div class="lang-box spotlight-card">
-          <h4>🎨 ڕەنگەکانی براند</h4>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div class="field"><label>ڕەنگی سەرەکی</label><input type="color" id="gradColor1" onchange="autoSync()" style="height:42px;padding:4px"></div>
-            <div class="field"><label>ڕەنگی دووەم</label><input type="color" id="gradColor2" onchange="autoSync()" style="height:42px;padding:4px"></div>
+        <div class="toolbar">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <h2>🌐 دەستکاریکردنی هەموو بەشەکانی ماڵپەڕ و دەربارە</h2>
+          <button class="pill" onclick="publishLive()" style="background:linear-gradient(120deg,#0c9b61,#07774a);border-color:#26d08c">💾 پاشەکەوتکردن و بڵاوکردنەوە</button>
+        </div>
+
+        <!-- Quick Section Jump Chips inside Website Editor -->
+        <div class="filters" style="margin-bottom:12px">
+          <button type="button" class="filter active" onclick="document.getElementById('adminAboutSectionEditor')?.scrollIntoView({behavior:'smooth'})">📖 بەشی دەربارە (About)</button>
+          <button type="button" class="filter" onclick="document.getElementById('adminHeroSectionEditor')?.scrollIntoView({behavior:'smooth'})">🏔️ بەشی سەرەکی و هێرۆ</button>
+          <button type="button" class="filter" onclick="document.getElementById('adminPrivateSectionEditor')?.scrollIntoView({behavior:'smooth'})">👑 گەشتی تایبەت VIP</button>
+          <button type="button" class="filter" onclick="document.getElementById('adminContactSectionEditor')?.scrollIntoView({behavior:'smooth'})">📞 پەیوەندی و سۆشیال</button>
+          <button type="button" class="filter" onclick="document.getElementById('adminNavSectionEditor')?.scrollIntoView({behavior:'smooth'})">🧭 دووگمەکانی مێنو</button>
+        </div>
+
+        <!-- =====================================================
+             SECTION A: ABOUT KURDIA EDITOR (بەشی دەربارە)
+             ===================================================== -->
+        <div class="lang-box spotlight-card" id="adminAboutSectionEditor" style="border-color:#10b981;background:linear-gradient(150deg,#07221b,#09141e);margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(16,185,129,0.25)">
+            <div>
+              <h4 style="margin:0;color:#6bf0b3;font-size:15px">📖 ١. دەستکاریکردنی بەشی دەربارەی کوردیا (About Section)</h4>
+              <small style="color:#94a3b8;font-size:11.5px">ئەم زانیارییانە ڕاستەوخۆ لە پەڕەی «دەربارەی تیمەکە» (#about) و کارتی ناساندنی پەڕەی سەرەکی دەردەکەون</small>
+            </div>
+            <button type="button" class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;padding:7px 12px;font-size:11.5px" onclick="publishLive()">💾 پاشەکەوتی دەربارە</button>
+          </div>
+
+          <div class="upload spotlight-card" onclick="triggerCropUpload('aboutImageUrl','aboutPreviewImg',16/10)" style="margin-bottom:10px;border-color:rgba(16,185,129,0.4)">
+            <div>🖼️<br><b>وێنەی بەشی دەربارە (About Image)</b><br><small>کلیک بکە بۆ بارکردن و بڕینی وێنەی تیم یان گەشتەکانی کوردیا</small></div>
+            <img id="aboutPreviewImg" style="display:none;width:100%;max-height:175px;object-fit:cover;border-radius:10px;margin-top:8px">
+          </div>
+          <div class="field">
+            <label>لینکی ڕاستەوخۆی وێنەی دەربارە (ئارەزوومەندانە)</label>
+            <input id="aboutImageUrlInput" dir="ltr" placeholder="https://..." oninput="autoSync()">
+          </div>
+
+          <div class="field">
+            <label>ناونیشانی سەرەکیی پەڕەی دەربارە (#about Title)</label>
+            <input id="aboutTitleInput" placeholder="بۆ نموونە: KURDIA ADVENTURE — چیرۆکی ئێمە لە ناو دڵی سروشتدا" oninput="autoSync()">
+          </div>
+          <div class="field">
+            <label>دەقی تەواوی دەربارەی کوردیا (#about Description)</label>
+            <textarea id="aboutTextInput" style="min-height:110px" placeholder="باسی تیمی KURDIA ADVENTURE، ئامانج، ئەزموون و چالاکییەکانتان لێرە بنووسە..." oninput="autoSync()"></textarea>
+          </div>
+
+          <div style="margin-top:12px;padding:12px;border-radius:12px;background:rgba(0,0,0,0.28);border:1px solid rgba(255,255,255,0.08)">
+            <b style="display:block;font-size:12.5px;color:#38bdf8;margin-bottom:8px">📊 ٣ خانەی ئامارەکانی ناو بەشی دەربارە (Stats Boxes):</b>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+              <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06)">
+                <div class="field" style="margin:0 0 6px"><label>ژمارەی ئاماری ١</label><input id="aboutStat1Num" placeholder="+120" oninput="autoSync()"></div>
+                <div class="field" style="margin:0"><label>ناونیشانی ئاماری ١</label><input id="aboutStat1Label" placeholder="گەشتی سەرکەوتوو" oninput="autoSync()"></div>
+              </div>
+              <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06)">
+                <div class="field" style="margin:0 0 6px"><label>ژمارەی ئاماری ٢</label><input id="aboutStat2Num" placeholder="+3,400" oninput="autoSync()"></div>
+                <div class="field" style="margin:0"><label>ناونیشانی ئاماری ٢</label><input id="aboutStat2Label" placeholder="بەشداربووی دڵخۆش" oninput="autoSync()"></div>
+              </div>
+              <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06)">
+                <div class="field" style="margin:0 0 6px"><label>ژمارەی ئاماری ٣</label><input id="aboutStat3Num" placeholder="4.9★" oninput="autoSync()"></div>
+                <div class="field" style="margin:0"><label>ناونیشانی ئاماری ٣</label><input id="aboutStat3Label" placeholder="متمانە و سەلامەتی" oninput="autoSync()"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;padding:12px;border-radius:12px;background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.07)">
+            <b style="display:block;font-size:12.5px;color:#fbbf24;margin-bottom:8px">🏠 کارتی کورتەی دەربارە لە پەڕەی سەرەکی (Homepage About Card):</b>
+            <div class="field">
+              <label>ناونیشانی کارتی دەربارە لە پەڕەی سەرەکی</label>
+              <input id="aboutHomeTitleInput" placeholder="ئێمە گروپێکی گەشتیاری و شاخەوانی کوردستانین" oninput="autoSync()">
+            </div>
+            <div class="field">
+              <label>دەقی کارتی دەربارە لە پەڕەی سەرەکی</label>
+              <textarea id="aboutHomeTextInput" style="min-height:75px" placeholder="ئامانجمان تەنها گەشت نییە؛ دروستکردنی ئەزموونێکی جوان، سەلامەت و پڕ لە وزەیە..." oninput="autoSync()"></textarea>
+            </div>
           </div>
         </div>
-        <div class="upload spotlight-card" onclick="triggerCropUpload('heroImageUrl','heroPreviewImg',16/9)" style="margin-bottom:10px">
-          <div>🖼️<br><b>وێنەی کاڤەری سەرەکی (Hero)</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنە</small></div>
-          <img id="heroPreviewImg" style="display:none;width:100%;max-height:150px;object-fit:cover;border-radius:9px;margin-top:8px">
-        </div>
-        <div class="lang-box spotlight-card" style="border-color:#0ea5e9;background:linear-gradient(145deg,#071d2e,#09141e)">
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(56,189,248,0.18)">
-            <h4 style="margin:0;color:#38bdf8;font-size:13.5px">☀️ ناونیشان و پێناسەی سەرەکی (تەنها بە کوردی بنووسە)</h4>
-            <span style="font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.18);color:#6bf0b3;border:1px solid rgba(16,185,129,0.4)">🌐 Google Translate چالاکە — خۆکارانە وەردەگێڕدرێت</span>
+
+        <!-- =====================================================
+             SECTION B: HERO, BRAND & HOMEPAGE HEADINGS
+             ===================================================== -->
+        <div class="lang-box spotlight-card" id="adminHeroSectionEditor" style="border-color:#0ea5e9;background:linear-gradient(145deg,#071d2e,#09141e);margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(56,189,248,0.22)">
+            <div>
+              <h4 style="margin:0;color:#38bdf8;font-size:15px">🏔️ ٢. بەشی سەرەکی، کاڤەر (Hero) و ڕەنگەکانی براند</h4>
+              <small style="color:#94a3b8;font-size:11.5px">تەنها بە کوردی بنووسە — سیستەمی وەرگێڕانی خۆکار بۆ زمانەکانی تر چالاکە</small>
+            </div>
+            <span style="font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(16,185,129,0.18);color:#6bf0b3;border:1px solid rgba(16,185,129,0.4)">🌐 Auto Translate چالاکە</span>
           </div>
-          <div class="field"><label>ناونیشانی سەرەکی (Hero Title)</label><input id="heroTitle_ku" oninput="autoSync()"></div>
-          <div class="field"><label>پێناسەی کورت (Hero Subtitle)</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div class="field"><label>🎨 ڕەنگی سەرەکی براند</label><input type="color" id="gradColor1" onchange="autoSync()" style="height:42px;padding:4px"></div>
+            <div class="field"><label>🎨 ڕەنگی دووەمی براند</label><input type="color" id="gradColor2" onchange="autoSync()" style="height:42px;padding:4px"></div>
+          </div>
+
+          <div class="upload spotlight-card" onclick="triggerCropUpload('heroImageUrl','heroPreviewImg',16/9)" style="margin-bottom:10px">
+            <div>🖼️<br><b>وێنەی کاڤەری سەرەکی (Hero Background)</b><br><small>کلیک بکە بۆ هەڵبژاردن و بڕینی وێنەی سەرەکی</small></div>
+            <img id="heroPreviewImg" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:9px;margin-top:8px">
+          </div>
+          <div class="field">
+            <label>لینکی ڕاستەوخۆی وێنەی کاڤەری سەرەکی (ئارەزوومەندانە)</label>
+            <input id="heroImageUrlInput" dir="ltr" placeholder="https://..." oninput="autoSync()">
+          </div>
+
+          <div class="field"><label>نووسینی سەرەوەی هێرۆ (Eyebrow Badge)</label><input id="heroEyebrowInput" placeholder="KURDISTAN MOUNTAIN & NATURE CLUB" oninput="autoSync()"></div>
+          <div class="field"><label>ناونیشانی سەرەکی (Hero Title)</label><input id="heroTitle_ku" placeholder="زیاتر لە گەشت." oninput="autoSync()"></div>
+          <div class="field"><label>پێناسەی کورتی ژێر ناونیشان (Hero Subtitle)</label><textarea id="heroSubtitle_ku" oninput="autoSync()"></textarea></div>
           <input type="hidden" id="heroTitle_ar"><input type="hidden" id="heroSubtitle_ar">
           <input type="hidden" id="heroTitle_en"><input type="hidden" id="heroSubtitle_en">
+
+          <div style="margin-top:10px;padding:12px;border-radius:12px;background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.07)">
+            <b style="display:block;font-size:12.5px;color:#7dd3fc;margin-bottom:8px">🧭 ناونیشانی بەشی گەشتەکانی داهاتوو لە پەڕەی سەرەکی:</b>
+            <div class="field"><label>ناونیشانی بەشی گەشتەکان (خاڵی بێت خۆکارانە دادەنرێت)</label><input id="upcomingSectionTitleInput" placeholder="گەشتەکانی داهاتوو" oninput="autoSync()"></div>
+            <div class="field"><label>دەقی ژێر ناونیشانی گەشتەکان (خاڵی بێت خۆکارانە ژمارەی گەشت دەنووسێت)</label><input id="upcomingSectionDescInput" placeholder="ئێستا گەشتی نوێ بەردەستە بۆ ناونووسین و بەشداریکردن" oninput="autoSync()"></div>
+          </div>
         </div>
-        <button class="primary border-beam" onclick="publishLive()">پاشەکەوتکردن و بڵاوکردنەوە</button>
+
+        <!-- =====================================================
+             SECTION C: PRIVATE VIP TRIP SECTION EDITOR
+             ===================================================== -->
+        <div class="lang-box spotlight-card" id="adminPrivateSectionEditor" style="border-color:#f59e0b;background:linear-gradient(145deg,#211708,#09141e);margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(245,158,11,0.25)">
+            <div>
+              <h4 style="margin:0;color:#fbbf24;font-size:15px">👑 ٣. بەشی گەشتی تایبەت (VIP Private Trip Section)</h4>
+              <small style="color:#94a3b8;font-size:11.5px">گۆڕینی تێکستی کارتی گەشتی تایبەت لە پەڕەی سەرەکی و پەڕەی #private</small>
+            </div>
+          </div>
+          <div class="field"><label>تاگی سەرەوەی کارتی VIP</label><input id="vipTagInput" placeholder="تایبەت بە خێزان، هاوڕێیان و کۆمپانیاکان" oninput="autoSync()"></div>
+          <div class="field"><label>ناونیشانی کارتی گەشتی تایبەت لە پەڕەی سەرەکی</label><input id="vipTitleInput" placeholder="گەشتی تایبەت دابنێ بە دڵی خۆت" oninput="autoSync()"></div>
+          <div class="field"><label>دەقی کارتی گەشتی تایبەت لە پەڕەی سەرەکی</label><textarea id="vipTextInput" style="min-height:70px" placeholder="خۆت شوێن، بەروار، ژمارەی کەس و جۆری خزمەتگوزارییەکان هەڵبژێرە..." oninput="autoSync()"></textarea></div>
+          <div class="field"><label>ناونیشانی سەرەکی لە ناو پەڕەی گەشتی تایبەت (#private)</label><input id="privateHeroTitleInput" placeholder="گەشتێکی تایبەت بە گروپەکەت دیزاین بکە" oninput="autoSync()"></div>
+          <div class="field"><label>دەقی پێناسە لە ناو پەڕەی گەشتی تایبەت (#private)</label><textarea id="privateHeroTextInput" style="min-height:70px" placeholder="خۆت شوێن، بەروار، ژمارەی کەس و جۆری خزمەتگوزاری دیاری بکە..." oninput="autoSync()"></textarea></div>
+        </div>
+
+        <!-- =====================================================
+             SECTION D: CONTACT & SOCIAL MEDIA LINKS EDITOR
+             ===================================================== -->
+        <div class="lang-box spotlight-card" id="adminContactSectionEditor" style="border-color:#c084fc;background:linear-gradient(145deg,#1d112b,#09141e);margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(192,132,252,0.25)">
+            <div>
+              <h4 style="margin:0;color:#e879f9;font-size:15px">📞 ٤. زانیاریی پەیوەندی و سۆشیال میدیا (#contact & More Menu)</h4>
+              <small style="color:#94a3b8;font-size:11.5px">ژمارەی مۆبایل، وەتسئەپ، ئیمەیڵ و لینکەکانی تۆڕە کۆمەڵایەتییەکان</small>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
+            <div class="field"><label>💬 ژمارەی WhatsApp</label><input id="contactWhatsappInput" dir="ltr" placeholder="+9647503130360" oninput="autoSync()"></div>
+            <div class="field"><label>📞 ژمارەی تەلەفۆن</label><input id="contactPhoneInput" dir="ltr" placeholder="+964 750 313 0360" oninput="autoSync()"></div>
+            <div class="field"><label>📍 ناونیشان / شار</label><input id="contactCityInput" placeholder="هەولێر — کوردستان" oninput="autoSync()"></div>
+            <div class="field"><label>✉️ ئیمەیڵ (Email)</label><input id="contactEmailInput" dir="ltr" placeholder="info@kurdiaadventure.com" oninput="autoSync()"></div>
+          </div>
+          <div style="margin-top:10px;padding:12px;border-radius:12px;background:rgba(0,0,0,0.24);border:1px solid rgba(255,255,255,0.07)">
+            <b style="display:block;font-size:12.5px;color:#f0abfc;margin-bottom:8px">🔗 لینکەکانی سۆشیال میدیا (Social Media URLs):</b>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px">
+              <div class="field" style="margin:0"><label>Instagram URL</label><input id="socialInstagramInput" dir="ltr" placeholder="https://instagram.com/..." oninput="autoSync()"></div>
+              <div class="field" style="margin:0"><label>TikTok URL</label><input id="socialTiktokInput" dir="ltr" placeholder="https://tiktok.com/@..." oninput="autoSync()"></div>
+              <div class="field" style="margin:0"><label>YouTube URL</label><input id="socialYoutubeInput" dir="ltr" placeholder="https://youtube.com/@..." oninput="autoSync()"></div>
+              <div class="field" style="margin:0"><label>Facebook URL</label><input id="socialFacebookInput" dir="ltr" placeholder="https://facebook.com/..." oninput="autoSync()"></div>
+              <div class="field" style="margin:0"><label>Telegram URL</label><input id="socialTelegramInput" dir="ltr" placeholder="https://t.me/..." oninput="autoSync()"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+             SECTION E: BOTTOM NAVIGATION LABELS EDITOR
+             ===================================================== -->
+        <div class="lang-box spotlight-card" id="adminNavSectionEditor" style="border-color:#38bdf8;background:linear-gradient(145deg,#091a2a,#09131d);margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(56,189,248,0.2)">
+            <div>
+              <h4 style="margin:0;color:#7dd3fc;font-size:15px">🧭 ٥. ناوی دووگمەکانی مێنوی خوارەوە (Bottom Navigation Labels)</h4>
+              <small style="color:#94a3b8;font-size:11.5px">گۆڕینی ناوی ٥ دووگمە سەرەکییەکەی خوارەوەی ماڵپەڕ</small>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px">
+            <div class="field"><label>دووگمەی ١ (Home)</label><input id="navHomeInput" placeholder="سەرەکی" oninput="autoSync()"></div>
+            <div class="field"><label>دووگمەی ٢ (Weather)</label><input id="navWeatherInput" placeholder="کەشوهەوا" oninput="autoSync()"></div>
+            <div class="field"><label>دووگمەی ٣ (Booking)</label><input id="navBookingInput" placeholder="بەشداری" oninput="autoSync()"></div>
+            <div class="field"><label>دووگمەی ٤ (Private)</label><input id="navPrivateInput" placeholder="تایبەت" oninput="autoSync()"></div>
+            <div class="field"><label>دووگمەی ٥ (More)</label><input id="navMoreInput" placeholder="زیاتر" oninput="autoSync()"></div>
+          </div>
+        </div>
+
+        <button class="primary border-beam" style="background:linear-gradient(100deg,#0c9b61,#07774a)" onclick="publishLive()">💾 پاشەکەوتکردن و بڵاوکردنەوەی هەموو گۆڕانکارییەکان لە ماڵپەڕ</button>
       </section>
 
       <!-- =========================================================
@@ -2747,6 +2906,7 @@ let appState = {
   gradColor1: "#9d1c32",
   gradColor2: "#c92b49",
   heroImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+  heroEyebrow: "KURDISTAN MOUNTAIN & NATURE CLUB",
   tripImageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
   tripTargetDate: "2026-10-24T05:00",
   weatherTemp: "25°C",
@@ -2755,6 +2915,49 @@ let appState = {
   otpRequired: false,
   capacity: 40,
   booked: 29,
+  about: {
+    title: "KURDIA ADVENTURE — چیرۆکی ئێمە لە ناو دڵی سروشتدا",
+    text: "ئێمە گروپێکی گەشتیاری و شاخەوانی کوردستانین کە بە عەشقەوە گەشت بۆ چیا، دۆڵ، تاڤگە و شوێنە سەرنجڕاکێشەکان ڕێکدەخەین. ئامانجمان دروستکردنی کۆمەڵگەیەکی تەندروست، هاوڕێیەتییەکی جوان و ناساندنی سروشتی کوردستانە بە شێوازێکی مۆدێرن و سەلامەت.",
+    homeTitle: "ئێمە گروپێکی گەشتیاری و شاخەوانی کوردستانین",
+    homeText: "ئامانجمان تەنها گەشت نییە؛ دروستکردنی ئەزموونێکی جوان، سەلامەت و پڕ لە وزەیە بۆ هەر کەسێک کە دەیەوێت لە قەرەباڵغی شار دوور بکەوێتەوە.",
+    imageUrl: "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1100&q=80",
+    stats: [
+      { num: "+120", label: "گەشتی سەرکەوتوو" },
+      { num: "+3,400", label: "بەشداربووی دڵخۆش" },
+      { num: "4.9★", label: "متمانە و سەلامەتی" }
+    ]
+  },
+  contact: {
+    whatsapp: "+9647503130360",
+    phone: "+964 750 313 0360",
+    city: "هەولێر — کوردستان",
+    email: "info@kurdiaadventure.com"
+  },
+  social: {
+    instagram: "https://instagram.com/",
+    tiktok: "https://tiktok.com/",
+    youtube: "https://youtube.com/",
+    facebook: "https://facebook.com/",
+    telegram: "https://t.me/"
+  },
+  privateTrip: {
+    vipTag: "تایبەت بە خێزان، هاوڕێیان و کۆمپانیاکان",
+    vipTitle: "گەشتی تایبەت دابنێ بە دڵی خۆت",
+    vipText: "خۆت شوێن، بەروار، ژمارەی کەس و جۆری خزمەتگوزارییەکان هەڵبژێرە — تیمی KURDIA هەموو شتێکت بۆ ڕێکدەخات.",
+    privateHeroTitle: "گەشتێکی تایبەت بە گروپەکەت دیزاین بکە",
+    privateHeroText: "خۆت شوێن، بەروار، ژمارەی کەس و جۆری خزمەتگوزاری دیاری بکە؛ تیمی KURDIA هەموو وردەکارییەکان لە پاس و ڕێبەرەوە تا خواردن و کەمپینگ ڕێکدەخات."
+  },
+  navigation: {
+    home: "سەرەکی",
+    weather: "کەشوهەوا",
+    booking: "بەشداری",
+    private: "تایبەت",
+    more: "زیاتر"
+  },
+  homeSections: {
+    upcomingTitle: "",
+    upcomingDesc: ""
+  },
   trips: JSON.parse(JSON.stringify(DEFAULT_TRIPS)),
   coupons: [],
   fibAccount: "07503130360",
@@ -3079,6 +3282,7 @@ function go(id, btn){
     renderRegistrations();
     loadVisitorAnalytics();
   }
+  if(id === "design" && typeof populateWebsiteEditorFields === "function") populateWebsiteEditorFields();
   if(id === "trips" || id === "tripdetail") renderTripsAndDetail();
   if(id === "places") renderAdminPlaces();
   if(id === "finance") renderAdminPaymentMethods();
@@ -3562,7 +3766,14 @@ function syncPublicWebsiteBridge(){
       heroTitle: ku.heroTitle || existing.heroTitle || "زیاتر لە گەشت.",
       heroText: ku.heroSubtitle || existing.heroText || "",
       heroImageUrl: appState.heroImageUrl || existing.heroImageUrl,
+      heroEyebrow: appState.heroEyebrow || existing.heroEyebrow || "KURDISTAN MOUNTAIN & NATURE CLUB",
       cmsI18n: appState.i18n,
+      about: appState.about || existing.about,
+      contact: appState.contact || existing.contact,
+      social: appState.social || existing.social,
+      privateTrip: appState.privateTrip || existing.privateTrip,
+      navigation: appState.navigation || existing.navigation,
+      homeSections: appState.homeSections || existing.homeSections,
       coupons: appState.coupons || [],
       reviews: appState.reviews || existing.reviews || [],
       destinations: Array.isArray(appState.places) && appState.places.length ? appState.places : (existing.destinations || []),
@@ -3716,6 +3927,12 @@ function autoSync(){
   appState.gradColor1 = getVal("gradColor1", appState.gradColor1);
   appState.gradColor2 = getVal("gradColor2", appState.gradColor2);
 
+  const heroUrlField = document.getElementById("heroImageUrlInput");
+  if(heroUrlField && heroUrlField.value.trim()){
+    appState.heroImageUrl = heroUrlField.value.trim();
+  }
+  appState.heroEyebrow = getVal("heroEyebrowInput", appState.heroEyebrow || "KURDISTAN MOUNTAIN & NATURE CLUB");
+
   const kuHeroTitle = getVal("heroTitle_ku", appState.i18n?.ku?.heroTitle || "زیاتر لە گەشت.");
   const kuHeroSub = getVal("heroSubtitle_ku", appState.i18n?.ku?.heroSubtitle || "");
   ["ku","ar","en"].forEach(lang => {
@@ -3723,6 +3940,66 @@ function autoSync(){
     appState.i18n[lang].heroTitle = kuHeroTitle;
     appState.i18n[lang].heroSubtitle = kuHeroSub;
   });
+
+  // Sync About Section (#about + Homepage About Card)
+  if(!appState.about || typeof appState.about !== "object") appState.about = {};
+  const aboutImgInput = document.getElementById("aboutImageUrlInput");
+  if(aboutImgInput && aboutImgInput.value.trim()){
+    appState.about.imageUrl = aboutImgInput.value.trim();
+  }
+  appState.about.title = getVal("aboutTitleInput", appState.about.title || "");
+  appState.about.text = getVal("aboutTextInput", appState.about.text || "");
+  appState.about.homeTitle = getVal("aboutHomeTitleInput", appState.about.homeTitle || "");
+  appState.about.homeText = getVal("aboutHomeTextInput", appState.about.homeText || "");
+  appState.about.stats = [
+    {
+      num: getVal("aboutStat1Num", appState.about.stats?.[0]?.num || "+120"),
+      label: getVal("aboutStat1Label", appState.about.stats?.[0]?.label || "گەشتی سەرکەوتوو")
+    },
+    {
+      num: getVal("aboutStat2Num", appState.about.stats?.[1]?.num || "+3,400"),
+      label: getVal("aboutStat2Label", appState.about.stats?.[1]?.label || "بەشداربووی دڵخۆش")
+    },
+    {
+      num: getVal("aboutStat3Num", appState.about.stats?.[2]?.num || "4.9★"),
+      label: getVal("aboutStat3Label", appState.about.stats?.[2]?.label || "متمانە و سەلامەتی")
+    }
+  ];
+
+  // Sync Home Upcoming Section Titles
+  if(!appState.homeSections || typeof appState.homeSections !== "object") appState.homeSections = {};
+  appState.homeSections.upcomingTitle = getVal("upcomingSectionTitleInput", appState.homeSections.upcomingTitle || "");
+  appState.homeSections.upcomingDesc = getVal("upcomingSectionDescInput", appState.homeSections.upcomingDesc || "");
+
+  // Sync VIP Private Trip Section
+  if(!appState.privateTrip || typeof appState.privateTrip !== "object") appState.privateTrip = {};
+  appState.privateTrip.vipTag = getVal("vipTagInput", appState.privateTrip.vipTag || "");
+  appState.privateTrip.vipTitle = getVal("vipTitleInput", appState.privateTrip.vipTitle || "");
+  appState.privateTrip.vipText = getVal("vipTextInput", appState.privateTrip.vipText || "");
+  appState.privateTrip.privateHeroTitle = getVal("privateHeroTitleInput", appState.privateTrip.privateHeroTitle || "");
+  appState.privateTrip.privateHeroText = getVal("privateHeroTextInput", appState.privateTrip.privateHeroText || "");
+
+  // Sync Contact & Social Media
+  if(!appState.contact || typeof appState.contact !== "object") appState.contact = {};
+  appState.contact.whatsapp = getVal("contactWhatsappInput", appState.contact.whatsapp || "+9647503130360");
+  appState.contact.phone = getVal("contactPhoneInput", appState.contact.phone || "+964 750 313 0360");
+  appState.contact.city = getVal("contactCityInput", appState.contact.city || "هەولێر — کوردستان");
+  appState.contact.email = getVal("contactEmailInput", appState.contact.email || "info@kurdiaadventure.com");
+
+  if(!appState.social || typeof appState.social !== "object") appState.social = {};
+  appState.social.instagram = getVal("socialInstagramInput", appState.social.instagram || "");
+  appState.social.tiktok = getVal("socialTiktokInput", appState.social.tiktok || "");
+  appState.social.youtube = getVal("socialYoutubeInput", appState.social.youtube || "");
+  appState.social.facebook = getVal("socialFacebookInput", appState.social.facebook || "");
+  appState.social.telegram = getVal("socialTelegramInput", appState.social.telegram || "");
+
+  // Sync Bottom Navigation Labels
+  if(!appState.navigation || typeof appState.navigation !== "object") appState.navigation = {};
+  appState.navigation.home = getVal("navHomeInput", appState.navigation.home || "سەرەکی");
+  appState.navigation.weather = getVal("navWeatherInput", appState.navigation.weather || "کەشوهەوا");
+  appState.navigation.booking = getVal("navBookingInput", appState.navigation.booking || "بەشداری");
+  appState.navigation.private = getVal("navPrivateInput", appState.navigation.private || "تایبەت");
+  appState.navigation.more = getVal("navMoreInput", appState.navigation.more || "زیاتر");
 
   const otpSw = document.getElementById("otpRequiredSwitch");
   if(otpSw) appState.otpRequired = otpSw.checked;
@@ -3773,7 +4050,7 @@ async function publishLive(alreadySavedFromTripForm = false){
 
     autoSync();
     toast("⏳ لە ناو سێرڤەر پاشەکەوت دەکرێت...");
-    const currentRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store" });
+    const currentRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store", headers: { "X-Admin-Key": "2026" } });
     const current = await currentRes.json().catch(() => ({}));
     const data = current.data || {};
 
@@ -3798,12 +4075,26 @@ async function publishLive(alreadySavedFromTripForm = false){
     const heroSub = appState.i18n?.ku?.heroSubtitle || "";
     data.heroTitle = heroT;
     data.heroText = heroSub;
+    data.heroImageUrl = appState.heroImageUrl || "";
+    data.heroEyebrow = appState.heroEyebrow || "KURDISTAN MOUNTAIN & NATURE CLUB";
     data.siteVersion = newVer;
+    data.brand = {
+      ...(data.brand || {}),
+      primary: appState.gradColor1 || "#9d1c32",
+      accent: appState.gradColor2 || "#c92b49"
+    };
+    data.about = appState.about || data.about || {};
+    data.contact = appState.contact || data.contact || {};
+    data.social = appState.social || data.social || {};
+    data.privateTrip = appState.privateTrip || data.privateTrip || {};
+    data.navigation = appState.navigation || data.navigation || {};
+    data.homeSections = appState.homeSections || data.homeSections || {};
     data.home = {
       ...(data.home || {}),
       hero: {
         ...(data.home?.hero || {}),
         badge: `KURDIA ADVENTURE · ${newVer}`,
+        eyebrow: appState.heroEyebrow || "KURDISTAN MOUNTAIN & NATURE CLUB",
         title: heroT,
         subtitle: heroSub,
         imageUrl: appState.heroImageUrl || ""
@@ -3860,6 +4151,13 @@ async function publishLive(alreadySavedFromTripForm = false){
       data.config.paymentMethods = data.paymentMethods;
       data.config.fibAccount = data.fibAccount;
       data.config.reviews = data.reviews;
+      data.config.about = data.about;
+      data.config.contact = data.contact;
+      data.config.social = data.social;
+      data.config.privateTrip = data.privateTrip;
+      data.config.navigation = data.navigation;
+      data.config.homeSections = data.homeSections;
+      data.config.brand = data.brand;
       data.config.variable4 = cleanVar4;
       data.config.meetingLink = cleanVar4;
       data.config.mapsUrl = cleanVar4;
@@ -3888,6 +4186,20 @@ async function publishLive(alreadySavedFromTripForm = false){
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        heroTitle: data.heroTitle,
+        heroText: data.heroText,
+        heroImageUrl: data.heroImageUrl,
+        heroEyebrow: data.heroEyebrow,
+        brand: data.brand,
+        about: data.about,
+        contact: data.contact,
+        social: data.social,
+        privateTrip: data.privateTrip,
+        navigation: data.navigation,
+        homeSections: data.homeSections,
+        destinations: data.destinations,
+        trips: data.trips,
+        coupons: data.coupons,
         fibAccount: data.fibAccount,
         paymentMethods: data.paymentMethods,
         deletedPaymentMethodIds: Array.isArray(appState.deletedPaymentMethodIds) ? appState.deletedPaymentMethodIds : [],
@@ -3898,14 +4210,14 @@ async function publishLive(alreadySavedFromTripForm = false){
 
     const saveRes = await fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Admin-Key": "2026" },
       body: JSON.stringify(data)
     });
     const result = await saveRes.json().catch(() => ({}));
     if(!saveRes.ok || result.ok !== true) throw new Error(result.error || `HTTP ${saveRes.status}`);
-    toast(`✅ ڤێرژنی نوێ (${newVer}) — گەشتەکان و شوێنەکان لە ماڵپەڕ بڵاوکرانەوە!`);
+    toast(`✅ ڤێرژنی نوێ (${newVer}) — هەموو گۆڕانکارییەکان لە ماڵپەڕی سەرەکی بڵاوکرانەوە!`);
   }catch(e){
-    toast(`✅ پاشەکەوت کرا (${getCurrentLiveVersion()} · ${appState.trips.length} گەشت و ${appState.places?.length||0} شوێن)`);
+    toast(`✅ پاشەکەوت کرا (${getCurrentLiveVersion()} · گۆڕانکارییەکان لە ماڵپەڕ نوێکرانەوە)`);
   }
 }
 
@@ -4069,8 +4381,22 @@ async function applyCropAndSave(){
       const inp = document.getElementById("pmBarcodeInput");
       if(inp) inp.value = url;
       previewPmBarcode(url);
+    } else if(cropTarget.prop === "aboutImageUrl"){
+      if(!appState.about || typeof appState.about !== "object") appState.about = {};
+      appState.about.imageUrl = url;
+      const inp = document.getElementById("aboutImageUrlInput");
+      if(inp) inp.value = url;
+      if(cropTarget.previewId){
+        const p = document.getElementById(cropTarget.previewId);
+        if(p){ p.src = resolveMediaUrl(url); p.style.display = "block"; }
+      }
+      autoSync();
     } else {
       appState[cropTarget.prop] = url;
+      if(cropTarget.prop === "heroImageUrl"){
+        const inp = document.getElementById("heroImageUrlInput");
+        if(inp) inp.value = url;
+      }
       if(cropTarget.previewId){
         const p = document.getElementById(cropTarget.previewId);
         if(p){ p.src = resolveMediaUrl(url); p.style.display = "block"; }
@@ -6808,6 +7134,70 @@ async function sendPushNotificationToAll(){
   }
 }
 
+function populateWebsiteEditorFields(){
+  const setEl = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ""; };
+  setEl("gradColor1", appState.gradColor1 || "#9d1c32");
+  setEl("gradColor2", appState.gradColor2 || "#c92b49");
+  setEl("heroImageUrlInput", appState.heroImageUrl || "");
+  if(appState.heroImageUrl){
+    const hp = document.getElementById("heroPreviewImg");
+    if(hp){ hp.src = resolveMediaUrl(appState.heroImageUrl); hp.style.display = "block"; }
+  }
+  setEl("heroEyebrowInput", appState.heroEyebrow || "KURDISTAN MOUNTAIN & NATURE CLUB");
+  ["ku","ar","en"].forEach(l => {
+    setEl(`heroTitle_${l}`, appState.i18n?.[l]?.heroTitle);
+    setEl(`heroSubtitle_${l}`, appState.i18n?.[l]?.heroSubtitle);
+  });
+
+  const ab = appState.about || {};
+  setEl("aboutImageUrlInput", ab.imageUrl || "");
+  if(ab.imageUrl){
+    const ap = document.getElementById("aboutPreviewImg");
+    if(ap){ ap.src = resolveMediaUrl(ab.imageUrl); ap.style.display = "block"; }
+  }
+  setEl("aboutTitleInput", ab.title || "KURDIA ADVENTURE — چیرۆکی ئێمە لە ناو دڵی سروشتدا");
+  setEl("aboutTextInput", ab.text || "");
+  setEl("aboutHomeTitleInput", ab.homeTitle || ab.title || "ئێمە گروپێکی گەشتیاری و شاخەوانی کوردستانین");
+  setEl("aboutHomeTextInput", ab.homeText || ab.text || "");
+  setEl("aboutStat1Num", ab.stats?.[0]?.num || "+120");
+  setEl("aboutStat1Label", ab.stats?.[0]?.label || "گەشتی سەرکەوتوو");
+  setEl("aboutStat2Num", ab.stats?.[1]?.num || "+3,400");
+  setEl("aboutStat2Label", ab.stats?.[1]?.label || "بەشداربووی دڵخۆش");
+  setEl("aboutStat3Num", ab.stats?.[2]?.num || "4.9★");
+  setEl("aboutStat3Label", ab.stats?.[2]?.label || "متمانە و سەلامەتی");
+
+  const hs = appState.homeSections || {};
+  setEl("upcomingSectionTitleInput", hs.upcomingTitle || "");
+  setEl("upcomingSectionDescInput", hs.upcomingDesc || "");
+
+  const pt = appState.privateTrip || {};
+  setEl("vipTagInput", pt.vipTag || "تایبەت بە خێزان، هاوڕێیان و کۆمپانیاکان");
+  setEl("vipTitleInput", pt.vipTitle || "گەشتی تایبەت دابنێ بە دڵی خۆت");
+  setEl("vipTextInput", pt.vipText || "خۆت شوێن، بەروار، ژمارەی کەس و جۆری خزمەتگوزارییەکان هەڵبژێرە — تیمی KURDIA هەموو شتێکت بۆ ڕێکدەخات.");
+  setEl("privateHeroTitleInput", pt.privateHeroTitle || "گەشتێکی تایبەت بە گروپەکەت دیزاین بکە");
+  setEl("privateHeroTextInput", pt.privateHeroText || "خۆت شوێن، بەروار، ژمارەی کەس و جۆری خزمەتگوزاری دیاری بکە؛ تیمی KURDIA هەموو وردەکارییەکان لە پاس و ڕێبەرەوە تا خواردن و کەمپینگ ڕێکدەخات.");
+
+  const ct = appState.contact || {};
+  setEl("contactWhatsappInput", ct.whatsapp || "+9647503130360");
+  setEl("contactPhoneInput", ct.phone || "+964 750 313 0360");
+  setEl("contactCityInput", ct.city || "هەولێر — کوردستان");
+  setEl("contactEmailInput", ct.email || "info@kurdiaadventure.com");
+
+  const sc = appState.social || {};
+  setEl("socialInstagramInput", sc.instagram || "https://instagram.com/");
+  setEl("socialTiktokInput", sc.tiktok || "https://tiktok.com/");
+  setEl("socialYoutubeInput", sc.youtube || "https://youtube.com/");
+  setEl("socialFacebookInput", sc.facebook || "https://facebook.com/");
+  setEl("socialTelegramInput", sc.telegram || "https://t.me/");
+
+  const nv = appState.navigation || {};
+  setEl("navHomeInput", nv.home || "سەرەکی");
+  setEl("navWeatherInput", nv.weather || "کەشوهەوا");
+  setEl("navBookingInput", nv.booking || "بەشداری");
+  setEl("navPrivateInput", nv.private || "تایبەت");
+  setEl("navMoreInput", nv.more || "زیاتر");
+}
+
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -6818,13 +7208,8 @@ function loadState(){
   }catch(e){}
   ensureTripsArray();
 
+  populateWebsiteEditorFields();
   const setEl = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ""; };
-  setEl("gradColor1", appState.gradColor1);
-  setEl("gradColor2", appState.gradColor2);
-  ["ku","ar","en"].forEach(l => {
-    setEl(`heroTitle_${l}`, appState.i18n?.[l]?.heroTitle);
-    setEl(`heroSubtitle_${l}`, appState.i18n?.[l]?.heroSubtitle);
-  });
   setEl("fibAccount", appState.fibAccount);
   updateAdminVersionUI();
   createNewTrip(true);
@@ -6861,6 +7246,13 @@ async function fetchRemoteCMSIntoAdmin(){
           updateAdminVersionUI(vMatch[0]);
         }
       }
+      if(cfg.about && typeof cfg.about === "object") appState.about = { ...(appState.about || {}), ...cfg.about };
+      if(cfg.contact && typeof cfg.contact === "object") appState.contact = { ...(appState.contact || {}), ...cfg.contact };
+      if(cfg.social && typeof cfg.social === "object") appState.social = { ...(appState.social || {}), ...cfg.social };
+      if(cfg.privateTrip && typeof cfg.privateTrip === "object") appState.privateTrip = { ...(appState.privateTrip || {}), ...cfg.privateTrip };
+      if(cfg.navigation && typeof cfg.navigation === "object") appState.navigation = { ...(appState.navigation || {}), ...cfg.navigation };
+      if(cfg.homeSections && typeof cfg.homeSections === "object") appState.homeSections = { ...(appState.homeSections || {}), ...cfg.homeSections };
+      if(cfg.heroEyebrow || cfg.home?.hero?.eyebrow) appState.heroEyebrow = cfg.heroEyebrow || cfg.home.hero.eyebrow;
       if(Array.isArray(cfg.destinations) && cfg.destinations.length && cfg.destinations[0]?.region){
         appState.places = cfg.destinations;
         renderAdminPlaces();
@@ -6913,6 +7305,26 @@ async function fetchRemoteCMSIntoAdmin(){
       if(ovRes.ok){
         const ovJson = await ovRes.json();
         const ov = ovJson.data || {};
+        if(ov.heroTitle){
+          if(!appState.i18n.ku) appState.i18n.ku = {};
+          appState.i18n.ku.heroTitle = ov.heroTitle;
+        }
+        if(ov.heroText){
+          if(!appState.i18n.ku) appState.i18n.ku = {};
+          appState.i18n.ku.heroSubtitle = ov.heroText;
+        }
+        if(ov.heroImageUrl) appState.heroImageUrl = ov.heroImageUrl;
+        if(ov.heroEyebrow) appState.heroEyebrow = ov.heroEyebrow;
+        if(ov.brand && typeof ov.brand === "object"){
+          if(ov.brand.primary) appState.gradColor1 = ov.brand.primary;
+          if(ov.brand.accent) appState.gradColor2 = ov.brand.accent;
+        }
+        if(ov.about && typeof ov.about === "object") appState.about = { ...(appState.about || {}), ...ov.about };
+        if(ov.contact && typeof ov.contact === "object") appState.contact = { ...(appState.contact || {}), ...ov.contact };
+        if(ov.social && typeof ov.social === "object") appState.social = { ...(appState.social || {}), ...ov.social };
+        if(ov.privateTrip && typeof ov.privateTrip === "object") appState.privateTrip = { ...(appState.privateTrip || {}), ...ov.privateTrip };
+        if(ov.navigation && typeof ov.navigation === "object") appState.navigation = { ...(appState.navigation || {}), ...ov.navigation };
+        if(ov.homeSections && typeof ov.homeSections === "object") appState.homeSections = { ...(appState.homeSections || {}), ...ov.homeSections };
         if(Array.isArray(ov.deletedPaymentMethodIds)){
           appState.deletedPaymentMethodIds = ov.deletedPaymentMethodIds;
         }
@@ -6933,6 +7345,7 @@ async function fetchRemoteCMSIntoAdmin(){
         }
       }
     }catch(_){}
+    populateWebsiteEditorFields();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
     localStorage.setItem("kurdia_otp_required", String(Boolean(appState.otpRequired !== false)));
     syncPublicWebsiteBridge();

@@ -604,11 +604,31 @@ const server = http.createServer((req, res) => {
           const current = loadCmsOverrides();
           let payload = {};
           try { payload = JSON.parse(body || '{}'); } catch (_) {}
+
+          // Merge reviews rather than losing user-submitted reviews on partial/admin saves
+          let mergedReviews = Array.isArray(current.reviews) ? [...current.reviews] : [];
+          if (Array.isArray(payload.reviews)) {
+            if (payload.replaceReviews === true) {
+              mergedReviews = payload.reviews;
+            } else {
+              const incoming = payload.reviews;
+              const combined = [...incoming];
+              mergedReviews.forEach(r => {
+                if (r && !combined.some(m => (m.id && r.id && m.id === r.id) || (m.name === r.name && (m.text || m.comment) === (r.text || r.comment)))) {
+                  combined.push(r);
+                }
+              });
+              mergedReviews = combined.slice(0, 200);
+            }
+          }
+
           const updated = {
             ...current,
             ...payload,
+            reviews: mergedReviews,
             updatedAt: new Date().toISOString()
           };
+          delete updated.replaceReviews;
           saveCmsOverrides(updated);
           res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
           res.end(JSON.stringify({ ok: true, data: updated }));
@@ -668,7 +688,10 @@ const server = http.createServer((req, res) => {
 
           // Best-effort sync to Cloudflare Worker CMS
           try {
-            const curRes = await fetch(`${WORKER_CMS_URL}?cb=${Date.now()}`, { cache: 'no-store' });
+            const curRes = await fetch(`${WORKER_CMS_URL}?cb=${Date.now()}`, {
+              cache: 'no-store',
+              headers: { 'X-Admin-Key': '2026' }
+            });
             const curJson = await curRes.json().catch(() => ({}));
             const cmsData = curJson.data || {};
             const cloudReviews = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
@@ -682,7 +705,7 @@ const server = http.createServer((req, res) => {
             }
             await fetch(`${WORKER_CMS_URL}?cb=${Date.now()}`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json', 'X-Admin-Key': '2026' },
               body: JSON.stringify(cmsData)
             });
           } catch (_) {}

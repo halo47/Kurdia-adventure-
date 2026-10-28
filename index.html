@@ -2161,7 +2161,7 @@ main,section,.section,.page-section{background-color:transparent!important}
     </div>
   </div>
   <div class="review-write glass" style="padding:20px;border-radius:22px">
-    <form class="form" id="reviewForm" onsubmit="submitReview(event)">
+    <form class="form" id="reviewForm" novalidate onsubmit="return submitReview(event)">
       <div class="review-rating" aria-label="هەڵسەنگاندن" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <span style="font-weight:800;color:#fff">⭐ پلەی هەڵسەنگاندنەکەت:</span>
@@ -2173,14 +2173,14 @@ main,section,.section,.page-section{background-color:transparent!important}
         <input type="hidden" name="rating" id="reviewRating" value="5">
       </div>
       <div class="grid-review-fields">
-        <input class="input" id="reviewNameInput" name="name" placeholder="ناوی تەواوی تۆ *" required>
+        <input class="input" id="reviewNameInput" name="name" placeholder="ناوی تەواوی تۆ *">
         <input class="input" id="reviewCityInput" name="city" placeholder="شار (بۆ نموونە: هەولێر، سلێمانی، دهۆک...)">
       </div>
-      <textarea class="textarea" id="reviewCommentInput" name="comment" rows="3" placeholder="بیروڕا و فیدباکی خۆت بنووسە لەسەر گەشتەکانی KURDIA... *" required></textarea>
+      <textarea class="textarea" id="reviewCommentInput" name="comment" rows="3" placeholder="بیروڕا و فیدباکی خۆت بنووسە لەسەر گەشتەکانی KURDIA... *"></textarea>
       <div id="reviewSuccessBanner" style="display:none;padding:12px 16px;border-radius:14px;background:rgba(55,201,135,0.14);border:1px solid rgba(55,201,135,0.4);color:#6bf0b3;font-size:13px;font-weight:700">
         ✓ سوپاس! فیدباک و هەڵسەنگاندنەکەت بە سەرکەوتوویی بڵاوکرایەوە.
       </div>
-      <button class="btn red" type="submit" id="reviewSubmitBtn">✨ ناردنی بیروڕا و فیدباک</button>
+      <button class="btn red" type="submit" id="reviewSubmitBtn" onclick="return submitReview(event)">✨ ناردنی بیروڕا و فیدباک</button>
     </form>
   </div>
   <div id="reviewsListPublic" class="reviews-public-grid" style="margin-top:16px"></div>
@@ -2727,7 +2727,54 @@ window.setLanguage=function(lang){
   }catch(e){}
 };
 
+function mergeReviewLists(...lists){
+  const merged = [];
+  const seen = new Set();
+  for(const list of lists){
+    if(!Array.isArray(list)) continue;
+    for(const r of list){
+      if(!r || typeof r !== 'object') continue;
+      const name = String(r.name || '').trim();
+      const text = String(r.text ?? r.comment ?? '').trim();
+      if(!name || !text) continue;
+      const key = (r.id ? String(r.id) + '|' : '') + (name + '::' + text).toLowerCase();
+      const textKey = (name + '::' + text).toLowerCase();
+      if(seen.has(key) || seen.has(textKey)) continue;
+      seen.add(key);
+      seen.add(textKey);
+      merged.push({
+        ...r,
+        id: r.id || ('rev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)),
+        name,
+        city: String(r.city || 'کوردستان').trim() || 'کوردستان',
+        rating: Math.min(5, Math.max(1, Number(r.rating || 5))),
+        text,
+        comment: text
+      });
+    }
+  }
+  return merged;
+}
+
+function syncReviewIntoLocalAdminState(newReview){
+  try{
+    const raw = localStorage.getItem('kurdia_admin_multitrip_v6');
+    if(!raw) return;
+    const adminState = JSON.parse(raw);
+    if(!adminState || typeof adminState !== 'object') return;
+    adminState.reviews = mergeReviewLists([newReview], adminState.reviews || []);
+    localStorage.setItem('kurdia_admin_multitrip_v6', JSON.stringify(adminState));
+  }catch(_){}
+}
+
 async function loadRemote(){
+  const prevReviews = Array.isArray(data.reviews) ? [...data.reviews] : [];
+  let localRevs = [];
+  try{
+    localRevs = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
+    if(!Array.isArray(localRevs)) localRevs = [];
+  }catch(_){ localRevs = []; }
+
   try{
     updateSiteVersionUI();
     const r=await fetch(WORKER+'/api/site/config?cb='+Date.now(),{cache:'no-store'});
@@ -2744,6 +2791,7 @@ async function loadRemote(){
         updateSiteVersionUI();
       }
       data=normalizeRemoteCMS(config);
+      data.reviews = mergeReviewLists(localRevs, prevReviews, data.reviews);
       normalizePublicData();
       localStorage.setItem('kurdia_premium_data',JSON.stringify(data));
     }
@@ -2751,10 +2799,56 @@ async function loadRemote(){
     console.warn('KURDIA CMS load failed:',e);
   }
   try{
-    const ovRes = await fetch('/api/cms-overrides?cb=' + Date.now(), { cache: 'no-store' });
-    if(ovRes.ok){
+    const [ovRes, revRes] = await Promise.all([
+      fetch('/api/cms-overrides?cb=' + Date.now(), { cache: 'no-store' }).catch(() => null),
+      fetch('/api/reviews?cb=' + Date.now(), { cache: 'no-store' }).catch(() => null)
+    ]);
+    let apiReviews = [];
+    if(revRes && revRes.ok){
+      const revJson = await revRes.json().catch(() => ({}));
+      if(Array.isArray(revJson.reviews)) apiReviews = revJson.reviews;
+    }
+    if(ovRes && ovRes.ok){
       const ovJson = await ovRes.json();
       const ov = ovJson.data || {};
+      if(ov.heroTitle) data.heroTitle = ov.heroTitle;
+      if(ov.heroText !== undefined && ov.heroText !== '') data.heroText = ov.heroText;
+      if(ov.heroImageUrl) data.heroImageUrl = ov.heroImageUrl;
+      if(ov.heroEyebrow) data.heroEyebrow = ov.heroEyebrow;
+      if(ov.brand && typeof ov.brand === 'object'){
+        data.brand = { ...(data.brand || {}), ...ov.brand };
+      }
+      if(ov.about && typeof ov.about === 'object'){
+        data.about = { ...(data.about || {}), ...ov.about };
+      }
+      if(ov.contact && typeof ov.contact === 'object'){
+        data.contact = { ...(data.contact || {}), ...ov.contact };
+      }
+      if(ov.social && typeof ov.social === 'object'){
+        data.social = { ...(data.social || {}), ...ov.social };
+      }
+      if(ov.privateTrip && typeof ov.privateTrip === 'object'){
+        data.privateTrip = { ...(data.privateTrip || {}), ...ov.privateTrip };
+      }
+      if(ov.navigation && typeof ov.navigation === 'object'){
+        data.navigation = { ...(data.navigation || {}), ...ov.navigation };
+      }
+      if(ov.homeSections && typeof ov.homeSections === 'object'){
+        data.homeSections = { ...(data.homeSections || {}), ...ov.homeSections };
+      }
+      if(Array.isArray(ov.destinations) && ov.destinations.length){
+        data.destinations = ov.destinations.map((p, i) => normalizePlaceItem(p, i)).filter(Boolean);
+      }
+      if(Array.isArray(ov.trips) && ov.trips.length){
+        const normTrips = ov.trips.map((tr, idx) => normalizeTripItem(tr, data.trip, 'ku', data.cmsI18n, idx)).filter(Boolean);
+        if(normTrips.length){
+          data.trips = normTrips;
+          data.trip = normTrips.find(t => t.published !== false) || normTrips[0];
+        }
+      }
+      if(Array.isArray(ov.coupons)){
+        data.coupons = ov.coupons;
+      }
       if(Array.isArray(ov.paymentMethods) && ov.paymentMethods.length){
         data.paymentMethods = ov.paymentMethods;
       }
@@ -2767,30 +2861,15 @@ async function loadRemote(){
         data.booking.otpRequired = ov.otpRequired;
         try{ localStorage.setItem('kurdia_otp_required', String(ov.otpRequired)); }catch(_){}
       }
-      if(Array.isArray(ov.reviews) && ov.reviews.length){
-        const existingRevs = Array.isArray(data.reviews) ? data.reviews : [];
-        const merged = [...ov.reviews];
-        existingRevs.forEach(r => {
-          if(r && !merged.some(m => m.name === r.name && (m.text || m.comment) === (r.text || r.comment))){
-            merged.push(r);
-          }
-        });
-        data.reviews = merged;
-      }
-      localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
+      data.reviews = mergeReviewLists(apiReviews, ov.reviews, localRevs, data.reviews);
+    } else if(apiReviews.length){
+      data.reviews = mergeReviewLists(apiReviews, localRevs, data.reviews);
     }
+    localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
   }catch(_){}
   try{
-    const localRevs = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
-    if(Array.isArray(localRevs) && localRevs.length){
-      const existingRevs = Array.isArray(data.reviews) ? data.reviews : [];
-      const merged = [...localRevs];
-      existingRevs.forEach(r => {
-        if(r && !merged.some(m => m.name === r.name && (m.text || m.comment) === (r.text || r.comment))){
-          merged.push(r);
-        }
-      });
-      data.reviews = merged;
+    if(localRevs.length){
+      data.reviews = mergeReviewLists(localRevs, data.reviews);
     }
   }catch(_){}
   if(typeof window.syncPublicOtpUI === 'function') window.syncPublicOtpUI();
@@ -3240,9 +3319,16 @@ function getTripRemainingTimeBadge(dateStr){
 function render(){
  normalizePublicData();
  applyCMSPresentation();
+ if(data.brand?.primary) document.documentElement.style.setProperty('--red', data.brand.primary);
+ if(data.brand?.accent) document.documentElement.style.setProperty('--red2', data.brand.accent);
  const heroUrl=safeImageUrl(data.heroImageUrl);
  document.documentElement.style.setProperty("--hero-image",heroUrl?`url("${heroUrl.replace(/"/g,'\\"')}")`:"url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85')");
  $('heroTitle').textContent=data.heroTitle;$('heroText').textContent=data.heroText;
+ const eyebrowText = data.heroEyebrow || data.homeSections?.heroEyebrow || data.home?.hero?.eyebrow;
+ if(eyebrowText){
+   const ebEl = document.querySelector('#home .hero .eyebrow');
+   if(ebEl) ebEl.innerHTML = `<i data-lucide="compass" style="width:15px;height:15px"></i> ${esc(eyebrowText)}`;
+ }
 
  const activeTrips = getActiveTripsList();
  const t = activeTrips[0] || data.trip || {};
@@ -3268,10 +3354,45 @@ function render(){
    noTripNotice.style.display = tripIsUpcoming ? 'none' : '';
    const sectionTitle=featuredSection.querySelector('.sectionhead h2');
    const sectionDesc=featuredSection.querySelector('.sectionhead p');
-   if(sectionTitle) sectionTitle.textContent = activeTrips.length > 1 ? 'گەشتەکانی داهاتوو' : 'گەشتی داهاتوو';
-   if(sectionDesc) sectionDesc.textContent = tripIsUpcoming
+   const customUpTitle = data.homeSections?.upcomingTitle || '';
+   const customUpDesc = data.homeSections?.upcomingDesc || '';
+   if(sectionTitle) sectionTitle.textContent = customUpTitle || (activeTrips.length > 1 ? 'گەشتەکانی داهاتوو' : 'گەشتی داهاتوو');
+   if(sectionDesc) sectionDesc.textContent = customUpDesc || (tripIsUpcoming
      ? `ئێستا ${activeTrips.length} گەشتی جیاواز بەردەستە بۆ ناونووسین و بەشداریکردن`
-     : 'بەرواری گەشتی داهاتوو هێشتا دیاری نەکراوە';
+     : 'بەرواری گەشتی داهاتوو هێشتا دیاری نەکراوە');
+ }
+
+ // Render VIP Private Trip section & Private page hero if customized
+ if(data.privateTrip && typeof data.privateTrip === 'object'){
+   const pt = data.privateTrip;
+   const vipTagEl = document.querySelector('#home .private-vip-tag');
+   if(vipTagEl && pt.vipTag) vipTagEl.textContent = pt.vipTag;
+   const vipTitleEl = document.querySelector('#home .private-vip-content h2');
+   if(vipTitleEl && pt.vipTitle) vipTitleEl.textContent = pt.vipTitle;
+   const vipTextEl = document.querySelector('#home .private-vip-content > p');
+   if(vipTextEl && pt.vipText) vipTextEl.textContent = pt.vipText;
+   const privHeroTitleEl = document.querySelector('#private .private-page-hero h2');
+   if(privHeroTitleEl && pt.privateHeroTitle) privHeroTitleEl.textContent = pt.privateHeroTitle;
+   const privHeroTextEl = document.querySelector('#private .private-page-hero p');
+   if(privHeroTextEl && pt.privateHeroText) privHeroTextEl.textContent = pt.privateHeroText;
+ }
+
+ // Render bottom navigation labels if customized
+ if(data.navigation && typeof data.navigation === 'object'){
+   const nav = data.navigation;
+   const navMap = [
+     ['.bottom .navitem[data-page="home"] span', nav.home],
+     ['.bottom .navitem[data-page="weather"] span', nav.weather],
+     ['.bottom .navitem[data-page="booking"] span', nav.booking],
+     ['.bottom .navitem[data-page="private"] span', nav.private],
+     ['.bottom .navitem[data-page="more"] span', nav.more]
+   ];
+   navMap.forEach(([sel, val]) => {
+     if(val){
+       const el = document.querySelector(sel);
+       if(el) el.textContent = val;
+     }
+   });
  }
 
  if(homeTripsList && tripIsUpcoming){
@@ -3613,44 +3734,76 @@ function setupReviewStars(){
 
 async function saveReviewToCloudCMS(newReview){
   try{
-    const curRes = await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, { cache: 'no-store' });
+    const curRes = await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, {
+      cache: 'no-store',
+      headers: { 'X-Admin-Key': '2026' }
+    });
     const curJson = await curRes.json().catch(() => ({}));
     const cmsData = curJson.data || {};
     const existingList = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
-    const merged = [
-      newReview,
-      ...existingList.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
-    ].slice(0, 200);
+    const merged = mergeReviewLists([newReview], existingList).slice(0, 200);
     cmsData.reviews = merged;
     if(cmsData.config && typeof cmsData.config === 'object'){
       cmsData.config.reviews = merged;
     }
     await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': '2026' },
       body: JSON.stringify(cmsData)
     });
   }catch(_){}
 }
 
 async function submitReview(e){
-  e.preventDefault();
-  const form = e.target;
-  const fd = new FormData(form);
-  const name = String(fd.get('name') || $('reviewNameInput')?.value || '').trim();
-  const city = String(fd.get('city') || $('reviewCityInput')?.value || 'کوردستان').trim() || 'کوردستان';
-  const comment = String(fd.get('comment') || $('reviewCommentInput')?.value || '').trim();
-  const rating = Math.min(5, Math.max(1, Number(fd.get('rating') || $('reviewRating')?.value || 5)));
+  if(e && typeof e.preventDefault === 'function') e.preventDefault();
+  if(e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  if(window.__submittingReviewLock) return false;
 
-  if(!name || !comment){
-    toast('تکایە ناو و بیروڕاکەت بنووسە');
-    return;
+  const form = $('reviewForm') || (e && e.target && e.target.tagName === 'FORM' ? e.target : null);
+  const nameInput = $('reviewNameInput') || (form ? form.querySelector('[name="name"]') : null);
+  const cityInput = $('reviewCityInput') || (form ? form.querySelector('[name="city"]') : null);
+  const commentInput = $('reviewCommentInput') || (form ? form.querySelector('[name="comment"]') : null);
+  const ratingInput = $('reviewRating') || (form ? form.querySelector('[name="rating"]') : null);
+
+  const name = String(nameInput?.value || '').trim();
+  const city = String(cityInput?.value || 'کوردستان').trim() || 'کوردستان';
+  const comment = String(commentInput?.value || '').trim();
+  const rating = Math.min(5, Math.max(1, Number(ratingInput?.value || 5)));
+
+  if(!name){
+    toast('⚠️ تکایە ناوی سیانیت لە خانەی سەرەوە بنووسە');
+    if(nameInput){
+      try{ nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(_){}
+      nameInput.style.borderColor = '#ff3e69';
+      nameInput.style.boxShadow = '0 0 18px rgba(229,35,79,0.45)';
+      setTimeout(() => {
+        nameInput.style.borderColor = '';
+        nameInput.style.boxShadow = '';
+        nameInput.focus();
+      }, 280);
+    }
+    return false;
+  }
+  if(!comment){
+    toast('⚠️ تکایە بیروڕا و فیدباکەکەت بنووسە');
+    if(commentInput){
+      try{ commentInput.scrollIntoView({ behavior: 'smooth', block: 'center' }); }catch(_){}
+      commentInput.style.borderColor = '#ff3e69';
+      commentInput.style.boxShadow = '0 0 18px rgba(229,35,79,0.45)';
+      setTimeout(() => {
+        commentInput.style.borderColor = '';
+        commentInput.style.boxShadow = '';
+        commentInput.focus();
+      }, 280);
+    }
+    return false;
   }
 
+  window.__submittingReviewLock = true;
   const btn = $('reviewSubmitBtn');
   if(btn){
     btn.disabled = true;
-    btn.textContent = 'لە ناردندایە...';
+    btn.textContent = '⏳ لە ناردندایە...';
   }
 
   const newReview = {
@@ -3664,20 +3817,14 @@ async function submitReview(e){
   };
 
   try{
-    // 1. Update in-memory data & localStorage immediately for instant UI response
-    const currentList = Array.isArray(data.reviews) ? data.reviews : [];
-    data.reviews = [
-      newReview,
-      ...currentList.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
-    ];
+    // 1. Update in-memory data & all localStorage stores immediately for instant UI response
+    data.reviews = mergeReviewLists([newReview], data.reviews || []);
     try{
       const savedLocal = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
-      const nextLocal = [
-        newReview,
-        ...(Array.isArray(savedLocal) ? savedLocal : []).filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
-      ].slice(0, 100);
+      const nextLocal = mergeReviewLists([newReview], Array.isArray(savedLocal) ? savedLocal : []).slice(0, 150);
       localStorage.setItem('kurdia_public_reviews_v1', JSON.stringify(nextLocal));
       localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
+      syncReviewIntoLocalAdminState(newReview);
     }catch(_){}
 
     renderReviewsPublic();
@@ -3694,36 +3841,109 @@ async function submitReview(e){
       }
     }
 
-    // 2. Sync to local backend (/api/reviews) and Cloudflare Worker (/api/admin/cms) in parallel
+    // 2. Sync to local backend (/api/reviews & /api/cms-overrides) and Cloudflare Worker (/api/admin/cms) in parallel
     await Promise.allSettled([
       fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newReview)
       }),
+      fetch('/api/cms-overrides', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reviews: data.reviews })
+      }),
       saveReviewToCloudCMS(newReview)
     ]);
 
-    form.reset();
-    if($('reviewRating')) $('reviewRating').value = '5';
+    if(form) form.reset();
+    if(nameInput) nameInput.value = '';
+    if(cityInput) cityInput.value = '';
+    if(commentInput) commentInput.value = '';
+    if(ratingInput) ratingInput.value = '5';
     setupReviewStars();
     const banner = $('reviewSuccessBanner');
     if(banner){
       banner.style.display = 'block';
-      setTimeout(() => { banner.style.display = 'none'; }, 5500);
+      setTimeout(() => { banner.style.display = 'none'; }, 6000);
     }
     toast('🎉 سوپاس! بیروڕا و فیدباکەکەت بە سەرکەوتوویی بڵاوکرایەوە ✓');
   }catch(err){
     toast('✓ بیروڕاکەت تۆمارکرا');
   }finally{
+    window.__submittingReviewLock = false;
     if(btn){
       btn.disabled = false;
       btn.textContent = '✨ ناردنی بیروڕا و فیدباک';
     }
   }
+  return false;
 }
-function renderAboutPublic(){const a=data.about||{};const img=$('aboutImagePublic');if(img)img.src=a.imageUrl||DEFAULT.about.imageUrl;const t=$('aboutTitlePublic');if(t)t.textContent=a.title||'';const p=$('aboutTextPublic');if(p)p.textContent=a.text||'';const st=$('aboutStatsPublic');if(st)st.innerHTML=(a.stats||[]).map(x=>`<div class="stat"><b>${esc(x.num)}</b><span>${esc(x.label)}</span></div>`).join('')}
-function renderContactPublic(){const c=data.contact||{},s=data.social||{};const wa=$('contactWhatsAppPublic');if(wa){wa.href=c.whatsapp?`https://wa.me/${String(c.whatsapp).replace(/\D/g,'')}`:'#';wa.querySelector('small').textContent=c.whatsapp||''}const ph=$('contactPhonePublic');if(ph){ph.href=c.phone?`tel:${c.phone}`:'#';ph.querySelector('small').textContent=c.phone||''}if($('contactCity'))$('contactCity').textContent=c.city||'';if($('contactEmailPublic'))$('contactEmailPublic').textContent=c.email||'';[['instagram',s.instagram],['tiktok',s.tiktok],['youtube',s.youtube],['facebook',s.facebook],['telegram',s.telegram]].forEach(([k,v])=>{const e=$('social_'+k);if(e){e.href=v||'#';e.style.display=v?'grid':'none'}})}
+window.submitReview = submitReview;
+
+function renderAboutPublic(){
+  const a = data.about || DEFAULT.about || {};
+  const img = $('aboutImagePublic');
+  if(img){
+    const resolved = safeImageUrl(a.imageUrl) || a.imageUrl || DEFAULT.about.imageUrl;
+    img.src = resolved;
+  }
+  const t = $('aboutTitlePublic');
+  if(t) t.textContent = a.title || DEFAULT.about.title || '';
+  const p = $('aboutTextPublic');
+  if(p) p.textContent = a.text || DEFAULT.about.text || '';
+  const st = $('aboutStatsPublic');
+  if(st){
+    const statsList = Array.isArray(a.stats) && a.stats.length ? a.stats : (DEFAULT.about.stats || []);
+    st.innerHTML = statsList.map(x => `<div class="stat"><b>${esc(x.num)}</b><span>${esc(x.label)}</span></div>`).join('');
+  }
+  // Also update the About preview card on the Homepage (#home .about-no-image)
+  const homeAboutTitleEl = document.querySelector('#home .about-no-image h2');
+  if(homeAboutTitleEl){
+    homeAboutTitleEl.textContent = a.homeTitle || a.title || 'ئێمە گروپێکی گەشتیاری و شاخەوانی کوردستانین';
+  }
+  const homeAboutTextEl = document.querySelector('#home .about-no-image p.muted');
+  if(homeAboutTextEl){
+    homeAboutTextEl.textContent = a.homeText || a.text || '';
+  }
+}
+
+function renderContactPublic(){
+  const c = data.contact || DEFAULT.contact || {};
+  const s = data.social || DEFAULT.social || {};
+  const waClean = String(c.whatsapp || '+9647503130360').replace(/\D/g, '');
+  const wa = $('contactWhatsAppPublic');
+  if(wa){
+    wa.href = c.whatsapp ? `https://wa.me/${waClean}` : '#';
+    const sm = wa.querySelector('small');
+    if(sm) sm.textContent = c.whatsapp || '';
+  }
+  const ph = $('contactPhonePublic');
+  if(ph){
+    ph.href = c.phone ? `tel:${c.phone}` : '#';
+    const sm = ph.querySelector('small');
+    if(sm) sm.textContent = c.phone || '';
+  }
+  if($('contactCity')) $('contactCity').textContent = c.city || '';
+  if($('contactEmailPublic')) $('contactEmailPublic').textContent = c.email || '';
+  [['instagram',s.instagram],['tiktok',s.tiktok],['youtube',s.youtube],['facebook',s.facebook],['telegram',s.telegram]].forEach(([k,v])=>{
+    const e = $('social_'+k);
+    if(e){
+      e.href = v || '#';
+      e.style.display = v ? 'grid' : 'none';
+    }
+  });
+  // Also sync More drawer contact links if present
+  const moreTel = document.querySelector('#kaMoreMenu .ka-contact a[href^="tel:"]');
+  if(moreTel && c.phone){
+    moreTel.href = `tel:${String(c.phone).replace(/\s+/g, '')}`;
+    moreTel.textContent = `📞 ${c.phone}`;
+  }
+  const moreWa = document.querySelector('#kaMoreMenu .ka-contact a[href*="wa.me"]');
+  if(moreWa && waClean){
+    moreWa.href = `https://wa.me/${waClean}`;
+  }
+}
 
 function renderPage(id){
   try{
@@ -5590,19 +5810,13 @@ window.submitQuickBookingReview = async function(mode){
   };
 
   try{
-    const currentList = Array.isArray(data.reviews) ? data.reviews : [];
-    data.reviews = [
-      newReview,
-      ...currentList.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
-    ];
+    data.reviews = mergeReviewLists([newReview], data.reviews || []);
     try{
       const savedLocal = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
-      const nextLocal = [
-        newReview,
-        ...(Array.isArray(savedLocal) ? savedLocal : []).filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
-      ].slice(0, 100);
+      const nextLocal = mergeReviewLists([newReview], Array.isArray(savedLocal) ? savedLocal : []).slice(0, 150);
       localStorage.setItem('kurdia_public_reviews_v1', JSON.stringify(nextLocal));
       localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
+      syncReviewIntoLocalAdminState(newReview);
     }catch(_){}
 
     renderReviewsPublic();
@@ -5612,6 +5826,11 @@ window.submitQuickBookingReview = async function(mode){
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newReview)
+      }),
+      fetch('/api/cms-overrides', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reviews: data.reviews })
       }),
       saveReviewToCloudCMS(newReview)
     ]);
@@ -9141,8 +9360,19 @@ html[dir="ltr"] .ai{
   // Sync with Admin LocalStorage
   function syncAdminData(){
     try{
+      let localRevs = [];
+      try{
+        localRevs = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
+        if(!Array.isArray(localRevs)) localRevs = [];
+      }catch(_){}
       const raw = localStorage.getItem('kurdia_admin_multitrip_v6');
-      if(!raw) return;
+      if(!raw){
+        if(localRevs.length){
+          data.reviews = mergeReviewLists(localRevs, data.reviews);
+          renderReviewsPublic();
+        }
+        return;
+      }
       const adminState = JSON.parse(raw);
       if(!adminState || typeof adminState !== 'object') return;
       if(adminState.appVersion){
@@ -9173,11 +9403,38 @@ html[dir="ltr"] .ai{
       if(adminState.i18n?.ku?.heroTitle) data.heroTitle = adminState.i18n.ku.heroTitle;
       if(adminState.i18n?.ku?.heroSubtitle) data.heroText = adminState.i18n.ku.heroSubtitle;
       if(adminState.heroImageUrl) data.heroImageUrl = adminState.heroImageUrl;
+      if(adminState.heroEyebrow) data.heroEyebrow = adminState.heroEyebrow;
+      if(adminState.gradColor1 || adminState.gradColor2){
+        data.brand = {
+          ...(data.brand || {}),
+          primary: adminState.gradColor1 || data.brand?.primary || '#a91d37',
+          accent: adminState.gradColor2 || data.brand?.accent || '#d32f4e'
+        };
+      }
+      if(adminState.about && typeof adminState.about === 'object'){
+        data.about = { ...(data.about || {}), ...adminState.about };
+      }
+      if(adminState.contact && typeof adminState.contact === 'object'){
+        data.contact = { ...(data.contact || {}), ...adminState.contact };
+      }
+      if(adminState.social && typeof adminState.social === 'object'){
+        data.social = { ...(data.social || {}), ...adminState.social };
+      }
+      if(adminState.privateTrip && typeof adminState.privateTrip === 'object'){
+        data.privateTrip = { ...(data.privateTrip || {}), ...adminState.privateTrip };
+      }
+      if(adminState.navigation && typeof adminState.navigation === 'object'){
+        data.navigation = { ...(data.navigation || {}), ...adminState.navigation };
+      }
+      if(adminState.homeSections && typeof adminState.homeSections === 'object'){
+        data.homeSections = { ...(data.homeSections || {}), ...adminState.homeSections };
+      }
+      data.reviews = mergeReviewLists(localRevs, adminState.reviews, data.reviews);
       render();
     }catch(e){}
   }
   window.addEventListener('storage', e => {
-    if(e.key === 'kurdia_admin_multitrip_v6' || e.key === 'kurdia_live_version' || e.key === 'kurdia_otp_required' || e.key === 'kurdia_premium_data') syncAdminData();
+    if(e.key === 'kurdia_admin_multitrip_v6' || e.key === 'kurdia_live_version' || e.key === 'kurdia_otp_required' || e.key === 'kurdia_premium_data' || e.key === 'kurdia_public_reviews_v1') syncAdminData();
   });
   window.addEventListener('focus', syncAdminData);
   document.addEventListener('visibilitychange', () => { if(!document.hidden) syncAdminData(); });
