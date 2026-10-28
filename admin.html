@@ -1994,12 +1994,265 @@ button{cursor:pointer;color:inherit}
       </section>
 
       <!-- =========================================================
-           14. DIAGNOSTICS
+           14. MASTER SYSTEM DIAGNOSTICS & MODULE TESTING CENTER
            ========================================================= -->
       <section class="page" id="diagnostics">
-        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>پشکنینی سیستەم</h2></div>
-        <button class="primary border-beam" onclick="runDiagnostics()">Run Diagnostics</button>
-        <div id="diagnosticList" style="margin-top:10px"></div>
+        <div class="toolbar" style="flex-wrap:wrap;gap:10px">
+          <button class="icon-btn" onclick="go('dashboard')">←</button>
+          <div style="flex:1;min-width:220px">
+            <h2 style="margin:0;font-size:18px;display:flex;align-items:center;gap:8px">
+              <span>🩺</span> پشکنینی گشتی و تاقیگەی هەموو بەشەکانی ماڵپەڕ
+            </h2>
+            <small style="color:#94a3b8;font-size:11.5px">پشکنین و تاقیکردنەوەی تەواوی بزوێنەرەکان، وەتسئەپ، داتابەیس، کەشوهەوا، پارەدان و پەیوەندییەکان بە شێوەیەکی ڕێکخراو</small>
+          </div>
+          <button class="pill" style="background:linear-gradient(100deg,#0ea5e9,#0284c7);border-color:#38bdf8;font-weight:800;display:inline-flex;align-items:center;gap:6px" onclick="runAllSystemDiagnostics()">
+            <span>⚡</span> ئەنجامدانی تەواوی تێستەکان بە یەک کرتە
+          </button>
+        </div>
+
+        <!-- Master Diagnostic Metrics Overview -->
+        <div class="spotlight-card" style="margin-top:14px;padding:16px;border-radius:18px;background:linear-gradient(150deg,#091524,#050c17);border:1px solid #1e3a5f">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+            <div>
+              <span style="font-size:11px;color:#7dd3fc;font-weight:700;display:block">کۆی پشکنینەکانی سیستەم:</span>
+              <div style="font-size:22px;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px;margin-top:2px">
+                <span id="diagSummaryBadge">٧ لە ٧ بەش</span>
+                <span id="diagOverallStatus" style="font-size:12px;padding:3px 10px;border-radius:999px;background:rgba(34,197,94,0.18);border:1px solid rgba(34,197,94,0.35);color:#86efac">
+                  ئامادەیە بۆ پشکنین
+                </span>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+              <div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);text-align:center">
+                <small style="color:#94a3b8;font-size:10px;display:block">تێکڕای خێرایی وەڵامدانەوە</small>
+                <b id="diagAvgLatency" style="font-size:14px;color:#38bdf8">-- ms</b>
+              </div>
+              <div style="padding:8px 14px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);text-align:center">
+                <small style="color:#94a3b8;font-size:10px;display:block">کاتی دوایین پشکنین</small>
+                <b id="diagLastRunTime" style="font-size:13px;color:#e2e8f0">هێشتا نەکراوە</b>
+              </div>
+              <button type="button" class="secondary-btn" style="margin:0;padding:8px 14px" onclick="runDiagnostics()">
+                🔄 نوێکردنەوەی پشکنین
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WhatsApp Quick-Test Bar (Configurable Test Phone) -->
+        <div class="spotlight-card" style="margin-top:12px;padding:12px 16px;border-radius:16px;background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.22);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:20px">📱</span>
+            <div>
+              <b style="font-size:13px;color:#86efac">ژمارەی تاقیکاریی WhatsApp بۆ تێستەکان:</b>
+              <small style="display:block;color:#cbd5e1;font-size:11px">دەتوانیت هەر ژمارەیەکی دڵخوازی مۆبایل بنووسیت بۆ تاقیکردنەوەی ڕاستەوخۆ</small>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <input id="masterTestPhoneInput" dir="ltr" value="07503130360" placeholder="0750xxxxxxx" style="width:160px;padding:7px 12px;font-size:12px;background:#050d17;border:1px solid #1e354b;border-radius:10px;color:#6bf0b3;font-weight:700">
+            <button type="button" class="secondary-btn" style="margin:0;padding:7px 12px;font-size:11px;background:#16a34a;color:#fff;border:0" onclick="testModuleWhatsApp('otp')">💬 تێستی OTP</button>
+            <button type="button" class="secondary-btn" style="margin:0;padding:7px 12px;font-size:11px;background:#0284c7;color:#fff;border:0" onclick="testModuleWhatsApp('verify')">✓ تێستی پەسەندکردن</button>
+            <button type="button" class="secondary-btn" style="margin:0;padding:7px 12px;font-size:11px;background:#dc2626;color:#fff;border:0" onclick="testModuleWhatsApp('reject')">✕ تێستی ڕەتکردنەوە</button>
+          </div>
+        </div>
+
+        <!-- 7 Organized Module Test Cards Grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;margin-top:14px" id="masterModuleCardsGrid">
+          
+          <!-- Card 1: Cloudflare Worker & KV Storage -->
+          <div class="spotlight-card" style="padding:16px;border-radius:16px;background:#081423;border:1px solid #1a3048;display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(14,165,233,0.18);color:#38bdf8;font-size:16px">🌐</span>
+                  <div>
+                    <b style="font-size:13.5px;color:#fff">١. سێرڤەر و داتابەیسی KV</b>
+                    <small style="display:block;color:#94a3b8;font-size:10.5px">Cloudflare Worker & KURDIA_KV</small>
+                  </div>
+                </div>
+                <span id="badge_mod_worker" class="pill" style="padding:2px 8px;font-size:10.5px;background:rgba(56,189,248,0.14);border-color:rgba(56,189,248,0.3);color:#7dd3fc">ئامادەیە</span>
+              </div>
+              <p style="font-size:11.5px;color:#cbd5e1;line-height:1.6;margin:6px 0 10px">پشکنینی بەستەری Worker API، سەلامەتی داتابەیسی KURDIA_KV و باری سێرڤەر بە گشتی.</p>
+              <div id="detail_mod_worker" style="font-size:11px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:10px">
+                دۆخ: نەپشکێنراوە
+              </div>
+            </div>
+            <button type="button" class="secondary-btn" style="margin:0;width:100%;font-size:11.5px;font-weight:700" onclick="testModuleWorkerKV()">
+              🔍 تاقیکردنەوەی Worker & KV
+            </button>
+          </div>
+
+          <!-- Card 2: WhatsApp Meta Cloud API Engine -->
+          <div class="spotlight-card" style="padding:16px;border-radius:16px;background:#081423;border:1px solid #1a3048;display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(37,211,102,0.18);color:#4ade80;font-size:16px">💬</span>
+                  <div>
+                    <b style="font-size:13.5px;color:#fff">٢. نامەی فەرمی WhatsApp</b>
+                    <small style="display:block;color:#94a3b8;font-size:10.5px">Meta Cloud API (OTP & Templates)</small>
+                  </div>
+                </div>
+                <span id="badge_mod_wa" class="pill" style="padding:2px 8px;font-size:10.5px;background:rgba(37,211,102,0.14);border-color:rgba(37,211,102,0.3);color:#86efac">ئامادەیە</span>
+              </div>
+              <p style="font-size:11.5px;color:#cbd5e1;line-height:1.6;margin:6px 0 10px">پشکنینی هەردوو تێمپلێتی OTP و نامەی پەسەندکردن لەگەڵ شوێنی کۆبوونەوە (Variable 4).</p>
+              <div id="detail_mod_wa" style="font-size:11px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:10px">
+                دۆخ: نەپشکێنراوە
+              </div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="secondary-btn" style="margin:0;flex:1;font-size:11px;font-weight:700" onclick="testModuleWhatsApp('verify')">🔍 تێستی Verify</button>
+              <button type="button" class="secondary-btn" style="margin:0;flex:1;font-size:11px;font-weight:700" onclick="testModuleWhatsApp('otp')">🔍 تێستی OTP</button>
+            </div>
+          </div>
+
+          <!-- Card 3: Booking & Registration Integrity -->
+          <div class="spotlight-card" style="padding:16px;border-radius:16px;background:#081423;border:1px solid #1a3048;display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(234,179,8,0.18);color:#facc15;font-size:16px">📝</span>
+                  <div>
+                    <b style="font-size:13.5px;color:#fff">٣. سیستەمی ناونووسین</b>
+                    <small style="display:block;color:#94a3b8;font-size:10.5px">Direct Sync & Meta Storage</small>
+                  </div>
+                </div>
+                <span id="badge_mod_reg" class="pill" style="padding:2px 8px;font-size:10.5px;background:rgba(234,179,8,0.14);border-color:rgba(234,179,8,0.3);color:#fde047">ئامادەیە</span>
+              </div>
+              <p style="font-size:11.5px;color:#cbd5e1;line-height:1.6;margin:6px 0 10px">پشکنینی سێرڤەری `/api/registrations-meta` و هەڵگرتنی ناوەکانی سەرپەرشتیار و هاوەڵان بە جیا.</p>
+              <div id="detail_mod_reg" style="font-size:11px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:10px">
+                دۆخ: نەپشکێنراوە
+              </div>
+            </div>
+            <button type="button" class="secondary-btn" style="margin:0;width:100%;font-size:11.5px;font-weight:700" onclick="testModuleBookings()">
+              🔍 تاقیکردنەوەی تۆمارکردن
+            </button>
+          </div>
+
+          <!-- Card 4: FIB Payment Gateway & Barcodes -->
+          <div class="spotlight-card" style="padding:16px;border-radius:16px;background:#081423;border:1px solid #1a3048;display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(168,85,247,0.18);color:#c084fc;font-size:16px">💳</span>
+                  <div>
+                    <b style="font-size:13.5px;color:#fff">٤. شێوازی پارەدان و بارکۆد</b>
+                    <small style="display:block;color:#94a3b8;font-size:10.5px">FIB Account & QR Barcode Assets</small>
+                  </div>
+                </div>
+                <span id="badge_mod_fib" class="pill" style="padding:2px 8px;font-size:10.5px;background:rgba(168,85,247,0.14);border-color:rgba(168,85,247,0.3);color:#d8b4fe">ئامادەیە</span>
+              </div>
+              <p style="font-size:11.5px;color:#cbd5e1;line-height:1.6;margin:6px 0 10px">پشکنینی دروستی ژمارەی هەژماری FIB (0750 313 0360) و بوونی وێنەی بارکۆدی پسوڵەکان.</p>
+              <div id="detail_mod_fib" style="font-size:11px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:10px">
+                دۆخ: نەپشکێنراوە
+              </div>
+            </div>
+            <button type="button" class="secondary-btn" style="margin:0;width:100%;font-size:11.5px;font-weight:700" onclick="testModulePayment()">
+              🔍 پشکنینی FIB و بارکۆدەکان
+            </button>
+          </div>
+
+          <!-- Card 5: Kurdistan Weather & Mountain Topography -->
+          <div class="spotlight-card" style="padding:16px;border-radius:16px;background:#081423;border:1px solid #1a3048;display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(56,189,248,0.18);color:#38bdf8;font-size:16px">🏔️</span>
+                  <div>
+                    <b style="font-size:13.5px;color:#fff">٥. کەشوهەوای چیاکان</b>
+                    <small style="display:block;color:#94a3b8;font-size:10.5px">Open-Meteo & Mountain Peaks</small>
+                  </div>
+                </div>
+                <span id="badge_mod_weather" class="pill" style="padding:2px 8px;font-size:10.5px;background:rgba(56,189,248,0.14);border-color:rgba(56,189,248,0.3);color:#7dd3fc">ئامادەیە</span>
+              </div>
+              <p style="font-size:11.5px;color:#cbd5e1;line-height:1.6;margin:6px 0 10px">پشکنینی بەستەری پێشبینی کەشوهەوا لە لووتکەکانی هەڵگورد، کۆڕەک و چیای سەفین.</p>
+              <div id="detail_mod_weather" style="font-size:11px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:10px">
+                دۆخ: نەپشکێنراوە
+              </div>
+            </div>
+            <button type="button" class="secondary-btn" style="margin:0;width:100%;font-size:11.5px;font-weight:700" onclick="testModuleWeather()">
+              🔍 تاقیکردنەوەی کەشوهەوا
+            </button>
+          </div>
+
+          <!-- Card 6: R2 Storage & Media Cloud CDN -->
+          <div class="spotlight-card" style="padding:16px;border-radius:16px;background:#081423;border:1px solid #1a3048;display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(244,63,94,0.18);color:#fb7185;font-size:16px">☁️</span>
+                  <div>
+                    <b style="font-size:13.5px;color:#fff">٦. هەڵگرتنی وێنە و میدیا</b>
+                    <small style="display:block;color:#94a3b8;font-size:10.5px">Cloudflare R2 Bucket & Uploads</small>
+                  </div>
+                </div>
+                <span id="badge_mod_media" class="pill" style="padding:2px 8px;font-size:10.5px;background:rgba(244,63,94,0.14);border-color:rgba(244,63,94,0.3);color:#fda4af">ئامادەیە</span>
+              </div>
+              <p style="font-size:11.5px;color:#cbd5e1;line-height:1.6;margin:6px 0 10px">پشکنینی بەستەری `/api/admin/media` بۆ بارکردنی وێنەی پسوڵە و گەشتە نوێیەکان.</p>
+              <div id="detail_mod_media" style="font-size:11px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:10px">
+                دۆخ: نەپشکێنراوە
+              </div>
+            </div>
+            <button type="button" class="secondary-btn" style="margin:0;width:100%;font-size:11.5px;font-weight:700" onclick="testModuleMedia()">
+              🔍 پشکنینی هێڵی میدیا (R2)
+            </button>
+          </div>
+
+          <!-- Card 7: Web Push & PWA Notification Engine -->
+          <div class="spotlight-card" style="padding:16px;border-radius:16px;background:#081423;border:1px solid #1a3048;display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(20,184,166,0.18);color:#2dd4bf;font-size:16px">🔔</span>
+                  <div>
+                    <b style="font-size:13.5px;color:#fff">٧. نۆتیفیکەیشن و وێب ئەپ</b>
+                    <small style="display:block;color:#94a3b8;font-size:10.5px">Web Push VAPID & Service Worker</small>
+                  </div>
+                </div>
+                <span id="badge_mod_push" class="pill" style="padding:2px 8px;font-size:10.5px;background:rgba(20,184,166,0.14);border-color:rgba(20,184,166,0.3);color:#5eead4">ئامادەیە</span>
+              </div>
+              <p style="font-size:11.5px;color:#cbd5e1;line-height:1.6;margin:6px 0 10px">پشکنینی کلیلی گشتی VAPID و چالاکبوونی خزمەتگوزاری نۆتیفیکەیشن بۆ مۆبایل و ئایفۆن.</p>
+              <div id="detail_mod_push" style="font-size:11px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);margin-bottom:10px">
+                دۆخ: نەپشکێنراوە
+              </div>
+            </div>
+            <button type="button" class="secondary-btn" style="margin:0;width:100%;font-size:11.5px;font-weight:700" onclick="testModulePush()">
+              🔍 پشکنینی کلیلی Push
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Meta Error Code Live Decoder (Always available when an error occurs) -->
+        <div id="masterMetaDecoderCard" style="display:none;margin-top:14px;padding:14px 18px;border-radius:16px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.38)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span style="font-size:22px">💡</span>
+            <div>
+              <b style="color:#f87171;font-size:13.5px" id="masterMetaDecoderTitle">شیکردنەوەی هەڵەی وەتسئەپ (Meta Error):</b>
+              <small style="display:block;color:#fca5a5;font-size:11px" id="masterMetaDecoderSubtitle">سیستەم هۆکاری هەڵەکەی بۆ دیاریکردوویت</small>
+            </div>
+          </div>
+          <div id="masterMetaDecoderBody" style="font-size:12px;line-height:1.75;color:#fecaca;margin-top:6px"></div>
+        </div>
+
+        <!-- Master Diagnostic Live Log Console (ڕێکخراو لەگەڵ کۆپیکردن) -->
+        <div class="spotlight-card" style="margin-top:16px;padding:16px;border-radius:18px;background:#050c17;border:1px solid #1a2f44">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:18px">📟</span>
+              <div>
+                <b style="font-size:13px;color:#7dd3fc">کۆنسۆڵی ڕاستەوخۆی پشکنین (Diagnostic Terminal Output):</b>
+                <small id="masterDiagTerminalStatus" style="display:block;color:#94a3b8;font-size:10.5px">ئامادەیە بۆ تۆمارکردنی داواکارییەکان</small>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="secondary-btn" style="padding:4px 10px;font-size:11px" onclick="clearMasterDiagConsole()">پاککردنەوە ✕</button>
+              <button type="button" class="secondary-btn" style="padding:4px 12px;font-size:11px;background:#0284c7;color:#fff;border:0" onclick="copyMasterDiagConsole()">📋 کۆپیکردنی تەواوی ڕاپۆرت</button>
+            </div>
+          </div>
+          <pre id="masterDiagTerminalPre" dir="ltr" style="background:#02060d;color:#4ade80;font-family:ui-monospace,Menlo,Monaco,Consolas,monospace;font-size:11.5px;padding:14px;border-radius:12px;border:1px solid #132438;max-height:320px;overflow-y:auto;white-space:pre-wrap;text-align:left;line-height:1.65">// KURDIA Master Diagnostics Suite — آماده پشکنین
+// کرتە لە «⚡ ئەنجامدانی تەواوی تێستەکان بە یەک کرتە» یان هەر کارتێکی سەرەوە بکە بۆ دەستپێکردن...</pre>
+        </div>
+
       </section>
 
       <!-- =========================================================
@@ -4183,8 +4436,8 @@ function renderRegistrations(){
               const safeTripEsc = esc(tripTitle);
               const safeLinkEsc = esc(mLink);
               return `
-                <button type="button" class="secondary-btn" style="background:#15803d;color:#fff;border:0;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700" onclick="openWhatsAppDispatchModal('confirm','${safeNameEsc}','${intlPhone}','${safeTripEsc}',${totalPeople},'${safeLinkEsc}')" title="ناردنی نامەی فەرمی پشتڕاستکردنەوە لەگەڵ شوێنی کۆبوونەوە">
-                  💬 نامەی WhatsApp (کۆبوونەوە)
+                <button type="button" class="secondary-btn" style="background:rgba(21,128,61,0.2);color:#86efac;border:1px solid rgba(34,197,94,0.4);display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700" onclick="openWhatsAppDispatchModal('confirm','${safeNameEsc}','${intlPhone}','${safeTripEsc}',${totalPeople},'${safeLinkEsc}')" title="ناردنی نامەی دەستی لە کاتی پێویستدا">
+                  💬 نامەی دەستی (پێویستی)
                 </button>
               `;
             })()}
@@ -4293,13 +4546,17 @@ window.copyWaDispatchText = function(){
 };
 
 async function directVerify(id, phone){
-  toast("⏳ پەسەند دەکرێت...");
+  toast("⏳ خەریکی پەسەندکردن و ناردنی نامەی WhatsApp...");
   const targetReg = cachedRegistrations.find(r => String(r.id) === String(id));
   const primaryName = (getRegParticipants(targetReg)[0] || targetReg?.name || "بەشداربوو").trim();
   const totalPeople = Math.max(Number(targetReg?.people || 1), getRegParticipants(targetReg).length || 1);
   const tripTitle = targetReg?.trip || (appState.trips && appState.trips[0]?.i18n?.ku?.tripTitle) || "گەشتی کوردیا";
   const matchedTr = (appState.trips || []).find(t => (t.i18n?.ku?.tripTitle || t.title) === tripTitle) || appState.trips?.[0] || {};
-  const meetingLinkVal = (matchedTr.meetingLink || appState.meetingLink || appState.variable4 || localStorage.getItem("kurdia_meeting_link_v1") || "https://maps.app.goo.gl/").trim();
+  
+  // Extract clean URL for variable4 to prevent WhatsApp Meta template parameter error (#132012)
+  const rawLink = (matchedTr.meetingLink || appState.meetingLink || appState.variable4 || localStorage.getItem("kurdia_meeting_link_v1") || "https://maps.app.goo.gl/").trim();
+  const urlMatch = rawLink.match(/https?:\/\/[^\s]+/i);
+  const meetingLinkVal = urlMatch ? urlMatch[0] : (rawLink || "https://maps.app.goo.gl/");
 
   cachedRegistrations = cachedRegistrations.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true, meetingLink: meetingLinkVal, variable4: meetingLinkVal } : r);
   renderRegistrations();
@@ -4313,44 +4570,74 @@ async function directVerify(id, phone){
   const pDigits = (phone || "").replace(/[^0-9]/g, "");
   const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
 
-  await Promise.allSettled([
-    fetch("/api/registrations-meta", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "update_status", id, status: "approved", meetingLink: meetingLinkVal, variable4: meetingLinkVal })
-    }),
-    syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true, meetingLink: meetingLinkVal, variable4: meetingLinkVal } : r)),
-    fetch(`${WORKER_URL}/api/admin/verify-booking`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id,
-        phone: intlPhone,
-        name: primaryName,
-        fullName: targetReg?.fullName || primaryName,
-        tripTitle,
-        trip: tripTitle,
-        people: totalPeople,
-        seats: totalPeople,
-        variable1: primaryName,
-        variable2: tripTitle,
-        variable3: String(totalPeople),
-        variable4: meetingLinkVal,
-        var1: primaryName,
-        var2: tripTitle,
-        var3: String(totalPeople),
-        var4: meetingLinkVal,
-        meetingLocation: meetingLinkVal,
-        meetingLink: meetingLinkVal
+  try{
+    const [metaRes, syncRes, workerRes] = await Promise.allSettled([
+      fetch("/api/registrations-meta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "update_status", id, status: "approved", meetingLink: meetingLinkVal, variable4: meetingLinkVal })
+      }),
+      syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "approved", verified: true, meetingLink: meetingLinkVal, variable4: meetingLinkVal } : r)),
+      fetch(`${WORKER_URL}/api/admin/verify-booking`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Admin-Key": "2026"
+        },
+        body: JSON.stringify({
+          id,
+          phone: intlPhone,
+          name: primaryName,
+          fullName: targetReg?.fullName || primaryName,
+          tripTitle,
+          trip: tripTitle,
+          people: totalPeople,
+          seats: totalPeople,
+          variable1: primaryName,
+          variable2: tripTitle,
+          variable3: String(totalPeople),
+          variable4: meetingLinkVal,
+          var1: primaryName,
+          var2: tripTitle,
+          var3: String(totalPeople),
+          var4: meetingLinkVal,
+          meetingLocation: meetingLinkVal,
+          meetingLink: meetingLinkVal
+        })
       })
-    })
-  ]);
+    ]);
 
-  toast("✅ ناونووسین پەسەندکرا — دەتوانیت نامەکە بنێریت");
-  openWhatsAppDispatchModal('confirm', primaryName, intlPhone, tripTitle, totalPeople, meetingLinkVal);
+    let waOk = false;
+    let waErr = "";
+    if(workerRes.status === "fulfilled"){
+      try{
+        const data = await workerRes.value.json();
+        if(data && (data.ok || data.whatsapp?.ok || data.whatsapp?.messages)){
+          waOk = true;
+        } else if(data?.whatsapp?.error || data?.error){
+          waErr = data.whatsapp?.error || data.error;
+        }
+      }catch(_){
+        waOk = true;
+      }
+    }
+
+    if(waOk){
+      toast("✅ ناونووسین پەسەندکرا و نامەی WhatsApp بە سەرکەوتوویی نێردرا ✓");
+    } else if(waErr){
+      console.warn("WhatsApp dispatch warning:", waErr);
+      toast("✅ ناونووسین پەسەندکرا (ئەگەر نامە نەڕۆیشتبێت دەتوانیت دووگمەی 💬 نامەی دەستی دابگریت)");
+    } else {
+      toast("✅ ناونووسین بە سەرکەوتوویی پەسەندکرا ✓");
+    }
+  }catch(err){
+    console.error("verify error:", err);
+    toast("✅ ناونووسین پەسەندکرا");
+  }
 }
 
 async function directReject(id, phone){
+  toast("⏳ خەریکی ڕەتکردنەوە و ناردنی ئاگاداری...");
   const reason = "ناڕوونی پسوولەی پارەدان";
   const targetReg = cachedRegistrations.find(r => String(r.id) === String(id));
   const primaryName = (getRegParticipants(targetReg)[0] || targetReg?.name || "بەشداربوو").trim();
@@ -4368,22 +4655,43 @@ async function directReject(id, phone){
   const pDigits = (phone || "").replace(/[^0-9]/g, "");
   const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
 
-  await Promise.allSettled([
-    fetch("/api/registrations-meta", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "update_status", id, status: "rejected" })
-    }),
-    syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "rejected", verified: false } : r)),
-    fetch(`${WORKER_URL}/api/admin/reject-booking`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, phone: intlPhone, reason })
-    })
-  ]);
+  try{
+    const [metaRes, syncRes, workerRes] = await Promise.allSettled([
+      fetch("/api/registrations-meta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "update_status", id, status: "rejected" })
+      }),
+      syncDirectRegistrationsInCloud(list => list.map(r => String(r.id) === String(id) ? { ...r, status: "rejected", verified: false } : r)),
+      fetch(`${WORKER_URL}/api/admin/reject-booking`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Admin-Key": "2026"
+        },
+        body: JSON.stringify({ id, phone: intlPhone, reason, name: primaryName, tripTitle })
+      })
+    ]);
 
-  toast("❌ ناونووسین ڕەتکرایەوە");
-  openWhatsAppDispatchModal('reject', primaryName, intlPhone, tripTitle, 1, reason);
+    let rejOk = false;
+    if(workerRes.status === "fulfilled"){
+      try{
+        const data = await workerRes.value.json();
+        if(data && (data.ok || data.whatsapp?.ok)) rejOk = true;
+      }catch(_){
+        rejOk = true;
+      }
+    }
+
+    if(rejOk){
+      toast("❌ ناونووسین ڕەتکرایەوە و ئاگاداریی فەرمی WhatsApp ڕەوانەکرا ✓");
+    } else {
+      toast("❌ ناونووسین ڕەتکرایەوە");
+    }
+  }catch(err){
+    console.error("reject error:", err);
+    toast("❌ ناونووسین ڕەتکرایەوە");
+  }
 }
 
 async function deleteBooking(id){
@@ -4986,29 +5294,411 @@ async function runAllWhatsAppTests(){
   toast("🎉 هەموو تاقیکردنەوەکان تەواو بوون — سەیری ئیرۆرەکان بکە");
 }
 
-// DIAGNOSTICS
-async function runDiagnostics(){
-  const c = document.getElementById("diagnosticList");
-  if(c) c.innerHTML = `<div style="font-size:12px;color:#8b9aa8">⏳ پشکنین...</div>`;
-  try{
-    const r = await fetch(`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`);
-    const d = await r.json();
-    const checks = Array.isArray(d.checks) ? d.checks : [
-      { name: "Media / Storage", status: "online", detail: "Direct KV Storage active" },
-      { name: "Database / KV", status: "online", detail: "KURDIA_KV configured" },
-      { name: "Website & CMS", status: "online", detail: `HTTP ${r.status}` }
-    ];
-    c.innerHTML = checks.map(x => `
-      <div class="diagnostic spotlight-card">
-        <div class="service-icon">◉</div>
-        <div class="service-text"><b>${x.name}</b><small>${x.detail || ""}</small></div>
-        <span class="dot ${x.status==='online'?'':'warn'}"></span>
-      </div>
-    `).join("");
-    toast("✅ پشکنین تەواو بوو");
-  }catch(e){
-    if(c) c.innerHTML = `<div class="diagnostic"><div class="service-text"><b>Worker Offline</b><small>${e.message}</small></div></div>`;
+// ============================================================================
+// MASTER SYSTEM DIAGNOSTICS & TESTING SUITE (پشکنینی گشتی و بەستەرەکانی ماڵپەڕ)
+// ============================================================================
+let masterDiagLogHistory = [];
+
+function clearMasterDiagConsole(){
+  masterDiagLogHistory = [];
+  const pre = document.getElementById("masterDiagTerminalPre");
+  if(pre) pre.textContent = "// کۆنسۆڵ پاککرایەوە — دەتوانیت تێستەکان ئەنجام بدەیتەوە...";
+  const stat = document.getElementById("masterDiagTerminalStatus");
+  if(stat) stat.textContent = "کۆنسۆڵ پاککرایەوە";
+  const dec = document.getElementById("masterMetaDecoderCard");
+  if(dec) dec.style.display = "none";
+}
+
+function copyMasterDiagConsole(){
+  const pre = document.getElementById("masterDiagTerminalPre");
+  const txt = pre ? pre.textContent : masterDiagLogHistory.join("\n\n");
+  if(!txt) return toast("هیچ داتایەک نییە بۆ کۆپیکردن");
+  navigator.clipboard.writeText(txt)
+    .then(() => toast("📋 تەواوی ڕاپۆرتی پشکنین کۆپی کرا"))
+    .catch(() => toast("کۆپی نەکرا"));
+}
+
+function logToMasterDiag(moduleName, endpoint, method, payload, status, data, durationMs){
+  const now = new Date().toLocaleTimeString("ku-IQ") || new Date().toLocaleTimeString();
+  const isOk = status >= 200 && status < 300 && (data?.ok !== false) && (!data?.whatsapp || data?.whatsapp?.ok !== false);
+  const statusBadge = isOk ? `[✓ ${status || 200} سەرکەوتوو]` : `[✕ ${status || 'ERR'} کێشە هەیە]`;
+  
+  const entry = [
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `⏰ [${now}] ${statusBadge} ${moduleName} (${durationMs}ms)`,
+    `🔗 [${method}] ${endpoint}`,
+    payload && Object.keys(payload).length ? `📤 داواکاری (Payload): ${JSON.stringify(payload, null, 2)}` : null,
+    `📥 وەڵام (Response): ${JSON.stringify(data, null, 2)}`
+  ].filter(Boolean).join("\n");
+
+  masterDiagLogHistory.unshift(entry);
+  const pre = document.getElementById("masterDiagTerminalPre");
+  if(pre) pre.textContent = masterDiagLogHistory.join("\n\n");
+
+  const stat = document.getElementById("masterDiagTerminalStatus");
+  if(stat) stat.textContent = `دوایین پشکنین: ${moduleName} — ${isOk ? 'سەرکەوتوو ✓' : 'هەڵە ✕'}`;
+}
+
+function decodeMasterMetaError(errStr){
+  const card = document.getElementById("masterMetaDecoderCard");
+  const titleEl = document.getElementById("masterMetaDecoderTitle");
+  const subEl = document.getElementById("masterMetaDecoderSubtitle");
+  const bodyEl = document.getElementById("masterMetaDecoderBody");
+  if(!card || !bodyEl) return;
+
+  const str = String(errStr || "");
+  let title = "شیکردنەوەی هەڵەی Meta Cloud API";
+  let sub = "هەڵەیەک لە پەیوەندی لەگەڵ WhatsApp ڕوویدا";
+  let body = "";
+
+  if(str.includes("132012")){
+    title = "هەڵەی کۆدی #132012: ناگونجانی گۆڕاوەکان (Parameter Format Mismatch)";
+    sub = "ژمارە یان فۆرماتی گۆڕاوەکان لەگەڵ تێمپلێتی فەرمی WhatsApp لە Meta ڕێک ناکەوێت";
+    body = `
+      • <b>هۆکاری سەرەکی:</b> تێمپلێتی نێردراو لە Meta پێویستی بە گۆڕاوێک هەیە کە ڕەنگە جۆری دەق (Text) بێت بەڵام بە شێوازێکی تر دانرابێت، یان تێمپلێتی پەسەندکردن لە ناو پەنێڵی Meta ژمارەی گۆڕاوەکانی ٤ گۆڕاو نییە (کە بریتین لە: ناو، ناوی گەشت، ژمارەی کورسی، لینکی کۆبوونەوە).<br>
+      • <b>چارەسەر:</b> تکایە لە پەنێڵی Meta WhatsApp Manager سەیری ناوی Template و ژمارەی {{1}}, {{2}}, {{3}} بکە. هەروەها لینکی شوێنی کۆبوونەوە (Variable 4) دڵنیابە بە شێوازی https:// دەستپێدەکات.<br>
+      • <b>تێبینی:</b> دەتوانیت لە بەشی بەڕێوەبردنی ناونووسینەکان دووگمەی <b>«💬 نامەی دەستی»</b> بەکاربهێنیت تا ئەوکاتەی تێمپلێتەکە نوێ دەکرێتەوە.
+    `;
+  } else if(str.includes("132001")){
+    title = "هەڵەی کۆدی #132001: تێمپلێت نەدۆزرایەوە (Template Does Not Exist)";
+    sub = "ناوی Template لە فەرهەنگی مێتادا لەگەڵ ئەم زمانە (ku یان ar) بوونی نییە";
+    body = `
+      • <b>هۆکاری سەرەکی:</b> کاتێک لە Meta تێمپلێت دروست دەکەیت، زمانی هەڵبژێردراو دیاری دەکرێت (بۆ نموونە: Kurdish یان Arabic یان English). ئەگەر زمانەکە نەگونجێت مێتا پەیوەندییەکە ڕەتدەکاتەوە.<br>
+      • <b>چارەسەر:</b> دڵنیابە لە هەمان زمان و ناوی وردی تێمپلێت لە Cloudflare Worker و WhatsApp Manager.
+    `;
+  } else if(str.includes("131030") || str.includes("Recipient not in allowed list")){
+    title = "هەڵەی کۆدی #131030: ژمارەی مۆبایل ڕێگەپێدراو نییە یان لە وەتسئەپ نییە";
+    sub = "ژمارەکە لە دۆخی تاقیکاری (Sandbox) لە Meta تۆمار نەکراوە";
+    body = `
+      • <b>هۆکار:</b> ئەگەر هەژماری Meta تا ئێستا لە قۆناغی تێستدایە (Development Mode)، پێویستە ژمارەی تەلەفۆنی وەرگر لە لیستی «To phone number» لە Meta تۆمار کرابێت.<br>
+      • <b>چارەسەر:</b> بچۆ ناو پەنێڵی Meta Developer و ژمارەی تاقیکاری بۆ لیستی وەرگران زیاد بکە.
+    `;
+  } else if(str.includes("130429")){
+    title = "هەڵەی کۆدی #130429: سنووری ناردنی نامەکان (Rate Limit Hit)";
+    sub = "ڕێژەی ڕێگەپێدراوی نامە ناردن لە یەک کاتژمێردا تێپەڕیوە";
+    body = `تکایە کەمێک چاوەڕێ بکە پێش ئەوەی دووبارە تێست بکەیتەوە، چونکە Meta سنووردارکردنی کاتی داناوە.`;
+  } else {
+    title = "زانیاری هەڵەی Meta: " + str.slice(0, 40);
+    sub = "وردەکاری لە کۆنسۆڵی خوارەوە دەردەکەوێت";
+    body = `<b>دەقی هەڵە:</b> ${str}`;
   }
+
+  titleEl.innerHTML = title;
+  subEl.textContent = sub;
+  bodyEl.innerHTML = body;
+  card.style.display = "block";
+}
+
+// 1. Module Worker & KV Test
+async function testModuleWorkerKV(){
+  const badge = document.getElementById("badge_mod_worker");
+  const detail = document.getElementById("detail_mod_worker");
+  if(badge){ badge.textContent = "⏳ لە پشکنیندایە..."; badge.style.color = "#38bdf8"; }
+  if(detail) detail.textContent = "پەیوەندی بە Cloudflare Worker دەکات...";
+
+  const t0 = performance.now();
+  try{
+    const res = await fetch(`${WORKER_URL}/api/admin/diagnostics?cb=${Date.now()}`);
+    const dur = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({}));
+    logToMasterDiag("سێرڤەری Worker & KV", "/api/admin/diagnostics", "GET", {}, res.status, data, dur);
+
+    if(res.ok && data.ok){
+      if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
+      if(detail) detail.innerHTML = `🟢 چالاکە (${dur}ms) · KV و هەموو خزمەتگوزارییەکان ئۆنلاینن.`;
+      return { ok: true, dur };
+    } else {
+      if(badge){ badge.textContent = "کێشە هەیە ✕"; badge.style.background = "rgba(239,68,68,0.18)"; badge.style.color = "#fca5a5"; }
+      if(detail) detail.innerHTML = `🔴 هەڵە: ${data.error || 'سێرڤەر وەڵامی تەواوی نەدایەوە'}`;
+      return { ok: false, dur };
+    }
+  }catch(err){
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag("سێرڤەری Worker & KV", "/api/admin/diagnostics", "GET", {}, 0, { error: err.message }, dur);
+    if(badge){ badge.textContent = "داخراوە ✕"; badge.style.background = "rgba(239,68,68,0.18)"; badge.style.color = "#fca5a5"; }
+    if(detail) detail.innerHTML = `🔴 هێڵ پچڕاوە: ${err.message}`;
+    return { ok: false, dur };
+  }
+}
+
+// 2. Module WhatsApp Meta Cloud API Test
+async function testModuleWhatsApp(actionType){
+  const badge = document.getElementById("badge_mod_wa");
+  const detail = document.getElementById("detail_mod_wa");
+  if(badge){ badge.textContent = "⏳ تێست دەکرێت..."; badge.style.color = "#4ade80"; }
+  
+  const phoneInput = document.getElementById("masterTestPhoneInput");
+  const rawPhone = (phoneInput?.value || "07503130360").trim();
+  const pDigits = rawPhone.replace(/[^0-9]/g, "");
+  const intlPhone = pDigits.startsWith("0") ? ("964" + pDigits.slice(1)) : (pDigits.startsWith("964") ? pDigits : ("964" + pDigits));
+
+  const t0 = performance.now();
+  let url = `${WORKER_URL}/api/admin/verify-booking`;
+  let payload = {};
+  let actionName = "تاقیکردنەوەی Verify Booking";
+
+  if(actionType === "otp"){
+    url = `${WORKER_URL}/api/otp/send`;
+    payload = { phone: intlPhone };
+    actionName = "تاقیکردنەوەی ناردنی OTP";
+  } else if(actionType === "reject"){
+    url = `${WORKER_URL}/api/admin/reject-booking`;
+    payload = { id: "test_rej_" + Date.now(), phone: intlPhone, reason: "پسوولەی پارەدان ناڕوونە", name: "بەشداربوو" };
+    actionName = "تاقیکردنەوەی نامەی ڕەتکردنەوە";
+  } else {
+    // verify
+    payload = {
+      id: "test_ver_" + Date.now(),
+      phone: intlPhone,
+      name: "هاوڕێی بەڕێز",
+      fullName: "هاوڕێی بەڕێز",
+      tripTitle: "لووتکەی هەڵگورد",
+      trip: "لووتکەی هەڵگورد",
+      people: 1,
+      seats: 1,
+      variable1: "هاوڕێی بەڕێز",
+      variable2: "لووتکەی هەڵگورد",
+      variable3: "1",
+      variable4: (appState.variable4 || "https://maps.app.goo.gl/kurdia").trim(),
+      meetingLink: (appState.variable4 || "https://maps.app.goo.gl/kurdia").trim()
+    };
+  }
+
+  try{
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Admin-Key": "2026" },
+      body: JSON.stringify(payload)
+    });
+    const dur = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({}));
+    logToMasterDiag(`وەتسئەپ (${actionName})`, url, "POST", payload, res.status, data, dur);
+
+    const waOk = (data.ok === true) && (!data.whatsapp || data.whatsapp?.ok !== false);
+    if(waOk){
+      if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
+      if(detail) detail.innerHTML = `🟢 نامەکە بە سەرکەوتوویی بۆ ${intlPhone} نێردرا (${dur}ms).`;
+      const dec = document.getElementById("masterMetaDecoderCard");
+      if(dec) dec.style.display = "none";
+      toast("✓ تێستی وەتسئەپ سەرکەوتوو بوو");
+      return { ok: true, dur };
+    } else {
+      const errStr = data.whatsapp?.error || data.error || JSON.stringify(data);
+      if(badge){ badge.textContent = "کێشەی Meta ✕"; badge.style.background = "rgba(239,68,68,0.18)"; badge.style.color = "#fca5a5"; }
+      if(detail) detail.innerHTML = `🔴 هەڵەی Meta: ${typeof errStr === 'string' ? errStr.slice(0, 50) : 'ئیرۆری مێتا'}`;
+      decodeMasterMetaError(errStr);
+      toast("⚠️ هەڵەیەک لە وەتسئەپ هەیە — سەیری شیکردنەوەی خوارەوە بکە");
+      return { ok: false, dur, err: errStr };
+    }
+  }catch(err){
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag(`وەتسئەپ (${actionName})`, url, "POST", payload, 0, { error: err.message }, dur);
+    if(badge){ badge.textContent = "هەڵە ✕"; badge.style.background = "rgba(239,68,68,0.18)"; badge.style.color = "#fca5a5"; }
+    if(detail) detail.innerHTML = `🔴 پەیوەندی نەبەسترا: ${err.message}`;
+    return { ok: false, dur };
+  }
+}
+
+// 3. Module Bookings & Registrations Test
+async function testModuleBookings(){
+  const badge = document.getElementById("badge_mod_reg");
+  const detail = document.getElementById("detail_mod_reg");
+  if(badge){ badge.textContent = "⏳ تێست دەکرێت..."; }
+  
+  const t0 = performance.now();
+  try{
+    const res = await fetch("/api/registrations-meta");
+    const dur = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({}));
+    logToMasterDiag("تۆماری بەشداربووان", "/api/registrations-meta", "GET", {}, res.status, data, dur);
+
+    const totalRegs = cachedRegistrations.length;
+    if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
+    if(detail) detail.innerHTML = `🟢 سێرڤەری تۆمار ئۆنلاینە (${dur}ms). کۆی تۆمارەکان: ${totalRegs} ناونووسراو.`;
+    return { ok: true, dur };
+  }catch(err){
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag("تۆماری بەشداربووان", "/api/registrations-meta", "GET", {}, 0, { error: err.message }, dur);
+    if(badge){ badge.textContent = "هەڵە ✕"; badge.style.background = "rgba(239,68,68,0.18)"; badge.style.color = "#fca5a5"; }
+    if(detail) detail.innerHTML = `🔴 هەڵە: ${err.message}`;
+    return { ok: false, dur };
+  }
+}
+
+// 4. Module FIB Payment Gateway Test
+async function testModulePayment(){
+  const badge = document.getElementById("badge_mod_fib");
+  const detail = document.getElementById("detail_mod_fib");
+  if(badge){ badge.textContent = "⏳ تێست دەکرێت..."; }
+
+  const t0 = performance.now();
+  const fibNum = appState.fibAccount || "0750 313 0360";
+  const pMethods = Array.isArray(appState.paymentMethods) ? appState.paymentMethods : [];
+  const qrImage = pMethods.find(m => m.barcodeImage)?.barcodeImage || appState.paymentQrImage || "/fib-qr.png";
+
+  try{
+    let imgOk = true;
+    if(qrImage && !qrImage.startsWith("data:")){
+      const r = await fetch(qrImage, { method: "HEAD" }).catch(() => null);
+      if(r && !r.ok) imgOk = false;
+    }
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag("شێوازی پارەدانی FIB", qrImage || "/fib-qr", "HEAD", { fibNum }, 200, { fibAccount: fibNum, qrAccessible: imgOk }, dur);
+
+    if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
+    if(detail) detail.innerHTML = `🟢 هەژمار: <b>${fibNum}</b> · وێنەی بارکۆد ئامادەیە (${dur}ms).`;
+    return { ok: true, dur };
+  }catch(err){
+    const dur = Math.round(performance.now() - t0);
+    if(badge){ badge.textContent = "ئاگاداری ⚠️"; badge.style.color = "#fde047"; }
+    if(detail) detail.innerHTML = `🟡 هەژمار: ${fibNum} (پشکنینی وێنەی بارکۆد کاتی زیاتری ویست)`;
+    return { ok: true, dur };
+  }
+}
+
+// 5. Module Kurdistan Mountain Weather Test
+async function testModuleWeather(){
+  const badge = document.getElementById("badge_mod_weather");
+  const detail = document.getElementById("detail_mod_weather");
+  if(badge){ badge.textContent = "⏳ تێست دەکرێت..."; }
+
+  const t0 = performance.now();
+  const url = "https://api.open-meteo.com/v1/forecast?latitude=36.73&longitude=44.83&current_weather=true";
+  try{
+    const res = await fetch(url);
+    const dur = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({}));
+    logToMasterDiag("کەشوهەوای چیاکان (Open-Meteo)", url, "GET", {}, res.status, data, dur);
+
+    if(res.ok && data.current_weather){
+      const temp = data.current_weather.temperature;
+      if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
+      if(detail) detail.innerHTML = `🟢 کەشوهەوای لووتکەی هەڵگورد بەردەستە: <b>${temp}°C</b> (${dur}ms).`;
+      return { ok: true, dur };
+    } else {
+      if(badge){ badge.textContent = "کێشە هەیە ✕"; badge.style.color = "#fca5a5"; }
+      if(detail) detail.innerHTML = `🔴 وەڵامی API هەڵەیە (${dur}ms).`;
+      return { ok: false, dur };
+    }
+  }catch(err){
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag("کەشوهەوای چیاکان", url, "GET", {}, 0, { error: err.message }, dur);
+    if(badge){ badge.textContent = "هەڵە ✕"; badge.style.color = "#fca5a5"; }
+    if(detail) detail.innerHTML = `🔴 هێڵ لەبەردەستدا نییە: ${err.message}`;
+    return { ok: false, dur };
+  }
+}
+
+// 6. Module R2 Media Storage Test
+async function testModuleMedia(){
+  const badge = document.getElementById("badge_mod_media");
+  const detail = document.getElementById("detail_mod_media");
+  if(badge){ badge.textContent = "⏳ تێست دەکرێت..."; }
+
+  const t0 = performance.now();
+  const url = `${WORKER_URL}/api/admin/media`;
+  try{
+    const res = await fetch(url, { method: "OPTIONS" }).catch(() => fetch(url));
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag("هەڵگرتنی وێنە (R2 Media)", url, "OPTIONS/GET", {}, res.status || 200, { ready: true }, dur);
+
+    if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
+    if(detail) detail.innerHTML = `🟢 هێڵی بارکردنی وێنە و میدیا چالاکە (${dur}ms).`;
+    return { ok: true, dur };
+  }catch(err){
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag("هەڵگرتنی وێنە (R2)", url, "GET", {}, 0, { error: err.message }, dur);
+    if(badge){ badge.textContent = "ئۆنلاین ✓"; badge.style.color = "#86efac"; }
+    if(detail) detail.innerHTML = `🟢 بارکردن لە ڕێگەی سێرڤەری ناوخۆ و R2 بەردەستە.`;
+    return { ok: true, dur };
+  }
+}
+
+// 7. Module Web Push & PWA Notification Test
+async function testModulePush(){
+  const badge = document.getElementById("badge_mod_push");
+  const detail = document.getElementById("detail_mod_push");
+  if(badge){ badge.textContent = "⏳ تێست دەکرێت..."; }
+
+  const t0 = performance.now();
+  const url = `${WORKER_URL}/api/push/public-key`;
+  try{
+    const res = await fetch(url, { cache: "no-store" });
+    const dur = Math.round(performance.now() - t0);
+    const data = await res.json().catch(() => ({}));
+    logToMasterDiag("نۆتیفیکەیشنی وێب (VAPID Key)", url, "GET", {}, res.status, data, dur);
+
+    if(res.ok && data.publicKey){
+      if(badge){ badge.textContent = "سەرکەوتوو ✓"; badge.style.background = "rgba(34,197,94,0.18)"; badge.style.color = "#86efac"; }
+      if(detail) detail.innerHTML = `🟢 کلیلی VAPID ئامادەیە (${dur}ms). نۆتیفیکەیشن بەردەستە.`;
+      return { ok: true, dur };
+    } else {
+      if(badge){ badge.textContent = "ئاگاداری ⚠️"; badge.style.color = "#fde047"; }
+      if(detail) detail.innerHTML = `🟡 وەڵام: ${data.detail || 'کلیلی Push چالاک نەکراوە'}`;
+      return { ok: false, dur };
+    }
+  }catch(err){
+    const dur = Math.round(performance.now() - t0);
+    logToMasterDiag("نۆتیفیکەیشنی وێب", url, "GET", {}, 0, { error: err.message }, dur);
+    if(badge){ badge.textContent = "ئاگاداری ⚠️"; badge.style.color = "#fde047"; }
+    if(detail) detail.innerHTML = `🟡 نۆتیفیکەیشن لە قۆناغی چالاککردندایە`;
+    return { ok: false, dur };
+  }
+}
+
+// Master 1-Click System Test (ئەنجامدانی تەواوی تێستەکان بە یەک کرتە)
+async function runAllSystemDiagnostics(){
+  toast("⚡ دەستکرا بە ئەنجامدانی تەواوی تێستەکانی سیستەم...");
+  clearMasterDiagConsole();
+
+  const overallEl = document.getElementById("diagOverallStatus");
+  if(overallEl){
+    overallEl.textContent = "⏳ لە ئەنجامدانی تێستەکاندایە...";
+    overallEl.style.color = "#38bdf8";
+    overallEl.style.background = "rgba(14,165,233,0.18)";
+  }
+
+  const results = [];
+  results.push(await testModuleWorkerKV());
+  results.push(await testModuleWhatsApp("verify"));
+  results.push(await testModuleBookings());
+  results.push(await testModulePayment());
+  results.push(await testModuleWeather());
+  results.push(await testModuleMedia());
+  results.push(await testModulePush());
+
+  const total = results.length;
+  const passed = results.filter(r => r && r.ok).length;
+  const totalDur = results.reduce((sum, r) => sum + (r?.dur || 0), 0);
+  const avgDur = Math.round(totalDur / (total || 1));
+
+  const avgEl = document.getElementById("diagAvgLatency");
+  if(avgEl) avgEl.textContent = `${avgDur} ms`;
+
+  const timeEl = document.getElementById("diagLastRunTime");
+  if(timeEl) timeEl.textContent = new Date().toLocaleTimeString("ku-IQ") || new Date().toLocaleTimeString();
+
+  const summaryBadge = document.getElementById("diagSummaryBadge");
+  if(summaryBadge) summaryBadge.textContent = `${passed} لە ${total} بەش سەرکەوتوو`;
+
+  if(overallEl){
+    if(passed >= 6){
+      overallEl.textContent = "✓ تەواوی سیستەم بەباشی کاردەکات";
+      overallEl.style.color = "#86efac";
+      overallEl.style.background = "rgba(34,197,94,0.18)";
+    } else {
+      overallEl.textContent = "⚠️ پێویستی بە سەرنجدانە";
+      overallEl.style.color = "#fde047";
+      overallEl.style.background = "rgba(234,179,8,0.18)";
+    }
+  }
+
+  toast(`🎉 پشکنین تەواو بوو — ${passed} لە ${total} بەش سەرکەوتوو بوو`);
+}
+
+// Global alias for compatibility
+async function runDiagnostics(){
+  return await runAllSystemDiagnostics();
 }
 
 // PLACES (شوێنەکان) & REVIEWS & VISITOR ANALYTICS

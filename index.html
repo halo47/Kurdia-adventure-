@@ -5569,7 +5569,7 @@ document.addEventListener('click',function(e){
 
   function isPwaFullyActivated(){
     if(isStandalone()) return true;
-    if(localStorage.getItem('kurdia_pwa_activated_v3') === '1') return true;
+    if(localStorage.getItem('kurdia_pwa_activated_v5') === '1') return true;
     return false;
   }
 
@@ -5580,19 +5580,19 @@ document.addEventListener('click',function(e){
     if(!content) return;
 
     if(isIOS){
-      if(badge) badge.textContent = '🍎 بۆ بەکارهێنەرانی iPhone / iOS';
+      if(badge) badge.textContent = '🍎 تایبەت بە iPhone / Safari';
       content.innerHTML = `
-        <div class="kp-text">بۆ ئەوەی وەک ئەپ کاربکات و گەشتە نوێیەکان لەدەست نەدەیت:</div>
+        <div class="kp-text">بۆ ئەوەی KURDIA وەک ئەپی سەر شاشە کاربکات و ئاگاداری گەشتە نوێیەکان بیت:</div>
         <div class="kp-steps">
-          <div>١. لە خوارەوەی وێبگەڕی Safari کرتە لە دووگمەی <b>Share (هاوبەشکردن <span style="display:inline-block;padding:0 3px;border:1px solid rgba(255,255,255,0.3);border-radius:4px;font-size:12px;line-height:1">⎋</span>)</b> بکە.</div>
-          <div style="margin-top:4px">٢. پەڕەکە بەرەو خوارەوە ببە و هەڵبژاردنی <b>«Add to Home Screen»</b> (یان زیادکردن بۆ سەر شاشەی سەرەکی <span style="font-weight:900">⊞</span>) بکە.</div>
+          <div>١. لە خوارەوەی وێبگەڕی Safari کرتە لە دووگمەی <b>Share (هاوبەشکردن <span style="display:inline-block;padding:1px 5px;border:1px solid rgba(255,255,255,0.4);border-radius:6px;font-size:12px;line-height:1">⎋</span>)</b> بکە.</div>
+          <div style="margin-top:5px">٢. مێنیوەکە بەرەو خوارەوە ببە و هەڵبژاردنی <b>«Add to Home Screen»</b> (<span style="font-weight:900">⊞</span> زیادکردن بۆ سەر شاشە) بکە.</div>
         </div>
       `;
       if(installBtn) installBtn.style.display = 'none';
     } else {
-      if(badge) badge.textContent = '📱 ئەپی KURDIA';
+      if(badge) badge.textContent = '📱 ئەپی سەر شاشەی KURDIA';
       content.innerHTML = `
-        <div class="kp-text">بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە و ئاگادارییە نوێیەکان و گەشتەکان بە دەستبەجێ وەربگرە.</div>
+        <div class="kp-text">بۆ ئەزموونێکی خێراتر، ئەپەکە دابمەزرێنە بۆ سەر شاشە و ئاگادارییە نوێیەکان و داشکاندنەکان وەربگرە.</div>
       `;
       if(installBtn) installBtn.style.display = deferredInstall ? 'inline-block' : 'none';
     }
@@ -5693,7 +5693,7 @@ document.addEventListener('click',function(e){
     closePrompt: function(){ minimize(); },
     minimizePrompt: function(){ minimize(); },
     markActivated: function(){
-      localStorage.setItem('kurdia_pwa_activated_v3', '1');
+      localStorage.setItem('kurdia_pwa_activated_v5', '1');
       hide();
       if(typeof toast === 'function') toast('سوپاس! ئەپ و ئاگادارییەکانی KURDIA چالاک کران ✓');
     },
@@ -5726,7 +5726,7 @@ document.addEventListener('click',function(e){
 
   window.addEventListener('appinstalled', () => {
     deferredInstall = null;
-    localStorage.setItem('kurdia_pwa_activated_v3', '1');
+    localStorage.setItem('kurdia_pwa_activated_v5', '1');
     hide();
   });
 
@@ -5734,7 +5734,7 @@ document.addEventListener('click',function(e){
     await registerSW();
 
     if(isStandalone()){
-      localStorage.setItem('kurdia_pwa_activated_v3', '1');
+      localStorage.setItem('kurdia_pwa_activated_v5', '1');
       hide();
       return;
     }
@@ -5749,7 +5749,7 @@ document.addEventListener('click',function(e){
           const r = await deferredInstall.userChoice;
           deferredInstall = null;
           if(r?.outcome === 'accepted'){
-            localStorage.setItem('kurdia_pwa_activated_v3', '1');
+            localStorage.setItem('kurdia_pwa_activated_v5', '1');
             hide();
           }
           return;
@@ -5764,7 +5764,7 @@ document.addEventListener('click',function(e){
 
     // Show persistently until activated
     if(!isPwaFullyActivated()){
-      setTimeout(() => show(false), 900);
+      setTimeout(() => show(false), 500);
     }
   });
 })();
@@ -8840,6 +8840,7 @@ html[dir="ltr"] .ai{
     const activePage = document.getElementById(pageId || (location.hash || '#home').slice(1) || 'home');
     if(!activePage) return;
     window.kurdiaBindScrollReveals(activePage);
+    if(typeof init3DCardPerspectiveTilt === 'function') init3DCardPerspectiveTilt();
     if(reduce || !window.gsap) return;
     try{
       const targets = activePage.querySelectorAll('.featured, .place-card, .booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card, .private-vip-showcase, .experience-card');
@@ -8878,7 +8879,7 @@ html[dir="ltr"] .ai{
     setTimeout(() => window.kurdiaAnimatePageCards(), 60);
   });
 
-  // 5. Ambient Floating Mountain Starlight / Embers Canvas (Mobile + Desktop)
+  // 5. Lightweight 3D Mountain Horizon Depth & Ambient Embers Scene (Three.js)
   function initThreeAtmosphere(){
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!window.THREE || reduce) return;
@@ -8888,21 +8889,68 @@ html[dir="ltr"] .ai{
       bgCanvas.id = 'kurdiaThreeAmbientCanvas';
       document.body.prepend(bgCanvas);
       const isMobile = window.innerWidth < 768;
-      const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: false });
+      const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: false, powerPreference: 'low-power' });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.z = 6;
+      const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 0, 7);
 
-      const count = isMobile ? 48 : 95;
-      const geo = new THREE.BufferGeometry();
-      const pts = new Float32Array(count * 3);
-      for(let i=0;i<count*3;i++) pts[i] = (Math.random() - 0.5) * 16;
-      geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-      const mat = new THREE.PointsMaterial({ color: 0xff4d73, size: isMobile ? 0.048 : 0.04, transparent: true, opacity: 0.42 });
-      const particles = new THREE.Points(geo, mat);
-      scene.add(particles);
+      // A. Geometric 3D Mountain Horizon Wireframe (Ultra lightweight, Zagros ridges)
+      const gridX = isMobile ? 14 : 22;
+      const gridY = isMobile ? 8 : 12;
+      const mountainGeo = new THREE.PlaneGeometry(32, 16, gridX, gridY);
+      const posAttr = mountainGeo.attributes.position;
+      for(let i = 0; i < posAttr.count; i++){
+        const vx = posAttr.getX(i);
+        const vy = posAttr.getY(i);
+        // Realistic mountain ridge wave formula
+        const elevation = Math.sin(vx * 0.35) * Math.cos(vy * 0.4) * 2.2 +
+                          Math.sin(vx * 0.75 + 1.2) * 1.1 +
+                          Math.sin(vx * 1.4) * 0.45;
+        posAttr.setZ(i, Math.max(0, elevation));
+      }
+      mountainGeo.computeVertexNormals();
+
+      const mountainMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        wireframe: true,
+        transparent: true,
+        opacity: isMobile ? 0.08 : 0.12
+      });
+      const mountainMesh = new THREE.Mesh(mountainGeo, mountainMat);
+      mountainMesh.rotation.x = -Math.PI / 2.3;
+      mountainMesh.position.set(0, -4.6, -2);
+      scene.add(mountainMesh);
+
+      // B. Ambient Floating Starlight & Warm Sunset Embers
+      const emberCount = isMobile ? 36 : 75;
+      const emberGeo = new THREE.BufferGeometry();
+      const emberPositions = new Float32Array(emberCount * 3);
+      const emberVelocities = new Float32Array(emberCount);
+      for(let i = 0; i < emberCount; i++){
+        emberPositions[i * 3] = (Math.random() - 0.5) * 18;
+        emberPositions[i * 3 + 1] = (Math.random() - 0.5) * 12;
+        emberPositions[i * 3 + 2] = (Math.random() - 0.5) * 8;
+        emberVelocities[i] = 0.003 + Math.random() * 0.007;
+      }
+      emberGeo.setAttribute('position', new THREE.BufferAttribute(emberPositions, 3));
+      const emberMat = new THREE.PointsMaterial({
+        color: 0xff5e7e,
+        size: isMobile ? 0.046 : 0.042,
+        transparent: true,
+        opacity: 0.48
+      });
+      const emberPoints = new THREE.Points(emberGeo, emberMat);
+      scene.add(emberPoints);
+
+      // Mouse Parallax Driver
+      let mouseX = 0, mouseY = 0;
+      let targetCameraX = 0, targetCameraY = 0;
+      window.addEventListener('pointermove', e => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      }, { passive: true });
 
       window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -8910,14 +8958,65 @@ html[dir="ltr"] .ai{
         renderer.setSize(window.innerWidth, window.innerHeight);
       }, { passive: true });
 
+      let clock = 0;
       function animateThree(){
         requestAnimationFrame(animateThree);
-        particles.rotation.y += 0.00035;
-        particles.rotation.x += 0.00012;
+        clock += 0.008;
+
+        // Subtle mountain ridge breath
+        mountainMesh.rotation.z = Math.sin(clock * 0.2) * 0.02;
+        mountainMesh.position.y = -4.6 + Math.sin(clock * 0.4) * 0.12;
+
+        // Rise embers
+        const pArr = emberGeo.attributes.position.array;
+        for(let i = 0; i < emberCount; i++){
+          pArr[i * 3 + 1] += emberVelocities[i];
+          pArr[i * 3] += Math.sin(clock + i) * 0.002;
+          if(pArr[i * 3 + 1] > 6){
+            pArr[i * 3 + 1] = -6;
+            pArr[i * 3] = (Math.random() - 0.5) * 18;
+          }
+        }
+        emberGeo.attributes.position.needsUpdate = true;
+
+        // Smooth camera damping
+        targetCameraX += (mouseX * 0.35 - targetCameraX) * 0.04;
+        targetCameraY += (-mouseY * 0.25 - targetCameraY) * 0.04;
+        camera.position.x = targetCameraX;
+        camera.position.y = targetCameraY;
+        camera.lookAt(0, -1, 0);
+
         renderer.render(scene, camera);
       }
       animateThree();
     }catch(e){}
+  }
+
+  // 6. Interactive 3D Perspective Tilt on Interactive Cards (Smooth & Lightweight)
+  function init3DCardPerspectiveTilt(){
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce) return;
+    const cards = document.querySelectorAll('.featured, .place-card, .booking-trip-pick-card, .booking-form-card, .private-preset-card, .private-trip-card');
+    cards.forEach(card => {
+      if(card._has3dTilt) return;
+      card._has3dTilt = true;
+      card.style.transformStyle = 'preserve-3d';
+      card.style.transition = 'transform 0.18s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.25s ease';
+
+      card.addEventListener('pointermove', e => {
+        const rect = card.getBoundingClientRect();
+        if(rect.width === 0 || rect.height === 0) return;
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        const rx = (-py * 6.5).toFixed(2);
+        const ry = (px * 6.5).toFixed(2);
+        card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(4px)`;
+      }, { passive: true });
+
+      card.addEventListener('pointerleave', () => {
+        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+      }, { passive: true });
+    });
   }
 
   // 5. Real-Time Website Visitor Tracking (Synced with Server + LocalStorage for Admin)
