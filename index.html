@@ -649,8 +649,42 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 </style>
 
 <style id="public-cms-style">
-.public-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.public-photo{position:relative;min-height:190px;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#111}.public-photo img{width:100%;height:100%;min-height:190px;object-fit:cover;display:block}.public-photo div{position:absolute;bottom:0;left:0;right:0;padding:14px;color:#fff;font-weight:800;background:linear-gradient(transparent,rgba(0,0,0,.85))}.reviews-public-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.public-review{padding:18px;border:1px solid var(--line);background:var(--panel);border-radius:22px}.review-stars{color:#ffca3a;letter-spacing:2px}.public-review p{font-size:12px;line-height:2;color:#d9dce2}.public-review small{display:block;color:var(--muted);margin-top:4px}.social-public{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}.social-public a{width:48px;height:48px;border-radius:15px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;font-weight:900}.social-public a:hover{border-color:rgba(211,47,78,.6)}
-@media(max-width:600px){.public-gallery,.reviews-public-grid{grid-template-columns:1fr 1fr}.public-photo,.public-photo img{min-height:150px}}
+.public-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.public-photo{position:relative;min-height:190px;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#111}.public-photo img{width:100%;height:100%;min-height:190px;object-fit:cover;display:block}.public-photo div{position:absolute;bottom:0;left:0;right:0;padding:14px;color:#fff;font-weight:800;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.reviews-public-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.public-review{padding:16px 18px;border:1px solid rgba(255,255,255,0.09);background:linear-gradient(155deg,rgba(18,23,33,0.94),rgba(10,13,20,0.97));border-radius:20px;box-shadow:0 12px 30px rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:10px;min-width:0;overflow:hidden}
+.public-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.public-review-user{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.public-review-avatar{width:40px;height:40px;flex:0 0 40px;border-radius:13px;background:linear-gradient(145deg,rgba(211,47,78,0.28),rgba(169,29,55,0.14));border:1px solid rgba(211,47,78,0.42);display:grid;place-items:center;font-weight:900;color:#ff8da3;font-size:15px}
+.public-review-meta{min-width:0;flex:1}
+.public-review-meta b{display:block;font-size:14px;font-weight:800;color:#fff;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.public-review-meta small{display:inline-flex;align-items:center;gap:4px;color:#94a3b8;font-size:11px;margin-top:2px}
+.review-stars{color:#ffca3a;letter-spacing:1.5px;font-size:14px;line-height:1;direction:ltr;white-space:nowrap;flex-shrink:0;background:rgba(255,202,58,0.1);border:1px solid rgba(255,202,58,0.25);padding:5px 9px;border-radius:999px;font-weight:800}
+.public-review p{margin:0;font-size:13px;line-height:1.9;color:#e2e8f0;overflow-wrap:anywhere}
+.social-public{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}.social-public a{width:48px;height:48px;border-radius:15px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;font-weight:900}.social-public a:hover{border-color:rgba(211,47,78,.6)}
+@media(max-width:680px){
+  .public-gallery{grid-template-columns:1fr 1fr}
+  .public-photo,.public-photo img{min-height:150px}
+  .reviews-public-grid{grid-template-columns:1fr!important;gap:10px!important}
+  .public-review{padding:14px 15px!important;border-radius:17px!important}
+  .public-review-avatar{width:36px;height:36px;flex:0 0 36px;font-size:14px;border-radius:11px}
+  .public-review-meta b{font-size:13.5px;white-space:normal}
+  .review-stars{font-size:13px!important;letter-spacing:1px!important;padding:4px 8px!important}
+  .public-review p{font-size:12.5px;line-height:1.85}
+  .review-write{padding:14px!important;border-radius:18px!important}
+  .review-rating{padding:10px 12px!important;gap:8px!important}
+  .stars-input button{font-size:26px!important;padding:2px 4px!important}
+}
+/* Auto Review Prompt Modal & Inline Quick Rating */
+.quick-rate-box{margin-top:12px;padding:13px 14px;border-radius:16px;background:linear-gradient(145deg,rgba(255,200,61,0.09),rgba(211,47,78,0.08));border:1px solid rgba(255,200,61,0.28);text-align:right}
+.quick-rate-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.quick-rate-head b{font-size:13px;color:#fde68a;display:flex;align-items:center;gap:6px}
+.quick-rate-stars{display:flex;direction:ltr;justify-content:center;gap:6px;margin:8px 0}
+.quick-rate-stars button{border:1px solid rgba(255,200,61,0.25);background:rgba(15,23,42,0.75);color:#64748b;width:40px;height:40px;border-radius:12px;font-size:22px;line-height:1;cursor:pointer;transition:all .18s ease;display:grid;place-items:center}
+.quick-rate-stars button.selected{color:#ffc83d;background:rgba(255,200,61,0.16);border-color:rgba(255,200,61,0.55);transform:scale(1.05);box-shadow:0 4px 14px rgba(255,200,61,0.2)}
+.quick-rate-chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
+.quick-rate-chips::-webkit-scrollbar{display:none}
+.quick-rate-chip{flex:0 0 auto;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:#e2e8f0;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:.18s}
+.quick-rate-chip:hover,.quick-rate-chip:active{background:rgba(211,47,78,0.22);border-color:rgba(211,47,78,0.5);color:#fff}
 </style>
 
 <style id="kurdia-friendly-ai-chat">
@@ -2240,7 +2274,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="storyModal" class="story-modal"><div class="story-sheet"><div class="sectionhead"><div><div class="eyebrow">ستۆری</div><h2>ستۆری خۆت بنێرە</h2></div><button class="iconbtn" onclick="closeStoryModal()"><i data-lucide="x"></i></button></div><form class="form" onsubmit="submitStory(event)"><input id="stName" class="input" required placeholder="ناوی تۆ..."><input id="stCity" class="input" placeholder="شار..."><input id="stTrip" class="input" placeholder="ناوی گەشت..."><textarea id="stText" class="textarea" placeholder="چی بەسەر هات؟..."></textarea><input id="stMediaFile" class="input" type="file" accept="image/*" onchange="previewStoryImage(event)" required><input id="stMediaBase64" type="hidden"><div id="storyPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div><button class="btn red" type="submit">ناردنی ستۆری</button></form></div></div>
 <div id="storyViewerModal" class="story-viewer"><div class="story-viewer-card"><div class="story-progress"><i id="storyProgressBar"></i></div><img id="viewerImage"><div class="story-viewer-top"><div id="viewerAvatar" class="story-viewer-avatar">K</div><div class="story-viewer-info"><b id="viewerName">KURDIA</b><small id="viewerTime">کوردیا</small></div><button class="story-viewer-close" onclick="closeStoryViewer()"><i data-lucide="x"></i></button></div><div class="story-viewer-bottom"><div id="viewerText" style="flex:1;font-size:12px;line-height:1.8"></div><button class="story-viewer-like" onclick="likeCurrentStory()"><i data-lucide="heart"></i> <span id="viewerLikes">0</span></button><button class="story-viewer-like" onclick="shareStoryWhatsApp()"><i data-lucide="share-2"></i></button></div></div></div>
 <div id="bookingSuccessModal" class="booking-success-overlay" aria-hidden="true">
-  <div class="booking-success-card">
+  <div class="booking-success-card" style="max-height:92vh;overflow-y:auto">
     <div class="booking-success-confetti" id="bookingSuccessConfetti"></div>
     <div class="booking-success-ring-wrap">
       <div class="booking-success-halo"></div>
@@ -2255,7 +2289,74 @@ main,section,.section,.page-section{background-color:transparent!important}
     <h2 class="booking-success-title">ناو تۆمارکردنەکەت سەرکەوتوو بوو</h2>
     <p class="booking-success-sub">داواکاری و وێنەی پسوڵەکەت بە سەرکەوتوویی گەیشتە تیمی سەرپەرشتیاری گەشت.</p>
     <div class="booking-success-details" id="bookingSuccessDetails"></div>
-    <button type="button" class="btn red booking-success-close-btn" onclick="closeBookingSuccessModal()">زۆر باشە، تێگەیشتم ✓</button>
+
+    <!-- Automatic Inline Review / Rating Prompt right on the confirmation screen -->
+    <div class="quick-rate-box" id="inlineBookingReviewBox">
+      <div id="inlineReviewFormArea">
+        <div class="quick-rate-head">
+          <b>⭐ هەڵسەنگاندن بکە بۆ ئەزموونەکەت</b>
+          <span id="inlineRateLabel" style="font-size:11px;font-weight:800;color:#ffc83d">٥ لە ٥ — نایاب 🌟</span>
+        </div>
+        <div class="quick-rate-stars" id="inlineStarsGroup">
+          <button type="button" data-val="1" onclick="setQuickReviewStars('inline',1)">★</button>
+          <button type="button" data-val="2" onclick="setQuickReviewStars('inline',2)">★</button>
+          <button type="button" data-val="3" onclick="setQuickReviewStars('inline',3)">★</button>
+          <button type="button" data-val="4" onclick="setQuickReviewStars('inline',4)">★</button>
+          <button type="button" data-val="5" class="selected" onclick="setQuickReviewStars('inline',5)">★</button>
+        </div>
+        <div class="quick-rate-chips">
+          <button type="button" class="quick-rate-chip" onclick="fillQuickReviewChip('inline','🔥 ناو تۆمارکردنەکە زۆر ئاسان و خێرا بوو، دەستخۆش!')">🔥 زۆر ئاسان و نایاب بوو</button>
+          <button type="button" class="quick-rate-chip" onclick="fillQuickReviewChip('inline','🏔️ باشترین تیمی شاخەوانی لە کوردستان، سەرکەوتوو بن!')">🏔️ باشترین تیمی شاخەوانی</button>
+          <button type="button" class="quick-rate-chip" onclick="fillQuickReviewChip('inline','❤️ زۆر سوپاس بۆ تیمی KURDIA ADVENTURE')">❤️ سوپاس بۆ کوردیا</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <input id="inlineReviewName" class="input" style="min-height:36px;padding:7px 10px;font-size:12px" placeholder="ناوی تۆ">
+          <input id="inlineReviewCity" class="input" style="min-height:36px;padding:7px 10px;font-size:12px" placeholder="شار (هەولێر، سلێمانی...)" value="هەولێر">
+        </div>
+        <textarea id="inlineReviewComment" class="textarea" rows="2" style="min-height:56px;padding:8px 10px;font-size:12px;margin-bottom:8px" placeholder="بیروڕا و هەڵسەنگاندنی خۆت لێرە بنووسە..."></textarea>
+        <button type="button" id="inlineReviewSubmitBtn" class="btn red" style="width:100%;padding:10px;font-size:12.5px" onclick="submitQuickBookingReview('inline')">✨ ناردنی هەڵسەنگاندن</button>
+      </div>
+      <div id="inlineReviewThanksArea" style="display:none;padding:10px;text-align:center;color:#4ef2a1;font-weight:800;font-size:13px">
+        🎉 زۆر سوپاس! هەڵسەنگاندنەکەت بە سەرکەوتوویی نێردرا و بڵاوکرایەوە ✓
+      </div>
+    </div>
+
+    <button type="button" class="btn ghost booking-success-close-btn" style="margin-top:8px;width:100%" onclick="closeBookingSuccessModal()">داخستن و گەڕانەوە ✓</button>
+  </div>
+</div>
+
+<!-- Automatic Standalone Review Popup Modal (appears if user closes confirmation without rating) -->
+<div id="autoReviewPromptModal" class="booking-success-overlay" aria-hidden="true">
+  <div class="booking-success-card" style="max-width:420px">
+    <div style="font-size:38px;line-height:1;margin-bottom:6px">🌟</div>
+    <span class="booking-success-badge" style="background:rgba(255,200,61,0.14);color:#fde68a;border-color:rgba(255,200,61,0.3)">KURDIA FEEDBACK · هەڵسەنگاندن</span>
+    <h2 class="booking-success-title" style="font-size:20px;margin-top:8px">هەڵسەنگاندن بۆ KURDIA بکە</h2>
+    <p class="booking-success-sub" style="font-size:12px;margin-bottom:10px">بیروڕا و هەڵسەنگاندنی تۆ یارمەتیمان دەدات گەشتەکانمان باشتر بکەین ❤️</p>
+    <div class="quick-rate-box" style="margin-top:4px">
+      <div class="quick-rate-head">
+        <b>⭐ چەند ئەستێرەمان پێ دەدەیت؟</b>
+        <span id="popupRateLabel" style="font-size:11px;font-weight:800;color:#ffc83d">٥ لە ٥ — نایاب 🌟</span>
+      </div>
+      <div class="quick-rate-stars" id="popupStarsGroup">
+        <button type="button" data-val="1" onclick="setQuickReviewStars('popup',1)">★</button>
+        <button type="button" data-val="2" onclick="setQuickReviewStars('popup',2)">★</button>
+        <button type="button" data-val="3" onclick="setQuickReviewStars('popup',3)">★</button>
+        <button type="button" data-val="4" onclick="setQuickReviewStars('popup',4)">★</button>
+        <button type="button" data-val="5" class="selected" onclick="setQuickReviewStars('popup',5)">★</button>
+      </div>
+      <div class="quick-rate-chips">
+        <button type="button" class="quick-rate-chip" onclick="fillQuickReviewChip('popup','🔥 خزمەتگوزاری و ڕێکخستنی گەشتەکانتان زۆر نایابە!')">🔥 زۆر نایابە</button>
+        <button type="button" class="quick-rate-chip" onclick="fillQuickReviewChip('popup','🏔️ یەکێک لە باشترین گروپەکانی شاخەوانی کوردستان!')">🏔️ باشترین گروپ</button>
+        <button type="button" class="quick-rate-chip" onclick="fillQuickReviewChip('popup','❤️ دەستخۆشی لە تیمی KURDIA دەکەم')">❤️ دەستخۆش</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+        <input id="popupReviewName" class="input" style="min-height:36px;padding:7px 10px;font-size:12px" placeholder="ناوی تۆ">
+        <input id="popupReviewCity" class="input" style="min-height:36px;padding:7px 10px;font-size:12px" placeholder="شار" value="هەولێر">
+      </div>
+      <textarea id="popupReviewComment" class="textarea" rows="2" style="min-height:60px;padding:8px 10px;font-size:12px;margin-bottom:8px" placeholder="بیروڕای خۆت بنووسە..."></textarea>
+      <button type="button" id="popupReviewSubmitBtn" class="btn red" style="width:100%;padding:11px;font-size:13px" onclick="submitQuickBookingReview('popup')">✨ ناردنی هەڵسەنگاندن</button>
+    </div>
+    <button type="button" class="btn ghost" style="margin-top:8px;width:100%;padding:9px;font-size:12px" onclick="closeAutoReviewPromptModal()">دواتر هەڵسەنگاندن دەکەم</button>
   </div>
 </div>
 <div id="paymentBarcodeModal" class="modal" onclick="if(event.target===this)closeModal('paymentBarcodeModal')">
@@ -3457,17 +3558,17 @@ function createReviewCardHTML(x){
   const text = String(x.text ?? x.comment ?? '').trim();
   const initial = (name[0] || 'K').toUpperCase();
   return `<article class="public-review">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,rgba(211,47,78,0.28),rgba(169,29,55,0.14));border:1px solid rgba(211,47,78,0.4);display:grid;place-items:center;font-weight:900;color:#ff8da3;font-size:15px">${esc(initial)}</div>
-        <div>
-          <b style="display:block;font-size:14px;color:#fff">${esc(name)}</b>
-          <small style="margin:0;font-size:11px;color:#94a3b8">📍 ${esc(city)}</small>
+    <div class="public-review-head">
+      <div class="public-review-user">
+        <div class="public-review-avatar">${esc(initial)}</div>
+        <div class="public-review-meta">
+          <b>${esc(name)}</b>
+          <small>📍 ${esc(city)}</small>
         </div>
       </div>
       <div class="review-stars" title="${rating} لە 5">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
     </div>
-    <p style="margin:0;font-size:13px;line-height:1.95;color:#e2e8f0">“${esc(text)}”</p>
+    <p>“${esc(text)}”</p>
   </article>`;
 }
 
@@ -5329,9 +5430,18 @@ async function submitPrivate(e){
     const x=await r.json().catch(()=>({}));
     if(x.ok){
       toast('داواکارییەکەت نێردرا ✓');
+      const reqName = String(body.name || '').trim();
       form.reset();
       $('privateDateBox')?.classList.remove('open');
       privateTripGo(1);
+      if($('popupReviewName') && reqName) $('popupReviewName').value = reqName;
+      if($('popupReviewComment')) $('popupReviewComment').value = '';
+      if(typeof window.setQuickReviewStars === 'function') window.setQuickReviewStars('popup', 5);
+      const promptModal = $('autoReviewPromptModal');
+      if(promptModal){
+        promptModal.classList.add('open');
+        promptModal.setAttribute('aria-hidden', 'false');
+      }
     }else{
       toast(x.error||'ناردنی داواکاری سەرکەوتوو نەبوو');
     }
@@ -5421,13 +5531,134 @@ window.removeCompanion = function(idx){
   toast('بەشداربوو لابرا');
 };
 
+window.__quickReviewRatings = { inline: 5, popup: 5 };
+window.__bookingReviewSubmittedInSession = false;
+
+window.setQuickReviewStars = function(mode, val){
+  const r = Math.min(5, Math.max(1, Number(val || 5)));
+  window.__quickReviewRatings[mode] = r;
+  const labels = {
+    1: '١ لە ٥ — پێویستی بە باشترکردنە',
+    2: '٢ لە ٥ — مامناوەند',
+    3: '٣ لە ٥ — باش 👍',
+    4: '٤ لە ٥ — زۆر باش ⭐',
+    5: '٥ لە ٥ — نایاب 🌟'
+  };
+  const group = $(mode === 'popup' ? 'popupStarsGroup' : 'inlineStarsGroup');
+  if(group){
+    group.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('selected', Number(b.dataset.val) <= r);
+    });
+  }
+  const lbl = $(mode === 'popup' ? 'popupRateLabel' : 'inlineRateLabel');
+  if(lbl) lbl.textContent = labels[r] || labels[5];
+};
+
+window.fillQuickReviewChip = function(mode, text){
+  const el = $(mode === 'popup' ? 'popupReviewComment' : 'inlineReviewComment');
+  if(el){
+    el.value = text;
+    el.focus();
+  }
+};
+
+window.submitQuickBookingReview = async function(mode){
+  const nameEl = $(mode === 'popup' ? 'popupReviewName' : 'inlineReviewName');
+  const cityEl = $(mode === 'popup' ? 'popupReviewCity' : 'inlineReviewCity');
+  const commentEl = $(mode === 'popup' ? 'popupReviewComment' : 'inlineReviewComment');
+  const btnEl = $(mode === 'popup' ? 'popupReviewSubmitBtn' : 'inlineReviewSubmitBtn');
+
+  const name = String(nameEl?.value || 'بەشداربوو').trim() || 'بەشداربوو';
+  const city = String(cityEl?.value || 'کوردستان').trim() || 'کوردستان';
+  const rating = Math.min(5, Math.max(1, Number(window.__quickReviewRatings?.[mode] || 5)));
+  const comment = String(commentEl?.value || '').trim() || (rating >= 4 ? 'زۆر سوپاس بۆ تیمی KURDIA ADVENTURE، ئەزموونێکی نایاب بوو! 🌟' : 'سوپاس بۆ تیمی KURDIA');
+
+  if(btnEl){
+    btnEl.disabled = true;
+    btnEl.textContent = 'لە ناردندایە...';
+  }
+
+  const newReview = {
+    id: 'rev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    name,
+    city,
+    rating,
+    text: comment,
+    comment,
+    source: 'booking_prompt',
+    createdAt: new Date().toISOString()
+  };
+
+  try{
+    const currentList = Array.isArray(data.reviews) ? data.reviews : [];
+    data.reviews = [
+      newReview,
+      ...currentList.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
+    ];
+    try{
+      const savedLocal = JSON.parse(localStorage.getItem('kurdia_public_reviews_v1') || '[]');
+      const nextLocal = [
+        newReview,
+        ...(Array.isArray(savedLocal) ? savedLocal : []).filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
+      ].slice(0, 100);
+      localStorage.setItem('kurdia_public_reviews_v1', JSON.stringify(nextLocal));
+      localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
+    }catch(_){}
+
+    renderReviewsPublic();
+
+    await Promise.allSettled([
+      fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReview)
+      }),
+      saveReviewToCloudCMS(newReview)
+    ]);
+
+    window.__bookingReviewSubmittedInSession = true;
+    if($('inlineReviewFormArea')) $('inlineReviewFormArea').style.display = 'none';
+    if($('inlineReviewThanksArea')) $('inlineReviewThanksArea').style.display = 'block';
+    if(mode === 'popup'){
+      closeAutoReviewPromptModal();
+    }
+    toast('🎉 سوپاس! هەڵسەنگاندنەکەت بە سەرکەوتوویی تۆمارکرا ✓');
+  }catch(_){
+    toast('✓ هەڵسەنگاندنەکەت تۆمارکرا');
+  }finally{
+    if(btnEl){
+      btnEl.disabled = false;
+      btnEl.textContent = '✨ ناردنی هەڵسەنگاندن';
+    }
+  }
+};
+
+window.closeAutoReviewPromptModal = function(){
+  const modal = $('autoReviewPromptModal');
+  if(!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+};
+
 function showBookingSuccessModal(meta){
   const modal = $('bookingSuccessModal');
   if(!modal) return;
+  window.__bookingReviewSubmittedInSession = false;
+  if($('inlineReviewFormArea')) $('inlineReviewFormArea').style.display = 'block';
+  if($('inlineReviewThanksArea')) $('inlineReviewThanksArea').style.display = 'none';
   const details = $('bookingSuccessDetails');
   const namesList = Array.isArray(meta?.participants) && meta.participants.length
     ? meta.participants
     : [meta?.name || 'بەشداربوو'];
+  const primaryPersonName = String(meta?.primaryName || namesList[0] || meta?.name || '').trim();
+  if($('inlineReviewName')) $('inlineReviewName').value = primaryPersonName;
+  if($('popupReviewName')) $('popupReviewName').value = primaryPersonName;
+  if($('reviewNameInput') && primaryPersonName) $('reviewNameInput').value = primaryPersonName;
+  if($('inlineReviewComment')) $('inlineReviewComment').value = '';
+  if($('popupReviewComment')) $('popupReviewComment').value = '';
+  window.setQuickReviewStars('inline', 5);
+  window.setQuickReviewStars('popup', 5);
+
   if(details){
     details.innerHTML = `
       <div class="bs-row"><span>🧭 گەشت:</span><b>${esc(meta?.trip || 'گەشتی KURDIA')}</b></div>
@@ -5480,15 +5711,30 @@ function showBookingSuccessModal(meta){
 function closeBookingSuccessModal(){
   const modal = $('bookingSuccessModal');
   if(!modal) return;
+  const openAutoReviewIfNeeded = () => {
+    if(!window.__bookingReviewSubmittedInSession){
+      const promptModal = $('autoReviewPromptModal');
+      if(promptModal){
+        promptModal.classList.add('open');
+        promptModal.setAttribute('aria-hidden', 'false');
+        if(window.gsap){
+          const c = promptModal.querySelector('.booking-success-card');
+          if(c) gsap.fromTo(c, { scale: 0.88, opacity: 0, y: 20 }, { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.5)' });
+        }
+      }
+    }
+  };
   if(window.gsap){
     const card = modal.querySelector('.booking-success-card');
     gsap.to(card, { scale: 0.92, opacity: 0, y: 16, duration: 0.24, ease: 'power2.in', onComplete: () => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
+      openAutoReviewIfNeeded();
     }});
   } else {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
+    openAutoReviewIfNeeded();
   }
 }
 function applyCoupon(){

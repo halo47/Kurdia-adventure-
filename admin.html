@@ -2368,24 +2368,43 @@ button{cursor:pointer;color:inherit}
            16. REVIEWS
            ========================================================= -->
       <section class="page" id="reviews">
-        <div class="toolbar"><button class="icon-btn" onclick="go('dashboard')">←</button><h2>هەڵسەنگاندنەکان</h2></div>
+        <div class="toolbar" style="justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="icon-btn" onclick="go('dashboard')">←</button>
+            <h2>هەڵسەنگاندنەکان (فیدباکی بەشداربووان)</h2>
+          </div>
+          <button class="secondary-btn" onclick="fetchLiveReviewsForAdmin(false)" style="padding:7px 12px;font-size:12px">🔄 نوێکردنەوەی فیدباکەکان</button>
+        </div>
         <div class="rating-box spotlight-card">
-          <div><span class="star">★</span><strong>٤.٩</strong></div>
-          <p>لە هەڵسەنگاندنی شاخەوانان</p>
-          <div class="barrow"><span>5 ★</span><div class="bar"><i style="width:78%"></i></div><span>78%</span></div>
-          <div class="barrow"><span>4 ★</span><div class="bar"><i style="width:16%"></i></div><span>16%</span></div>
-          <div class="barrow"><span>3 ★</span><div class="bar"><i style="width:4%"></i></div><span>4%</span></div>
+          <div><span class="star">★</span><strong id="adminReviewsAvgVal">٤.٩</strong></div>
+          <p id="adminReviewsTotalSub">لە هەڵسەنگاندنی شاخەوانان و ماڵپەڕی سەرەکی</p>
+          <div class="barrow"><span>5 ★</span><div class="bar"><i id="adminBar5" style="width:85%"></i></div><span id="adminBar5Pct">85%</span></div>
+          <div class="barrow"><span>4 ★</span><div class="bar"><i id="adminBar4" style="width:12%"></i></div><span id="adminBar4Pct">12%</span></div>
+          <div class="barrow"><span>3 ★</span><div class="bar"><i id="adminBar3" style="width:3%"></i></div><span id="adminBar3Pct">3%</span></div>
         </div>
         <div class="lang-box spotlight-card" style="margin-top:10px">
-          <h4>زیادکردنی فیدباک</h4>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <h4>زیادکردنی فیدباک لەلایەن ئەدمین</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr 110px;gap:8px">
             <div class="field"><label>ناو</label><input id="newReviewName" placeholder="ڕەوەند عەلی"></div>
             <div class="field"><label>شار</label><input id="newReviewCity" placeholder="هەولێر"></div>
+            <div class="field"><label>ئەستێرە</label>
+              <select id="newReviewRating">
+                <option value="5" selected>5 ★</option>
+                <option value="4">4 ★</option>
+                <option value="3">3 ★</option>
+                <option value="2">2 ★</option>
+                <option value="1">1 ★</option>
+              </select>
+            </div>
           </div>
-          <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText"></textarea></div>
-          <button class="primary" onclick="addReviewItem()">زیادکردن ＋</button>
+          <div class="field"><label>دەقی فیدباک</label><textarea id="newReviewText" placeholder="بیروڕای بەشداربوو بنووسە..."></textarea></div>
+          <button class="primary" onclick="addReviewItem()">زیادکردن و بڵاوکردنەوە ＋</button>
         </div>
-        <div id="reviewsList"></div>
+        <div class="section-title" style="margin-top:14px">
+          <span>💬 هەموو هەڵسەنگاندنەکانی ماڵپەڕی سەرەکی</span>
+          <small id="adminReviewsCountLabel" style="color:#6bf0b3;font-size:11px">ڕاستەوخۆ بەستراوەتەوە بە وێبسایت</small>
+        </div>
+        <div id="reviewsList" style="margin-top:8px"></div>
       </section>
 
       <!-- =========================================================
@@ -3067,6 +3086,10 @@ function go(id, btn){
   if(id === "bookings") fetchLiveRegistrations();
   if(id === "stories") fetchAdminStories();
   if(id === "private_requests") loadPrivateRequests();
+  if(id === "reviews"){
+    renderReviews();
+    fetchLiveReviewsForAdmin(true);
+  }
   if(id === "diagnostics") runDiagnostics();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -3787,6 +3810,14 @@ async function publishLive(alreadySavedFromTripForm = false){
       }
     };
 
+    // Merge remote user-submitted reviews before syncing so we never overwrite them
+    if(Array.isArray(data.reviews) && data.reviews.length){
+      mergeIncomingReviewsIntoState(data.reviews);
+    }
+    if(Array.isArray(data.config?.reviews) && data.config.reviews.length){
+      mergeIncomingReviewsIntoState(data.config.reviews);
+    }
+
     data.trips = appState.trips.map((tr, idx) => formatTripForPublic(tr, idx));
     data.trip = data.trips.find(t => t.published !== false) || data.trips[0] || {};
     data.i18n = appState.i18n;
@@ -3828,6 +3859,7 @@ async function publishLive(alreadySavedFromTripForm = false){
       data.config.booking = data.booking;
       data.config.paymentMethods = data.paymentMethods;
       data.config.fibAccount = data.fibAccount;
+      data.config.reviews = data.reviews;
       data.config.variable4 = cleanVar4;
       data.config.meetingLink = cleanVar4;
       data.config.mapsUrl = cleanVar4;
@@ -6336,53 +6368,220 @@ async function loadVisitorAnalytics(showToastMsg = false){
   }catch(e){}
 }
 
+function getReviewSignature(r){
+  if(!r) return "";
+  const nm = String(r.name || "").trim().toLowerCase();
+  const tx = String(r.text ?? r.comment ?? "").trim().toLowerCase();
+  return `${nm}|${tx}`;
+}
+
+function getDeletedReviewSet(){
+  const list = [];
+  if(Array.isArray(appState.deletedReviewKeys)) list.push(...appState.deletedReviewKeys);
+  try{
+    const saved = JSON.parse(localStorage.getItem("kurdia_deleted_reviews_v1") || "[]");
+    if(Array.isArray(saved)) list.push(...saved);
+  }catch(_){}
+  return new Set(list.filter(Boolean));
+}
+
+function mergeIncomingReviewsIntoState(incomingArray){
+  if(!Array.isArray(incomingArray) || !incomingArray.length) return false;
+  const delSet = getDeletedReviewSet();
+  const current = Array.isArray(appState.reviews) ? appState.reviews : [];
+  const combined = [...incomingArray, ...current];
+  const seen = new Set();
+  const deduped = [];
+
+  for(const item of combined){
+    if(!item || typeof item !== "object") continue;
+    const name = String(item.name || "").trim();
+    const text = String(item.text ?? item.comment ?? "").trim();
+    if(!name && !text) continue;
+    const sig = getReviewSignature(item);
+    const idKey = item.id ? String(item.id) : "";
+    if(delSet.has(sig) || (idKey && delSet.has(idKey))) continue;
+    if(seen.has(sig) || (idKey && seen.has(idKey))) continue;
+    seen.add(sig);
+    if(idKey) seen.add(idKey);
+    deduped.push({
+      id: item.id || ("rev_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6)),
+      name: name || "بەشداربوو",
+      city: String(item.city || "کوردستان").trim() || "کوردستان",
+      rating: Math.min(5, Math.max(1, Number(item.rating || 5))),
+      text,
+      comment: text,
+      source: item.source || "",
+      createdAt: item.createdAt || ""
+    });
+  }
+
+  // Sort so reviews with createdAt (user-submitted) appear newest-first at the top
+  deduped.sort((a, b) => {
+    const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return (Number.isFinite(tb) ? tb : 0) - (Number.isFinite(ta) ? ta : 0);
+  });
+
+  appState.reviews = deduped;
+  return true;
+}
+
+async function fetchLiveReviewsForAdmin(silent = true){
+  try{
+    const [cmsRes, cfgRes, apiRevRes, ovRes] = await Promise.allSettled([
+      fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null),
+      fetch(`${WORKER_URL}/api/site/config?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null),
+      fetch(`/api/reviews?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null),
+      fetch(`/api/cms-overrides?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null)
+    ]);
+
+    const pool = [];
+    // 1. Local browser submissions from same device
+    try{
+      const pubLocal = JSON.parse(localStorage.getItem("kurdia_public_reviews_v1") || "[]");
+      if(Array.isArray(pubLocal)) pool.push(...pubLocal);
+    }catch(_){}
+    try{
+      const premLocal = JSON.parse(localStorage.getItem("kurdia_premium_data") || "{}");
+      if(Array.isArray(premLocal?.reviews)) pool.push(...premLocal.reviews);
+    }catch(_){}
+
+    // 2. Local server /api/reviews & /api/cms-overrides
+    if(apiRevRes.status === "fulfilled" && Array.isArray(apiRevRes.value?.reviews)){
+      pool.push(...apiRevRes.value.reviews);
+    }
+    if(ovRes.status === "fulfilled" && Array.isArray(ovRes.value?.data?.reviews)){
+      pool.push(...ovRes.value.data.reviews);
+    }
+
+    // 3. Cloudflare Worker /api/admin/cms & /api/site/config
+    if(cmsRes.status === "fulfilled" && cmsRes.value){
+      const d = cmsRes.value.data || cmsRes.value;
+      if(Array.isArray(d?.reviews)) pool.push(...d.reviews);
+      if(Array.isArray(d?.config?.reviews)) pool.push(...d.config.reviews);
+    }
+    if(cfgRes.status === "fulfilled" && cfgRes.value){
+      const c = cfgRes.value.config || cfgRes.value.data || cfgRes.value;
+      if(Array.isArray(c?.reviews)) pool.push(...c.reviews);
+    }
+
+    if(pool.length){
+      mergeIncomingReviewsIntoState(pool);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      syncPublicWebsiteBridge();
+    }
+    renderReviews();
+    if(!silent) toast(`✅ فیدباکەکان نوێکرانەوە (${(appState.reviews || []).length} هەڵسەنگاندن)`);
+  }catch(e){
+    renderReviews();
+  }
+}
+
 function renderReviews(){
   const c = document.getElementById("reviewsList"); if(!c) return;
-  c.innerHTML = (appState.reviews || []).map((r,i) => {
+  const list = Array.isArray(appState.reviews) ? appState.reviews : [];
+
+  // Update summary stats in #reviews
+  const total = list.length;
+  const avg = total
+    ? (list.reduce((s, r) => s + Math.min(5, Math.max(1, Number(r.rating || 5))), 0) / total).toFixed(1)
+    : "5.0";
+  const avgEl = document.getElementById("adminReviewsAvgVal");
+  if(avgEl) avgEl.textContent = avg;
+  const subEl = document.getElementById("adminReviewsTotalSub");
+  if(subEl) subEl.textContent = `لە کۆی ${total} هەڵسەنگاندنی بەشداربووان لە ماڵپەڕ`;
+  const cntEl = document.getElementById("adminReviewsCountLabel");
+  if(cntEl) cntEl.textContent = `کۆی گشتی: ${total} فیدباک`;
+
+  if(total > 0){
+    const c5 = Math.round((list.filter(r => Number(r.rating || 5) === 5).length / total) * 100);
+    const c4 = Math.round((list.filter(r => Number(r.rating || 5) === 4).length / total) * 100);
+    const c3 = Math.max(0, 100 - c5 - c4);
+    const setB = (barId, pctId, v) => {
+      const b = document.getElementById(barId); if(b) b.style.width = v + "%";
+      const p = document.getElementById(pctId); if(p) p.textContent = v + "%";
+    };
+    setB("adminBar5", "adminBar5Pct", c5);
+    setB("adminBar4", "adminBar4Pct", c4);
+    setB("adminBar3", "adminBar3Pct", c3);
+  }
+
+  c.innerHTML = list.map((r,i) => {
     const starsCount = Math.min(5, Math.max(1, Number(r.rating || 5)));
     const starsStr = "★".repeat(starsCount) + "☆".repeat(5 - starsCount);
     const txt = r.text || r.comment || "";
+    const dateLabel = r.createdAt ? String(r.createdAt).slice(0, 16).replace("T", " ") : "";
     return `
-    <div class="review spotlight-card">
-      <div class="review-head">
-        <b>${r.name || "بەشداربوو"} (${r.city || "کوردستان"})</b>
-        <span class="stars">${starsStr}</span>
-        <button class="secondary-btn" style="padding:3px 7px;color:#ff4a62" onclick="deleteAdminReviewItem(${i})">✕</button>
+    <div class="review spotlight-card" style="margin-bottom:8px">
+      <div class="review-head" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div>
+          <b style="font-size:13.5px;color:#fff">${r.name || "بەشداربوو"} <span style="color:#94a3b8;font-weight:600;font-size:11.5px">(📍 ${r.city || "کوردستان"})</span></b>
+          ${dateLabel ? `<small style="display:block;font-size:10px;color:#6bf0b3;margin-top:2px">🕒 ${dateLabel}</small>` : ""}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="stars" style="direction:ltr;letter-spacing:1px">${starsStr}</span>
+          <button class="secondary-btn" style="padding:4px 8px;color:#ff4a62" onclick="deleteAdminReviewItem(${i})" title="سڕینەوەی فیدباک">✕ سڕینەوە</button>
+        </div>
       </div>
-      <p>${txt}</p>
+      <p style="margin-top:8px;line-height:1.85;color:#e2e8f0">“${txt}”</p>
     </div>
   `;
-  }).join("");
+  }).join("") || `<div class="lang-box" style="text-align:center;color:#94a3b8;padding:18px">هیچ هەڵسەنگاندنێک نییە.</div>`;
 }
 
 function deleteAdminReviewItem(idx){
   if(!Array.isArray(appState.reviews)) return;
+  const target = appState.reviews[idx];
+  if(target){
+    const sig = getReviewSignature(target);
+    const delSet = getDeletedReviewSet();
+    if(sig) delSet.add(sig);
+    if(target.id) delSet.add(String(target.id));
+    appState.deletedReviewKeys = [...delSet];
+    try{
+      localStorage.setItem("kurdia_deleted_reviews_v1", JSON.stringify(appState.deletedReviewKeys));
+      const pubLocal = JSON.parse(localStorage.getItem("kurdia_public_reviews_v1") || "[]");
+      if(Array.isArray(pubLocal)){
+        const filteredPub = pubLocal.filter(x => getReviewSignature(x) !== sig && String(x?.id || "") !== String(target.id || ""));
+        localStorage.setItem("kurdia_public_reviews_v1", JSON.stringify(filteredPub));
+      }
+    }catch(_){}
+  }
   appState.reviews.splice(idx, 1);
   renderReviews();
   autoSync();
   if(typeof syncWebsite === "function") syncWebsite(true);
+  toast("🗑️ فیدباک سڕایەوە");
 }
 
 function addReviewItem(){
   const n = document.getElementById("newReviewName").value.trim();
   const c = document.getElementById("newReviewCity").value.trim() || "کوردستان";
   const t = document.getElementById("newReviewText").value.trim();
+  const rt = Math.min(5, Math.max(1, Number(document.getElementById("newReviewRating")?.value || 5)));
   if(!n || !t) return toast("⚠️ تکایە ناو و دەقی فیدباک بنووسە");
   if(!Array.isArray(appState.reviews)) appState.reviews = [];
-  appState.reviews.unshift({
+  const newRev = {
     id: "rev_" + Date.now(),
     name: n,
     city: c,
-    rating: 5,
+    rating: rt,
     text: t,
     comment: t,
     createdAt: new Date().toISOString()
-  });
+  };
+  appState.reviews.unshift(newRev);
   document.getElementById("newReviewName").value = "";
   document.getElementById("newReviewCity").value = "";
   document.getElementById("newReviewText").value = "";
   renderReviews();
   autoSync();
+  fetch("/api/reviews", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newRev)
+  }).catch(() => {});
   if(typeof syncWebsite === "function") syncWebsite(true);
   toast("✅ فیدباک زیادکرا و لە وێبسایت بڵاوکرایەوە");
 }
@@ -6704,6 +6903,10 @@ async function fetchRemoteCMSIntoAdmin(){
         appState.coupons = cfg.coupons;
         renderCoupons();
       }
+      if(Array.isArray(cfg.reviews) && cfg.reviews.length){
+        mergeIncomingReviewsIntoState(cfg.reviews);
+        renderReviews();
+      }
     }
     try{
       const ovRes = await fetch(`/api/cms-overrides?cb=${Date.now()}`, { cache: "no-store" });
@@ -6723,6 +6926,10 @@ async function fetchRemoteCMSIntoAdmin(){
         }
         if(typeof ov.otpRequired === "boolean"){
           appState.otpRequired = ov.otpRequired;
+        }
+        if(Array.isArray(ov.reviews) && ov.reviews.length){
+          mergeIncomingReviewsIntoState(ov.reviews);
+          renderReviews();
         }
       }
     }catch(_){}
@@ -6801,10 +7008,12 @@ loadState();
 autoSync();
 updateLiveClocks();
 fetchRemoteCMSIntoAdmin();
+fetchLiveReviewsForAdmin(true);
 fetchLiveRegistrations();
 loadVisitorAnalytics();
 window.addEventListener("storage", e => {
   if(e.key === "kurdia_visitor_stats_v1") loadVisitorAnalytics();
+  if(e.key === "kurdia_public_reviews_v1" || e.key === "kurdia_premium_data") fetchLiveReviewsForAdmin(true);
 });
 
 window.addEventListener("load", () => {
