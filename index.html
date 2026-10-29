@@ -2216,15 +2216,16 @@ main,section,.section,.page-section{background-color:transparent!important}
         </div>
         <div class="ai-head-info">
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-            <h3 style="margin:0;font-size:15px;line-height:1.25">یاریدەدەری زیرەکی KURDIA</h3>
-            <span class="ai-pro-tag">KURDIA AI</span>
+            <h3 style="margin:0;font-size:15px;line-height:1.25">هاوڕێی گەشت و زیرەکی KURDIA</h3>
+            <span class="ai-pro-tag">TRAVEL COMPANION</span>
+            <button type="button" id="aiHistoryCountBadge" onclick="scrollToAIHistoryTop()" style="display:none;background:rgba(56,189,248,0.14);color:#7dd3fc;border:1px solid rgba(56,189,248,0.3);border-radius:999px;padding:2px 8px;font-size:10px;font-weight:800;cursor:pointer" title="بینینی نامە پاشەکەوتکراوەکانی پێشوو">📜 0 نامە</button>
           </div>
-          <small class="muted" style="display:block;margin-top:2px;font-size:11px">گفتوگۆی ڕاستەوخۆ و دەنگی لەگەڵ KURDIA ADVENTURE</small>
+          <small class="muted" style="display:block;margin-top:2px;font-size:11px">هاوڕێی سروشت، شاخەوانی و زانیاری وردی گەشتەکانی KURDIA</small>
         </div>
       </div>
       <div class="ai-top-actions">
         <button type="button" class="ai-voice-toggle-btn" id="aiVoiceToggleBtn" onclick="toggleAIVoice()" title="چالاککردن / ناچالاککردنی دەنگی AI">🔊</button>
-        <button type="button" class="ai-clear-btn" onclick="resetAIChat()" title="پاککردنەوەی گفتوگۆ">↻</button>
+        <button type="button" class="ai-clear-btn" onclick="resetAIChat()" title="پاککردنەوەی مێژووی گفتوگۆ">↻</button>
         <button type="button" class="ai-close-btn" onclick="closeModal('aiModal')" aria-label="داخستن">✕</button>
       </div>
     </div>
@@ -2236,13 +2237,14 @@ main,section,.section,.page-section{background-color:transparent!important}
       <button type="button" onclick="aiQuick('گەشتی داهاتوو چییە و نرخی چەندە؟')">🧭 گەشتی داهاتوو؟</button>
       <button type="button" onclick="aiQuick('چۆن بەشداری گەشت بکەم و پارە بدەم؟')">🎟️ چۆن ناو تۆمار بکەم؟</button>
       <button type="button" onclick="aiQuick('بۆ شاخەوانی چ جلوبەرگ و پێداویستییەک لەگەڵ خۆم بهێنم؟')">🎒 چی لەگەڵ خۆم بهێنم؟</button>
+      <button type="button" onclick="aiQuick('باسی ئەزموونی کەمپینگ و مانەوەی شەوانە لەناو سروشتی کوردستانم بۆ بکە')">🏕️ کەمپینگ و سروشت</button>
       <button type="button" onclick="aiQuick('چ شوێنێک پیادەڕەوی تیایە؟')">🥾 شوێنەکانی پیادەڕەوی</button>
       <button type="button" onclick="aiQuick('چۆن داواکاری گەشتی تایبەت (VIP) بکەم؟')">👑 گەشتی تایبەت VIP</button>
     </div>
 
     <form class="ai-chat-form" onsubmit="askAI(event)">
       <button type="button" class="ai-mic-btn" id="aiMicBtn" onclick="startAIVoiceInput()" title="قسەکردن بە مایکرۆفۆن">🎤</button>
-      <input id="aiInput" class="input" autocomplete="off" placeholder="لەگەڵ KURDIA قسە بکە یان پرسیار بنووسە...">
+      <input id="aiInput" class="input" autocomplete="off" placeholder="لەسەر سروشت، شاخەوانی یان گەشتەکانی KURDIA قسەم لەگەڵ بکە...">
       <button class="btn red ai-send-btn" type="submit" aria-label="ناردن"><i data-lucide="send"></i></button>
     </form>
   </div>
@@ -4964,7 +4966,55 @@ function filterSearch(){
   $('searchResults').innerHTML=all.filter(x=>String(x.label||'').toLowerCase().includes(q)||String(x.sub||'').toLowerCase().includes(q)).slice(0,12).map(x=>`<div class="article" style="cursor:pointer" onclick="${x.action}"><div class="articleIcon"><i data-lucide="compass"></i></div><div><b>${esc(x.label)}</b><small>${esc(x.sub||'KURDIA ADVENTURE')}</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';
   if(window.lucide)lucide.createIcons();
 }
-window.kurdiaAiHistory = [];
+const AI_HISTORY_STORAGE_KEY = 'kurdia_ai_chat_history_v1';
+function loadPersistedAIHistory(){
+  try{
+    const raw = localStorage.getItem(AI_HISTORY_STORAGE_KEY);
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter(m => m && m.text).slice(-40) : [];
+  }catch(_){
+    return [];
+  }
+}
+function savePersistedAIHistory(){
+  try{
+    const clean = (Array.isArray(window.kurdiaAiHistory) ? window.kurdiaAiHistory : [])
+      .filter(m => m && m.text)
+      .slice(-40);
+    window.kurdiaAiHistory = clean;
+    localStorage.setItem(AI_HISTORY_STORAGE_KEY, JSON.stringify(clean));
+    updateAIHistoryBadgeUI();
+  }catch(_){}
+}
+function updateAIHistoryBadgeUI(){
+  const badge = $('aiHistoryCountBadge');
+  if(!badge) return;
+  const count = Array.isArray(window.kurdiaAiHistory) ? window.kurdiaAiHistory.length : 0;
+  if(count > 0){
+    badge.style.display = 'inline-flex';
+    badge.textContent = `📜 ${count} نامە`;
+  } else {
+    badge.style.display = 'none';
+  }
+}
+function scrollToAIHistoryTop(){
+  const m = $('aiMessages');
+  if(!m) return;
+  const divider = m.querySelector('.ai-history-divider');
+  if(divider){
+    if(m.scrollTop > 120){
+      divider.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      toast('📜 گەڕانەوە بۆ سەرەتای مێژووی گفتوگۆکان');
+    } else {
+      m.scrollTo({ top: m.scrollHeight, behavior: 'smooth' });
+      toast('⬇️ چوونە کۆتایی گفتوگۆ');
+    }
+  } else {
+    m.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+window.kurdiaAiHistory = loadPersistedAIHistory();
 window.kurdiaAiVoiceEnabled = localStorage.getItem('kurdia_ai_voice') === '1';
 
 function playAIConversationChime(type){
@@ -5003,7 +5053,7 @@ window.speakAIText = function(rawText, btnEl){
     const clean = String(rawText || '')
       .replace(/\*\*(.+?)\*\*/g, '$1')
       .replace(/`([^`]+)`/g, '$1')
-      .replace(/[•🌿🏔️🎟️👑⛅📍📅💰⏰🥾🚗💬👋🎒❤️😊]/g, ' ')
+      .replace(/[•🌿🏔️🎟️👑⛅📍📅💰⏰🥾🚗💬👋🎒❤️😊🏕️📜]/g, ' ')
       .replace(/\s+/g, ' ')
       .trim();
     if(!clean) return;
@@ -5140,21 +5190,21 @@ function renderAIWelcomeMessage(){
   let welcomeText = '';
   let defaultActions = [];
   if(lang === 'en'){
-    welcomeText = `Hello friend 🌿\nI am the official **KURDIA ADVENTURE Smart AI**.\n\n• **Next Trip:** ${mainTrip.title || 'Kurdistan Expedition'} (${mainTrip.price || '35,000 IQD'})\n• Chat with me about **KURDIA trips, hiking gear, mountain trails, FIB payment, VIP private trips, weather**, or general outdoor topics!`;
+    welcomeText = `Hello and welcome, fellow explorer 🌿\nI am your warm, knowledgeable **KURDIA ADVENTURE Travel Companion**.\n\n• **Curated Next Expedition:** ${mainTrip.title || 'Kurdistan Expedition'} (${mainTrip.price || '35,000 IQD'})\n• Chat naturally with me about **mountain hiking, camping under the stars, trail gear, and nature**, or ask for accurate **KURDIA trip details, FIB payment, VIP private trips, and weather**!`;
     defaultActions = [
       { label: '🎟️ Book a Trip', action: 'booking' },
       { label: '🗺️ Destinations', action: 'destinations' },
       { label: '👑 Private Trip', action: 'private' }
     ];
   } else if(lang === 'ar'){
-    welcomeText = `أهلاً بك يا صديقي 🌿\nأنا **المساعد الذكي الرسمي لـ KURDIA ADVENTURE**.\n\n• **الرحلة القادمة:** ${mainTrip.title || 'رحلة كوردستان'} (${mainTrip.price || '35,000 دينار'})\n• تحدث معي عن **رحلات KURDIA، معدات الجبال، طريقة الحجز عبر FIB، الرحلات الخاصة VIP، الطقس** أو أي موضوع عام!`;
+    welcomeText = `أهلاً وسهلاً بك يا صديقي العزيز 🌿\nأنا **رفيق سفرك والمساعد الذكي لـ KURDIA ADVENTURE**.\n\n• **الرحلة القادمة:** ${mainTrip.title || 'رحلة كوردستان'} (${mainTrip.price || '35,000 دينار'})\n• تحدث معي بحرية عن **الطبيعة، المشي الجبلي، التخييم، ومعدات المغامرات**، أو استفسر عن **تفاصيل رحلات KURDIA، الدفع عبر FIB، والرحلات الخاصة VIP**!`;
     defaultActions = [
       { label: '🎟️ حجز رحلة', action: 'booking' },
       { label: '🗺️ الأماكن السياحية', action: 'destinations' },
       { label: '👑 رحلة خاصة', action: 'private' }
     ];
   } else {
-    welcomeText = `سڵاو هاوڕێی ئازیز 🌿\nمن **یاریدەدەری زیرەکی فەرمی KURDIA ADVENTURE** ـم.\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• دەتوانیت لەگەڵم قسە بکەیت لەسەر **گەشتەکانی کوردیا، شوێنەکان، پێداویستی شاخەوانی، ناو تۆمارکردن، کەشوهەوا و زانیاری گشتی**!`;
+    welcomeText = `سڵاو و بەخێربێیت هاوڕێی ئازیز 🌿\nمن **هاوڕێی گەشت و ڕاوێژکاری زیرەکی KURDIA ADVENTURE** ـم.\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• دەتوانیت زۆر بە ئاسایی و گەرمی لەگەڵم بدوێیت لەسەر **سروشت، شاخەوانی، کەمپینگ و پێداویستی ڕێگا**، یان داوای زانیاری وردی **گەشتەکانی KURDIA، ناو تۆمارکردن و گەشتی تایبەت (VIP)** بکەیت!`;
     defaultActions = [
       { label: '🎟️ بەشداری گەشت', action: 'booking' },
       { label: '🗺️ شوێنەکان', action: 'destinations' },
@@ -5163,12 +5213,36 @@ function renderAIWelcomeMessage(){
   }
   m.innerHTML = '';
   addAIMessage(welcomeText, 'bot', defaultActions);
+
+  // Restore saved historical messages so previous conversations remain accessible
+  const savedHistory = loadPersistedAIHistory();
+  window.kurdiaAiHistory = savedHistory;
+  if(savedHistory.length > 0){
+    const div = document.createElement('div');
+    div.className = 'ai-history-divider';
+    div.style.cssText = 'text-align:center;margin:10px 0 6px;font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:8px;justify-content:center;opacity:0.85';
+    div.innerHTML = `<span style="height:1px;flex:1;background:rgba(255,255,255,0.08)"></span><span>📜 مێژووی گفتوگۆ پاشەکەوتکراوەکان (${savedHistory.length})</span><span style="height:1px;flex:1;background:rgba(255,255,255,0.08)"></span>`;
+    m.appendChild(div);
+
+    savedHistory.forEach(item => {
+      if(!item || !item.text) return;
+      if(item.role === 'user'){
+        addAIMessage(item.text, 'user');
+      } else {
+        addAIMessage(item.text, 'bot', Array.isArray(item.actions) ? item.actions : []);
+      }
+    });
+  }
+  updateAIHistoryBadgeUI();
 }
 
 function resetAIChat(){
   window.kurdiaAiHistory = [];
+  try{ localStorage.removeItem(AI_HISTORY_STORAGE_KEY); }catch(_){}
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
   renderAIWelcomeMessage();
+  updateAIHistoryBadgeUI();
+  toast('🗑️ مێژووی گفتوگۆ پاککرایەوە؛ نامە ئامادەکراوەکان لە خوارەوە بەردەستن');
 }
 
 function openAI(){
@@ -5182,6 +5256,8 @@ function openAI(){
   const m = $('aiMessages');
   if(m && !m.children.length){
     renderAIWelcomeMessage();
+  } else {
+    updateAIHistoryBadgeUI();
   }
   modal.classList.add('show');
   setTimeout(()=>{
@@ -5208,9 +5284,12 @@ async function callClientConversationalAI(q, lang, history){
   const ctx = aiSiteContext();
   const langName = lang === 'en' ? 'English' : (lang === 'ar' ? 'Arabic (العربية)' : 'Kurdish Sorani (کوردیی سۆرانی)');
   const sysPrompt = [
-    `You are the official smart AI conversational companion and Mountain & Travel Concierge for KURDIA ADVENTURE (kurdiaadventure.com), the premier outdoor, hiking, camping, and adventure platform in the Kurdistan Region.`,
+    `You are KURDIA AI, a warm, professional, and deeply knowledgeable Travel Companion & Mountain Concierge for KURDIA ADVENTURE (kurdiaadventure.com), the premier outdoor, hiking, camping, and adventure platform in the Kurdistan Region.`,
+    `PERSONA & TONE: Speak like a trusted, experienced, and welcoming mountain guide and travel companion. Be warm, encouraging, articulate, and insightful.`,
+    `DYNAMIC CONTEXT SWITCHING:`,
+    `1. General Nature, Hiking & Outdoor Conversation: When the user chats about nature, mountain peaks, hiking techniques, trail fitness, camping under the stars, packing lists, layering clothes, weather patterns, photography, or casual friendly topics, engage naturally with deep outdoor expertise and genuine warmth—without forcing a sales pitch.`,
+    `2. Curated KURDIA Trip & Booking Details: When the user asks about trips, schedules, prices, destinations, registration, or VIP private tours, provide accurate, curated KURDIA ADVENTURE details from the live website context below (including upcoming trip titles, locations, dates, prices, departure times, 3-step registration, official FIB payment account 0750 313 0360, FastPay, and WhatsApp +964 750 313 0360).`,
     `STRICT EXCLUSIVITY RULE: You represent ONLY KURDIA ADVENTURE. NEVER mention, name, promote, or compare any other hiking, travel, or tourism groups/companies/agencies under any circumstances.`,
-    `CONVERSATIONAL SCOPE: You are a real, natural, intelligent conversational AI. Speak naturally, warmly, and friendlily with the user about ANY topic they ask! In addition to knowing all KURDIA ADVENTURE trips, booking steps, FIB payment (0750 313 0360), WhatsApp (+964 750 313 0360), VIP private trips, and Kurdistan destinations, you can freely hold normal human-like conversations, answer general questions, give hiking/camping/clothing advice, discuss Kurdistan nature & weather, tell stories, or help with anything the user writes.`,
     `Always reply fluently in ${langName} unless the user explicitly writes in another language.`,
     `Keep answers natural, helpful, and formatted cleanly for mobile screens (use bullet points • and **bold** key terms when listing items, or natural paragraphs when chatting).`,
     `Live KURDIA ADVENTURE Website Context: ${JSON.stringify(ctx)}`
@@ -5218,7 +5297,7 @@ async function callClientConversationalAI(q, lang, history){
 
   const messages = [
     { role: 'system', content: sysPrompt },
-    ...(Array.isArray(history) ? history.slice(-8) : []).map(m => ({
+    ...(Array.isArray(history) ? history.slice(-10) : []).map(m => ({
       role: m.role === 'user' ? 'user' : 'assistant',
       content: String(m.text || '')
     })),
@@ -5265,62 +5344,68 @@ function buildClientFallbackAI(q, lang){
   // Strict Guardrail: Never discuss or mention other groups
   if(ql.includes('گرووپی تر') || ql.includes('گروپی تر') || ql.includes('کۆمپانیای تر') || ql.includes('گرووپەکانی تر') || ql.includes('other group') || ql.includes('شركات اخرى') || ql.includes('مجموعات اخرى')){
     if(lang === 'en'){
-      return { text: `🏔️ I am the exclusive AI assistant of **KURDIA ADVENTURE**.\n\nI only speak about **KURDIA ADVENTURE** expeditions, Kurdistan's nature, mountain trails, weather, and general outdoor advice — I never discuss other travel groups.`, actions: [{ label: '🎟️ KURDIA Trips', action: 'booking' }, { label: '👑 VIP Private Trip', action: 'private' }] };
+      return { text: `🏔️ I am your dedicated travel companion and exclusive AI concierge for **KURDIA ADVENTURE**.\n\nI only speak about **KURDIA ADVENTURE** expeditions, Kurdistan's nature, mountain trails, weather, and outdoor wisdom — I never discuss other travel groups.`, actions: [{ label: '🎟️ KURDIA Trips', action: 'booking' }, { label: '👑 VIP Private Trip', action: 'private' }] };
     }
     if(lang === 'ar'){
-      return { text: `🏔️ أنا المساعد الذكي الرسمي والوحيد لـ **KURDIA ADVENTURE**.\n\nأتحدث فقط عن رحلات **KURDIA ADVENTURE**، طبيعة كوردستان، مسارات الجبال، الطقس، والنصائح العامة — ولا أتحدث عن أي مجموعات أخرى.`, actions: [{ label: '🎟️ رحلات KURDIA', action: 'booking' }, { label: '👑 رحلة خاصة VIP', action: 'private' }] };
+      return { text: `🏔️ أنا رفيق سفرك والمساعد الذكي الحصري لـ **KURDIA ADVENTURE**.\n\nأتحدث فقط عن رحلات **KURDIA ADVENTURE**، طبيعة كوردستان، مسارات الجبال، الطقس، والنصائح العامة — ولا أتحدث عن أي مجموعات أخرى.`, actions: [{ label: '🎟️ رحلات KURDIA', action: 'booking' }, { label: '👑 رحلة خاصة VIP', action: 'private' }] };
     }
-    return { text: `🏔️ من تەنها یاریدەدەری زیرەکی فەرمی **KURDIA ADVENTURE** ـم و باسی هیچ گرووپ و لایەنێکی تر ناکەم.\n\nتەنها لەسەر گەشت و چالاکییەکانی **KURDIA ADVENTURE**، سروشتی کوردستان، ڕێنمایی شاخەوانی، کەشوهەوا و زانیاری گشتی قسە دەکەم! 🌿`, actions: [{ label: '🎟️ گەشتەکانی KURDIA', action: 'booking' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
+    return { text: `🏔️ من تەنها هاوڕێی گەشت و یاریدەدەری زیرەکی فەرمی **KURDIA ADVENTURE** ـم و باسی هیچ گرووپ و لایەنێکی تر ناکەم.\n\nتەنها لەسەر گەشت و چالاکییەکانی **KURDIA ADVENTURE**، سروشتی کوردستان، ڕێنمایی شاخەوانی، کەشوهەوا و ئەزموونی ناو سروشت قسە دەکەم! 🌿`, actions: [{ label: '🎟️ گەشتەکانی KURDIA', action: 'booking' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
   }
 
   if(lang === 'en'){
     if(ql.includes('hello') || ql.includes('hi') || ql.includes('how are you') || ql.includes('who are you')){
-      return { text: `Hello friend! 🌿 I'm doing great and ready to talk with you about **KURDIA ADVENTURE**, mountain hiking, gear tips, or Kurdistan's nature!\n\nOur next expedition is **${mainTrip.title || 'Mount Halgurd'}** (${mainTrip.price || '35,000 IQD'}). How can I help you today?`, actions: [{ label: '🎟️ Book Now', action: 'booking' }, { label: '📍 View Places', action: 'destinations' }] };
+      return { text: `Hello and welcome, fellow explorer! 🌿 I'm doing wonderfully and ready to chat with you about **nature, mountain hiking, camping gear**, or our curated **KURDIA ADVENTURE** expeditions!\n\nOur next expedition is **${mainTrip.title || 'Mount Halgurd'}** (${mainTrip.price || '35,000 IQD'}). Where shall our conversation take us today?`, actions: [{ label: '🎟️ Book Now', action: 'booking' }, { label: '📍 View Places', action: 'destinations' }] };
     }
     if(ql.includes('gear') || ql.includes('wear') || ql.includes('bring') || ql.includes('shoe') || ql.includes('جل') || ql.includes('پێڵاو')){
-      return { text: `🎒 **KURDIA Hiking & Trip Essentials:**\n\n• **Shoes:** Comfortable hiking boots or non-slip sneakers.\n• **Clothing:** Breathable layered clothes + a light jacket.\n• **Personal Items:** Water bottle, sunglasses, sunscreen, and a powerbank.\n• **Included by KURDIA:** VIP transport, mountain guides, mountain tea, and professional photography!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }] };
+      return { text: `🎒 **KURDIA Trail Companion Packing Guide:**\n\n• **Footwear:** Ankle-supporting hiking boots or non-slip trail shoes.\n• **Layered Clothing:** Breathable base layer + warm fleece + windbreaker for summit breezes.\n• **Personal Essentials:** 1.5L water bottle, sunglasses, sunscreen, and a powerbank.\n• **Included by KURDIA:** VIP transport, mountain guides, charcoal mountain tea, and professional photography!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }] };
+    }
+    if(ql.includes('camp') || ql.includes('tent') || ql.includes('nature') || ql.includes('star') || ql.includes('night')){
+      return { text: `🏕️ **Camping & Nature Experience in Kurdistan:**\n\nNothing compares to watching the stars reflect on **Felaw Alpine Lake** or sitting around a campfire in **Balakayati** after a rewarding hike. We always practice Leave No Trace and pace our climbs so everyone enjoys the mountain air.`, actions: [{ label: '🗺️ Explore Destinations', action: 'destinations' }, { label: '🎟️ Join a Trip', action: 'booking' }] };
     }
     if(ql.includes('trip') || ql.includes('next') || ql.includes('week') || ql.includes('گەشت')){
       const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${t.date || 'Soon'} | 💰 ${t.price}`).join('\n');
-      return { text: `🌿 **Upcoming KURDIA Expeditions:**\n\n${list}\n\nIncludes VIP bus transport, expert mountain guides, and professional photography.`, actions: [{ label: '🎟️ Book Now', action: 'booking' }, { label: '📍 View Places', action: 'destinations' }] };
+      return { text: `🌿 **Curated Upcoming KURDIA Expeditions:**\n\n${list}\n\nIncludes VIP bus transport, expert mountain guides, and professional photography.`, actions: [{ label: '🎟️ Book Now', action: 'booking' }, { label: '📍 View Places', action: 'destinations' }] };
     }
     if(ql.includes('book') || ql.includes('pay') || ql.includes('fib') || ql.includes('register') || ql.includes('بەشداری') || ql.includes('ناو')){
-      return { text: `🎟️ **How to Register & Pay:**\n\n• **1. Select Trip & Participants:** Choose your trip on the Booking page and enter your full name (plus names of any friends joining you).\n• **2. WhatsApp OTP:** Verify your phone number with the 4-digit code.\n• **3. FIB Payment:** Send the fee (${mainTrip.price || '35,000 IQD'}) to **FIB: 0750 313 0360** and upload the receipt screenshot.`, actions: [{ label: '🎟️ Open Booking Form', action: 'booking' }] };
+      return { text: `🎟️ **How to Register & Pay:**\n\n• **1. Select Trip & Participants:** Choose your trip on the Booking page and enter your full name (plus names of any friends joining you).\n• **2. WhatsApp Number:** Enter your active phone number.\n• **3. FIB Payment:** Send the fee (${mainTrip.price || '35,000 IQD'}) to **FIB: 0750 313 0360** and upload the receipt screenshot.`, actions: [{ label: '🎟️ Open Booking Form', action: 'booking' }] };
     }
-    return { text: `🌿 **KURDIA ADVENTURE Smart AI:**\n\n• **Featured Trip:** ${mainTrip.title || 'Mount Halgurd'} (${mainTrip.price || '35,000 IQD'})\n• **Official FIB Account:** \`0750 313 0360\`\n• **WhatsApp Support:** \`+964 750 313 0360\`\n\nAsk me anything about KURDIA trips, hiking tips, or nature!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }, { label: '🗺️ Destinations', action: 'destinations' }, { label: '👑 Private Trip', action: 'private' }] };
+    return { text: `🌿 **KURDIA ADVENTURE Travel Companion:**\n\n• **Featured Trip:** ${mainTrip.title || 'Mount Halgurd'} (${mainTrip.price || '35,000 IQD'})\n• **Official FIB Account:** \`0750 313 0360\`\n• **WhatsApp Support:** \`+964 750 313 0360\`\n\nAsk me anything about nature, hiking tips, or KURDIA trips!`, actions: [{ label: '🎟️ Book Trip', action: 'booking' }, { label: '🗺️ Destinations', action: 'destinations' }, { label: '👑 Private Trip', action: 'private' }] };
   }
 
   if(lang === 'ar'){
     if(ql.includes('مرحبا') || ql.includes('اهلا') || ql.includes('شلونك') || ql.includes('كيف حالك') || ql.includes('سلام')){
-      return { text: `أهلاً وسهلاً بك يا صديقي! 🌿 أنا بخير وسعيد بالتحدث معك في **KURDIA ADVENTURE**.\n\nرحلتنا القادمة هي **${mainTrip.title}** (${mainTrip.price || '35,000 دينار'}). يمكنك سؤالي عن الرحلات، معدات المشي الجبلي، الطقس، أو أي موضوع عام!`, actions: [{ label: '🎟️ حجز مقعد', action: 'booking' }, { label: '📍 الأماكن', action: 'destinations' }] };
+      return { text: `أهلاً وسهلاً بك يا صديقي العزيز! 🌿 أنا رفيق سفرك في **KURDIA ADVENTURE**.\n\nرحلتنا القادمة هي **${mainTrip.title}** (${mainTrip.price || '35,000 دينار'}). يمكنك التحدث معي حول الطبيعة، المشي الجبلي، معدات التخييم، الطقس، أو تفاصيل رحلاتنا!`, actions: [{ label: '🎟️ حجز مقعد', action: 'booking' }, { label: '📍 الأماكن', action: 'destinations' }] };
     }
     if(ql.includes('رحل') || ql.includes('قادم') || ql.includes('گەشت')){
       const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${t.date || 'قريباً'} | 💰 ${t.price}`).join('\n');
-      return { text: `🌿 **الرحلات القادمة مع KURDIA:**\n\n${list}\n\nتشمل النقل السياحي VIP، مرشدين جبليين، والتصوير الاحترافي.`, actions: [{ label: '🎟️ حجز مقعد', action: 'booking' }, { label: '📍 الأماكن', action: 'destinations' }] };
+      return { text: `🌿 **الرحلات القادمة المختارة مع KURDIA:**\n\n${list}\n\nتشمل النقل السياحي VIP، مرشدين جبليين، والتصوير الاحترافي.`, actions: [{ label: '🎟️ حجز مقعد', action: 'booking' }, { label: '📍 الأماكن', action: 'destinations' }] };
     }
     if(ql.includes('حجز') || ql.includes('دفع') || ql.includes('fib') || ql.includes('تسجيل') || ql.includes('بەشداری') || ql.includes('ناو')){
-      return { text: `🎟️ **خطوات التسجيل والدفع مع KURDIA:**\n\n• **١. اختيار الرحلة والأسماء:** اختر الرحلة واكتب اسمك الكامل وأسماء المرافقين.\n• **٢. تأكيد واتساب:** أدخل رمز التحقق OTP المرسل لرقمك.\n• **٣. الدفع عبر FIB:** حوّل المبلغ (${mainTrip.price || '35,000 دينار'}) إلى حساب **FIB: 0750 313 0360** وارفع صورة الوصل.`, actions: [{ label: '🎟️ الذهاب لصفحة الحجز', action: 'booking' }] };
+      return { text: `🎟️ **خطوات التسجيل والدفع مع KURDIA:**\n\n• **١. اختيار الرحلة والأسماء:** اختر الرحلة واكتب اسمك الكامل وأسماء المرافقين.\n• **٢. رقم واتساب:** أدخل رقم هاتفك الفعال.\n• **٣. الدفع عبر FIB:** حوّل المبلغ (${mainTrip.price || '35,000 دينار'}) إلى حساب **FIB: 0750 313 0360** وارفع صورة الوصل.`, actions: [{ label: '🎟️ الذهاب لصفحة الحجز', action: 'booking' }] };
     }
-    return { text: `🌿 **المساعد الذكي لـ KURDIA ADVENTURE:**\n\n• **الرحلة الحالية:** ${mainTrip.title || 'جبل هلكورد'} (${mainTrip.price || '35,000 دينار'})\n• **حساب الدفع FIB:** \`0750 313 0360\`\n• **واتساب الفريق:** \`+964 750 313 0360\``, actions: [{ label: '🎟️ حجز رحلة', action: 'booking' }, { label: '🗺️ الأماكن', action: 'destinations' }, { label: '👑 رحلة خاصة', action: 'private' }] };
+    return { text: `🌿 **رفيق السفر الذكي لـ KURDIA ADVENTURE:**\n\n• **الرحلة الحالية:** ${mainTrip.title || 'جبل هلكورد'} (${mainTrip.price || '35,000 دينار'})\n• **حساب الدفع FIB:** \`0750 313 0360\`\n• **واتساب الفريق:** \`+964 750 313 0360\``, actions: [{ label: '🎟️ حجز رحلة', action: 'booking' }, { label: '🗺️ الأماكن', action: 'destinations' }, { label: '👑 رحلة خاصة', action: 'private' }] };
   }
 
-  // Kurdish Sorani ('ku')
+  // Kurdish Sorani ('ku') — Warm, Professional & Knowledgeable Travel Companion
   if(ql === 'سڵاو' || ql === 'سلاو' || ql.includes('چۆنیت') || ql.includes('چۆنی') || ql.includes('باشیت') || ql.includes('کێیت') || ql.includes('چ خەبەر')){
-    return { text: `سڵاو و ڕێز هاوڕێی ئازیز! 🌿 زۆر سوپاس، من زۆر باشم و خۆشحاڵم کە لەگەڵ **KURDIA ADVENTURE** قسە دەکەیت!\n\nدەتوانین پێکەوە قسە بکەین لەسەر:\n• **گەشتەکانی KURDIA:** گەشتی داهاتوومان بۆ **${mainTrip.title}** ـە (${mainTrip.price || '35,000 دینار'})\n• **پێداویستی و ڕێنمایی شاخەوانی و کەمپینگ**\n• **کەشوهەوا، سروشتی کوردستان و بابەتی گشتی**\n\nحەز دەکەیت لەسەر چی قسە بکەین؟ 😊`, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }] };
+    return { text: `سڵاو و ڕێز هاوڕێی ئازیز! 🌿 زۆر سوپاس، من زۆر باشم و خۆشحاڵم کە وەک **هاوڕێی گەشت و ڕاوێژکاری KURDIA ADVENTURE** پێکەوە قسە دەکەین!\n\nدەتوانین زۆر بە گەرمی قسە بکەین لەسەر:\n• **سروشت، شاخەوانی و کەمپینگ:** ڕێنمایی ڕێگا، جلوبەرگ، هەناسەدان لە بەرزایی و جوانییەکانی کوردستان\n• **گەشتەکانی KURDIA:** گەشتی داهاتوومان بۆ **${mainTrip.title}** ـە (${mainTrip.price || '35,000 دینار'})\n• **کەشوهەوا و گەشتی تایبەت (VIP)**\n\nحەز دەکەیت ئەمڕۆ لەسەر کامیان بدوێین؟ 😊`, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }] };
   }
   if(ql.includes('جل') || ql.includes('پێڵاو') || ql.includes('جانتا') || ql.includes('ئامادە') || ql.includes('چی بهێنم') || ql.includes('پێداویستی')){
-    return { text: `🎒 **پێداویستییەکانی گەشت و شاخەوانی لەگەڵ KURDIA:**\n\n• **پێڵاو:** پێڵاوی شاخەوانی یان وەرزشی نەرم و دژە خلیسک.\n• **جلوبەرگ:** جلی ئاسوودە + چاکەتی سووک بۆ فێنکی شاخ.\n• **کەلوپەلی کەسی:** ئاو، چاوێلکەی هەتاوی، دژەخۆر و پاوەربانک.\n• **لەسەر تیمی KURDIA:** پاسی گەشتیاری VIP، ڕێبەری شارەزا، چای سەر خەڵووز و وێنەگرتنی سینەمایی!`, actions: [{ label: '🎟️ ناو تۆمارکردن', action: 'booking' }, { label: '⛅ کەشوهەوا', action: 'weather' }] };
+    return { text: `🎒 **ڕێنمایی هاوڕێی گەشت (KURDIA) بۆ پێداویستییەکانی شاخەوانی:**\n\n• **پێڵاوی گونجاو:** پێڵاوی شاخەوانی یان وەرزشی نەرم و دژە خلیسک بۆ پاراستنی قولەپێ.\n• **سیستەمی چەند چینە لە جلوبەرگدا:** جلی ئاسوودە کە ئارەق هەڵبمژێت + چاکەتی سووکی دژەبا بۆ فێنکی سەر لووتکە.\n• **کەلوپەلی کەسی:** ١.٥ لیتر ئاو، چەرەزات یان خورما، چاوێلکەی هەتاوی، دژەخۆر و پاوەربانک.\n• **لەسەر تیمی KURDIA:** پاسی گەشتیاری VIP، ڕێبەری شارەزا، چای سەر خەڵووز و وێنەگرتنی سینەمایی!`, actions: [{ label: '🎟️ ناو تۆمارکردن', action: 'booking' }, { label: '⛅ کەشوهەوا', action: 'weather' }] };
+  }
+  if(ql.includes('کەمپ') || ql.includes('شەو') || ql.includes('ئەستێرە') || ql.includes('ئاگر') || ql.includes('خێمە') || ql.includes('مانەو')){
+    return { text: `🏕️ **ئەزموونی کەمپینگ و شەوانی ناو سروشتی کوردستان لەگەڵ KURDIA:**\n\nمانەوەی شەوانە لە کەناری **گۆماوی فێڵاو**، **دەریاچەی دووکان** یان کوێستانەکانی **باڵەکایەتی** چێژێکی تایبەتی هەیە:\n• کۆبوونەوەی هاوڕێیانە لە دەوری ئاگر و چای سەر خەڵووز.\n• هەوای فێنک و بێگەردی چیا و بینینی ئاسمانی پڕ لە ئەستێرە.\n• پاراستنی تەواوی ژینگە و پاکڕاگرتنی سروشتی جوانی کوردستان.\n\nدەتەوێت زانیاری لەسەر گەشتە کەمپینگییەکانمان یان ڕێکخستنی کەمپی تایبەت (VIP) بزانیت؟ 🌿`, actions: [{ label: '🎟️ گەشتە بەردەستەکان', action: 'booking' }, { label: '👑 کەمپی تایبەت VIP', action: 'private' }] };
   }
   if(ql.includes('گەشت') && (ql.includes('هەفتە') || ql.includes('داهاتوو') || ql.includes('چییە') || ql.includes('نرخ'))){
     const list = trips.map((t, idx) => `• **${idx+1}. ${t.title}** — 📍 ${t.location} | 📅 ${formatTripDateKu(t.date)} | 💰 ${t.price}`).join('\n');
-    return { text: `🌿 **گەشتەکانی داهاتووی KURDIA ADVENTURE:**\n\n${list}\n\nهەموو گەشتەکانمان پاسی VIP، ڕێبەری شاخەوانی و فۆتۆگرافەری تایبەتیان لەگەڵدایە.`, actions: [{ label: '🎟️ بەشداری لە گەشت بکە', action: 'booking' }, { label: '📍 بینینی شوێنەکان', action: 'destinations' }] };
+    return { text: `🌿 **گەشتە هەڵبژێردراوەکانی داهاتووی KURDIA ADVENTURE:**\n\n${list}\n\nهەموو گەشتەکانمان پاسی VIP، ڕێبەری شاخەوانی و فۆتۆگرافەری تایبەتیان لەگەڵدایە.`, actions: [{ label: '🎟️ بەشداری لە گەشت بکە', action: 'booking' }, { label: '📍 بینینی شوێنەکان', action: 'destinations' }] };
   }
   if(ql.includes('بەشداری') || ql.includes('ناو') || ql.includes('تۆمار') || ql.includes('چۆن') || ql.includes('پارە') || ql.includes('fib')){
-    return { text: `🎟️ **چۆنیەتی ناو تۆمارکردن لە KURDIA بە ٣ هەنگاوی ئاسان:**\n\n• **هەنگاوی ١:** لە بەشی «بەشداری» گەشتەکەت هەڵبژێرە، ناوی سیانی خۆت و ژمارەی کەسەکان بنووسە.\n• **هەنگاوی ٢:** ژمارەی مۆبایل (WhatsApp) بنووسە و کۆدی ٤ ژمارەیی OTP پشتڕاست بکەرەوە.\n• **هەنگاوی ٣:** بڕی بەشداری (${mainTrip.price || '35,000 دینار'}) بنێرە بۆ هەژماری فەرمی **FIB: 0750 313 0360** و وێنەی پسوڵەکە دابنێ.`, actions: [{ label: '🎟️ چوون بۆ فۆڕمی بەشداری', action: 'booking' }, { label: '💬 پرسیار لە وەتسئەپ', action: 'whatsapp' }] };
+    return { text: `🎟️ **چۆنیەتی ناو تۆمارکردن لە KURDIA بە ٣ هەنگاوی ئاسان:**\n\n• **هەنگاوی ١:** لە بەشی «بەشداری» گەشتەکەت هەڵبژێرە، ناوی سیانی خۆت و ژمارەی کەسەکان بنووسە.\n• **هەنگاوی ٢:** ژمارەی مۆبایلی چالاکی WhatsApp بنووسە.\n• **هەنگاوی ٣:** بڕی بەشداری (${mainTrip.price || '35,000 دینار'}) بنێرە بۆ هەژماری فەرمی **FIB: 0750 313 0360** (یان FastPay) و وێنەی پسوڵەکە دابنێ.`, actions: [{ label: '🎟️ چوون بۆ فۆڕمی بەشداری', action: 'booking' }, { label: '💬 پرسیار لە وەتسئەپ', action: 'whatsapp' }] };
   }
   if(ql.includes('پیادە') || ql.includes('شاخ') || ql.includes('شوێن')){
     const hList = dests.filter(d => d.hasHiking !== false).slice(0, 5).map(d => `• **${d.name}** (${d.region}) — 🥾 ${d.hikingDuration}`).join('\n');
-    return { text: `🏔️ **شوێنەکانی شاخەوانی و پیادەڕەوی لەگەڵ KURDIA:**\n\n${hList}\n\nکرتە لە دوگمەی خوارەوە بکە بۆ بینینی تەواوی زانیاری و وێنەی شوێنەکان.`, actions: [{ label: '🗺️ بینینی هەموو شوێنەکان', action: 'destinations' }, { label: '👑 داواکاری گەشتی تایبەت', action: 'private' }] };
+    return { text: `🏔️ **شوێنەکانی شاخەوانی و پیادەڕەوی لەگەڵ KURDIA:**\n\n${hList}\n\nکرتە لە دوگمەی خوارەوە بکە بۆ بینینی تەواوی زانیاری، بەرزی لە ئاستی دەریا و وێنەی شوێنەکان.`, actions: [{ label: '🗺️ بینینی هەموو شوێنەکان', action: 'destinations' }, { label: '👑 داواکاری گەشتی تایبەت', action: 'private' }] };
   }
   if(ql.includes('تایبەت') || ql.includes('vip') || ql.includes('خێزان') || ql.includes('گروپ')){
     return { text: `👑 **گەشتی تایبەت لەگەڵ KURDIA (VIP & گروپ و خێزانی):**\n\nدەتوانیت شوێن، بەروار، ژمارەی کەس و هەموو خزمەتگوزارییەکان (گواستنەوەی تایبەت، کەپر و کەمپ، ڕێبەر و فۆتۆگرافەر) بە دڵی خۆت دیاری بکەیت.`, actions: [{ label: '👑 ڕێکخستنی گەشتی تایبەت', action: 'private' }, { label: '💬 ڕاوێژکاری وەتسئەپ', action: 'whatsapp' }] };
@@ -5328,7 +5413,7 @@ function buildClientFallbackAI(q, lang){
   if(ql.includes('کەش') || ql.includes('باران') || ql.includes('با')){
     return { text: `⛅ **وێستگەی کەشوهەوا و نەخشەی شاخەوانی KURDIA:**\n\nلە بەشی کەشوهەوا دەتوانیت پێشبینی ٢٤ کاتژمێر و ٧ ڕۆژی داهاتوو لەگەڵ نەخشەی بای زیندوو بۆ هەموو چیا و شارەکانی کوردستان ببینیت.`, actions: [{ label: '⛅ کردنەوەی کەشوهەوا', action: 'weather' }] };
   }
-  return { text: `🌿 **خۆشحاڵم بە قسەکردن لەگەڵت لە KURDIA ADVENTURE!**\n\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• **هەژماری پارەدانی FIB:** \`0750 313 0360\`\n• **ژمارەی پەیوەندی و وەتسئەپ:** \`+964 750 313 0360\`\n\nهەر پرسیارێکت هەیە لەسەر کوردیا، شاخەوانی، یان زانیاری گشتی بۆم بنووسە!`, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
+  return { text: `🌿 **خۆشحاڵم بە گفتوگۆکردن لەگەڵت لە KURDIA ADVENTURE!**\n\nوەک هاوڕێی گەشت و ڕاوێژکاری سروشت، هەمیشە ئامادەم بۆ قسەکردن لەسەر شاخەوانی یان گەشتەکانمان:\n• **گەشتی داهاتوو:** ${mainTrip.title || 'گەشتی کوردستان'} (${formatTripDateKu(mainTrip.date)} · ${mainTrip.price || '35,000 دینار'})\n• **هەژماری پارەدانی FIB:** \`0750 313 0360\`\n• **ژمارەی پەیوەندی و وەتسئەپ:** \`+964 750 313 0360\`\n\nهەر پرسیارێکت هەیە لەسەر سروشت، شاخەوانی، یان گەشتەکانی کوردیا بۆم بنووسە!`, actions: [{ label: '🎟️ بەشداری گەشت', action: 'booking' }, { label: '🗺️ شوێنەکان', action: 'destinations' }, { label: '👑 گەشتی تایبەت', action: 'private' }] };
 }
 
 async function askAI(e){
@@ -5342,24 +5427,26 @@ async function askAI(e){
   playAIConversationChime('send');
   addAIMessage(q, 'user');
   const historySnapshot = [...(window.kurdiaAiHistory || [])];
-  window.kurdiaAiHistory.push({ role: 'user', text: q });
+  window.kurdiaAiHistory.push({ role: 'user', text: q, time: new Date().toISOString() });
+  savePersistedAIHistory();
   if(i) i.value = '';
 
   const fb = buildClientFallbackAI(q, lang);
 
   // 1. If the user clicked one of the saved quick-chips, immediately show the saved message + action buttons
   if(isSavedChip){
-    window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text });
+    window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text, actions: fb.actions || [], time: new Date().toISOString() });
+    savePersistedAIHistory();
     addAIMessage(fb.text, 'bot', fb.actions || []);
     playAIConversationChime('reply');
     if(window.kurdiaAiVoiceEnabled) window.speakAIText(fb.text);
     return;
   }
 
-  const loadingMsg = lang === 'en' ? 'KURDIA AI is thinking... 🌿' : (lang === 'ar' ? 'مساعد KURDIA يكتب الآن... 🌿' : 'KURDIA خەریکی وەڵامدانەوەیە... 🌿');
+  const loadingMsg = lang === 'en' ? 'KURDIA Travel Companion is thinking... 🌿' : (lang === 'ar' ? 'رفيق سفر KURDIA يكتب الآن... 🌿' : 'هاوڕێی گەشتی KURDIA وەڵام دەداتەوە... 🌿');
   const loading = addAIMessage(loadingMsg, 'bot loading');
 
-  // 2. Try backend /api/ai (Gemini 3.8 Flash + server conversational AI)
+  // 2. Try backend /api/ai (Gemini multi-turn conversational companion)
   try{
     const r = await fetch('/api/ai', {
       method: 'POST',
@@ -5368,15 +5455,17 @@ async function askAI(e){
         prompt: q,
         lang: lang,
         savedChip: false,
-        history: historySnapshot.slice(-8),
+        history: historySnapshot.slice(-12),
         siteState: aiSiteContext()
       })
     });
     const x = await r.json().catch(()=>({}));
     if(x && x.text && x.source !== 'kurdia-smart-concierge'){
       loading?.remove();
-      window.kurdiaAiHistory.push({ role: 'assistant', text: x.text });
-      addAIMessage(x.text, 'bot', x.actions || fb.actions || []);
+      const replyActions = x.actions || fb.actions || [];
+      window.kurdiaAiHistory.push({ role: 'assistant', text: x.text, actions: replyActions, time: new Date().toISOString() });
+      savePersistedAIHistory();
+      addAIMessage(x.text, 'bot', replyActions);
       playAIConversationChime('reply');
       if(window.kurdiaAiVoiceEnabled) window.speakAIText(x.text);
       return;
@@ -5388,8 +5477,10 @@ async function askAI(e){
     const liveReply = await callClientConversationalAI(q, lang, historySnapshot);
     if(liveReply){
       loading?.remove();
-      window.kurdiaAiHistory.push({ role: 'assistant', text: liveReply });
-      addAIMessage(liveReply, 'bot', fb.actions || []);
+      const replyActions = fb.actions || [];
+      window.kurdiaAiHistory.push({ role: 'assistant', text: liveReply, actions: replyActions, time: new Date().toISOString() });
+      savePersistedAIHistory();
+      addAIMessage(liveReply, 'bot', replyActions);
       playAIConversationChime('reply');
       if(window.kurdiaAiVoiceEnabled) window.speakAIText(liveReply);
       return;
@@ -5398,7 +5489,8 @@ async function askAI(e){
 
   // 4. Offline fallback to saved curated responses
   loading?.remove();
-  window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text });
+  window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text, actions: fb.actions || [], time: new Date().toISOString() });
+  savePersistedAIHistory();
   addAIMessage(fb.text, 'bot', fb.actions || []);
   playAIConversationChime('reply');
   if(window.kurdiaAiVoiceEnabled) window.speakAIText(fb.text);
