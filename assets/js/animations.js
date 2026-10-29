@@ -84,7 +84,8 @@
   /**
    * 3. Sequenced GSAP Timeline Hero Choreography & Scroll Cue (gsap-skills 02-gsap-timeline)
    */
-  function initCinematicHero() {
+  function initCinematicHero(options) {
+    const opts = options || {};
     const hero = document.querySelector('#home .hero');
     if (!hero) return;
     hero.classList.add('ka-hero-loaded');
@@ -116,68 +117,109 @@
 
     const cfg = getCfg();
     if (!window.gsap || (cfg && cfg.prefersReducedMotion())) return;
-    if (hero.__kaHeroAnimated) return;
+
+    const now = Date.now();
+    if (!opts.force && hero.__kaHeroLastRunAt && now - hero.__kaHeroLastRunAt < 900) {
+      return;
+    }
+    hero.__kaHeroLastRunAt = now;
     hero.__kaHeroAnimated = true;
 
     const eyebrow = hero.querySelector('.eyebrow');
     const title = hero.querySelector('#heroTitle, h1');
     const text = hero.querySelector('#heroText, p');
+    const titleGroup = [eyebrow, title, text].filter(Boolean);
     const ctaBtns = Array.from(hero.querySelectorAll('.actions .btn'));
     const cueEl = hero.querySelector('.ka-hero-scroll-cue');
 
     try {
-      const heroTl = window.gsap.timeline({
-        defaults: { ease: 'power3.out', overwrite: 'auto' }
-      });
+      if (hero.__kaActiveHeroTl && typeof hero.__kaActiveHeroTl.kill === 'function') {
+        hero.__kaActiveHeroTl.kill();
+      }
 
-      if (eyebrow) {
+      const allTargets = [...titleGroup, ...ctaBtns, cueEl].filter(Boolean);
+      window.gsap.killTweensOf(allTargets);
+
+      const heroTl = window.gsap.timeline({
+        defaults: { ease: 'expo.out', overwrite: 'auto' }
+      });
+      hero.__kaActiveHeroTl = heroTl;
+
+      // 1. Staggered cinematic entrance for Hero Titles (Eyebrow -> Main H1 Title -> Subtitle Text)
+      if (titleGroup.length) {
         heroTl.fromTo(
-          eyebrow,
-          { autoAlpha: 0, y: 16 },
-          { autoAlpha: 1, y: 0, duration: 0.52, clearProps: 'transform,opacity,visibility' }
-        );
-      }
-      if (title) {
-        heroTl.fromTo(
-          title,
-          { autoAlpha: 0, y: 26, scale: 0.98 },
-          { autoAlpha: 1, y: 0, scale: 1, duration: 0.68, clearProps: 'transform,opacity,visibility' },
-          '-=0.36'
-        );
-      }
-      if (text) {
-        heroTl.fromTo(
-          text,
-          { autoAlpha: 0, y: 20 },
-          { autoAlpha: 1, y: 0, duration: 0.58, clearProps: 'transform,opacity,visibility' },
-          '-=0.42'
-        );
-      }
-      if (ctaBtns.length) {
-        heroTl.fromTo(
-          ctaBtns,
-          { autoAlpha: 0, y: 16, scale: 0.97 },
+          titleGroup,
+          {
+            autoAlpha: 0,
+            y: (i) => (i === 1 ? 34 : 22),
+            scale: (i) => (i === 1 ? 0.965 : 0.985),
+            rotationX: (i) => (i === 1 ? 8 : 0),
+            filter: 'blur(6px)'
+          },
           {
             autoAlpha: 1,
             y: 0,
             scale: 1,
-            duration: 0.5,
-            stagger: 0.08,
+            rotationX: 0,
+            filter: 'blur(0px)',
+            duration: 0.88,
+            stagger: {
+              each: 0.13,
+              ease: 'power2.out'
+            },
+            clearProps: 'transform,opacity,visibility,filter'
+          },
+          opts.delay || 0.04
+        );
+      }
+
+      // 2. Staggered entrance for Hero Action Buttons (.actions .btn)
+      if (ctaBtns.length) {
+        heroTl.fromTo(
+          ctaBtns,
+          {
+            autoAlpha: 0,
+            y: 22,
+            scale: 0.92,
+            filter: 'blur(4px)'
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            filter: 'blur(0px)',
+            duration: 0.68,
+            stagger: {
+              each: 0.11,
+              from: 'start'
+            },
+            ease: 'back.out(1.45)',
+            clearProps: 'transform,opacity,visibility,filter'
+          },
+          '-=0.52'
+        );
+      }
+
+      // 3. Smooth follow-through for Scroll Cue Pill
+      if (cueEl) {
+        heroTl.fromTo(
+          cueEl,
+          { autoAlpha: 0, y: 14, scale: 0.96 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.56,
+            ease: 'power3.out',
             clearProps: 'transform,opacity,visibility'
           },
           '-=0.38'
         );
       }
-      if (cueEl) {
-        heroTl.fromTo(
-          cueEl,
-          { autoAlpha: 0, y: 12 },
-          { autoAlpha: 1, y: 0, duration: 0.48, clearProps: 'transform,opacity,visibility' },
-          '-=0.32'
-        );
-      }
     } catch (_) {}
   }
+
+  window.playHeroEntranceAnimation = initCinematicHero;
 
   /**
    * 4. React-Bits Universal Cursor Spotlight + Desktop 3D Perspective Tilt
