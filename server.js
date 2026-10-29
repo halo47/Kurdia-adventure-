@@ -329,6 +329,10 @@ function buildSmartLocalAIResponse(prompt, lang, siteState) {
 
 const server = http.createServer((req, res) => {
   try {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+
     const parsedUrl = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
     let pathname = decodeURIComponent(parsedUrl.pathname);
 
@@ -972,6 +976,27 @@ const server = http.createServer((req, res) => {
     }
 
     const safePath = path.normalize(pathname).replace(/^(\.\.[/\\])+/, '');
+    const lowerSafe = safePath.toLowerCase().replace(/^[/\\]+/, '');
+    const BLOCKED_FILES = new Set([
+      'server.js',
+      'package.json',
+      'package-lock.json',
+      'registrations-meta.json',
+      'cms-overrides.json',
+      'visitors-store.json',
+      'translations-cache.json'
+    ]);
+    if (
+      BLOCKED_FILES.has(lowerSafe) ||
+      lowerSafe.startsWith('.env') ||
+      lowerSafe.startsWith('.git') ||
+      lowerSafe.startsWith('node_modules')
+    ) {
+      res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Forbidden');
+      return;
+    }
+
     let filePath = path.join(ROOT, safePath);
 
     if (!filePath.startsWith(ROOT)) {
