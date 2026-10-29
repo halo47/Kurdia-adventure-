@@ -2421,7 +2421,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div id="toast" class="toast"></div>
 <script>
 const WORKER='https://kurdia.alwandssalh.workers.dev';
-const SITE_CODE_RELEASE='v4.2.0';
+const SITE_CODE_RELEASE='v4.3.0';
 (function(){
   try{
     if(localStorage.getItem('kurdia_code_release')!==SITE_CODE_RELEASE){
@@ -2727,21 +2727,57 @@ window.setLanguage=function(lang){
   }catch(e){}
 };
 
+function getCanonicalReviewKey(r){
+  if(!r || typeof r !== 'object') return '';
+  const name = String(r.name || '').trim().toLowerCase();
+  const text = String(r.text ?? r.comment ?? '').trim().toLowerCase();
+  if(!name || !text) return '';
+  return `${name}|${text}`;
+}
+
+function isLegacyDuplicateSeedReview(r){
+  if(!r || typeof r !== 'object') return true;
+  const t = String(r.text ?? r.comment ?? '').trim();
+  return r.id === 'seed-rev-1' || r.id === 'seed-rev-2' ||
+    t === 'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.' ||
+    t === 'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.';
+}
+
+function getDeletedReviewKeySet(){
+  const set = new Set();
+  try{
+    if(Array.isArray(window.__kurdiaDeletedReviewKeys)){
+      window.__kurdiaDeletedReviewKeys.forEach(k => set.add(String(k).toLowerCase()));
+    }
+    if(Array.isArray(data?.deletedReviewKeys)){
+      data.deletedReviewKeys.forEach(k => set.add(String(k).toLowerCase()));
+    }
+    const localDel = JSON.parse(localStorage.getItem('kurdia_deleted_reviews_v1') || '[]');
+    if(Array.isArray(localDel)){
+      localDel.forEach(k => set.add(String(k).toLowerCase()));
+    }
+  }catch(_){}
+  return set;
+}
+
 function mergeReviewLists(...lists){
   const merged = [];
   const seen = new Set();
+  const deletedSet = getDeletedReviewKeySet();
   for(const list of lists){
     if(!Array.isArray(list)) continue;
     for(const r of list){
       if(!r || typeof r !== 'object') continue;
+      if(isLegacyDuplicateSeedReview(r)) continue;
       const name = String(r.name || '').trim();
       const text = String(r.text ?? r.comment ?? '').trim();
       if(!name || !text) continue;
-      const key = (r.id ? String(r.id) + '|' : '') + (name + '::' + text).toLowerCase();
-      const textKey = (name + '::' + text).toLowerCase();
-      if(seen.has(key) || seen.has(textKey)) continue;
+      const canonicalKey = getCanonicalReviewKey(r);
+      if(!canonicalKey || deletedSet.has(canonicalKey)) continue;
+      const key = (r.id ? String(r.id) + '|' : '') + canonicalKey;
+      if(seen.has(key) || seen.has(canonicalKey)) continue;
       seen.add(key);
-      seen.add(textKey);
+      seen.add(canonicalKey);
       merged.push({
         ...r,
         id: r.id || ('rev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)),
@@ -2762,7 +2798,7 @@ function syncReviewIntoLocalAdminState(newReview){
     if(!raw) return;
     const adminState = JSON.parse(raw);
     if(!adminState || typeof adminState !== 'object') return;
-    adminState.reviews = mergeReviewLists([newReview], adminState.reviews || []);
+    adminState.reviews = mergeReviewLists(newReview ? [newReview] : [], adminState.reviews || [], data.reviews || [], DEFAULT.reviews || []);
     localStorage.setItem('kurdia_admin_multitrip_v6', JSON.stringify(adminState));
   }catch(_){}
 }
@@ -2790,8 +2826,14 @@ async function loadRemote(){
       } else {
         updateSiteVersionUI();
       }
+      const remoteDeleted = Array.isArray(config.deletedReviewKeys) ? config.deletedReviewKeys : (Array.isArray(config.config?.deletedReviewKeys) ? config.config.deletedReviewKeys : []);
+      if(remoteDeleted.length){
+        window.__kurdiaDeletedReviewKeys = Array.from(new Set([...(window.__kurdiaDeletedReviewKeys || []), ...remoteDeleted]));
+        try{ localStorage.setItem('kurdia_deleted_reviews_v1', JSON.stringify(window.__kurdiaDeletedReviewKeys)); }catch(_){}
+      }
       data=normalizeRemoteCMS(config);
-      data.reviews = mergeReviewLists(localRevs, prevReviews, data.reviews);
+      data.deletedReviewKeys = window.__kurdiaDeletedReviewKeys || [];
+      data.reviews = mergeReviewLists(localRevs, prevReviews, data.reviews, DEFAULT.reviews);
       normalizePublicData();
       localStorage.setItem('kurdia_premium_data',JSON.stringify(data));
     }
@@ -2806,11 +2848,19 @@ async function loadRemote(){
     let apiReviews = [];
     if(revRes && revRes.ok){
       const revJson = await revRes.json().catch(() => ({}));
+      if(Array.isArray(revJson.deletedReviewKeys) && revJson.deletedReviewKeys.length){
+        window.__kurdiaDeletedReviewKeys = Array.from(new Set([...(window.__kurdiaDeletedReviewKeys || []), ...revJson.deletedReviewKeys]));
+        try{ localStorage.setItem('kurdia_deleted_reviews_v1', JSON.stringify(window.__kurdiaDeletedReviewKeys)); }catch(_){}
+      }
       if(Array.isArray(revJson.reviews)) apiReviews = revJson.reviews;
     }
     if(ovRes && ovRes.ok){
       const ovJson = await ovRes.json();
       const ov = ovJson.data || {};
+      if(Array.isArray(ov.deletedReviewKeys) && ov.deletedReviewKeys.length){
+        window.__kurdiaDeletedReviewKeys = Array.from(new Set([...(window.__kurdiaDeletedReviewKeys || []), ...ov.deletedReviewKeys]));
+        try{ localStorage.setItem('kurdia_deleted_reviews_v1', JSON.stringify(window.__kurdiaDeletedReviewKeys)); }catch(_){}
+      }
       if(ov.heroTitle) data.heroTitle = ov.heroTitle;
       if(ov.heroText !== undefined && ov.heroText !== '') data.heroText = ov.heroText;
       if(ov.heroImageUrl) data.heroImageUrl = ov.heroImageUrl;
@@ -2861,16 +2911,18 @@ async function loadRemote(){
         data.booking.otpRequired = ov.otpRequired;
         try{ localStorage.setItem('kurdia_otp_required', String(ov.otpRequired)); }catch(_){}
       }
-      data.reviews = mergeReviewLists(apiReviews, ov.reviews, localRevs, data.reviews);
+      data.reviews = mergeReviewLists(localRevs, apiReviews, ov.reviews, data.reviews, DEFAULT.reviews);
     } else if(apiReviews.length){
-      data.reviews = mergeReviewLists(apiReviews, localRevs, data.reviews);
+      data.reviews = mergeReviewLists(localRevs, apiReviews, data.reviews, DEFAULT.reviews);
     }
     localStorage.setItem('kurdia_premium_data', JSON.stringify(data));
   }catch(_){}
   try{
-    if(localRevs.length){
-      data.reviews = mergeReviewLists(localRevs, data.reviews);
-    }
+    data.reviews = mergeReviewLists(localRevs, data.reviews, DEFAULT.reviews);
+    localStorage.setItem('kurdia_public_reviews_v1', JSON.stringify(data.reviews));
+    syncReviewIntoLocalAdminState(null);
+    // Automatically push any local reviews on this device up to the cloud & backend so Admin always matches 100%
+    saveReviewToCloudCMS(null, data.reviews);
   }catch(_){}
   if(typeof window.syncPublicOtpUI === 'function') window.syncPublicOtpUI();
 }
@@ -3694,7 +3746,9 @@ function createReviewCardHTML(x){
 }
 
 function renderReviewsPublic(){
-  const list = (Array.isArray(data.reviews) && data.reviews.length) ? data.reviews : (DEFAULT.reviews || []);
+  const rawList = (Array.isArray(data.reviews) && data.reviews.length) ? data.reviews : (DEFAULT.reviews || []);
+  const list = mergeReviewLists(rawList, DEFAULT.reviews || []);
+  data.reviews = list;
   const c = $('reviewsListPublic');
   if(c){
     c.innerHTML = list.map(x => createReviewCardHTML(x)).join('');
@@ -3705,7 +3759,10 @@ function renderReviewsPublic(){
   }
   const badge = $('reviewsCountBadge');
   if(badge){
-    badge.textContent = `٤.٩ / ٥ (${list.length} فیدباک)`;
+    const total = list.length;
+    const sum = list.reduce((acc, r) => acc + Math.min(5, Math.max(1, Number(r?.rating || 5))), 0);
+    const avg = total ? (sum / total).toFixed(1) : '5.0';
+    badge.textContent = `${avg} / 5 (${total} فیدباک)`;
   }
 }
 
@@ -3732,19 +3789,52 @@ function setupReviewStars(){
   updateStarsUI(Number($('reviewRating')?.value || 5));
 }
 
-async function saveReviewToCloudCMS(newReview){
+async function saveReviewToCloudCMS(newReview, fullListOverride){
   try{
+    if(newReview){
+      const k = getCanonicalReviewKey(newReview);
+      if(k && Array.isArray(window.__kurdiaDeletedReviewKeys)){
+        window.__kurdiaDeletedReviewKeys = window.__kurdiaDeletedReviewKeys.filter(dk => dk !== k);
+        try{ localStorage.setItem('kurdia_deleted_reviews_v1', JSON.stringify(window.__kurdiaDeletedReviewKeys)); }catch(_){}
+      }
+    }
+    const baseList = Array.isArray(fullListOverride) ? fullListOverride : (Array.isArray(data.reviews) ? data.reviews : []);
+    const allLocalReviews = mergeReviewLists(newReview ? [newReview] : [], baseList, DEFAULT.reviews || []).slice(0, 200);
+
+    // Sync full list to local backend endpoints if reachable
+    fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reviews: allLocalReviews, deletedReviewKeys: window.__kurdiaDeletedReviewKeys || [] })
+    }).catch(() => {});
+
+    fetch('/api/cms-overrides', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reviews: allLocalReviews, deletedReviewKeys: window.__kurdiaDeletedReviewKeys || [] })
+    }).catch(() => {});
+
+    // Sync full list to Cloudflare Worker CMS so Admin subdomain sees exact same reviews
     const curRes = await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, {
       cache: 'no-store',
       headers: { 'X-Admin-Key': '2026' }
     });
     const curJson = await curRes.json().catch(() => ({}));
     const cmsData = curJson.data || {};
-    const existingList = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
-    const merged = mergeReviewLists([newReview], existingList).slice(0, 200);
+    const remoteDeleted = Array.isArray(cmsData.deletedReviewKeys) ? cmsData.deletedReviewKeys : (Array.isArray(cmsData.config?.deletedReviewKeys) ? cmsData.config.deletedReviewKeys : []);
+    if(remoteDeleted.length && !newReview){
+      window.__kurdiaDeletedReviewKeys = Array.from(new Set([...(window.__kurdiaDeletedReviewKeys || []), ...remoteDeleted]));
+    }
+    const existingList = Array.isArray(cmsData.reviews) ? cmsData.reviews : (Array.isArray(cmsData.config?.reviews) ? cmsData.config.reviews : []);
+    const merged = mergeReviewLists(newReview ? [newReview] : [], allLocalReviews, existingList, DEFAULT.reviews || []).slice(0, 200);
+    data.reviews = merged;
+    renderReviewsPublic();
+
     cmsData.reviews = merged;
+    cmsData.deletedReviewKeys = window.__kurdiaDeletedReviewKeys || [];
     if(cmsData.config && typeof cmsData.config === 'object'){
       cmsData.config.reviews = merged;
+      cmsData.config.deletedReviewKeys = cmsData.deletedReviewKeys;
     }
     await fetch(`${WORKER}/api/admin/cms?cb=${Date.now()}`, {
       method: 'POST',
@@ -5106,8 +5196,64 @@ function closeModal(id){
   }
   $(id)?.classList.remove('show');
 }
-function aiQuick(q){const i=$('aiInput');if(i)i.value=q;askAI({preventDefault:()=>{}})}
+function aiQuick(q){
+  const i=$('aiInput');
+  if(i) i.value=q;
+  window.__isSavedQuickChip = true;
+  askAI({preventDefault:()=>{}});
+}
 function aiSiteContext(){const trips=getActiveTripsList();const t=trips[0]||data.trip||{};return {brand:'KURDIA ADVENTURE',exclusiveGroupOnly:true,language:localStorage.getItem('kurdia_language')||'ku',purpose:'پلاتفۆرمێکی گەشت و سەرکێشی و سروشت لە کوردستان.',fibAccount:'0750 313 0360',whatsapp:data?.contact?.whatsapp||'+9647503130360',currentTrip:{title:t.title,location:t.location,date:t.date,price:t.price,time:t.time,description:t.desc,capacity:t.capacity,booked:t.booked},upcomingTrips:trips.map(tr=>({title:tr.title,location:tr.location,date:tr.date,price:tr.price,time:tr.time,description:tr.desc,capacity:tr.capacity,booked:tr.booked})),destinations:(data.destinations||[]).map(x=>({name:x.name,region:x.region,type:x.type,hasHiking:x.hasHiking,hikingDuration:x.hikingDuration,hikingLevel:x.hikingLevel,altitude:x.altitude,description:x.description||x.desc})),pages:['سەرەکی','کەشوهەوا','بەشداری','گەشتی تایبەت','شوێنەکان','ستۆری','پێداچوونەوە','دەربارەی کوردیا','پەیوەندی']}}
+
+async function callClientConversationalAI(q, lang, history){
+  const ctx = aiSiteContext();
+  const langName = lang === 'en' ? 'English' : (lang === 'ar' ? 'Arabic (العربية)' : 'Kurdish Sorani (کوردیی سۆرانی)');
+  const sysPrompt = [
+    `You are the official smart AI conversational companion and Mountain & Travel Concierge for KURDIA ADVENTURE (kurdiaadventure.com), the premier outdoor, hiking, camping, and adventure platform in the Kurdistan Region.`,
+    `STRICT EXCLUSIVITY RULE: You represent ONLY KURDIA ADVENTURE. NEVER mention, name, promote, or compare any other hiking, travel, or tourism groups/companies/agencies under any circumstances.`,
+    `CONVERSATIONAL SCOPE: You are a real, natural, intelligent conversational AI. Speak naturally, warmly, and friendlily with the user about ANY topic they ask! In addition to knowing all KURDIA ADVENTURE trips, booking steps, FIB payment (0750 313 0360), WhatsApp (+964 750 313 0360), VIP private trips, and Kurdistan destinations, you can freely hold normal human-like conversations, answer general questions, give hiking/camping/clothing advice, discuss Kurdistan nature & weather, tell stories, or help with anything the user writes.`,
+    `Always reply fluently in ${langName} unless the user explicitly writes in another language.`,
+    `Keep answers natural, helpful, and formatted cleanly for mobile screens (use bullet points • and **bold** key terms when listing items, or natural paragraphs when chatting).`,
+    `Live KURDIA ADVENTURE Website Context: ${JSON.stringify(ctx)}`
+  ].join('\n');
+
+  const messages = [
+    { role: 'system', content: sysPrompt },
+    ...(Array.isArray(history) ? history.slice(-8) : []).map(m => ({
+      role: m.role === 'user' ? 'user' : 'assistant',
+      content: String(m.text || '')
+    })),
+    { role: 'user', content: String(q || '') }
+  ];
+
+  try{
+    const res = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openai',
+        messages,
+        temperature: 0.7
+      })
+    });
+    if(res.ok){
+      const json = await res.json().catch(() => ({}));
+      const txt = String(json?.choices?.[0]?.message?.content || '').trim();
+      if(txt) return txt;
+    }
+  }catch(_){}
+
+  try{
+    const shortHistory = (Array.isArray(history) ? history.slice(-4) : []).map(m => `${m.role === 'user' ? 'User' : 'KURDIA AI'}: ${m.text}`).join('\n');
+    const urlPrompt = `${sysPrompt}\n\n${shortHistory ? shortHistory + '\n' : ''}User: ${q}\nKURDIA AI:`;
+    const getRes = await fetch('https://text.pollinations.ai/' + encodeURIComponent(urlPrompt));
+    if(getRes.ok){
+      const txt = String(await getRes.text() || '').trim();
+      if(txt && !txt.startsWith('<!DOCTYPE')) return txt;
+    }
+  }catch(_){}
+
+  return '';
+}
 
 function buildClientFallbackAI(q, lang){
   const ctx = aiSiteContext();
@@ -5187,17 +5333,33 @@ function buildClientFallbackAI(q, lang){
 
 async function askAI(e){
   if(e && typeof e.preventDefault === 'function') e.preventDefault();
+  const isSavedChip = Boolean(window.__isSavedQuickChip);
+  window.__isSavedQuickChip = false;
   const i = $('aiInput');
   const q = (i?.value || '').trim();
   if(!q) return;
   const lang = localStorage.getItem('kurdia_language') || 'ku';
   playAIConversationChime('send');
   addAIMessage(q, 'user');
+  const historySnapshot = [...(window.kurdiaAiHistory || [])];
   window.kurdiaAiHistory.push({ role: 'user', text: q });
   if(i) i.value = '';
+
+  const fb = buildClientFallbackAI(q, lang);
+
+  // 1. If the user clicked one of the saved quick-chips, immediately show the saved message + action buttons
+  if(isSavedChip){
+    window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text });
+    addAIMessage(fb.text, 'bot', fb.actions || []);
+    playAIConversationChime('reply');
+    if(window.kurdiaAiVoiceEnabled) window.speakAIText(fb.text);
+    return;
+  }
+
   const loadingMsg = lang === 'en' ? 'KURDIA AI is thinking... 🌿' : (lang === 'ar' ? 'مساعد KURDIA يكتب الآن... 🌿' : 'KURDIA خەریکی وەڵامدانەوەیە... 🌿');
   const loading = addAIMessage(loadingMsg, 'bot loading');
 
+  // 2. Try backend /api/ai (Gemini 3.8 Flash + server conversational AI)
   try{
     const r = await fetch('/api/ai', {
       method: 'POST',
@@ -5205,22 +5367,36 @@ async function askAI(e){
       body: JSON.stringify({
         prompt: q,
         lang: lang,
-        history: window.kurdiaAiHistory.slice(-8),
+        savedChip: false,
+        history: historySnapshot.slice(-8),
         siteState: aiSiteContext()
       })
     });
     const x = await r.json().catch(()=>({}));
-    loading?.remove();
-    if(x && x.text){
+    if(x && x.text && x.source !== 'kurdia-smart-concierge'){
+      loading?.remove();
       window.kurdiaAiHistory.push({ role: 'assistant', text: x.text });
-      addAIMessage(x.text, 'bot', x.actions || []);
+      addAIMessage(x.text, 'bot', x.actions || fb.actions || []);
       playAIConversationChime('reply');
       if(window.kurdiaAiVoiceEnabled) window.speakAIText(x.text);
       return;
     }
   }catch(_){}
 
-  const fb = buildClientFallbackAI(q, lang);
+  // 3. Direct browser live conversational AI (works on static Cloudflare Pages kurdiaadventure.com too)
+  try{
+    const liveReply = await callClientConversationalAI(q, lang, historySnapshot);
+    if(liveReply){
+      loading?.remove();
+      window.kurdiaAiHistory.push({ role: 'assistant', text: liveReply });
+      addAIMessage(liveReply, 'bot', fb.actions || []);
+      playAIConversationChime('reply');
+      if(window.kurdiaAiVoiceEnabled) window.speakAIText(liveReply);
+      return;
+    }
+  }catch(_){}
+
+  // 4. Offline fallback to saved curated responses
   loading?.remove();
   window.kurdiaAiHistory.push({ role: 'assistant', text: fb.text });
   addAIMessage(fb.text, 'bot', fb.actions || []);

@@ -2729,7 +2729,7 @@ button{cursor:pointer;color:inherit}
 <script>
 const WORKER_URL = "https://kurdia.alwandssalh.workers.dev";
 const STORAGE_KEY = "kurdia_admin_multitrip_v6";
-const CODE_RELEASE_VERSION = "v3.8.2";
+const CODE_RELEASE_VERSION = "v4.3.0";
 
 // Immediately purge old single-trip cached localStorage on version upgrade
 (function(){
@@ -3023,9 +3023,13 @@ let appState = {
     }
   },
   reviews: [
-    { name: "دەرباز سەعید", city: "هەولێر", text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." },
-    { name: "تاریق سەلام", city: "سلێمانی", text: "سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو." }
+    { id: "rev-default-1", name: "دەرباز سەعید", city: "هەولێر", rating: 5, text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا.", comment: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." },
+    { id: "rev-default-2", name: "تاریق سەلام", city: "سلێمانی", rating: 5, text: "سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو.", comment: "سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو." },
+    { id: "rev-default-3", name: "شیلان عومەر", city: "دهۆک", rating: 5, text: "سەلامەتی و ڕێبەرایەتی پرۆفیشناڵ، زۆر سوپاس بۆ KURDIA.", comment: "سەلامەتی و ڕێبەرایەتی پرۆفیشناڵ، زۆر سوپاس بۆ KURDIA." },
+    { id: "rev-default-4", name: "ڕێبین کەریم", city: "هەولێر", rating: 5, text: "ئەزموونێکی زۆر تایبەت بوو لە چیاکانی کوردستان، بێگومان دووبارە بەشداری دەکەمەوە.", comment: "ئەزموونێکی زۆر تایبەت بوو لە چیاکانی کوردستان، بێگومان دووبارە بەشداری دەکەمەوە." },
+    { id: "rev-default-5", name: "سارا جەمال", city: "سلێمانی", rating: 5, text: "هەموو شتێک لە کاتی خۆیدا و بە پلانێکی زۆر ڕێکوپێک ئەنجام درا.", comment: "هەموو شتێک لە کاتی خۆیدا و بە پلانێکی زۆر ڕێکوپێک ئەنجام درا." }
   ],
+  deletedReviewKeys: [],
   places: [
     {
       id: "place-1",
@@ -4102,6 +4106,9 @@ async function publishLive(alreadySavedFromTripForm = false){
     };
 
     // Merge remote user-submitted reviews before syncing so we never overwrite them
+    if(Array.isArray(data.deletedReviewKeys) && data.deletedReviewKeys.length){
+      appState.deletedReviewKeys = Array.from(new Set([...(appState.deletedReviewKeys || []), ...data.deletedReviewKeys]));
+    }
     if(Array.isArray(data.reviews) && data.reviews.length){
       mergeIncomingReviewsIntoState(data.reviews);
     }
@@ -4114,6 +4121,7 @@ async function publishLive(alreadySavedFromTripForm = false){
     data.i18n = appState.i18n;
     data.coupons = Array.isArray(appState.coupons) ? appState.coupons : [];
     data.reviews = Array.isArray(appState.reviews) ? appState.reviews : [];
+    data.deletedReviewKeys = Array.isArray(appState.deletedReviewKeys) ? appState.deletedReviewKeys : [];
     data.destinations = Array.isArray(appState.places) ? appState.places : [];
     data.fibAccount = appState.fibAccount || "07503130360";
     data.paymentMethods = Array.isArray(appState.paymentMethods) ? appState.paymentMethods : [];
@@ -4151,6 +4159,7 @@ async function publishLive(alreadySavedFromTripForm = false){
       data.config.paymentMethods = data.paymentMethods;
       data.config.fibAccount = data.fibAccount;
       data.config.reviews = data.reviews;
+      data.config.deletedReviewKeys = data.deletedReviewKeys;
       data.config.about = data.about;
       data.config.contact = data.contact;
       data.config.social = data.social;
@@ -4204,7 +4213,8 @@ async function publishLive(alreadySavedFromTripForm = false){
         paymentMethods: data.paymentMethods,
         deletedPaymentMethodIds: Array.isArray(appState.deletedPaymentMethodIds) ? appState.deletedPaymentMethodIds : [],
         otpRequired: data.otpRequired,
-        reviews: data.reviews
+        reviews: data.reviews,
+        deletedReviewKeys: data.deletedReviewKeys
       })
     }).catch(() => {});
 
@@ -6694,6 +6704,22 @@ async function loadVisitorAnalytics(showToastMsg = false){
   }catch(e){}
 }
 
+const DEFAULT_ADMIN_REVIEWS = [
+  { id: "rev-default-1", name: "دەرباز سەعید", city: "هەولێر", rating: 5, text: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا.", comment: "یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا." },
+  { id: "rev-default-2", name: "تاریق سەلام", city: "سلێمانی", rating: 5, text: "سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو.", comment: "سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو." },
+  { id: "rev-default-3", name: "شیلان عومەر", city: "دهۆک", rating: 5, text: "سەلامەتی و ڕێبەرایەتی پرۆفیشناڵ، زۆر سوپاس بۆ KURDIA.", comment: "سەلامەتی و ڕێبەرایەتی پرۆفیشناڵ، زۆر سوپاس بۆ KURDIA." },
+  { id: "rev-default-4", name: "ڕێبین کەریم", city: "هەولێر", rating: 5, text: "ئەزموونێکی زۆر تایبەت بوو لە چیاکانی کوردستان، بێگومان دووبارە بەشداری دەکەمەوە.", comment: "ئەزموونێکی زۆر تایبەت بوو لە چیاکانی کوردستان، بێگومان دووبارە بەشداری دەکەمەوە." },
+  { id: "rev-default-5", name: "سارا جەمال", city: "سلێمانی", rating: 5, text: "هەموو شتێک لە کاتی خۆیدا و بە پلانێکی زۆر ڕێکوپێک ئەنجام درا.", comment: "هەموو شتێک لە کاتی خۆیدا و بە پلانێکی زۆر ڕێکوپێک ئەنجام درا." }
+];
+
+function isLegacySeedReview(r){
+  if(!r || typeof r !== "object") return true;
+  const t = String(r.text ?? r.comment ?? "").trim();
+  return r.id === "seed-rev-1" || r.id === "seed-rev-2" ||
+    t === "یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA." ||
+    t === "ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.";
+}
+
 function getReviewSignature(r){
   if(!r) return "";
   const nm = String(r.name || "").trim().toLowerCase();
@@ -6703,29 +6729,29 @@ function getReviewSignature(r){
 
 function getDeletedReviewSet(){
   const list = [];
-  if(Array.isArray(appState.deletedReviewKeys)) list.push(...appState.deletedReviewKeys);
+  if(Array.isArray(appState.deletedReviewKeys)) list.push(...appState.deletedReviewKeys.map(x => String(x).toLowerCase()));
   try{
     const saved = JSON.parse(localStorage.getItem("kurdia_deleted_reviews_v1") || "[]");
-    if(Array.isArray(saved)) list.push(...saved);
+    if(Array.isArray(saved)) list.push(...saved.map(x => String(x).toLowerCase()));
   }catch(_){}
   return new Set(list.filter(Boolean));
 }
 
 function mergeIncomingReviewsIntoState(incomingArray){
-  if(!Array.isArray(incomingArray) || !incomingArray.length) return false;
   const delSet = getDeletedReviewSet();
   const current = Array.isArray(appState.reviews) ? appState.reviews : [];
-  const combined = [...incomingArray, ...current];
+  const combined = [...(Array.isArray(incomingArray) ? incomingArray : []), ...current, ...DEFAULT_ADMIN_REVIEWS];
   const seen = new Set();
   const deduped = [];
 
   for(const item of combined){
     if(!item || typeof item !== "object") continue;
+    if(isLegacySeedReview(item)) continue;
     const name = String(item.name || "").trim();
     const text = String(item.text ?? item.comment ?? "").trim();
-    if(!name && !text) continue;
+    if(!name || !text) continue;
     const sig = getReviewSignature(item);
-    const idKey = item.id ? String(item.id) : "";
+    const idKey = item.id ? String(item.id).toLowerCase() : "";
     if(delSet.has(sig) || (idKey && delSet.has(idKey))) continue;
     if(seen.has(sig) || (idKey && seen.has(idKey))) continue;
     seen.add(sig);
@@ -6756,11 +6782,16 @@ function mergeIncomingReviewsIntoState(incomingArray){
 async function fetchLiveReviewsForAdmin(silent = true){
   try{
     const [cmsRes, cfgRes, apiRevRes, ovRes] = await Promise.allSettled([
-      fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null),
+      fetch(`${WORKER_URL}/api/admin/cms?cb=${Date.now()}`, { cache: "no-store", headers: { "X-Admin-Key": "2026" } }).then(r => r.ok ? r.json() : null),
       fetch(`${WORKER_URL}/api/site/config?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null),
       fetch(`/api/reviews?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null),
       fetch(`/api/cms-overrides?cb=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null)
     ]);
+
+    const delKeys = new Set(getDeletedReviewSet());
+    const collectDeleted = (arr) => {
+      if(Array.isArray(arr)) arr.forEach(k => { if(k) delKeys.add(String(k).toLowerCase()); });
+    };
 
     const pool = [];
     // 1. Local browser submissions from same device
@@ -6771,14 +6802,17 @@ async function fetchLiveReviewsForAdmin(silent = true){
     try{
       const premLocal = JSON.parse(localStorage.getItem("kurdia_premium_data") || "{}");
       if(Array.isArray(premLocal?.reviews)) pool.push(...premLocal.reviews);
+      collectDeleted(premLocal?.deletedReviewKeys);
     }catch(_){}
 
     // 2. Local server /api/reviews & /api/cms-overrides
-    if(apiRevRes.status === "fulfilled" && Array.isArray(apiRevRes.value?.reviews)){
-      pool.push(...apiRevRes.value.reviews);
+    if(apiRevRes.status === "fulfilled" && apiRevRes.value){
+      if(Array.isArray(apiRevRes.value.reviews)) pool.push(...apiRevRes.value.reviews);
+      collectDeleted(apiRevRes.value.deletedReviewKeys);
     }
-    if(ovRes.status === "fulfilled" && Array.isArray(ovRes.value?.data?.reviews)){
-      pool.push(...ovRes.value.data.reviews);
+    if(ovRes.status === "fulfilled" && ovRes.value?.data){
+      if(Array.isArray(ovRes.value.data.reviews)) pool.push(...ovRes.value.data.reviews);
+      collectDeleted(ovRes.value.data.deletedReviewKeys);
     }
 
     // 3. Cloudflare Worker /api/admin/cms & /api/site/config
@@ -6786,20 +6820,27 @@ async function fetchLiveReviewsForAdmin(silent = true){
       const d = cmsRes.value.data || cmsRes.value;
       if(Array.isArray(d?.reviews)) pool.push(...d.reviews);
       if(Array.isArray(d?.config?.reviews)) pool.push(...d.config.reviews);
+      collectDeleted(d?.deletedReviewKeys);
+      collectDeleted(d?.config?.deletedReviewKeys);
     }
     if(cfgRes.status === "fulfilled" && cfgRes.value){
       const c = cfgRes.value.config || cfgRes.value.data || cfgRes.value;
       if(Array.isArray(c?.reviews)) pool.push(...c.reviews);
+      collectDeleted(c?.deletedReviewKeys);
+      collectDeleted(c?.config?.deletedReviewKeys);
     }
 
-    if(pool.length){
-      mergeIncomingReviewsIntoState(pool);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-      syncPublicWebsiteBridge();
-    }
+    appState.deletedReviewKeys = Array.from(delKeys);
+    try{ localStorage.setItem("kurdia_deleted_reviews_v1", JSON.stringify(appState.deletedReviewKeys)); }catch(_){}
+
+    mergeIncomingReviewsIntoState(pool);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    localStorage.setItem("kurdia_public_reviews_v1", JSON.stringify(appState.reviews));
+    syncPublicWebsiteBridge();
     renderReviews();
     if(!silent) toast(`✅ فیدباکەکان نوێکرانەوە (${(appState.reviews || []).length} هەڵسەنگاندن)`);
   }catch(e){
+    mergeIncomingReviewsIntoState([]);
     renderReviews();
   }
 }
@@ -6856,20 +6897,20 @@ function renderReviews(){
   }).join("") || `<div class="lang-box" style="text-align:center;color:#94a3b8;padding:18px">هیچ هەڵسەنگاندنێک نییە.</div>`;
 }
 
-function deleteAdminReviewItem(idx){
+async function deleteAdminReviewItem(idx){
   if(!Array.isArray(appState.reviews)) return;
   const target = appState.reviews[idx];
   if(target){
     const sig = getReviewSignature(target);
     const delSet = getDeletedReviewSet();
     if(sig) delSet.add(sig);
-    if(target.id) delSet.add(String(target.id));
+    if(target.id) delSet.add(String(target.id).toLowerCase());
     appState.deletedReviewKeys = [...delSet];
     try{
       localStorage.setItem("kurdia_deleted_reviews_v1", JSON.stringify(appState.deletedReviewKeys));
       const pubLocal = JSON.parse(localStorage.getItem("kurdia_public_reviews_v1") || "[]");
       if(Array.isArray(pubLocal)){
-        const filteredPub = pubLocal.filter(x => getReviewSignature(x) !== sig && String(x?.id || "") !== String(target.id || ""));
+        const filteredPub = pubLocal.filter(x => getReviewSignature(x) !== sig && String(x?.id || "").toLowerCase() !== String(target.id || "").toLowerCase());
         localStorage.setItem("kurdia_public_reviews_v1", JSON.stringify(filteredPub));
       }
     }catch(_){}
@@ -6877,11 +6918,20 @@ function deleteAdminReviewItem(idx){
   appState.reviews.splice(idx, 1);
   renderReviews();
   autoSync();
-  if(typeof syncWebsite === "function") syncWebsite(true);
-  toast("🗑️ فیدباک سڕایەوە");
+  fetch("/api/cms-overrides", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      replaceReviews: true,
+      reviews: appState.reviews,
+      deletedReviewKeys: appState.deletedReviewKeys || []
+    })
+  }).catch(() => {});
+  await publishLive(true);
+  toast("🗑️ فیدباک سڕایەوە و لە ماڵپەڕی سەرەکیش لادرا");
 }
 
-function addReviewItem(){
+async function addReviewItem(){
   const n = document.getElementById("newReviewName").value.trim();
   const c = document.getElementById("newReviewCity").value.trim() || "کوردستان";
   const t = document.getElementById("newReviewText").value.trim();
@@ -6897,7 +6947,15 @@ function addReviewItem(){
     comment: t,
     createdAt: new Date().toISOString()
   };
+  const sig = getReviewSignature(newRev);
+  if(Array.isArray(appState.deletedReviewKeys)){
+    appState.deletedReviewKeys = appState.deletedReviewKeys.filter(k => k !== sig);
+    try{ localStorage.setItem("kurdia_deleted_reviews_v1", JSON.stringify(appState.deletedReviewKeys)); }catch(_){}
+  }
   appState.reviews.unshift(newRev);
+  try{
+    localStorage.setItem("kurdia_public_reviews_v1", JSON.stringify(appState.reviews));
+  }catch(_){}
   document.getElementById("newReviewName").value = "";
   document.getElementById("newReviewCity").value = "";
   document.getElementById("newReviewText").value = "";
@@ -6908,7 +6966,7 @@ function addReviewItem(){
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newRev)
   }).catch(() => {});
-  if(typeof syncWebsite === "function") syncWebsite(true);
+  await publishLive(true);
   toast("✅ فیدباک زیادکرا و لە وێبسایت بڵاوکرایەوە");
 }
 
@@ -7426,8 +7484,14 @@ fetchLiveRegistrations();
 loadVisitorAnalytics();
 window.addEventListener("storage", e => {
   if(e.key === "kurdia_visitor_stats_v1") loadVisitorAnalytics();
-  if(e.key === "kurdia_public_reviews_v1" || e.key === "kurdia_premium_data") fetchLiveReviewsForAdmin(true);
+  if(e.key === "kurdia_public_reviews_v1" || e.key === "kurdia_premium_data" || e.key === "kurdia_deleted_reviews_v1") fetchLiveReviewsForAdmin(true);
 });
+window.addEventListener("focus", () => fetchLiveReviewsForAdmin(true));
+setInterval(() => {
+  if(document.getElementById("reviews")?.classList.contains("active")){
+    fetchLiveReviewsForAdmin(true);
+  }
+}, 15000);
 
 window.addEventListener("load", () => {
   if(window.THREE){

@@ -395,23 +395,36 @@ const server = http.createServer((req, res) => {
         const prompt = String(payload.prompt || '').trim();
         const lang = ['ku', 'ar', 'en'].includes(payload.lang) ? payload.lang : 'ku';
         const siteState = payload.siteState || {};
-        const history = Array.isArray(payload.history) ? payload.history.slice(-8) : [];
+        const history = Array.isArray(payload.history) ? payload.history.slice(-10) : [];
 
         const fallbackResult = buildSmartLocalAIResponse(prompt, lang, siteState);
 
+        // If explicitly triggered as a saved quick-chip message, return the curated saved response immediately
+        if (payload.savedChip === true && fallbackResult && fallbackResult.text) {
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({
+            ok: true,
+            text: fallbackResult.text,
+            actions: fallbackResult.actions || [],
+            source: 'kurdia-saved-chip'
+          }));
+          return;
+        }
+
+        const langName = lang === 'en' ? 'English' : (lang === 'ar' ? 'Arabic (العربية)' : 'Kurdish Sorani (کوردیی سۆرانی)');
+        const sysInstruction = [
+          `You are the official smart AI conversational companion and Mountain & Travel Concierge for KURDIA ADVENTURE (kurdiaadventure.com), the premier outdoor, hiking, camping, and adventure platform in the Kurdistan Region.`,
+          `STRICT EXCLUSIVITY RULE: You represent ONLY KURDIA ADVENTURE. NEVER mention, name, promote, or compare any other hiking, travel, or tourism groups/companies/agencies under any circumstances. If asked about other groups, politely state that you are exclusively the official assistant of KURDIA ADVENTURE.`,
+          `CONVERSATIONAL SCOPE: You are a real, natural, intelligent conversational AI. Speak naturally, warmly, and friendlily with the user about ANY topic they ask! In addition to knowing all KURDIA ADVENTURE trips, booking steps, FIB payment (0750 313 0360), WhatsApp (+964 750 313 0360), VIP private trips, and Kurdistan destinations, you can freely hold normal human-like conversations, answer general questions, give hiking/camping/clothing advice, discuss Kurdistan nature & weather, tell stories, or help with anything the user writes.`,
+          `Always reply fluently in ${langName} unless the user explicitly writes in another language.`,
+          `Keep answers natural, helpful, and formatted cleanly for mobile screens (use bullet points • and **bold** key terms when listing items, or natural paragraphs when chatting).`,
+          `Live KURDIA ADVENTURE Website Context: ${JSON.stringify(siteState)}`
+        ].join('\n');
+
+        // 1. Primary: Official Gemini SDK (gemini-3.8-flash)
         try {
           const ai = getGeminiClient();
           if (ai && prompt) {
-            const langName = lang === 'en' ? 'English' : (lang === 'ar' ? 'Arabic (العربية)' : 'Kurdish Sorani (کوردیی سۆرانی)');
-            const sysInstruction = [
-              `You are the official smart AI conversational companion and Mountain & Travel Concierge for KURDIA ADVENTURE (kurdiaadventure.com), the premier outdoor, hiking, camping, and adventure platform in the Kurdistan Region.`,
-              `STRICT EXCLUSIVITY RULE: You represent ONLY KURDIA ADVENTURE. NEVER mention, name, promote, or compare any other hiking, travel, or tourism groups/companies/agencies under any circumstances. If asked about other groups, politely state that you are exclusively the official assistant of KURDIA ADVENTURE.`,
-              `CONVERSATIONAL SCOPE: Speak naturally, warmly, and friendlily with the user! In addition to all KURDIA ADVENTURE trips, booking, FIB payment (0750 313 0360), WhatsApp (+964 750 313 0360), VIP private trips, and destinations, you ARE allowed and encouraged to chat naturally about general helpful topics such as hiking gear/clothing advice, camping tips, Kurdistan geography & history, mountain safety, photography, nature, weather, and friendly daily conversation.`,
-              `Always reply fluently in ${langName} unless the user explicitly writes in another language.`,
-              `Keep answers concise, engaging, and well-structured for mobile screens (use bullet points • and **bold** key terms).`,
-              `Live Website Data Context: ${JSON.stringify(siteState)}`
-            ].join('\n');
-
             const conversationText = history.map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.text}`).join('\n');
             const fullPrompt = conversationText ? `${conversationText}\nUser: ${prompt}` : prompt;
 
@@ -420,7 +433,7 @@ const server = http.createServer((req, res) => {
               contents: fullPrompt,
               config: {
                 systemInstruction: sysInstruction,
-                temperature: 0.65
+                temperature: 0.7
               }
             });
 
@@ -438,6 +451,45 @@ const server = http.createServer((req, res) => {
           }
         } catch (aiErr) {
           console.warn('Gemini /api/ai fallback:', aiErr?.message || aiErr);
+        }
+
+        // 2. Secondary: Live Conversational LLM API (works even when GEMINI_API_KEY is not set)
+        if (prompt) {
+          try {
+            const chatMessages = [
+              { role: 'system', content: sysInstruction },
+              ...history.map(m => ({
+                role: m.role === 'user' ? 'user' : 'assistant',
+                content: String(m.text || '')
+              })),
+              { role: 'user', content: prompt }
+            ];
+            const llmRes = await fetch('https://text.pollinations.ai/openai', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                model: 'openai',
+                messages: chatMessages,
+                temperature: 0.7
+              })
+            });
+            if (llmRes.ok) {
+              const llmJson = await llmRes.json().catch(() => ({}));
+              const llmText = String(llmJson?.choices?.[0]?.message?.content || '').trim();
+              if (llmText) {
+                res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+                res.end(JSON.stringify({
+                  ok: true,
+                  text: llmText,
+                  actions: fallbackResult.actions || [],
+                  source: 'live-conversational-ai'
+                }));
+                return;
+              }
+            }
+          } catch (llmErr) {
+            console.warn('Secondary conversational AI error:', llmErr?.message || llmErr);
+          }
         }
 
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
@@ -605,6 +657,18 @@ const server = http.createServer((req, res) => {
           let payload = {};
           try { payload = JSON.parse(body || '{}'); } catch (_) {}
 
+          const deletedKeys = new Set([
+            ...(Array.isArray(current.deletedReviewKeys) ? current.deletedReviewKeys : []),
+            ...(Array.isArray(payload.deletedReviewKeys) ? payload.deletedReviewKeys : [])
+          ]);
+          const isLegacySeed = (r) => {
+            const t = String(r?.text || r?.comment || '').trim();
+            return r?.id === 'seed-rev-1' || r?.id === 'seed-rev-2' ||
+              t === 'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.' ||
+              t === 'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.';
+          };
+          const revKey = (r) => `${String(r?.name || '').trim().toLowerCase()}|${String(r?.text || r?.comment || '').trim().toLowerCase()}`;
+
           // Merge reviews rather than losing user-submitted reviews on partial/admin saves
           let mergedReviews = Array.isArray(current.reviews) ? [...current.reviews] : [];
           if (Array.isArray(payload.reviews)) {
@@ -621,11 +685,13 @@ const server = http.createServer((req, res) => {
               mergedReviews = combined.slice(0, 200);
             }
           }
+          mergedReviews = mergedReviews.filter(r => r && !isLegacySeed(r) && !deletedKeys.has(revKey(r)));
 
           const updated = {
             ...current,
             ...payload,
             reviews: mergedReviews,
+            deletedReviewKeys: Array.from(deletedKeys),
             updatedAt: new Date().toISOString()
           };
           delete updated.replaceReviews;
@@ -644,45 +710,91 @@ const server = http.createServer((req, res) => {
 
     if (pathname === '/api/reviews') {
       const WORKER_CMS_URL = 'https://kurdia.alwandssalh.workers.dev/api/admin/cms';
+      const DEFAULT_CANONICAL_REVIEWS = [
+        { id: 'rev-default-1', name: 'دەرباز سەعید', city: 'هەولێر', rating: 5, text: 'یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا.', comment: 'یەکێک لە باشترین گەشتەکانی ژیانم بوو لەگەڵ تیمی کوردیا.' },
+        { id: 'rev-default-2', name: 'تاریق سەلام', city: 'سلێمانی', rating: 5, text: 'سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو.', comment: 'سروشت و ڕێکخستنی گەشتەکە زۆر ناوازە بوو.' },
+        { id: 'rev-default-3', name: 'شیلان عومەر', city: 'دهۆک', rating: 5, text: 'سەلامەتی و ڕێبەرایەتی پرۆفیشناڵ، زۆر سوپاس بۆ KURDIA.', comment: 'سەلامەتی و ڕێبەرایەتی پرۆفیشناڵ، زۆر سوپاس بۆ KURDIA.' },
+        { id: 'rev-default-4', name: 'ڕێبین کەریم', city: 'هەولێر', rating: 5, text: 'ئەزموونێکی زۆر تایبەت بوو لە چیاکانی کوردستان، بێگومان دووبارە بەشداری دەکەمەوە.', comment: 'ئەزموونێکی زۆر تایبەت بوو لە چیاکانی کوردستان، بێگومان دووبارە بەشداری دەکەمەوە.' },
+        { id: 'rev-default-5', name: 'سارا جەمال', city: 'سلێمانی', rating: 5, text: 'هەموو شتێک لە کاتی خۆیدا و بە پلانێکی زۆر ڕێکوپێک ئەنجام درا.', comment: 'هەموو شتێک لە کاتی خۆیدا و بە پلانێکی زۆر ڕێکوپێک ئەنجام درا.' }
+      ];
+      const isLegacySeed = (r) => {
+        const t = String(r?.text || r?.comment || '').trim();
+        return r?.id === 'seed-rev-1' || r?.id === 'seed-rev-2' ||
+          t === 'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.' ||
+          t === 'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.';
+      };
+      const revKey = (r) => `${String(r?.name || '').trim().toLowerCase()}|${String(r?.text || r?.comment || '').trim().toLowerCase()}`;
+
       if (req.method === 'POST') {
         let body = '';
         req.on('data', chunk => { body += chunk.toString(); });
         req.on('end', async () => {
           let payload = {};
           try { payload = JSON.parse(body || '{}'); } catch (_) {}
-          const name = String(payload.name || '').trim();
-          const city = String(payload.city || 'کوردستان').trim() || 'کوردستان';
-          const text = String(payload.text || payload.comment || '').trim();
-          const rating = Math.min(5, Math.max(1, Number(payload.rating || 5)));
-
-          if (!name || !text) {
-            res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
-            res.end(JSON.stringify({ ok: false, error: 'تکایە ناو و بیروڕاکەت بنووسە' }));
-            return;
-          }
-
-          const newReview = {
-            id: String(payload.id || ('rev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6))),
-            name,
-            city,
-            rating,
-            text,
-            comment: text,
-            createdAt: payload.createdAt || new Date().toISOString()
-          };
 
           const current = loadCmsOverrides();
-          const existingReviews = Array.isArray(current.reviews) ? current.reviews : [
-            { id: 'seed-rev-1', name: 'دەرباز سەعید', city: 'هەولێر', rating: 5, text: 'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.', comment: 'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.' },
-            { id: 'seed-rev-2', name: 'سارا ئەحمەد', city: 'سلێمانی', rating: 5, text: 'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.', comment: 'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو، بێگومان دووبارە بەشداری دەکەمەوە.' }
-          ];
+          const deletedKeys = new Set([
+            ...(Array.isArray(current.deletedReviewKeys) ? current.deletedReviewKeys : []),
+            ...(Array.isArray(payload.deletedReviewKeys) ? payload.deletedReviewKeys : [])
+          ]);
 
-          const updatedReviews = [
-            newReview,
-            ...existingReviews.filter(r => r && String(r.id || '') !== newReview.id && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
-          ].slice(0, 200);
+          let incomingReviews = [];
+          let newReview = null;
+          if (Array.isArray(payload.reviews)) {
+            incomingReviews = payload.reviews.map((r, i) => ({
+              id: String(r?.id || ('rev_' + Date.now() + '_' + i)),
+              name: String(r?.name || 'بەشداربوو').trim(),
+              city: String(r?.city || 'کوردستان').trim() || 'کوردستان',
+              rating: Math.min(5, Math.max(1, Number(r?.rating || 5))),
+              text: String(r?.text || r?.comment || '').trim(),
+              comment: String(r?.text || r?.comment || '').trim(),
+              createdAt: r?.createdAt || new Date().toISOString()
+            })).filter(r => r.name && r.text);
+          } else {
+            const name = String(payload.name || '').trim();
+            const city = String(payload.city || 'کوردستان').trim() || 'کوردستان';
+            const text = String(payload.text || payload.comment || '').trim();
+            const rating = Math.min(5, Math.max(1, Number(payload.rating || 5)));
 
-          current.reviews = updatedReviews;
+            if (!name || !text) {
+              res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+              res.end(JSON.stringify({ ok: false, error: 'تکایە ناو و بیروڕاکەت بنووسە' }));
+              return;
+            }
+            newReview = {
+              id: String(payload.id || ('rev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6))),
+              name,
+              city,
+              rating,
+              text,
+              comment: text,
+              createdAt: payload.createdAt || new Date().toISOString()
+            };
+            deletedKeys.delete(revKey(newReview));
+            incomingReviews = [newReview];
+          }
+
+          const existingReviews = Array.isArray(current.reviews) && current.reviews.length ? current.reviews : DEFAULT_CANONICAL_REVIEWS;
+          const seen = new Set();
+          const updatedReviews = [];
+          [...incomingReviews, ...existingReviews, ...DEFAULT_CANONICAL_REVIEWS].forEach(r => {
+            if (!r || isLegacySeed(r)) return;
+            const k = revKey(r);
+            if (!k || k === '|' || deletedKeys.has(k) || seen.has(k)) return;
+            seen.add(k);
+            updatedReviews.push({
+              id: r.id || ('rev_' + updatedReviews.length),
+              name: String(r.name || '').trim(),
+              city: String(r.city || 'کوردستان').trim() || 'کوردستان',
+              rating: Math.min(5, Math.max(1, Number(r.rating || 5))),
+              text: String(r.text || r.comment || '').trim(),
+              comment: String(r.text || r.comment || '').trim(),
+              createdAt: r.createdAt || new Date().toISOString()
+            });
+          });
+
+          current.reviews = updatedReviews.slice(0, 200);
+          current.deletedReviewKeys = Array.from(deletedKeys);
           current.updatedAt = new Date().toISOString();
           saveCmsOverrides(current);
 
@@ -694,14 +806,33 @@ const server = http.createServer((req, res) => {
             });
             const curJson = await curRes.json().catch(() => ({}));
             const cmsData = curJson.data || {};
+            const cloudDeleted = Array.isArray(cmsData.deletedReviewKeys) ? cmsData.deletedReviewKeys : [];
+            cloudDeleted.forEach(dk => { if (!incomingReviews.some(ir => revKey(ir) === dk)) deletedKeys.add(dk); });
+
             const cloudReviews = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
-            const mergedCloud = [
-              newReview,
-              ...cloudReviews.filter(r => r && !(r.name === newReview.name && (r.text || r.comment) === newReview.text))
-            ].slice(0, 200);
-            cmsData.reviews = mergedCloud;
+            const cloudSeen = new Set();
+            const mergedCloud = [];
+            [...current.reviews, ...cloudReviews, ...DEFAULT_CANONICAL_REVIEWS].forEach(r => {
+              if (!r || isLegacySeed(r)) return;
+              const k = revKey(r);
+              if (!k || k === '|' || deletedKeys.has(k) || cloudSeen.has(k)) return;
+              cloudSeen.add(k);
+              mergedCloud.push({
+                id: r.id || ('rev_' + mergedCloud.length),
+                name: String(r.name || '').trim(),
+                city: String(r.city || 'کوردستان').trim() || 'کوردستان',
+                rating: Math.min(5, Math.max(1, Number(r.rating || 5))),
+                text: String(r.text || r.comment || '').trim(),
+                comment: String(r.text || r.comment || '').trim(),
+                createdAt: r.createdAt || new Date().toISOString()
+              });
+            });
+
+            cmsData.reviews = mergedCloud.slice(0, 200);
+            cmsData.deletedReviewKeys = Array.from(deletedKeys);
             if (cmsData.config && typeof cmsData.config === 'object') {
-              cmsData.config.reviews = mergedCloud;
+              cmsData.config.reviews = cmsData.reviews;
+              cmsData.config.deletedReviewKeys = cmsData.deletedReviewKeys;
             }
             await fetch(`${WORKER_CMS_URL}?cb=${Date.now()}`, {
               method: 'POST',
@@ -711,13 +842,13 @@ const server = http.createServer((req, res) => {
           } catch (_) {}
 
           res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
-          res.end(JSON.stringify({ ok: true, review: newReview, reviews: updatedReviews }));
+          res.end(JSON.stringify({ ok: true, review: newReview, reviews: current.reviews, deletedReviewKeys: current.deletedReviewKeys }));
         });
         return;
       } else {
         const current = loadCmsOverrides();
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
-        res.end(JSON.stringify({ ok: true, reviews: Array.isArray(current.reviews) ? current.reviews : [] }));
+        res.end(JSON.stringify({ ok: true, reviews: Array.isArray(current.reviews) ? current.reviews : DEFAULT_CANONICAL_REVIEWS, deletedReviewKeys: Array.isArray(current.deletedReviewKeys) ? current.deletedReviewKeys : [] }));
         return;
       }
     }
