@@ -1,49 +1,74 @@
 /* ==========================================================================
-   KURDIA ADVENTURE — CENTRALIZED MOTION & DARK GLASSMORPHISM TOKENS
+   KURDIA ADVENTURE — W3C DTCG DESIGN TOKENS & MOTION SYSTEM (v4.2.0)
    File: /assets/css/motion-tokens.css
-   Purpose: Reusable CSS custom properties for durations, easing curves,
-            stagger intervals, distances, dark glassmorphism, and elevation.
+   Skills Integrated:
+   - design-extract (Manavarya09/design-extract): Structured W3C DTCG tokens
+   - taste-skill (leonxlnx/taste-skill): Atmospheric minimalism & dark UI craft
+   - impeccable (pbakaus/impeccable): WCAG AA contrast, RTL typography & tap targets
+   - transitions-dev (Jakubantalik/transitions.dev): Semantic transition tokens
+   - react-bits (DavidHDev/react-bits): Interactive spotlight & shimmer tokens
    ========================================================================== */
 
 :root {
-  /* 1. Brand & Atmospheric Palette Tokens */
+  /* 1. Atmospheric Obsidian & Zagros Night Palette (design-extract + taste-skill) */
   --ka-bg-void: #05070b;
   --ka-bg-obsidian: #080c13;
   --ka-surface-navy: #0b1018;
   --ka-surface-elevated: #101722;
+  --ka-surface-floating: #141d2b;
 
-  /* 2. Authentic Dark Glassmorphism Tokens (Refined, Non-White, Outdoor Dark) */
-  --ka-glass-bg: rgba(15, 20, 29, 0.68);
-  --ka-glass-bg-elevated: rgba(18, 25, 36, 0.74);
-  --ka-glass-bg-nav: rgba(8, 12, 19, 0.78);
-  --ka-glass-bg-modal: rgba(11, 16, 24, 0.86);
-  --ka-glass-bg-pill: rgba(12, 17, 26, 0.64);
+  /* 2. Authentic Dark Glassmorphism Surfaces & Specular Hairlines */
+  --ka-glass-bg: rgba(15, 21, 31, 0.72);
+  --ka-glass-bg-elevated: rgba(19, 27, 40, 0.78);
+  --ka-glass-bg-nav: rgba(7, 10, 16, 0.82);
+  --ka-glass-bg-modal: rgba(10, 15, 24, 0.90);
+  --ka-glass-bg-pill: rgba(13, 19, 29, 0.68);
   --ka-glass-fallback-solid: #0d131d;
 
-  --ka-glass-border: rgba(255, 255, 255, 0.11);
+  --ka-glass-border: rgba(255, 255, 255, 0.10);
   --ka-glass-border-strong: rgba(255, 255, 255, 0.16);
-  --ka-glass-border-hover: rgba(211, 47, 78, 0.46);
-  --ka-glass-highlight-inset: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  --ka-glass-border-hover: rgba(229, 35, 79, 0.48);
+  --ka-glass-highlight-inset: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  --ka-glass-inner-ring: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 
   --ka-blur-subtle: 10px;
   --ka-blur-md: 16px;
   --ka-blur-lg: 22px;
 
-  /* 3. Brand Accent Tokens */
+  /* 3. Brand Crimson & Semantic Accent Tokens */
   --ka-brand-maroon: #a91d37;
   --ka-brand-crimson: #d32f4e;
   --ka-brand-rose: #ff5b79;
-  --ka-brand-glow: rgba(211, 47, 78, 0.36);
+  --ka-brand-soft: #ff8da3;
+  --ka-brand-glow: rgba(211, 47, 78, 0.38);
 
   --ka-accent-gold: #f59e0b;
   --ka-accent-emerald: #10b981;
   --ka-accent-sky: #38bdf8;
 
+  /* 4. WCAG AA Compliant Typography & Contrast Tokens (impeccable) */
   --ka-text-primary: #f8fafc;
-  --ka-text-secondary: #cbd5e1;
-  --ka-text-muted: #94a3b8;
+  --ka-text-secondary: #d1d9e6;
+  --ka-text-muted: #9eb0c7;
+  --ka-leading-sorani: 1.82;
+  --ka-leading-heading: 1.22;
+  --ka-touch-target-min: 44px;
 
-  /* 4. Motion Duration Tokens */
+  /* 5. React-Bits Interactive Spotlight & Shimmer Tokens (react-bits) */
+  --ka-spotlight-size: 460px;
+  --ka-spotlight-color: rgba(229, 35, 79, 0.15);
+  --ka-spotlight-sky: rgba(56, 189, 248, 0.13);
+  --ka-spotlight-border: rgba(255, 120, 148, 0.36);
+
+  /* 6. Transitions.dev Semantic Easing & Duration Tokens (transitions-dev) */
+  --t-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-duration-fast: 180ms;
+  --t-duration-base: 320ms;
+  --t-duration-slow: 520ms;
+
+  /* 7. Legacy & GSAP Motion Tokens */
   --motion-instant: 120ms;
   --motion-fast: 240ms;
   --motion-base: 420ms;
@@ -52,7 +77,6 @@
   --motion-cinematic: 1250ms;
   --motion-ambient: 18000ms;
 
-  /* 5. Precision Easing Curves (Cinematic & Organic) */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
@@ -60,25 +84,28 @@
   --ease-spring-gentle: cubic-bezier(0.34, 1.42, 0.64, 1);
   --ease-spring-snappy: cubic-bezier(0.28, 1.35, 0.58, 1);
 
-  /* 6. Stagger & Distance Tokens */
+  /* 8. Stagger & Reveal Distance Tokens */
   --stagger-tight: 55ms;
   --stagger-base: 85ms;
   --stagger-relaxed: 120ms;
 
   --reveal-distance-sm: 16px;
-  --reveal-distance-md: 28px;
-  --reveal-distance-lg: 40px;
+  --reveal-distance-md: 26px;
+  --reveal-distance-lg: 38px;
 
-  /* 7. Card Elevation & Shadow Tokens */
-  --shadow-glass: 0 14px 36px -10px rgba(0, 0, 0, 0.58), var(--ka-glass-highlight-inset);
-  --shadow-resting: 0 12px 32px -10px rgba(0, 0, 0, 0.55);
-  --shadow-elevated: 0 22px 48px -12px rgba(0, 0, 0, 0.76), 0 0 30px -6px rgba(211, 47, 78, 0.26);
-  --shadow-crimson-glow: 0 14px 34px -6px rgba(211, 47, 78, 0.46);
+  /* 9. Multi-Layered Elevation & Specular Shadow Tokens */
+  --shadow-glass: 0 14px 36px -10px rgba(0, 0, 0, 0.62), var(--ka-glass-highlight-inset);
+  --shadow-resting: 0 12px 32px -10px rgba(0, 0, 0, 0.58);
+  --shadow-elevated: 0 22px 50px -12px rgba(0, 0, 0, 0.78), 0 0 32px -6px rgba(211, 47, 78, 0.28), var(--ka-glass-highlight-inset);
+  --shadow-crimson-glow: 0 14px 34px -6px rgba(211, 47, 78, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 /* Reduced Motion Accessibility Overrides */
 @media (prefers-reduced-motion: reduce) {
   :root {
+    --t-duration-fast: 0.01ms;
+    --t-duration-base: 0.01ms;
+    --t-duration-slow: 0.01ms;
     --motion-instant: 1ms;
     --motion-fast: 1ms;
     --motion-base: 1ms;

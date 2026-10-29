@@ -1,15 +1,20 @@
 /**
  * ============================================================================
- * KURDIA ADVENTURE — MASTER CINEMATIC ANIMATION ORCHESTRATOR
- * File: /assets/js/animations.js
- * Purpose: Coordinates:
- *          1. Cinematic Hero Entrance & Scroll Cue
- *          2. Brand & Logo Precision Entrance
- *          3. Desktop-Only 3D Card Perspective Tilt (Touch/Mobile Safe)
- *          4. Tactile Button Ripple & Pointer Spotlight
- *          5. Page Transition Choreography & Weather Station Motion
- *          6. Lightweight 3D Zagros Mountain Horizon Atmosphere (with full
- *             WebGL disposal, off-tab pausing, and cleanup registration)
+ * KURDIA ADVENTURE — MASTER 7-SKILL CINEMATIC MOTION & INTERACTION ENGINE
+ * File: /assets/js/animations.js (v4.2.0)
+ * Skills Integrated Across Every Website Section:
+ * 1. gsap-skills (greensock/gsap-skills):
+ *    - gsap.registerPlugin(ScrollTrigger) + gsap.matchMedia()
+ *    - Sequenced Hero Timeline with 0.15s overlap & overwrite: 'auto'
+ *    - ScrollTrigger refresh on dynamic CMS renders & tab switches
+ * 2. react-bits (DavidHDev/react-bits):
+ *    - Universal cursor-tracking radial spotlight (--mouse-x, --mouse-y)
+ *    - Desktop-only magnetic button pull on primary CTAs (.btn.red, .ai)
+ *    - Kinetic number counter animation on stats
+ * 3. transitions-dev (Jakubantalik/transitions.dev):
+ *    - Tactile button active compression & wizard step choreography
+ * 4. taste-skill & impeccable:
+ *    - Restrained 3D perspective card tilt on desktop, touch-safe on mobile
  * ============================================================================
  */
 (function (window, document) {
@@ -32,42 +37,32 @@
   }
 
   /**
-   * 2. Brand Logo & Header Entrance Motion
+   * 2. Brand Logo & Header Entrance Motion (gsap-skills)
    */
   function initBrandLogoEntrance() {
     const cfg = getCfg();
     if (!window.gsap || (cfg && cfg.prefersReducedMotion())) return;
     const brand = document.querySelector('.top .brand');
     const logoImg = document.querySelector('.top .brand-logo-img');
-    const topActions = document.querySelectorAll('.top .top-actions > *');
+    const topActions = document.querySelectorAll('.top .topin > div:last-child, .top .iconbtn');
     if (!brand || brand.__kaLogoAnimated) return;
     brand.__kaLogoAnimated = true;
 
     try {
-      window.gsap.fromTo(
+      const tl = window.gsap.timeline({
+        defaults: { ease: 'power3.out', overwrite: 'auto' }
+      });
+      tl.fromTo(
         brand,
-        { opacity: 0, y: -10, scale: 0.96 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.6,
-          ease: 'power3.out',
-          clearProps: 'transform,opacity'
-        }
+        { autoAlpha: 0, y: -10, scale: 0.96 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.58, clearProps: 'transform,opacity,visibility' }
       );
       if (topActions && topActions.length) {
-        window.gsap.fromTo(
+        tl.fromTo(
           topActions,
-          { opacity: 0, y: -8 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.06,
-            ease: 'power3.out',
-            clearProps: 'transform,opacity'
-          }
+          { autoAlpha: 0, y: -8 },
+          { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.05, clearProps: 'transform,opacity,visibility' },
+          '-=0.38'
         );
       }
       if (logoImg) {
@@ -87,14 +82,13 @@
   }
 
   /**
-   * 3. Cinematic Hero Choreography & Scroll Cue Injection
+   * 3. Sequenced GSAP Timeline Hero Choreography & Scroll Cue (gsap-skills 02-gsap-timeline)
    */
   function initCinematicHero() {
     const hero = document.querySelector('#home .hero');
     if (!hero) return;
     hero.classList.add('ka-hero-loaded');
 
-    // Inject subtle scroll indicator if not already present
     const heroContainer = hero.querySelector('.container');
     if (heroContainer && !heroContainer.querySelector('.ka-hero-scroll-cue')) {
       const cue = document.createElement('div');
@@ -130,47 +124,103 @@
     const text = hero.querySelector('#heroText, p');
     const ctaBtns = Array.from(hero.querySelectorAll('.actions .btn'));
     const cueEl = hero.querySelector('.ka-hero-scroll-cue');
-    const sequence = [eyebrow, title, text, ...ctaBtns, cueEl].filter(Boolean);
 
-    if (sequence.length) {
-      try {
-        window.gsap.killTweensOf(sequence);
-        window.gsap.fromTo(
-          sequence,
-          { opacity: 0, y: 24, scale: 0.98 },
+    try {
+      const heroTl = window.gsap.timeline({
+        defaults: { ease: 'power3.out', overwrite: 'auto' }
+      });
+
+      if (eyebrow) {
+        heroTl.fromTo(
+          eyebrow,
+          { autoAlpha: 0, y: 16 },
+          { autoAlpha: 1, y: 0, duration: 0.52, clearProps: 'transform,opacity,visibility' }
+        );
+      }
+      if (title) {
+        heroTl.fromTo(
+          title,
+          { autoAlpha: 0, y: 26, scale: 0.98 },
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.68, clearProps: 'transform,opacity,visibility' },
+          '-=0.36'
+        );
+      }
+      if (text) {
+        heroTl.fromTo(
+          text,
+          { autoAlpha: 0, y: 20 },
+          { autoAlpha: 1, y: 0, duration: 0.58, clearProps: 'transform,opacity,visibility' },
+          '-=0.42'
+        );
+      }
+      if (ctaBtns.length) {
+        heroTl.fromTo(
+          ctaBtns,
+          { autoAlpha: 0, y: 16, scale: 0.97 },
           {
-            opacity: 1,
+            autoAlpha: 1,
             y: 0,
             scale: 1,
-            duration: 0.72,
-            stagger: 0.095,
-            ease: 'power3.out',
-            clearProps: 'transform,opacity'
-          }
+            duration: 0.5,
+            stagger: 0.08,
+            clearProps: 'transform,opacity,visibility'
+          },
+          '-=0.38'
         );
-      } catch (_) {}
-    }
+      }
+      if (cueEl) {
+        heroTl.fromTo(
+          cueEl,
+          { autoAlpha: 0, y: 12 },
+          { autoAlpha: 1, y: 0, duration: 0.48, clearProps: 'transform,opacity,visibility' },
+          '-=0.32'
+        );
+      }
+    } catch (_) {}
   }
 
   /**
-   * 4. Desktop-Only 3D Perspective Card Tilt (Disabled on Touch & Mobile)
+   * 4. React-Bits Universal Cursor Spotlight + Desktop 3D Perspective Tilt
    */
-  function init3DCardPerspectiveTilt(rootScope) {
+  const SPOTLIGHT_CARD_SELECTOR = [
+    '.featured',
+    '.trip-showcase-card',
+    '.place-card',
+    '.booking-trip-pick-card',
+    '.private-vip-showcase',
+    '.private-preset-card',
+    '.private-trip-card',
+    '.weather-hero-card',
+    '.weather-metrics-grid .metric-box',
+    '.hourly-card',
+    '.day-row-card',
+    '.public-review',
+    '.review-write',
+    '.about .glass',
+    '#contact .article',
+    '.ka-menu-item'
+  ].join(', ');
+
+  const TILT_CARD_SELECTOR =
+    '.featured, .trip-showcase-card, .place-card, .booking-trip-pick-card, .private-preset-card';
+
+  function initSpotlightAnd3DTilt(rootScope) {
     const cfg = getCfg();
     if (cfg && (cfg.prefersReducedMotion() || cfg.isTouchDevice() || cfg.isMobileViewport())) {
       return;
     }
     const scope = rootScope || document;
-    const cards = scope.querySelectorAll(
-      '.featured, .trip-showcase-card, .place-card, .booking-trip-pick-card, .private-preset-card'
-    );
-    const maxDeg = (cfg && cfg.limits && cfg.limits.cardTiltMaxDeg) || 5.5;
-    const perspective = (cfg && cfg.limits && cfg.limits.cardTiltPerspectivePx) || 950;
+    const spotlightCards = scope.querySelectorAll(SPOTLIGHT_CARD_SELECTOR);
+    const maxDeg = (cfg && cfg.limits && cfg.limits.cardTiltMaxDeg) || 5.0;
+    const perspective = (cfg && cfg.limits && cfg.limits.cardTiltPerspectivePx) || 980;
 
-    cards.forEach((card) => {
-      if (card._has3dTilt) return;
-      card._has3dTilt = true;
-      card.style.transformStyle = 'preserve-3d';
+    spotlightCards.forEach((card) => {
+      if (card._hasSpotlightBound) return;
+      card._hasSpotlightBound = true;
+      const shouldTilt = card.matches && card.matches(TILT_CARD_SELECTOR);
+      if (shouldTilt) {
+        card.style.transformStyle = 'preserve-3d';
+      }
 
       card.addEventListener(
         'pointermove',
@@ -178,21 +228,67 @@
           if (e.pointerType === 'touch') return;
           const rect = card.getBoundingClientRect();
           if (!rect.width || !rect.height) return;
-          const xRel = (e.clientX - rect.left) / rect.width - 0.5;
-          const yRel = (e.clientY - rect.top) / rect.height - 0.5;
-          const rx = (-yRel * maxDeg).toFixed(2);
-          const ry = (xRel * maxDeg).toFixed(2);
-          card.style.transform = `perspective(${perspective}px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px) translateZ(3px)`;
-          card.style.setProperty('--mx', (e.clientX - rect.left).toFixed(0) + 'px');
-          card.style.setProperty('--my', (e.clientY - rect.top).toFixed(0) + 'px');
+          const mx = (e.clientX - rect.left).toFixed(0) + 'px';
+          const my = (e.clientY - rect.top).toFixed(0) + 'px';
+          card.style.setProperty('--mouse-x', mx);
+          card.style.setProperty('--mouse-y', my);
+          card.style.setProperty('--mx', mx);
+          card.style.setProperty('--my', my);
+
+          if (shouldTilt) {
+            const xRel = (e.clientX - rect.left) / rect.width - 0.5;
+            const yRel = (e.clientY - rect.top) / rect.height - 0.5;
+            const rx = (-yRel * maxDeg).toFixed(2);
+            const ry = (xRel * maxDeg).toFixed(2);
+            card.style.transform = `perspective(${perspective}px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px) translateZ(3px)`;
+          }
         },
         { passive: true }
       );
 
-      card.addEventListener(
+      if (shouldTilt) {
+        card.addEventListener(
+          'pointerleave',
+          () => {
+            card.style.transform = '';
+          },
+          { passive: true }
+        );
+      }
+    });
+  }
+
+  /**
+   * 5. React-Bits Desktop Magnetic Pull on Primary CTAs (.btn.red, .ai)
+   */
+  function initMagneticButtons(rootScope) {
+    const cfg = getCfg();
+    if (cfg && (cfg.prefersReducedMotion() || cfg.isTouchDevice() || cfg.isMobileViewport())) {
+      return;
+    }
+    const scope = rootScope || document;
+    const buttons = scope.querySelectorAll('.hero .btn.red, .private-vip-actions .btn.red, button.ai');
+    buttons.forEach((btn) => {
+      if (btn._hasMagneticBound) return;
+      btn._hasMagneticBound = true;
+
+      btn.addEventListener(
+        'pointermove',
+        (e) => {
+          if (e.pointerType === 'touch' || btn.disabled) return;
+          const rect = btn.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+          const dx = ((e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2)) * 4.5;
+          const dy = ((e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2)) * 3.5;
+          btn.style.transform = `translate3d(${dx.toFixed(1)}px, ${(dy - 1.5).toFixed(1)}px, 0)`;
+        },
+        { passive: true }
+      );
+
+      btn.addEventListener(
         'pointerleave',
         () => {
-          card.style.transform = '';
+          btn.style.transform = '';
         },
         { passive: true }
       );
@@ -200,7 +296,45 @@
   }
 
   /**
-   * 5. Tactile Button Ripple & Micro-Interactions
+   * 6. React-Bits Kinetic Number Counters on Stats (#aboutStatsPublic .stat b)
+   */
+  function initKineticStatCounters(rootScope) {
+    const cfg = getCfg();
+    if (!window.gsap || (cfg && cfg.prefersReducedMotion())) return;
+    const scope = rootScope || document;
+    const statEls = scope.querySelectorAll('#aboutStatsPublic .stat b');
+    statEls.forEach((el) => {
+      const rawText = (el.textContent || '').trim();
+      if (!rawText || el.dataset.kaCountedValue === rawText) return;
+      const match = rawText.match(/^([+]?)(\d+(?:[.,]\d+)?)(.*)$/);
+      if (!match) return;
+      const prefix = match[1] || '';
+      const targetNum = parseFloat(match[2].replace(/,/g, ''));
+      const suffix = match[3] || '';
+      if (!Number.isFinite(targetNum) || targetNum <= 0) return;
+
+      el.dataset.kaCountedValue = rawText;
+      const isDecimal = match[2].includes('.');
+      const counter = { val: 0 };
+      window.gsap.to(counter, {
+        val: targetNum,
+        duration: 1.15,
+        ease: 'power2.out',
+        onUpdate: () => {
+          const formatted = isDecimal
+            ? counter.val.toFixed(1)
+            : Math.round(counter.val).toLocaleString();
+          el.textContent = `${prefix}${formatted}${suffix}`;
+        },
+        onComplete: () => {
+          el.textContent = rawText;
+        }
+      });
+    });
+  }
+
+  /**
+   * 7. Tactile Button Ripple & Micro-Interactions (transitions-dev)
    */
   function initMicroInteractions() {
     if (window.__kaMicroInteractionsBound) return;
@@ -250,7 +384,7 @@
   }
 
   /**
-   * 6. Weather Station Card & Metric Choreography (Data-Safe)
+   * 8. Weather Station Card & Metric Choreography (Data-Safe)
    */
   function animateWeatherStationSection(weatherRoot) {
     const cfg = getCfg();
@@ -272,7 +406,7 @@
   }
 
   /**
-   * 7. Page Transition & Card Stagger Entrance
+   * 9. Page Transition & Card Stagger Entrance Across All Pages
    */
   window.kurdiaAnimatePageCards = function (pageId) {
     const cfg = getCfg();
@@ -288,7 +422,12 @@
     if (prim) {
       prim.AnimatedSection(activePage);
     }
-    init3DCardPerspectiveTilt(activePage);
+    initSpotlightAnd3DTilt(activePage);
+    initMagneticButtons(activePage);
+
+    if (resolvedId === 'about') {
+      initKineticStatCounters(activePage);
+    }
 
     if (resolvedId === 'weather') {
       animateWeatherStationSection(activePage);
@@ -296,10 +435,9 @@
 
     if (cfg && cfg.prefersReducedMotion()) return;
 
-    // For non-home subpages, stagger their top-level cards immediately on tab switch
     if (resolvedId !== 'home' && prim) {
       const subpageTargets = activePage.querySelectorAll(
-        '.booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-page-hero, .private-preset-card, .private-trip-card, .place-card, .experience-card'
+        '.booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-page-hero, .private-preset-card, .private-trip-card, .place-card, .experience-card, .review-write, .public-review, #storyGrid .tile, #contact .article'
       );
       if (subpageTargets.length) {
         prim.StaggerReveal(subpageTargets, { y: 18, duration: 0.48, stagger: 0.055 });
@@ -323,6 +461,12 @@
         });
       } catch (_) {}
     }
+
+    if (window.ScrollTrigger) {
+      try {
+        window.ScrollTrigger.refresh();
+      } catch (_) {}
+    }
   };
 
   window.kurdiaRefreshMotion = function () {
@@ -330,7 +474,8 @@
     if (prim) {
       prim.AnimatedSection(document);
     }
-    init3DCardPerspectiveTilt(document);
+    initSpotlightAnd3DTilt(document);
+    initMagneticButtons(document);
     if (window.ScrollTrigger) {
       try {
         window.ScrollTrigger.refresh();
@@ -339,9 +484,7 @@
   };
 
   /**
-   * 8. Lightweight 3D Zagros Mountain Horizon & Ambient Embers (Three.js)
-   *    - Pauses automatically when #home is not the active tab or tab is hidden
-   *    - Disposes geometries, materials, renderer, and listeners on cleanup
+   * 10. Lightweight 3D Zagros Mountain Horizon & Ambient Embers (Three.js)
    */
   function initThreeAtmosphere() {
     const cfg = getCfg();
@@ -447,7 +590,6 @@
       function animateThree() {
         if (disposed) return;
         rafId = window.requestAnimationFrame(animateThree);
-        // Pause GPU work when tab is hidden or user is on heavy map/form pages
         const homeEl = document.getElementById('home');
         if (document.hidden || (homeEl && !homeEl.classList.contains('active'))) {
           return;
@@ -506,7 +648,7 @@
   }
 
   /**
-   * 9. Bootstrapping & Lifecycle Hook
+   * 11. Bootstrapping & GSAP matchMedia Lifecycle Hook (gsap-skills)
    */
   function bootKurdiaMotionSystem() {
     initLivingAuroraBg();
@@ -516,10 +658,33 @@
       prim.ParallaxImage();
       prim.AnimatedSection(document);
     }
-    initBrandLogoEntrance();
-    initCinematicHero();
+
+    if (window.gsap && typeof window.gsap.matchMedia === 'function') {
+      const mm = window.gsap.matchMedia();
+      mm.add(
+        {
+          isDesktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
+          isMobile: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
+          reduceMotion: '(prefers-reduced-motion: reduce)'
+        },
+        (context) => {
+          const { reduceMotion } = context.conditions;
+          if (!reduceMotion) {
+            initBrandLogoEntrance();
+            initCinematicHero();
+            initSpotlightAnd3DTilt(document);
+            initMagneticButtons(document);
+          }
+        }
+      );
+    } else {
+      initBrandLogoEntrance();
+      initCinematicHero();
+      initSpotlightAnd3DTilt(document);
+      initMagneticButtons(document);
+    }
+
     initMicroInteractions();
-    init3DCardPerspectiveTilt(document);
     initThreeAtmosphere();
   }
 
