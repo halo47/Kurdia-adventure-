@@ -11,7 +11,8 @@
  *          - AnimatedHeading
  *          - AnimatedSection
  *          Integrates GSAP + ScrollTrigger with an IntersectionObserver
- *          fallback and registers cleanup handlers with KURDIA_MOTION_CONFIG.
+ *          fallback, prevents duplicate initialization across SPA page
+ *          transitions, and registers cleanup handlers.
  * ============================================================================
  */
 (function (window, document) {
@@ -19,13 +20,14 @@
 
   const cfg = () =>
     window.KURDIA_MOTION_CONFIG || {
-      durations: { fast: 0.24, base: 0.42, medium: 0.62, slow: 0.85 },
+      durations: { fast: 0.24, base: 0.42, medium: 0.58, slow: 0.78 },
       easings: { outQuart: 'power3.out', outExpo: 'expo.out' },
       stagger: { tight: 0.045, base: 0.075 },
-      distances: { sm: 16, md: 26 },
-      limits: { heroParallaxMaxPx: 36 },
+      distances: { sm: 14, md: 20 },
+      limits: { heroParallaxMaxPx: 34 },
       prefersReducedMotion: () => false,
       isMobileViewport: () => window.innerWidth < 768,
+      isPageHidden: () => Boolean(document.hidden),
       registerCleanup: () => {}
     };
 
@@ -41,6 +43,7 @@
   function animateElementIn(el, duration, distance, delay) {
     if (!el || el.__kaRevealedDone) return;
     el.__kaRevealedDone = true;
+    el.dataset.kaRevealed = '1';
     el.classList.remove('scroll-hidden', 'ka-reveal-armed');
     el.classList.add('scroll-visible', 'ka-revealed');
 
@@ -57,16 +60,17 @@
         el,
         {
           opacity: 0,
-          y: distance || c.distances.md || 24,
-          scale: 0.975
+          y: distance || c.distances.md || 20,
+          scale: 0.985
         },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: duration || c.durations.medium || 0.62,
+          duration: duration || c.durations.medium || 0.58,
           delay: delay || 0,
           ease: c.easings.outQuart || 'power3.out',
+          overwrite: 'auto',
           clearProps: 'transform,opacity'
         }
       );
@@ -94,7 +98,7 @@
           }
         });
       },
-      { threshold: 0.08, rootMargin: '0px 0px -28px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
     );
 
     cfg().registerCleanup(() => {
@@ -111,43 +115,44 @@
    * Primitive 1: Reveal (Single Element Scroll-Triggered Entrance)
    */
   function Reveal(element, options) {
-    if (!element || element.__kaRevealBound) return;
-    element.__kaRevealBound = true;
+    if (!element || element.__kaRevealBound || element.__kaRevealedDone) return;
 
     const c = cfg();
     if (c.prefersReducedMotion()) {
+      element.__kaRevealBound = true;
+      element.__kaRevealedDone = true;
       element.classList.remove('scroll-hidden', 'ka-reveal-armed');
       element.classList.add('scroll-visible', 'ka-revealed');
       return;
     }
-
-    const opts = Object.assign(
-      { distance: c.distances.md || 24, duration: c.durations.medium || 0.62, delay: 0 },
-      options || {}
-    );
 
     const rect = element.getBoundingClientRect();
-    // If element is inside an inactive page tab (0x0 dimensions), leave it clean until that page activates
+    // If element is inside an inactive page tab (0x0 dimensions), wait until that page is activated
     if (rect.width === 0 && rect.height === 0) {
-      element.__kaRevealBound = false;
       element.classList.remove('scroll-hidden', 'ka-reveal-armed');
       element.classList.add('scroll-visible', 'ka-revealed');
       return;
     }
+
+    element.__kaRevealBound = true;
+
+    const opts = Object.assign(
+      { distance: c.distances.md || 20, duration: c.durations.medium || 0.58, delay: 0 },
+      options || {}
+    );
 
     element.classList.add('kurdia-scroll-item');
     element.__kaRevealDuration = opts.duration;
     element.__kaRevealDistance = opts.distance;
     element.__kaRevealDelay = opts.delay;
 
-    const inInitialViewport = rect.top < window.innerHeight * 0.88 && rect.bottom > 0;
+    const inInitialViewport = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
     if (inInitialViewport) {
-      // Animate visible above-the-fold cards smoothly right away
       animateElementIn(element, opts.duration, opts.distance * 0.75, opts.delay);
       return;
     }
 
-    // Arm below-the-fold element for scroll-triggered entrance
+    // Arm below-the-fold element for progressive scroll reveal
     element.classList.add('scroll-hidden');
 
     if (window.gsap && window.ScrollTrigger && !element.__kaScrollTriggerBound) {
@@ -163,7 +168,6 @@
       registerTrigger(st);
     }
 
-    // Always bind IntersectionObserver as a reliable co-trigger
     const obs = ensureIntersectionObserver();
     if (obs) {
       obs.observe(element);
@@ -171,7 +175,7 @@
       animateElementIn(element, opts.duration, opts.distance, opts.delay);
     }
 
-    // Fail-safe: ensure no content remains permanently hidden if layout shifts prevent trigger
+    // Fail-safe so content never stays hidden if layout changes without scroll
     setTimeout(() => {
       if (element.classList.contains('scroll-hidden')) {
         element.classList.remove('scroll-hidden', 'ka-reveal-armed');
@@ -179,20 +183,38 @@
         element.style.opacity = '';
         element.style.transform = '';
       }
-    }, 6500);
+    }, 5500);
   }
 
   /**
    * Primitive 2: StaggerReveal (Group of Cards, Badges, or Grid Items)
+   * Respects already-revealed items to prevent duplicate animation on page navigation.
    */
   function StaggerReveal(elements, options) {
     if (!elements) return;
-    const list = Array.from(elements).filter(Boolean);
+    const opts = Object.assign(
+      {
+        y: cfg().distances.md || 20,
+        duration: cfg().durations.medium || 0.56,
+        stagger: cfg().stagger.base || 0.07,
+        ease: cfg().easings.outQuart || 'power3.out',
+        force: false
+      },
+      options || {}
+    );
+
+    const list = Array.from(elements).filter((el) => {
+      if (!el) return false;
+      if (!opts.force && el.__kaRevealedDone) return false;
+      return true;
+    });
     if (!list.length) return;
 
     const c = cfg();
     if (c.prefersReducedMotion() || !window.gsap) {
       list.forEach((el) => {
+        el.__kaRevealBound = true;
+        el.__kaRevealedDone = true;
         el.classList.remove('scroll-hidden', 'ka-reveal-armed');
         el.classList.add('scroll-visible', 'ka-revealed');
         el.style.opacity = '';
@@ -201,17 +223,6 @@
       return;
     }
 
-    const opts = Object.assign(
-      {
-        y: c.distances.md || 22,
-        duration: c.durations.medium || 0.56,
-        stagger: c.stagger.base || 0.075,
-        ease: c.easings.outQuart || 'power3.out'
-      },
-      options || {}
-    );
-
-    // Separate items currently visible in viewport from items further down the page
     const visibleNow = [];
     const belowFold = [];
 
@@ -229,13 +240,15 @@
       try {
         window.gsap.killTweensOf(visibleNow);
         visibleNow.forEach((el) => {
+          el.__kaRevealBound = true;
           el.__kaRevealedDone = true;
+          el.dataset.kaRevealed = '1';
           el.classList.remove('scroll-hidden', 'ka-reveal-armed');
           el.classList.add('scroll-visible', 'ka-revealed');
         });
         window.gsap.fromTo(
           visibleNow,
-          { opacity: 0, y: opts.y, scale: 0.975 },
+          { opacity: 0, y: opts.y, scale: 0.985 },
           {
             opacity: 1,
             y: 0,
@@ -243,6 +256,7 @@
             duration: opts.duration,
             stagger: opts.stagger,
             ease: opts.ease,
+            overwrite: 'auto',
             clearProps: 'transform,opacity'
           }
         );
@@ -255,13 +269,13 @@
     }
 
     belowFold.forEach((el, idx) => {
-      el.__kaRevealBound = false;
-      el.__kaRevealedDone = false;
-      Reveal(el, {
-        distance: opts.y,
-        duration: opts.duration,
-        delay: Math.min(0.28, (idx % 4) * 0.065)
-      });
+      if (!el.__kaRevealBound) {
+        Reveal(el, {
+          distance: opts.y,
+          duration: opts.duration,
+          delay: Math.min(0.24, (idx % 4) * 0.06)
+        });
+      }
     });
   }
 
@@ -277,16 +291,18 @@
       if (media.__kaImageRevealed) return;
       const r = media.getBoundingClientRect();
       if (r.width === 0 && r.height === 0) return;
+      if (r.top > window.innerHeight * 1.05) return;
       media.__kaImageRevealed = true;
       try {
         window.gsap.fromTo(
           media,
-          { scale: 1.07, filter: 'brightness(0.84)' },
+          { scale: 1.05, filter: 'brightness(0.88)' },
           {
             scale: 1,
             filter: 'brightness(1)',
-            duration: c.durations.slow || 0.88,
+            duration: c.durations.slow || 0.78,
             ease: c.easings.outExpo || 'expo.out',
+            overwrite: 'auto',
             clearProps: 'transform,filter'
           }
         );
@@ -295,7 +311,7 @@
   }
 
   /**
-   * Primitive 4: ParallaxImage (Restrained Atmospheric Depth on Scroll)
+   * Primitive 4: ParallaxImage (Subtle Hero Background Parallax & Atmospheric Depth)
    */
   function ParallaxImage() {
     if (parallaxBound) return;
@@ -305,25 +321,28 @@
     let ticking = false;
 
     function onScrollParallax() {
-      if (ticking) return;
+      if (ticking || c.isPageHidden()) return;
       ticking = true;
       window.requestAnimationFrame(() => {
         const sy = window.scrollY || 0;
         const hero = document.querySelector('#home.page.active .hero');
-        if (hero && sy < 720) {
-          const shift = Math.min(c.limits.heroParallaxMaxPx || 36, sy * 0.085);
+        if (hero && sy < 760) {
+          const maxShift = c.limits.heroParallaxMaxPx || 34;
+          const shift = Math.min(maxShift, sy * 0.09);
           hero.style.setProperty('--hero-parallax-y', `${shift.toFixed(1)}px`);
         }
         const bgOrbs = document.querySelectorAll('#kurdiaLivingBg .klbg-orb');
-        if (bgOrbs.length >= 2) {
-          bgOrbs[0].style.marginTop = (sy * -0.05).toFixed(1) + 'px';
-          bgOrbs[1].style.marginTop = (sy * 0.04).toFixed(1) + 'px';
+        if (bgOrbs.length >= 2 && sy < 1600) {
+          bgOrbs[0].style.marginTop = (sy * -0.04).toFixed(1) + 'px';
+          bgOrbs[1].style.marginTop = (sy * 0.032).toFixed(1) + 'px';
         }
         ticking = false;
       });
     }
 
     window.addEventListener('scroll', onScrollParallax, { passive: true });
+    onScrollParallax();
+
     c.registerCleanup(() => {
       window.removeEventListener('scroll', onScrollParallax);
       parallaxBound = false;
@@ -331,7 +350,7 @@
   }
 
   /**
-   * Primitive 5: ScrollProgress (Top Reading Progress & Sticky Header State)
+   * Primitive 5: ScrollProgress (Top Reading Progress & Sticky Header Glass State)
    */
   function ScrollProgress() {
     if (progressBound) return;
@@ -344,6 +363,7 @@
     }
 
     function updateProgress() {
+      if (cfg().isPageHidden()) return;
       const sy = window.scrollY || 0;
       const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const pct = Math.min(100, Math.max(0, (sy / total) * 100));
@@ -369,7 +389,7 @@
    */
   function AnimatedHeading(sectionHeadEl) {
     if (!sectionHeadEl) return;
-    Reveal(sectionHeadEl, { distance: 20, duration: 0.56 });
+    Reveal(sectionHeadEl, { distance: 16, duration: 0.52 });
   }
 
   /**
@@ -408,13 +428,14 @@
         '.review-write',
         '.public-review',
         '#contact .article',
+        '.more-card',
         '.footer'
       ].join(', ')
     );
 
     revealTargets.forEach((el, idx) => {
       Reveal(el, {
-        delay: Math.min(0.24, (idx % 4) * 0.055)
+        delay: Math.min(0.22, (idx % 4) * 0.05)
       });
     });
 

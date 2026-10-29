@@ -1,186 +1,185 @@
 /**
  * ============================================================================
- * KURDIA ADVENTURE — MASTER 7-SKILL CINEMATIC MOTION & INTERACTION ENGINE
- * File: /assets/js/animations.js (v4.2.0)
- * Skills Integrated Across Every Website Section:
- * 1. gsap-skills (greensock/gsap-skills):
- *    - gsap.registerPlugin(ScrollTrigger) + gsap.matchMedia()
- *    - Sequenced Hero Timeline with 0.15s overlap & overwrite: 'auto'
- *    - ScrollTrigger refresh on dynamic CMS renders & tab switches
- * 2. react-bits (DavidHDev/react-bits):
- *    - Universal cursor-tracking radial spotlight (--mouse-x, --mouse-y)
- *    - Desktop-only magnetic button pull on primary CTAs (.btn.red, .ai)
- *    - Kinetic number counter animation on stats
- * 3. transitions-dev (Jakubantalik/transitions.dev):
- *    - Tactile button active compression & wizard step choreography
- * 4. taste-skill & impeccable:
- *    - Restrained 3D perspective card tilt on desktop, touch-safe on mobile
+ * KURDIA ADVENTURE — MASTER CINEMATIC MOTION & INTERACTION ORCHESTRATOR
+ * File: /assets/js/animations.js
+ * Purpose: Coordinates:
+ *          1. Living Aurora Background Mesh
+ *          2. Header Brand Logo Entrance
+ *          3. Cinematic Hero Choreography, Background Settle & Scroll Cue
+ *          4. Desktop Card Radial Spotlight & Restrained 3D Tilt (Touch-Safe)
+ *          5. Desktop Magnetic Primary CTA Pull (Touch-Safe)
+ *          6. Kinetic Stat Counters (20K+, 200+, 4.9)
+ *          7. Micro-Interactions (Tactile Press, Ripple, Modal/Sheet/Toast/Wizard)
+ *          8. Weather Station Section Choreography
+ *          9. Dynamic CMS / Trip Card MutationObserver & Page Navigation Hooks
+ *          10. Viewport-Gated Three.js Hero Starfield (Zero Continuous Background GPU Waste)
  * ============================================================================
  */
 (function (window, document) {
   'use strict';
 
-  const getCfg = () => window.KURDIA_MOTION_CONFIG;
-  const getPrimitives = () => window.KurdiaMotionPrimitives;
+  const cfg = () =>
+    window.KURDIA_MOTION_CONFIG || {
+      durations: { fast: 0.24, base: 0.42, medium: 0.58, slow: 0.78, cinematic: 1.05 },
+      easings: { outQuart: 'power3.out', outExpo: 'expo.out', gentleSpring: 'power3.out' },
+      stagger: { tight: 0.045, base: 0.075, relaxed: 0.11 },
+      distances: { sm: 14, md: 20, lg: 28 },
+      limits: { heroParallaxMaxPx: 34, cardTiltMaxDeg: 3.2, cardTiltPerspectivePx: 980 },
+      prefersReducedMotion: () => false,
+      isTouchDevice: () => true,
+      isMobileViewport: () => window.innerWidth < 768,
+      isPageHidden: () => Boolean(document.hidden),
+      onVisibilityChange: () => {},
+      registerCleanup: () => {}
+    };
 
-  /**
-   * 1. Living Aurora Background Layer
-   */
+  let heroEntranceTimeline = null;
+  let threeRunning = false;
+  let threeRafId = null;
+  let threeCheckVisibility = null;
+
+  /* ==========================================================================
+     1. LIVING AURORA BACKGROUND MESH
+     ========================================================================== */
   function initLivingAuroraBg() {
     if (document.getElementById('kurdiaLivingBg')) return;
-    const bgWrap = document.createElement('div');
-    bgWrap.id = 'kurdiaLivingBg';
-    bgWrap.setAttribute('aria-hidden', 'true');
-    bgWrap.innerHTML =
-      '<div class="klbg-orb orb-1"></div><div class="klbg-orb orb-2"></div><div class="klbg-orb orb-3"></div>';
-    document.body.prepend(bgWrap);
+    const bg = document.createElement('div');
+    bg.id = 'kurdiaLivingBg';
+    bg.setAttribute('aria-hidden', 'true');
+    bg.innerHTML = [
+      '<div class="klbg-orb klbg-orb-1"></div>',
+      '<div class="klbg-orb klbg-orb-2"></div>',
+      '<div class="klbg-orb klbg-orb-3"></div>',
+      '<div class="klbg-grid"></div>'
+    ].join('');
+    document.body.prepend(bg);
   }
 
-  /**
-   * 2. Brand Logo & Header Entrance Motion (gsap-skills)
-   */
+  /* ==========================================================================
+     2. HEADER BRAND LOGO ENTRANCE
+     ========================================================================== */
   function initBrandLogoEntrance() {
-    const cfg = getCfg();
-    if (!window.gsap || (cfg && cfg.prefersReducedMotion())) return;
     const brand = document.querySelector('.top .brand');
-    const logoImg = document.querySelector('.top .brand-logo-img');
-    const topActions = document.querySelectorAll('.top .topin > div:last-child, .top .iconbtn');
-    if (!brand || brand.__kaLogoAnimated) return;
-    brand.__kaLogoAnimated = true;
+    if (!brand || brand.__kaBrandAnimated) return;
+    brand.__kaBrandAnimated = true;
+
+    const c = cfg();
+    if (c.prefersReducedMotion() || !window.gsap) return;
+
+    const logoImg = brand.querySelector('.brand-logo-img');
+    const textWrap = brand.querySelector('.brand-text-wrap');
 
     try {
-      const tl = window.gsap.timeline({
-        defaults: { ease: 'power3.out', overwrite: 'auto' }
-      });
-      tl.fromTo(
-        brand,
-        { autoAlpha: 0, y: -10, scale: 0.96 },
-        { autoAlpha: 1, y: 0, scale: 1, duration: 0.58, clearProps: 'transform,opacity,visibility' }
-      );
-      if (topActions && topActions.length) {
+      const tl = window.gsap.timeline({ defaults: { ease: c.easings.outExpo } });
+      if (logoImg) {
         tl.fromTo(
-          topActions,
-          { autoAlpha: 0, y: -8 },
-          { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.05, clearProps: 'transform,opacity,visibility' },
-          '-=0.38'
+          logoImg,
+          { opacity: 0, scale: 0.86, rotate: -6 },
+          { opacity: 1, scale: 1, rotate: 0, duration: 0.68, clearProps: 'transform,opacity' }
         );
       }
-      if (logoImg) {
-        window.gsap.fromTo(
-          logoImg,
-          { boxShadow: '0 0 0px rgba(211,47,78,0)' },
-          {
-            boxShadow: '0 0 22px rgba(211,47,78,0.48)',
-            duration: 0.95,
-            yoyo: true,
-            repeat: 1,
-            ease: 'sine.inOut'
-          }
+      if (textWrap) {
+        tl.fromTo(
+          textWrap,
+          { opacity: 0, x: 10 },
+          { opacity: 1, x: 0, duration: 0.56, clearProps: 'transform,opacity' },
+          '-=0.46'
         );
       }
     } catch (_) {}
   }
 
-  /**
-   * 3. Sequenced GSAP Timeline Hero Choreography & Scroll Cue (gsap-skills 02-gsap-timeline)
-   */
+  /* ==========================================================================
+     3. CINEMATIC HERO CHOREOGRAPHY (Smooth, Natural GSAP Staggered Entrance)
+     ========================================================================== */
   function initCinematicHero(options) {
     const opts = options || {};
     const hero = document.querySelector('#home .hero');
     if (!hero) return;
-    hero.classList.add('ka-hero-loaded');
 
-    const heroContainer = hero.querySelector('.container');
-    if (heroContainer && !heroContainer.querySelector('.ka-hero-scroll-cue')) {
-      const cue = document.createElement('div');
+    const container = hero.querySelector('.container');
+    if (!container) return;
+
+    // Inject subtle scroll cue pill once
+    if (!container.querySelector('.ka-hero-scroll-cue')) {
+      const cue = document.createElement('button');
+      cue.type = 'button';
       cue.className = 'ka-hero-scroll-cue';
-      cue.setAttribute('role', 'button');
-      cue.setAttribute('tabindex', '0');
-      cue.setAttribute('aria-label', 'خوارەوە ببینە');
-      cue.innerHTML =
-        '<span class="ka-hero-scroll-dot"></span><span>خوارەوە ببینە · گەشتەکانی داهاتوو ↓</span>';
-      const scrollToUpcoming = () => {
-        const target = document.getElementById('upcomingTripsSection');
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+      cue.style.border = '1px solid rgba(255,255,255,0.12)';
+      cue.onclick = function () {
+        const up = document.getElementById('upcomingTripsSection');
+        if (up) up.scrollIntoView({ behavior: 'smooth', block: 'start' });
       };
-      cue.addEventListener('click', scrollToUpcoming);
-      cue.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          scrollToUpcoming();
-        }
-      });
-      heroContainer.appendChild(cue);
+      cue.innerHTML =
+        '<span class="ka-hero-scroll-dot"></span>' +
+        '<span>خوارەوە ببینە · گەشتەکانی داهاتوو ↓</span>';
+      container.appendChild(cue);
     }
 
-    const cfg = getCfg();
-    if (!window.gsap || (cfg && cfg.prefersReducedMotion())) return;
-
-    const now = Date.now();
-    if (!opts.force && hero.__kaHeroLastRunAt && now - hero.__kaHeroLastRunAt < 900) {
-      return;
-    }
-    hero.__kaHeroLastRunAt = now;
+    if (hero.__kaHeroAnimated && !opts.force) return;
     hero.__kaHeroAnimated = true;
 
-    const eyebrow = hero.querySelector('.eyebrow');
-    const title = hero.querySelector('#heroTitle, h1');
-    const text = hero.querySelector('#heroText, p');
-    const titleGroup = [eyebrow, title, text].filter(Boolean);
-    const ctaBtns = Array.from(hero.querySelectorAll('.actions .btn'));
-    const cueEl = hero.querySelector('.ka-hero-scroll-cue');
+    const eyebrow = container.querySelector('.eyebrow');
+    const title = container.querySelector('#heroTitle, h1');
+    const text = container.querySelector('#heroText, p');
+    const btns = Array.from(container.querySelectorAll('.actions .btn'));
+    const cue = container.querySelector('.ka-hero-scroll-cue');
+    const allTargets = [eyebrow, title, text, ...btns, cue].filter(Boolean);
+
+    const c = cfg();
+    if (c.prefersReducedMotion() || !window.gsap) {
+      allTargets.forEach((el) => {
+        el.style.opacity = '';
+        el.style.visibility = '';
+        el.style.transform = '';
+        el.style.filter = '';
+      });
+      return;
+    }
+
+    const introEl = document.getElementById('kurdia-intro');
+    const hasActiveIntro =
+      !opts.force &&
+      Boolean(introEl && !introEl.classList.contains('intro-out') && introEl.offsetParent !== null);
+    const baseDelay = opts.delay !== undefined ? opts.delay : hasActiveIntro ? 0.32 : 0.06;
 
     try {
-      if (hero.__kaActiveHeroTl && typeof hero.__kaActiveHeroTl.kill === 'function') {
-        hero.__kaActiveHeroTl.kill();
+      if (heroEntranceTimeline) {
+        heroEntranceTimeline.kill();
       }
-
-      const allTargets = [...titleGroup, ...ctaBtns, cueEl].filter(Boolean);
       window.gsap.killTweensOf(allTargets);
 
-      const heroTl = window.gsap.timeline({
-        defaults: { ease: 'expo.out', overwrite: 'auto' }
+      // Gentle, natural background scale settle (--hero-kenburns-scale)
+      const scaleProxy = { s: 1.075 };
+      hero.style.setProperty('--hero-kenburns-scale', '1.075');
+      window.gsap.to(scaleProxy, {
+        s: 1.045,
+        duration: 1.85,
+        delay: baseDelay,
+        ease: 'power2.out',
+        onUpdate: () => {
+          hero.style.setProperty('--hero-kenburns-scale', scaleProxy.s.toFixed(4));
+        }
       });
-      hero.__kaActiveHeroTl = heroTl;
 
-      // 1. Staggered cinematic entrance for Hero Titles (Eyebrow -> Main H1 Title -> Subtitle Text)
+      const tl = window.gsap.timeline({
+        delay: baseDelay,
+        defaults: {
+          ease: c.easings.outExpo || 'expo.out',
+          overwrite: 'auto'
+        }
+      });
+      heroEntranceTimeline = tl;
+
+      // 1. Staggered reveal for Hero Titles (Eyebrow -> Main Heading -> Subtitle)
+      const titleGroup = [eyebrow, title, text].filter(Boolean);
       if (titleGroup.length) {
-        heroTl.fromTo(
+        tl.fromTo(
           titleGroup,
           {
             autoAlpha: 0,
-            y: (i) => (i === 1 ? 34 : 22),
-            scale: (i) => (i === 1 ? 0.965 : 0.985),
-            rotationX: (i) => (i === 1 ? 8 : 0),
-            filter: 'blur(6px)'
-          },
-          {
-            autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            rotationX: 0,
-            filter: 'blur(0px)',
-            duration: 0.88,
-            stagger: {
-              each: 0.13,
-              ease: 'power2.out'
-            },
-            clearProps: 'transform,opacity,visibility,filter'
-          },
-          opts.delay || 0.04
-        );
-      }
-
-      // 2. Staggered entrance for Hero Action Buttons (.actions .btn)
-      if (ctaBtns.length) {
-        heroTl.fromTo(
-          ctaBtns,
-          {
-            autoAlpha: 0,
             y: 22,
-            scale: 0.92,
+            scale: 0.985,
             filter: 'blur(4px)'
           },
           {
@@ -188,27 +187,45 @@
             y: 0,
             scale: 1,
             filter: 'blur(0px)',
-            duration: 0.68,
-            stagger: {
-              each: 0.11,
-              from: 'start'
-            },
-            ease: 'back.out(1.45)',
+            duration: 0.88,
+            stagger: 0.12,
+            ease: 'expo.out',
             clearProps: 'transform,opacity,visibility,filter'
           },
-          '-=0.52'
+          0
         );
       }
 
-      // 3. Smooth follow-through for Scroll Cue Pill
-      if (cueEl) {
-        heroTl.fromTo(
-          cueEl,
-          { autoAlpha: 0, y: 14, scale: 0.96 },
+      // 2. Smooth, natural staggered entrance for Hero Action Buttons (no exaggerated bounce)
+      if (btns.length) {
+        tl.fromTo(
+          btns,
+          {
+            autoAlpha: 0,
+            y: 16,
+            scale: 0.96
+          },
           {
             autoAlpha: 1,
             y: 0,
             scale: 1,
+            duration: 0.68,
+            stagger: 0.09,
+            ease: 'power3.out',
+            clearProps: 'transform,opacity,visibility'
+          },
+          titleGroup.length ? '-=0.52' : 0.15
+        );
+      }
+
+      // 3. Scroll Cue pill entrance
+      if (cue) {
+        tl.fromTo(
+          cue,
+          { autoAlpha: 0, y: 12 },
+          {
+            autoAlpha: 1,
+            y: 0,
             duration: 0.56,
             ease: 'power3.out',
             clearProps: 'transform,opacity,visibility'
@@ -216,308 +233,445 @@
           '-=0.38'
         );
       }
-    } catch (_) {}
+    } catch (_) {
+      allTargets.forEach((el) => {
+        el.style.opacity = '';
+        el.style.visibility = '';
+        el.style.transform = '';
+        el.style.filter = '';
+      });
+    }
   }
 
+  // Expose globally so Intro overlay dismissal or manual replay can trigger the hero entrance smoothly
   window.playHeroEntranceAnimation = initCinematicHero;
 
-  /**
-   * 4. React-Bits Universal Cursor Spotlight + Desktop 3D Perspective Tilt
-   */
-  const SPOTLIGHT_CARD_SELECTOR = [
-    '.featured',
-    '.trip-showcase-card',
-    '.place-card',
-    '.booking-trip-pick-card',
-    '.private-vip-showcase',
-    '.private-preset-card',
-    '.private-trip-card',
-    '.weather-hero-card',
-    '.weather-metrics-grid .metric-box',
-    '.hourly-card',
-    '.day-row-card',
-    '.public-review',
-    '.review-write',
-    '.about .glass',
-    '#contact .article',
-    '.ka-menu-item'
-  ].join(', ');
+  /* ==========================================================================
+     4. DESKTOP CARD RADIAL SPOTLIGHT & RESTRAINED 3D TILT (Touch-Safe)
+     ========================================================================== */
+  function initSpotlightAnd3DTilt() {
+    const c = cfg();
+    const cardSelector = [
+      '.featured',
+      '.trip-showcase-card',
+      '.place-card',
+      '.booking-trip-pick-card',
+      '.private-vip-showcase',
+      '.private-preset-card',
+      '.private-trip-card',
+      '.weather-hero-card',
+      '.public-review',
+      '.experiences .tile',
+      '.experience-card',
+      '.more-card'
+    ].join(', ');
 
-  const TILT_CARD_SELECTOR =
-    '.featured, .trip-showcase-card, .place-card, .booking-trip-pick-card, .private-preset-card';
+    const cards = document.querySelectorAll(cardSelector);
+    cards.forEach((card) => {
+      if (card.__kaSpotlightBound) return;
+      card.__kaSpotlightBound = true;
 
-  function initSpotlightAnd3DTilt(rootScope) {
-    const cfg = getCfg();
-    if (cfg && (cfg.prefersReducedMotion() || cfg.isTouchDevice() || cfg.isMobileViewport())) {
-      return;
-    }
-    const scope = rootScope || document;
-    const spotlightCards = scope.querySelectorAll(SPOTLIGHT_CARD_SELECTOR);
-    const maxDeg = (cfg && cfg.limits && cfg.limits.cardTiltMaxDeg) || 5.0;
-    const perspective = (cfg && cfg.limits && cfg.limits.cardTiltPerspectivePx) || 980;
+      const onCardMove = (e) => {
+        // Strictly disable on touch pointers, touch devices, reduced motion, or hidden tab
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        if (c.isTouchDevice() || c.prefersReducedMotion() || c.isPageHidden()) return;
 
-    spotlightCards.forEach((card) => {
-      if (card._hasSpotlightBound) return;
-      card._hasSpotlightBound = true;
-      const shouldTilt = card.matches && card.matches(TILT_CARD_SELECTOR);
-      if (shouldTilt) {
-        card.style.transformStyle = 'preserve-3d';
-      }
+        const rect = card.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
 
-      card.addEventListener(
-        'pointermove',
-        (e) => {
-          if (e.pointerType === 'touch') return;
-          const rect = card.getBoundingClientRect();
-          if (!rect.width || !rect.height) return;
-          const mx = (e.clientX - rect.left).toFixed(0) + 'px';
-          const my = (e.clientY - rect.top).toFixed(0) + 'px';
-          card.style.setProperty('--mouse-x', mx);
-          card.style.setProperty('--mouse-y', my);
-          card.style.setProperty('--mx', mx);
-          card.style.setProperty('--my', my);
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-          if (shouldTilt) {
-            const xRel = (e.clientX - rect.left) / rect.width - 0.5;
-            const yRel = (e.clientY - rect.top) / rect.height - 0.5;
-            const rx = (-yRel * maxDeg).toFixed(2);
-            const ry = (xRel * maxDeg).toFixed(2);
-            card.style.transform = `perspective(${perspective}px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px) translateZ(3px)`;
-          }
-        },
-        { passive: true }
-      );
+        // Update CSS custom properties for radial cursor light-follow
+        card.style.setProperty('--mouse-x', `${x.toFixed(1)}px`);
+        card.style.setProperty('--mouse-y', `${y.toFixed(1)}px`);
 
-      if (shouldTilt) {
-        card.addEventListener(
-          'pointerleave',
-          () => {
-            card.style.transform = '';
-          },
-          { passive: true }
-        );
-      }
-    });
-  }
-
-  /**
-   * 5. React-Bits Desktop Magnetic Pull on Primary CTAs (.btn.red, .ai)
-   */
-  function initMagneticButtons(rootScope) {
-    const cfg = getCfg();
-    if (cfg && (cfg.prefersReducedMotion() || cfg.isTouchDevice() || cfg.isMobileViewport())) {
-      return;
-    }
-    const scope = rootScope || document;
-    const buttons = scope.querySelectorAll('.hero .btn.red, .private-vip-actions .btn.red, button.ai');
-    buttons.forEach((btn) => {
-      if (btn._hasMagneticBound) return;
-      btn._hasMagneticBound = true;
-
-      btn.addEventListener(
-        'pointermove',
-        (e) => {
-          if (e.pointerType === 'touch' || btn.disabled) return;
-          const rect = btn.getBoundingClientRect();
-          if (!rect.width || !rect.height) return;
-          const dx = ((e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2)) * 4.5;
-          const dy = ((e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2)) * 3.5;
-          btn.style.transform = `translate3d(${dx.toFixed(1)}px, ${(dy - 1.5).toFixed(1)}px, 0)`;
-        },
-        { passive: true }
-      );
-
-      btn.addEventListener(
-        'pointerleave',
-        () => {
-          btn.style.transform = '';
-        },
-        { passive: true }
-      );
-    });
-  }
-
-  /**
-   * 6. React-Bits Kinetic Number Counters on Stats (#aboutStatsPublic .stat b)
-   */
-  function initKineticStatCounters(rootScope) {
-    const cfg = getCfg();
-    if (!window.gsap || (cfg && cfg.prefersReducedMotion())) return;
-    const scope = rootScope || document;
-    const statEls = scope.querySelectorAll('#aboutStatsPublic .stat b');
-    statEls.forEach((el) => {
-      const rawText = (el.textContent || '').trim();
-      if (!rawText || el.dataset.kaCountedValue === rawText) return;
-      const match = rawText.match(/^([+]?)(\d+(?:[.,]\d+)?)(.*)$/);
-      if (!match) return;
-      const prefix = match[1] || '';
-      const targetNum = parseFloat(match[2].replace(/,/g, ''));
-      const suffix = match[3] || '';
-      if (!Number.isFinite(targetNum) || targetNum <= 0) return;
-
-      el.dataset.kaCountedValue = rawText;
-      const isDecimal = match[2].includes('.');
-      const counter = { val: 0 };
-      window.gsap.to(counter, {
-        val: targetNum,
-        duration: 1.15,
-        ease: 'power2.out',
-        onUpdate: () => {
-          const formatted = isDecimal
-            ? counter.val.toFixed(1)
-            : Math.round(counter.val).toLocaleString();
-          el.textContent = `${prefix}${formatted}${suffix}`;
-        },
-        onComplete: () => {
-          el.textContent = rawText;
+        // Restrained 3D tilt only on explicit .tilt-3d-card elements
+        if (card.classList.contains('tilt-3d-card')) {
+          const maxDeg = c.limits.cardTiltMaxDeg || 3.2;
+          const persp = c.limits.cardTiltPerspectivePx || 980;
+          const pctX = x / rect.width - 0.5;
+          const pctY = y / rect.height - 0.5;
+          const rotY = (pctX * maxDeg * 1.4).toFixed(2);
+          const rotX = (-pctY * maxDeg * 1.4).toFixed(2);
+          card.style.transform = `perspective(${persp}px) translateY(-5px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
         }
-      });
+      };
+
+      const onCardLeave = () => {
+        if (card.classList.contains('tilt-3d-card')) {
+          card.style.transform = '';
+        }
+      };
+
+      card.addEventListener('pointermove', onCardMove, { passive: true });
+      card.addEventListener('pointerleave', onCardLeave, { passive: true });
     });
   }
 
-  /**
-   * 7. Tactile Button Ripple & Micro-Interactions (transitions-dev)
-   */
-  function initMicroInteractions() {
-    if (window.__kaMicroInteractionsBound) return;
-    window.__kaMicroInteractionsBound = true;
+  /* ==========================================================================
+     5. DESKTOP MAGNETIC PRIMARY CTA PULL (Touch-Safe)
+     ========================================================================== */
+  function initMagneticButtons() {
+    const c = cfg();
+    if (c.isTouchDevice() || c.prefersReducedMotion()) return;
 
-    const CLICKABLE_SEL =
-      '.btn, .navitem, .pf-chip, .weather-chip, .pay-method-btn, .private-preset-card, .stepper-btn, .iconbtn, .fib-quick-pill, .ka-menu-item, .booking-trip-pick-card';
+    const magTargets = document.querySelectorAll(
+      '#home .hero .actions .btn, .private-vip-actions .btn.red, .trip-join-btn'
+    );
+
+    magTargets.forEach((btn) => {
+      if (btn.__kaMagneticBound) return;
+      btn.__kaMagneticBound = true;
+
+      const onMove = (e) => {
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        if (c.isTouchDevice() || c.prefersReducedMotion() || btn.disabled) return;
+        const r = btn.getBoundingClientRect();
+        const dx = Math.max(-5, Math.min(5, (e.clientX - (r.left + r.width / 2)) * 0.14));
+        const dy = Math.max(-4, Math.min(4, (e.clientY - (r.top + r.height / 2)) * 0.14));
+        btn.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)`;
+      };
+
+      const onLeave = () => {
+        btn.style.transform = '';
+      };
+
+      btn.addEventListener('pointermove', onMove, { passive: true });
+      btn.addEventListener('pointerleave', onLeave, { passive: true });
+    });
+  }
+
+  /* ==========================================================================
+     6. KINETIC STAT COUNTERS (About Page Stats: 20K+, 200+, 4.9)
+     ========================================================================== */
+  function initKineticStatCounters() {
+    const c = cfg();
+    const statEls = document.querySelectorAll('#aboutStatsPublic .stat b');
+    if (!statEls.length) return;
+
+    statEls.forEach((bEl) => {
+      if (bEl.__kaStatAnimated) return;
+      const raw = (bEl.textContent || '').trim();
+      const match = raw.match(/^(\d+(?:\.\d+)?)(.*)$/);
+      if (!match) return;
+
+      const targetNum = parseFloat(match[1]);
+      const suffix = match[2] || '';
+      const isDecimal = match[1].includes('.');
+      if (Number.isNaN(targetNum)) return;
+
+      const runCounter = () => {
+        if (bEl.__kaStatAnimated) return;
+        bEl.__kaStatAnimated = true;
+        if (c.prefersReducedMotion() || !window.gsap) {
+          bEl.textContent = raw;
+          return;
+        }
+        const proxy = { val: 0 };
+        window.gsap.to(proxy, {
+          val: targetNum,
+          duration: 1.25,
+          ease: 'power3.out',
+          onUpdate() {
+            bEl.textContent = (isDecimal ? proxy.val.toFixed(1) : Math.round(proxy.val)) + suffix;
+          },
+          onComplete() {
+            bEl.textContent = raw;
+          }
+        });
+      };
+
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                runCounter();
+                io.disconnect();
+              }
+            });
+          },
+          { threshold: 0.25 }
+        );
+        io.observe(bEl);
+      } else {
+        runCounter();
+      }
+    });
+  }
+
+  /* ==========================================================================
+     7. MICRO-INTERACTIONS (Tactile Press, Ripple, Modal/Toast/Wizard Transitions)
+     ========================================================================== */
+  function initMicroInteractions() {
+    if (document.body.__kaMicroBound) return;
+    document.body.__kaMicroBound = true;
+
+    const c = cfg();
+
+    // 7A. Tactile Press Feedback
+    const pressSelector =
+      '.btn, .navitem, .pf-chip, .weather-chip, .pay-method-btn, .private-preset-card, .stepper-btn, .iconbtn, .ka-menu-item';
 
     document.addEventListener(
       'pointerdown',
       (e) => {
-        const target = e.target.closest ? e.target.closest(CLICKABLE_SEL) : null;
+        const target = e.target && e.target.closest ? e.target.closest(pressSelector) : null;
         if (!target || target.disabled) return;
         target.classList.add('kurdia-btn-pressed');
-        setTimeout(() => target.classList.remove('kurdia-btn-pressed'), 180);
-
-        const cfg = getCfg();
-        if (cfg && cfg.prefersReducedMotion()) return;
-
-        try {
-          const rect = target.getBoundingClientRect();
-          const size = Math.max(rect.width, rect.height, 44);
-          const ripple = document.createElement('span');
-          ripple.className = 'kurdia-click-ripple';
-          ripple.style.width = size + 'px';
-          ripple.style.height = size + 'px';
-          ripple.style.left = ((e.clientX || rect.left + rect.width / 2) - rect.left) + 'px';
-          ripple.style.top = ((e.clientY || rect.top + rect.height / 2) - rect.top) + 'px';
-          target.appendChild(ripple);
-          setTimeout(() => ripple.remove(), 620);
-        } catch (_) {}
       },
       { passive: true }
     );
 
-    ['pointerup', 'pointerleave', 'pointercancel'].forEach((evName) => {
-      document.addEventListener(
-        evName,
-        () => {
-          document
-            .querySelectorAll('.kurdia-btn-pressed')
-            .forEach((el) => el.classList.remove('kurdia-btn-pressed'));
-        },
-        { passive: true }
-      );
+    const clearPressed = () => {
+      document
+        .querySelectorAll('.kurdia-btn-pressed')
+        .forEach((el) => el.classList.remove('kurdia-btn-pressed'));
+    };
+    document.addEventListener('pointerup', clearPressed, { passive: true });
+    document.addEventListener('pointercancel', clearPressed, { passive: true });
+
+    // 7B. Click Ripple on Primary & Ghost Buttons
+    document.addEventListener(
+      'click',
+      (e) => {
+        if (c.prefersReducedMotion()) return;
+        const btn =
+          e.target && e.target.closest
+            ? e.target.closest('.btn, .navjoin, .pay-method-btn, .fib-quick-pill')
+            : null;
+        if (!btn || btn.disabled) return;
+
+        const rect = btn.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+
+        const ripple = document.createElement('span');
+        ripple.className = 'kurdia-click-ripple';
+        const size = Math.max(rect.width, rect.height) * 0.9;
+        ripple.style.width = `${size}px`;
+        ripple.style.height = `${size}px`;
+        const cx = e.clientX ? e.clientX - rect.left : rect.width / 2;
+        const cy = e.clientY ? e.clientY - rect.top : rect.height / 2;
+        ripple.style.left = `${cx}px`;
+        ripple.style.top = `${cy}px`;
+        btn.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 620);
+      },
+      { passive: true }
+    );
+
+    // 7C. Modal & Sheet Entrance Choreography
+    const modals = document.querySelectorAll('.modal, .story-modal');
+    modals.forEach((modal) => {
+      if (modal.__kaModalObserved) return;
+      modal.__kaModalObserved = true;
+      const mo = new MutationObserver(() => {
+        const isShown = modal.classList.contains('show');
+        const sheet = modal.querySelector('.sheet, .story-sheet');
+        if (isShown && sheet && window.gsap && !c.prefersReducedMotion()) {
+          window.gsap.killTweensOf(sheet);
+          window.gsap.fromTo(
+            sheet,
+            { opacity: 0, y: 24, scale: 0.975 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.36,
+              ease: c.easings.outQuart || 'power3.out',
+              clearProps: 'transform,opacity'
+            }
+          );
+        }
+      });
+      mo.observe(modal, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    // 7D. Booking & Private Wizard Step Panel Entrance
+    const wizardSteps = document.querySelectorAll('.booking-step-panel, .private-wizard-panel');
+    wizardSteps.forEach((panel) => {
+      if (panel.__kaWizardObserved) return;
+      panel.__kaWizardObserved = true;
+      const mo = new MutationObserver(() => {
+        if (!panel.hidden && window.gsap && !c.prefersReducedMotion()) {
+          window.gsap.killTweensOf(panel);
+          window.gsap.fromTo(
+            panel,
+            { opacity: 0, y: 12 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.32,
+              ease: 'power3.out',
+              clearProps: 'transform,opacity'
+            }
+          );
+        }
+      });
+      mo.observe(panel, { attributes: true, attributeFilter: ['hidden'] });
     });
   }
 
-  /**
-   * 8. Weather Station Card & Metric Choreography (Data-Safe)
-   */
-  function animateWeatherStationSection(weatherRoot) {
-    const cfg = getCfg();
-    const prim = getPrimitives();
-    if (!weatherRoot || (cfg && cfg.prefersReducedMotion())) return;
+  /* ==========================================================================
+     8. WEATHER STATION SECTION CHOREOGRAPHY
+     ========================================================================== */
+  function animateWeatherStationSection() {
+    const c = cfg();
+    if (c.prefersReducedMotion() || !window.gsap) return;
 
-    const metrics = weatherRoot.querySelectorAll('.weather-metrics-grid .metric-box');
-    if (prim && metrics.length) {
-      prim.StaggerReveal(metrics, { y: 16, duration: 0.46, stagger: 0.045 });
+    const weatherPage = document.getElementById('weather');
+    if (!weatherPage || !weatherPage.classList.contains('active')) return;
+
+    const chips = weatherPage.querySelectorAll('#weatherQuickChips .weather-chip');
+    const heroCard = weatherPage.querySelector('#weatherHeroCard');
+    const metrics = weatherPage.querySelectorAll('#weatherMetricsGrid .metric-box');
+    const hourly = weatherPage.querySelectorAll('#hourlyTimeline .hourly-card');
+    const days = weatherPage.querySelectorAll('#daysForecast .day-row-card');
+
+    if (chips.length && !weatherPage.__kaChipsAnimated) {
+      weatherPage.__kaChipsAnimated = true;
+      window.gsap.fromTo(
+        chips,
+        { opacity: 0, y: 10 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.36,
+          stagger: 0.03,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity'
+        }
+      );
     }
-    const hourly = weatherRoot.querySelectorAll('#hourlyTimeline .hourly-card');
-    if (prim && hourly.length) {
-      prim.StaggerReveal(hourly, { y: 14, duration: 0.42, stagger: 0.03 });
+
+    if (heroCard && !heroCard.__kaWeatherHeroAnimated) {
+      heroCard.__kaWeatherHeroAnimated = true;
+      window.gsap.fromTo(
+        heroCard,
+        { opacity: 0, y: 18, scale: 0.985 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.52,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity'
+        }
+      );
     }
-    const days = weatherRoot.querySelectorAll('#daysForecast .day-row-card');
-    if (prim && days.length) {
-      prim.StaggerReveal(days, { y: 16, duration: 0.46, stagger: 0.045 });
+
+    if (metrics.length && !weatherPage.__kaMetricsAnimated) {
+      weatherPage.__kaMetricsAnimated = true;
+      window.gsap.fromTo(
+        metrics,
+        { opacity: 0, y: 14 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.035,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity'
+        }
+      );
+    }
+
+    if (hourly.length && !weatherPage.__kaHourlyAnimated) {
+      weatherPage.__kaHourlyAnimated = true;
+      window.gsap.fromTo(
+        Array.from(hourly).slice(0, 10),
+        { opacity: 0, y: 12 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.36,
+          stagger: 0.025,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity'
+        }
+      );
+    }
+
+    if (days.length && !weatherPage.__kaDaysAnimated) {
+      weatherPage.__kaDaysAnimated = true;
+      window.gsap.fromTo(
+        days,
+        { opacity: 0, y: 12 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.38,
+          stagger: 0.04,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity'
+        }
+      );
     }
   }
 
-  /**
-   * 9. Page Transition & Card Stagger Entrance Across All Pages
-   */
+  /* ==========================================================================
+     9. PAGE NAVIGATION & DYNAMIC CONTENT REFRESH HOOKS (Duplicate-Safe)
+     ========================================================================== */
   window.kurdiaAnimatePageCards = function (pageId) {
-    const cfg = getCfg();
-    const prim = getPrimitives();
-    const resolvedId = pageId || (window.location.hash || '#home').slice(1) || 'home';
-    const activePage = document.getElementById(resolvedId);
-    if (!activePage || !activePage.classList.contains('active')) return;
+    const activePage = document.querySelector('.page.active');
+    const targetId = pageId || (activePage ? activePage.id : 'home');
+    const page = document.getElementById(targetId);
+    if (!page) return;
 
-    if (resolvedId === 'home') {
-      initCinematicHero();
+    if (typeof threeCheckVisibility === 'function') {
+      threeCheckVisibility();
     }
 
-    if (prim) {
-      prim.AnimatedSection(activePage);
-    }
-    initSpotlightAnd3DTilt(activePage);
-    initMagneticButtons(activePage);
-
-    if (resolvedId === 'about') {
-      initKineticStatCounters(activePage);
+    if (targetId === 'weather') {
+      animateWeatherStationSection();
     }
 
-    if (resolvedId === 'weather') {
-      animateWeatherStationSection(activePage);
-    }
+    if (window.KurdiaMotionPrimitives) {
+      window.KurdiaMotionPrimitives.AnimatedSection(page);
 
-    if (cfg && cfg.prefersReducedMotion()) return;
-
-    if (resolvedId !== 'home' && prim) {
-      const subpageTargets = activePage.querySelectorAll(
-        '.booking-hero-banner, .booking-trip-pick-card, .booking-form-card, .private-page-hero, .private-preset-card, .private-trip-card, .place-card, .experience-card, .review-write, .public-review, #storyGrid .tile, #contact .article'
+      const items = page.querySelectorAll(
+        [
+          '.featured',
+          '.trip-showcase-card',
+          '.place-card',
+          '.booking-hero-banner',
+          '.booking-trip-pick-card',
+          '.booking-form-card',
+          '.private-page-hero',
+          '.private-preset-card',
+          '.private-trip-card',
+          '.experience-card',
+          '.public-review',
+          '.review-write',
+          '.about img',
+          '.about .glass',
+          '#contact .article',
+          '.more-card',
+          '#storyGrid .tile'
+        ].join(', ')
       );
-      if (subpageTargets.length) {
-        prim.StaggerReveal(subpageTargets, { y: 18, duration: 0.48, stagger: 0.055 });
-      }
+      window.KurdiaMotionPrimitives.StaggerReveal(items, {
+        y: 18,
+        duration: 0.52,
+        stagger: 0.06
+      });
+      window.KurdiaMotionPrimitives.ImageReveal(page);
     }
 
-    if (window.anime) {
-      try {
-        const bars = activePage.querySelectorAll('.btp-seat-bar i');
-        bars.forEach((b) => {
-          const targetW = b.getAttribute('data-target-w') || b.style.width || '50%';
-          b.setAttribute('data-target-w', targetW);
-          b.style.width = '0%';
-          window.anime({
-            targets: b,
-            width: targetW,
-            duration: 780,
-            easing: 'easeOutQuart',
-            delay: 120
-          });
-        });
-      } catch (_) {}
-    }
-
-    if (window.ScrollTrigger) {
-      try {
-        window.ScrollTrigger.refresh();
-      } catch (_) {}
-    }
+    initSpotlightAnd3DTilt();
+    initMagneticButtons();
+    initKineticStatCounters();
   };
 
   window.kurdiaRefreshMotion = function () {
-    const prim = getPrimitives();
-    if (prim) {
-      prim.AnimatedSection(document);
+    initSpotlightAnd3DTilt();
+    initMagneticButtons();
+    initKineticStatCounters();
+    const activePage = document.querySelector('.page.active');
+    if (window.KurdiaMotionPrimitives) {
+      window.KurdiaMotionPrimitives.AnimatedSection(activePage || document);
     }
-    initSpotlightAnd3DTilt(document);
-    initMagneticButtons(document);
     if (window.ScrollTrigger) {
       try {
         window.ScrollTrigger.refresh();
@@ -525,208 +679,186 @@
     }
   };
 
-  /**
-   * 10. Lightweight 3D Zagros Mountain Horizon & Ambient Embers (Three.js)
-   */
+  /* ==========================================================================
+     9B. DYNAMIC CMS & TRIP CONTENT MUTATION OBSERVER
+     Automatically binds scroll reveals & light-follow to newly rendered cards
+     ========================================================================== */
+  function initDynamicContentObserver() {
+    if (document.body.__kaDynamicObserverBound || !('MutationObserver' in window)) return;
+    document.body.__kaDynamicObserverBound = true;
+
+    let refreshTimer = null;
+    const dynamicSelectors = [
+      '#homeTripsList',
+      '#homeDests',
+      '#destList',
+      '#tripList',
+      '#reviewsList',
+      '#homeReviewsPreview',
+      '#aboutStatsPublic'
+    ];
+
+    const scheduleRefresh = () => {
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => {
+        if (typeof window.kurdiaRefreshMotion === 'function') {
+          window.kurdiaRefreshMotion();
+        }
+      }, 60);
+    };
+
+    dynamicSelectors.forEach((sel) => {
+      const container = document.querySelector(sel);
+      if (!container || container.__kaContainerObserved) return;
+      container.__kaContainerObserved = true;
+      const mo = new MutationObserver((mutations) => {
+        for (let i = 0; i < mutations.length; i++) {
+          if (mutations[i].addedNodes && mutations[i].addedNodes.length > 0) {
+            scheduleRefresh();
+            break;
+          }
+        }
+      });
+      mo.observe(container, { childList: true });
+    });
+  }
+
+  /* ==========================================================================
+     10. VIEWPORT-GATED THREE.JS STARFIELD (Zero Continuous Background GPU Waste)
+     Only renders when #home hero is visible on desktop; stops RAF otherwise.
+     ========================================================================== */
   function initThreeAtmosphere() {
-    const cfg = getCfg();
-    if (!window.THREE || (cfg && cfg.prefersReducedMotion())) return;
+    const c = cfg();
+    if (c.prefersReducedMotion() || c.isMobileViewport() || !window.THREE) return;
     if (document.getElementById('kurdiaThreeAmbientCanvas')) return;
 
     try {
-      const bgCanvas = document.createElement('canvas');
-      bgCanvas.id = 'kurdiaThreeAmbientCanvas';
-      bgCanvas.setAttribute('aria-hidden', 'true');
-      document.body.prepend(bgCanvas);
+      const canvas = document.createElement('canvas');
+      canvas.id = 'kurdiaThreeAmbientCanvas';
+      canvas.style.cssText =
+        'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.42;';
+      document.body.prepend(canvas);
 
-      const isMobile = window.innerWidth < 768;
       const renderer = new window.THREE.WebGLRenderer({
-        canvas: bgCanvas,
+        canvas,
         alpha: true,
         antialias: false,
         powerPreference: 'low-power'
       });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
 
       const scene = new window.THREE.Scene();
       const camera = new window.THREE.PerspectiveCamera(
-        55,
+        60,
         window.innerWidth / window.innerHeight,
         0.1,
-        100
+        1000
       );
-      camera.position.set(0, 0, 7);
+      camera.position.z = 50;
 
-      const gridX = isMobile ? 12 : 20;
-      const gridY = isMobile ? 7 : 11;
-      const mountainGeo = new window.THREE.PlaneGeometry(32, 16, gridX, gridY);
-      const posAttr = mountainGeo.attributes.position;
-      for (let i = 0; i < posAttr.count; i++) {
-        const vx = posAttr.getX(i);
-        const vy = posAttr.getY(i);
-        const elevation =
-          Math.sin(vx * 0.35) * Math.cos(vy * 0.4) * 2.1 +
-          Math.sin(vx * 0.75 + 1.2) * 1.05 +
-          Math.sin(vx * 1.4) * 0.42;
-        posAttr.setZ(i, Math.max(0, elevation));
+      const count = 48;
+      const positions = new Float32Array(count * 3);
+      for (let i = 0; i < count * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 120;
+        positions[i + 1] = (Math.random() - 0.5) * 80;
+        positions[i + 2] = (Math.random() - 0.5) * 50;
       }
-      mountainGeo.computeVertexNormals();
 
-      const mountainMat = new window.THREE.MeshBasicMaterial({
-        color: 0x38bdf8,
-        wireframe: true,
+      const geo = new window.THREE.BufferGeometry();
+      geo.setAttribute('position', new window.THREE.BufferAttribute(positions, 3));
+
+      const mat = new window.THREE.PointsMaterial({
+        color: 0xff6b86,
+        size: 1.05,
         transparent: true,
-        opacity: isMobile ? 0.065 : 0.1
+        opacity: 0.48
       });
-      const mountainMesh = new window.THREE.Mesh(mountainGeo, mountainMat);
-      mountainMesh.rotation.x = -Math.PI / 2.3;
-      mountainMesh.position.set(0, -4.6, -2);
-      scene.add(mountainMesh);
 
-      const emberCount = isMobile ? 28 : 64;
-      const emberGeo = new window.THREE.BufferGeometry();
-      const emberPositions = new Float32Array(emberCount * 3);
-      const emberVelocities = new Float32Array(emberCount);
-      for (let i = 0; i < emberCount; i++) {
-        emberPositions[i * 3] = (Math.random() - 0.5) * 18;
-        emberPositions[i * 3 + 1] = (Math.random() - 0.5) * 12;
-        emberPositions[i * 3 + 2] = (Math.random() - 0.5) * 8;
-        emberVelocities[i] = 0.0025 + Math.random() * 0.006;
+      const points = new window.THREE.Points(geo, mat);
+      scene.add(points);
+
+      function shouldRenderThree() {
+        if (document.hidden || c.prefersReducedMotion()) return false;
+        const homePage = document.getElementById('home');
+        if (!homePage || !homePage.classList.contains('active')) return false;
+        if ((window.scrollY || 0) > 740) return false;
+        return true;
       }
-      emberGeo.setAttribute('position', new window.THREE.BufferAttribute(emberPositions, 3));
-      const emberMat = new window.THREE.PointsMaterial({
-        color: 0xff5e7e,
-        size: isMobile ? 0.044 : 0.04,
-        transparent: true,
-        opacity: 0.42
-      });
-      const emberPoints = new window.THREE.Points(emberGeo, emberMat);
-      scene.add(emberPoints);
 
-      let mouseX = 0;
-      let mouseY = 0;
-      let targetCameraX = 0;
-      let targetCameraY = 0;
-      let rafId = null;
-      let disposed = false;
+      function animateThree() {
+        if (!shouldRenderThree()) {
+          threeRunning = false;
+          threeRafId = null;
+          return;
+        }
+        threeRunning = true;
+        points.rotation.y += 0.00032;
+        points.rotation.x += 0.00012;
+        renderer.render(scene, camera);
+        threeRafId = window.requestAnimationFrame(animateThree);
+      }
 
-      const onPointerMove = (e) => {
-        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      threeCheckVisibility = function () {
+        const active = shouldRenderThree();
+        canvas.style.visibility = active ? 'visible' : 'hidden';
+        if (active && !threeRunning) {
+          threeRunning = true;
+          threeRafId = window.requestAnimationFrame(animateThree);
+        } else if (!active && threeRunning && threeRafId) {
+          window.cancelAnimationFrame(threeRafId);
+          threeRunning = false;
+          threeRafId = null;
+        }
       };
 
       const onResize = () => {
-        if (disposed) return;
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        if (threeCheckVisibility) threeCheckVisibility();
       };
 
-      if (!isMobile) {
-        window.addEventListener('pointermove', onPointerMove, { passive: true });
-      }
       window.addEventListener('resize', onResize, { passive: true });
+      window.addEventListener('scroll', threeCheckVisibility, { passive: true });
+      c.onVisibilityChange(threeCheckVisibility);
 
-      let clock = 0;
-      function animateThree() {
-        if (disposed) return;
-        rafId = window.requestAnimationFrame(animateThree);
-        const homeEl = document.getElementById('home');
-        if (document.hidden || (homeEl && !homeEl.classList.contains('active'))) {
-          return;
-        }
-        clock += 0.007;
+      // Render one initial frame and start only if hero is in view
+      renderer.render(scene, camera);
+      threeCheckVisibility();
 
-        mountainMesh.rotation.z = Math.sin(clock * 0.2) * 0.018;
-        mountainMesh.position.y = -4.6 + Math.sin(clock * 0.38) * 0.1;
-
-        const pArr = emberGeo.attributes.position.array;
-        for (let i = 0; i < emberCount; i++) {
-          pArr[i * 3 + 1] += emberVelocities[i];
-          pArr[i * 3] += Math.sin(clock + i) * 0.0018;
-          if (pArr[i * 3 + 1] > 6) {
-            pArr[i * 3 + 1] = -6;
-            pArr[i * 3] = (Math.random() - 0.5) * 18;
-          }
-        }
-        emberGeo.attributes.position.needsUpdate = true;
-
-        targetCameraX += (mouseX * 0.3 - targetCameraX) * 0.04;
-        targetCameraY += (-mouseY * 0.22 - targetCameraY) * 0.04;
-        camera.position.x = targetCameraX;
-        camera.position.y = targetCameraY;
-        camera.lookAt(0, -1, 0);
-
-        renderer.render(scene, camera);
-      }
-      animateThree();
-
-      const cleanupThree = () => {
-        if (disposed) return;
-        disposed = true;
-        if (rafId) window.cancelAnimationFrame(rafId);
-        window.removeEventListener('pointermove', onPointerMove);
+      c.registerCleanup(() => {
+        if (threeRafId) window.cancelAnimationFrame(threeRafId);
+        threeRunning = false;
         window.removeEventListener('resize', onResize);
-        try {
-          mountainGeo.dispose();
-          mountainMat.dispose();
-          emberGeo.dispose();
-          emberMat.dispose();
-          renderer.dispose();
-          if (bgCanvas.parentNode) bgCanvas.parentNode.removeChild(bgCanvas);
-        } catch (_) {}
-      };
-
-      bgCanvas.addEventListener('webglcontextlost', (e) => {
-        e.preventDefault();
-        cleanupThree();
+        window.removeEventListener('scroll', threeCheckVisibility);
+        geo.dispose();
+        mat.dispose();
+        renderer.dispose();
       });
-
-      if (cfg && typeof cfg.registerCleanup === 'function') {
-        cfg.registerCleanup(cleanupThree);
-      }
     } catch (_) {}
   }
 
-  /**
-   * 11. Bootstrapping & GSAP matchMedia Lifecycle Hook (gsap-skills)
-   */
+  /* ==========================================================================
+     MASTER BOOTSTRAPPER
+     ========================================================================== */
   function bootKurdiaMotionSystem() {
     initLivingAuroraBg();
-    const prim = getPrimitives();
-    if (prim) {
-      prim.ScrollProgress();
-      prim.ParallaxImage();
-      prim.AnimatedSection(document);
+    initBrandLogoEntrance();
+    initCinematicHero();
+
+    if (window.KurdiaMotionPrimitives) {
+      window.KurdiaMotionPrimitives.ScrollProgress();
+      window.KurdiaMotionPrimitives.ParallaxImage();
+      const activePage = document.querySelector('.page.active');
+      window.KurdiaMotionPrimitives.AnimatedSection(activePage || document);
     }
 
-    if (window.gsap && typeof window.gsap.matchMedia === 'function') {
-      const mm = window.gsap.matchMedia();
-      mm.add(
-        {
-          isDesktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
-          isMobile: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
-          reduceMotion: '(prefers-reduced-motion: reduce)'
-        },
-        (context) => {
-          const { reduceMotion } = context.conditions;
-          if (!reduceMotion) {
-            initBrandLogoEntrance();
-            initCinematicHero();
-            initSpotlightAnd3DTilt(document);
-            initMagneticButtons(document);
-          }
-        }
-      );
-    } else {
-      initBrandLogoEntrance();
-      initCinematicHero();
-      initSpotlightAnd3DTilt(document);
-      initMagneticButtons(document);
-    }
-
+    initSpotlightAnd3DTilt();
+    initMagneticButtons();
+    initKineticStatCounters();
     initMicroInteractions();
+    initDynamicContentObserver();
     initThreeAtmosphere();
   }
 

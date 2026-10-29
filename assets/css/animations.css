@@ -418,18 +418,21 @@ aside#kaMoreMenu.ka-more-menu {
   .booking-trip-pick-card:hover,
   .private-preset-card:hover,
   .public-review:hover,
-  #contact .article:hover {
-    transform: translateY(-6px);
+  #contact .article:hover,
+  .more-card:hover {
+    transform: translateY(-5px);
     border-color: var(--ka-glass-border-hover) !important;
     box-shadow: var(--shadow-elevated) !important;
   }
 
+  /* Gentle Image Zoom on Hover */
   .featured:hover .featureimg,
   .trip-showcase-card:hover .featureimg,
   .place-card:hover .place-card-media,
-  .booking-trip-pick-card:hover .btp-thumb {
-    transform: scale(1.065);
-    filter: saturate(1.1) contrast(1.04);
+  .booking-trip-pick-card:hover .btp-thumb,
+  .about:hover img {
+    transform: scale(1.045);
+    filter: saturate(1.06) contrast(1.03);
   }
 
   .featured:hover .trip-status-pill,
@@ -440,24 +443,44 @@ aside#kaMoreMenu.ka-more-menu {
   }
 
   #homeStories .story:hover {
-    transform: translateY(-5px) scale(1.045);
+    transform: translateY(-4px) scale(1.035);
   }
 
   .experiences .tile:hover,
   .experience-card:hover {
-    transform: translateY(-5px) scale(1.015);
+    transform: translateY(-4px) scale(1.01);
     box-shadow: var(--shadow-elevated);
   }
 
   /* RTL-Aware Arrow Micro-Shift on Hover */
   [dir="rtl"] .place-card:hover .place-card-footer span:last-child,
   [dir="rtl"] .booking-trip-pick-card:hover .btp-select-indicator span:last-child {
-    transform: translateX(-6px);
+    transform: translateX(-5px);
   }
 
   [dir="ltr"] .place-card:hover .place-card-footer span:last-child,
   [dir="ltr"] .booking-trip-pick-card:hover .btp-select-indicator span:last-child {
-    transform: translateX(6px);
+    transform: translateX(5px);
+  }
+}
+
+/* Disable 3D tilt, spotlight, and sticky hover elevation on touch devices */
+@media (hover: none), (pointer: coarse) {
+  .featured::before,
+  .trip-showcase-card::before,
+  .place-card::before,
+  .booking-trip-pick-card::before,
+  .private-preset-card::before,
+  .weather-metrics-grid .metric-box::before,
+  .public-review::before,
+  .review-write::before,
+  .about .glass::before,
+  #contact .article::before {
+    display: none !important;
+  }
+
+  .tilt-3d-card {
+    transform: none !important;
   }
 }
 
@@ -508,33 +531,39 @@ aside#kaMoreMenu.ka-more-menu {
   text-shadow: 0 14px 38px rgba(0, 0, 0, 0.65);
 }
 
+#home .hero::before,
+#home .hero:before,
 .hero::before,
 .hero:before {
+  content: "";
+  position: absolute;
+  inset: -4% 0;
+  z-index: 0;
   will-change: transform;
-  animation: heroMountainDrift 20s ease-in-out infinite alternate !important;
+  animation: none !important;
+  transform: translate3d(0, var(--hero-parallax-y, 0px), 0) scale(var(--hero-kenburns-scale, 1.045)) !important;
+  transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+  background:
+    radial-gradient(ellipse 84% 58% at 50% 22%, rgba(5, 7, 11, 0.14) 0%, rgba(5, 7, 11, 0.56) 76%),
+    linear-gradient(180deg, rgba(5, 7, 11, 0.32) 0%, rgba(5, 7, 11, 0.12) 36%, rgba(5, 7, 11, 0.78) 76%, #05070b 100%),
+    var(--hero-image, url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85')) center / cover no-repeat !important;
+  filter: saturate(0.96) contrast(1.05);
 }
 
+#home .hero::after,
+#home .hero:after,
 .hero::after,
 .hero:after {
-  animation: heroAtmosphere 8s ease-in-out infinite alternate !important;
-}
-
-@keyframes heroMountainDrift {
-  0% {
-    transform: scale(1) translate3d(0, var(--hero-parallax-y, 0px), 0);
-  }
-  100% {
-    transform: scale(1.075) translate3d(-1%, calc(-1.5% + var(--hero-parallax-y, 0px)), 0);
-  }
-}
-
-@keyframes kaHeroKenBurns {
-  0% {
-    transform: scale(1) translate3d(0, var(--hero-parallax-y, 0px), 0);
-  }
-  100% {
-    transform: scale(1.075) translate3d(-1%, calc(-1.5% + var(--hero-parallax-y, 0px)), 0);
-  }
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 88%, rgba(169, 29, 55, 0.22), transparent 68%),
+    radial-gradient(ellipse 46% 34% at 84% 20%, rgba(211, 47, 78, 0.09), transparent 64%),
+    linear-gradient(180deg, rgba(5, 7, 11, 0.12) 0%, transparent 40%, rgba(5, 7, 11, 0.86) 92%, #05070b 100%) !important;
+  animation: heroAtmosphere 8.5s ease-in-out infinite alternate !important;
 }
 
 @keyframes heroAtmosphere {
@@ -845,7 +874,13 @@ nav.bottom .navitem.active .ico {
   }
 }
 
-/* 10. Strict Reduced Motion & Mobile Safeguards */
+/* 10. Page Hidden Pause & Strict Reduced Motion Safeguards */
+html.ka-page-hidden *,
+html.ka-page-hidden *::before,
+html.ka-page-hidden *::after {
+  animation-play-state: paused !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
