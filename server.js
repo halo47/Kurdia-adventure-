@@ -2020,6 +2020,103 @@ ${JSON.stringify(fallbackReport, null, 2)}`;
       return;
     }
 
+    // =========================================================================
+    // LIVE SOCIAL PAGE METADATA LOOKUP (/api/admin/social-lookup)
+    // =========================================================================
+    if (pathname === '/api/admin/social-lookup') {
+      if (req.method === 'OPTIONS') {
+        res.writeHead(204, {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, Authorization'
+        });
+        res.end();
+        return;
+      }
+
+      readBody(req, async (rawBody) => {
+        try {
+          const body = rawBody ? JSON.parse(rawBody) : {};
+          const igUrl = body.instagramUrl || parsedUrl.searchParams.get('instagramUrl') || '';
+          const ttUrl = body.tiktokUrl || parsedUrl.searchParams.get('tiktokUrl') || '';
+          const fbUrl = body.facebookUrl || parsedUrl.searchParams.get('facebookUrl') || '';
+
+          const parsePublicMeta = async (url, platform) => {
+            if (!url || !url.startsWith('http')) return { ok: false, followers: null, secondaryMetric: null, bio: null, source: 'none' };
+            try {
+              const resp = await fetch(url, {
+                headers: {
+                  'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+                  'Accept-Language': 'en-US,en;q=0.9'
+                }
+              });
+              const html = await resp.text();
+              const ogDescMatch = html.match(/property=["']og:description["']\s+content=["']([^"']+)["']/i) ||
+                                  html.match(/content=["']([^"']+)["']\s+property=["']og:description["']/i) ||
+                                  html.match(/name=["']description["']\s+content=["']([^"']+)["']/i);
+              const desc = ogDescMatch ? ogDescMatch[1] : '';
+
+              if (platform === 'instagram') {
+                const fMatch = desc.match(/([0-9.,]+[KMBkmb]?)\s+Followers/i);
+                const pMatch = desc.match(/([0-9.,]+[KMBkmb]?)\s+Posts/i);
+                if (fMatch) {
+                  return {
+                    ok: true,
+                    followers: fMatch[1].toUpperCase(),
+                    secondaryMetric: pMatch ? `${pMatch[1]} پۆست` : null,
+                    bio: desc,
+                    source: 'public_meta'
+                  };
+                }
+              } else if (platform === 'tiktok') {
+                const fJson = html.match(/"followerCount"\s*:\s*(\d+)/);
+                const hJson = html.match(/"heartCount"\s*:\s*(\d+)/);
+                if (fJson) {
+                  return {
+                    ok: true,
+                    followers: Number(fJson[1]).toLocaleString(),
+                    secondaryMetric: hJson ? `${Number(hJson[1]).toLocaleString()} لایک` : null,
+                    bio: desc || null,
+                    source: 'public_meta'
+                  };
+                }
+              } else if (platform === 'facebook') {
+                const fMatch = desc.match(/([0-9.,]+[KMBkmb]?)\s+(followers|likes)/i);
+                if (fMatch) {
+                  return {
+                    ok: true,
+                    followers: fMatch[1].toUpperCase(),
+                    secondaryMetric: null,
+                    bio: desc,
+                    source: 'public_meta'
+                  };
+                }
+              }
+            } catch (_) {}
+            return { ok: false, followers: null, secondaryMetric: null, bio: null, source: 'restricted_by_platform' };
+          };
+
+          const [igData, ttData, fbData] = await Promise.all([
+            parsePublicMeta(igUrl, 'instagram'),
+            parsePublicMeta(ttUrl, 'tiktok'),
+            parsePublicMeta(fbUrl, 'facebook')
+          ]);
+
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({
+            ok: true,
+            instagram: igData,
+            tiktok: ttData,
+            facebook: fbData
+          }));
+        } catch (err) {
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({ ok: false, error: err.message }));
+        }
+      });
+      return;
+    }
+
     const host = String(req.headers.host || '').toLowerCase();
     if (pathname === '/' && host.startsWith('admin.')) {
       pathname = '/admin.html';

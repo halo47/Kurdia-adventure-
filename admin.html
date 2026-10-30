@@ -8460,7 +8460,8 @@ function renderAllTrendsSections(data) {
   renderKurdiaAccountAudit();
 }
 
-const KURDIA_SOCIAL_AUDIT_KEY = 'kurdia_social_3pages_audit_v1';
+const KURDIA_SOCIAL_AUDIT_KEY = 'kurdia_social_3pages_audit_v2';
+try { localStorage.removeItem('kurdia_social_3pages_audit_v1'); } catch (e) {}
 
 function getKurdiaSocialAuditStore() {
   const defaultStore = {
@@ -8469,8 +8470,8 @@ function getKurdiaSocialAuditStore() {
         ? appState.social.instagram
         : 'https://www.instagram.com/kurdia.adventure/',
       handle: '@kurdia.adventure',
-      followers: '12,400',
-      avgReelsViews: '8,500',
+      followers: '20.1K',
+      avgReelsViews: '',
       postsPerWeek: '4 ڕیڵز + ستۆری ڕۆژانە',
       checks: { bio: true, highlights: true, pinned: false, reelsHook: false, storyLink: true }
     },
@@ -8479,8 +8480,8 @@ function getKurdiaSocialAuditStore() {
         ? appState.social.tiktok
         : 'https://www.tiktok.com/@kurdia.adventure',
       handle: '@kurdia.adventure',
-      followers: '18,900',
-      avgViews: '15,200',
+      followers: '',
+      avgViews: '',
       postsPerWeek: '5 ڤیدیۆ لە هەفتەیەکدا',
       checks: { businessBio: true, pinned3: false, hook3sec: false, pinnedComment: true, bilingualTags: false }
     },
@@ -8489,8 +8490,8 @@ function getKurdiaSocialAuditStore() {
         ? appState.social.facebook
         : 'https://www.facebook.com/kurdia.adventure',
       handle: 'KURDIA Adventure',
-      followers: '9,800',
-      avgReach: '6,400',
+      followers: '',
+      avgReach: '',
       postsPerWeek: '3 پۆست و ئەلبوومی خێزانی',
       checks: { whatsappBtn: true, autoReply: false, familyAlbum: true, groupsShare: false, erbilAds: true }
     }
@@ -8535,20 +8536,76 @@ function updateKurdiaSocialInputs() {
   const val = (id) => document.getElementById(id)?.value?.trim() || '';
 
   if (val('kurdiaIgUrl')) store.instagram.url = val('kurdiaIgUrl');
-  if (val('kurdiaIgFollowers')) store.instagram.followers = val('kurdiaIgFollowers');
-  if (val('kurdiaIgViews')) store.instagram.avgReelsViews = val('kurdiaIgViews');
+  store.instagram.followers = val('kurdiaIgFollowers') || '20.1K';
+  store.instagram.avgReelsViews = val('kurdiaIgViews');
 
   if (val('kurdiaTtUrl')) store.tiktok.url = val('kurdiaTtUrl');
-  if (val('kurdiaTtFollowers')) store.tiktok.followers = val('kurdiaTtFollowers');
-  if (val('kurdiaTtViews')) store.tiktok.avgViews = val('kurdiaTtViews');
+  store.tiktok.followers = val('kurdiaTtFollowers');
+  store.tiktok.avgViews = val('kurdiaTtViews');
 
   if (val('kurdiaFbUrl')) store.facebook.url = val('kurdiaFbUrl');
-  if (val('kurdiaFbFollowers')) store.facebook.followers = val('kurdiaFbFollowers');
-  if (val('kurdiaFbViews')) store.facebook.avgReach = val('kurdiaFbViews');
+  store.facebook.followers = val('kurdiaFbFollowers');
+  store.facebook.avgReach = val('kurdiaFbViews');
 
   saveKurdiaSocialAuditStore(store);
   renderKurdiaAccountAudit();
-  toast('✅ زانیارییەکانی هەرسێ پەیجی (Instagram · TikTok · Facebook) پاشەکەوت کران!');
+  toast('✅ زانیارییە ڕاستەقینەکانی هەرسێ پەیجی (Instagram · TikTok · Facebook) پاشەکەوت کران!');
+}
+
+async function fetchLiveSocialPagesMetadata() {
+  const btn = document.getElementById('btnFetchLiveSocialMeta');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ خەریکی هێنانی داتای پەیجەکانە...';
+  }
+  const store = getKurdiaSocialAuditStore();
+  const igUrl = document.getElementById('kurdiaIgUrl')?.value?.trim() || store.instagram.url;
+  const ttUrl = document.getElementById('kurdiaTtUrl')?.value?.trim() || store.tiktok.url;
+  const fbUrl = document.getElementById('kurdiaFbUrl')?.value?.trim() || store.facebook.url;
+
+  store.instagram.url = igUrl;
+  store.tiktok.url = ttUrl;
+  store.facebook.url = fbUrl;
+
+  try {
+    const resp = await fetch('/api/admin/social-lookup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': '2026' },
+      body: JSON.stringify({ instagramUrl: igUrl, tiktokUrl: ttUrl, facebookUrl: fbUrl })
+    });
+    const data = await resp.json();
+    let updatedCount = 0;
+    if (data && data.ok) {
+      if (data.instagram?.followers) {
+        store.instagram.followers = data.instagram.followers;
+        updatedCount++;
+      }
+      if (data.tiktok?.followers) {
+        store.tiktok.followers = data.tiktok.followers;
+        updatedCount++;
+      }
+      if (data.facebook?.followers) {
+        store.facebook.followers = data.facebook.followers;
+        updatedCount++;
+      }
+    }
+    saveKurdiaSocialAuditStore(store);
+    renderKurdiaAccountAudit();
+    if (updatedCount > 0) {
+      toast(`✅ داتای زیندووی ${updatedCount} پەیج بە سەرکەوتوویی نوێکرایەوە!`);
+    } else {
+      toast('ℹ️ ئینستاگرام (20.1K) جێگیرکراوە؛ بۆ تیکتۆک و فەیسبووک ژمارەکانیان لە خوارەوە بنووسە');
+    }
+  } catch (e) {
+    saveKurdiaSocialAuditStore(store);
+    renderKurdiaAccountAudit();
+    toast('ℹ️ تکایە ژمارەی فۆڵۆوەری تیکتۆک و فەیسبووک لە خانەکانی خوارەوە بنووسە');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '🔍 پشکنینی زیندووی لینکەکان';
+    }
+  }
 }
 
 function copyKurdiaPageTemplate(text, label) {
@@ -8578,11 +8635,20 @@ function renderKurdiaAccountAudit() {
   const fbMissingCount = Object.values(store.facebook.checks).filter(v => !v).length;
   const totalMissing = igMissingCount + ttMissingCount + fbMissingCount;
 
+  const igFollowersLabel = store.instagram.followers ? `${store.instagram.followers} فۆڵۆوەر` : '20.1K فۆڵۆوەر';
+  const igViewsLabel = store.instagram.avgReelsViews ? `تێکڕای بینەری ڕیڵز: ${store.instagram.avgReelsViews}` : 'بینەری ڕیڵز: لە خوارەوە داخڵی بکە';
+
+  const ttFollowersLabel = store.tiktok.followers ? `${store.tiktok.followers} فۆڵۆوەر` : 'فۆڵۆوەر: دیاری نەکراوە (لە خوارەوە بینووسە)';
+  const ttViewsLabel = store.tiktok.avgViews ? `تێکڕای بینەری ڤیدیۆ: ${store.tiktok.avgViews}` : 'بینەری ڤیدیۆ: لە خوارەوە داخڵی بکە';
+
+  const fbFollowersLabel = store.facebook.followers ? `${store.facebook.followers} فۆڵۆوەر` : 'فۆڵۆوەر: دیاری نەکراوە (لە خوارەوە بینووسە)';
+  const fbViewsLabel = store.facebook.avgReach ? `تێکڕای گەیشتن (Reach): ${store.facebook.avgReach}` : 'گەیشتن (Reach): لە خوارەوە داخڵی بکە';
+
   // Update KPI card in Overview
   const scoreEl = document.getElementById('trendsKpiKurdiaScore');
-  if (scoreEl) scoreEl.textContent = `${avgScore}%`;
+  if (scoreEl) scoreEl.textContent = `20.1K`;
   const subEl = document.getElementById('trendsKpiKurdiaSub');
-  if (subEl) subEl.textContent = totalMissing > 0 ? `${totalMissing} خاڵ ماوە لە هەرسێ پەیج` : 'هەرسێ پەیج تەواون ✓';
+  if (subEl) subEl.textContent = `ئینستاگرام 20.1K · تیکتۆک · فەیسبووک`;
 
   // 1. Render Quick 3-Page Summary Banner inside Overview tab (ONLY Instagram, TikTok, Facebook)
   const ovSummaryBox = document.getElementById('trendsOverviewKurdiaSummaryBox');
@@ -8590,13 +8656,13 @@ function renderKurdiaAccountAudit() {
     ovSummaryBox.innerHTML = `
       <div class="panel-card spotlight-card" style="border-color:rgba(240,24,61,0.5);background:linear-gradient(135deg,rgba(38,8,18,0.85),rgba(9,19,30,0.95))">
         <div class="panel-head">
-          <h3>👑 پوختەی شیکاری هەرسێ پەیجی KURDIA (Instagram · TikTok · Facebook)</h3>
+          <h3>👑 پوختەی شیکاری هەرسێ پەیجی KURDIA (Instagram 20.1K · TikTok · Facebook)</h3>
           <button type="button" class="pill" onclick="switchTrendsSubTab('kurdia_account')" style="background:linear-gradient(120deg,#f0183d,#9f1239);border-color:#fda4af">کردنەوەی شیکاری تەواوی هەرسێ پەیج ←</button>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px">
           <div class="occ-row" style="margin:0;border-color:rgba(236,72,153,0.4)">
             <div class="occ-top">
-              <span style="color:#fbcfe8">📸 پەیجی Instagram (${escapeTrendHtml(store.instagram.handle)})</span>
+              <span style="color:#fbcfe8">📸 Instagram (${escapeTrendHtml(igFollowersLabel)})</span>
               <span style="color:#f472b6">${igScore}% ئامادەیە</span>
             </div>
             <div class="occ-bar"><i style="width:${igScore}%;background:linear-gradient(90deg,#ec4899,#a855f7)"></i></div>
@@ -8607,7 +8673,7 @@ function renderKurdiaAccountAudit() {
 
           <div class="occ-row" style="margin:0;border-color:rgba(20,184,166,0.4)">
             <div class="occ-top">
-              <span style="color:#99f6e4">🎵 پەیجی TikTok (${escapeTrendHtml(store.tiktok.handle)})</span>
+              <span style="color:#99f6e4">🎵 TikTok (${escapeTrendHtml(store.tiktok.followers || 'کلیک بکە بۆ تۆمارکردنی ژمارە')})</span>
               <span style="color:#2dd4bf">${ttScore}% ئامادەیە</span>
             </div>
             <div class="occ-bar"><i style="width:${ttScore}%;background:linear-gradient(90deg,#14b8a6,#38bdf8)"></i></div>
@@ -8618,7 +8684,7 @@ function renderKurdiaAccountAudit() {
 
           <div class="occ-row" style="margin:0;border-color:rgba(59,130,246,0.4)">
             <div class="occ-top">
-              <span style="color:#bfdbfe">📘 پەیجی Facebook (${escapeTrendHtml(store.facebook.handle)})</span>
+              <span style="color:#bfdbfe">📘 Facebook (${escapeTrendHtml(store.facebook.followers || 'کلیک بکە بۆ تۆمارکردنی ژمارە')})</span>
               <span style="color:#60a5fa">${fbScore}% ئامادەیە</span>
             </div>
             <div class="occ-bar"><i style="width:${fbScore}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></i></div>
@@ -8657,19 +8723,19 @@ function renderKurdiaAccountAudit() {
     <!-- TOP KPI FOR THE 3 PAGES -->
     <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-bottom:14px">
       <div class="stat red spotlight-card">
-        <div class="stat-head"><span>📸</span><strong>${igScore}%</strong></div>
-        <p>پەیجی Instagram (${escapeTrendHtml(store.instagram.followers)} فۆڵۆوەر)</p>
-        <small>تێکڕای بینەری ڕیڵز: ${escapeTrendHtml(store.instagram.avgReelsViews)} · ${igMissingCount ? `${igMissingCount} کەمووکورتی ماوە` : 'تەواو ئامادەیە ✓'}</small>
+        <div class="stat-head"><span>📸</span><strong dir="ltr">${escapeTrendHtml(store.instagram.followers || '20.1K')}</strong></div>
+        <p>پەیجی Instagram (${escapeTrendHtml(igFollowersLabel)})</p>
+        <small>${escapeTrendHtml(igViewsLabel)} · ئامادەیی پەیج: ${igScore}%</small>
       </div>
       <div class="stat cyan spotlight-card">
-        <div class="stat-head"><span>🎵</span><strong>${ttScore}%</strong></div>
-        <p>پەیجی TikTok (${escapeTrendHtml(store.tiktok.followers)} فۆڵۆوەر)</p>
-        <small>تێکڕای بینەری ڤیدیۆ: ${escapeTrendHtml(store.tiktok.avgViews)} · ${ttMissingCount ? `${ttMissingCount} کەمووکورتی ماوە` : 'تەواو ئامادەیە ✓'}</small>
+        <div class="stat-head"><span>🎵</span><strong dir="ltr">${escapeTrendHtml(store.tiktok.followers || 'TikTok')}</strong></div>
+        <p>پەیجی TikTok (${escapeTrendHtml(ttFollowersLabel)})</p>
+        <small>${escapeTrendHtml(ttViewsLabel)} · ئامادەیی پەیج: ${ttScore}%</small>
       </div>
       <div class="stat blue spotlight-card">
-        <div class="stat-head"><span>📘</span><strong>${fbScore}%</strong></div>
-        <p>پەیجی Facebook (${escapeTrendHtml(store.facebook.followers)} فۆڵۆوەر)</p>
-        <small>تێکڕای گەیشتن (Reach): ${escapeTrendHtml(store.facebook.avgReach)} · ${fbMissingCount ? `${fbMissingCount} کەمووکورتی ماوە` : 'تەواو ئامادەیە ✓'}</small>
+        <div class="stat-head"><span>📘</span><strong dir="ltr">${escapeTrendHtml(store.facebook.followers || 'Facebook')}</strong></div>
+        <p>پەیجی Facebook (${escapeTrendHtml(fbFollowersLabel)})</p>
+        <small>${escapeTrendHtml(fbViewsLabel)} · ئامادەیی پەیج: ${fbScore}%</small>
       </div>
     </div>
 
@@ -8678,20 +8744,26 @@ function renderKurdiaAccountAudit() {
 
     <!-- QUICK STATS & LINKS UPDATER FOR THE 3 PAGES -->
     <div class="panel-card spotlight-card" style="margin-bottom:14px">
-      <div class="panel-head">
-        <h3>🔗 لینک و ژمارەکانی هەرسێ پەیجەکەت (Instagram · TikTok · Facebook)</h3>
-        <button type="button" class="pill" onclick="updateKurdiaSocialInputs()" style="background:linear-gradient(120deg,#0c9b61,#07774a)">💾 پاشەکەوتکردنی زانیاری پەیجەکان</button>
+      <div class="panel-head" style="flex-wrap:wrap;gap:8px">
+        <div>
+          <h3>🔗 لینک و ژمارەی ڕاستەقینەی هەرسێ پەیجەکەت (هیچ ژمارەیەکی خەیاڵی دانانرێت)</h3>
+          <small style="color:#94a3b8;font-size:11px;display:block;margin-top:2px">پەیجی ئینستاگرام لەسەر <b>20.1K</b> جێگیرکراوە؛ دەتوانیت ژمارەی ڕاستی تیکتۆک و فەیسبووک یان بینەری ڕیڵز لێرە بنووسیت و پاشەکەوتی بکەیت.</small>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="secondary-btn" id="btnFetchLiveSocialMeta" onclick="fetchLiveSocialPagesMetadata()" style="border-color:#38bdf8;color:#7dd3fc">🔍 پشکنینی زیندووی لینکەکان</button>
+          <button type="button" class="pill" onclick="updateKurdiaSocialInputs()" style="background:linear-gradient(120deg,#0c9b61,#07774a)">💾 پاشەکەوتکردنی ژمارەکان</button>
+        </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px">
         <div class="occ-row" style="margin:0">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <b style="color:#f472b6;font-size:12.5px">📸 ١. پەیجی Instagram</b>
+            <b style="color:#f472b6;font-size:12.5px">📸 ١. پەیجی Instagram (20.1K)</b>
             <a href="${escapeTrendHtml(store.instagram.url)}" target="_blank" rel="noopener" class="secondary-btn" style="text-decoration:none;padding:3px 8px;font-size:10.5px;border-color:#f472b6;color:#fbcfe8">↗ کردنەوەی پەیج</a>
           </div>
           <div class="field" style="margin-bottom:6px"><label style="font-size:10px">لینکی پەیج</label><input id="kurdiaIgUrl" value="${escapeTrendHtml(store.instagram.url)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-            <div class="field" style="margin:0"><label style="font-size:10px">ژمارەی فۆڵۆوەر</label><input id="kurdiaIgFollowers" value="${escapeTrendHtml(store.instagram.followers)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
-            <div class="field" style="margin:0"><label style="font-size:10px">تێکڕای بینەری Reels</label><input id="kurdiaIgViews" value="${escapeTrendHtml(store.instagram.avgReelsViews)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
+            <div class="field" style="margin:0"><label style="font-size:10px">ژمارەی فۆڵۆوەر (ڕاستەقینە)</label><input id="kurdiaIgFollowers" value="${escapeTrendHtml(store.instagram.followers || '20.1K')}" placeholder="20.1K" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
+            <div class="field" style="margin:0"><label style="font-size:10px">تێکڕای بینەری Reels</label><input id="kurdiaIgViews" value="${escapeTrendHtml(store.instagram.avgReelsViews)}" placeholder="بۆ نموونە: 15K" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
           </div>
         </div>
 
@@ -8702,8 +8774,8 @@ function renderKurdiaAccountAudit() {
           </div>
           <div class="field" style="margin-bottom:6px"><label style="font-size:10px">لینکی پەیج</label><input id="kurdiaTtUrl" value="${escapeTrendHtml(store.tiktok.url)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-            <div class="field" style="margin:0"><label style="font-size:10px">ژمارەی فۆڵۆوەر</label><input id="kurdiaTtFollowers" value="${escapeTrendHtml(store.tiktok.followers)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
-            <div class="field" style="margin:0"><label style="font-size:10px">تێکڕای بینەری ڤیدیۆ</label><input id="kurdiaTtViews" value="${escapeTrendHtml(store.tiktok.avgViews)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
+            <div class="field" style="margin:0"><label style="font-size:10px">ژمارەی فۆڵۆوەر (ڕاستەقینە)</label><input id="kurdiaTtFollowers" value="${escapeTrendHtml(store.tiktok.followers)}" placeholder="ژمارەی فۆڵۆوەر بنووسە..." dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
+            <div class="field" style="margin:0"><label style="font-size:10px">تێکڕای بینەری ڤیدیۆ</label><input id="kurdiaTtViews" value="${escapeTrendHtml(store.tiktok.avgViews)}" placeholder="ژمارەی بینەر بنووسە..." dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
           </div>
         </div>
 
@@ -8714,8 +8786,8 @@ function renderKurdiaAccountAudit() {
           </div>
           <div class="field" style="margin-bottom:6px"><label style="font-size:10px">لینکی پەیج</label><input id="kurdiaFbUrl" value="${escapeTrendHtml(store.facebook.url)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-            <div class="field" style="margin:0"><label style="font-size:10px">ژمارەی فۆڵۆوەر / لایک</label><input id="kurdiaFbFollowers" value="${escapeTrendHtml(store.facebook.followers)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
-            <div class="field" style="margin:0"><label style="font-size:10px">تێکڕای گەیشتن (Reach)</label><input id="kurdiaFbViews" value="${escapeTrendHtml(store.facebook.avgReach)}" dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
+            <div class="field" style="margin:0"><label style="font-size:10px">ژمارەی فۆڵۆوەر / لایک</label><input id="kurdiaFbFollowers" value="${escapeTrendHtml(store.facebook.followers)}" placeholder="ژمارەی فۆڵۆوەر بنووسە..." dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
+            <div class="field" style="margin:0"><label style="font-size:10px">تێکڕای گەیشتن (Reach)</label><input id="kurdiaFbViews" value="${escapeTrendHtml(store.facebook.avgReach)}" placeholder="تێکڕای Reach بنووسە..." dir="ltr" style="padding:6px 8px;font-size:11.5px"></div>
           </div>
         </div>
       </div>
