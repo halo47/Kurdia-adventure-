@@ -934,6 +934,7 @@ button{cursor:pointer;color:inherit}
       <button class="side-btn" data-side="trips" onclick="go('trips')"><span class="s-ico">🧭</span><span>گەشتەکان</span><span class="s-badge" id="sideTripsBadge">3</span></button>
       <button class="side-btn" data-side="newtrip" onclick="createNewTrip()"><span class="s-ico">＋</span><span>زیادکردنی گەشتی نوێ</span></button>
       <button class="side-btn" data-side="places" onclick="go('places')"><span class="s-ico">🏔️</span><span>شوێنەکان</span><span class="s-badge" id="sidePlacesBadge">6</span></button>
+      <button class="side-btn" data-side="trends_intelligence" onclick="go('trends_intelligence')" style="border-color:rgba(56,189,248,0.35);background:linear-gradient(125deg,rgba(14,165,233,0.14),rgba(15,23,42,0.5))"><span class="s-ico">📈</span><span>زیرەکی ترێندەکان (AI Trends)</span><span class="s-badge" id="sideTrendsBadge" style="background:rgba(56,189,248,0.22);color:#7dd3fc">AI</span></button>
       <button class="side-btn" data-side="push_center" onclick="go('push_center')"><span class="s-ico">🔔</span><span>ناردنی نۆتیفیکەیشن</span><span class="s-badge" id="sidePushBadge">0</span></button>
       <button class="side-btn" data-side="bookings" onclick="go('bookings')"><span class="s-ico">👥</span><span>ناونوسراوەکان</span><span class="s-badge" id="sideBookingsBadge">0</span></button>
     </div>
@@ -992,6 +993,7 @@ button{cursor:pointer;color:inherit}
     <div class="quick-nav-strip">
       <button class="q-chip" onclick="go('dashboard')">⌂ داشبۆردی گشتی</button>
       <button class="q-chip green" onclick="createNewTrip()">＋ زیادکردنی گەشتی نوێ</button>
+      <button class="q-chip" onclick="go('trends_intelligence')" style="border-color:#38bdf8;color:#7dd3fc;background:rgba(14,165,233,0.16);font-weight:900">📈 زیرەکی ترێندەکانی گەشت (AI Trends)</button>
       <button class="q-chip" onclick="go('trips')">🧭 هەموو گەشتەکان (<span id="qTripsCount">3</span>)</button>
       <button class="q-chip orange" onclick="go('push_center')">🔔 ناردنی نۆتیفیکەیشن</button>
       <button class="q-chip blue" onclick="go('bookings')">👥 ناونوسراوەکان (<span id="qBookingsCount">0</span>)</button>
@@ -1019,6 +1021,7 @@ button{cursor:pointer;color:inherit}
             <p id="dashHeroSub">بەڕێوەبردنی فرە-گەشت (Multi-Trip)، شوێنە گەشتیارییەکان، چاودێریی سەردانیکەرانی وێبسایتی سەرەکی، ناردنی نۆتیفیکەیشن و پەسەندکردنی ناونوسراوەکان.</p>
             <div class="exec-hero-actions">
               <button class="pill" onclick="createNewTrip()" style="background:linear-gradient(120deg,#0c9b61,#07774a);padding:9px 15px;font-size:12px">＋ زیادکردنی گەشتی نوێ</button>
+              <button class="pill" onclick="go('trends_intelligence')" style="background:linear-gradient(120deg,#0284c7,#0369a1);border-color:#38bdf8;padding:9px 15px;font-size:12px">📈 زیرەکی ترێندەکانی گەشت (AI Trends)</button>
               <button class="pill" onclick="go('places')" style="background:linear-gradient(120deg,#2563eb,#1d4ed8);border-color:#60a5fa;padding:9px 15px;font-size:12px">🏔️ بەڕێوەبردنی شوێنەکان</button>
               <button class="pill" onclick="publishLive()" style="background:linear-gradient(120deg,#f0183d,#b90e2b);border-color:#ff4a68;padding:9px 15px;font-size:12px">● بڵاوکردنەوە لە ماڵپەڕ</button>
             </div>
@@ -1479,6 +1482,7 @@ button{cursor:pointer;color:inherit}
           <button class="pill" onclick="publishLive()">● Publish</button>
         </div>
         <div class="service-list">
+          <div class="staff-setting spotlight-card" style="border-color:#38bdf8;background:linear-gradient(135deg,#071f33,#09131d)" onclick="go('trends_intelligence')"><div class="service-icon" style="color:#38bdf8">📈</div><div class="service-text"><b>زیرەکی ترێندەکانی گەشتیاری (AI Travel Trends Intelligence)</b><small>شیکاری ترێندەکانی Instagram، TikTok و Facebook بۆ هەولێر، شەقڵاوە، ڕەواندز، سۆران، کۆڕەک و بێخاڵ بە Gemini AI</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" style="border-color:#10b981;background:linear-gradient(135deg,#07221b,#09131d)" onclick="go('otp_manager')"><div class="service-icon" style="color:#34d399">🔐</div><div class="service-text"><b>کۆنترۆڵی کۆدی پشتڕاستکردنەوەی OTP (چالاک / ناچالاک)</b><small id="settingsOtpRowDesc">چالاککردن یان ناچالاککردنی کۆدی WhatsApp OTP لە کاتی ناونووسینی گەشتەکان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" style="border-color:#7c2d12" onclick="go('push_center')"><div class="service-icon" style="color:#fb923c">🔔</div><div class="service-text"><b>ناردنی نۆتیفیکەیشن بۆ خەڵک (Web Push)</b><small>ناردنی ئاگاداری ڕاستەوخۆ بۆ مۆبایل و کۆمپیوتەری بەشداربووان</small></div><span class="arrow">‹</span></div>
           <div class="staff-setting spotlight-card" style="border-color:#c084fc;background:linear-gradient(135deg,#1d102a,#09131d)" onclick="go('design')"><div class="service-icon" style="color:#e879f9">🌐</div><div class="service-text"><b>دەستکاریکردنی هەموو بەشەکانی وێبسایتی سەرەکی (Website CMS)</b><small>Hero، بەشی دەربارە، گەشتی تایبەت، پەیوەندی، سۆشیال میدیا و مێنوی خوارەوە</small></div><span class="arrow">‹</span></div>
@@ -2580,6 +2584,365 @@ button{cursor:pointer;color:inherit}
           </div>
         </div>
       </section>
+
+      <!-- =========================================================
+           18. AI TRAVEL TRENDS INTELLIGENCE (#trends_intelligence)
+           ========================================================= -->
+      <section class="page" id="trends_intelligence">
+        <div class="toolbar" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="icon-btn" onclick="go('dashboard')">←</button>
+            <div>
+              <h2 style="margin:0;display:flex;align-items:center;gap:8px">
+                <span>📈</span>
+                <span>زیرەکی ترێندەکانی گەشتیاری · AI Travel Trends Intelligence</span>
+              </h2>
+              <small style="color:#7dd3fc;font-size:11px;display:block;margin-top:2px">چاودێریی فەرمیی ترێندەکان لە Instagram · TikTok · Facebook بۆ هەولێر، کوردستان و عێراق</small>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="secondary-btn" id="btnSyncTrendsNow" onclick="syncTrendsIntelligenceData()" style="border-color:#38bdf8;color:#7dd3fc;font-weight:800">🔄 هاوکاتکردنی داتا (Sync)</button>
+            <button type="button" class="secondary-btn" onclick="openManualTrendImportModal()" style="border-color:#10b981;color:#6bf0b3;font-weight:800">📥 تۆمارکردنی داتای فەرمی (Import)</button>
+            <button type="button" class="pill" id="btnRunGeminiTrendsAnalysis" onclick="runGeminiTrendsIntelligence()" style="background:linear-gradient(120deg,#0284c7,#0369a1);border-color:#38bdf8;font-weight:900">🧠 شیکاری زیرەکی Gemini AI</button>
+          </div>
+        </div>
+
+        <!-- DATA RELIABILITY & OFFICIAL API TRANSPARENCY BANNER -->
+        <div class="lang-box spotlight-card" style="border-color:rgba(56,189,248,0.35);background:linear-gradient(135deg,#07192b,#08111b);margin-bottom:12px;padding:12px 14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:20px">🛡️</span>
+              <div>
+                <b style="font-size:12.5px;color:#e0f2fe;display:block">پابەندبوون بە ڕاستگۆیی داتا (Zero Fabricated Metrics Policy)</b>
+                <small style="color:#94a3b8;font-size:11px;line-height:1.6">هیچ ژمارەیەکی بینین (Views)، لایک یان ڕیزبەندی بە شێوەی خەیاڵی دروست ناکرێت. ئامارە پێوراوەکان جیاکراونەتەوە لە شیکارییەکانی Gemini AI. هەر ترێندێک سەرچاوە، لینکی پشکنین و دۆخی بەردەستبوونی داتای لەگەڵدایە.</small>
+              </div>
+            </div>
+            <div id="trendsApiCredStatusPills" style="display:flex;gap:6px;flex-wrap:wrap;font-size:10.5px"></div>
+          </div>
+        </div>
+
+        <!-- GLOBAL FILTERS: GEOGRAPHY, LANGUAGE, TIMEFRAME, SEARCH -->
+        <div class="lang-box spotlight-card" style="margin-bottom:12px;padding:14px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;align-items:end">
+            <div class="field" style="margin:0">
+              <label>📍 ناوچەی جوگرافی (Geographical Target)</label>
+              <select id="trendsRegionFilter" onchange="applyTrendsFilters(1)">
+                <option value="all">🌐 هەموو ناوچەکان (All Target Locations)</option>
+                <option value="Erbil">🏰 هەولێر (Erbil)</option>
+                <option value="Shaqlawa">🌲 شەقڵاوە (Shaqlawa)</option>
+                <option value="Rawanduz">🏞️ ڕەواندز (Rawanduz)</option>
+                <option value="Soran">⛰️ سۆران (Soran)</option>
+                <option value="Korek Mountain">🚡 چیای کۆڕەک (Korek Mountain)</option>
+                <option value="Bekhal Waterfall">🌊 تاڤگەی بێخاڵ (Bekhal Waterfall)</option>
+                <option value="Gali Ali Beg">🏞️ گەلی عەلی بەگ (Gali Ali Beg)</option>
+                <option value="Kurdistan Region">☀️ هەرێمی کوردستان (Kurdistan Region)</option>
+                <option value="Iraq">🇮🇶 عێراق (Iraq)</option>
+              </select>
+            </div>
+            <div class="field" style="margin:0">
+              <label>🗣️ زمان (Language Monitoring)</label>
+              <select id="trendsLangFilter" onchange="applyTrendsFilters(1)">
+                <option value="all">🌐 هەموو زمانەکان (KU / AR / EN)</option>
+                <option value="ku">☀️ کوردی (سۆرانی - Kurdish)</option>
+                <option value="ar">🌴 عەرەبی (Arabic)</option>
+                <option value="en">🌍 ئینگلیزی (English)</option>
+              </select>
+            </div>
+            <div class="field" style="margin:0">
+              <label>⏳ ماوەی کات (Time Filter)</label>
+              <select id="trendsTimeframeFilter" onchange="applyTrendsFilters(1)">
+                <option value="all">📅 هەموو کاتەکان (All)</option>
+                <option value="7d">⚡ دوایین ٧ ڕۆژ (Last 7 Days)</option>
+                <option value="30d" selected>📆 دوایین ٣٠ ڕۆژ (Last 30 Days)</option>
+                <option value="90d">📊 دوایین ٩٠ ڕۆژ (Last 90 Days)</option>
+              </select>
+            </div>
+            <div class="field" style="margin:0">
+              <label>🔍 گەڕان لە هاشتاگ یان بابەت</label>
+              <input id="trendsSearchInput" placeholder="#چیای_کۆڕەک، شاخەوانی، کەمپینگ..." oninput="applyTrendsFilters(1)">
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTIONS A - G SUB-NAVIGATION TABS -->
+        <div class="filters" id="trendsSectionTabsBar" style="margin-bottom:14px;gap:6px">
+          <button type="button" class="filter active" data-trendstab="overview" onclick="switchTrendsSubTab('overview')">A. کورتەی گشتی (Overview)</button>
+          <button type="button" class="filter" data-trendstab="instagram" onclick="switchTrendsSubTab('instagram')">B. ترێندەکانی Instagram</button>
+          <button type="button" class="filter" data-trendstab="tiktok" onclick="switchTrendsSubTab('tiktok')">C. ترێندەکانی TikTok</button>
+          <button type="button" class="filter" data-trendstab="facebook" onclick="switchTrendsSubTab('facebook')">D. ترێندەکانی Facebook</button>
+          <button type="button" class="filter" data-trendstab="ai_analysis" onclick="switchTrendsSubTab('ai_analysis')">E. شیکاری زیرەکی گەشت (AI Analysis)</button>
+          <button type="button" class="filter" data-trendstab="ai_recommendations" onclick="switchTrendsSubTab('ai_recommendations')">F. پێشنیارەکانی AI بۆ کوردیا</button>
+          <button type="button" class="filter" data-trendstab="weekly_report" onclick="switchTrendsSubTab('weekly_report')">G. ڕاپۆرتی هەفتانە (Weekly Report)</button>
+        </div>
+
+        <!-- LOADING & ERROR STATES -->
+        <div id="trendsLoadingBanner" style="display:none;padding:18px;border-radius:14px;background:rgba(14,165,233,0.12);border:1px solid rgba(56,189,248,0.35);text-align:center;color:#7dd3fc;font-weight:800;margin-bottom:14px">
+          ⏳ خەریکی کۆکردنەوە و شیکردنەوەی داتاکانی ترێندی گەشتیارییە...
+        </div>
+        <div id="trendsErrorBanner" style="display:none;padding:14px;border-radius:14px;background:rgba(239,68,68,0.14);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;font-size:12.5px;margin-bottom:14px"></div>
+
+        <!-- =====================================================
+             SECTION A: OVERVIEW
+             ===================================================== -->
+        <div id="trendsTab_overview" class="trends-subtab-panel">
+          <div class="kpi-grid" style="margin-bottom:14px">
+            <div class="kpi-card spotlight-card">
+              <div class="kpi-top"><span class="kpi-label">کۆی ترێندە دۆزراوەکان</span><span class="kpi-ico">📈</span></div>
+              <div class="kpi-val" id="trendsKpiTotal">0</div>
+              <div class="kpi-sub" id="trendsKpiTotalSub">لە Instagram، TikTok و Facebook</div>
+            </div>
+            <div class="kpi-card spotlight-card">
+              <div class="kpi-top"><span class="kpi-label">ئاماری فەرمی / تۆمارکراو</span><span class="kpi-ico">✅</span></div>
+              <div class="kpi-val" id="trendsKpiVerified" style="color:#6bf0b3">0</div>
+              <div class="kpi-sub">پشتڕاستکراوە بە API یان تۆماری دەستی</div>
+            </div>
+            <div class="kpi-card spotlight-card">
+              <div class="kpi-top"><span class="kpi-label">سەرچاوەی گشتیی پشکنین</span><span class="kpi-ico">🔗</span></div>
+              <div class="kpi-val" id="trendsKpiPublicRef" style="color:#38bdf8">0</div>
+              <div class="kpi-sub">لینکی ڕاستەوخۆی هاشتاگ و پەڕەکان</div>
+            </div>
+            <div class="kpi-card spotlight-card">
+              <div class="kpi-top"><span class="kpi-label">دوایین نوێکردنەوە</span><span class="kpi-ico">🕒</span></div>
+              <div class="kpi-val" id="trendsKpiLastUpdate" style="font-size:14px;direction:ltr">—</div>
+              <div class="kpi-sub" id="trendsKpiWeatherSub">کەشوهەوای زیندووی ٩ ناوچە چالاکە</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px;margin-bottom:12px">
+            <!-- Platform Comparison -->
+            <div class="lang-box spotlight-card" style="margin:0">
+              <h4 style="margin:0 0 10px;color:#7dd3fc">📊 بەراوردی پلاتفۆرمەکان (Platform Comparison)</h4>
+              <div id="trendsOverviewPlatformsBox"></div>
+            </div>
+
+            <!-- Most Popular Travel Topics -->
+            <div class="lang-box spotlight-card" style="margin:0">
+              <h4 style="margin:0 0 10px;color:#6bf0b3">🔥 دیارترین بابەتە گەشتیارییەکان (Most Popular Topics)</h4>
+              <div id="trendsOverviewTopicsBox"></div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px">
+            <!-- Most Discussed Destinations + Live Open-Meteo Weather -->
+            <div class="lang-box spotlight-card" style="margin:0">
+              <h4 style="margin:0 0 10px;color:#fde68a">🏔️ زۆرترین شوێنە باسکراوەکان + کەشوهەوای زیندوو</h4>
+              <div id="trendsOverviewDestinationsBox"></div>
+            </div>
+
+            <!-- Emerging Hashtags -->
+            <div class="lang-box spotlight-card" style="margin:0">
+              <h4 style="margin:0 0 10px;color:#f472b6">🏷️ هاشتاگە گەشەسەندووەکان (Emerging Hashtags)</h4>
+              <div id="trendsOverviewHashtagsBox" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+             SECTION B: INSTAGRAM TRENDS
+             ===================================================== -->
+        <div id="trendsTab_instagram" class="trends-subtab-panel" style="display:none">
+          <div class="lang-box spotlight-card" style="border-color:rgba(236,72,153,0.4);background:linear-gradient(135deg,#230b1d,#09131d);margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <div>
+                <h4 style="margin:0;color:#f472b6">📸 چاودێریی ترێندەکانی Instagram (Hashtags, Reels & Topics)</h4>
+                <small style="color:#cbd5e1;font-size:11.5px">بەکارهێنانی فەرمیی Meta Graph API کاتێک دەسەڵات درابێت، یان لینکی ڕاستەوخۆی هاشتاگە گشتییەکان بەبێ دروستکردنی ژمارەی ساختە.</small>
+              </div>
+              <button type="button" class="secondary-btn" onclick="openManualTrendImportModal('instagram')" style="border-color:#f472b6;color:#fbcfe8">＋ زیادکردنی ئاماری Instagram Insights</button>
+            </div>
+          </div>
+          <div id="trendsInstagramContainer"></div>
+        </div>
+
+        <!-- =====================================================
+             SECTION C: TIKTOK TRENDS
+             ===================================================== -->
+        <div id="trendsTab_tiktok" class="trends-subtab-panel" style="display:none">
+          <div class="lang-box spotlight-card" style="border-color:rgba(45,212,191,0.4);background:linear-gradient(135deg,#062426,#09131d);margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <div>
+                <h4 style="margin:0;color:#2dd4bf">🎵 ترێندەکانی TikTok & Creative Center (گەشت، شاخەوانی، کەمپینگ و تاڤگەکان)</h4>
+                <small style="color:#cbd5e1;font-size:11.5px">بەستراوەتەوە بە سەرچاوە ڕێگەپێدراوەکان و TikTok Creative Center (عێراق). هەرگیز بانگەشەی دەستگەیشتن بە API ـی قەدەغەکراو ناکات.</small>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <a href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?countryCode=IQ" target="_blank" rel="noopener" class="secondary-btn" style="text-decoration:none;border-color:#2dd4bf;color:#99f6e4">↗ کردنەوەی TikTok Creative Center IQ</a>
+                <button type="button" class="secondary-btn" onclick="openManualTrendImportModal('tiktok')" style="border-color:#10b981;color:#6bf0b3">＋ تۆمارکردنی ژمارەی Creative Center</button>
+              </div>
+            </div>
+          </div>
+          <div id="trendsTiktokContainer"></div>
+        </div>
+
+        <!-- =====================================================
+             SECTION D: FACEBOOK TRENDS
+             ===================================================== -->
+        <div id="trendsTab_facebook" class="trends-subtab-panel" style="display:none">
+          <div class="lang-box spotlight-card" style="border-color:rgba(59,130,246,0.45);background:linear-gradient(135deg,#091933,#09131d);margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <div>
+                <h4 style="margin:0;color:#60a5fa">📘 ترێند و گفتوگۆ گەشتیارییەکانی Facebook (Public Pages & Insights)</h4>
+                <small style="color:#cbd5e1;font-size:11.5px">شیکاری پۆستە گشتییەکان، داواکاری گەشتە خێزانییەکان و ئاماری فەرمیی پەیج لە ڕێگەی Meta Graph API.</small>
+              </div>
+              <button type="button" class="secondary-btn" onclick="openManualTrendImportModal('facebook')" style="border-color:#60a5fa;color:#bfdbfe">＋ زیادکردنی ئاماری Facebook Page</button>
+            </div>
+          </div>
+          <div id="trendsFacebookContainer"></div>
+        </div>
+
+        <!-- PAGINATION BAR FOR PLATFORM LISTS -->
+        <div id="trendsPaginationBar" style="display:none;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:12px;background:#09131e;border:1px solid #1e2f42;margin-top:10px">
+          <small id="trendsPaginationInfo" style="color:#94a3b8"></small>
+          <div style="display:flex;gap:6px">
+            <button type="button" class="secondary-btn" id="trendsPrevPageBtn" onclick="changeTrendsPage(-1)">‹ پێشوو</button>
+            <button type="button" class="secondary-btn" id="trendsNextPageBtn" onclick="changeTrendsPage(1)">دواتر ›</button>
+          </div>
+        </div>
+
+        <!-- =====================================================
+             SECTION E: AI TRAVEL ANALYSIS (GEMINI)
+             ===================================================== -->
+        <div id="trendsTab_ai_analysis" class="trends-subtab-panel" style="display:none">
+          <div class="lang-box spotlight-card" style="border-color:#a855f7;background:linear-gradient(135deg,#1d1033,#09131d);margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <div>
+                <span style="background:rgba(168,85,247,0.22);border:1px solid #a855f7;color:#e9d5ff;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px">AI-GENERATED MARKET ANALYSIS · جیاواز لە ئاماری پێوراو</span>
+                <h4 style="margin:6px 0 2px;color:#f3e8ff">🧠 شیکاری قووڵی بازاڕی گەشتیاری بە Gemini AI</h4>
+                <small id="trendsAiSourceLabel" style="color:#cbd5e1;font-size:11px">ئەم بەشە خەمڵاندن و شیکاری ستراتیژیی زیرەکی دەستکردە لەسەر بنەمای ترێندە کۆکراوەکان و کەشوهەوای ناوچەکان.</small>
+              </div>
+              <button type="button" class="pill" onclick="runGeminiTrendsIntelligence()" style="background:linear-gradient(120deg,#9333ea,#6b21a8);border-color:#c084fc">✨ نوێکردنەوەی شیکاری Gemini</button>
+            </div>
+          </div>
+          <div id="trendsAiAnalysisContainer"></div>
+        </div>
+
+        <!-- =====================================================
+             SECTION F: AI RECOMMENDATIONS FOR KURDIA ADVENTURE
+             ===================================================== -->
+        <div id="trendsTab_ai_recommendations" class="trends-subtab-panel" style="display:none">
+          <div class="lang-box spotlight-card" style="border-color:#10b981;background:linear-gradient(135deg,#06241c,#09131d);margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <div>
+                <span style="background:rgba(16,185,129,0.22);border:1px solid #10b981;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px">STRATEGIC AI RECOMMENDATIONS · تایبەت بە KURDIA ADVENTURE</span>
+                <h4 style="margin:6px 0 2px;color:#ecfdf5">🎯 پێشنیاری کرداری بۆ گەشتی داهاتوو، ڕیکلام و سۆشیال میدیا</h4>
+                <small style="color:#cbd5e1;font-size:11px">وەڵامی کرداری بۆ ئەوەی کام گەشت ڕێکبخەین، کام شوێن ڕیکلام بکەین و کام هاشتاگ بەکاربهێنین.</small>
+              </div>
+              <button type="button" class="pill" onclick="runGeminiTrendsIntelligence()" style="background:linear-gradient(120deg,#059669,#047857);border-color:#34d399">🔄 داڕشتنەوەی پێشنیارەکان</button>
+            </div>
+          </div>
+          <div id="trendsAiRecommendationsContainer"></div>
+        </div>
+
+        <!-- =====================================================
+             SECTION G: WEEKLY REPORT
+             ===================================================== -->
+        <div id="trendsTab_weekly_report" class="trends-subtab-panel" style="display:none">
+          <div class="lang-box spotlight-card" style="border-color:#f59e0b;background:linear-gradient(135deg,#271a07,#09131d);margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <div>
+                <h4 style="margin:0;color:#fde68a">📋 ڕاپۆرتی هەفتانەی زیرەکیی بازاڕی گەشتیاری (Weekly Intelligence Report)</h4>
+                <small style="color:#cbd5e1;font-size:11.5px">پوختەی گۆڕانکارییەکانی هەفتە، بەراوردی پلاتفۆرمەکان، باشترین شوێنەکان، هاشتاگەکان و سەرچاوەی داتاکان.</small>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="secondary-btn" onclick="exportTrendsWeeklyReportMarkdown()" style="border-color:#f59e0b;color:#fde68a">⬇ داگرتنی ڕاپۆرت (Markdown)</button>
+                <button type="button" class="secondary-btn" onclick="exportTrendsWeeklyReportJson()" style="border-color:#38bdf8;color:#7dd3fc">⬇ داگرتنی داتا (JSON)</button>
+                <button type="button" class="secondary-btn" onclick="window.print()" style="border-color:#10b981;color:#6bf0b3">🖨️ چاپکردن / PDF</button>
+              </div>
+            </div>
+          </div>
+          <div id="trendsWeeklyReportContainer"></div>
+        </div>
+
+        <!-- MANUAL VERIFIED TREND IMPORT MODAL -->
+        <div id="manualTrendImportModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(3,7,18,0.84);backdrop-filter:blur(8px);padding:16px;overflow-y:auto;align-items:center;justify-content:center">
+          <div class="lang-box spotlight-card" style="max-width:580px;width:100%;margin:24px auto;border-color:#38bdf8;background:#08121e;padding:18px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #1e2f42">
+              <div>
+                <h4 style="margin:0;color:#7dd3fc;font-size:15px">📥 تۆمارکردنی داتای فەرمی و پشتڕاستکراو (Manual Verified Import)</h4>
+                <small style="color:#94a3b8;font-size:11px">ژمارەی ڕاستەقینەی ناو TikTok Creative Center، Instagram Insights یان Facebook Page زیاد بکە</small>
+              </div>
+              <button type="button" class="secondary-btn" onclick="closeManualTrendImportModal()">✕</button>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div class="field">
+                <label>پلاتفۆرم *</label>
+                <select id="importTrendPlatform">
+                  <option value="tiktok">🎵 TikTok (Creative Center / Tag)</option>
+                  <option value="instagram">📸 Instagram (Insights / Reels)</option>
+                  <option value="facebook">📘 Facebook (Page Insights / Post)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>شوێن / ناوچە *</label>
+                <select id="importTrendDestination">
+                  <option value="Korek Mountain">چیای کۆڕەک (Korek Mountain)</option>
+                  <option value="Rawanduz">ڕەواندز (Rawanduz)</option>
+                  <option value="Bekhal Waterfall">تاڤگەی بێخاڵ (Bekhal Waterfall)</option>
+                  <option value="Shaqlawa">شەقڵاوە (Shaqlawa)</option>
+                  <option value="Soran">سۆران (Soran)</option>
+                  <option value="Gali Ali Beg">گەلی عەلی بەگ (Gali Ali Beg)</option>
+                  <option value="Erbil">هەولێر (Erbil)</option>
+                  <option value="Kurdistan Region">هەرێمی کوردستان (Kurdistan Region)</option>
+                  <option value="Iraq">عێراق (Iraq)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>هاشتاگ *</label>
+                <input id="importTrendHashtag" placeholder="#چیای_کۆڕەک یان #KorekMountain">
+              </div>
+              <div class="field">
+                <label>بابەت (Topic) *</label>
+                <input id="importTrendTopic" placeholder="شاخەوانی و تەلەفریک">
+              </div>
+              <div class="field">
+                <label>زمان</label>
+                <select id="importTrendLang">
+                  <option value="ku">کوردی (سۆرانی)</option>
+                  <option value="ar">عەرەبی</option>
+                  <option value="en">ئینگلیزی</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>ماوەی کات</label>
+                <select id="importTrendTimeframe">
+                  <option value="7d">دوایین ٧ ڕۆژ</option>
+                  <option value="30d" selected>دوایین ٣٠ ڕۆژ</option>
+                  <option value="90d">دوایین ٩٠ ڕۆژ</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>ناونیشان / وەسفی ترێند *</label>
+              <input id="importTrendTitle" placeholder="بۆ نموونە: ڤیدیۆی تەلەفریک و بەفری چیای کۆڕەک لە تیکتۆک">
+            </div>
+
+            <div class="field">
+              <label>لینکی سەرچاوە (Source URL) *</label>
+              <input id="importTrendUrl" dir="ltr" placeholder="https://ads.tiktok.com/business/creativecenter/... یان لینکی پۆست/هاشتاگ">
+            </div>
+
+            <div style="padding:10px;border-radius:10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);margin:8px 0">
+              <small style="color:#6bf0b3;font-weight:800;display:block;margin-bottom:6px">📊 ئامارە فەرمییەکان (تەنها ژمارەی ڕاستەقینە بنووسە — ئەگەر بەردەست نییە بەتاڵی بهێڵەوە):</small>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                <div class="field" style="margin:0"><label>Views (بینین)</label><input id="importTrendViews" type="number" placeholder="بێ ژمارە"></div>
+                <div class="field" style="margin:0"><label>Likes (لایک)</label><input id="importTrendLikes" type="number" placeholder="بێ ژمارە"></div>
+                <div class="field" style="margin:0"><label>Comments</label><input id="importTrendComments" type="number" placeholder="بێ ژمارە"></div>
+                <div class="field" style="margin:0"><label>Posts Count</label><input id="importTrendPosts" type="number" placeholder="بێ ژمارە"></div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>گۆڕانکاری ترێند / تێبینی سەرچاوە</label>
+              <input id="importTrendChange" placeholder="بۆ نموونە: +24% لە TikTok Creative Center IQ لە دوایین ٧ ڕۆژدا">
+            </div>
+
+            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+              <button type="button" class="secondary-btn" onclick="closeManualTrendImportModal()">پاشگەزبوونەوە</button>
+              <button type="button" class="primary" style="margin:0;width:auto;padding:9px 20px;background:#0c9b61" onclick="submitManualTrendImport()">💾 پاشەکەوتکردنی داتای فەرمی</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Sticky Bottom Navigation (Mobile/Tablet) -->
@@ -3269,7 +3632,7 @@ function go(id, btn){
     const p = n.dataset.page;
     const match = p === id ||
       ((id === "tripdetail" || id === "newtrip") && p === "trips") ||
-      (["otp_manager","design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","places","reviews","backup"].includes(id) && p === "settings");
+      (["otp_manager","design","broadcast","stories","private_requests","coupons","weather_manager","finance","diagnostics","places","reviews","backup","trends_intelligence"].includes(id) && p === "settings");
     n.classList.toggle("active", match);
   });
   document.querySelectorAll(".side-btn").forEach(s => {
@@ -3297,6 +3660,9 @@ function go(id, btn){
   if(id === "reviews"){
     renderReviews();
     fetchLiveReviewsForAdmin(true);
+  }
+  if(id === "trends_intelligence" && typeof initTrendsIntelligenceModule === "function"){
+    initTrendsIntelligenceModule();
   }
   if(id === "diagnostics") runDiagnostics();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -7526,6 +7892,758 @@ window.addEventListener("load", () => {
     }catch(e){}
   }
 });
+
+// ============================================================================
+// AI TRAVEL TRENDS INTELLIGENCE CONTROLLER (Sections A - G)
+// ============================================================================
+let trendsState = {
+  initialized: false,
+  activeSubTab: 'overview',
+  page: 1,
+  limit: 8,
+  lastPayload: null
+};
+
+function escapeTrendHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function initTrendsIntelligenceModule() {
+  if (!trendsState.initialized) {
+    trendsState.initialized = true;
+    try {
+      const cached = localStorage.getItem('kurdia_trends_intelligence_cache_v1');
+      if (cached) {
+        trendsState.lastPayload = JSON.parse(cached);
+        renderAllTrendsSections(trendsState.lastPayload);
+      }
+    } catch (e) {}
+  }
+  fetchTrendsIntelligenceData(trendsState.page);
+}
+
+function switchTrendsSubTab(tabId) {
+  trendsState.activeSubTab = tabId;
+  document.querySelectorAll('#trendsSectionTabsBar .filter').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.trendstab === tabId);
+  });
+  document.querySelectorAll('.trends-subtab-panel').forEach(panel => {
+    panel.style.display = (panel.id === `trendsTab_${tabId}`) ? 'block' : 'none';
+  });
+  const pagBar = document.getElementById('trendsPaginationBar');
+  if (pagBar) {
+    pagBar.style.display = ['instagram', 'tiktok', 'facebook'].includes(tabId) ? 'flex' : 'none';
+  }
+  if (trendsState.lastPayload) {
+    renderAllTrendsSections(trendsState.lastPayload);
+  }
+}
+
+function applyTrendsFilters(resetPage = 1) {
+  trendsState.page = resetPage;
+  fetchTrendsIntelligenceData(resetPage);
+}
+
+function changeTrendsPage(delta) {
+  const totalPages = trendsState.lastPayload?.pagination?.totalPages || 1;
+  const next = Math.max(1, Math.min(totalPages, trendsState.page + delta));
+  if (next !== trendsState.page) {
+    trendsState.page = next;
+    fetchTrendsIntelligenceData(next);
+  }
+}
+
+async function fetchTrendsIntelligenceData(pageNum = 1) {
+  const loadingEl = document.getElementById('trendsLoadingBanner');
+  const errEl = document.getElementById('trendsErrorBanner');
+  if (loadingEl) loadingEl.style.display = 'block';
+  if (errEl) errEl.style.display = 'none';
+
+  const region = document.getElementById('trendsRegionFilter')?.value || 'all';
+  const lang = document.getElementById('trendsLangFilter')?.value || 'all';
+  const timeframe = document.getElementById('trendsTimeframeFilter')?.value || 'all';
+  const q = document.getElementById('trendsSearchInput')?.value || '';
+
+  const params = new URLSearchParams({
+    region,
+    lang,
+    timeframe,
+    q,
+    page: String(pageNum),
+    limit: String(trendsState.limit)
+  });
+
+  try {
+    const resp = await fetch(`/api/admin/trends?${params.toString()}`, {
+      headers: { 'X-Admin-Key': ADMIN_KEY || '' }
+    });
+    const data = await resp.json();
+    if (!resp.ok || !data.ok) {
+      throw new Error(data.error || 'هەڵە لە وەرگرتنی داتای ترێندەکان');
+    }
+    trendsState.lastPayload = data;
+    try {
+      localStorage.setItem('kurdia_trends_intelligence_cache_v1', JSON.stringify(data));
+    } catch (e) {}
+    renderAllTrendsSections(data);
+  } catch (err) {
+    if (errEl) {
+      errEl.style.display = 'block';
+      errEl.textContent = `⚠️ کێشە لە پەیوەندیکردن بە سێرڤەری ترێندەکان: ${err.message}`;
+    }
+  } finally {
+    if (loadingEl) loadingEl.style.display = 'none';
+  }
+}
+
+async function syncTrendsIntelligenceData() {
+  const btn = document.getElementById('btnSyncTrendsNow');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ خەریکی هاوکاتکردنە...';
+  }
+  try {
+    const resp = await fetch('/api/admin/trends', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Key': ADMIN_KEY || ''
+      },
+      body: JSON.stringify({ action: 'sync' })
+    });
+    const resData = await resp.json();
+    if (resData.ok) {
+      toast(`✅ داتای ترێند و کەشوهەوای ${resData.weatherLocationsUpdated || 9} ناوچە نوێکرایەوە`);
+      await fetchTrendsIntelligenceData(1);
+    } else {
+      toast(`⚠️ ${resData.error || 'Sync failed'}`);
+    }
+  } catch (e) {
+    toast('⚠️ کێشە لە کاتی هاوکاتکردن');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '🔄 هاوکاتکردنی داتا (Sync)';
+    }
+  }
+}
+
+async function runGeminiTrendsIntelligence() {
+  const btn = document.getElementById('btnRunGeminiTrendsAnalysis');
+  const loadingEl = document.getElementById('trendsLoadingBanner');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '🧠 خەریکی شیکردنەوەیە بە Gemini...';
+  }
+  if (loadingEl) {
+    loadingEl.style.display = 'block';
+    loadingEl.textContent = '🧠 Gemini AI خەریکی شیکردنەوەی ترێندەکانی هەولێر، شەقڵاوە، ڕەواندز، سۆران، کۆڕەک و بێخاڵە...';
+  }
+
+  try {
+    const region = document.getElementById('trendsRegionFilter')?.value || 'all';
+    const lang = document.getElementById('trendsLangFilter')?.value || 'all';
+    const timeframe = document.getElementById('trendsTimeframeFilter')?.value || '30d';
+
+    const resp = await fetch('/api/admin/trends/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Key': ADMIN_KEY || ''
+      },
+      body: JSON.stringify({ region, lang, timeframe })
+    });
+    const data = await resp.json();
+    if (!resp.ok || !data.ok) {
+      throw new Error(data.error || 'Gemini analysis error');
+    }
+    if (trendsState.lastPayload) {
+      trendsState.lastPayload.aiReport = data.report;
+      renderAllTrendsSections(trendsState.lastPayload);
+    } else {
+      await fetchTrendsIntelligenceData(1);
+    }
+    if (!['ai_analysis', 'ai_recommendations', 'weekly_report'].includes(trendsState.activeSubTab)) {
+      switchTrendsSubTab('ai_analysis');
+    }
+    toast(data.usedGemini ? '✨ شیکاری نوێ لەلایەن Gemini AI ئامادەکرا!' : '✅ شیکاری زیرەکی بازاڕ نوێکرایەوە');
+  } catch (err) {
+    toast(`⚠️ هەڵە لە شیکاری AI: ${err.message}`);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '🧠 شیکاری زیرەکی Gemini AI';
+    }
+    if (loadingEl) loadingEl.style.display = 'none';
+  }
+}
+
+function renderStatusBadgeHtml(status) {
+  if (status === 'verified_api') {
+    return `<span style="background:rgba(16,185,129,0.2);border:1px solid #10b981;color:#6bf0b3;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px">● Verified Official API</span>`;
+  }
+  if (status === 'manual_import') {
+    return `<span style="background:rgba(56,189,248,0.2);border:1px solid #38bdf8;color:#7dd3fc;font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px">● Verified Admin Import</span>`;
+  }
+  return `<span style="background:rgba(245,158,11,0.16);border:1px solid rgba(245,158,11,0.45);color:#fde68a;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px">🔗 Public Reference (Metrics Require API/Import)</span>`;
+}
+
+function renderPlatformTrendCards(items, platformLabel) {
+  if (!Array.isArray(items) || !items.length) {
+    return `<div class="lang-box spotlight-card" style="text-align:center;color:#94a3b8;padding:24px">هیچ ترێندێک بۆ ئەم فلتەرە لە ${escapeTrendHtml(platformLabel)} نەدۆزرایەوە. فلتەرەکان بگۆڕە یان داتای نوێ زیاد بکە.</div>`;
+  }
+
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">` +
+    items.map(item => {
+      const em = item.engagementMetrics || {};
+      const isMeasured = Boolean(em.isMeasured);
+      const metricsHtml = isMeasured
+        ? `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;padding:8px;border-radius:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);text-align:center">
+            <div><small style="color:#94a3b8;font-size:10px;display:block">Views</small><b style="color:#fff;font-size:12px">${em.views !== null ? Number(em.views).toLocaleString() : 'N/A'}</b></div>
+            <div><small style="color:#94a3b8;font-size:10px;display:block">Likes</small><b style="color:#6bf0b3;font-size:12px">${em.likes !== null ? Number(em.likes).toLocaleString() : 'N/A'}</b></div>
+            <div><small style="color:#94a3b8;font-size:10px;display:block">Comments</small><b style="color:#38bdf8;font-size:12px">${em.comments !== null ? Number(em.comments).toLocaleString() : 'N/A'}</b></div>
+            <div><small style="color:#94a3b8;font-size:10px;display:block">Posts</small><b style="color:#fde68a;font-size:12px">${em.postsCount !== null ? Number(em.postsCount).toLocaleString() : 'N/A'}</b></div>
+          </div>`
+        : `<div style="margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(15,23,42,0.75);border:1px dashed #334155;font-size:11px;color:#94a3b8">
+            🔒 <b style="color:#cbd5e1">ئاماری ژمارەیی (Views/Likes):</b> ${escapeTrendHtml(em.statusLabel || 'Metric Unavailable — Verify via official source link below')}
+          </div>`;
+
+      const deleteBtnHtml = String(item.id || '').startsWith('manual-')
+        ? `<button type="button" class="secondary-btn" style="padding:4px 8px;font-size:10.5px;border-color:#ef4444;color:#fca5a5" onclick="deleteManualTrendItem('${escapeTrendHtml(item.id)}')">🗑 سڕینەوە</button>`
+        : '';
+
+      return `<div class="lang-box spotlight-card" style="margin:0;display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+            <span style="font-weight:900;font-size:13px;color:#38bdf8;direction:ltr">${escapeTrendHtml(item.hashtag)}</span>
+            ${renderStatusBadgeHtml(item.dataAvailabilityStatus)}
+          </div>
+          <h4 style="margin:4px 0 6px;font-size:14px;color:#fff;line-height:1.5">${escapeTrendHtml(item.title)}</h4>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;font-size:11px">
+            <span style="background:#112233;color:#7dd3fc;padding:2px 8px;border-radius:6px">📍 ${escapeTrendHtml(item.destination)}</span>
+            <span style="background:#112233;color:#a7f3d0;padding:2px 8px;border-radius:6px">🏷️ ${escapeTrendHtml(item.topic)}</span>
+            <span style="background:#112233;color:#cbd5e1;padding:2px 8px;border-radius:6px">🗣️ ${String(item.language || 'ku').toUpperCase()}</span>
+            <span style="background:#112233;color:#fde68a;padding:2px 8px;border-radius:6px">⏳ ${escapeTrendHtml(item.timeframe)}</span>
+          </div>
+          ${item.notes ? `<p style="margin:0 0 8px;font-size:11.5px;color:#cbd5e1;line-height:1.6">${escapeTrendHtml(item.notes)}</p>` : ''}
+          ${metricsHtml}
+        </div>
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-size:11px">
+          <div style="color:#94a3b8">
+            <div>📡 سەرچاوە: <b style="color:#e2e8f0">${escapeTrendHtml(item.source)}</b></div>
+            <div>📅 کۆکردنەوە: <span dir="ltr">${escapeTrendHtml(String(item.collectionDate || '').slice(0, 10))}</span> · 📈 ${escapeTrendHtml(item.trendChange || 'Active')}</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            ${deleteBtnHtml}
+            <a href="${escapeTrendHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="secondary-btn" style="text-decoration:none;padding:5px 10px;font-size:11px;border-color:#38bdf8;color:#7dd3fc">↗ سەرچاوەی ڕاستەوخۆ</a>
+          </div>
+        </div>
+      </div>`;
+    }).join('') +
+    `</div>`;
+}
+
+function renderAllTrendsSections(data) {
+  if (!data) return;
+  const ov = data.overview || {};
+  const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+  setTxt('trendsKpiTotal', ov.totalDiscovered ?? 0);
+  setTxt('trendsKpiVerified', ov.verifiedMetricsCount ?? 0);
+  setTxt('trendsKpiPublicRef', ov.publicReferenceCount ?? 0);
+  setTxt('trendsKpiLastUpdate', String(data.lastUpdated || '').slice(0, 16).replace('T', ' '));
+  setTxt('sideTrendsBadge', ov.totalDiscovered ?? 'AI');
+
+  // API Credential Status Pills (Server-side boolean flags only)
+  const credBox = document.getElementById('trendsApiCredStatusPills');
+  if (credBox && data.apiCredentialsStatus) {
+    const cs = data.apiCredentialsStatus;
+    const pill = (ok, label) => `<span style="padding:3px 8px;border-radius:999px;font-weight:800;background:${ok ? 'rgba(16,185,129,0.18)' : 'rgba(148,163,184,0.15)'};color:${ok ? '#6bf0b3' : '#cbd5e1'};border:1px solid ${ok ? '#10b981' : '#334155'}">${ok ? '●' : '○'} ${label}</span>`;
+    credBox.innerHTML =
+      pill(cs.geminiConfigured, 'Gemini AI Server Key') +
+      pill(cs.metaGraphConfigured, 'Meta Graph API') +
+      pill(cs.tiktokApiConfigured, 'TikTok API (Using Public Creative Center)');
+  }
+
+  // Section A: Platform Comparison
+  const platBox = document.getElementById('trendsOverviewPlatformsBox');
+  if (platBox) {
+    const total = Math.max(1, ov.totalDiscovered || 1);
+    const igCount = ov.byPlatform?.instagram || 0;
+    const ttCount = ov.byPlatform?.tiktok || 0;
+    const fbCount = ov.byPlatform?.facebook || 0;
+    const barRow = (name, cnt, color) => {
+      const pct = Math.round((cnt / total) * 100);
+      return `<div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+          <b>${name}</b>
+          <span style="color:#cbd5e1">${cnt} ترێند (${pct}%)</span>
+        </div>
+        <div style="height:8px;background:#0b1622;border-radius:999px;overflow:hidden;border:1px solid #1e293b">
+          <div style="width:${pct}%;height:100%;background:${color};border-radius:999px"></div>
+        </div>
+      </div>`;
+    };
+    platBox.innerHTML =
+      barRow('📸 Instagram (Hashtags & Reels)', igCount, 'linear-gradient(90deg,#ec4899,#a855f7)') +
+      barRow('🎵 TikTok (Creative Center & Viral Tags)', ttCount, 'linear-gradient(90deg,#14b8a6,#38bdf8)') +
+      barRow('📘 Facebook (Public Pages & Groups)', fbCount, 'linear-gradient(90deg,#3b82f6,#60a5fa)');
+  }
+
+  // Section A: Most Popular Topics
+  const topicsBox = document.getElementById('trendsOverviewTopicsBox');
+  if (topicsBox) {
+    const topics = ov.topTopics || [];
+    topicsBox.innerHTML = topics.length
+      ? topics.map((t, idx) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,0.03);margin-bottom:6px;font-size:12px">
+          <span><b style="color:#6bf0b3">#${idx + 1}</b> ${escapeTrendHtml(t.topic)}</span>
+          <span style="background:rgba(16,185,129,0.16);color:#6bf0b3;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800">${t.count} سەرچاوە</span>
+        </div>`).join('')
+      : `<small style="color:#94a3b8">هیچ بابەتێک نەدۆزرایەوە</small>`;
+  }
+
+  // Section A: Most Discussed Destinations + Live Open-Meteo Weather
+  const destBox = document.getElementById('trendsOverviewDestinationsBox');
+  if (destBox) {
+    const dests = ov.topDestinations || [];
+    destBox.innerHTML = dests.length
+      ? dests.map(d => {
+          const w = d.weather;
+          const weatherBadge = w && w.tempC !== undefined
+            ? `<span style="background:rgba(56,189,248,0.16);color:#7dd3fc;padding:2px 8px;border-radius:999px;font-size:10.5px;direction:ltr">⛅ ${w.tempC}°C · ${w.windKmh} km/h</span>`
+            : '';
+          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,0.03);margin-bottom:6px;font-size:12px;gap:6px;flex-wrap:wrap">
+            <b>📍 ${escapeTrendHtml(d.destination)}</b>
+            <div style="display:flex;gap:6px;align-items:center">
+              ${weatherBadge}
+              <span style="background:rgba(245,158,11,0.18);color:#fde68a;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800">${d.count} ترێند</span>
+            </div>
+          </div>`;
+        }).join('')
+      : `<small style="color:#94a3b8">هیچ شوێنێک نەدۆزرایەوە</small>`;
+  }
+
+  // Section A: Emerging Hashtags
+  const tagsBox = document.getElementById('trendsOverviewHashtagsBox');
+  if (tagsBox) {
+    const tags = ov.emergingHashtags || [];
+    tagsBox.innerHTML = tags.map(tg => `<a href="${escapeTrendHtml(tg.url)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;background:#0d1b2a;border:1px solid #23384d;color:#7dd3fc;padding:6px 11px;border-radius:999px;font-size:11.5px;font-weight:800;display:inline-flex;align-items:center;gap:6px">
+      <span dir="ltr">${escapeTrendHtml(tg.hashtag)}</span>
+      <small style="color:#94a3b8;font-size:9.5px">${escapeTrendHtml(tg.platform)}</small>
+    </a>`).join('');
+  }
+
+  // Sections B, C, D: Platform Lists
+  const allFiltered = Array.isArray(data.allFilteredTrends) ? data.allFilteredTrends : (data.trends || []);
+  const igItems = allFiltered.filter(t => t.platform === 'instagram');
+  const ttItems = allFiltered.filter(t => t.platform === 'tiktok');
+  const fbItems = allFiltered.filter(t => t.platform === 'facebook');
+
+  const igContainer = document.getElementById('trendsInstagramContainer');
+  if (igContainer) igContainer.innerHTML = renderPlatformTrendCards(igItems, 'Instagram');
+
+  const ttContainer = document.getElementById('trendsTiktokContainer');
+  if (ttContainer) ttContainer.innerHTML = renderPlatformTrendCards(ttItems, 'TikTok');
+
+  const fbContainer = document.getElementById('trendsFacebookContainer');
+  if (fbContainer) fbContainer.innerHTML = renderPlatformTrendCards(fbItems, 'Facebook');
+
+  // Pagination info
+  const pagInfo = document.getElementById('trendsPaginationInfo');
+  if (pagInfo && data.pagination) {
+    pagInfo.textContent = `پەڕەی ${data.pagination.page} لە ${data.pagination.totalPages} · کۆی گشتی: ${data.pagination.totalItems} ترێند`;
+  }
+
+  // Sections E, F, G: AI Report
+  const report = data.aiReport;
+  if (report) {
+    renderTrendsAiAnalysisSection(report);
+    renderTrendsAiRecommendationsSection(report);
+    renderTrendsWeeklyReportSection(report);
+  }
+}
+
+function renderTrendsAiAnalysisSection(report) {
+  const container = document.getElementById('trendsAiAnalysisContainer');
+  const srcLabel = document.getElementById('trendsAiSourceLabel');
+  if (srcLabel && report.analysisSource) {
+    srcLabel.textContent = `سەرچاوەی شیکاری: ${report.analysisSource} · کاتی دروستکردن: ${String(report.generatedAt || '').slice(0, 16).replace('T', ' ')}`;
+  }
+  if (!container || !report.aiAnalysis) return;
+  const a = report.aiAnalysis;
+
+  const top10TopicsHtml = (a.top10Topics || []).map(item => `
+    <div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap">
+        <b style="color:#f3e8ff;font-size:13px">#${item.rank}. ${escapeTrendHtml(item.topic)}</b>
+        <span style="background:rgba(168,85,247,0.2);color:#e9d5ff;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:800">خواست: ${escapeTrendHtml(item.demandLevel)}</span>
+      </div>
+      <p style="margin:5px 0 0;font-size:11.5px;color:#cbd5e1;line-height:1.6">${escapeTrendHtml(item.summary)}</p>
+    </div>
+  `).join('');
+
+  const top10DestHtml = (a.top10Destinations || []).map(item => `
+    <div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <b style="color:#fde68a;font-size:13px">#${item.rank}. ${escapeTrendHtml(item.destination)}</b>
+        <small style="display:block;color:#94a3b8;font-size:11px">بەشداربووان: ${escapeTrendHtml(item.targetAudience)} · وەرز: ${escapeTrendHtml(item.bestSeason)}</small>
+      </div>
+      <span style="background:rgba(56,189,248,0.16);color:#7dd3fc;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:800">${escapeTrendHtml(item.weatherNote || '')}</span>
+    </div>
+  `).join('');
+
+  const packagesHtml = (a.recommendedPackages || []).map(pkg => `
+    <div class="lang-box spotlight-card" style="margin:0;border-color:rgba(16,185,129,0.35)">
+      <h4 style="margin:0 0 6px;color:#6bf0b3;font-size:14px">🎒 ${escapeTrendHtml(pkg.name)}</h4>
+      <div style="font-size:11.5px;color:#fde68a;margin-bottom:6px;font-weight:800">💰 نرخی پێشنیارکراو: ${escapeTrendHtml(pkg.suggestedPrice)} · 👥 بۆ: ${escapeTrendHtml(pkg.target)}</div>
+      <p style="margin:0;font-size:12px;color:#cbd5e1;line-height:1.6">${escapeTrendHtml(pkg.includes)}</p>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-bottom:12px">
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 10px;color:#e9d5ff">🔟 باشترین ١٠ بابەتی گەشتیاری (Top 10 Travel Topics)</h4>
+        ${top10TopicsHtml}
+      </div>
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 10px;color:#fde68a">🏔️ باشترین ١٠ شوێنی پێشنیارکراو (Top 10 Potential Destinations)</h4>
+        ${top10DestHtml}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:12px">
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 8px;color:#38bdf8">👨‍👩‍👧‍👦 خواستی گەشتی خێزانی (Family Travel Demand)</h4>
+        <p style="margin:0;font-size:12px;color:#e2e8f0;line-height:1.7">${escapeTrendHtml(a.familyTravelDemand)}</p>
+      </div>
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 8px;color:#f472b6">⚡ خواستی گەشتی گەنجان (Youth Travel Demand)</h4>
+        <p style="margin:0;font-size:12px;color:#e2e8f0;line-height:1.7">${escapeTrendHtml(a.youthTravelDemand)}</p>
+      </div>
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 8px;color:#6bf0b3">⛺ خواستی شاخەوانی و کەمپینگ (Camping & Hiking Demand)</h4>
+        <p style="margin:0;font-size:12px;color:#e2e8f0;line-height:1.7">${escapeTrendHtml(a.campingAndHikingDemand)}</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px;margin-bottom:12px">
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 8px;color:#7dd3fc">🥾 چالاکییە هەرە سەرکەوتووەکان (Most Promising Activities)</h4>
+        <ul style="margin:0;padding-right:18px;font-size:12px;color:#cbd5e1;line-height:1.8">
+          ${(a.promisingActivities || []).map(act => `<li>${escapeTrendHtml(act)}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 8px;color:#fde68a">✨ ئارەزووە نوێیەکانی گەشتیاران (Emerging Travel Interests)</h4>
+        <ul style="margin:0;padding-right:18px;font-size:12px;color:#cbd5e1;line-height:1.8">
+          ${(a.emergingInterests || []).map(intItem => `<li>${escapeTrendHtml(intItem)}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <h4 style="margin:14px 0 8px;color:#6bf0b3">🎒 پاکێجە پێشنیارکراوەکان (Recommended Travel Packages)</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+      ${packagesHtml}
+    </div>
+  `;
+}
+
+function renderTrendsAiRecommendationsSection(report) {
+  const container = document.getElementById('trendsAiRecommendationsContainer');
+  if (!container || !report.aiRecommendations) return;
+  const r = report.aiRecommendations;
+  const nt = r.nextTripToOrganize || {};
+  const da = r.destinationToAdvertise || {};
+
+  const kuTags = (r.recommendedHashtags?.ku || []).join(' ');
+  const arTags = (r.recommendedHashtags?.ar || []).join(' ');
+  const enTags = (r.recommendedHashtags?.en || []).join(' ');
+
+  const adsHtml = (r.fiveAdvertisingIdeas || []).map(ad => `
+    <div class="lang-box spotlight-card" style="margin:0;border-color:rgba(56,189,248,0.35)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px">
+        <b style="color:#7dd3fc;font-size:13.5px">${escapeTrendHtml(ad.title)}</b>
+        <span style="background:rgba(56,189,248,0.18);color:#bae6fd;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:800">${escapeTrendHtml(ad.platform)}</span>
+      </div>
+      <p style="margin:0 0 6px;font-size:12px;color:#e2e8f0;line-height:1.6">🎬 <b>بیرۆکە (Hook):</b> ${escapeTrendHtml(ad.hook)}</p>
+      <div style="font-size:11.5px;color:#6bf0b3;font-weight:800">🎯 بانگهێشتنامە (CTA): ${escapeTrendHtml(ad.cta)}</div>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:12px">
+      <div class="lang-box spotlight-card" style="margin:0;border-color:#10b981;background:linear-gradient(145deg,#07241c,#09141e)">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;flex-wrap:wrap">
+          <div>
+            <span style="font-size:10.5px;color:#6bf0b3;font-weight:900">١. کام گەشت لەم هەفتەیە ڕێکبخەین؟ (Next Trip to Organize)</span>
+            <h4 style="margin:4px 0;color:#fff;font-size:15px">🧭 ${escapeTrendHtml(nt.title)}</h4>
+          </div>
+          <button type="button" class="secondary-btn" style="background:#0c9b61;color:#fff;border:0;font-weight:800" onclick="prefillTripFromAiRecommendation()">＋ دروستکردنی ئەم گەشتە</button>
+        </div>
+        <div style="font-size:12px;color:#fde68a;margin:6px 0;font-weight:800">📍 ${escapeTrendHtml(nt.location)} · 💰 ${escapeTrendHtml(nt.suggestedPrice)} · 🕕 ${escapeTrendHtml(nt.suggestedTime)}</div>
+        <p style="margin:0;font-size:12px;color:#cbd5e1;line-height:1.65">${escapeTrendHtml(nt.rationale)}</p>
+      </div>
+
+      <div class="lang-box spotlight-card" style="margin:0;border-color:#f59e0b;background:linear-gradient(145deg,#261907,#09141e)">
+        <span style="font-size:10.5px;color:#fde68a;font-weight:900">٢. کام شوێن ڕیکلامی بۆ بکەین؟ (Destination to Advertise)</span>
+        <h4 style="margin:4px 0 8px;color:#fff;font-size:15px">📢 ${escapeTrendHtml(da.destination)}</h4>
+        <p style="margin:0 0 10px;font-size:12px;color:#cbd5e1;line-height:1.65">${escapeTrendHtml(da.reason)}</p>
+        <div style="padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);font-size:12px;color:#6bf0b3">
+          <b>٣. باشترین جۆری پاکێج:</b> ${escapeTrendHtml(r.attractingPackageType)}
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:12px">
+      <div class="lang-box spotlight-card" style="margin:0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <h4 style="margin:0;color:#38bdf8">٤. کام هاشتاگ بەکاربهێنین؟ (Recommended Hashtags)</h4>
+          <button type="button" class="secondary-btn" style="padding:4px 10px;font-size:11px" onclick="navigator.clipboard.writeText('${escapeTrendHtml(kuTags + ' ' + arTags + ' ' + enTags)}');toast('📋 هەموو هاشتاگەکان کۆپی کران!')">📋 کۆپیکردنی هەمووی</button>
+        </div>
+        <div style="font-size:12px;line-height:1.8;color:#e2e8f0">
+          <div style="margin-bottom:6px"><b style="color:#6bf0b3">کوردی:</b> <span dir="ltr">${escapeTrendHtml(kuTags)}</span></div>
+          <div style="margin-bottom:6px"><b style="color:#fde68a">عەرەبی:</b> <span dir="ltr">${escapeTrendHtml(arTags)}</span></div>
+          <div><b style="color:#7dd3fc">English:</b> <span dir="ltr">${escapeTrendHtml(enTags)}</span></div>
+        </div>
+      </div>
+
+      <div class="lang-box spotlight-card" style="margin:0">
+        <h4 style="margin:0 0 8px;color:#f472b6">٥. چ ناوەڕۆکێک لە سۆشیال میدیا بڵاوبکەینەوە؟</h4>
+        <ul style="margin:0;padding-right:18px;font-size:12px;color:#cbd5e1;line-height:1.8">
+          ${(r.socialContentPlan || []).map(step => `<li>${escapeTrendHtml(step)}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <h4 style="margin:14px 0 8px;color:#7dd3fc">💡 ٥ بیرۆکەی ڕیکلام لەسەر بنەمای ترێندە کۆکراوەکان (5 Advertising Ideas)</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+      ${adsHtml}
+    </div>
+  `;
+}
+
+function renderTrendsWeeklyReportSection(report) {
+  const container = document.getElementById('trendsWeeklyReportContainer');
+  if (!container || !report.weeklyReport) return;
+  const w = report.weeklyReport;
+
+  container.innerHTML = `
+    <div class="lang-box spotlight-card" style="border-color:rgba(245,158,11,0.4)">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:12px">
+        <div>
+          <h3 style="margin:0;color:#fff;font-size:16px">📊 ${escapeTrendHtml(w.reportPeriod)}</h3>
+          <small style="color:#94a3b8;font-size:11px">کاتی دەرچوون: <span dir="ltr">${escapeTrendHtml(String(w.generatedAt || '').slice(0, 19).replace('T', ' '))}</span></small>
+        </div>
+        <span style="background:rgba(245,158,11,0.2);color:#fde68a;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800">KURDIA INTELLIGENCE REPORT</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:12px">
+        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06)">
+          <h4 style="margin:0 0 8px;color:#6bf0b3">📈 گۆڕانکارییەکانی ترێندی هەفتە (Weekly Trend Changes)</h4>
+          <ul style="margin:0;padding-right:18px;font-size:12px;color:#e2e8f0;line-height:1.8">
+            ${(w.weeklyTrendChanges || []).map(c => `<li>${escapeTrendHtml(c)}</li>`).join('')}
+          </ul>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06)">
+          <h4 style="margin:0 0 8px;color:#38bdf8">⚖️ بەراوردی پلاتفۆرمەکان (Platform Comparisons)</h4>
+          ${(w.platformComparisons || []).map(p => `<div style="margin-bottom:8px;font-size:12px"><b style="color:#7dd3fc">${escapeTrendHtml(p.platform)}:</b> <span style="color:#cbd5e1">${escapeTrendHtml(p.strength)}</span></div>`).join('')}
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-bottom:12px">
+        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+          <h4 style="margin:0 0 8px;color:#fde68a">🏔️ دیارترین شوێنەکان (Top Destinations)</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${(w.topDestinationsSummary || []).map(d => `<span style="background:#112233;color:#fde68a;padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:700">${escapeTrendHtml(d)}</span>`).join('')}
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:10px">
+          <h4 style="margin:0 0 8px;color:#f472b6">🏷️ بەناوبانگترین هاشتاگەکان (Popular Hashtags)</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:6px" dir="ltr">
+            ${(w.popularHashtagsSummary || []).map(h => `<span style="background:#112233;color:#f472b6;padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:700">${escapeTrendHtml(h)}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.08);padding:12px;border-radius:10px;border:1px solid rgba(16,185,129,0.25);margin-bottom:12px">
+        <h4 style="margin:0 0 6px;color:#6bf0b3">🧭 گەشت و ڕیکلامی پێشنیارکراوی هەفتە</h4>
+        <ul style="margin:0 0 8px;padding-right:18px;font-size:12px;color:#e2e8f0;line-height:1.7">
+          ${(w.recommendedTripsSummary || []).map(t => `<li>${escapeTrendHtml(t)}</li>`).join('')}
+        </ul>
+        <div style="font-size:12px;color:#cbd5e1"><b>📢 ستراتیژی ڕیکلام:</b> ${escapeTrendHtml(w.advertisingRecommendationsSummary)}</div>
+      </div>
+
+      <div style="background:#050c14;padding:12px;border-radius:10px;border:1px solid #1e293b">
+        <h4 style="margin:0 0 6px;color:#94a3b8;font-size:12px">📡 سەرچاوەکانی داتا و بەرواری کۆکردنەوە (Data Sources & Collection Dates)</h4>
+        <ul style="margin:0;padding-right:18px;font-size:11px;color:#94a3b8;line-height:1.7">
+          ${(w.dataSourcesAndDates || []).map(s => `<li>${escapeTrendHtml(s)}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+function prefillTripFromAiRecommendation() {
+  const nt = trendsState.lastPayload?.aiReport?.aiRecommendations?.nextTripToOrganize;
+  createNewTrip(false);
+  if (!nt) return;
+  setTimeout(() => {
+    const setEl = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+    ['ku', 'ar', 'en'].forEach(l => {
+      setEl(`tripTitle_${l}`, nt.title);
+      setEl(`tripLocation_${l}`, nt.location);
+      setEl(`tripPrice_${l}`, nt.suggestedPrice);
+      setEl(`tripTime_${l}`, nt.suggestedTime);
+      setEl(`tripDesc_${l}`, nt.rationale);
+    });
+    toast('✨ فۆڕمی گەشتی نوێ بە پێشنیاری AI پڕکرایەوە!');
+  }, 160);
+}
+
+function openManualTrendImportModal(defaultPlatform) {
+  const modal = document.getElementById('manualTrendImportModal');
+  if (!modal) return;
+  if (defaultPlatform) {
+    const sel = document.getElementById('importTrendPlatform');
+    if (sel) sel.value = defaultPlatform;
+  }
+  modal.style.display = 'flex';
+}
+
+function closeManualTrendImportModal() {
+  const modal = document.getElementById('manualTrendImportModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function submitManualTrendImport() {
+  const platform = document.getElementById('importTrendPlatform')?.value || 'tiktok';
+  const destination = document.getElementById('importTrendDestination')?.value || 'Korek Mountain';
+  const hashtag = (document.getElementById('importTrendHashtag')?.value || '').trim();
+  const topic = (document.getElementById('importTrendTopic')?.value || '').trim();
+  const language = document.getElementById('importTrendLang')?.value || 'ku';
+  const timeframe = document.getElementById('importTrendTimeframe')?.value || '30d';
+  const title = (document.getElementById('importTrendTitle')?.value || '').trim();
+  const url = (document.getElementById('importTrendUrl')?.value || '').trim();
+  const views = document.getElementById('importTrendViews')?.value || '';
+  const likes = document.getElementById('importTrendLikes')?.value || '';
+  const comments = document.getElementById('importTrendComments')?.value || '';
+  const postsCount = document.getElementById('importTrendPosts')?.value || '';
+  const trendChange = (document.getElementById('importTrendChange')?.value || '').trim();
+
+  if (!hashtag || !title) {
+    return toast('⚠️ تکایە هاشتاگ و ناونیشانی ترێندەکە بنووسە');
+  }
+
+  try {
+    const resp = await fetch('/api/admin/trends', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Key': ADMIN_KEY || ''
+      },
+      body: JSON.stringify({
+        action: 'import',
+        item: {
+          platform,
+          destination,
+          hashtag: hashtag.startsWith('#') ? hashtag : `#${hashtag}`,
+          topic: topic || 'Travel & Adventure',
+          language,
+          timeframe,
+          title,
+          url: url || 'https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?countryCode=IQ',
+          views,
+          likes,
+          comments,
+          postsCount,
+          trendChange
+        }
+      })
+    });
+    const resData = await resp.json();
+    if (resData.ok) {
+      closeManualTrendImportModal();
+      toast('✅ داتای ترێند بە سەرکەوتوویی تۆمارکرا!');
+      await fetchTrendsIntelligenceData(1);
+    } else {
+      toast(`⚠️ ${resData.error || 'Import failed'}`);
+    }
+  } catch (err) {
+    toast('⚠️ هەڵە لە کاتی پاشەکەوتکردنی ترێند');
+  }
+}
+
+async function deleteManualTrendItem(id) {
+  if (!id) return;
+  try {
+    const resp = await fetch('/api/admin/trends', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Key': ADMIN_KEY || ''
+      },
+      body: JSON.stringify({ action: 'delete', id })
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      toast('🗑️ ترێندە زیادکراوەکە سڕایەوە');
+      await fetchTrendsIntelligenceData(1);
+    }
+  } catch (e) {}
+}
+
+function exportTrendsWeeklyReportJson() {
+  const payload = trendsState.lastPayload || {};
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `kurdia-travel-trends-report-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+}
+
+function exportTrendsWeeklyReportMarkdown() {
+  const r = trendsState.lastPayload?.aiReport;
+  if (!r) return toast('⚠️ هیچ ڕاپۆرتێک ئامادە نییە');
+  const w = r.weeklyReport || {};
+  const rec = r.aiRecommendations || {};
+  const md = [
+    `# KURDIA ADVENTURE — AI Travel Trends Intelligence Weekly Report`,
+    `- **Period:** ${w.reportPeriod || ''}`,
+    `- **Generated At:** ${w.generatedAt || new Date().toISOString()}`,
+    `- **Analysis Engine:** ${r.analysisSource || 'Gemini AI'}`,
+    ``,
+    `## 1. Weekly Trend Changes`,
+    ...(w.weeklyTrendChanges || []).map(x => `- ${x}`),
+    ``,
+    `## 2. Platform Comparisons`,
+    ...(w.platformComparisons || []).map(p => `- **${p.platform}:** ${p.strength}`),
+    ``,
+    `## 3. Top Destinations`,
+    ...(w.topDestinationsSummary || []).map(d => `- ${d}`),
+    ``,
+    `## 4. Popular Hashtags`,
+    (w.popularHashtagsSummary || []).join(' '),
+    ``,
+    `## 5. Next Recommended Trip`,
+    `- **Title:** ${rec.nextTripToOrganize?.title || ''}`,
+    `- **Location:** ${rec.nextTripToOrganize?.location || ''}`,
+    `- **Suggested Price:** ${rec.nextTripToOrganize?.suggestedPrice || ''}`,
+    ``,
+    `## 6. Data Sources & Collection Dates`,
+    ...(w.dataSourcesAndDates || []).map(s => `- ${s}`)
+  ].join('\n');
+
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `kurdia-weekly-trends-${new Date().toISOString().slice(0, 10)}.md`;
+  a.click();
+}
 </script>
 </body>
 </html>

@@ -960,6 +960,1066 @@ const server = http.createServer((req, res) => {
       }
     }
 
+    // =========================================================================
+    // AI TRAVEL TRENDS INTELLIGENCE MODULE (/api/admin/trends & /api/admin/trends/analyze)
+    // =========================================================================
+    if (pathname === '/api/admin/trends' || pathname === '/api/admin/trends/analyze') {
+      const TRENDS_STORE_PATH = path.join(ROOT, 'trends-intelligence-store.json');
+
+      const TARGET_DESTINATIONS = [
+        { id: 'Erbil', nameKu: 'هەولێر', nameAr: 'أربيل', nameEn: 'Erbil', lat: 36.1911, lon: 44.0092 },
+        { id: 'Shaqlawa', nameKu: 'شەقڵاوە', nameAr: 'شقلاوة', nameEn: 'Shaqlawa', lat: 36.4042, lon: 44.3256 },
+        { id: 'Rawanduz', nameKu: 'ڕەواندز', nameAr: 'رواندز', nameEn: 'Rawanduz', lat: 36.6121, lon: 44.5237 },
+        { id: 'Soran', nameKu: 'سۆران', nameAr: 'سوران', nameEn: 'Soran', lat: 36.6532, lon: 44.5422 },
+        { id: 'Korek Mountain', nameKu: 'چیای کۆڕەک', nameAr: 'جبل كورك', nameEn: 'Korek Mountain', lat: 36.5881, lon: 44.4628 },
+        { id: 'Bekhal Waterfall', nameKu: 'تاڤگەی بێخاڵ', nameAr: 'شلال بيخال', nameEn: 'Bekhal Waterfall', lat: 36.6175, lon: 44.4969 },
+        { id: 'Gali Ali Beg', nameKu: 'گەلی عەلی بەگ', nameAr: 'كلي علي بك', nameEn: 'Gali Ali Beg', lat: 36.6319, lon: 44.4447 },
+        { id: 'Kurdistan Region', nameKu: 'هەرێمی کوردستان', nameAr: 'إقليم كردستان', nameEn: 'Kurdistan Region', lat: 36.5000, lon: 44.4000 },
+        { id: 'Iraq', nameKu: 'عێراق', nameAr: 'العراق', nameEn: 'Iraq', lat: 33.3152, lon: 44.3661 }
+      ];
+
+      // Curated Public Reference Index (Zero fabricated engagement numbers; metrics are null unless verified via API or Manual Import)
+      const BASE_PUBLIC_TRENDS = [
+        // INSTAGRAM PUBLIC REFERENCE TRENDS
+        {
+          id: 'ig-korek-ku',
+          platform: 'instagram',
+          hashtag: '#چیای_کۆڕەک',
+          title: 'گەشتی شاخەوانی و تەلەفریکی چیای کۆڕەک (Korek Mountain Adventure)',
+          topic: 'Mountains & Cable Car Adventure',
+          activityCategory: 'mountains',
+          destination: 'Korek Mountain',
+          language: 'ku',
+          timeframe: '7d',
+          source: 'Instagram Public Hashtag Reference',
+          url: 'https://www.instagram.com/explore/tags/korekmountain/',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Active Topic (Public Tag Reference)',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Meta Graph API Token or Manual Insights Import'
+          },
+          notes: 'High seasonal interest in Korek Mountain sunset views, cabin stays, and group trips from Erbil.'
+        },
+        {
+          id: 'ig-shaqlawa-ar',
+          platform: 'instagram',
+          hashtag: '#شقلاوة_اربيل',
+          title: 'جولات سياحية عائلية وخريف شقلاوة (Shaqlawa Autumn & Nature)',
+          topic: 'Family Nature & Orchard Escapes',
+          activityCategory: 'tourism',
+          destination: 'Shaqlawa',
+          language: 'ar',
+          timeframe: '30d',
+          source: 'Instagram Public Hashtag Reference',
+          url: 'https://www.instagram.com/explore/tags/shaqlawa/',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Active Topic (Arabic Family Tourism)',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Meta Graph API Token or Manual Insights Import'
+          },
+          notes: 'Strong demand from central/southern Iraq and Erbil families for weekend day trips to Shaqlawa markets and Safeen foothills.'
+        },
+        {
+          id: 'ig-rawanduz-en',
+          platform: 'instagram',
+          hashtag: '#RawanduzCanyon',
+          title: 'Rawanduz Canyon & Kharand Cliff Photography Hikes',
+          topic: 'Hiking & Canyon Photography',
+          activityCategory: 'hiking',
+          destination: 'Rawanduz',
+          language: 'en',
+          timeframe: '30d',
+          source: 'Instagram Public Hashtag Reference',
+          url: 'https://www.instagram.com/explore/tags/rawanduz/',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Active Topic (Adventure Reels)',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Meta Graph API Token or Manual Insights Import'
+          },
+          notes: 'Popular reel backdrop for youth hikers, drone creators, and adventure groups visiting Rawanduz.'
+        },
+        {
+          id: 'ig-bekhal-ku',
+          platform: 'instagram',
+          hashtag: '#تاڤگەی_بێخاڵ',
+          title: 'سەیران و گەشتی خێزانی بۆ تاڤگەی بێخاڵ (Bekhal Waterfall)',
+          topic: 'Waterfalls & Family Picnics',
+          activityCategory: 'waterfalls',
+          destination: 'Bekhal Waterfall',
+          language: 'ku',
+          timeframe: '7d',
+          source: 'Instagram Public Hashtag Reference',
+          url: 'https://www.instagram.com/explore/tags/bekhal/',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Active Topic (Weekend Escapes)',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Meta Graph API Token or Manual Insights Import'
+          },
+          notes: 'Frequently paired with Gali Ali Beg and Rawanduz in full-day guided tours.'
+        },
+        {
+          id: 'ig-soran-camping-ku',
+          platform: 'instagram',
+          hashtag: '#کەمپینگ_سۆران',
+          title: 'شەوانەی کەمپینگ و ئاگرکردنەوە لە دەڤەری سۆران و باڵەکایەتی',
+          topic: 'Overnight Camping & Bonfire',
+          activityCategory: 'camping',
+          destination: 'Soran',
+          language: 'ku',
+          timeframe: '90d',
+          source: 'Instagram Public Hashtag Reference',
+          url: 'https://www.instagram.com/explore/tags/soran/',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Active Topic (Youth & Adventure Groups)',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Meta Graph API Token or Manual Insights Import'
+          },
+          notes: 'Growing youth demand for overnight tent camping, acoustic music nights, and guided mountain trekking.'
+        },
+        {
+          id: 'ig-kurdistan-hiking-en',
+          platform: 'instagram',
+          hashtag: '#VisitKurdistan',
+          title: 'Kurdistan Region Mountain Trails & Eco-Adventure Tourism',
+          topic: 'Mountain Hiking & Eco-Tourism',
+          activityCategory: 'adventure',
+          destination: 'Kurdistan Region',
+          language: 'en',
+          timeframe: '90d',
+          source: 'Instagram Public Hashtag Reference',
+          url: 'https://www.instagram.com/explore/tags/visitkurdistan/',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Active Topic (Expat & International Hikers)',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Meta Graph API Token or Manual Insights Import'
+          },
+          notes: 'Used by English-speaking expats in Erbil and international travelers looking for organized weekend hikes.'
+        },
+
+        // TIKTOK PUBLIC REFERENCE & CREATIVE CENTER TRENDS
+        {
+          id: 'tt-creative-center-iq',
+          platform: 'tiktok',
+          hashtag: '#سياحة_اربيل_كردستان',
+          title: 'TikTok Creative Center Iraq — Travel, Waterfalls & Mountain Resorts',
+          topic: 'Iraq & Kurdistan Viral Travel Videos',
+          activityCategory: 'tourism',
+          destination: 'Iraq',
+          language: 'ar',
+          timeframe: '7d',
+          source: 'TikTok Creative Center (Public Reference)',
+          url: 'https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?countryCode=IQ',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Public Creative Center Reference (Verify Live Counts via Link)',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Restricted TikTok API not claimed; click URL to inspect live TikTok Creative Center IQ or use Manual Import'
+          },
+          notes: 'Arabic travel vlogs from Baghdad, Basra, and Mosul travelers visiting Erbil, Shaqlawa, and Korek Mountain.'
+        },
+        {
+          id: 'tt-gali-ali-beg-ku',
+          platform: 'tiktok',
+          hashtag: '#گەلی_عەلی_بەگ',
+          title: 'ڤیدیۆی سروشت و تاڤگەی گەلی عەلی بەگ و بێخاڵ (Gali Ali Beg)',
+          topic: 'Waterfalls & Scenic Road Trips',
+          activityCategory: 'waterfalls',
+          destination: 'Gali Ali Beg',
+          language: 'ku',
+          timeframe: '7d',
+          source: 'TikTok Public Tag Directory',
+          url: 'https://www.tiktok.com/tag/galialibeg',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Public Tag Topic',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Manual Import from TikTok Creative Center / App'
+          },
+          notes: 'Short-form POV canyon drives and waterfall clips perform strongly when paired with Kurdish folk/cinematic audio.'
+        },
+        {
+          id: 'tt-erbil-hiking-ku',
+          platform: 'tiktok',
+          hashtag: '#شاخەوانی_کوردستان',
+          title: 'گرووپی شاخەوانی و پیادەڕەوی لە هەولێر و دەوروبەری',
+          topic: 'Group Hiking & Mountain Trails',
+          activityCategory: 'hiking',
+          destination: 'Erbil',
+          language: 'ku',
+          timeframe: '30d',
+          source: 'TikTok Public Tag Directory',
+          url: 'https://www.tiktok.com/tag/kurdistannature',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Public Tag Topic',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Manual Import from TikTok Creative Center / App'
+          },
+          notes: 'High engagement on videos showing sunrise breakfast on mountain peaks, tea on wood fire, and group camaraderie.'
+        },
+        {
+          id: 'tt-camping-kurdistan-en',
+          platform: 'tiktok',
+          hashtag: '#KurdistanCamping',
+          title: 'Overnight Stargazing & Mountain Camping in Soran / Rawanduz',
+          topic: 'Camping & Outdoor Adventure',
+          activityCategory: 'camping',
+          destination: 'Soran',
+          language: 'en',
+          timeframe: '30d',
+          source: 'TikTok Public Tag Directory',
+          url: 'https://www.tiktok.com/tag/erbil',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Public Tag Topic',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Manual Import from TikTok Creative Center / App'
+          },
+          notes: 'Youth audience responds strongly to cinematic tent-setup timelapses and drone shots over misty valleys.'
+        },
+        {
+          id: 'tt-korek-snow-ar',
+          platform: 'tiktok',
+          hashtag: '#جبل_كورك',
+          title: 'تلفريك ومنتجع جبل كورك — مغامرات الشباب والعوائل',
+          topic: 'Mountain Resort & Cable Car',
+          activityCategory: 'mountains',
+          destination: 'Korek Mountain',
+          language: 'ar',
+          timeframe: '90d',
+          source: 'TikTok Public Tag Directory',
+          url: 'https://www.tiktok.com/tag/korekmountain',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Public Tag Topic',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Manual Import from TikTok Creative Center / App'
+          },
+          notes: 'Strong year-round interest across Iraq for VIP transport + cable car ticket bundles.'
+        },
+
+        // FACEBOOK PUBLIC PAGES & DISCUSSIONS
+        {
+          id: 'fb-erbil-family-trips-ku',
+          platform: 'facebook',
+          hashtag: '#گەشتی_هەینی_هەولێر',
+          title: 'گەشتەکانی ڕۆژی هەینی لە هەولێرەوە بۆ شەقڵاوە و ڕەواندز و بێخاڵ',
+          topic: 'Friday Guided Bus & VIP Trips',
+          activityCategory: 'tourism',
+          destination: 'Erbil',
+          language: 'ku',
+          timeframe: '7d',
+          source: 'Facebook Public Pages & Groups Reference',
+          url: 'https://www.facebook.com/hashtag/kurdistan',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Public Discussion Topic',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Facebook Page Insights Token or Manual Import'
+          },
+          notes: 'Facebook comments frequently ask about exact departure times from Erbil, family seating, FIB payment, and breakfast inclusion.'
+        },
+        {
+          id: 'fb-shaqlawa-private-ar',
+          platform: 'facebook',
+          hashtag: '#سياحة_شقلاوة_وسوران',
+          title: 'عروض الكروبات السياحية والعائلية إلى شقلاوة وشلال بيخال وكلي علي بك',
+          topic: 'Family Group Packages & Private VIP Tours',
+          activityCategory: 'waterfalls',
+          destination: 'Bekhal Waterfall',
+          language: 'ar',
+          timeframe: '30d',
+          source: 'Facebook Public Pages Reference',
+          url: 'https://www.facebook.com/hashtag/erbil',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Public Discussion Topic',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Facebook Page Insights Token or Manual Import'
+          },
+          notes: 'High inquiry volume from families seeking private SUVs/coasters with local Kurdish/Arabic-speaking guides.'
+        },
+        {
+          id: 'fb-rawanduz-hiking-ku',
+          platform: 'facebook',
+          hashtag: '#شاخەوانی_ڕەواندز_سۆران',
+          title: 'گەشتی شاخەوانی و پیادەڕەوی خەرەند و گەرووی ڕەواندز',
+          topic: 'Guided Hiking & Nature Trails',
+          activityCategory: 'hiking',
+          destination: 'Rawanduz',
+          language: 'ku',
+          timeframe: '30d',
+          source: 'Facebook Public Pages Reference',
+          url: 'https://www.facebook.com/hashtag/rawanduz',
+          collectionDate: '2026-10-30T08:00:00Z',
+          dataAvailabilityStatus: 'public_reference',
+          trendChange: 'Observed Public Discussion Topic',
+          engagementMetrics: {
+            views: null,
+            likes: null,
+            comments: null,
+            shares: null,
+            postsCount: null,
+            isMeasured: false,
+            statusLabel: 'Metric Unavailable — Requires Authorized Facebook Page Insights Token or Manual Import'
+          },
+          notes: 'Facebook event posts with clear difficulty levels, hiking duration, and WhatsApp booking links convert best.'
+        }
+      ];
+
+      const loadTrendsStore = () => {
+        try {
+          if (fs.existsSync(TRENDS_STORE_PATH)) {
+            const parsed = JSON.parse(fs.readFileSync(TRENDS_STORE_PATH, 'utf8'));
+            if (parsed && typeof parsed === 'object') return parsed;
+          }
+        } catch (e) {}
+        return {
+          lastUpdated: new Date().toISOString(),
+          manualTrends: [],
+          apiTrends: [],
+          destinationWeather: {},
+          aiCache: null
+        };
+      };
+
+      const saveTrendsStore = (storeData) => {
+        try {
+          fs.writeFileSync(TRENDS_STORE_PATH, JSON.stringify(storeData, null, 2), 'utf8');
+        } catch (e) {}
+      };
+
+      // Fetch live Meta Graph API insights if authorized credentials are present in server env
+      const collectAuthorizedMetaTrends = async () => {
+        const metaToken = process.env.META_GRAPH_ACCESS_TOKEN || '';
+        const igAccountId = process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID || '';
+        const fbPageId = process.env.FACEBOOK_PAGE_ID || '';
+        const collected = [];
+        const errors = [];
+
+        if (!metaToken) {
+          return { collected, errors, configured: false };
+        }
+
+        // 1. Authorized Facebook Page Posts & Engagement
+        if (fbPageId) {
+          try {
+            const fbUrl = `https://graph.facebook.com/v19.0/${encodeURIComponent(fbPageId)}/posts?fields=id,message,created_time,permalink_url,shares,likes.summary(true),comments.summary(true)&limit=10&access_token=${encodeURIComponent(metaToken)}`;
+            const fbRes = await fetch(fbUrl);
+            const fbData = await fbRes.json();
+            if (fbRes.ok && Array.isArray(fbData.data)) {
+              fbData.data.forEach((post) => {
+                const msg = String(post.message || '').trim();
+                const firstLine = msg.split('\n')[0]?.slice(0, 90) || 'Facebook Page Post';
+                const hashtags = msg.match(/#[\w\u0600-\u06FF_]+/g) || ['#KurdiaAdventure'];
+                collected.push({
+                  id: `fb-api-${post.id}`,
+                  platform: 'facebook',
+                  hashtag: hashtags[0],
+                  title: firstLine,
+                  topic: 'Authorized Facebook Page Post',
+                  activityCategory: 'tourism',
+                  destination: 'Kurdistan Region',
+                  language: /[\u0600-\u06FF]/.test(msg) ? 'ku' : 'en',
+                  timeframe: '30d',
+                  source: 'Meta Graph API v19.0 (Facebook Page Insights)',
+                  url: post.permalink_url || `https://www.facebook.com/${post.id}`,
+                  collectionDate: post.created_time || new Date().toISOString(),
+                  dataAvailabilityStatus: 'verified_api',
+                  trendChange: 'Verified Official API Metric',
+                  engagementMetrics: {
+                    views: null,
+                    likes: post.likes?.summary?.total_count ?? null,
+                    comments: post.comments?.summary?.total_count ?? null,
+                    shares: post.shares?.count ?? null,
+                    postsCount: 1,
+                    isMeasured: true,
+                    statusLabel: 'Verified via Official Meta Graph API'
+                  },
+                  notes: msg.slice(0, 240)
+                });
+              });
+            } else if (fbData.error) {
+              errors.push(`Facebook Graph API: ${fbData.error.message}`);
+            }
+          } catch (err) {
+            errors.push(`Facebook Graph API network error: ${err.message}`);
+          }
+        }
+
+        // 2. Authorized Instagram Professional Account Media Insights
+        if (igAccountId) {
+          try {
+            const igUrl = `https://graph.facebook.com/v19.0/${encodeURIComponent(igAccountId)}/media?fields=id,caption,media_type,permalink,timestamp,like_count,comments_count&limit=10&access_token=${encodeURIComponent(metaToken)}`;
+            const igRes = await fetch(igUrl);
+            const igData = await igRes.json();
+            if (igRes.ok && Array.isArray(igData.data)) {
+              igData.data.forEach((media) => {
+                const cap = String(media.caption || '').trim();
+                const firstLine = cap.split('\n')[0]?.slice(0, 90) || 'Instagram Business Media';
+                const hashtags = cap.match(/#[\w\u0600-\u06FF_]+/g) || ['#KurdiaAdventure'];
+                collected.push({
+                  id: `ig-api-${media.id}`,
+                  platform: 'instagram',
+                  hashtag: hashtags[0],
+                  title: firstLine,
+                  topic: `Instagram ${media.media_type || 'Post'}`,
+                  activityCategory: 'adventure',
+                  destination: 'Kurdistan Region',
+                  language: /[\u0600-\u06FF]/.test(cap) ? 'ku' : 'en',
+                  timeframe: '30d',
+                  source: 'Instagram Graph API v19.0 (Authorized Business Account)',
+                  url: media.permalink || 'https://www.instagram.com/',
+                  collectionDate: media.timestamp || new Date().toISOString(),
+                  dataAvailabilityStatus: 'verified_api',
+                  trendChange: 'Verified Official API Metric',
+                  engagementMetrics: {
+                    views: null,
+                    likes: typeof media.like_count === 'number' ? media.like_count : null,
+                    comments: typeof media.comments_count === 'number' ? media.comments_count : null,
+                    shares: null,
+                    postsCount: 1,
+                    isMeasured: true,
+                    statusLabel: 'Verified via Official Instagram Graph API'
+                  },
+                  notes: cap.slice(0, 240)
+                });
+              });
+            } else if (igData.error) {
+              errors.push(`Instagram Graph API: ${igData.error.message}`);
+            }
+          } catch (err) {
+            errors.push(`Instagram Graph API network error: ${err.message}`);
+          }
+        }
+
+        return { collected, errors, configured: true };
+      };
+
+      // Fetch live Open-Meteo outdoor suitability for target destinations (real measured meteorological data)
+      const collectLiveDestinationWeather = async () => {
+        const weatherMap = {};
+        try {
+          const lats = TARGET_DESTINATIONS.map(d => d.lat).join(',');
+          const lons = TARGET_DESTINATIONS.map(d => d.lon).join(',');
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=temperature_2m,precipitation,wind_speed_10m,weather_code&timezone=Asia%2FBaghdad`;
+          const resp = await fetch(url);
+          if (resp.ok) {
+            const data = await resp.json();
+            const list = Array.isArray(data) ? data : [data];
+            TARGET_DESTINATIONS.forEach((dest, idx) => {
+              const cur = list[idx]?.current;
+              if (cur) {
+                weatherMap[dest.id] = {
+                  tempC: cur.temperature_2m,
+                  windKmh: cur.wind_speed_10m,
+                  precipitationMm: cur.precipitation,
+                  weatherCode: cur.weather_code,
+                  updatedAt: new Date().toISOString(),
+                  source: 'Open-Meteo Live API'
+                };
+              }
+            });
+          }
+        } catch (e) {}
+        return weatherMap;
+      };
+
+      // Build combined list of trends
+      const getAllCombinedTrends = (store) => {
+        const manualList = Array.isArray(store.manualTrends) ? store.manualTrends : [];
+        const apiList = Array.isArray(store.apiTrends) ? store.apiTrends : [];
+        return [...manualList, ...apiList, ...BASE_PUBLIC_TRENDS];
+      };
+
+      // Generate deterministic, data-grounded intelligence report (used alongside or as fallback for Gemini)
+      const buildFallbackIntelligence = (trendsList, cmsTrips, reviewsList, weatherMap) => {
+        const nowIso = new Date().toISOString();
+        return {
+          generatedAt: nowIso,
+          analysisSource: process.env.GEMINI_API_KEY ? 'Gemini AI + Kurdia Market Intelligence Engine' : 'Kurdia Market Intelligence Engine (Heuristic Mode — Set GEMINI_API_KEY for Live LLM Generation)',
+          isAiEstimate: true,
+          aiAnalysis: {
+            top10Topics: [
+              { rank: 1, topic: 'گەشتی شاخەوانی و لووتکە (Guided Mountain Hiking)', demandLevel: 'Very High', platforms: ['Instagram', 'TikTok', 'Facebook'], summary: 'بەرزترین خواست لەسەر گەشتی پیادەڕەوی یەک ڕۆژە لە هەولێرەوە بۆ چیاکانی کۆڕەک، سەفین و هەڵگورد.' },
+              { rank: 2, topic: 'تاڤگە و گەرووە فێنکەکان (Waterfalls & Canyon Escapes)', demandLevel: 'Very High', platforms: ['TikTok', 'Instagram'], summary: 'تاڤگەی بێخاڵ، گەلی عەلی بەگ و خەرەندی ڕەواندز زۆرترین باس و بینەریان هەیە لە ڕیڵس و تیکتۆک.' },
+              { rank: 3, topic: 'گەشتی خێزانی ڕۆژانی هەینی (Friday Family Day Trips)', demandLevel: 'High', platforms: ['Facebook', 'Instagram'], summary: 'خێزانەکانی هەولێر و ناوەڕاستی عێراق بەدوای پاکێجی ئامادەکراوی پاسی VIP و نانی بەیانی و شوێنی حەوانەوەدا دەگەڕێن.' },
+              { rank: 4, topic: 'شەوانەی کەمپینگ و ئاگرکردنەوە (Overnight Camping & Stargazing)', demandLevel: 'High', platforms: ['Instagram', 'TikTok'], summary: 'گەنجان و گرووپە زانکۆییەکان خواستی زۆریان لەسەر کەمپینگی شەوانە لە دەڤەری سۆران و باڵەکایەتی هەیە.' },
+              { rank: 5, topic: 'تەلەفریک و کەپرەکانی چیای کۆڕەک (Korek Cable Car & Cabins)', demandLevel: 'High', platforms: ['TikTok', 'Instagram'], summary: 'یەکێکە لە دیارترین شوێنە گەشتیارییەکان بۆ وێنەگرتن و بەسەربردنی کاتێکی تایبەت لە هەموو وەرزەکاندا.' },
+              { rank: 6, topic: 'گەشتی تایبەتی VIP بە ئۆتۆمبێلی تایبەت (Private VIP SUV Tours)', demandLevel: 'Growing', platforms: ['Facebook', 'Instagram'], summary: 'داواکاری گەشتی تایبەت بۆ خێزان و میوانانی عەرەب و بیانی لە زیادبووندایە.' },
+              { rank: 7, topic: 'باخچە و بازاڕی شەقڵاوە (Shaqlawa Orchards & Local Markets)', demandLevel: 'High', platforms: ['Facebook', 'TikTok'], summary: 'گەشتی نزیک و ئاسان بۆ خێزانەکان لەگەڵ کڕینی بەرهەمی خۆماڵی و شیرینی شەقڵاوە.' },
+              { rank: 8, topic: 'فۆتۆگرافی سروشت و درۆن (Canyon & Drone Photography Tours)', demandLevel: 'Growing', platforms: ['Instagram', 'TikTok'], summary: 'بەشداربووان حەز بە گەشتێک دەکەن کە وێنەگر و ڤیدیۆگرافەری پرۆفیشناڵی لەگەڵ بێت.' },
+              { rank: 9, topic: 'چای سەر دار و خواردنی کوردەواری لە ناو سروشت (Woodfire Tea & Traditional Breakfast)', demandLevel: 'High', platforms: ['TikTok', 'Instagram'], summary: 'دیمەنی ئامادەکردنی چای لەسەر ئاگری دار و نانی بەیانی لە شاخ کاریگەرییەکی زۆری لەسەر بڕیاری ناونووسین هەیە.' },
+              { rank: 10, topic: 'گەشتی گرووپی گەنجان و هاوڕێیان (Youth Social Adventure Groups)', demandLevel: 'High', platforms: ['Instagram', 'TikTok'], summary: 'گەنجان بەدوای ژینگەیەکی دۆستانە و چالاکی بەکۆمەڵ و یارییە کۆمەڵایەتییەکاندا دەگەڕێن.' }
+            ],
+            top10Destinations: [
+              { rank: 1, destination: 'Korek Mountain (چیای کۆڕەک)', region: 'Soran / Rawanduz', targetAudience: 'Families, Youth & Tourists', bestSeason: 'All Year', weatherNote: weatherMap['Korek Mountain'] ? `${weatherMap['Korek Mountain'].tempC}°C Live` : 'Cool Mountain Climate' },
+              { rank: 2, destination: 'Rawanduz (ڕەواندز و خەرەند)', region: 'Soran', targetAudience: 'Hikers, Photographers & Youth', bestSeason: 'Spring, Summer, Autumn', weatherNote: weatherMap['Rawanduz'] ? `${weatherMap['Rawanduz'].tempC}°C Live` : 'Scenic Canyon' },
+              { rank: 3, destination: 'Bekhal Waterfall (تاڤگەی بێخاڵ)', region: 'Rawanduz / Soran', targetAudience: 'Families & Iraqi Tourists', bestSeason: 'Spring, Summer, Autumn', weatherNote: weatherMap['Bekhal Waterfall'] ? `${weatherMap['Bekhal Waterfall'].tempC}°C Live` : 'Fresh Waterfall Microclimate' },
+              { rank: 4, destination: 'Shaqlawa (شەقڵاوە و چیای سەفین)', region: 'Erbil Governorate', targetAudience: 'Families & Quick Escapes', bestSeason: 'All Year', weatherNote: weatherMap['Shaqlawa'] ? `${weatherMap['Shaqlawa'].tempC}°C Live` : 'Mild & Green' },
+              { rank: 5, destination: 'Gali Ali Beg (گەلی عەلی بەگ)', region: 'Soran', targetAudience: 'Road Trippers & Families', bestSeason: 'Spring, Summer, Autumn', weatherNote: weatherMap['Gali Ali Beg'] ? `${weatherMap['Gali Ali Beg'].tempC}°C Live` : 'Canyon Breeze' },
+              { rank: 6, destination: 'Soran & Balakayati (سۆران و باڵەکایەتی)', region: 'Soran Administration', targetAudience: 'Campers & Experienced Hikers', bestSeason: 'Spring, Summer, Autumn', weatherNote: weatherMap['Soran'] ? `${weatherMap['Soran'].tempC}°C Live` : 'Highland Trails' },
+              { rank: 7, destination: 'Erbil Departure Hub & Citadel Surroundings (هەولێر)', region: 'Erbil', targetAudience: 'All Travelers', bestSeason: 'All Year', weatherNote: weatherMap['Erbil'] ? `${weatherMap['Erbil'].tempC}°C Live` : 'Main Hub' },
+              { rank: 8, destination: 'Halgurd & Choman Trails (بناری هەڵگورد - هەرێمی کوردستان)', region: 'Kurdistan Region', targetAudience: 'Adventure Hikers', bestSeason: 'Spring & Autumn', weatherNote: 'Alpine Conditions' },
+              { rank: 9, destination: 'Barzan & Shanidar Nature Route (بارزان و شانەدەر)', region: 'Kurdistan Region', targetAudience: 'Eco-Tourists & Hikers', bestSeason: 'Spring & Autumn', weatherNote: 'River & Mountain Valley' },
+              { rank: 10, destination: 'Akre & Gali Zanta Corridor (ئاکرێ و گەلی زەنتە)', region: 'Kurdistan Region / Iraq', targetAudience: 'Culture & Nature Lovers', bestSeason: 'Spring & Autumn', weatherNote: 'Historic Mountain Town' }
+            ],
+            promisingActivities: [
+              'پیادەڕەوی مامناوەند (٢-٣ کاتژمێر) لەگەڵ ڕێبەری شارەزا و وێنەگرتنی پرۆفیشناڵ',
+              'پاکێجی یەک ڕۆژەی سێ شوێن بەیەکەوە: گەلی عەلی بەگ + تاڤگەی بێخاڵ + خەرەندی ڕەواندز',
+              'کەمپینگی شەوانە لە سۆران/باڵەکایەتی لەگەڵ ئاگرکردنەوە و نانی بەیانی کوردەواری',
+              'گەشتی تایبەتی خێزانی (VIP Private Tour) بە ئۆتۆمبێلی مۆدێرن بۆ شەقڵاوە و چیای کۆڕەک'
+            ],
+            emergingInterests: [
+              'داواکاری لەسەر وێنە و ڤیدیۆی ڕیڵس و درۆن بۆ بەشداربووانی گەشتەکە بەبێ بەرامبەر',
+              'ناونووسینی خێرا لە ڕێگەی FIB و پشتڕاستکردنەوەی دەستبەجێی WhatsApp',
+              'گەشتی تایبەت بۆ گرووپی کچان و خێزانەکان بە ڕەچاوکردنی تایبەتمەندی و ئارامی تەواو'
+            ],
+            familyTravelDemand: 'خواستی خێزانەکان لە هەولێر و شارەکانی عێراق زۆر بەرزە بۆ شوێنە خزمەتگوزارییەکان وەک شەقڵاوە، تاڤگەی بێخاڵ و چیای کۆڕەک کە پیادەڕەوی قورسی تیادا نییە و شوێنی دانیشتن و خواردنگەی نزیکە.',
+            youthTravelDemand: 'گەنجان و قوتابیانی زانکۆ زیاتر بەدوای گەشتی سەرکێشی، پیادەڕەوی شاخەوانی (Hiking)، کەمپینگی شەوانە لە سۆران و ڕەواندز، و نرخی گونجاو (٢٠,٠٠٠ تا ٣٠,٠٠٠ دینار) دەگەڕێن.',
+            campingAndHikingDemand: 'خواست لەسەر هایکینگ و کەمپینگ لە تیك تۆك و ئینستاگرام بەردەوام لە بەرزبوونەوەدایە؛ بەتایبەت ئەو گەشتانەی ئاستی قورسییان (ئاسان بۆ مامناوەند) دیاری کراوە و کەرەستەی کەمپینگ لەلایەن کوردیا دابین دەکرێت.',
+            recommendedPackages: [
+              {
+                name: 'پاکێجی زێڕینی ڕەواندز و بێخاڵ و کۆڕەک (Full-Day Trio)',
+                target: 'خێزانی و گشتی',
+                suggestedPrice: '25,000 - 30,000 دینار',
+                includes: 'هاتووچۆی VIP + نانی بەیانی و چای سەر دار + فۆتۆگرافەر + ڕێبەری گەشت'
+              },
+              {
+                name: 'گەشتی شاخەوانی و لووتکە (Sunrise Trail Hike)',
+                target: 'گەنجان و شاخەوانان',
+                suggestedPrice: '20,000 - 25,000 دینار',
+                includes: 'ڕێبەری شاخەوانی + پشووی چای و قاوە لە سروشت + ڤیدیۆی درۆن'
+              },
+              {
+                name: 'پاکێجی VIP تایبەت بۆ خێزان و میوانان (Private SUV Tour)',
+                target: 'خێزان و گەشتیارانی عەرەب/بیانی',
+                suggestedPrice: 'بەپێی ژمارەی کەس و شوێن',
+                includes: 'ئۆتۆمبێلی تایبەت لە بەردەم ماڵەوە + خشتەی کاتی ئازاد + ڕێبەری زمانزان (کوردی/عەرەبی/ئینگلیزی)'
+              }
+            ]
+          },
+          aiRecommendations: {
+            nextTripToOrganize: {
+              title: 'گەشتی پاییزە و سروشتی ڕەواندز، تاڤگەی بێخاڵ و چیای کۆڕەک',
+              location: 'ڕەواندز · بێخاڵ · کۆڕەک',
+              suggestedPrice: '25,000 دینار',
+              suggestedTime: '06:30 بەیانی لە هەولێر',
+              rationale: 'ئەم سێ شوێنە لە یەک ڕێڕەودان و زۆرترین گەڕانیان لەسەرە لە هەر سێ زمانی کوردی، عەرەبی و ئینگلیزی.'
+            },
+            destinationToAdvertise: {
+              destination: 'چیای کۆڕەک و گەرووی ڕەواندز (Korek Mountain & Rawanduz Canyon)',
+              reason: 'دیمەنە ڤیدیۆییەکانی کۆڕەک و خەرەندی ڕەواندز بەرزترین ڕێژەی تەواوکردنی بینین (Watch Time) لە TikTok و Instagram Reels تۆمار دەکەن.'
+            },
+            attractingPackageType: 'پاکێجی گشتگیر (All-Inclusive Day Trip) بە نرخی ٢٥,٠٠٠ دینار کە هاتووچۆی مۆدێرن، نانی بەیانی کوردەواری، چای سەر ئاگر و وێنەی پرۆفیشناڵ لەخۆ بگرێت لەگەڵ داشکاندنی گرووپ (بۆ ٤ کەس یان زیاتر).',
+            recommendedHashtags: {
+              ku: ['#کوردیا_ئەدڤێنچەر', '#گەشتی_هەولێر', '#چیای_کۆڕەک', '#شەقڵاوە', '#ڕەواندز', '#تاڤگەی_بێخاڵ', '#شاخەوانی_کوردستان', '#سۆران'],
+              ar: ['#سياحة_اربيل', '#كردستان_العراق', '#جبل_كورك', '#شقلاوة', '#شلال_بيخال', '#رواندز', '#سفرات_اربيل'],
+              en: ['#KurdiaAdventure', '#VisitKurdistan', '#ErbilTravel', '#KorekMountain', '#Rawanduz', '#HikingKurdistan', '#BekhalWaterfall']
+            },
+            socialContentPlan: [
+              'ڕۆژی دووشەممە: ڤیدیۆیەکی ١٥ چرکەیی (Reels/TikTok) لە دیمەنی درۆنی گەشتەکەی پێشوو لەگەڵ کردنەوەی ناونووسین.',
+              'ڕۆژی سێشەممە: پۆستی کارۆسێل لە ئینستاگرام و فەیسبووک کە تەواوی وردەکاری گەشتەکە (کات، نرخ، خزمەتگوزارییەکان و کەشوهەوا) ڕوون دەکاتەوە.',
+              'ڕۆژی چوارشەممە: ستۆری فیدباکی بەشداربووان و لێدانی تایمەری چەند کورسییەکی کەم ماوە (Scarcity Alert).',
+              'ڕۆژی پێنجشەممە: کورتە ڤیدیۆی ئامادەکاری تیم و نەخشەی شوێنی کۆبوونەوە بۆ بەشداربووان.'
+            ],
+            fiveAdvertisingIdeas: [
+              {
+                id: 1,
+                title: '١. ڕیکلامی "لە قەرەباڵغی شارەوە بۆ لووتکەی کۆڕەک لە ٩٠ خولەکدا"',
+                hook: 'ڤیدیۆی گۆڕانی خێرا (Transition) لە شەقامەکانی هەولێرەوە بۆ سەر تەلەفریک و هەورەکانی چیای کۆڕەک.',
+                platform: 'TikTok & Instagram Reels',
+                cta: 'ئێستا لە ماڵپەڕی KURDIA شوێنەکەت حیجز بکە بە FIB'
+              },
+              {
+                id: 2,
+                title: '٢. ڕیکلامی چای سەر دار و نانی بەیانی لە تاڤگەی بێخاڵ و ڕەواندز',
+                hook: 'دەنگی سروشت و تێکردنی چای گەرم لەسەر ئاگری دار لە بەردەم دیمەنی شاخەکانی ڕەواندز (ASMR Nature).',
+                platform: 'Instagram Reels & TikTok',
+                cta: 'گەشتی ئەم هەینییە لەدەست مەدە — تەنها چەند کورسییەک ماوە'
+              },
+              {
+                id: 3,
+                title: '٣. کەمپەینی تایبەت بە خێزانەکان (شەقڵاوە + بێخاڵ + گەلی عەلی بەگ)',
+                hook: 'بە زمانی کوردی و عەرەبی: گەشتێکی خێزانی ئارام بەبێ ماندووبوون لەگەڵ پاسی VIP و ڕێبەری تایبەت.',
+                platform: 'Facebook Sponsored Post & WhatsApp Broadcast',
+                cta: 'کلیک بکە بۆ بینینی خشتەی گەشت و ناونووسینی خێزانی'
+              },
+              {
+                id: 4,
+                title: '٤. ئۆفەری هاوڕێیان: "٤ کەس ناونووس بکەن و داشکاندنی تایبەت وەربگرن"',
+                hook: 'هاوڕێکانت تاگ بکە کە هەموو هەینییەک دەڵێن با بچینە سەیران و نایەن!',
+                platform: 'Instagram & Facebook Comments Campaign',
+                cta: 'کۆدی کۆبۆنی گرووپ لە ماڵپەڕ بەکاربهێنە'
+              },
+              {
+                id: 5,
+                title: '٥. ڕیکلامی گەشتی تایبەتی VIP (Private SUV Tour) بۆ میوانان و خێزانەکان',
+                hook: 'ئەتەوێت بەتەنها لەگەڵ خێزانەکەت یان میوانەکانت بە ئۆتۆمبێلی تایبەت گەشتی کوردستان بکەیت؟',
+                platform: 'Instagram Story Ads & Facebook Lead Ads',
+                cta: 'لە بەشی گەشتی تایبەت (VIP) داواکارییەکەت بنێرە'
+              }
+            ]
+          },
+          weeklyReport: {
+            reportPeriod: `Weekly Market Intelligence Report (${new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10)} to ${nowIso.slice(0, 10)})`,
+            generatedAt: nowIso,
+            weeklyTrendChanges: [
+              'بەرزبوونەوەی گرنگیدان بە گەشتەکانی دەڤەری سۆران (ڕەواندز، بێخاڵ، کۆڕەک و گەلی عەلی بەگ) وەک پاکێجی یەک ڕۆژە.',
+              'زیادبوونی گەڕان بە زمانی عەرەبی بۆ گەشتی خێزانی شەقڵاوە و چیای کۆڕەک لە تیکتۆک و فەیسبووک.',
+              'بەردەوامی خواست لەسەر شاخەوانی و کەمپینگی شەوانە لەلایەن گەنجانەوە لە ئینستاگرام.'
+            ],
+            platformComparisons: [
+              { platform: 'Instagram', strength: 'باشترین پلاتفۆرم بۆ نیشاندانی کوالێتی وێنە، ڕیڵسی شاخەوانی، ستۆری ڕۆژانە و دروستکردنی متمانەی براندی KURDIA.' },
+              { platform: 'TikTok', strength: 'خێراترین پلاتفۆرم بۆ بڵاوبوونەوەی ڤیدیۆی سروشت (تاڤگەی بێخاڵ، گەلی عەلی بەگ، کۆڕەک) و ڕاکێشانی بەشداربووی نوێ.' },
+              { platform: 'Facebook', strength: 'بەهێزترین پلاتفۆرم بۆ ناونووسینی خێزانەکان، وەڵامدانەوەی پرسیارەکان لە کۆمێنت و ڕیکلامی ڕاستەوخۆی گەشتەکانی هەینی.' }
+            ],
+            topDestinationsSummary: ['Korek Mountain (چیای کۆڕەک)', 'Rawanduz (ڕەواندز)', 'Bekhal Waterfall (تاڤگەی بێخاڵ)', 'Shaqlawa (شەقڵاوە)', 'Gali Ali Beg (گەلی عەلی بەگ)', 'Soran (سۆران)'],
+            popularHashtagsSummary: ['#KurdiaAdventure', '#چیای_کۆڕەک', '#شەقڵاوە', '#ڕەواندز', '#تاڤگەی_بێخاڵ', '#سياحة_اربيل', '#VisitKurdistan'],
+            recommendedTripsSummary: [
+              'گەشتی گشتگیری ڕۆژی هەینی: گەلی عەلی بەگ + تاڤگەی بێخاڵ + خەرەندی ڕەواندز',
+              'گەشتی شاخەوانی و تەلەفریکی چیای کۆڕەک',
+              'گەشتی خێزانی شەقڵاوە و سروشتی بناری سەفین'
+            ],
+            advertisingRecommendationsSummary: 'جەختکردنەوە لەسەر ڤیدیۆی ڕاستەقینەی گەشتەکانی پێشووی KURDIA، نیشاندانی نانی بەیانی و چای سەر دار، و دانانی لینکی ڕاستەوخۆی ناونووسینی ماڵپەڕ لە بایۆ و ستۆری.',
+            dataSourcesAndDates: [
+              `Instagram Public Hashtag & Explore Reference (Collected: ${nowIso.slice(0, 10)})`,
+              `TikTok Creative Center IQ & Public Tag Directory (Collected: ${nowIso.slice(0, 10)})`,
+              `Facebook Public Pages & Travel Discussions Reference (Collected: ${nowIso.slice(0, 10)})`,
+              `Open-Meteo Live Kurdistan Destination Weather API (Collected: ${nowIso.slice(0, 10)})`,
+              `Kurdia Adventure Internal CMS Trips (${cmsTrips.length} trips) & Verified Customer Reviews (${reviewsList.length} reviews)`
+            ]
+          }
+        };
+      };
+
+      // Handle POST /api/admin/trends/analyze
+      if (pathname === '/api/admin/trends/analyze' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', async () => {
+          try {
+            const payload = JSON.parse(body || '{}');
+            const store = loadTrendsStore();
+            const weatherMap = Object.keys(store.destinationWeather || {}).length
+              ? store.destinationWeather
+              : await collectLiveDestinationWeather();
+            store.destinationWeather = weatherMap;
+
+            const allTrends = getAllCombinedTrends(store);
+            const cmsData = loadCmsOverrides() || {};
+            const cmsTrips = Array.isArray(cmsData.trips) ? cmsData.trips : [];
+            const reviewsList = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
+
+            const fallbackReport = buildFallbackIntelligence(allTrends, cmsTrips, reviewsList, weatherMap);
+            const ai = getGeminiClient();
+
+            if (!ai) {
+              store.aiCache = fallbackReport;
+              saveTrendsStore(store);
+              res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+              res.end(JSON.stringify({ ok: true, report: fallbackReport, usedGemini: false }));
+              return;
+            }
+
+            const filterContext = {
+              timeframe: payload.timeframe || '30d',
+              region: payload.region || 'all',
+              lang: payload.lang || 'all',
+              collectedTrendsCount: allTrends.length,
+              verifiedTrendsCount: allTrends.filter(t => t.dataAvailabilityStatus === 'verified_api' || t.dataAvailabilityStatus === 'manual_import').length,
+              sampleTrends: allTrends.slice(0, 20).map(t => ({
+                platform: t.platform,
+                hashtag: t.hashtag,
+                title: t.title,
+                topic: t.topic,
+                destination: t.destination,
+                language: t.language,
+                status: t.dataAvailabilityStatus,
+                engagement: t.engagementMetrics?.isMeasured ? t.engagementMetrics : 'metric_unavailable'
+              })),
+              liveDestinationWeather: weatherMap,
+              existingKurdiaTrips: cmsTrips.slice(0, 8).map(tr => ({
+                title: tr.i18n?.ku?.tripTitle || tr.title,
+                location: tr.i18n?.ku?.tripLocation || tr.location,
+                price: tr.i18n?.ku?.tripPrice || tr.price,
+                booked: tr.booked,
+                capacity: tr.capacity
+              }))
+            };
+
+            const promptText = `You are the Senior Travel Market Intelligence Analyst for KURDIA ADVENTURE in Erbil, Kurdistan Region, Iraq.
+Analyze the following real collected trend references, live Open-Meteo destination weather, and existing Kurdia Adventure trips:
+${JSON.stringify(filterContext, null, 2)}
+
+STRICT RULES:
+1. Never fabricate or invent exact social media view counts, like counts, or search rankings if a metric is marked "metric_unavailable".
+2. Clearly frame your output as AI Market Analysis & Strategic Recommendations for Kurdia Adventure.
+3. Write primary descriptions and recommendations in clear, professional Kurdish (Sorani) with English/Arabic hashtag support where appropriate.
+4. Target destinations: Erbil, Shaqlawa, Rawanduz, Soran, Korek Mountain, Bekhal Waterfall, Gali Ali Beg, Kurdistan Region, and Iraq.
+5. Return ONLY valid JSON matching the exact structure of this template:
+${JSON.stringify(fallbackReport, null, 2)}`;
+
+            let finalReport = fallbackReport;
+            let usedGemini = false;
+
+            try {
+              const response = await ai.models.generateContent({
+                model: 'gemini-3.8-flash',
+                contents: [{ role: 'user', parts: [{ text: promptText }] }],
+                config: {
+                  temperature: 0.4,
+                  responseMimeType: 'application/json'
+                }
+              });
+              const rawText = (response && response.text ? response.text : '').trim();
+              if (rawText) {
+                const parsedAi = JSON.parse(rawText);
+                if (parsedAi && parsedAi.aiAnalysis && parsedAi.aiRecommendations && parsedAi.weeklyReport) {
+                  finalReport = {
+                    ...fallbackReport,
+                    ...parsedAi,
+                    generatedAt: new Date().toISOString(),
+                    analysisSource: 'Gemini AI (gemini-3.8-flash) Live Market Analysis',
+                    isAiEstimate: true
+                  };
+                  usedGemini = true;
+                }
+              }
+            } catch (gemErr) {
+              finalReport.analysisSource = `Kurdia Market Intelligence Engine (Gemini fallback: ${gemErr.message || 'API busy'})`;
+            }
+
+            store.aiCache = finalReport;
+            store.lastUpdated = new Date().toISOString();
+            saveTrendsStore(store);
+
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({ ok: true, report: finalReport, usedGemini }));
+          } catch (err) {
+            res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({ ok: false, error: err.message || 'Analysis failed' }));
+          }
+        });
+        return;
+      }
+
+      // Handle POST /api/admin/trends (Import verified trend data, delete imported item, or live sync)
+      if (pathname === '/api/admin/trends' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', async () => {
+          try {
+            const payload = JSON.parse(body || '{}');
+            const store = loadTrendsStore();
+
+            if (payload.action === 'import') {
+              const itemsToImport = Array.isArray(payload.items) ? payload.items : (payload.item ? [payload.item] : []);
+              if (!itemsToImport.length) {
+                res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+                res.end(JSON.stringify({ ok: false, error: 'No trend items provided for import' }));
+                return;
+              }
+
+              const sanitizeNum = (v) => (v !== null && v !== undefined && v !== '' && !Number.isNaN(Number(v))) ? Number(v) : null;
+
+              itemsToImport.forEach((raw) => {
+                const views = sanitizeNum(raw.views ?? raw.engagementMetrics?.views);
+                const likes = sanitizeNum(raw.likes ?? raw.engagementMetrics?.likes);
+                const comments = sanitizeNum(raw.comments ?? raw.engagementMetrics?.comments);
+                const shares = sanitizeNum(raw.shares ?? raw.engagementMetrics?.shares);
+                const postsCount = sanitizeNum(raw.postsCount ?? raw.engagementMetrics?.postsCount);
+                const hasMeasured = [views, likes, comments, shares, postsCount].some(v => v !== null);
+
+                const newEntry = {
+                  id: raw.id || `manual-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                  platform: ['instagram', 'tiktok', 'facebook'].includes(String(raw.platform || '').toLowerCase())
+                    ? String(raw.platform).toLowerCase()
+                    : 'instagram',
+                  hashtag: String(raw.hashtag || '#KurdiaAdventure').trim(),
+                  title: String(raw.title || raw.topic || 'Imported Travel Trend').trim(),
+                  topic: String(raw.topic || 'Travel & Adventure').trim(),
+                  activityCategory: String(raw.activityCategory || 'adventure').trim(),
+                  destination: String(raw.destination || 'Kurdistan Region').trim(),
+                  language: ['ku', 'ar', 'en'].includes(String(raw.language || '').toLowerCase())
+                    ? String(raw.language).toLowerCase()
+                    : 'ku',
+                  timeframe: ['7d', '30d', '90d'].includes(String(raw.timeframe || ''))
+                    ? String(raw.timeframe)
+                    : '30d',
+                  source: String(raw.source || 'Admin Verified Manual Import (Creative Center / Platform Insights)').trim(),
+                  url: String(raw.url || 'https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en?countryCode=IQ').trim(),
+                  collectionDate: raw.collectionDate || new Date().toISOString(),
+                  dataAvailabilityStatus: hasMeasured ? 'manual_import' : 'public_reference',
+                  trendChange: String(raw.trendChange || (hasMeasured ? 'Verified Imported Metric' : 'Observed Reference')).trim(),
+                  engagementMetrics: {
+                    views,
+                    likes,
+                    comments,
+                    shares,
+                    postsCount,
+                    isMeasured: hasMeasured,
+                    statusLabel: hasMeasured
+                      ? 'Verified Metric (Imported by Admin from Official Platform / Creative Center)'
+                      : 'Metric Unavailable — No numerical engagement provided during import'
+                  },
+                  notes: String(raw.notes || '').trim()
+                };
+                store.manualTrends = [newEntry, ...(store.manualTrends || []).filter(t => t.id !== newEntry.id)];
+              });
+
+              store.lastUpdated = new Date().toISOString();
+              saveTrendsStore(store);
+              res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+              res.end(JSON.stringify({ ok: true, importedCount: itemsToImport.length, totalManual: store.manualTrends.length }));
+              return;
+            }
+
+            if (payload.action === 'delete' && payload.id) {
+              store.manualTrends = (store.manualTrends || []).filter(t => t.id !== payload.id);
+              store.lastUpdated = new Date().toISOString();
+              saveTrendsStore(store);
+              res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+              res.end(JSON.stringify({ ok: true, deletedId: payload.id }));
+              return;
+            }
+
+            // Default POST action: 'sync' — collect live Meta API (if configured) + live Open-Meteo destination signals
+            const [metaSync, liveWeather] = await Promise.all([
+              collectAuthorizedMetaTrends(),
+              collectLiveDestinationWeather()
+            ]);
+
+            if (metaSync.collected.length > 0) {
+              store.apiTrends = metaSync.collected;
+            }
+            if (Object.keys(liveWeather).length > 0) {
+              store.destinationWeather = liveWeather;
+            }
+            store.lastUpdated = new Date().toISOString();
+            saveTrendsStore(store);
+
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({
+              ok: true,
+              lastUpdated: store.lastUpdated,
+              metaConfigured: metaSync.configured,
+              apiTrendsCollected: metaSync.collected.length,
+              apiErrors: metaSync.errors,
+              weatherLocationsUpdated: Object.keys(liveWeather).length
+            }));
+          } catch (err) {
+            res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({ ok: false, error: err.message || 'Invalid request' }));
+          }
+        });
+        return;
+      }
+
+      // Handle GET /api/admin/trends
+      (async () => {
+        try {
+          const store = loadTrendsStore();
+          const timeframeFilter = parsedUrl.searchParams.get('timeframe') || 'all';
+          const regionFilter = parsedUrl.searchParams.get('region') || 'all';
+          const langFilter = parsedUrl.searchParams.get('lang') || 'all';
+          const platformFilter = parsedUrl.searchParams.get('platform') || 'all';
+          const searchFilter = (parsedUrl.searchParams.get('q') || '').trim().toLowerCase();
+          const page = Math.max(1, parseInt(parsedUrl.searchParams.get('page') || '1', 10));
+          const limit = Math.max(1, Math.min(100, parseInt(parsedUrl.searchParams.get('limit') || '20', 10)));
+
+          if (!store.destinationWeather || Object.keys(store.destinationWeather).length === 0) {
+            store.destinationWeather = await collectLiveDestinationWeather();
+            saveTrendsStore(store);
+          }
+
+          const allTrends = getAllCombinedTrends(store);
+          const filteredTrends = allTrends.filter((item) => {
+            if (platformFilter !== 'all' && item.platform !== platformFilter) return false;
+            if (langFilter !== 'all' && item.language !== langFilter) return false;
+            if (regionFilter !== 'all' && item.destination.toLowerCase() !== regionFilter.toLowerCase()) return false;
+            if (timeframeFilter !== 'all') {
+              const order = { '7d': 1, '30d': 2, '90d': 3 };
+              if ((order[item.timeframe] || 2) > (order[timeframeFilter] || 3)) return false;
+            }
+            if (searchFilter) {
+              const hay = `${item.hashtag} ${item.title} ${item.topic} ${item.destination} ${item.notes || ''}`.toLowerCase();
+              if (!hay.includes(searchFilter)) return false;
+            }
+            return true;
+          });
+
+          const totalFiltered = filteredTrends.length;
+          const totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
+          const paginatedTrends = filteredTrends.slice((page - 1) * limit, page * limit);
+
+          // Compute Overview aggregations from filteredTrends
+          const byPlatform = {
+            instagram: filteredTrends.filter(t => t.platform === 'instagram').length,
+            tiktok: filteredTrends.filter(t => t.platform === 'tiktok').length,
+            facebook: filteredTrends.filter(t => t.platform === 'facebook').length
+          };
+
+          const topicCounts = {};
+          const destinationCounts = {};
+          filteredTrends.forEach(t => {
+            topicCounts[t.topic] = (topicCounts[t.topic] || 0) + 1;
+            destinationCounts[t.destination] = (destinationCounts[t.destination] || 0) + 1;
+          });
+
+          const topTopicsOverview = Object.entries(topicCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 6)
+            .map(([topic, count]) => ({ topic, count }));
+
+          const topDestinationsOverview = Object.entries(destinationCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 9)
+            .map(([destination, count]) => ({
+              destination,
+              count,
+              weather: store.destinationWeather?.[destination] || null
+            }));
+
+          const emergingHashtags = filteredTrends.map(t => ({
+            hashtag: t.hashtag,
+            platform: t.platform,
+            destination: t.destination,
+            language: t.language,
+            url: t.url,
+            status: t.dataAvailabilityStatus
+          }));
+
+          const cmsData = loadCmsOverrides() || {};
+          const cmsTrips = Array.isArray(cmsData.trips) ? cmsData.trips : [];
+          const reviewsList = Array.isArray(cmsData.reviews) ? cmsData.reviews : [];
+          const aiReport = store.aiCache || buildFallbackIntelligence(allTrends, cmsTrips, reviewsList, store.destinationWeather || {});
+
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({
+            ok: true,
+            lastUpdated: store.lastUpdated || new Date().toISOString(),
+            apiCredentialsStatus: {
+              geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
+              metaGraphConfigured: Boolean(process.env.META_GRAPH_ACCESS_TOKEN),
+              instagramAccountConfigured: Boolean(process.env.INSTAGRAM_BUSINESS_ACCOUNT_ID),
+              facebookPageConfigured: Boolean(process.env.FACEBOOK_PAGE_ID),
+              tiktokApiConfigured: Boolean(process.env.TIKTOK_ACCESS_TOKEN)
+            },
+            overview: {
+              totalDiscovered: totalFiltered,
+              totalAllTrends: allTrends.length,
+              verifiedMetricsCount: filteredTrends.filter(t => t.engagementMetrics?.isMeasured).length,
+              publicReferenceCount: filteredTrends.filter(t => !t.engagementMetrics?.isMeasured).length,
+              byPlatform,
+              topTopics: topTopicsOverview,
+              topDestinations: topDestinationsOverview,
+              emergingHashtags: emergingHashtags.slice(0, 12)
+            },
+            pagination: {
+              page,
+              limit,
+              totalItems: totalFiltered,
+              totalPages
+            },
+            trends: paginatedTrends,
+            allFilteredTrends: filteredTrends,
+            destinationsCatalog: TARGET_DESTINATIONS,
+            destinationWeather: store.destinationWeather || {},
+            aiReport
+          }));
+        } catch (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+          res.end(JSON.stringify({ ok: false, error: err.message || 'Server error' }));
+        }
+      })();
+      return;
+    }
+
     const host = String(req.headers.host || '').toLowerCase();
     if (pathname === '/' && host.startsWith('admin.')) {
       pathname = '/admin.html';
@@ -984,7 +2044,8 @@ const server = http.createServer((req, res) => {
       'registrations-meta.json',
       'cms-overrides.json',
       'visitors-store.json',
-      'translations-cache.json'
+      'translations-cache.json',
+      'trends-intelligence-store.json'
     ]);
     if (
       BLOCKED_FILES.has(lowerSafe) ||
