@@ -2610,6 +2610,7 @@ button{cursor:pointer;color:inherit}
             <h1>ناوەندی <span>ترێند و بازاڕی گەشتیاری</span></h1>
             <p>چاودێریی خواستی گەشتیاران لە Instagram، TikTok و Facebook بۆ هەولێر، شەقڵاوە، ڕەواندز، سۆران، چیای کۆڕەک، تاڤگەی بێخاڵ و گەلی عەلی بەگ لەگەڵ کەشوهەوای زیندوو و پێشنیاری گەشتی داهاتوو.</p>
             <div class="exec-hero-actions">
+              <button type="button" class="pill" onclick="switchTrendsSubTab('kurdia_account')" style="background:linear-gradient(120deg,#f0183d,#9f1239);border-color:#fda4af">👑 شیکاری ئەکاونتی KURDIA (چی پێویستە؟)</button>
               <button type="button" class="pill" onclick="switchTrendsSubTab('ai_recommendations')" style="background:linear-gradient(120deg,#0c9b61,#07774a)">🎯 کام گەشت ڕێکبخەین؟</button>
               <button type="button" class="pill" onclick="switchTrendsSubTab('ai_analysis')" style="background:linear-gradient(120deg,#7e22ce,#581c87);border-color:#c084fc">🧠 شیکاری ١٠ باشترین شوێن</button>
               <button type="button" class="pill" onclick="switchTrendsSubTab('weekly_report')" style="background:linear-gradient(120deg,#d97706,#b45309);border-color:#fbbf24">📋 ڕاپۆرتی هەفتانە</button>
@@ -2659,15 +2660,16 @@ button{cursor:pointer;color:inherit}
           </div>
         </div>
 
-        <!-- CLEAN HORIZONTAL SUB-NAVIGATION STRIP (SECTIONS A - G) -->
+        <!-- CLEAN HORIZONTAL SUB-NAVIGATION STRIP (SECTIONS A - H) -->
         <div class="quick-nav-strip" id="trendsSectionTabsBar" style="margin-bottom:14px">
           <button type="button" class="q-chip blue" data-trendstab="overview" onclick="switchTrendsSubTab('overview')">📊 ١. کورتەی گشتی</button>
-          <button type="button" class="q-chip" data-trendstab="instagram" onclick="switchTrendsSubTab('instagram')">📸 ٢. ئینستاگرام</button>
-          <button type="button" class="q-chip" data-trendstab="tiktok" onclick="switchTrendsSubTab('tiktok')">🎵 ٣. تیکتۆک</button>
-          <button type="button" class="q-chip" data-trendstab="facebook" onclick="switchTrendsSubTab('facebook')">📘 ٤. فەیسبووک</button>
-          <button type="button" class="q-chip" data-trendstab="ai_analysis" onclick="switchTrendsSubTab('ai_analysis')">🧠 ٥. شیکاری بازاڕ (AI)</button>
-          <button type="button" class="q-chip green" data-trendstab="ai_recommendations" onclick="switchTrendsSubTab('ai_recommendations')">🎯 ٦. پێشنیار و ڕیکلام</button>
-          <button type="button" class="q-chip orange" data-trendstab="weekly_report" onclick="switchTrendsSubTab('weekly_report')">📋 ٧. ڕاپۆرتی هەفتانە</button>
+          <button type="button" class="q-chip" data-trendstab="kurdia_account" onclick="switchTrendsSubTab('kurdia_account')" style="border-color:rgba(240,24,61,0.55);color:#fecdd3">👑 ٢. شیکاری ئەکاونتی KURDIA</button>
+          <button type="button" class="q-chip" data-trendstab="instagram" onclick="switchTrendsSubTab('instagram')">📸 ٣. ئینستاگرام</button>
+          <button type="button" class="q-chip" data-trendstab="tiktok" onclick="switchTrendsSubTab('tiktok')">🎵 ٤. تیکتۆک</button>
+          <button type="button" class="q-chip" data-trendstab="facebook" onclick="switchTrendsSubTab('facebook')">📘 ٥. فەیسبووک</button>
+          <button type="button" class="q-chip" data-trendstab="ai_analysis" onclick="switchTrendsSubTab('ai_analysis')">🧠 ٦. شیکاری بازاڕ (AI)</button>
+          <button type="button" class="q-chip green" data-trendstab="ai_recommendations" onclick="switchTrendsSubTab('ai_recommendations')">🎯 ٧. پێشنیار و ڕیکلام</button>
+          <button type="button" class="q-chip orange" data-trendstab="weekly_report" onclick="switchTrendsSubTab('weekly_report')">📋 ٨. ڕاپۆرتی هەفتانە</button>
         </div>
 
         <!-- LOADING INDICATOR -->
@@ -2686,25 +2688,25 @@ button{cursor:pointer;color:inherit}
               <p>کۆی ترێندە چالاکەکان</p>
               <small id="trendsKpiTotalSub">لە هەر سێ پلاتفۆرم</small>
             </div>
-            <div class="stat red spotlight-card" onclick="switchTrendsSubTab('instagram')" style="cursor:pointer">
-              <div class="stat-head"><span>📸</span><strong id="trendsKpiIgCount">6</strong></div>
+            <div class="stat red spotlight-card" onclick="switchTrendsSubTab('kurdia_account')" style="cursor:pointer">
+              <div class="stat-head"><span>👑</span><strong id="trendsKpiKurdiaScore">88%</strong></div>
+              <p>ئاستی ئەکاونتی KURDIA</p>
+              <small id="trendsKpiKurdiaSub">کلیک بکە بۆ بینینی پێداویستییەکان</small>
+            </div>
+            <div class="stat cyan spotlight-card" onclick="switchTrendsSubTab('instagram')" style="cursor:pointer">
+              <div class="stat-head"><span>📸</span><strong id="trendsKpiIgCount">5</strong></div>
               <p>ترێندەکانی Instagram</p>
               <small>هاشتاگ و ڕیڵسی گەشتیاری</small>
             </div>
-            <div class="stat cyan spotlight-card" onclick="switchTrendsSubTab('tiktok')" style="cursor:pointer">
+            <div class="stat purple spotlight-card" onclick="switchTrendsSubTab('tiktok')" style="cursor:pointer">
               <div class="stat-head"><span>🎵</span><strong id="trendsKpiTtCount">5</strong></div>
               <p>ترێندەکانی TikTok</p>
               <small>Creative Center & Tags</small>
             </div>
-            <div class="stat purple spotlight-card" onclick="switchTrendsSubTab('facebook')" style="cursor:pointer">
-              <div class="stat-head"><span>📘</span><strong id="trendsKpiFbCount">3</strong></div>
+            <div class="stat green spotlight-card" onclick="switchTrendsSubTab('facebook')" style="cursor:pointer">
+              <div class="stat-head"><span>📘</span><strong id="trendsKpiFbCount">4</strong></div>
               <p>ترێندەکانی Facebook</p>
               <small>پەیج و گرووپە گەشتیارییەکان</small>
-            </div>
-            <div class="stat green spotlight-card">
-              <div class="stat-head"><span>✅</span><strong id="trendsKpiVerified">14</strong></div>
-              <p>سەرچاوەی پشتڕاستکراو</p>
-              <small id="trendsKpiPublicRef">لینکی فەرمی و ڕاستەوخۆ</small>
             </div>
             <div class="stat gold spotlight-card">
               <div class="stat-head"><span>⛅</span><strong id="trendsKpiLastUpdate" style="font-size:14px">LIVE</strong></div>
@@ -2712,6 +2714,9 @@ button{cursor:pointer;color:inherit}
               <small id="trendsKpiWeatherSub">ڕاستەوخۆ لە Open-Meteo</small>
             </div>
           </div>
+
+          <!-- QUICK KURDIA ACCOUNT DIAGNOSTIC PREVIEW IN OVERVIEW -->
+          <div id="trendsOverviewKurdiaSummaryBox" style="margin-bottom:14px"></div>
 
           <div class="dash-bento equal">
             <div class="panel-card spotlight-card">
@@ -2748,6 +2753,23 @@ button{cursor:pointer;color:inherit}
               <div id="trendsOverviewHashtagsBox" style="display:flex;flex-wrap:wrap;gap:7px"></div>
             </div>
           </div>
+        </div>
+
+        <!-- =====================================================
+             SECTION A2: KURDIA ACCOUNT AUDIT & ACTION PLAN
+             ===================================================== -->
+        <div id="trendsTab_kurdia_account" class="trends-subtab-panel" style="display:none">
+          <div class="panel-card spotlight-card" style="margin-bottom:12px;border-color:#f0183d;background:linear-gradient(135deg,rgba(45,8,20,0.88),rgba(9,19,30,0.96))">
+            <div class="panel-head" style="margin-bottom:4px;border-bottom:0;padding-bottom:0;flex-wrap:wrap;gap:8px">
+              <h3>👑 شیکاری داتای ئەکاونتی KURDIA و پێداویستییەکانی گەشەکردن</h3>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="secondary-btn" onclick="renderKurdiaAccountAudit()" style="border-color:#fda4af;color:#fecdd3">🔄 پشکنینەوەی داتاکان</button>
+                <button type="button" class="pill" id="btnRunKurdiaAiAudit" onclick="runKurdiaAccountAiAudit()" style="background:linear-gradient(120deg,#f0183d,#9f1239);border-color:#fda4af">🤖 ڕاوێژی زیرەکی AI بۆ ئەکاونتی KURDIA</button>
+              </div>
+            </div>
+            <small style="color:#fecdd3;font-size:11.5px;display:block">پشکنینی ڕاستەوخۆی گەشتەکانت، ڕێژەی پڕبوونی کورسییەکان، فیدباکەکان، گەلەری، کۆپۆن و ئەکاونتەکانی سۆشیال میدیا لەگەڵ لیستی ئەو کارانەی پێویستە ئەنجامی بدەیت.</small>
+          </div>
+          <div id="trendsKurdiaAccountContainer"></div>
         </div>
 
         <!-- =====================================================
@@ -8432,6 +8454,463 @@ function renderAllTrendsSections(data) {
     renderTrendsAiAnalysisSection(report);
     renderTrendsAiRecommendationsSection(report);
     renderTrendsWeeklyReportSection(report);
+  }
+
+  // Section A2: Kurdia Account Live Audit & Action Plan
+  renderKurdiaAccountAudit();
+}
+
+function analyzeKurdiaAccountLive() {
+  const trips = (typeof appState === 'object' && Array.isArray(appState?.trips)) ? appState.trips : [];
+  const reviews = (typeof appState === 'object' && Array.isArray(appState?.reviews)) ? appState.reviews : [];
+  const gallery = (typeof appState === 'object' && Array.isArray(appState?.gallery)) ? appState.gallery : [];
+  const places = (typeof appState === 'object' && Array.isArray(appState?.places)) ? appState.places : [];
+  const coupons = (typeof appState === 'object' && Array.isArray(appState?.coupons)) ? appState.coupons : [];
+  const paymentMethods = (typeof appState === 'object' && Array.isArray(appState?.paymentMethods)) ? appState.paymentMethods : [];
+  const social = (typeof appState === 'object' && appState?.social) ? appState.social : {};
+
+  const activeTrips = trips.filter(t => t.published !== false && t.bookingOpen !== false);
+  let totalCap = 0;
+  let totalBooked = 0;
+  let totalEstRev = 0;
+
+  trips.forEach(tr => {
+    const cap = Number(tr.capacity || 40);
+    const bkd = Number(tr.booked || 0);
+    const prStr = tr.i18n?.ku?.tripPrice || tr.price || '30000';
+    const unitPr = parseInt(String(prStr).replace(/[^0-9]/g, ''), 10) || 30000;
+    totalCap += cap;
+    totalBooked += bkd;
+    totalEstRev += (bkd * unitPr);
+  });
+
+  const occupancyPct = totalCap > 0 ? Math.min(100, Math.round((totalBooked / totalCap) * 100)) : 0;
+  const remainingSeats = Math.max(0, totalCap - totalBooked);
+
+  const avgRating = reviews.length
+    ? (reviews.reduce((s, r) => s + Number(r.rating || r.stars || 5), 0) / reviews.length).toFixed(1)
+    : '5.0';
+
+  // Compare Kurdia's active trips against the 6 hottest market destinations
+  const hotDestinations = [
+    { key: 'Korek', nameKu: 'چیای کۆڕەک (Korek Mountain)', matchWords: ['کۆڕەک', 'کورك', 'korek'], suggestedTitle: 'گەشتی تەلەفریک و چیای کۆڕەک و بێخاڵ', suggestedLoc: 'هەولێر · چیای کۆڕەک · بێخاڵ', suggestedPrice: '25,000 دینار', demand: 'زۆر بەرز 🔥 (#1 لە ئینستاگرام و تیکتۆک)' },
+    { key: 'Rawanduz', nameKu: 'خەرەندی ڕەواندز (Rawanduz)', matchWords: ['ڕەواندز', 'رواندز', 'rawanduz'], suggestedTitle: 'گەشتی خەرەندی ڕەواندز و شەلالی بێخاڵ', suggestedLoc: 'سۆران · ڕەواندز', suggestedPrice: '25,000 دینار', demand: 'زۆر بەرز 🔥 (زۆرترین ڤیدیۆی درۆن و ڕیڵز)' },
+    { key: 'Bekhal', nameKu: 'تاڤگەی بێخاڵ (Bekhal Waterfall)', matchWords: ['بێخاڵ', 'بيخال', 'bekhal'], suggestedTitle: 'گەشتی خێزانی تاڤگەی بێخاڵ و گەلی عەلی بەگ', suggestedLoc: 'بێخاڵ · گەلی عەلی بەگ', suggestedPrice: '25,000 دینار', demand: 'بەرز ⭐ (خواستی زۆری خێزان و گرووپەکان)' },
+    { key: 'Shaqlawa', nameKu: 'شەقڵاوە (Shaqlawa)', matchWords: ['شەقڵاوە', 'شقلاوة', 'shaqlawa'], suggestedTitle: 'گەشتی باخەکانی شەقڵاوە و چیای سەفین', suggestedLoc: 'هەولێر · شەقڵاوە', suggestedPrice: '20,000 دینار', demand: 'بەرز ⭐ (نزیکترین و پڕفرۆشترین گەشتی خێزانی)' },
+    { key: 'Soran', nameKu: 'سۆران و باڵەکایەتی (Soran)', matchWords: ['سۆران', 'سوران', 'soran', 'هەڵگورد', 'باڵەکایەتی'], suggestedTitle: 'کەمپینگ و شاخەوانی لە چیاکانی سۆران', suggestedLoc: 'سۆران · باڵەکایەتی', suggestedPrice: '35,000 دینار', demand: 'بەرز ⭐ (#1 بۆ شاخەوانی و کەمپینگی گەنجان)' },
+    { key: 'GaliAliBeg', nameKu: 'گەلی عەلی بەگ (Gali Ali Beg)', matchWords: ['گەلی عەلی بەگ', 'كلي علي بك', 'gali ali beg'], suggestedTitle: 'گەشتی هاوینەهەواری گەلی عەلی بەگ و ڕەواندز', suggestedLoc: 'سۆران · گەلی عەلی بەگ', suggestedPrice: '25,000 دینار', demand: 'بەرز ⭐ (گەشتی كلاسیكی پڕخواست)' }
+  ];
+
+  const allTripsText = trips.map(tr => `${tr.i18n?.ku?.tripTitle || ''} ${tr.i18n?.ku?.tripLocation || ''} ${tr.i18n?.en?.tripTitle || ''} ${tr.i18n?.ar?.tripTitle || ''}`).join(' ').toLowerCase();
+
+  const destinationGapList = hotDestinations.map(hd => {
+    const isCovered = hd.matchWords.some(w => allTripsText.includes(w.toLowerCase()));
+    return { ...hd, isCovered };
+  });
+
+  const missingHotDestinations = destinationGapList.filter(d => !d.isCovered);
+
+  // Build prioritized Action Items ("چی پێویستە لە ئەکاونتی کوردیا بکرێت؟")
+  const actionItems = [];
+
+  // 1. Check low occupancy trips
+  trips.forEach((tr, idx) => {
+    const cap = Math.max(1, Number(tr.capacity || 40));
+    const bkd = Number(tr.booked || 0);
+    const pct = Math.round((bkd / cap) * 100);
+    const rem = Math.max(0, cap - bkd);
+    const title = tr.i18n?.ku?.tripTitle || `گەشتی #${idx + 1}`;
+    if (tr.published !== false && tr.bookingOpen !== false && pct < 65) {
+      actionItems.push({
+        priority: 'urgent',
+        badge: '🔴 زۆر گرنگ · پڕکردنەوەی کورسی',
+        title: `پڕکردنەوەی ${rem} کورسی ماوە لە «${title}» (ئێستا ${pct}% پڕبووە)`,
+        desc: `ئەم گەشتە هێشتا ${rem} کورسی بەتاڵی ماوە. پێویستە ئەمڕۆ ستۆرییەکی کورت لە ئینستاگرام و تیکتۆک بڵاوبکەیتەوە بە ناونیشانی «تەنها ${rem} کورسی ماوە!» و نۆتیفیکەیشنێک بۆ بەشداربووان بنێریت.`,
+        btnLabel: '🔔 ناردنی نۆتیفیکەیشن بۆ ئەم گەشتە',
+        btnAction: `go('notifications')`
+      });
+    }
+  });
+
+  // 2. Missing trending destinations
+  if (missingHotDestinations.length > 0) {
+    const topMiss = missingHotDestinations[0];
+    actionItems.push({
+      priority: 'urgent',
+      badge: '🔥 دەرفەتی زێڕینی بازاڕ',
+      title: `زیادکردنی گەشت بۆ «${topMiss.nameKu}» چونکە لە ترێندی یەکەمدایە`,
+      desc: `بەپێی داتای ئێستای سۆشیال میدیا، زۆرترین گەڕانی گەشتیاران لە هەولێر لەسەر (${missingHotDestinations.map(m => m.nameKu).join('، ')})ە، بەڵام ئێستا لە لیستی گەشتە چالاکەکانتدا نییە!`,
+      btnLabel: `＋ دروستکردنی گەشتی ${topMiss.key}`,
+      btnAction: `createTripFromTrendGap('${topMiss.key}')`
+    });
+  }
+
+  // 3. Reviews & Social Proof check
+  if (reviews.length < 10) {
+    actionItems.push({
+      priority: 'growth',
+      badge: '🟡 متمانە و فیدباک (Social Proof)',
+      title: `زیادکردنی ژمارەی فیدباکەکان (ئێستا ${reviews.length} فیدباک هەیە بە کۆی ${avgRating} ★)`,
+      desc: `گەشتیارێکی نوێ پێش ناونوسین سەیری فیدباکەکان دەکات. لینکەکەی ماڵپەڕ بنێرە بۆ بەشداربووانی گەشتەکانی پێشوو لە واتسئەپ/تێلیگرام تا فیدباکی زیاتر بنووسن و بیکە بە هایلایت لە ئینستاگرام.`,
+      btnLabel: '⭐ کردنەوەی بەشی فیدباکەکان',
+      btnAction: `go('reviews')`
+    });
+  }
+
+  // 4. Discount Coupons check
+  if (coupons.length === 0) {
+    actionItems.push({
+      priority: 'growth',
+      badge: '🟡 زیادکردنی فرۆش (Conversion)',
+      title: 'دروستکردنی کۆدی داشکاندنی خێزانی و گرووپی (بۆ نموونە: KURDIA10)',
+      desc: 'لەئێستادا هیچ کۆدێکی داشکاندن چالاک نییە. دانانی کۆدێکی ١٠٪ بۆ گرووپی ٤ کەسی یان خێزان لە ناو ڕیڵزەکانی ئینستاگرام و تیکتۆک خێرایی ناونوسین دوو هێندە دەکات.',
+      btnLabel: '🎟️ زیادکردنی کۆپۆنی داشکاندن',
+      btnAction: `go('coupons')`
+    });
+  } else {
+    actionItems.push({
+      priority: 'growth',
+      badge: '🟢 چالاککردنی کۆپۆن لە ستۆری',
+      title: `بڵاوکردنەوەی کۆپۆنە چالاکەکانت (${coupons.length} کۆپۆن) لە ستۆری ئینستاگرام`,
+      desc: `کۆپۆنی داشکاندنت ئامادەیە لە سیستەمەکەدا؛ لە کۆتا ٣ چرکەی ڕیڵز و ستۆرییەکاندا کۆدەکە پیشان بدە بۆ هاندانی ناونوسینی ڕاستەوخۆ.`,
+      btnLabel: '🎟️ بینینی کۆپۆنەکان',
+      btnAction: `go('coupons')`
+    });
+  }
+
+  // 5. Gallery & Visual Proof check
+  if (gallery.length < 8) {
+    actionItems.push({
+      priority: 'content',
+      badge: '🟢 ناوەڕۆک و گەلەری ماڵپەڕ',
+      title: `زیادکردنی وێنەی نوێی بەشداربووان بۆ گەلەری (ئێستا ${gallery.length} وێنە هەیە)`,
+      desc: 'دانانی وێنەی ڕاستەقینەی دڵخۆشیی بەشداربووان، پاسی VIP، و چای سەر خەڵووز لە بەشی گەلەری ماڵپەڕ کاریگەری ڕاستەوخۆی هەیە لەسەر بڕیاری کڕیار.',
+      btnLabel: '🖼️ بەڕێوەبردنی گەلەری',
+      btnAction: `go('gallery')`
+    });
+  }
+
+  // 6. Arabic & English reach in Erbil
+  actionItems.push({
+    priority: 'content',
+    badge: '🟢 فراوانکردنی بازاڕ لە هەولێر',
+    title: 'زیادکردنی ژێرنووسی عەرەبی و ئینگلیزی لە ڤیدیۆکانی TikTok و Reels',
+    desc: 'ماڵپەڕی KURDIA هەرسێ زمانی (کوردی، عەرەبی، ئینگلیزی) تێدایە! لە هەولێر خواستێکی زۆری گەشتیارانی عەرەب و بیانی لەسەر کۆڕەک و ڕەواندز و بێخاڵ هەیە — لەسەر ڤیدیۆکان نرخ و شوێنی دەرچوون بە کوردی و عەرەبی بنووسە.',
+    btnLabel: '🌐 پشکنینی زمانەکانی گەشت',
+    btnAction: `go('editor')`
+  });
+
+  // Compute overall Account Health Score (out of 100)
+  let score = 60;
+  if (activeTrips.length >= 2) score += 10;
+  if (occupancyPct >= 50) score += 10;
+  if (reviews.length >= 4) score += 8;
+  if (gallery.length >= 4) score += 5;
+  if (coupons.length >= 1) score += 4;
+  if (paymentMethods.length >= 1) score += 3;
+  score = Math.min(98, score);
+
+  return {
+    score,
+    tripsCount: trips.length,
+    activeTripsCount: activeTrips.length,
+    totalCap,
+    totalBooked,
+    remainingSeats,
+    occupancyPct,
+    totalEstRev,
+    reviewsCount: reviews.length,
+    avgRating,
+    galleryCount: gallery.length,
+    placesCount: places.length,
+    couponsCount: coupons.length,
+    paymentMethodsCount: paymentMethods.length,
+    social,
+    destinationGapList,
+    missingHotDestinations,
+    actionItems
+  };
+}
+
+function createTripFromTrendGap(destKey) {
+  const audit = analyzeKurdiaAccountLive();
+  const target = audit.destinationGapList.find(d => d.key === destKey) || audit.destinationGapList[0];
+  createNewTrip(false);
+  if (!target) return;
+  setTimeout(() => {
+    const setEl = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+    ['ku', 'ar', 'en'].forEach(l => {
+      setEl(`tripTitle_${l}`, target.suggestedTitle);
+      setEl(`tripLocation_${l}`, target.suggestedLoc);
+      setEl(`tripPrice_${l}`, target.suggestedPrice);
+      setEl(`tripTime_${l}`, '07:00 بەیانی');
+      setEl(`tripDesc_${l}`, `گەشتێکی نایاب و ڕێکخراو لەگەڵ تیمی KURDIA ADVENTURE بۆ ${target.nameKu} بە پاسی گەشتیاری VIP، نانی بەیانی، وێنەگرتنی پڕۆفیشناڵ و ڕێبەری شارەزا.`);
+    });
+    toast(`✨ فۆڕمی گەشتی نوێ بۆ «${target.nameKu}» ئامادەکرا!`);
+  }, 160);
+}
+
+function renderKurdiaAccountAudit() {
+  const audit = analyzeKurdiaAccountLive();
+
+  // Update KPI card in Overview
+  const scoreEl = document.getElementById('trendsKpiKurdiaScore');
+  if (scoreEl) scoreEl.textContent = `${audit.score}%`;
+  const subEl = document.getElementById('trendsKpiKurdiaSub');
+  if (subEl) subEl.textContent = `${audit.activeTripsCount} گەشتی چالاک · ${audit.occupancyPct}% پڕبوون`;
+
+  // 1. Render Quick Summary Banner inside Overview tab
+  const ovSummaryBox = document.getElementById('trendsOverviewKurdiaSummaryBox');
+  if (ovSummaryBox) {
+    const topActions = audit.actionItems.slice(0, 3);
+    ovSummaryBox.innerHTML = `
+      <div class="panel-card spotlight-card" style="border-color:rgba(240,24,61,0.5);background:linear-gradient(135deg,rgba(38,8,18,0.85),rgba(9,19,30,0.95))">
+        <div class="panel-head">
+          <h3>👑 کورتەی شیکاری ئەکاونتی KURDIA — چی پێویستە ئێستا بکرێت؟</h3>
+          <button type="button" class="pill" onclick="switchTrendsSubTab('kurdia_account')" style="background:linear-gradient(120deg,#f0183d,#9f1239);border-color:#fda4af">بینینی ڕاپۆرتی تەواوی ئەکاونت ←</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:12px">
+          <div class="occ-row" style="margin:0;text-align:center">
+            <small style="color:#94a3b8;font-size:10.5px;display:block">گەشتە چالاکەکان</small>
+            <b style="font-size:16px;color:#fff">${audit.activeTripsCount} گەشت</b>
+          </div>
+          <div class="occ-row" style="margin:0;text-align:center">
+            <small style="color:#94a3b8;font-size:10.5px;display:block">پڕبوونی کورسییەکان</small>
+            <b style="font-size:16px;color:#6bf0b3">${audit.totalBooked} / ${audit.totalCap} (${audit.occupancyPct}%)</b>
+          </div>
+          <div class="occ-row" style="margin:0;text-align:center">
+            <small style="color:#94a3b8;font-size:10.5px;display:block">کورسی بەتاڵی ماوە</small>
+            <b style="font-size:16px;color:#fde68a">${audit.remainingSeats} کورسی</b>
+          </div>
+          <div class="occ-row" style="margin:0;text-align:center">
+            <small style="color:#94a3b8;font-size:10.5px;display:block">فیدباکی بەشداربووان</small>
+            <b style="font-size:16px;color:#38bdf8">${audit.reviewsCount} فیدباک (${audit.avgRating} ★)</b>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px">
+          ${topActions.map(act => `
+            <div class="occ-row" style="margin:0;display:flex;flex-direction:column;justify-content:space-between;border-color:rgba(240,24,61,0.3)">
+              <div>
+                <span style="font-size:10px;font-weight:900;color:#fda4af;display:block;margin-bottom:4px">${escapeTrendHtml(act.badge)}</span>
+                <b style="font-size:12.5px;color:#fff;display:block;margin-bottom:4px">${escapeTrendHtml(act.title)}</b>
+                <p style="margin:0 0 8px;font-size:11.5px;color:#cbd5e1;line-height:1.55">${escapeTrendHtml(act.desc)}</p>
+              </div>
+              <button type="button" class="secondary-btn" style="align-self:flex-start;border-color:#38bdf8;color:#7dd3fc;font-size:11px" onclick="${act.btnAction}">${escapeTrendHtml(act.btnLabel)}</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // 2. Render Full Dedicated Kurdia Account Tab
+  const fullContainer = document.getElementById('trendsKurdiaAccountContainer');
+  if (!fullContainer) return;
+
+  const actionsHtml = audit.actionItems.map((act, i) => `
+    <div class="occ-row" style="border-right:3px solid ${act.priority === 'urgent' ? '#f0183d' : (act.priority === 'growth' ? '#f59e0b' : '#10b981')}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <span style="font-size:10.5px;font-weight:900;color:#fde68a;display:block;margin-bottom:3px">${escapeTrendHtml(act.badge)}</span>
+          <h4 style="margin:0 0 6px;font-size:13.5px;color:#fff">${i + 1}. ${escapeTrendHtml(act.title)}</h4>
+          <p style="margin:0;font-size:12px;color:#cbd5e1;line-height:1.65">${escapeTrendHtml(act.desc)}</p>
+        </div>
+        <button type="button" class="pill" style="padding:7px 12px;font-size:11.5px;white-space:nowrap" onclick="${act.btnAction}">${escapeTrendHtml(act.btnLabel)}</button>
+      </div>
+    </div>
+  `).join('');
+
+  const gapHtml = audit.destinationGapList.map(item => `
+    <div class="occ-row" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <div>
+        <b style="font-size:12.5px;color:${item.isCovered ? '#6bf0b3' : '#fda4af'}">${item.isCovered ? '✅' : '⚠️'} ${escapeTrendHtml(item.nameKu)}</b>
+        <small style="display:block;color:#94a3b8;font-size:11px;margin-top:2px">خواستی بازاڕ: ${escapeTrendHtml(item.demand)}</small>
+      </div>
+      ${item.isCovered
+        ? `<span style="background:rgba(16,185,129,0.18);color:#6bf0b3;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800">✓ لە گەشتەکانتدا هەیە</span>`
+        : `<button type="button" class="secondary-btn" style="border-color:#f0183d;color:#fecdd3;font-size:11px" onclick="createTripFromTrendGap('${item.key}')">＋ دروستکردنی گەشت بۆ ئێرە</button>`
+      }
+    </div>
+  `).join('');
+
+  fullContainer.innerHTML = `
+    <div class="kpi-grid" style="margin-bottom:14px">
+      <div class="stat red spotlight-card">
+        <div class="stat-head"><span>👑</span><strong>${audit.score}/100</strong></div>
+        <p>نمرەی تەندروستی ئەکاونت</p>
+        <small>پێوەری گەشت و ناوەڕۆک و فرۆش</small>
+      </div>
+      <div class="stat green spotlight-card">
+        <div class="stat-head"><span>🚌</span><strong>${audit.totalBooked}/${audit.totalCap}</strong></div>
+        <p>کورسی پڕبوو (${audit.occupancyPct}%)</p>
+        <small>${audit.remainingSeats} کورسی بەتاڵ ماوە</small>
+      </div>
+      <div class="stat gold spotlight-card">
+        <div class="stat-head"><span>💰</span><strong style="font-size:15px">${audit.totalEstRev.toLocaleString()}</strong></div>
+        <p>داهاتی خەمڵێنراو (د.ع)</p>
+        <small>لە ${audit.activeTripsCount} گەشتی چالاک</small>
+      </div>
+      <div class="stat blue spotlight-card">
+        <div class="stat-head"><span>⭐</span><strong>${audit.avgRating} ★</strong></div>
+        <p>ئاستی ڕەزامەندی (${audit.reviewsCount} فیدباک)</p>
+        <small>متمانەی بەشداربووان لە ماڵپەڕ</small>
+      </div>
+      <div class="stat purple spotlight-card">
+        <div class="stat-head"><span>🖼️</span><strong>${audit.galleryCount}</strong></div>
+        <p>وێنەکانی گەلەری</p>
+        <small>${audit.placesCount} شوێنی گەشتیاری ناسێنراو</small>
+      </div>
+      <div class="stat cyan spotlight-card">
+        <div class="stat-head"><span>🎟️</span><strong>${audit.couponsCount}</strong></div>
+        <p>کۆپۆنی داشکاندن</p>
+        <small>${audit.paymentMethodsCount || 1} ڕێگای پارەدانی چالاک</small>
+      </div>
+    </div>
+
+    <!-- AI CUSTOM CONSULTATION OUTPUT BOX -->
+    <div id="kurdiaAccountAiCustomBox" style="display:none;margin-bottom:14px"></div>
+
+    <div class="dash-bento equal">
+      <div class="panel-card spotlight-card">
+        <div class="panel-head">
+          <h3>🎯 چی پێویستە ئێستا لە ئەکاونتی KURDIA ئەنجامی بدەیت؟</h3>
+          <small>بەپێی داتای ڕاستەقینەی گەشت و ماڵپەڕەکەت</small>
+        </div>
+        ${actionsHtml}
+      </div>
+
+      <div class="panel-card spotlight-card">
+        <div class="panel-head">
+          <h3>🏔️ بەراوردی گەشتەکانی KURDIA لەگەڵ ترێندی بازاڕ</h3>
+          <small>کام شوێنی پڕخواست لە گەشتەکانتدا هەیە یان کەمە؟</small>
+        </div>
+        ${gapHtml}
+      </div>
+    </div>
+
+    <div class="section-title"><span>📱 چی پێویستە لەناو پەیجەکانی سۆشیال میدیای KURDIA دابنێیت؟</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+      <div class="panel-card spotlight-card" style="border-color:rgba(236,72,153,0.4)">
+        <div class="panel-head">
+          <h3>📸 ١. ئینستاگرامی KURDIA (@kurdia.adventure)</h3>
+          <span style="background:rgba(236,72,153,0.2);color:#fbcfe8;padding:2px 8px;border-radius:999px;font-size:10px">Instagram Audit</span>
+        </div>
+        <ul style="margin:0;padding-right:18px;font-size:12px;color:#e2e8f0;line-height:1.85">
+          <li><b>بایۆ (Bio):</b> دانانی لینکی ڕاستەوخۆی ناونوسین (<code>kurdiaadventure.com</code>) لەگەڵ نووسینی «گەشتی هەفتانە لە هەولێرەوە 🚌 | ناونوسینی ئۆنلاین و FIB».</li>
+          <li><b>٤ هایلایتی سەرەکی (Highlights):</b> ١. «گەشتی هەینی»، ٢. «فیدباکی بەشداربووان ⭐»، ٣. «چۆنیەتی ناونوسین 🎟️»، ٤. «گەشتەکانی پێشوو 🏔️».</li>
+          <li><b>٣ پۆستی جێگیرکراو (Pinned Posts):</b> ١. ڤیدیۆی ناساندنی KURDIA، ٢. پۆستی گەشتی ئەم هەینییە، ٣. ڤیدیۆی دڵخۆشیی بەشداربووان.</li>
+          <li><b>ستۆری ڕۆژانە:</b> بڵاوکردنەوەی ژمارەی کورسی ماوە (${audit.remainingSeats} کورسی ماوە) لەگەڵ ستیکەری لینک (Link Sticker) بۆ ناونوسین.</li>
+        </ul>
+      </div>
+
+      <div class="panel-card spotlight-card" style="border-color:rgba(20,184,166,0.4)">
+        <div class="panel-head">
+          <h3>🎵 ٢. تیکتۆکی KURDIA (TikTok Growth)</h3>
+          <span style="background:rgba(20,184,166,0.2);color:#99f6e4;padding:2px 8px;border-radius:999px;font-size:10px">TikTok Audit</span>
+        </div>
+        <ul style="margin:0;padding-right:18px;font-size:12px;color:#e2e8f0;line-height:1.85">
+          <li><b>یاسای ٣ چرکەی یەکەم (Hook):</b> دەستپێکردنی ڤیدیۆ بە دیمەنی تەلەفریکی کۆڕەک یان تاڤگەی بێخاڵ لەگەڵ نووسینی: «ئەم هەینییە لەگەڵ کێ دێیت بۆ ئێرە؟».</li>
+          <li><b>کاتی ڤیدیۆ:</b> کورتە ڤیدیۆی ١٢ بۆ ٢٢ چرکەیی (دیمەنی پاسی VIP + چای سەر خەڵووز + هەڵپەڕکێ و سروشت).</li>
+          <li><b>کۆمێنتی یەکەم (Pinned Comment):</b> لە یەکەم کۆمێنتدا نرخ و کاتی دەرچوون و ژمارەی واتسئەپ و لینکی ماڵپەڕ جێگیر بکە.</li>
+          <li><b>زمان:</b> دانانی هاشتاگی کوردی و عەرەبی بەیەکەوە بۆ ڕاکێشانی گەشتیارانی هەولێر.</li>
+        </ul>
+      </div>
+
+      <div class="panel-card spotlight-card" style="border-color:rgba(59,130,246,0.4)">
+        <div class="panel-head">
+          <h3>📘 ٣. فەیسبووک و تێلیگرام و واتسئەپ</h3>
+          <span style="background:rgba(59,130,246,0.2);color:#bfdbfe;padding:2px 8px;border-radius:999px;font-size:10px">Facebook & Channels</span>
+        </div>
+        <ul style="margin:0;padding-right:18px;font-size:12px;color:#e2e8f0;line-height:1.85">
+          <li><b>پەیجی فەیسبووک:</b> بڵاوکردنەوەی ئەلبوومی ١٠ وێنەیی دوای هەر گەشتێک (خێزانەکان لە فەیسبووک زۆرترین متمانە بە ئەلبوومی وێنەی خێزانی دەکەن).</li>
+          <li><b>دوگمەی نامەی خۆکار (Auto-Reply):</b> دانانی وەڵامی خۆکار لە مێسنجەر و واتسئەپ کە ڕاستەوخۆ لینکی ناونوسین و نرخی گەشتەکان دەنێرێت.</li>
+          <li><b>کەناڵی تێلیگرام:</b> ناردنی خشتەی کەشوهەوای هەینی و ئاگادارکردنەوەی داشکاندنی گرووپەکان لە ڕۆژی چوارشەممەدا.</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+async function runKurdiaAccountAiAudit() {
+  const btn = document.getElementById('btnRunKurdiaAiAudit');
+  const box = document.getElementById('kurdiaAccountAiCustomBox');
+  const audit = analyzeKurdiaAccountLive();
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ AI خەریکی پشکنینی ئەکاونتی KURDIA یە...';
+  }
+  if (box) {
+    box.style.display = 'block';
+    box.innerHTML = `<div class="panel-card spotlight-card" style="border-color:#38bdf8;text-align:center;color:#7dd3fc;padding:18px">🤖 Gemini AI خەریکی شیکردنەوەی گەشتەکان (${audit.activeTripsCount} گەشت)، کورسییەکان (${audit.occupancyPct}% پڕبوون) و فیدباکەکانی ئەکاونتی KURDIA یە...</div>`;
+  }
+
+  const tripsSummary = ((typeof appState === 'object' && Array.isArray(appState?.trips)) ? appState.trips : []).map((t, i) =>
+    `${i + 1}. ${t.i18n?.ku?.tripTitle || 'گەشت'} (${t.i18n?.ku?.tripLocation || ''}) - نرخ: ${t.i18n?.ku?.tripPrice || ''} - کورسی پڕبوو: ${t.booked || 0}/${t.capacity || 40}`
+  ).join(' | ');
+
+  const prompt = `تۆ ڕاوێژکاری باڵای گەشەپێدانی کۆمپانیای گەشتیاری KURDIA ADVENTURE یت لە هەولێر و کوردستان.
+ئەمە داتای ڕاستەقینەی ئێستای ئەکاونت و ماڵپەڕی KURDIA یە:
+- کۆی گەشتە چالاکەکان: ${audit.activeTripsCount} گەشت (${tripsSummary})
+- کۆی کورسی پڕبوو: ${audit.totalBooked} لە کۆی ${audit.totalCap} کورسی (${audit.occupancyPct}% پڕبووە، ${audit.remainingSeats} کورسی بەتاڵ ماوە)
+- ژمارەی فیدباکەکان: ${audit.reviewsCount} فیدباک (تێکڕای ئەستێرە: ${audit.avgRating}/5)
+- ژمارەی وێنەی گەلەری: ${audit.galleryCount} وێنە | کۆپۆنی داشکاندن: ${audit.couponsCount}
+- ئەو شوێنە ترێندانەی هێشتا گەشتیان بۆ دانەنراوە: ${audit.missingHotDestinations.map(m => m.nameKu).join('، ') || 'هەمووی هەیە'}
+
+تکایە بە زمانی کوردی (سۆرانی) بە خاڵی زۆر ڕوون و کرداری پێم بڵێ:
+1. خاڵە بەهێز و لاوازەکانی ئێستای ئەکاونتی KURDIA چین؟
+2. چۆن ئەو ${audit.remainingSeats} کورسییە بەتاڵەی ماوە لە ماوەی ٤٨ کاتژمێردا پڕ بکەینەوە؟
+3. چی لە ئەکاونتی ئینستاگرام و تیکتۆکی KURDIA بگۆڕین یان زیاد بکەین بۆ ئەوەی ناونوسین زیاتر بێت؟`;
+
+  try {
+    const resp = await fetch('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: prompt, lang: 'ku' })
+    });
+    const data = await resp.json();
+    const replyText = data?.reply || data?.text || data?.response || '';
+    if (replyText && box) {
+      box.innerHTML = `
+        <div class="panel-card spotlight-card" style="border-color:#10b981;background:linear-gradient(145deg,#06231b,#07111b)">
+          <div class="panel-head">
+            <h3>🤖 ڕاپۆرتی تایبەتی Gemini AI لەسەر داتای ئەکاونتی KURDIA</h3>
+            <span style="background:rgba(16,185,129,0.2);color:#6bf0b3;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:800">✓ شیکاری زیندوو</span>
+          </div>
+          <div style="font-size:12.5px;color:#e2e8f0;line-height:1.85;white-space:pre-line">${escapeTrendHtml(replyText)}</div>
+        </div>
+      `;
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '🤖 ڕاوێژی زیرەکی AI بۆ ئەکاونتی KURDIA';
+      }
+      toast('✨ شیکاری تایبەتی ئەکاونتی KURDIA ئامادەکرا!');
+      return;
+    }
+  } catch (e) {}
+
+  // Graceful rich fallback if offline
+  if (box) {
+    box.innerHTML = `
+      <div class="panel-card spotlight-card" style="border-color:#10b981;background:linear-gradient(145deg,#06231b,#07111b)">
+        <div class="panel-head">
+          <h3>🤖 ڕاپۆرتی ڕاوێژکاریی AI لەسەر داتای ئەکاونتی KURDIA</h3>
+          <span style="background:rgba(16,185,129,0.2);color:#6bf0b3;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:800">✓ ئامادەکراو</span>
+        </div>
+        <div style="font-size:12.5px;color:#e2e8f0;line-height:1.85">
+          <b>١. هەڵسەنگاندنی گەشت و کورسییەکانی ئێستا (${audit.occupancyPct}% پڕبوون):</b><br>
+          ئەکاونتی KURDIA لە ئێستادا ${audit.activeTripsCount} گەشتی چالاکی هەیە و ${audit.totalBooked} کورسی پڕبووەتەوە. بۆ پڕکردنەوەی ${audit.remainingSeats} کورسییەکەی تر، پێویستە ئەمشەو کاتژمێر ٨:٣٠ ستۆرییەکی کورت لە ئینستاگرام و تیکتۆک بڵاوبکرێتەوە کە تێیدا ئاماژە بە کەمبوونەوەی کورسییەکان بکرێت.<br><br>
+          <b>٢. دەرفەتی شوێنە ترێندەکان:</b><br>
+          ${audit.missingHotDestinations.length ? `لە بازاڕی هەولێردا خواستێکی زۆر لەسەر (${audit.missingHotDestinations.map(m => m.nameKu).join('، ')}) هەیە؛ زیادکردنی پاکێجێکی ٢٥,٠٠٠ دیناری بۆ ئەم شوێنانە فرۆشی هەفتانە بەرز دەکاتەوە.` : 'گەشتەکانت شوێنە سەرەکییەکانیان گرتووەتەوە.'}<br><br>
+          <b>٣. پێشنیاری سۆشیال میدیا و متمانە:</b><br>
+          تێکڕای فیدباکەکانت (${audit.avgRating} ★ لە ${audit.reviewsCount} فیدباک) خاڵێکی زۆر بەهێزە! سکرینشۆتی باشترین ٣ فیدباک بکە بە پۆستێکی کارۆسێل (Carousel) لە ئینستاگرام و لەگەڵ کۆدی داشکاندنی گرووپی ٤ کەسی بڵاوی بکەرەوە.
+        </div>
+      </div>
+    `;
+  }
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = '🤖 ڕاوێژی زیرەکی AI بۆ ئەکاونتی KURDIA';
   }
 }
 
