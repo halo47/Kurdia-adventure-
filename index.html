@@ -2277,6 +2277,71 @@ main,section,.section,.page-section{background-color:transparent!important}
     </div>
   </div>
 </div>
+
+<!-- PUBLISHED TRIP FULL DETAILS POPUP MODAL (ADMIN DATA VIEW) -->
+<div id="tripDetailsModal" class="modal" onclick="if(event.target===this)closeModal('tripDetailsModal')">
+  <div class="sheet destination-sheet trip-details-sheet" style="max-width:650px;max-height:92vh;overflow-y:auto">
+    <button class="iconbtn close" onclick="closeModal('tripDetailsModal')" aria-label="داخستن"><i data-lucide="x"></i></button>
+    <div class="dest-modal-hero" style="position:relative">
+      <img id="tripModalImage" class="destination-modal-image" src="" alt="" style="height:245px;object-fit:cover;width:100%;border-radius:20px">
+      <div class="dest-modal-badges" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="dest-modal-region" id="tripModalLocationBadge">📍 کوردستان</span>
+        <span class="dest-modal-hiking" id="tripModalStatusBadge">ناونووسین کراوەیە ✓</span>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:14px">
+      <div class="eyebrow" id="tripModalCountdownBadge" style="margin:0;color:#ff8da3">⏳ کاتی گەشت</div>
+      <span id="tripModalWeatherBadge" style="font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.28);color:#7dd3fc">⛅ ساماڵ · 22°C</span>
+    </div>
+
+    <h2 id="tripModalTitle" style="margin:8px 0 12px;font-size:clamp(20px,5vw,26px);line-height:1.35;color:#fff"></h2>
+
+    <!-- Complete Admin Info Grid -->
+    <div class="dest-modal-specs" id="tripModalSpecsGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px"></div>
+
+    <!-- Live Seat Capacity Progress Box -->
+    <div id="tripModalCapacityBox" style="padding:12px 14px;border-radius:16px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.08);margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:7px;flex-wrap:wrap;gap:6px">
+        <b style="color:#fff" id="tripModalSeatsTitle">💺 دۆخی کورسییەکان</b>
+        <span id="tripModalSeatsSub" style="font-weight:800;color:#4ef2a1"></span>
+      </div>
+      <div style="height:8px;border-radius:999px;background:rgba(255,255,255,0.08);overflow:hidden">
+        <div id="tripModalSeatsBar" style="height:100%;width:0%;background:linear-gradient(90deg,#e5234f,#ff7a98);border-radius:999px;transition:width 0.4s ease"></div>
+      </div>
+    </div>
+
+    <!-- Meeting Point / Google Maps Link (if entered in Admin) -->
+    <div id="tripModalMeetingBox" style="display:none;padding:12px 14px;border-radius:16px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.28);margin-bottom:12px;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0">
+        <span style="font-size:18px">📍</span>
+        <div>
+          <b style="display:block;font-size:12.5px;color:#fff">شوێنی کۆبوونەوە و بەڕێکەوتن</b>
+          <small id="tripModalMeetingText" style="color:#a7f3d0;font-size:11px;display:block;overflow-wrap:anywhere">لینکی نەخشەی شوێنی دەرچوونی پاسەکان</small>
+        </div>
+      </div>
+      <a id="tripModalMeetingLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn ghost" style="padding:8px 12px;font-size:11.5px;min-height:36px;border-color:rgba(16,185,129,0.45);color:#6bf0b3;text-decoration:none">
+        🗺️ کردنەوەی نەخشە ↗
+      </a>
+    </div>
+
+    <!-- Full Trip Program & Description Entered in Admin -->
+    <div class="dest-modal-desc-box" style="padding:14px 16px;border-radius:18px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09)">
+      <b style="display:flex;align-items:center;gap:6px;color:#ffd0d9;font-size:13.5px;margin-bottom:6px">📋 تەواوی بەرنامە و وردەکاری گەشت:</b>
+      <p id="tripModalDescription" class="muted" style="line-height:2;margin:0;white-space:pre-line;color:#e2e8f0;font-size:13px"></p>
+    </div>
+
+    <!-- Modal CTA Actions -->
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+      <button type="button" id="tripModalBookBtn" class="btn red" style="flex:1.4;min-height:46px;font-size:13.5px" onclick="bookFromTripDetailsModal()">
+        🎟️ بەشداری بکە لەم گەشتە ←
+      </button>
+      <button type="button" id="tripModalWaBtn" class="btn ghost" style="flex:0.8;min-height:46px;font-size:12.5px" onclick="inquireTripWhatsApp(window.currentOpenedTripIndex || 0)">
+        💬 پرسیار لە وەتسئەپ
+      </button>
+    </div>
+  </div>
+</div>
 <div id="storyModal" class="story-modal"><div class="story-sheet"><div class="sectionhead"><div><div class="eyebrow">ستۆری</div><h2>ستۆری خۆت بنێرە</h2></div><button class="iconbtn" onclick="closeStoryModal()"><i data-lucide="x"></i></button></div><form class="form" onsubmit="submitStory(event)"><input id="stName" class="input" required placeholder="ناوی تۆ..."><input id="stCity" class="input" placeholder="شار..."><input id="stTrip" class="input" placeholder="ناوی گەشت..."><textarea id="stText" class="textarea" placeholder="چی بەسەر هات؟..."></textarea><input id="stMediaFile" class="input" type="file" accept="image/*" onchange="previewStoryImage(event)" required><input id="stMediaBase64" type="hidden"><div id="storyPreview" class="receipt-preview">هیچ وێنەیەک هەڵنەبژێردراوە</div><button class="btn red" type="submit">ناردنی ستۆری</button></form></div></div>
 <div id="storyViewerModal" class="story-viewer"><div class="story-viewer-card"><div class="story-progress"><i id="storyProgressBar"></i></div><img id="viewerImage"><div class="story-viewer-top"><div id="viewerAvatar" class="story-viewer-avatar">K</div><div class="story-viewer-info"><b id="viewerName">KURDIA</b><small id="viewerTime">کوردیا</small></div><button class="story-viewer-close" onclick="closeStoryViewer()"><i data-lucide="x"></i></button></div><div class="story-viewer-bottom"><div id="viewerText" style="flex:1;font-size:12px;line-height:1.8"></div><button class="story-viewer-like" onclick="likeCurrentStory()"><i data-lucide="heart"></i> <span id="viewerLikes">0</span></button><button class="story-viewer-like" onclick="shareStoryWhatsApp()"><i data-lucide="share-2"></i></button></div></div></div>
 <div id="bookingSuccessModal" class="booking-success-overlay" aria-hidden="true">
@@ -2623,19 +2688,28 @@ function normalizeTripItem(tr, fallbackTrip, lang, globalI18n, idx){
     rawTime = '06:00 بەیانی';
   }
   const rawDesc = ku.tripDesc || tr.description || tr.desc || fallbackTrip?.desc || '';
+  const rawDate = tr.date || (tr.targetDate ? String(tr.targetDate).slice(0, 10) : '') || (tr.tripTargetDate ? String(tr.tripTargetDate).slice(0, 10) : '') || fallbackTrip?.date || '';
+  const rawTargetDate = tr.targetDate || tr.tripTargetDate || rawDate || '';
+  const isBookingOpen = tr.bookingOpen !== false && tr.status !== 'closed';
   return {
     id: tr.id || ('trip-' + (idx + 1)),
     title: rawTitle,
     location: rawLoc,
-    date: tr.date || (tr.targetDate ? String(tr.targetDate).slice(0, 10) : '') || (tr.tripTargetDate ? String(tr.tripTargetDate).slice(0, 10) : '') || fallbackTrip?.date || '',
+    date: rawDate,
+    targetDate: rawTargetDate,
     price: rawPrice,
     time: rawTime,
     capacity: Number(tr.capacity ?? fallbackTrip?.capacity ?? 35),
     booked: Number(tr.booked ?? fallbackTrip?.booked ?? 0),
     desc: rawDesc,
+    description: rawDesc,
     imageUrl: tr.heroImageUrl || tr.tripImageUrl || tr.imageUrl || tr.img || fallbackTrip?.imageUrl || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85',
     published: tr.published !== false,
-    status: tr.status || 'active',
+    bookingOpen: isBookingOpen,
+    status: !isBookingOpen ? 'closed' : (tr.status || 'active'),
+    weatherTemp: tr.weatherTemp || tr.weather?.temp || fallbackTrip?.weatherTemp || '22°C',
+    weatherCondition: tr.weatherCondition || tr.weather?.condition || fallbackTrip?.weatherCondition || 'ساماڵ ☀️',
+    meetingLink: tr.meetingLink || tr.meetingLocation || tr.variable4 || fallbackTrip?.meetingLink || '',
     i18n: tr.i18n || null
   };
 }
@@ -3461,11 +3535,13 @@ function render(){
      const bkd = Math.min(cap, Math.max(0, Number(tr.booked || 0)));
      const rem = Math.max(0, cap - bkd);
      const fDate = formatTripDateKu(tr.date);
-     const isFull = rem === 0 || tr.status === 'full';
-     const statusLabel = isFull ? 'پڕبووە' : (rem <= 8 ? `تەنها ${rem} شوێن ماوە 🔥` : 'ناونووسین کراوەیە ✓');
-     return `<article class="featured trip-showcase-card tilt-3d-card" data-trip-index="${idx}">
+     const isClosed = tr.bookingOpen === false || tr.status === 'closed';
+     const isFull = rem === 0 || tr.status === 'full' || isClosed;
+     const statusLabel = isClosed ? 'ناونووسین داخراوە' : (isFull ? 'پڕبووە' : (rem <= 8 ? `تەنها ${rem} شوێن ماوە 🔥` : 'ناونووسین کراوەیە ✓'));
+     return `<article class="featured trip-showcase-card tilt-3d-card" data-trip-index="${idx}" style="cursor:pointer" onclick="openTripDetailsModal(${idx})">
        <div class="featureimg" style="background-image:url('${esc(imgUrl)}')">
          <span class="pill trip-status-pill ${isFull ? 'is-full' : ''}">${esc(statusLabel)}</span>
+         <span style="position:absolute;bottom:12px;left:12px;z-index:2;background:rgba(7,10,16,0.78);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.16);color:#f8fafc;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:5px">🔍 کلیک بکە بۆ تەواوی زانیاری</span>
        </div>
        <div class="featurebody">
          <div class="trip-meta-top">
@@ -3478,12 +3554,15 @@ function render(){
            <div class="stat"><b>${esc(fDate)}</b><span>بەرواری گەشت</span></div>
            <div class="stat"><b>${esc(tr.price || '—')}</b><span>نرخی بەشداری</span></div>
          </div>
-         <div class="trip-card-actions">
-           <button class="btn red trip-join-btn" style="flex:1" onclick="selectTripForBooking(${idx})" ${isFull ? 'disabled' : ''}>
+         <div class="trip-card-actions" style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px">
+           <button type="button" class="btn ghost" style="flex:1;min-width:120px;border-color:rgba(229,35,79,0.4);color:#ffd0d9" onclick="event.stopPropagation();openTripDetailsModal(${idx})">
+             📋 تەواوی زانیاری
+           </button>
+           <button type="button" class="btn red trip-join-btn" style="flex:1.2;min-width:125px" onclick="event.stopPropagation();selectTripForBooking(${idx})" ${isFull ? 'disabled' : ''}>
              ${isFull ? 'شوێن نەماوە' : 'بەشداری بکە ←'}
            </button>
-           <button class="btn ghost trip-wa-btn" type="button" onclick="inquireTripWhatsApp(${idx})" title="پرسیار لە ڕێگەی وەتسئەپ">
-             💬 پرسیار
+           <button class="btn ghost trip-wa-btn" type="button" onclick="event.stopPropagation();inquireTripWhatsApp(${idx})" title="پرسیار لە ڕێگەی وەتسئەپ">
+             💬
            </button>
          </div>
        </div>
@@ -3533,9 +3612,14 @@ function render(){
            </div>
            <div class="btp-seat-bar"><i style="width:${pct}%"></i></div>
          </div>
-         <div class="btp-select-indicator">
-           <span>${isSel ? '✓ ئەم گەشتە هەڵبژێردراوە بۆ تۆمارکردن' : 'کلیک بکە بۆ هەڵبژاردنی ئەم گەشتە'}</span>
-           <span>←</span>
+         <div style="display:flex;gap:6px;align-items:center;margin-top:4px">
+           <div class="btp-select-indicator" style="flex:1;margin:0">
+             <span>${isSel ? '✓ هەڵبژێردراوە بۆ تۆمارکردن' : 'هەڵبژاردنی ئەم گەشتە'}</span>
+             <span>←</span>
+           </div>
+           <button type="button" class="btn ghost" style="padding:7px 11px;min-height:34px;font-size:11px;border-radius:10px;border-color:rgba(229,35,79,0.4);color:#ffd0d9;white-space:nowrap" onclick="event.stopPropagation();openTripDetailsModal(${idx})">
+             📋 وردەکاری گەشت
+           </button>
          </div>
        </div>
      </article>`;
@@ -3683,6 +3767,165 @@ window.requestPrivateTripForPlace = function(){
       privateTripGo(1);
     }, 100);
   }
+};
+
+window.currentOpenedTripIndex = 0;
+window.openTripDetailsModal = function(tripIdx){
+  const trips = getActiveTripsList();
+  const tr = trips[tripIdx] || trips[0];
+  if(!tr) return;
+  window.currentOpenedTripIndex = tripIdx;
+
+  // Also check if local admin state has fresher fields for this same trip
+  let adminMatch = null;
+  try{
+    const rawAdm = localStorage.getItem('kurdia_admin_multitrip_v6');
+    if(rawAdm){
+      const parsedAdm = JSON.parse(rawAdm);
+      if(Array.isArray(parsedAdm?.trips)){
+        adminMatch = parsedAdm.trips.find(at =>
+          (at.id && at.id === tr.id) ||
+          ((at.i18n?.ku?.tripTitle || at.title) === tr.title)
+        );
+      }
+    }
+  }catch(_){}
+
+  const kuAdm = adminMatch?.i18n?.ku || tr.i18n?.ku || {};
+  const title = kuAdm.tripTitle || tr.title || 'گەشتی KURDIA ADVENTURE';
+  const location = kuAdm.tripLocation || tr.location || 'هەرێمی کوردستان';
+  const price = kuAdm.tripPrice || tr.price || '—';
+  const time = kuAdm.tripTime || tr.time || '06:00 بەیانی';
+  const desc = kuAdm.tripDesc || tr.description || tr.desc || 'تەواوی بەرنامە و وردەکارییەکانی ئەم گەشتە لەگەڵ تیمی سەرپەرشتیاری KURDIA ADVENTURE.';
+  const dateRaw = tr.date || (adminMatch?.tripTargetDate ? String(adminMatch.tripTargetDate).slice(0, 10) : '');
+  const formattedDate = formatTripDateKu(dateRaw);
+  const imgUrl = safeImageUrl(tr.imageUrl || adminMatch?.tripImageUrl) || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85';
+
+  const cap = Math.max(1, Number(adminMatch?.capacity ?? tr.capacity ?? 35));
+  const bkd = Math.min(cap, Math.max(0, Number(adminMatch?.booked ?? tr.booked ?? 0)));
+  const rem = Math.max(0, cap - bkd);
+  const pct = Math.min(100, Math.round((bkd / cap) * 100));
+
+  const isBookingOpen = (adminMatch ? adminMatch.bookingOpen !== false : tr.bookingOpen !== false) && tr.status !== 'closed';
+  const isFull = rem === 0 || tr.status === 'full' || !isBookingOpen;
+
+  const weatherTemp = adminMatch?.weatherTemp || tr.weatherTemp || '22°C';
+  const weatherCond = adminMatch?.weatherCondition || tr.weatherCondition || 'ساماڵ ☀️';
+  const meetingLink = String(adminMatch?.meetingLink || tr.meetingLink || data.meetingLink || '').trim();
+
+  const imgEl = $('tripModalImage');
+  if(imgEl) imgEl.src = imgUrl;
+
+  const titleEl = $('tripModalTitle');
+  if(titleEl) titleEl.textContent = title;
+
+  const locBadge = $('tripModalLocationBadge');
+  if(locBadge) locBadge.textContent = `📍 ${location}`;
+
+  const statusBadge = $('tripModalStatusBadge');
+  if(statusBadge){
+    if(!isBookingOpen){
+      statusBadge.textContent = '🔒 ناونووسین داخراوە';
+      statusBadge.style.background = 'rgba(239,68,68,0.22)';
+      statusBadge.style.color = '#fca5a5';
+    } else if(rem === 0){
+      statusBadge.textContent = '🔴 کورسییەکان پڕبوون';
+      statusBadge.style.background = 'rgba(239,68,68,0.22)';
+      statusBadge.style.color = '#fca5a5';
+    } else if(rem <= 8){
+      statusBadge.textContent = `🔥 تەنها ${rem} کورسی ماوە`;
+      statusBadge.style.background = 'rgba(245,158,11,0.24)';
+      statusBadge.style.color = '#fde68a';
+    } else {
+      statusBadge.textContent = '🟢 ناونووسین کراوەیە ✓';
+      statusBadge.style.background = 'rgba(16,185,129,0.22)';
+      statusBadge.style.color = '#6bf0b3';
+    }
+  }
+
+  const cdBadge = $('tripModalCountdownBadge');
+  if(cdBadge) cdBadge.textContent = getTripRemainingTimeBadge(tr.targetDate || dateRaw);
+
+  const wBadge = $('tripModalWeatherBadge');
+  if(wBadge) wBadge.textContent = `⛅ کەشوهەوا: ${weatherCond} · ${weatherTemp}`;
+
+  const specsGrid = $('tripModalSpecsGrid');
+  if(specsGrid){
+    const specs = [
+      { label: '📍 شوێن و ناوچە', val: location },
+      { label: '📅 بەرواری گەشت', val: formattedDate + (dateRaw && formattedDate !== dateRaw ? ` (${dateRaw})` : '') },
+      { label: '⏰ کاتی دەرچوون', val: time || 'دیاری دەکرێت' },
+      { label: '💰 نرخی بەشداری', val: price },
+      { label: '👥 کۆی گشتی کورسی', val: `${cap} کورسی` },
+      { label: '💺 کورسی ماوە', val: rem > 0 ? `${rem} شوێن بەردەستە` : 'پڕبووە (0 ماوە)' },
+      { label: '⛅ پێشبینی کەشوهەوا', val: `${weatherCond} (${weatherTemp})` },
+      { label: '🎟️ دۆخی ناونووسین', val: !isBookingOpen ? 'داخراوە' : (rem > 0 ? 'کراوەیە بۆ بەشداریکردن' : 'تەواوی کورسییەکان گیراون') }
+    ];
+    specsGrid.innerHTML = specs.map(s => `
+      <div class="dest-spec-box" style="padding:10px 12px;border-radius:14px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.08)">
+        <small style="display:block;font-size:10.5px;color:#94a3b8;margin-bottom:3px">${esc(s.label)}</small>
+        <b style="font-size:13px;color:#fff;line-height:1.4;display:block">${esc(s.val)}</b>
+      </div>
+    `).join('');
+  }
+
+  const seatsTitle = $('tripModalSeatsTitle');
+  if(seatsTitle) seatsTitle.textContent = `💺 بەشداربووان: ${bkd} لە کۆی ${cap} کورسی (${pct}%)`;
+  const seatsSub = $('tripModalSeatsSub');
+  if(seatsSub){
+    seatsSub.textContent = rem > 0 ? `${rem} کورسی بەردەستە` : 'شوێن نەماوە';
+    seatsSub.style.color = rem > 0 ? '#4ef2a1' : '#f87171';
+  }
+  const seatsBar = $('tripModalSeatsBar');
+  if(seatsBar) seatsBar.style.width = `${pct}%`;
+
+  const meetBox = $('tripModalMeetingBox');
+  const meetBtn = $('tripModalMeetingLinkBtn');
+  const meetTxt = $('tripModalMeetingText');
+  if(meetBox){
+    if(meetingLink && meetingLink !== 'https://maps.app.goo.gl/'){
+      meetBox.style.display = 'flex';
+      const isUrl = /^https?:\/\//i.test(meetingLink);
+      if(meetTxt) meetTxt.textContent = isUrl ? 'کرتە لە دوگمەی نەخشە بکە بۆ بینینی شوێنی کۆبوونەوە' : meetingLink;
+      if(meetBtn){
+        meetBtn.href = isUrl ? meetingLink : `https://www.google.com/maps/search/${encodeURIComponent(meetingLink)}`;
+        meetBtn.style.display = 'inline-flex';
+      }
+    } else {
+      meetBox.style.display = 'none';
+    }
+  }
+
+  const descEl = $('tripModalDescription');
+  if(descEl) descEl.textContent = desc;
+
+  const bookBtn = $('tripModalBookBtn');
+  if(bookBtn){
+    bookBtn.disabled = isFull;
+    bookBtn.textContent = isFull ? '🔒 شوێن نەماوە / ناونووسین داخراوە' : '🎟️ بەشداری بکە لەم گەشتە ←';
+  }
+
+  const modal = $('tripDetailsModal');
+  if(modal){
+    modal.classList.add('show');
+    const curLang = localStorage.getItem('kurdia_language') || 'ku';
+    if(curLang !== 'ku' && typeof window.translateSubtree === 'function'){
+      window.translateSubtree(modal, curLang);
+    }
+    if(window.gsap){
+      const sheet = modal.querySelector('.trip-details-sheet');
+      if(sheet){
+        gsap.fromTo(sheet, { opacity: 0, y: 22, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.36, ease: 'power3.out', clearProps: 'transform' });
+      }
+    }
+  }
+  if(window.lucide) lucide.createIcons();
+};
+
+window.bookFromTripDetailsModal = function(){
+  const idx = window.currentOpenedTripIndex || 0;
+  closeModal('tripDetailsModal');
+  selectTripForBooking(idx);
 };
 
 window.selectPrivatePreset = function(typeVal, destPlaceholder, peopleCount, btnEl){
@@ -4964,7 +5207,7 @@ function initPrivateMap(){
 function openSearch(){ $('searchModal').classList.add('show');$('siteSearch').focus();filterSearch() }
 function filterSearch(){
   const q=($('siteSearch').value||'').toLowerCase();
-  const tripItems=getActiveTripsList().map((tr,idx)=>({label:tr.title+' — '+tr.location,sub:formatTripDateKu(tr.date)+' · '+tr.price,action:`closeModal('searchModal');selectTripForBooking(${idx})`}));
+  const tripItems=getActiveTripsList().map((tr,idx)=>({label:tr.title+' — '+tr.location,sub:formatTripDateKu(tr.date)+' · '+tr.price,action:`closeModal('searchModal');openTripDetailsModal(${idx})`}));
   const placeItems=(data.destinations||[]).map((x,idx)=>({label:x.name+' — '+(x.region||'کوردستان'),sub:(x.type||'شوێن')+' · '+(x.hasHiking!==false?'پیادەڕەوی تیایە':'گەشتی ئاسان'),action:`closeModal('searchModal');openDestination(${idx})`}));
   const all=[...tripItems,...placeItems];
   $('searchResults').innerHTML=all.filter(x=>String(x.label||'').toLowerCase().includes(q)||String(x.sub||'').toLowerCase().includes(q)).slice(0,12).map(x=>`<div class="article" style="cursor:pointer" onclick="${x.action}"><div class="articleIcon"><i data-lucide="compass"></i></div><div><b>${esc(x.label)}</b><small>${esc(x.sub||'KURDIA ADVENTURE')}</small></div></div>`).join('')||'<div class="muted">هیچ ئەنجامێک نەدۆزرایەوە.</div>';
