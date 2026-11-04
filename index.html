@@ -26,7 +26,7 @@
 <link rel="icon" href="/icons/kurdia-logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/Picsart_26-05-02_22-24-16-869.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Leaflet Map Engine (Local primary + CDN fallback) -->
 <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';">
 <script src="/vendor/leaflet/leaflet.js"></script>
@@ -50,19 +50,19 @@ if(!window.L || typeof window.L.map !== 'function'){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 <!-- Modular KURDIA Motion Design System Stylesheets -->
-<link rel="stylesheet" href="/assets/css/motion-tokens.css?v=4.3.0">
-<link rel="stylesheet" href="/assets/css/animations.css?v=4.3.0">
+<link rel="stylesheet" href="/assets/css/motion-tokens.css?v=4.4.0">
+<link rel="stylesheet" href="/assets/css/animations.css?v=4.4.0">
 <style>
-:root{--bg:#05070b;--panel:#0b1018;--panel2:#101722;--line:rgba(255,255,255,.09);--text:#f6f7f9;--muted:#9da7b7;--red:#a91d37;--red2:#d32f4e;--green:#37c987;--r:24px;--nav:82px}
+:root{--bg:#070A10;--panel:#0D121D;--panel2:#111827;--line:rgba(255,255,255,.08);--text:#F8FAFC;--muted:#94A3B8;--red:#9D1C32;--red2:#C92B49;--green:#10B981;--r:16px;--nav:60px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:#000;color:var(--text);font-family:'Noto Sans Arabic',system-ui,sans-serif;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Vazirmatn','Noto Sans Arabic',system-ui,-apple-system,sans-serif;overflow-x:hidden}
 button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
-.app{min-height:100vh;padding-bottom:calc(var(--nav) + 28px)}
-.page{display:none;min-height:100vh;animation:fade .28s ease}.page.active{display:block}
-@keyframes fade{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
-.container{width:min(1100px,100%);margin:auto;padding:0 16px}
-.top{position:sticky;top:0;z-index:20;background:rgba(5,7,11,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
-.topin{height:64px;display:flex;align-items:center;justify-content:space-between}
+.app{min-height:100vh;padding-bottom:calc(var(--nav) + 18px)}
+.page{display:none;min-height:calc(100vh - 120px);animation:fade .24s ease}.page.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+.container{width:min(1120px,100%);margin:auto;padding:0 14px}
+.top{position:sticky;top:0;z-index:20;background:rgba(7,10,16,.86);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.topin{height:54px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .brand{font-weight:900;letter-spacing:2px}.brand small{display:block;font-size:8px;letter-spacing:4px;color:#c8ced8;margin-top:-3px}
 .iconbtn{width:42px;height:42px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;border-radius:14px;display:grid;place-items:center;transition:0.2s;}
 .iconbtn:active{transform:scale(0.95)}
@@ -1375,14 +1375,27 @@ main,section,.section,.page-section{background-color:transparent!important}
 <div class="app">
 <header class="top">
   <div class="container topin">
-    <button class="iconbtn" onclick="goBackHome()" aria-label="گەڕانەوە"><i data-lucide="chevron-right"></i></button>
-    <div style="display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:8px;min-width:0">
+      <button class="iconbtn top-back-btn" onclick="goBackHome()" aria-label="گەڕانەوە"><i data-lucide="chevron-right"></i></button>
       <a class="brand" href="#home">
         <img class="brand-logo-img" src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA ADVENTURE">
         <span class="brand-text-wrap">KURDIA<small>ADVENTURE</small></span>
       </a>
     </div>
+
+    <nav class="top-desktop-nav" aria-label="Primary Navigation">
+      <a href="#home" class="td-link active" data-page="home">سەرەکی</a>
+      <a href="#booking" class="td-link" data-page="booking">گەشتەکان</a>
+      <a href="#destinations" class="td-link" data-page="destinations">شوێنەکان</a>
+      <a href="#weather" class="td-link" data-page="weather">کەشوهەوا</a>
+      <a href="#private" class="td-link" data-page="private">گەشتی تایبەت</a>
+      <a href="#stories" class="td-link" data-page="stories">ستۆری</a>
+      <a href="#about" class="td-link" data-page="about">دەربارە</a>
+      <a href="#contact" class="td-link" data-page="contact">پەیوەندی</a>
+    </nav>
+
     <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <button type="button" class="iconbtn top-search-btn" onclick="document.getElementById('searchModal')?.classList.add('show')" aria-label="گەڕان" title="گەڕان"><i data-lucide="search"></i></button>
       <div class="top-lang-wrap" id="topLangWrap">
         <button type="button" class="top-lang-btn" id="topLangBtn" onclick="toggleTopLangMenu(event)" title="گۆڕینی زمان / Change Language">
           <span>🌐</span>
@@ -1401,6 +1414,7 @@ main,section,.section,.page-section{background-color:transparent!important}
 <main>
 
 <section id="home" class="page active">
+  <!-- 2. HERO SECTION -->
   <div class="hero">
     <div class="container">
       <div class="eyebrow">KURDIA ADVENTURE · PREMIER EXPEDITIONS</div>
@@ -1412,17 +1426,18 @@ main,section,.section,.page-section{background-color:transparent!important}
       </div>
     </div>
   </div>
-  <div class="container">
-    <section class="section" id="upcomingTripsSection">
+
+  <div class="container home-flow">
+    <!-- 1. UPCOMING TRIPS – گەشتەکانی داهاتوو -->
+    <section class="section home-section-block" id="upcomingTripsSection">
       <div class="sectionhead">
-        <div>
+        <div class="sh-title-group">
           <div class="eyebrow">UPCOMING EXPEDITIONS</div>
           <h2 id="upcomingSectionTitle">گەشتەکانی داهاتوو</h2>
           <p id="upcomingSectionDesc">هەموو ئەو گەشتانەی ئێستا ناونووسینیان بۆ کراوەیە</p>
         </div>
         <a class="link" href="#booking">بینینی هەموو (<span id="upcomingTripsCount">1</span>)</a>
       </div>
-      <!-- Multi-Trip Dynamic Container -->
       <div id="homeTripsList" class="home-trips-grid">
         <div class="featured">
           <div class="featureimg"><span class="pill" id="tripStatus">کراوە</span></div>
@@ -1434,77 +1449,107 @@ main,section,.section,.page-section{background-color:transparent!important}
               <div class="stat"><b id="tripDate">24/10</b><span>بەروار</span></div>
               <div class="stat"><b id="tripPrice">35,000</b><span>نرخ</span></div>
             </div>
-            <button class="btn red" style="width:100%;margin-top:14px" onclick="go('booking')">بەشداری بکە ←</button>
+            <button class="btn red" style="width:100%;margin-top:10px" onclick="go('booking')">بەشداری بکە ←</button>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <!-- 2. STORIES – ستۆری گەشتیاران -->
+    <section class="section home-section-block" id="homeStoriesSection">
       <div class="sectionhead">
-        <div>
+        <div class="sh-title-group">
+          <div class="eyebrow">TRAVELER STORIES</div>
+          <h2>ستۆری</h2>
+          <p>یادەوەری و ئەزموونی گەشتیارانی KURDIA</p>
+        </div>
+        <a class="link" href="#stories">بینینی هەموو ←</a>
+      </div>
+      <div class="stories-strip-box">
+        <div id="homeStories" class="stories"></div>
+      </div>
+    </section>
+
+    <!-- 3. DESTINATIONS – شوێنەکان -->
+    <section class="section home-section-block" id="homePlacesSection">
+      <div class="sectionhead">
+        <div class="sh-title-group">
           <div class="eyebrow">DISCOVER KURDISTAN</div>
           <h2>شوێنەکان</h2>
-          <p>جوانترین شوێنە گەشتیاری و شاخەوانییەکانی کوردستان بە تەواوی زانیارییەوە</p>
+          <p>جوانترین شوێنە گەشتیاری و شاخەوانییەکانی کوردستان</p>
         </div>
         <a class="link" href="#destinations">بینینی هەموو ←</a>
       </div>
       <div id="homeDests" class="places-grid"></div>
     </section>
 
-    <section class="section">
-      <div class="sectionhead"><div><h2>ستۆری</h2><p>یادەوەری و ئەزموونی خەڵکی KURDIA</p></div><a class="link" href="#stories">بینینی هەموو</a></div>
-      <div id="homeStories" class="stories">
-        <!-- The Add Story button will be pre-pended by JS -->
+    <!-- 4. PRIVATE TRIPS – گەشتی تایبەت -->
+    <section class="section home-section-block" id="homePrivateSection">
+      <div class="sectionhead">
+        <div class="sh-title-group">
+          <div class="eyebrow">VIP & GROUP TRIPS</div>
+          <h2>گەشتی تایبەت</h2>
+          <p>ڕێکخستنی گەشتی تایبەت بۆ خێزان و گروپەکان بەپێی داواکاری</p>
+        </div>
+        <a class="link" href="#private">داواکاری ←</a>
       </div>
-    </section>
-
-    <section class="section">
       <div class="private-vip-showcase" onclick="go('private')">
         <div class="private-vip-glow"></div>
         <div class="private-vip-content">
           <div class="private-vip-top">
-            <span class="private-vip-kicker">👑 VIP PRIVATE EXPEDITIONS</span>
+            <span class="private-vip-kicker">👑 PRIVATE EXPEDITIONS</span>
             <span class="private-vip-tag">تایبەت بە خێزان و گروپەکان</span>
           </div>
           <h2>گەشتی تایبەت بە دڵی خۆت ڕێکبخە</h2>
-          <p>شوێن، بەروار، ژمارەی کەس و شێوازی گەشتەکەت دیاری بکە؛ تیمی KURDIA هەموو وردەکارییەکان لە گواستنەوە، مانەوە، ڕێبەر و وێنەگرتن بۆ تۆ و هاوڕێکانت یان خێزانەکەت ئامادە دەکات.</p>
+          <p>شوێن، بەروار و ژمارەی کەس دیاری بکە؛ تیمی KURDIA گواستنەوە، مانەوە و ڕێبەری شارەزا بۆ گروپەکەت دابین دەکات.</p>
           <div class="private-vip-features">
-            <span>🚌 پاس و ئۆتۆمبێلی تایبەت</span>
-            <span>🏕️ کەمپ و کەپری تایبەت</span>
-            <span>🧭 ڕێبەری شارەزا و فۆتۆگرافەر</span>
+            <span>🚌 گواستنەوەی تایبەت</span>
+            <span>🏕️ کەمپ و کەپر</span>
+            <span>🧭 ڕێبەر و فۆتۆگرافەر</span>
           </div>
           <div class="private-vip-actions">
-            <button type="button" class="btn red" onclick="event.stopPropagation();go('private')">داواکاری گەشتی تایبەت ←</button>
-            <button type="button" class="btn ghost" onclick="event.stopPropagation();inquirePrivateWhatsApp()">💬 ڕاوێژکاری لە وەتسئەپ</button>
+            <button type="button" class="btn red" onclick="event.stopPropagation();go('private')">ڕێکخستنی گەشتی تایبەت ←</button>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="homeFeedbackSection">
+    <!-- 5. REVIEWS – بیروڕای بەشداربووان -->
+    <section class="section home-section-block" id="homeFeedbackSection">
       <div class="sectionhead">
-        <div>
-          <div class="eyebrow">TRAVELER FEEDBACK · فیدباک</div>
-          <h2>بیروڕا و هەڵسەنگاندنی بەشداربووان</h2>
-          <p>ئەزموونی ڕاستەقینەی گەشتیاران و شاخەوانان لەگەڵ تیمی KURDIA ADVENTURE</p>
+        <div class="sh-title-group">
+          <div class="eyebrow">TRAVELER FEEDBACK</div>
+          <h2>بیروڕای بەشداربووان</h2>
+          <p>ئەزموونی ڕاستەقینەی گەشتیاران لەگەڵ KURDIA</p>
         </div>
-        <button type="button" class="btn red" onclick="go('reviews')" style="padding:10px 16px;font-size:12.5px;border-radius:14px">
-          ✍️ ناردنی فیدباک ←
-        </button>
+        <a class="link" href="#reviews">ناردنی فیدباک ←</a>
       </div>
       <div id="homeReviewsPreview" class="reviews-public-grid"></div>
     </section>
 
-    <section class="section">
-      <div class="about about-no-image">
-        <div class="glass">
+    <!-- 6. ABOUT KURDIA – دەربارەی کوردیا -->
+    <section class="section home-section-block" id="homeAboutSection">
+      <div class="sectionhead">
+        <div class="sh-title-group">
           <div class="eyebrow">ABOUT KURDIA</div>
-          <h2>گەشتێکی باش، یادەوەرییەکی باشتر.</h2>
-          <p class="muted" style="line-height:2">KURDIA ADVENTURE پلاتفۆرمێکە بۆ گەشت، سروشت، کەمپینگ، ڕێگاکان، شوێنە مێژووییەکان و ئەزموونی هاوبەش. ئامانجمان دروستکردنی گەشتێکی ڕێکخراو و خۆشە.</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-            <button class="btn ghost" onclick="go('about')">دەربارەی کوردیا</button>
-            <button class="btn ghost" onclick="go('reviews')">⭐ بینینی هەموو فیدباکەکان</button>
+          <h2>دەربارەی کوردیا</h2>
+        </div>
+        <a class="link" href="#about">زیاتر بزانە ←</a>
+      </div>
+      <div class="about about-no-image">
+        <div class="glass home-about-compact">
+          <div class="home-about-text">
+            <h2>گەشتێکی باش، یادەوەرییەکی باشتر.</h2>
+            <p class="muted">KURDIA ADVENTURE پلاتفۆرمێکە بۆ گەشتی سروشت، شاخەوانی، کەمپینگ و دۆزینەوەی جوانترین شوێنەکانی کوردستان بە ڕێکخستنێکی پیشەیی و سەلامەت.</p>
+          </div>
+          <div class="home-about-stats">
+            <div class="ha-stat"><b>+20K</b><span>ئەندامی کۆمەڵگە</span></div>
+            <div class="ha-stat"><b>+180</b><span>گەشتی سەرکەوتوو</span></div>
+            <div class="ha-stat"><b>4.9 ★</b><span>ڕەزامەندی گەشتیاران</span></div>
+          </div>
+          <div class="home-about-actions">
+            <button class="btn ghost" onclick="go('about')">دەربارەی تیمەکە</button>
+            <button class="btn ghost" onclick="go('contact')">📞 پەیوەندی</button>
           </div>
         </div>
       </div>
@@ -2191,6 +2236,30 @@ main,section,.section,.page-section{background-color:transparent!important}
 </section></div></section>
 <section id="about" class="page"><div class="container"><section class="section"><div class="about"><img id="aboutImagePublic" src="" alt="KURDIA ADVENTURE"><div><div class="eyebrow">KURDIA ADVENTURE</div><h2 id="aboutTitlePublic"></h2><p id="aboutTextPublic" class="muted" style="line-height:2"></p><div id="aboutStatsPublic" class="stats"></div></div></div></section></div></section>
 <section id="contact" class="page"><div class="container"><section class="section"><div class="eyebrow">CONTACT</div><h2>پەیوەندی</h2><div class="articleList"><a id="contactWhatsAppPublic" class="article" href="#"><div class="articleIcon"><i data-lucide="message-circle"></i></div><div><b>WhatsApp</b><small></small></div></a><a id="contactPhonePublic" class="article" href="#"><div class="articleIcon"><i data-lucide="phone"></i></div><div><b>تەلەفۆن</b><small></small></div></a><div class="article"><div class="articleIcon"><i data-lucide="map-pin"></i></div><div><b id="contactCity">هەولێر — کوردستان</b><small>شوێنی کار</small></div></div><div class="article"><div class="articleIcon"><i data-lucide="mail"></i></div><div><b>Email</b><small id="contactEmailPublic"></small></div></div></div><div class="social-public"><a id="social_instagram" href="#">IG</a><a id="social_tiktok" href="#">TT</a><a id="social_youtube" href="#">YT</a><a id="social_facebook" href="#">FB</a><a id="social_telegram" href="#">TG</a></div></section></div></section>
+
+<!-- 10. GLOBAL FOOTER -->
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <div class="sf-brand">
+      <a class="brand" href="#home">
+        <img class="brand-logo-img" src="/Picsart_26-05-02_22-24-16-869.jpg" onerror="this.onerror=null;this.src='/icons/kurdia-logo.svg'" alt="KURDIA ADVENTURE">
+        <span class="brand-text-wrap">KURDIA<small>ADVENTURE</small></span>
+      </a>
+      <p>گەشتی سروشت، شاخەوانی و کەمپینگ لە جوانترین ناوچەکانی هەرێمی کوردستان.</p>
+    </div>
+    <div class="sf-links">
+      <a href="#home">سەرەکی</a>
+      <a href="#booking">گەشتەکان</a>
+      <a href="#destinations">شوێنەکان</a>
+      <a href="#weather">کەشوهەوا</a>
+      <a href="#private">گەشتی تایبەت</a>
+      <a href="#reviews">فیدباک</a>
+      <a href="#about">دەربارە</a>
+      <a href="#contact">پەیوەندی</a>
+    </div>
+    <div class="sf-copy">© KURDIA ADVENTURE · هەموو مافێکی پارێزراوە</div>
+  </div>
+</footer>
 </main>
 </div>
 <button class="ai" onclick="openAI()" aria-label="یاریدەدەری زیرەکی KURDIA">
@@ -3025,7 +3094,7 @@ function route(){
       onComplete: () => {
         gsap.set(prevPage, { clearProps: 'all' });
         document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===activeId));
-        document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===activeId));
+        document.querySelectorAll('.navitem, .td-link').forEach(n=>n.classList.toggle('active',n.dataset.page===activeId));
         window.scrollTo(0,0);
         renderPage(activeId);
         if(window.lucide)lucide.createIcons();
@@ -3044,7 +3113,7 @@ function route(){
     });
   } else {
     document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===activeId));
-    document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.page===activeId));
+    document.querySelectorAll('.navitem, .td-link').forEach(n=>n.classList.toggle('active',n.dataset.page===activeId));
     window.scrollTo(0,0);
     renderPage(activeId);
     if(window.lucide)lucide.createIcons();
@@ -3522,32 +3591,26 @@ function render(){
      const fDate = formatTripDateKu(tr.date);
      const isClosed = tr.bookingOpen === false || tr.status === 'closed';
      const isFull = rem === 0 || tr.status === 'full' || isClosed;
-     const statusLabel = isClosed ? 'ناونووسین داخراوە' : (isFull ? 'پڕبووە' : (rem <= 8 ? `تەنها ${rem} شوێن ماوە 🔥` : 'ناونووسین کراوەیە ✓'));
-     return `<article class="featured trip-showcase-card tilt-3d-card" data-trip-index="${idx}" style="cursor:pointer" onclick="openTripDetailsModal(${idx})">
+     const statusLabel = isClosed ? 'داخراوە' : (isFull ? 'پڕبووە' : `${rem} کورسی ماوە`);
+     return `<article class="featured trip-showcase-card" data-trip-index="${idx}" style="cursor:pointer" onclick="openTripDetailsModal(${idx})">
        <div class="featureimg" style="background-image:url('${esc(imgUrl)}')">
          <span class="pill trip-status-pill ${isFull ? 'is-full' : ''}">${esc(statusLabel)}</span>
-         <span style="position:absolute;bottom:12px;left:12px;z-index:2;background:rgba(7,10,16,0.78);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.16);color:#f8fafc;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:5px">🔍 کلیک بکە بۆ تەواوی زانیاری</span>
+         ${idx === 0 ? `<span class="trip-featured-badge">⭐ گەشتی ئەم هەفتەیە</span>` : ''}
+         <span class="trip-price-pill">${esc(tr.price || '—')}</span>
        </div>
        <div class="featurebody">
          <div class="trip-meta-top">
-           <span class="trip-loc-tag"><i data-lucide="map-pin" style="width:13px;height:13px"></i> ${esc(tr.location || 'کوردستان')}</span>
-           ${tr.time ? `<span class="trip-time-tag"><i data-lucide="clock" style="width:13px;height:13px"></i> ${esc(tr.time)}</span>` : ''}
+           <span class="trip-loc-tag">📍 ${esc(tr.location || 'کوردستان')}</span>
+           ${tr.time ? `<span class="trip-time-tag">⏰ ${esc(tr.time)}</span>` : ''}
          </div>
          <h3 class="trip-card-title">${esc(tr.title || 'گەشتی KURDIA')}</h3>
-         <p class="muted trip-card-desc">${esc(tr.desc || 'ئەزموونێکی تایبەت لەگەڵ تیمی KURDIA ADVENTURE.')}</p>
-         <div class="stats trip-stats-grid">
-           <div class="stat"><b>${esc(fDate)}</b><span>بەرواری گەشت</span></div>
-           <div class="stat"><b>${esc(tr.price || '—')}</b><span>نرخی بەشداری</span></div>
+         <div class="trip-inline-facts">
+           <span>📅 ${esc(fDate)}</span>
+           <span>💺 ${isFull ? 'پڕبووە' : `${rem} کورسی بەردەستە`}</span>
          </div>
-         <div class="trip-card-actions" style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px">
-           <button type="button" class="btn ghost" style="flex:1;min-width:120px;border-color:rgba(229,35,79,0.4);color:#ffd0d9" onclick="event.stopPropagation();openTripDetailsModal(${idx})">
-             📋 تەواوی زانیاری
-           </button>
-           <button type="button" class="btn red trip-join-btn" style="flex:1.2;min-width:125px" onclick="event.stopPropagation();selectTripForBooking(${idx})" ${isFull ? 'disabled' : ''}>
+         <div class="trip-card-actions">
+           <button type="button" class="btn red trip-join-btn" onclick="event.stopPropagation();selectTripForBooking(${idx})" ${isFull ? 'disabled' : ''}>
              ${isFull ? 'شوێن نەماوە' : 'بەشداری بکە ←'}
-           </button>
-           <button class="btn ghost trip-wa-btn" type="button" onclick="event.stopPropagation();inquireTripWhatsApp(${idx})" title="پرسیار لە ڕێگەی وەتسئەپ">
-             💬
            </button>
          </div>
        </div>
@@ -3563,11 +3626,11 @@ function render(){
  }
 
  const bookingSubmit=$('bookingSubmitBtn');if(bookingSubmit)bookingSubmit.disabled=!tripIsUpcoming;
- const bookingForm=$('bookingForm');if(bookingForm){let bookingNotice=document.getElementById('bookingTripNotice');if(!bookingNotice){bookingNotice=document.createElement('p');bookingNotice.id='bookingTripNotice';bookingNotice.className='muted';bookingNotice.style.cssText='line-height:1.9;margin:10px 0';bookingForm.prepend(bookingNotice)}bookingNotice.textContent=tripIsUpcoming?'':'تۆمارکردن لەم کاتەدا بەردەست نییە؛ کاتێک بەرواری گەشتی نوێ بڵاوکرایەوە دەتوانیت تۆمار بکەیت.';bookingNotice.style.display=tripIsUpcoming?'none':'';}
+ const bookingForm=$('bookingForm');if(bookingForm){let bookingNotice=document.getElementById('bookingTripNotice');if(!bookingNotice){bookingNotice=document.createElement('p');bookingNotice.id='bookingTripNotice';bookingNotice.className='muted';bookingNotice.style.cssText='line-height:1.7;margin:8px 0';bookingForm.prepend(bookingNotice)}bookingNotice.textContent=tripIsUpcoming?'':'تۆمارکردن لەم کاتەدا بەردەست نییە؛ کاتێک بەرواری گەشتی نوێ بڵاوکرایەوە دەتوانیت تۆمار بکەیت.';bookingNotice.style.display=tripIsUpcoming?'none':'';}
 
  renderPlacesPublic();
 
- const addStoryBtn=`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,.05);border:1px dashed var(--muted)"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;
+ const addStoryBtn=`<button class="story" style="background:none;border:0;color:inherit" onclick="openStoryUploadModal()"><div class="ring" style="background:rgba(255,255,255,.04);border:1px dashed var(--muted)"><i data-lucide="plus" style="color:var(--muted)"></i></div><small>زیادکردن</small></button>`;
  if($('homeStories')) $('homeStories').innerHTML=addStoryBtn+data.stories.map(st=>`<div class="story"><div class="ring"><img src="${esc(st.img)}"></div><small>${esc(st.name)}</small></div>`).join('');
  if($('storyGrid')) $('storyGrid').innerHTML=data.stories.map(st=>`<div class="tile" style="background:url('${esc(st.img)}') center/cover"><div><b>${esc(st.name)}</b><small>ئەزموونی KURDIA</small></div></div>`).join('');
 
@@ -3581,40 +3644,29 @@ function render(){
      const cap = Math.max(1, Number(x.capacity || 35));
      const bkd = Math.min(cap, Math.max(0, Number(x.booked || 0)));
      const rem = Math.max(0, cap - bkd);
-     const pct = Math.min(100, Math.round((bkd / cap) * 100));
      const isSel = idx === (window.selectedBookingTripIndex || 0);
      return `<article class="booking-trip-pick-card ${isSel ? 'is-selected' : ''}" onclick="selectTripForBooking(${idx})">
        <div class="btp-thumb" style="background-image:url('${esc(imgUrl)}')">
          <span class="btp-status">${rem > 0 ? `${rem} کورسی ماوە` : 'پڕبووە'}</span>
        </div>
        <div class="btp-body">
-         <div>
-           <div class="btp-top">
-             <span class="btp-loc">📍 ${esc(x.location || 'کوردستان')}</span>
-             <span class="btp-price">${esc(x.price || '—')}</span>
-           </div>
-           <h4 class="btp-title">${esc(x.title)}</h4>
+         <div class="btp-top">
+           <span class="btp-loc">📍 ${esc(x.location || 'کوردستان')}</span>
+           <span class="btp-price">${esc(x.price || '—')}</span>
          </div>
-         <div>
-           <div class="btp-meta">
-             <span>📅 ${esc(x.date ? String(x.date).replace(/-/g, '/') : formatTripDateKu(x.date))}</span>
-             ${x.time ? `<span>⏰ ${esc(x.time)}</span>` : ''}
-             <span>💺 ${rem > 0 ? `${rem} کورسی بەردەستە` : 'پڕبووە'}</span>
-           </div>
-           <div class="btp-seat-bar"><i style="width:${pct}%"></i></div>
+         <h4 class="btp-title">${esc(x.title)}</h4>
+         <div class="btp-meta">
+           <span>📅 ${esc(x.date ? String(x.date).replace(/-/g, '/') : formatTripDateKu(x.date))}</span>
+           ${x.time ? `<span>⏰ ${esc(x.time)}</span>` : ''}
+           <span>💺 ${rem > 0 ? `${rem} کورسی بەردەستە` : 'پڕبووە'}</span>
          </div>
-         <div style="display:flex;gap:6px;align-items:center;margin-top:4px">
-           <div class="btp-select-indicator" style="flex:1;margin:0">
-             <span>${isSel ? '✓ هەڵبژێردراوە بۆ تۆمارکردن' : 'هەڵبژاردنی ئەم گەشتە'}</span>
-             <span>←</span>
-           </div>
-           <button type="button" class="btn ghost" style="padding:7px 11px;min-height:34px;font-size:11px;border-radius:10px;border-color:rgba(229,35,79,0.4);color:#ffd0d9;white-space:nowrap" onclick="event.stopPropagation();openTripDetailsModal(${idx})">
-             📋 وردەکاری گەشت
-           </button>
+         <div class="btp-actions-row">
+           <span class="btp-select-indicator">${isSel ? '✓ هەڵبژێردراوە' : 'هەڵبژاردنی گەشت ←'}</span>
+           <button type="button" class="btp-detail-link" onclick="event.stopPropagation();openTripDetailsModal(${idx})">وردەکاری</button>
          </div>
        </div>
      </article>`;
-   }).join('') : '<div class="glass" style="padding:18px"><b>هیچ گەشتێکی داهاتوو بۆ تۆمارکردن نییە</b><p class="muted" style="margin:6px 0 0">بەروار و زانیاریی گەشتی نوێ دوای بڵاوکردنەوە لێرە دەردەکەوێت.</p></div>';
+   }).join('') : '<div class="glass" style="padding:14px"><b>هیچ گەشتێکی داهاتوو بۆ تۆمارکردن نییە</b><p class="muted" style="margin:4px 0 0">بەروار و زانیاریی گەشتی نوێ دوای بڵاوکردنەوە لێرە دەردەکەوێت.</p></div>';
    if(tripListEl.__lastRenderedHtml !== nextBookingTripsHtml || !tripListEl.children.length){
      tripListEl.__lastRenderedHtml = nextBookingTripsHtml;
      tripListEl.innerHTML = nextBookingTripsHtml;
@@ -9788,10 +9840,735 @@ html[dir="ltr"] .ai{
 </style>
 
 <!-- Authoritative Late-Cascade Motion & Glassmorphism Stylesheet + Modular Scripts -->
-<link rel="stylesheet" href="/assets/css/animations.css?v=4.3.0">
-<script src="/assets/js/motion-config.js?v=4.3.0"></script>
-<script src="/assets/js/scroll-reveal.js?v=4.3.0"></script>
-<script src="/assets/js/animations.js?v=4.3.0"></script>
+<link rel="stylesheet" href="/assets/css/animations.css?v=4.4.0">
+
+<style id="kurdia-complete-ui-ux-system">
+/* ==========================================================================
+   KURDIA ADVENTURE — COMPLETE MOBILE-FIRST UI/UX DESIGN SYSTEM (v5.0)
+   Primary BG: #070A10 | Primary Accent: #9D1C32 | Secondary Accent: #C92B49
+   Font: Vazirmatn (RTL Kurdish Sorani / Arabic / LTR English)
+   ========================================================================== */
+:root {
+  --bg: #070A10 !important;
+  --panel: #0D121D !important;
+  --panel2: #111827 !important;
+  --line: rgba(255, 255, 255, 0.08) !important;
+  --text: #F8FAFC !important;
+  --muted: #94A3B8 !important;
+  --red: #9D1C32 !important;
+  --red2: #C92B49 !important;
+  --r: 16px !important;
+  --nav: 58px !important;
+}
+
+html, body {
+  background-color: #070A10 !important;
+  color: #F8FAFC !important;
+  font-family: 'Vazirmatn', 'Noto Sans Arabic', system-ui, -apple-system, sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font-family: 'Vazirmatn', 'Noto Sans Arabic', system-ui, -apple-system, sans-serif !important;
+}
+
+/* 1. COMPACT CONTAINER & CLEAR SECTION SEPARATION */
+.app {
+  padding-bottom: calc(var(--nav) + 16px) !important;
+}
+.container {
+  width: min(1120px, 100%) !important;
+  padding: 0 14px !important;
+}
+.section {
+  padding: 18px 0 !important;
+  margin: 0 !important;
+}
+.home-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px !important;
+}
+.home-section-block {
+  padding: 20px 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+.home-section-block:last-child {
+  border-bottom: none !important;
+}
+.sectionhead {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 14px !important;
+}
+.sh-title-group {
+  border-inline-start: 3px solid #C92B49;
+  padding-inline-start: 10px;
+}
+
+/* 2. MOBILE-FIRST TYPOGRAPHY SCALE */
+.eyebrow {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.2px !important;
+  color: #E54865 !important;
+  margin-bottom: 2px !important;
+  display: block;
+}
+.hero h1, #heroTitle {
+  font-size: clamp(25px, 6.5vw, 38px) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.4px !important;
+  margin: 4px 0 8px !important;
+  font-weight: 800 !important;
+}
+.hero p, #heroText {
+  font-size: 13.5px !important;
+  line-height: 1.62 !important;
+  color: #CBD5E1 !important;
+  margin: 0 0 14px !important;
+  max-width: 520px !important;
+}
+.sectionhead h2, .section h2 {
+  font-size: clamp(18px, 4.4vw, 21px) !important;
+  line-height: 1.28 !important;
+  font-weight: 800 !important;
+  margin: 1px 0 0 !important;
+  letter-spacing: -0.2px !important;
+}
+.sectionhead p {
+  font-size: 11.5px !important;
+  line-height: 1.45 !important;
+  color: #94A3B8 !important;
+  margin: 2px 0 0 !important;
+}
+.sectionhead .link {
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  padding: 6px 11px !important;
+  border-radius: 9px !important;
+  white-space: nowrap !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  color: #E2E8F0 !important;
+  flex-shrink: 0;
+}
+
+/* 3. COMPACT HEADER & NAVIGATION (MOBILE + DESKTOP) */
+header.top {
+  background: rgba(7, 10, 16, 0.88) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+header.top .topin {
+  height: 52px !important;
+  min-height: 52px !important;
+  padding: 0 !important;
+}
+.brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px !important;
+}
+.brand-logo-img {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 8px !important;
+  object-fit: cover !important;
+}
+.brand small {
+  font-size: 7.5px !important;
+  letter-spacing: 2.2px !important;
+  color: #94A3B8 !important;
+  margin-top: -2px !important;
+}
+.iconbtn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.iconbtn svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+.top-lang-btn {
+  height: 34px !important;
+  padding: 0 9px !important;
+  border-radius: 9px !important;
+  font-size: 11px !important;
+  gap: 4px !important;
+}
+
+/* Desktop Horizontal Navigation */
+.top-desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+.top-desktop-nav .td-link {
+  padding: 6px 11px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #94A3B8;
+  transition: color 0.18s ease, background 0.18s ease;
+  white-space: nowrap;
+}
+.top-desktop-nav .td-link:hover {
+  color: #F8FAFC;
+  background: rgba(255, 255, 255, 0.04);
+}
+.top-desktop-nav .td-link.active {
+  color: #F8FAFC;
+  background: rgba(157, 28, 50, 0.22);
+  border: 1px solid rgba(201, 43, 73, 0.35);
+}
+
+/* Compact Mobile Bottom Navigation */
+nav.bottom {
+  height: 58px !important;
+  min-height: 58px !important;
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom)) !important;
+  background: rgba(7, 10, 16, 0.92) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+nav.bottom .navitem {
+  padding: 4px 2px !important;
+  gap: 2px !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  color: #94A3B8 !important;
+  border-radius: 10px !important;
+}
+nav.bottom .navitem .ico,
+nav.bottom .navitem svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+nav.bottom .navitem.active {
+  color: #F8FAFC !important;
+  background: rgba(157, 28, 50, 0.18) !important;
+}
+nav.bottom .navitem.navjoin {
+  background: linear-gradient(135deg, #9D1C32, #C92B49) !important;
+  color: #FFFFFF !important;
+  border-radius: 11px !important;
+  margin: 2px 3px !important;
+  box-shadow: 0 6px 16px -4px rgba(157, 28, 50, 0.5) !important;
+}
+
+/* 4. COMPACT BUTTONS & INPUTS (36–42px) */
+.btn {
+  min-height: 38px !important;
+  padding: 8px 15px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  line-height: 1.2 !important;
+}
+.btn.red {
+  background: linear-gradient(135deg, #9D1C32 0%, #C92B49 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 20px -6px rgba(157, 28, 50, 0.45) !important;
+}
+.btn.ghost {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #E2E8F0 !important;
+}
+.input, .select, .textarea {
+  min-height: 40px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  border-radius: 10px !important;
+  background: rgba(13, 18, 29, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 5. COMPACT HERO SECTION */
+.hero {
+  min-height: 340px !important;
+  max-height: 420px !important;
+  padding: 28px 0 22px !important;
+  border-radius: 0 0 20px 20px !important;
+}
+.hero .container {
+  padding-bottom: 10px !important;
+}
+.hero .actions {
+  gap: 8px !important;
+}
+.hero .actions .btn {
+  min-height: 38px !important;
+  padding: 8px 16px !important;
+}
+
+/* 6. FEATURED TRIP BADGE & STORIES BOX */
+.trip-featured-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: linear-gradient(135deg, #9D1C32, #C92B49);
+  color: #FFFFFF;
+  padding: 4px 9px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.stories-strip-box {
+  background: rgba(13, 18, 29, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
+  padding: 12px 14px;
+}
+
+/* 7. COMPACT AVAILABLE TRIP CARDS (#homeTripsList) */
+.home-trips-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+}
+.trip-showcase-card,
+.featured.trip-showcase-card {
+  border-radius: 15px !important;
+  background: rgba(13, 18, 29, 0.86) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.55) !important;
+  overflow: hidden !important;
+}
+.trip-showcase-card .featureimg {
+  height: 154px !important;
+  min-height: 154px !important;
+  position: relative !important;
+}
+.trip-status-pill {
+  top: 10px !important;
+  right: 10px !important;
+  padding: 4px 9px !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+}
+.trip-price-pill {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 2;
+  background: rgba(7, 10, 16, 0.86);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #F8FAFC;
+  padding: 3px 9px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+.trip-showcase-card .featurebody {
+  padding: 12px 13px 13px !important;
+  gap: 6px !important;
+}
+.trip-meta-top {
+  margin-bottom: 2px !important;
+  gap: 6px !important;
+}
+.trip-loc-tag, .trip-time-tag {
+  font-size: 11px !important;
+  padding: 2px 7px !important;
+  border-radius: 6px !important;
+}
+.trip-card-title {
+  font-size: 15.5px !important;
+  line-height: 1.32 !important;
+  margin: 0 !important;
+  font-weight: 800 !important;
+}
+.trip-inline-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11.5px;
+  color: #CBD5E1;
+  font-weight: 600;
+}
+.trip-card-actions {
+  margin-top: 6px !important;
+  display: flex !important;
+}
+.trip-card-actions .trip-join-btn {
+  width: 100% !important;
+  min-height: 36px !important;
+  font-size: 12px !important;
+  border-radius: 9px !important;
+}
+
+/* 8. COMPACT ABOUT, ACTIVITIES, STORIES, VIP & CONTACT ON HOMEPAGE */
+.home-about-compact {
+  padding: 14px 15px !important;
+  border-radius: 15px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.home-about-text h2 {
+  font-size: 18px !important;
+  margin: 2px 0 6px !important;
+}
+.home-about-text p {
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+.home-about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.ha-stat {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.ha-stat b {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  color: #F8FAFC;
+}
+.ha-stat span {
+  font-size: 10.5px;
+  color: #94A3B8;
+}
+
+.home-activities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.activity-compact-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 11px;
+  border-radius: 12px;
+  background: rgba(13, 18, 29, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.activity-compact-card:hover {
+  border-color: rgba(201, 43, 73, 0.4);
+  background: rgba(17, 24, 39, 0.9);
+}
+.activity-compact-card .act-ico {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.activity-compact-card b {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #F8FAFC;
+  line-height: 1.25;
+}
+.activity-compact-card small {
+  display: block;
+  font-size: 10.5px;
+  color: #94A3B8;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+/* Compact Places Grid & Cards */
+.places-grid {
+  gap: 12px !important;
+}
+.place-card {
+  border-radius: 14px !important;
+}
+.place-card-media {
+  height: 148px !important;
+}
+.place-card-body {
+  padding: 11px 13px 12px !important;
+  gap: 5px !important;
+}
+.place-card-body h3 {
+  font-size: 15px !important;
+  margin: 0 !important;
+}
+.place-card-body p {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  -webkit-line-clamp: 2 !important;
+  margin: 0 !important;
+}
+.place-card-meta span {
+  font-size: 10.5px !important;
+  padding: 2px 7px !important;
+}
+.place-card-footer {
+  padding-top: 7px !important;
+  margin-top: 2px !important;
+  font-size: 11.5px !important;
+}
+
+/* Compact Stories Row */
+.stories {
+  gap: 10px !important;
+  padding: 2px 0 4px !important;
+}
+.story .ring {
+  width: 56px !important;
+  height: 56px !important;
+}
+.story small {
+  font-size: 10.5px !important;
+  margin-top: 4px !important;
+}
+
+/* Compact Private VIP Banner */
+.private-vip-showcase {
+  padding: 15px 16px !important;
+  border-radius: 16px !important;
+}
+.private-vip-content h2 {
+  font-size: 18px !important;
+  margin: 6px 0 !important;
+}
+.private-vip-content p {
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+  margin: 0 0 10px !important;
+}
+.private-vip-features {
+  gap: 6px !important;
+  margin-bottom: 12px !important;
+}
+.private-vip-features span {
+  font-size: 11px !important;
+  padding: 4px 9px !important;
+  border-radius: 8px !important;
+}
+
+/* Compact Reviews Grid */
+.reviews-public-grid {
+  gap: 10px !important;
+}
+.review-card-public {
+  padding: 12px 13px !important;
+  border-radius: 13px !important;
+}
+.review-card-public p {
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+}
+
+/* Homepage Contact CTA Strip */
+.home-contact-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 15px 16px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.9), rgba(13, 18, 29, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.hcs-info h3 {
+  margin: 2px 0 4px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #F8FAFC;
+}
+.hcs-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #94A3B8;
+}
+.hcs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* 9. COMPACT BOOKING PAGE TRIP PICK CARDS */
+.booking-trip-pick-card {
+  padding: 9px !important;
+  gap: 10px !important;
+  border-radius: 13px !important;
+}
+.btp-thumb {
+  width: 84px !important;
+  min-height: 84px !important;
+  border-radius: 10px !important;
+}
+.btp-title {
+  font-size: 13.5px !important;
+  margin: 2px 0 4px !important;
+}
+.btp-meta {
+  font-size: 11px !important;
+  gap: 6px !important;
+}
+.btp-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+}
+.btp-detail-link {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #E2E8F0;
+  padding: 3px 9px;
+  border-radius: 7px;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+/* 10. GLOBAL FOOTER */
+.site-footer {
+  margin-top: 20px;
+  padding: 20px 0 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(5, 7, 12, 0.65);
+}
+.site-footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sf-brand p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #94A3B8;
+  max-width: 420px;
+}
+.sf-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #CBD5E1;
+}
+.sf-links a:hover {
+  color: #F8FAFC;
+}
+.sf-copy {
+  font-size: 11px;
+  color: #64748B;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 11. COMPACT FLOATING AI BUTTON */
+button.ai {
+  width: 44px !important;
+  height: 44px !important;
+  bottom: calc(var(--nav) + 12px) !important;
+  left: 12px !important;
+  border-radius: 13px !important;
+}
+
+/* 12. RESPONSIVE BREAKPOINTS (TABLET & DESKTOP) */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 22px !important;
+  }
+  .section {
+    padding: 22px 0 !important;
+  }
+  .hero {
+    min-height: 400px !important;
+    max-height: 470px !important;
+  }
+  .featured-spotlight-card {
+    grid-template-columns: 280px 1fr;
+  }
+  .fsc-media {
+    height: 100%;
+    min-height: 190px;
+  }
+  .home-trips-grid.multi-trips,
+  .home-trips-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+  }
+  .home-activities-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .home-contact-strip {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 1024px) {
+  .top-desktop-nav {
+    display: flex;
+  }
+  .top-back-btn {
+    display: none !important;
+  }
+  header.top .topin {
+    height: 58px !important;
+  }
+  .home-trips-grid.multi-trips {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .featured-spotlight-card {
+    grid-template-columns: 340px 1fr;
+  }
+  .site-footer-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .sf-copy {
+    width: 100%;
+  }
+}
+</style>
+
+<script src="/assets/js/motion-config.js?v=4.4.0"></script>
+<script src="/assets/js/scroll-reveal.js?v=4.4.0"></script>
+<script src="/assets/js/animations.js?v=4.4.0"></script>
 
 <script id="kurdia-master-motion-engine">
 (function(){
