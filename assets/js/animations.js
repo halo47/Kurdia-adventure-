@@ -247,6 +247,70 @@
   window.playHeroEntranceAnimation = initCinematicHero;
 
   /* ==========================================================================
+     3B. TRIP CARDS SUBTLE GSAP ENTRANCE ANIMATION (Slide in from bottom on load)
+     ========================================================================== */
+  function animateTripCardsEntrance(options) {
+    const opts = options || {};
+    const c = cfg();
+    const cards = Array.from(
+      document.querySelectorAll('#homeTripsList .trip-showcase-card, #tripList .booking-trip-pick-card')
+    ).filter((card) => {
+      if (!card) return false;
+      const page = card.closest('.page');
+      if (page && !page.classList.contains('active')) return false;
+      if (!opts.force && card.__kaTripEntranceAnimated) return false;
+      return true;
+    });
+
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+      card.__kaTripEntranceAnimated = true;
+      card.__kaRevealBound = true;
+      card.__kaRevealedDone = true;
+      card.dataset.kaRevealed = '1';
+      card.classList.remove('scroll-hidden', 'ka-reveal-armed');
+      card.classList.add('scroll-visible', 'ka-revealed');
+    });
+
+    if (c.prefersReducedMotion() || !window.gsap) {
+      cards.forEach((card) => {
+        card.style.opacity = '';
+        card.style.transform = '';
+      });
+      return;
+    }
+
+    try {
+      window.gsap.killTweensOf(cards);
+      window.gsap.fromTo(
+        cards,
+        {
+          opacity: 0,
+          y: 28
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.68,
+          stagger: 0.1,
+          delay: opts.delay !== undefined ? opts.delay : 0.08,
+          ease: c.easings.outQuart || 'power3.out',
+          overwrite: 'auto',
+          clearProps: 'transform,opacity'
+        }
+      );
+    } catch (_) {
+      cards.forEach((card) => {
+        card.style.opacity = '';
+        card.style.transform = '';
+      });
+    }
+  }
+
+  window.animateTripCardsEntrance = animateTripCardsEntrance;
+
+  /* ==========================================================================
      4. DESKTOP CARD RADIAL SPOTLIGHT & RESTRAINED 3D TILT (Touch-Safe)
      ========================================================================== */
   function initSpotlightAnd3DTilt() {
@@ -659,12 +723,14 @@
       window.KurdiaMotionPrimitives.ImageReveal(page);
     }
 
+    animateTripCardsEntrance();
     initSpotlightAnd3DTilt();
     initMagneticButtons();
     initKineticStatCounters();
   };
 
   window.kurdiaRefreshMotion = function () {
+    animateTripCardsEntrance();
     initSpotlightAnd3DTilt();
     initMagneticButtons();
     initKineticStatCounters();
@@ -846,6 +912,7 @@
     initLivingAuroraBg();
     initBrandLogoEntrance();
     initCinematicHero();
+    animateTripCardsEntrance({ delay: 0.14 });
 
     if (window.KurdiaMotionPrimitives) {
       window.KurdiaMotionPrimitives.ScrollProgress();

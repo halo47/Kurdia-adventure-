@@ -3514,7 +3514,7 @@ function render(){
 
  if(homeTripsList && tripIsUpcoming){
    homeTripsList.classList.toggle('multi-trips', activeTrips.length > 1);
-   homeTripsList.innerHTML = activeTrips.map((tr, idx) => {
+   const nextHomeTripsHtml = activeTrips.map((tr, idx) => {
      const imgUrl = safeImageUrl(tr.imageUrl) || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85';
      const cap = Math.max(1, Number(tr.capacity || 35));
      const bkd = Math.min(cap, Math.max(0, Number(tr.booked || 0)));
@@ -3553,7 +3553,12 @@ function render(){
        </div>
      </article>`;
    }).join('');
-   if(window.lucide) lucide.createIcons();
+   if(homeTripsList.__lastRenderedHtml !== nextHomeTripsHtml || !homeTripsList.children.length){
+     homeTripsList.__lastRenderedHtml = nextHomeTripsHtml;
+     homeTripsList.innerHTML = nextHomeTripsHtml;
+     if(window.lucide) lucide.createIcons();
+   }
+   if(typeof window.animateTripCardsEntrance === 'function') window.animateTripCardsEntrance();
    if(typeof window.kurdiaRefreshMotion === 'function') window.kurdiaRefreshMotion();
  }
 
@@ -3570,7 +3575,8 @@ function render(){
  if(availCountEl) availCountEl.textContent = tripIsUpcoming ? `${activeTrips.length} گەشتی چالاک بەردەستە` : 'هیچ گەشتێک بەردەست نییە';
 
  if($('tripList')){
-   $('tripList').innerHTML = tripIsUpcoming ? activeTrips.map((x, idx) => {
+   const tripListEl = $('tripList');
+   const nextBookingTripsHtml = tripIsUpcoming ? activeTrips.map((x, idx) => {
      const imgUrl = safeImageUrl(x.imageUrl) || 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85';
      const cap = Math.max(1, Number(x.capacity || 35));
      const bkd = Math.min(cap, Math.max(0, Number(x.booked || 0)));
@@ -3609,6 +3615,11 @@ function render(){
        </div>
      </article>`;
    }).join('') : '<div class="glass" style="padding:18px"><b>هیچ گەشتێکی داهاتوو بۆ تۆمارکردن نییە</b><p class="muted" style="margin:6px 0 0">بەروار و زانیاریی گەشتی نوێ دوای بڵاوکردنەوە لێرە دەردەکەوێت.</p></div>';
+   if(tripListEl.__lastRenderedHtml !== nextBookingTripsHtml || !tripListEl.children.length){
+     tripListEl.__lastRenderedHtml = nextBookingTripsHtml;
+     tripListEl.innerHTML = nextBookingTripsHtml;
+   }
+   if(typeof window.animateTripCardsEntrance === 'function') window.animateTripCardsEntrance();
  }
 
  if($('bookingTrip')){
