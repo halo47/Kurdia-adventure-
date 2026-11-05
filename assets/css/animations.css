@@ -912,3 +912,709 @@ html.ka-page-hidden *::after {
     transform: none !important;
   }
 }
+
+/* ==========================================================================
+   11. iOS 26 LIQUID GLASS & LIGHT / DARK MODE DESIGN ARCHITECTURE
+   ========================================================================== */
+
+/* Universal iOS 26 Liquid Glass Surface */
+.ios-glass {
+  background: var(--ka-liquid-glass-bg) !important;
+  backdrop-filter: blur(var(--ka-blur-lg)) saturate(175%) !important;
+  -webkit-backdrop-filter: blur(var(--ka-blur-lg)) saturate(175%) !important;
+  border: 1px solid var(--ka-liquid-glass-border) !important;
+  box-shadow: var(--ka-liquid-glass-specular), var(--ka-liquid-glass-shadow) !important;
+}
+
+.ios-glass-card {
+  position: relative;
+  background: var(--ka-liquid-glass-elevated) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1px solid var(--ka-liquid-glass-border) !important;
+  border-radius: 26px;
+  box-shadow: var(--ka-liquid-glass-specular), var(--shadow-resting) !important;
+  transition: transform var(--t-duration-base) var(--t-ease-out), box-shadow var(--t-duration-base) var(--t-ease-out), border-color var(--t-duration-base) var(--t-ease-out);
+}
+
+/* Light Mode Core Surfaces */
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background: #F8F9FA !important;
+  color: #111318 !important;
+}
+
+html[data-theme="light"] body::before {
+  background: radial-gradient(ellipse at 85% 15%, rgba(162, 13, 24, 0.05), transparent 45%),
+              radial-gradient(ellipse at 15% 75%, rgba(214, 184, 117, 0.08), transparent 45%),
+              #F8F9FA !important;
+}
+
+html[data-theme="light"] header.top {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-bottom: 1px solid rgba(17, 19, 24, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(17, 19, 24, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+html[data-theme="light"] header.top.scrolled {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom-color: rgba(162, 13, 24, 0.22) !important;
+  box-shadow: 0 8px 30px rgba(17, 19, 24, 0.08) !important;
+}
+
+html[data-theme="light"] nav.bottom {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-top: 1px solid rgba(17, 19, 24, 0.09) !important;
+  box-shadow: 0 -10px 30px rgba(17, 19, 24, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+html[data-theme="light"] .navitem {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .navitem.active {
+  color: #A20D18 !important;
+  background: rgba(162, 13, 24, 0.08) !important;
+}
+
+html[data-theme="light"] .featured,
+html[data-theme="light"] .trip-showcase-card,
+html[data-theme="light"] .place-card,
+html[data-theme="light"] .booking-trip-pick-card,
+html[data-theme="light"] .booking-hero-banner,
+html[data-theme="light"] .booking-form-card,
+html[data-theme="light"] .booking-subcard,
+html[data-theme="light"] .booking-step3-summary-card,
+html[data-theme="light"] .payment-gateways-container,
+html[data-theme="light"] .private-vip-showcase,
+html[data-theme="light"] .private-page-hero,
+html[data-theme="light"] .private-trip-card,
+html[data-theme="light"] .private-preset-card,
+html[data-theme="light"] .weather-hero-card,
+html[data-theme="light"] .weather-metrics-grid .metric-box,
+html[data-theme="light"] .hourly-card,
+html[data-theme="light"] .day-row-card,
+html[data-theme="light"] .public-review,
+html[data-theme="light"] .review-write,
+html[data-theme="light"] .glass,
+html[data-theme="light"] .dest-spec-box,
+html[data-theme="light"] .dest-modal-desc-box,
+html[data-theme="light"] .more-card {
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.94) 0%, rgba(246, 248, 250, 0.90) 100%) !important;
+  border: 1px solid rgba(17, 19, 24, 0.08) !important;
+  color: #111318 !important;
+  box-shadow: 0 10px 30px rgba(17, 19, 24, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] .trip-card-title,
+html[data-theme="light"] .place-card-title,
+html[data-theme="light"] b {
+  color: #111318 !important;
+}
+
+html[data-theme="light"] p,
+html[data-theme="light"] .muted,
+html[data-theme="light"] .trip-card-desc,
+html[data-theme="light"] .sectionhead p {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .input,
+html[data-theme="light"] .select,
+html[data-theme="light"] .textarea {
+  background: #FFFFFF !important;
+  border-color: rgba(17, 19, 24, 0.14) !important;
+  color: #111318 !important;
+}
+
+html[data-theme="light"] .input:focus,
+html[data-theme="light"] .select:focus,
+html[data-theme="light"] .textarea:focus {
+  border-color: var(--ka-brand-red) !important;
+  box-shadow: 0 0 0 3px rgba(162, 13, 24, 0.12) !important;
+}
+
+html[data-theme="light"] .btn.ghost {
+  background: rgba(17, 19, 24, 0.04) !important;
+  color: #111318 !important;
+  border-color: rgba(17, 19, 24, 0.12) !important;
+}
+
+html[data-theme="light"] .btn.ghost:hover {
+  background: rgba(17, 19, 24, 0.08) !important;
+}
+
+html[data-theme="light"] .iconbtn {
+  background: rgba(17, 19, 24, 0.04) !important;
+  color: #111318 !important;
+  border-color: rgba(17, 19, 24, 0.12) !important;
+}
+
+html[data-theme="light"] .modal .sheet {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(17, 19, 24, 0.12) !important;
+  color: #111318 !important;
+  box-shadow: 0 30px 80px rgba(17, 19, 24, 0.18) !important;
+}
+
+html[data-theme="light"] .stat {
+  background: rgba(17, 19, 24, 0.03) !important;
+  border: 1px solid rgba(17, 19, 24, 0.07) !important;
+}
+
+html[data-theme="light"] .top-lang-btn,
+html[data-theme="light"] .theme-toggle-btn {
+  background: rgba(17, 19, 24, 0.04) !important;
+  color: #111318 !important;
+  border-color: rgba(17, 19, 24, 0.1) !important;
+}
+
+html[data-theme="light"] .top-lang-dropdown {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(17, 19, 24, 0.12) !important;
+  box-shadow: 0 16px 45px rgba(17, 19, 24, 0.15) !important;
+}
+
+html[data-theme="light"] .top-lang-opt {
+  color: #111318 !important;
+}
+
+html[data-theme="light"] .weather-map-box,
+html[data-theme="light"] .weather-map-element {
+  border-color: rgba(17, 19, 24, 0.12) !important;
+}
+
+/* Kurdia Red Brand Elements */
+.btn.red,
+.trip-join-btn,
+.navjoin {
+  background: linear-gradient(135deg, #C91D2C, #A20D18) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 10px 24px rgba(162, 13, 24, 0.35) !important;
+}
+
+.btn.red:hover:not(:disabled) {
+  box-shadow: 0 14px 32px rgba(162, 13, 24, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+/* Desktop Navigation Styling */
+.desktop-nav {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px 6px;
+    border-radius: 999px;
+    backdrop-filter: blur(16px);
+  }
+
+  html[data-theme="light"] .desktop-nav {
+    background: rgba(17, 19, 24, 0.04);
+    border-color: rgba(17, 19, 24, 0.08);
+  }
+
+  .desktop-nav-link {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ka-text-secondary);
+    transition: all var(--t-duration-fast) var(--t-ease-out);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .desktop-nav-link:hover,
+  .desktop-nav-link.active {
+    color: #FFFFFF;
+    background: var(--ka-brand-red);
+    box-shadow: 0 4px 14px rgba(162, 13, 24, 0.35);
+  }
+
+  html[data-theme="light"] .desktop-nav-link {
+    color: #334155;
+  }
+
+  html[data-theme="light"] .desktop-nav-link:hover,
+  html[data-theme="light"] .desktop-nav-link.active {
+    color: #FFFFFF;
+    background: var(--ka-brand-red);
+  }
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--ka-glass-border);
+  background: var(--ka-glass-bg-pill);
+  color: #fff;
+  cursor: pointer;
+  transition: all var(--t-duration-fast) var(--t-ease-out);
+  font-size: 16px;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-1.5px) rotate(15deg);
+  border-color: var(--ka-brand-gold);
+}
+
+/* 10% Discount Promotion Banner (iOS 26 Liquid Card) */
+.discount-promo-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: 22px 24px;
+  margin: 18px 0;
+  border: 1px solid rgba(214, 184, 117, 0.45);
+  background: linear-gradient(135deg, rgba(162, 13, 24, 0.22) 0%, rgba(214, 184, 117, 0.12) 50%, rgba(16, 27, 45, 0.85) 100%);
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+html[data-theme="light"] .discount-promo-card {
+  background: linear-gradient(135deg, rgba(162, 13, 24, 0.1) 0%, rgba(214, 184, 117, 0.15) 50%, rgba(255, 255, 255, 0.95) 100%);
+  border-color: rgba(214, 184, 117, 0.55);
+  box-shadow: 0 14px 36px rgba(16, 27, 45, 0.08);
+}
+
+.discount-promo-card::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -40px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(214, 184, 117, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.discount-promo-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 260px;
+}
+
+.discount-promo-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(214, 184, 117, 0.2);
+  border: 1px solid rgba(214, 184, 117, 0.45);
+  color: var(--ka-brand-gold);
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.discount-promo-title {
+  font-size: clamp(17px, 3.8vw, 22px);
+  font-weight: 900;
+  margin: 0 0 6px;
+  color: #FFFFFF;
+}
+
+html[data-theme="light"] .discount-promo-title {
+  color: #111318;
+}
+
+.discount-promo-desc {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--ka-text-secondary);
+  margin: 0;
+}
+
+.discount-promo-action {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.coupon-code-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed var(--ka-brand-gold);
+  color: var(--ka-brand-gold);
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  user-select: all;
+  transition: all var(--t-duration-fast) var(--t-ease-out);
+}
+
+.coupon-code-pill:hover {
+  background: rgba(214, 184, 117, 0.18);
+  transform: scale(1.02);
+}
+
+/* Adventure Categories Horizontal Ribbon */
+.adventure-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+@media (max-width: 640px) {
+  .adventure-categories-grid {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .adventure-categories-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .adv-cat-item {
+    flex: 0 0 160px;
+  }
+}
+
+.adv-cat-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 16px;
+  border: 1px solid var(--ka-glass-border);
+  background: linear-gradient(160deg, rgba(22, 32, 50, 0.75) 0%, rgba(12, 17, 26, 0.75) 100%);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: all var(--t-duration-fast) var(--t-ease-spring);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.adv-cat-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--ka-brand-gold);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme="light"] .adv-cat-item {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 248, 250, 0.88) 100%);
+  border-color: rgba(17, 19, 24, 0.08);
+}
+
+.adv-cat-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.adv-cat-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+html[data-theme="light"] .adv-cat-title {
+  color: #111318;
+}
+
+.adv-cat-count {
+  font-size: 10.5px;
+  color: var(--ka-text-muted);
+}
+
+/* Trip Card Favorite Button & Refined Badges */
+.trip-card-fav-btn {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(7, 10, 16, 0.65);
+  backdrop-filter: blur(12px);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all var(--t-duration-fast) var(--t-ease-spring);
+}
+
+.trip-card-fav-btn:hover {
+  transform: scale(1.12);
+  background: rgba(162, 13, 24, 0.85);
+}
+
+.trip-card-fav-btn.favorited {
+  color: #FF3B56;
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #FF3B56;
+}
+
+/* Instagram Feed Gallery */
+.instagram-gallery-section {
+  position: relative;
+  border-radius: 28px;
+  padding: 24px;
+  border: 1px solid var(--ka-glass-border);
+  background: linear-gradient(165deg, rgba(16, 27, 45, 0.65) 0%, rgba(10, 14, 22, 0.85) 100%);
+  backdrop-filter: blur(20px);
+  margin: 20px 0;
+}
+
+html[data-theme="light"] .instagram-gallery-section {
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.9) 0%, rgba(246, 248, 250, 0.9) 100%);
+  border-color: rgba(17, 19, 24, 0.08);
+}
+
+.insta-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.insta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .insta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.insta-tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+  text-decoration: none;
+}
+
+.insta-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-duration-base) var(--t-ease-out);
+}
+
+.insta-tile:hover img {
+  transform: scale(1.08);
+}
+
+.insta-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--t-duration-fast) var(--t-ease-out);
+  display: flex;
+  align-items: flex-end;
+  padding: 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.insta-tile:hover .insta-overlay {
+  opacity: 1;
+}
+
+/* Luxury Multi-Column Apple-Style Footer */
+.luxury-site-footer {
+  border-top: 1px solid var(--ka-glass-border);
+  background: linear-gradient(180deg, rgba(10, 14, 22, 0.85) 0%, #05070b 100%);
+  padding: 55px 0 120px;
+  color: var(--ka-text-secondary);
+  font-size: 12.5px;
+  line-height: 1.8;
+  position: relative;
+  z-index: 10;
+}
+
+html[data-theme="light"] .luxury-site-footer {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+  border-top-color: rgba(17, 19, 24, 0.08);
+  color: #475569;
+}
+
+.footer-top-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 36px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 900px) {
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 580px) {
+  .footer-top-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.footer-brand-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+
+html[data-theme="light"] .footer-brand-title {
+  color: #111318;
+}
+
+.footer-col-head {
+  font-size: 14px;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+html[data-theme="light"] .footer-col-head {
+  color: #111318;
+}
+
+.footer-link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-link-list a {
+  color: var(--ka-text-muted);
+  text-decoration: none;
+  transition: color var(--t-duration-fast) var(--t-ease-out), transform var(--t-duration-fast) var(--t-ease-out);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-link-list a:hover {
+  color: var(--ka-brand-red);
+  transform: translateX(-3px);
+}
+
+.footer-social-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.footer-social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--ka-glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 13px;
+  text-decoration: none;
+  transition: all var(--t-duration-fast) var(--t-ease-spring);
+}
+
+.footer-social-icon:hover {
+  transform: translateY(-2px);
+  background: var(--ka-brand-red);
+  border-color: var(--ka-brand-red);
+}
+
+html[data-theme="light"] .footer-social-icon {
+  background: rgba(17, 19, 24, 0.05);
+  color: #111318;
+  border-color: rgba(17, 19, 24, 0.1);
+}
+
+html[data-theme="light"] .footer-social-icon:hover {
+  background: var(--ka-brand-red);
+  color: #fff;
+}
+
+.footer-bottom-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--ka-text-muted);
+}
+
+html[data-theme="light"] .footer-bottom-bar {
+  border-top-color: rgba(17, 19, 24, 0.08);
+}
