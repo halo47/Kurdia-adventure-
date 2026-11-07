@@ -504,12 +504,37 @@ aside#kaMoreMenu.ka-more-menu {
 .hero p,
 .hero .actions .btn,
 .ka-hero-scroll-cue {
-  will-change: transform, opacity, filter;
   transform-origin: center bottom;
 }
 
 .hero h1 {
   text-shadow: 0 14px 38px rgba(0, 0, 0, 0.65);
+}
+
+.hero-bg-img {
+  position: absolute;
+  inset: -4% 0;
+  width: 100%;
+  height: 108%;
+  object-fit: cover;
+  object-position: center 38%;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  transform: translate3d(0, var(--hero-parallax-y, 0px), 0);
+}
+
+.card-media-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  display: block;
 }
 
 #home .hero::before,
@@ -518,17 +543,13 @@ aside#kaMoreMenu.ka-more-menu {
 .hero:before {
   content: "";
   position: absolute;
-  inset: -4% 0;
-  z-index: 0;
-  will-change: transform;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
   animation: none !important;
-  transform: translate3d(0, var(--hero-parallax-y, 0px), 0) scale(var(--hero-kenburns-scale, 1.045)) !important;
-  transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
   background:
     radial-gradient(ellipse 84% 58% at 50% 22%, rgba(5, 7, 11, 0.14) 0%, rgba(5, 7, 11, 0.56) 76%),
-    linear-gradient(180deg, rgba(5, 7, 11, 0.32) 0%, rgba(5, 7, 11, 0.12) 36%, rgba(5, 7, 11, 0.78) 76%, #05070b 100%),
-    var(--hero-image, url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85')) center / cover no-repeat !important;
-  filter: saturate(0.96) contrast(1.05);
+    linear-gradient(180deg, rgba(5, 7, 11, 0.32) 0%, rgba(5, 7, 11, 0.12) 36%, rgba(5, 7, 11, 0.78) 76%, #05070b 100%) !important;
 }
 
 #home .hero::after,
@@ -545,6 +566,11 @@ aside#kaMoreMenu.ka-more-menu {
     radial-gradient(ellipse 46% 34% at 84% 20%, rgba(211, 47, 78, 0.09), transparent 64%),
     linear-gradient(180deg, rgba(5, 7, 11, 0.12) 0%, transparent 40%, rgba(5, 7, 11, 0.86) 92%, #05070b 100%) !important;
   animation: none !important;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2;
 }
 
 .ka-hero-scroll-cue {
