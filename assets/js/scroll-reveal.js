@@ -1,18 +1,15 @@
 /**
  * ============================================================================
- * KURDIA ADVENTURE — REUSABLE SCROLL-REVEAL & PARALLAX PRIMITIVES
+ * KURDIA ADVENTURE — REUSABLE SCROLL-REVEAL & PARALLAX PRIMITIVES (60FPS GPU)
  * File: /assets/js/scroll-reveal.js
- * Purpose: Provides modular, reusable animation primitives:
- *          - Reveal
+ * Purpose: Lightweight, 60fps GPU-composited animation primitives:
+ *          - Reveal (IntersectionObserver + GSAP transform/opacity only)
  *          - StaggerReveal
- *          - ImageReveal
- *          - ParallaxImage
- *          - ScrollProgress
+ *          - ImageReveal (GPU scale + opacity, zero CSS filter thrashing)
+ *          - ParallaxImage (Desktop-only rAF transform, zero layout reflow)
+ *          - ScrollProgress (rAF-throttled GPU scaleX, zero width layout)
  *          - AnimatedHeading
  *          - AnimatedSection
- *          Integrates GSAP + ScrollTrigger with an IntersectionObserver
- *          fallback, prevents duplicate initialization across SPA page
- *          transitions, and registers cleanup handlers.
  * ============================================================================
  */
 (function (window, document) {
@@ -20,11 +17,11 @@
 
   const cfg = () =>
     window.KURDIA_MOTION_CONFIG || {
-      durations: { fast: 0.24, base: 0.42, medium: 0.58, slow: 0.78 },
+      durations: { fast: 0.22, base: 0.38, medium: 0.48, slow: 0.64 },
       easings: { outQuart: 'power3.out', outExpo: 'expo.out' },
-      stagger: { tight: 0.045, base: 0.075 },
-      distances: { sm: 14, md: 20 },
-      limits: { heroParallaxMaxPx: 34 },
+      stagger: { tight: 0.04, base: 0.065 },
+      distances: { sm: 12, md: 16 },
+      limits: { heroParallaxMaxPx: 26 },
       prefersReducedMotion: () => false,
       isMobileViewport: () => window.innerWidth < 768,
       isPageHidden: () => Boolean(document.hidden),
@@ -34,11 +31,6 @@
   let ioInstance = null;
   let parallaxBound = false;
   let progressBound = false;
-  const scrollTriggerInstances = [];
-
-  function registerTrigger(st) {
-    if (st) scrollTriggerInstances.push(st);
-  }
 
   function animateElementIn(el, duration, distance, delay) {
     if (!el || el.__kaRevealedDone) return;
@@ -51,6 +43,7 @@
     if (c.prefersReducedMotion() || !window.gsap) {
       el.style.opacity = '';
       el.style.transform = '';
+      el.style.willChange = 'auto';
       return;
     }
 
@@ -60,23 +53,23 @@
         el,
         {
           opacity: 0,
-          y: distance || c.distances.md || 20,
-          scale: 0.985
+          y: distance || c.distances.md || 16
         },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: duration || c.durations.medium || 0.58,
+          duration: duration || c.durations.medium || 0.46,
           delay: delay || 0,
           ease: c.easings.outQuart || 'power3.out',
+          force3D: true,
           overwrite: 'auto',
-          clearProps: 'transform,opacity'
+          clearProps: 'transform,opacity,willChange'
         }
       );
     } catch (_) {
       el.style.opacity = '';
       el.style.transform = '';
+      el.style.willChange = 'auto';
     }
   }
 
@@ -84,21 +77,22 @@
     if (ioInstance || !('IntersectionObserver' in window)) return ioInstance;
     ioInstance = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+        for (let i = 0; i < entries.length; i++) {
+          const entry = entries[i];
           if (entry.isIntersecting) {
             const el = entry.target;
             const c = cfg();
             animateElementIn(
               el,
-              el.__kaRevealDuration || c.durations.medium,
-              el.__kaRevealDistance || c.distances.md,
+              el.__kaRevealDuration || c.durations.medium || 0.46,
+              el.__kaRevealDistance || c.distances.md || 16,
               el.__kaRevealDelay || 0
             );
             ioInstance.unobserve(el);
           }
-        });
+        }
       },
-      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
+      { threshold: 0.06, rootMargin: '0px 0px 36px 0px' }
     );
 
     cfg().registerCleanup(() => {
@@ -113,6 +107,7 @@
 
   /**
    * Primitive 1: Reveal (Single Element Scroll-Triggered Entrance)
+   * Uses a single shared IntersectionObserver for zero scroll-event overhead.
    */
   function Reveal(element, options) {
     if (!element || element.__kaRevealBound || element.__kaRevealedDone) return;
@@ -126,8 +121,14 @@
       return;
     }
 
+    const page = element.closest('.page');
+    if (page && !page.classList.contains('active')) {
+      element.classList.remove('scroll-hidden', 'ka-reveal-armed');
+      element.classList.add('scroll-visible', 'ka-revealed');
+      return;
+    }
+
     const rect = element.getBoundingClientRect();
-    // If element is inside an inactive page tab (0x0 dimensions), wait until that page is activated
     if (rect.width === 0 && rect.height === 0) {
       element.classList.remove('scroll-hidden', 'ka-reveal-armed');
       element.classList.add('scroll-visible', 'ka-revealed');
@@ -137,7 +138,7 @@
     element.__kaRevealBound = true;
 
     const opts = Object.assign(
-      { distance: c.distances.md || 20, duration: c.durations.medium || 0.58, delay: 0 },
+      { distance: c.distances.md || 16, duration: c.durations.medium || 0.46, delay: 0 },
       options || {}
     );
 
@@ -146,36 +147,22 @@
     element.__kaRevealDistance = opts.distance;
     element.__kaRevealDelay = opts.delay;
 
-    const inInitialViewport = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+    const inInitialViewport = rect.top < window.innerHeight * 0.94 && rect.bottom > 0;
     if (inInitialViewport) {
-      animateElementIn(element, opts.duration, opts.distance * 0.75, opts.delay);
+      animateElementIn(element, opts.duration, opts.distance * 0.7, opts.delay);
       return;
     }
 
-    // Arm below-the-fold element for progressive scroll reveal
     element.classList.add('scroll-hidden');
-
-    if (window.gsap && window.ScrollTrigger && !element.__kaScrollTriggerBound) {
-      element.__kaScrollTriggerBound = true;
-      const st = window.ScrollTrigger.create({
-        trigger: element,
-        start: 'top 91%',
-        once: true,
-        onEnter: () => {
-          animateElementIn(element, opts.duration, opts.distance, opts.delay);
-        }
-      });
-      registerTrigger(st);
-    }
 
     const obs = ensureIntersectionObserver();
     if (obs) {
       obs.observe(element);
-    } else if (!window.ScrollTrigger) {
+    } else {
       animateElementIn(element, opts.duration, opts.distance, opts.delay);
     }
 
-    // Fail-safe so content never stays hidden if layout changes without scroll
+    // Fail-safe so content never stays hidden if layout shifts without scroll
     setTimeout(() => {
       if (element.classList.contains('scroll-hidden')) {
         element.classList.remove('scroll-hidden', 'ka-reveal-armed');
@@ -183,20 +170,19 @@
         element.style.opacity = '';
         element.style.transform = '';
       }
-    }, 5500);
+    }, 3500);
   }
 
   /**
    * Primitive 2: StaggerReveal (Group of Cards, Badges, or Grid Items)
-   * Respects already-revealed items to prevent duplicate animation on page navigation.
    */
   function StaggerReveal(elements, options) {
     if (!elements) return;
     const opts = Object.assign(
       {
-        y: cfg().distances.md || 20,
-        duration: cfg().durations.medium || 0.56,
-        stagger: cfg().stagger.base || 0.07,
+        y: cfg().distances.md || 16,
+        duration: cfg().durations.medium || 0.46,
+        stagger: cfg().stagger.base || 0.06,
         ease: cfg().easings.outQuart || 'power3.out',
         force: false
       },
@@ -229,7 +215,7 @@
     list.forEach((el) => {
       const r = el.getBoundingClientRect();
       if (r.width === 0 && r.height === 0) return;
-      if (r.top <= window.innerHeight * 0.92) {
+      if (r.top <= window.innerHeight * 0.94) {
         visibleNow.push(el);
       } else {
         belowFold.push(el);
@@ -248,16 +234,16 @@
         });
         window.gsap.fromTo(
           visibleNow,
-          { opacity: 0, y: opts.y, scale: 0.985 },
+          { opacity: 0, y: opts.y },
           {
             opacity: 1,
             y: 0,
-            scale: 1,
             duration: opts.duration,
             stagger: opts.stagger,
             ease: opts.ease,
+            force3D: true,
             overwrite: 'auto',
-            clearProps: 'transform,opacity'
+            clearProps: 'transform,opacity,willChange'
           }
         );
       } catch (_) {
@@ -273,18 +259,18 @@
         Reveal(el, {
           distance: opts.y,
           duration: opts.duration,
-          delay: Math.min(0.24, (idx % 4) * 0.06)
+          delay: Math.min(0.18, (idx % 3) * 0.05)
         });
       }
     });
   }
 
   /**
-   * Primitive 3: ImageReveal (Smooth Scale & Clarity Entrance for Card Media)
+   * Primitive 3: ImageReveal (GPU-Composited Scale Entrance — Zero Filter Repaints)
    */
   function ImageReveal(containerRoot) {
     const c = cfg();
-    if (c.prefersReducedMotion() || !window.gsap) return;
+    if (c.prefersReducedMotion() || c.isMobileViewport() || !window.gsap) return;
     const scope = containerRoot || document;
     const mediaEls = scope.querySelectorAll('.featureimg, .place-card-media, .btp-thumb, .about img');
     mediaEls.forEach((media) => {
@@ -296,14 +282,14 @@
       try {
         window.gsap.fromTo(
           media,
-          { scale: 1.05, filter: 'brightness(0.88)' },
+          { scale: 1.03 },
           {
             scale: 1,
-            filter: 'brightness(1)',
-            duration: c.durations.slow || 0.78,
-            ease: c.easings.outExpo || 'expo.out',
+            duration: 0.56,
+            ease: c.easings.outQuart || 'power3.out',
+            force3D: true,
             overwrite: 'auto',
-            clearProps: 'transform,filter'
+            clearProps: 'transform'
           }
         );
       } catch (_) {}
@@ -311,30 +297,27 @@
   }
 
   /**
-   * Primitive 4: ParallaxImage (Subtle Hero Background Parallax & Atmospheric Depth)
+   * Primitive 4: ParallaxImage (Desktop-Only GPU Transform — Skipped on Mobile for Native Momentum Scroll)
    */
   function ParallaxImage() {
     if (parallaxBound) return;
     const c = cfg();
-    if (c.prefersReducedMotion()) return;
+    if (c.prefersReducedMotion() || c.isMobileViewport()) return;
     parallaxBound = true;
     let ticking = false;
 
     function onScrollParallax() {
-      if (ticking || c.isPageHidden()) return;
+      if (ticking || c.isPageHidden() || c.isMobileViewport()) return;
       ticking = true;
       window.requestAnimationFrame(() => {
         const sy = window.scrollY || 0;
-        const hero = document.querySelector('#home.page.active .hero');
-        if (hero && sy < 760) {
-          const maxShift = c.limits.heroParallaxMaxPx || 34;
-          const shift = Math.min(maxShift, sy * 0.09);
-          hero.style.setProperty('--hero-parallax-y', `${shift.toFixed(1)}px`);
-        }
-        const bgOrbs = document.querySelectorAll('#kurdiaLivingBg .klbg-orb');
-        if (bgOrbs.length >= 2 && sy < 1600) {
-          bgOrbs[0].style.marginTop = (sy * -0.04).toFixed(1) + 'px';
-          bgOrbs[1].style.marginTop = (sy * 0.032).toFixed(1) + 'px';
+        if (sy < 680) {
+          const hero = document.querySelector('#home.page.active .hero');
+          if (hero) {
+            const maxShift = c.limits.heroParallaxMaxPx || 24;
+            const shift = Math.min(maxShift, sy * 0.07);
+            hero.style.setProperty('--hero-parallax-y', `${shift.toFixed(1)}px`);
+          }
         }
         ticking = false;
       });
@@ -350,7 +333,7 @@
   }
 
   /**
-   * Primitive 5: ScrollProgress (Top Reading Progress & Sticky Header Glass State)
+   * Primitive 5: ScrollProgress (rAF-Throttled GPU scaleX & Cached Header Class Toggle)
    */
   function ScrollProgress() {
     if (progressBound) return;
@@ -362,17 +345,30 @@
       document.body.appendChild(scrollBar);
     }
 
-    function updateProgress() {
-      if (cfg().isPageHidden()) return;
-      const sy = window.scrollY || 0;
-      const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const pct = Math.min(100, Math.max(0, (sy / total) * 100));
-      if (scrollBar) scrollBar.style.width = pct.toFixed(2) + '%';
+    let ticking = false;
+    let lastScrolledState = null;
 
-      const topNav = document.querySelector('.top');
-      if (topNav) {
-        topNav.classList.toggle('scrolled', sy > 24);
-      }
+    function updateProgress() {
+      if (ticking || cfg().isPageHidden()) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const sy = window.scrollY || 0;
+        const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const ratio = Math.min(1, Math.max(0, sy / total));
+        if (scrollBar) {
+          scrollBar.style.transform = `scaleX(${ratio.toFixed(4)})`;
+        }
+
+        const isScrolled = sy > 24;
+        if (isScrolled !== lastScrolledState) {
+          lastScrolledState = isScrolled;
+          const topNav = document.querySelector('.top');
+          if (topNav) {
+            topNav.classList.toggle('scrolled', isScrolled);
+          }
+        }
+        ticking = false;
+      });
     }
 
     window.addEventListener('scroll', updateProgress, { passive: true });
@@ -389,7 +385,7 @@
    */
   function AnimatedHeading(sectionHeadEl) {
     if (!sectionHeadEl) return;
-    Reveal(sectionHeadEl, { distance: 16, duration: 0.52 });
+    Reveal(sectionHeadEl, { distance: 14, duration: 0.42 });
   }
 
   /**
@@ -435,22 +431,12 @@
 
     revealTargets.forEach((el, idx) => {
       Reveal(el, {
-        delay: Math.min(0.22, (idx % 4) * 0.05)
+        delay: Math.min(0.16, (idx % 3) * 0.045)
       });
     });
 
     ImageReveal(scope);
   }
-
-  // Register cleanup for all ScrollTrigger instances created by this module
-  cfg().registerCleanup(() => {
-    while (scrollTriggerInstances.length) {
-      const st = scrollTriggerInstances.pop();
-      try {
-        st.kill();
-      } catch (_) {}
-    }
-  });
 
   // Expose Reusable Primitives Globally
   window.KurdiaMotionPrimitives = {

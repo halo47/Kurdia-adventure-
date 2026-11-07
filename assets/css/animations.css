@@ -92,51 +92,31 @@ p,
 .klbg-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(68px);
-  opacity: 0.42;
-  will-change: transform;
+  filter: blur(42px);
+  opacity: 0.34;
+  transform: translateZ(0);
 }
 
 .klbg-orb.orb-1 {
-  width: min(540px, 85vw);
-  height: min(540px, 85vw);
+  width: min(460px, 75vw);
+  height: min(460px, 75vw);
   top: -10%;
   right: -8%;
-  background: radial-gradient(circle, rgba(229, 35, 79, 0.34) 0%, rgba(169, 29, 55, 0.09) 55%, transparent 75%);
-  animation: klbgFloat1 16s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgba(200, 25, 30, 0.28) 0%, rgba(158, 11, 15, 0.08) 55%, transparent 75%);
 }
 
 .klbg-orb.orb-2 {
-  width: min(480px, 80vw);
-  height: min(480px, 80vw);
+  width: min(420px, 70vw);
+  height: min(420px, 70vw);
   bottom: 8%;
   left: -10%;
-  background: radial-gradient(circle, rgba(55, 201, 135, 0.18) 0%, rgba(14, 116, 144, 0.07) 55%, transparent 75%);
-  animation: klbgFloat2 20s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgba(18, 138, 67, 0.14) 0%, rgba(14, 116, 144, 0.05) 55%, transparent 75%);
 }
 
-.klbg-orb.orb-3 {
-  width: min(430px, 75vw);
-  height: min(430px, 75vw);
-  top: 40%;
-  left: 24%;
-  background: radial-gradient(circle, rgba(211, 47, 78, 0.16) 0%, rgba(56, 189, 248, 0.06) 55%, transparent 75%);
-  animation: klbgFloat3 22s ease-in-out infinite alternate;
-}
-
-@keyframes klbgFloat1 {
-  0% { transform: translate3d(0, 0, 0) scale(1); }
-  100% { transform: translate3d(-34px, 42px, 0) scale(1.1); }
-}
-
-@keyframes klbgFloat2 {
-  0% { transform: translate3d(0, 0, 0) scale(1); }
-  100% { transform: translate3d(38px, -32px, 0) scale(1.09); }
-}
-
-@keyframes klbgFloat3 {
-  0% { transform: translate3d(-18px, -12px, 0) scale(0.95); }
-  100% { transform: translate3d(24px, 28px, 0) scale(1.07); }
+@media (max-width: 1023px) {
+  #kurdiaLivingBg {
+    display: none !important;
+  }
 }
 
 .kurdia-scroll-progress {
@@ -145,12 +125,13 @@ p,
   right: 0;
   left: 0;
   height: 3px;
-  width: 0%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: right center;
+  will-change: transform;
   background: linear-gradient(90deg, var(--ka-brand-maroon), var(--ka-brand-crimson), var(--ka-brand-rose));
-  box-shadow: 0 0 14px var(--ka-brand-glow);
   z-index: 9999;
   pointer-events: none;
-  transition: width 80ms linear;
 }
 
 /* ==========================================================================
@@ -563,12 +544,7 @@ aside#kaMoreMenu.ka-more-menu {
     radial-gradient(ellipse 70% 45% at 50% 88%, rgba(169, 29, 55, 0.22), transparent 68%),
     radial-gradient(ellipse 46% 34% at 84% 20%, rgba(211, 47, 78, 0.09), transparent 64%),
     linear-gradient(180deg, rgba(5, 7, 11, 0.12) 0%, transparent 40%, rgba(5, 7, 11, 0.86) 92%, #05070b 100%) !important;
-  animation: heroAtmosphere 8.5s ease-in-out infinite alternate !important;
-}
-
-@keyframes heroAtmosphere {
-  0% { opacity: 0.88; }
-  100% { opacity: 1; }
+  animation: none !important;
 }
 
 .ka-hero-scroll-cue {
@@ -607,40 +583,27 @@ aside#kaMoreMenu.ka-more-menu {
   border-radius: 50%;
   background: var(--ka-brand-rose);
   box-shadow: 0 0 10px var(--ka-brand-rose);
-  animation: kaScrollCuePulse 2s ease-in-out infinite;
-}
-
-@keyframes kaScrollCuePulse {
-  0%, 100% {
-    transform: translateY(-2px);
-    opacity: 0.65;
-  }
-  50% {
-    transform: translateY(3px);
-    opacity: 1;
-  }
 }
 
 /* ==========================================================================
    5. GSAP & SCROLL-REVEAL COMPOSITOR PRIMITIVES (gsap-skills)
    ========================================================================== */
 .kurdia-scroll-item {
-  will-change: transform, opacity;
-  transition:
-    opacity var(--motion-medium) var(--t-ease-out),
-    transform var(--motion-medium) var(--t-ease-out);
+  will-change: auto;
 }
 
 .kurdia-scroll-item.scroll-hidden,
 .ka-reveal-armed {
   opacity: 0;
-  transform: translate3d(0, var(--reveal-distance-md), 0) scale(0.975);
+  will-change: transform, opacity;
+  transform: translate3d(0, var(--reveal-distance-md, 16px), 0);
 }
 
 .kurdia-scroll-item.scroll-visible,
 .ka-reveal-armed.ka-revealed {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+  will-change: auto;
+  transform: none;
 }
 
 /* Card Media Containers */

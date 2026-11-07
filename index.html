@@ -2,14 +2,37 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070a10"><meta name="description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
-<meta property="og:title" content="KURDIA ADVENTURE">
-<meta property="og:description" content="KURDIA ADVENTURE — گەشت، سروشت و ئەزموونی جیاواز لە کوردستان لەگەڵ پلاتفۆرمی بەڕێوەبردنی ئەدمین (KURDIA Control Center)">
+<meta name="theme-color" content="#07090D"><meta name="description" content="KURDIA ADVENTURE — گەشت، شاخەوانی، کەمپینگ و ئەزموونی سروشتی کوردستان لەگەڵ تیمی سەرپەرشتیاری شارەزا. ناوی خۆت تۆمار بکە بۆ گەشتەکانی داهاتوو.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KURDIA ADVENTURE">
+<meta property="og:title" content="KURDIA ADVENTURE — گەشت و شاخەوانی لە سروشتی کوردستان">
+<meta property="og:description" content="ئەزموونی سروشت، شاخەوانی، کەمپینگ و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA ADVENTURE. ناوی خۆت تۆمار بکە بۆ گەشتەکانی داهاتوو.">
+<meta property="og:image" content="/Picsart_26-05-02_22-24-16-869.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KURDIA ADVENTURE — گەشت و شاخەوانی لە سروشتی کوردستان">
+<meta name="twitter:description" content="ئەزموونی سروشت، شاخەوانی، کەمپینگ و شوێنە جیاوازەکانی کوردستان لەگەڵ KURDIA ADVENTURE.">
+<meta name="twitter:image" content="/Picsart_26-05-02_22-24-16-869.jpg">
 <title>KURDIA ADVENTURE</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "KURDIA ADVENTURE",
+  "description": "پلاتفۆرمی گەشت، شاخەوانی، کەمپینگ و گەڕان لە سروشتی کوردستان",
+  "image": "/Picsart_26-05-02_22-24-16-869.jpg",
+  "telephone": "+9647503130360",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Erbil",
+    "addressRegion": "Kurdistan Region",
+    "addressCountry": "IQ"
+  }
+}
+</script>
 <script>
 // Auto cache buster: upgrade stale cached versions immediately
 (function(){
-  var V = 'v4.2.0';
+  var V = 'v4.4.0';
   try {
     var stored = localStorage.getItem('kurdia_app_ver');
     if (stored !== V) {
@@ -23,7 +46,7 @@
   } catch(e){}
 })();
 </script>
-<link rel="icon" href="/icons/kurdia-logo.svg" type="image/svg+xml">
+<link rel="icon" href="/Picsart_26-05-02_22-24-16-869.jpg" type="image/jpeg">
 <link rel="apple-touch-icon" href="/Picsart_26-05-02_22-24-16-869.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1146,17 +1169,14 @@ body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;back
 
 
 <style id="kurdia-living-atmosphere-v14">
-/* V14: visibly animated atmosphere that visually connects every section to the hero. */
+/* V14: Lightweight static multi-radial atmosphere (zero fixed full-screen blur repaints during scroll). */
 html,body{background:#07070b!important}
 body{background-image:radial-gradient(ellipse 115% 680px at 50% 0%,rgba(137,24,52,.28),transparent 72%),radial-gradient(ellipse 90% 620px at 95% 38%,rgba(105,24,48,.17),transparent 70%),radial-gradient(ellipse 95% 650px at 0% 72%,rgba(47,39,62,.16),transparent 72%)!important;background-attachment:scroll!important}
-body:after{content:"";position:fixed;inset:-12%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 38% 30% at 18% 24%,rgba(225,35,79,.18),transparent 75%),radial-gradient(ellipse 34% 28% at 82% 54%,rgba(142,33,67,.19),transparent 74%),radial-gradient(ellipse 42% 32% at 48% 88%,rgba(75,42,65,.15),transparent 76%);filter:blur(22px);opacity:.85;animation:kurdiaAtmosphereFlow 12s ease-in-out infinite alternate}
-@keyframes kurdiaAtmosphereFlow{0%{transform:translate3d(-2%, -1%,0) scale(.98);opacity:.62}50%{transform:translate3d(1%,1%,0) scale(1.04);opacity:.95}100%{transform:translate3d(2%,-1%,0) scale(1.01);opacity:.72}}
-/* Keep section surfaces transparent so the animated atmosphere remains visible. */
+body:after{display:none!important;animation:none!important}
 main,section,.section,.page-section{background-color:transparent!important}
 .hero{isolation:isolate}
 .hero:after{background:linear-gradient(180deg,rgba(5,6,10,.02) 0%,rgba(7,7,11,.02) 38%,rgba(7,7,11,.38) 72%,#07070b 100%),linear-gradient(115deg,rgba(4,7,13,.08),transparent 42%,rgba(229,35,79,.15))}
-@media(max-width:700px){body{background-image:radial-gradient(ellipse 145% 540px at 50% 0%,rgba(137,24,52,.30),transparent 76%),radial-gradient(ellipse 120% 520px at 0% 48%,rgba(89,26,48,.17),transparent 75%),radial-gradient(ellipse 110% 460px at 100% 82%,rgba(53,39,61,.18),transparent 76%)!important}body:after{inset:-8%;filter:blur(16px);animation-duration:14s}.hero:after{background:linear-gradient(180deg,rgba(5,6,10,.02) 0%,rgba(7,7,11,.01) 38%,rgba(7,7,11,.32) 72%,#07070b 100%),linear-gradient(115deg,rgba(4,7,13,.06),transparent 42%,rgba(229,35,79,.13))}}
-@media(prefers-reduced-motion:reduce){body:after{animation:none!important;opacity:.65}}
+@media(max-width:700px){body{background-image:radial-gradient(ellipse 145% 540px at 50% 0%,rgba(137,24,52,.30),transparent 76%),radial-gradient(ellipse 120% 520px at 0% 48%,rgba(89,26,48,.17),transparent 75%),radial-gradient(ellipse 110% 460px at 100% 82%,rgba(53,39,61,.18),transparent 76%)!important}.hero:after{background:linear-gradient(180deg,rgba(5,6,10,.02) 0%,rgba(7,7,11,.01) 38%,rgba(7,7,11,.32) 72%,#07070b 100%),linear-gradient(115deg,rgba(4,7,13,.06),transparent 42%,rgba(229,35,79,.13))}}
 </style>
 
 </head>
@@ -2638,8 +2658,8 @@ const DEFAULT={
 
 DEFAULT.reviews=[{name:'دەرباز سەعید',city:'هەولێر',text:'یەکێک لە گەشتە جوانەکانم بوو لەگەڵ تیمی KURDIA.'},{name:'سارا',city:'سلێمانی',text:'ڕێکخستن و هاوڕێیەتیی تیمەکە زۆر خۆش بوو.'}];
 DEFAULT.about={title:'گەشت، سروشت، هاوڕێیەتی.',text:'ئێمە باوەڕمان وایە گەشت تەنها گەیشتن بە شوێنێک نییە؛ ئەزموونێکە کە لەگەڵ خەڵک و سروشت دروست دەبێت.',imageUrl:'https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=1000&q=85',stats:[{num:'20K+',label:'بەشداربوو'},{num:'200+',label:'گەشت'},{num:'4.9',label:'هەڵسەنگاندن'}]};
-DEFAULT.contact={whatsapp:'+9647503130360',phone:'+9647503130360',city:'هەولێر — کوردستان',email:'',mapUrl:''};
-DEFAULT.social={instagram:'',tiktok:'',youtube:'',facebook:'',telegram:''};
+DEFAULT.contact={whatsapp:'+9647503130360',phone:'+9647503130360',city:'هەولێر — کوردستان',email:'info@kurdiaadventure.com',mapUrl:''};
+DEFAULT.social={instagram:'https://www.instagram.com/kurdia.adventure',tiktok:'https://www.tiktok.com/@kurdia.adventure',youtube:'',facebook:'https://www.facebook.com/kurdia.adventure',telegram:'https://t.me/kurdiaadventure'};
 DEFAULT.fibAccount='0750 313 0360';
 DEFAULT.otpRequired=false;
 DEFAULT.booking={open:true,otpRequired:false};
@@ -4238,34 +4258,37 @@ function renderAboutPublic(){
 
 function renderContactPublic(){
   const c = data.contact || DEFAULT.contact || {};
-  const s = data.social || DEFAULT.social || {};
+  const s = { ...(DEFAULT.social || {}), ...(data.social || {}) };
   const waClean = String(c.whatsapp || '+9647503130360').replace(/\D/g, '');
   const wa = $('contactWhatsAppPublic');
   if(wa){
     wa.href = c.whatsapp ? `https://wa.me/${waClean}` : '#';
     const sm = wa.querySelector('small');
-    if(sm) sm.textContent = c.whatsapp || '';
+    if(sm) sm.textContent = c.whatsapp || '+964 750 313 0360';
   }
   const ph = $('contactPhonePublic');
   if(ph){
     ph.href = c.phone ? `tel:${c.phone}` : '#';
     const sm = ph.querySelector('small');
-    if(sm) sm.textContent = c.phone || '';
+    if(sm) sm.textContent = c.phone || '+964 750 313 0360';
   }
-  if($('contactCity')) $('contactCity').textContent = c.city || '';
-  if($('contactEmailPublic')) $('contactEmailPublic').textContent = c.email || '';
-  [['instagram',s.instagram],['tiktok',s.tiktok],['youtube',s.youtube],['facebook',s.facebook],['telegram',s.telegram]].forEach(([k,v])=>{
+  if($('contactCity')) $('contactCity').textContent = c.city || 'هەولێر — کوردستان';
+  if($('contactEmailPublic')) $('contactEmailPublic').textContent = c.email || 'info@kurdiaadventure.com';
+  [['instagram',s.instagram || DEFAULT.social.instagram],['tiktok',s.tiktok || DEFAULT.social.tiktok],['youtube',s.youtube],['facebook',s.facebook || DEFAULT.social.facebook],['telegram',s.telegram || DEFAULT.social.telegram]].forEach(([k,v])=>{
     const e = $('social_'+k);
     if(e){
       e.href = v || '#';
+      e.target = '_blank';
+      e.rel = 'noopener noreferrer';
       e.style.display = v ? 'grid' : 'none';
     }
   });
-  // Also sync More drawer contact links if present
-  const moreTel = document.querySelector('#kaMoreMenu .ka-contact a[href^="tel:"]');
+  // Safely sync More drawer phone number & WhatsApp link without destroying the inner icon structure
+  const moreTel = document.querySelector('#kaMoreMenu .ka-contact a.ka-phone');
   if(moreTel && c.phone){
     moreTel.href = `tel:${String(c.phone).replace(/\s+/g, '')}`;
-    moreTel.textContent = `📞 ${c.phone}`;
+    const numEl = moreTel.querySelector('.ka-phone-number');
+    if(numEl) numEl.textContent = c.phone;
   }
   const moreWa = document.querySelector('#kaMoreMenu .ka-contact a[href*="wa.me"]');
   if(moreWa && waClean){
@@ -10261,9 +10284,10 @@ header.top {
   margin: 8px auto 0 !important;
   width: min(calc(100% - 20px), 1120px) !important;
   border-radius: 999px !important;
-  background: linear-gradient(145deg, rgba(24, 30, 42, 0.72) 0%, rgba(11, 15, 22, 0.82) 100%) !important;
-  backdrop-filter: blur(32px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+  background: linear-gradient(145deg, rgba(24, 30, 42, 0.82) 0%, rgba(11, 15, 22, 0.88) 100%) !important;
+  backdrop-filter: blur(20px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(165%) !important;
+  transform: translateZ(0) !important;
   border: 1px solid rgba(255, 255, 255, 0.16) !important;
   box-shadow: 0 16px 38px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(255, 255, 255, 0.26) !important;
 }
@@ -10278,13 +10302,13 @@ nav.bottom {
   bottom: max(12px, env(safe-area-inset-bottom, 12px)) !important;
   left: 50% !important;
   right: auto !important;
-  transform: translateX(-50%) !important;
+  transform: translate3d(-50%, 0, 0) !important;
   width: min(calc(100% - 22px), 500px) !important;
   padding: 6px 8px !important;
   border-radius: 999px !important;
-  background: linear-gradient(155deg, rgba(26, 32, 44, 0.76) 0%, rgba(10, 13, 20, 0.86) 100%) !important;
-  backdrop-filter: blur(36px) saturate(210%) !important;
-  -webkit-backdrop-filter: blur(36px) saturate(210%) !important;
+  background: linear-gradient(155deg, rgba(26, 32, 44, 0.84) 0%, rgba(10, 13, 20, 0.92) 100%) !important;
+  backdrop-filter: blur(20px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(170%) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   box-shadow: 0 22px 50px -10px rgba(0, 0, 0, 0.78), inset 0 1px 0 0 rgba(255, 255, 255, 0.28) !important;
 }
@@ -10304,7 +10328,7 @@ nav.bottom .navitem.navjoin:not(.active) {
   color: #FFA1A5 !important;
 }
 
-/* 4. iOS 26 Liquid Glass Surfaces Across All Sections & Cards */
+/* 4. iOS 26 Liquid Glass Surfaces Across All Sections & Cards (60fps GPU-Optimized) */
 .glass,
 .featured,
 .trip-showcase-card,
@@ -10327,11 +10351,66 @@ nav.bottom .navitem.navjoin:not(.active) {
 .article,
 .ka-contact,
 .ka-version-card {
-  background: var(--ios26-glass-surface) !important;
-  backdrop-filter: blur(30px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(190%) !important;
+  background: linear-gradient(155deg, rgba(24, 31, 45, 0.88) 0%, rgba(12, 16, 25, 0.94) 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  box-shadow: var(--ios26-shadow) !important;
+  box-shadow: 0 14px 32px -10px rgba(0, 0, 0, 0.62), inset 0 1px 0 0 rgba(255, 255, 255, 0.24) !important;
+}
+
+@media only screen and (min-width: 1024px) {
+  .glass,
+  .featured,
+  .trip-showcase-card,
+  .place-card,
+  .booking-hero-banner,
+  .booking-trip-pick-card,
+  .booking-form-card,
+  .private-page-hero,
+  .private-trip-card,
+  .private-vip-showcase,
+  .weather-hero-card,
+  .public-review,
+  .review-write {
+    backdrop-filter: blur(14px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
+  }
+}
+
+@media only screen and (max-width: 1023px) {
+  .glass,
+  .featured,
+  .trip-showcase-card,
+  .place-card,
+  .booking-hero-banner,
+  .booking-trip-pick-card,
+  .booking-form-card,
+  .booking-subcard,
+  .booking-step3-summary-card,
+  .payment-gateways-container,
+  .receipt-box,
+  .private-page-hero,
+  .private-trip-card,
+  .private-vip-showcase,
+  .weather-hero-card,
+  .weather-map-box,
+  .metric-box,
+  .hourly-card,
+  .day-row-card,
+  .public-review,
+  .review-write,
+  .article,
+  .ka-contact,
+  .ka-version-card,
+  .pf-chip,
+  .weather-q-chip,
+  .weather-chip,
+  .private-quick-dests button,
+  .ai-quick button,
+  .input,
+  .select,
+  .textarea {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }
 
 .featured,
@@ -10350,9 +10429,7 @@ nav.bottom .navitem.navjoin:not(.active) {
   bottom: 12px;
   left: 12px;
   z-index: 2;
-  background: rgba(10, 14, 22, 0.72);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  background: rgba(10, 14, 22, 0.86);
   border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
   color: #FFFFFF;
@@ -10396,9 +10473,7 @@ nav.bottom .navitem.navjoin:not(.active) {
 .btn.ghost,
 .iconbtn,
 .top-lang-btn {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
-  backdrop-filter: blur(22px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.16) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
   color: #FFFFFF !important;
@@ -10411,9 +10486,7 @@ nav.bottom .navitem.navjoin:not(.active) {
 .private-quick-dests button,
 .ai-quick button {
   border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.07) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
+  background: linear-gradient(145deg, rgba(28, 36, 52, 0.85), rgba(15, 20, 30, 0.9)) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
   color: #E2E8F0 !important;
@@ -10455,9 +10528,7 @@ nav.bottom .navitem.navjoin:not(.active) {
 .input,
 .select,
 .textarea {
-  background: rgba(10, 14, 22, 0.62) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
+  background: rgba(10, 14, 22, 0.82) !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   border-radius: 15px !important;
@@ -10475,9 +10546,9 @@ nav.bottom .navitem.navjoin:not(.active) {
 .story-sheet,
 .booking-success-card,
 .ka-more-menu {
-  background: linear-gradient(160deg, rgba(24, 31, 44, 0.84) 0%, rgba(10, 14, 21, 0.92) 100%) !important;
-  backdrop-filter: blur(40px) saturate(210%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(210%) !important;
+  background: linear-gradient(160deg, rgba(24, 31, 44, 0.92) 0%, rgba(10, 14, 21, 0.96) 100%) !important;
+  backdrop-filter: blur(22px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   box-shadow: 0 28px 68px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.3) !important;
 }
@@ -10495,13 +10566,326 @@ nav.bottom .navitem.navjoin:not(.active) {
   width: 17px !important;
   height: 17px !important;
 }
+
+/* ==========================================================================
+   8. 4-TIER RESPONSIVE BREAKPOINT SYSTEM (EXACT SCREEN SIZES)
+   - Mobile Devices:  @media only screen and (max-width: 767px)
+   - Tablet Devices:  @media only screen and (min-width: 768px) and (max-width: 1023px)
+   - Laptop Devices:  @media only screen and (min-width: 1024px) and (max-width: 1439px)
+   - Desktop Devices: @media only screen and (min-width: 1440px)
+   ========================================================================== */
+
+/* TIER 1 — Mobile Devices (portrait and landscape: max-width: 767px) */
+@media only screen and (max-width: 767px) {
+  .container {
+    width: 100% !important;
+    padding-inline: 14px !important;
+  }
+
+  /* Balanced Top Header Bar on Mobile */
+  header.top {
+    top: 8px !important;
+    width: calc(100% - 16px) !important;
+  }
+  header.top .topin {
+    min-height: 52px !important;
+    height: 52px !important;
+    padding: 4px 10px !important;
+  }
+  .brand-logo-img {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
+  }
+  .iconbtn {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Balanced Hero Section on Mobile */
+  .hero {
+    min-height: clamp(390px, 58svh, 480px) !important;
+    padding-top: 14px !important;
+  }
+  .hero .container {
+    padding: 18px 14px 22px !important;
+  }
+  .ios26-hero-logo-capsule {
+    padding: 5px 12px 5px 6px !important;
+    gap: 9px !important;
+    margin-bottom: 10px !important;
+  }
+  .ios26-hero-logo-frame {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .ios26-hero-logo-title {
+    font-size: 11.5px !important;
+  }
+  .ios26-hero-logo-sub {
+    font-size: 8.5px !important;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 7.2vw, 35px) !important;
+    line-height: 1.22 !important;
+    margin: 6px 0 8px !important;
+  }
+  .hero p {
+    font-size: 12.5px !important;
+    line-height: 1.75 !important;
+    margin: 0 0 14px !important;
+  }
+  .hero .actions {
+    display: grid !important;
+    grid-template-columns: 1.15fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .hero .actions .btn {
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 8px 12px !important;
+    font-size: 12.5px !important;
+    border-radius: 13px !important;
+    justify-content: center !important;
+  }
+
+  /* Single-Column Balanced Cards on Mobile (Neither too big nor too small) */
+  .home-trips-grid,
+  .places-grid,
+  .booking-trips-cards-grid,
+  .reviews-public-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 13px !important;
+  }
+
+  .trip-showcase-card,
+  .place-card,
+  .booking-trip-pick-card,
+  .public-review {
+    border-radius: 20px !important;
+  }
+  .trip-showcase-card .featureimg {
+    height: 174px !important;
+    min-height: 174px !important;
+  }
+  .trip-showcase-card .featurebody {
+    padding: 13px 14px 14px !important;
+  }
+  .trip-card-title {
+    font-size: 17px !important;
+    line-height: 1.35 !important;
+  }
+  .trip-card-desc {
+    font-size: 12px !important;
+    line-height: 1.7 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+  .trip-stats-grid .stat {
+    padding: 8px 10px !important;
+    border-radius: 12px !important;
+  }
+  .trip-stats-grid .stat b {
+    font-size: 13px !important;
+  }
+  .trip-card-actions {
+    grid-template-columns: 1.2fr 1fr 42px !important;
+    gap: 7px !important;
+    margin-top: 11px !important;
+  }
+  .trip-card-actions .btn {
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    border-radius: 12px !important;
+  }
+  .trip-card-actions .trip-wa-btn {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  /* Places Cards on Mobile */
+  .place-card-media {
+    height: 156px !important;
+  }
+  .place-card-body {
+    padding: 12px 14px 13px !important;
+  }
+  .place-card-body h3 {
+    font-size: 16px !important;
+  }
+  .place-card-body p {
+    font-size: 11.5px !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  /* Weather Metrics 2-Column Compact Grid on Mobile */
+  .weather-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .metric-box {
+    padding: 11px 12px !important;
+    border-radius: 16px !important;
+  }
+
+  /* Floating Bottom Dock & AI Button on Mobile */
+  nav.bottom {
+    width: calc(100% - 18px) !important;
+    bottom: max(10px, env(safe-area-inset-bottom, 10px)) !important;
+    padding: 5px 6px !important;
+  }
+  nav.bottom .navitem {
+    min-height: 44px !important;
+    padding: 5px 4px !important;
+    font-size: 10.5px !important;
+  }
+  button.ai {
+    bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 14px !important;
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+/* TIER 2 — Tablet Devices (portrait and landscape: 768px to 1023px) */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    width: min(960px, calc(100% - 36px)) !important;
+    padding-inline: 18px !important;
+  }
+  .hero {
+    min-height: 480px !important;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 5.5vw, 50px) !important;
+  }
+  .home-trips-grid,
+  .places-grid,
+  .booking-trips-cards-grid,
+  .reviews-public-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .trip-showcase-card .featureimg {
+    height: 195px !important;
+  }
+  .place-card-media {
+    height: 175px !important;
+  }
+  .trip-card-actions .btn,
+  .hero .actions .btn,
+  .private-vip-actions .btn {
+    min-height: 44px !important;
+    font-size: 13px !important;
+    border-radius: 14px !important;
+  }
+  .weather-metrics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+
+/* TIER 3 — Laptop Devices (portrait and landscape: 1024px to 1439px) */
+@media only screen and (min-width: 1024px) and (max-width: 1439px) {
+  .container {
+    width: min(1160px, calc(100% - 48px)) !important;
+    padding-inline: 24px !important;
+  }
+  .hero {
+    min-height: 530px !important;
+  }
+  .hero h1 {
+    font-size: clamp(42px, 4.6vw, 58px) !important;
+  }
+  .home-trips-grid,
+  .places-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+  .booking-trips-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .reviews-public-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .trip-showcase-card .featureimg {
+    height: 205px !important;
+  }
+  .place-card-media {
+    height: 182px !important;
+  }
+  .trip-card-actions .btn {
+    min-height: 44px !important;
+    padding: 9px 11px !important;
+    font-size: 12.5px !important;
+  }
+  .weather-metrics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+
+/* TIER 4 — Desktop Devices (portrait and landscape: min-width: 1440px) */
+@media only screen and (min-width: 1440px) {
+  .container {
+    width: min(1320px, calc(100% - 64px)) !important;
+    padding-inline: 28px !important;
+  }
+  header.top {
+    width: min(calc(100% - 48px), 1320px) !important;
+  }
+  .hero {
+    min-height: 570px !important;
+  }
+  .hero h1 {
+    font-size: 62px !important;
+  }
+  .home-trips-grid,
+  .places-grid,
+  .booking-trips-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+  }
+  .reviews-public-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+  .trip-showcase-card .featureimg {
+    height: 220px !important;
+  }
+  .place-card-media {
+    height: 195px !important;
+  }
+  .trip-card-actions .btn,
+  .hero .actions .btn,
+  .private-vip-actions .btn {
+    min-height: 46px !important;
+    font-size: 13.5px !important;
+    border-radius: 15px !important;
+  }
+  .weather-metrics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+}
 </style>
 
-<!-- Authoritative Late-Cascade Motion & Glassmorphism Stylesheet + Modular Scripts -->
-<link rel="stylesheet" href="/assets/css/animations.css?v=4.3.0">
-<script src="/assets/js/motion-config.js?v=4.3.0"></script>
-<script src="/assets/js/scroll-reveal.js?v=4.3.0"></script>
-<script src="/assets/js/animations.js?v=4.3.0"></script>
+<!-- Authoritative Late-Cascade Modular Motion Scripts -->
+<script src="/assets/js/motion-config.js?v=4.4.0"></script>
+<script src="/assets/js/scroll-reveal.js?v=4.4.0"></script>
+<script src="/assets/js/animations.js?v=4.4.0"></script>
 
 <script id="kurdia-master-motion-engine">
 (function(){
@@ -10540,30 +10924,40 @@ nav.bottom .navitem.navjoin:not(.active) {
   }
   window.kurdiaStripPlainEmojis = kurdiaStripPlainEmojis;
 
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', () => {
-      kurdiaStripPlainEmojis(document.body);
-      if(window.lucide) lucide.createIcons();
-    });
-  } else {
+  function bindDynamicEmojiSanitizer(){
     kurdiaStripPlainEmojis(document.body);
     if(window.lucide) lucide.createIcons();
+
+    const dynamicIds = [
+      'homeTripsList',
+      'homeDests',
+      'destList',
+      'tripList',
+      'reviewsList',
+      'homeReviewsPreview',
+      'tripDetailModal',
+      'destDetailModal'
+    ];
+    let sanitizeTimer = null;
+    dynamicIds.forEach(id => {
+      const el = document.getElementById(id);
+      if(!el || el.__kaEmojiObserved) return;
+      el.__kaEmojiObserved = true;
+      const mo = new MutationObserver(() => {
+        if(sanitizeTimer) clearTimeout(sanitizeTimer);
+        sanitizeTimer = setTimeout(() => {
+          kurdiaStripPlainEmojis(el);
+          if(window.lucide) lucide.createIcons();
+        }, 80);
+      });
+      mo.observe(el, { childList: true });
+    });
   }
 
-  let emojiSanitizeTimer = null;
-  const emojiObserver = new MutationObserver(() => {
-    if(emojiSanitizeTimer) clearTimeout(emojiSanitizeTimer);
-    emojiSanitizeTimer = setTimeout(() => {
-      kurdiaStripPlainEmojis(document.body);
-      if(window.lucide) lucide.createIcons();
-    }, 60);
-  });
-  if(document.body){
-    emojiObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bindDynamicEmojiSanitizer, { once: true });
   } else {
-    document.addEventListener('DOMContentLoaded', () => {
-      emojiObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
-    });
+    bindDynamicEmojiSanitizer();
   }
 
   // Real-Time Website Visitor Tracking (Synced with Server + LocalStorage for Admin)
